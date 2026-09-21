@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组：测试下载导入用户组模版",
+    "browser": "chromium",
+    "outcome": "[1] 下载导入用户组模版成功，文件格式为csv\n[2] 下载导入用户组模版成功，文件格式为Excel",
+    "requirementId": "MS-105894",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105894"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组：测试下载导入用户组模版（CSV）",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户组：测试下载导入用户组模版（Excel）",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105894",
+  "title": "用户管理-用户组：测试下载导入用户组模版",
+  "revisionId": "1ca2a72249b1361aebcb1e3af7dfce528c16243c5b322cc7a033d2c5e527f988",
+  "instanceId": "MS-105894--1ca2a72249b1361a"
+}

@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 克隆用户组表单优化为抽屉式表单（右侧弹出）",
+    "browser": "chromium",
+    "outcome": "[1] 右侧弹出抽屉式表单，表单克隆了该用户组的信息\n[2] 更新成功过。显示用户组列表，查看该用户组信息是更新后信息正确的。",
+    "requirementId": "MS-100602",
+    "risk": "high",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100602"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组：点击克隆用户组",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写，修改名称，修改用户，点击更新",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-100602",
+  "title": "克隆用户组表单优化为抽屉式表单（右侧弹出）",
+  "revisionId": "3f9f2b0c2168f439805c1c56ca270490f31440424736ff9ee15f31312d606970",
+  "instanceId": "MS-100602--3f9f2b0c2168f439"
+}

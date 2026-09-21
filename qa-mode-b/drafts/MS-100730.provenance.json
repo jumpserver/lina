@@ -1,0 +1,34 @@
+{
+  "testCaseId": "MS-100730",
+  "source": {
+    "type": "metersphere",
+    "file": "JumpServer-控制台-用户管理.xlsx",
+    "sheet": "模版",
+    "row": 16,
+    "originalId": "100730"
+  },
+  "irId": "100730",
+  "irWarnings": [],
+  "conversionNotes": [],
+  "priority": "P0",
+  "tags": [],
+  "metadata": {
+    "owner": "yumin.jiang@fit2cloud.com",
+    "version": null,
+    "remark": "<code># Python 示例\n# pip install requests\nimport requests, json\n\ndef get_token(jms_url, username, password):\n    url = jms_url.rstrip('/') + '/api/v1/authentication/auth/'\n    query_args = {\n        \"username\": username,\n        \"password\": password\n    }\n    response = requests.post(url, data=query_args, verify=False)\n    print('Response status code:', response.status_code)\n    print('Response text:', response.text)\n    return json.loads(response.text)['token']\n\ndef get_user_info(jms_url, token):\n    url = jms_url.rstrip('/') + '/api/v1/users/users/'\n    headers = {\n        \"Authorization\": 'Bearer ' + token,\n        'X-JMS-ORG': '00000000-0000-0000-0000-000000000002'\n    }\n    response = requests.get(url, headers=headers, verify=False)\n    print('User info response status code:', response.status_code)\n    print('User info response text:', response.text)\n    print(json.loads(response.text))\n\nif __name__ == '__main__':\n    jms_url = 'https://osm.cmdb.cc/'\n    username = 'jym'\n    password = 'xxxxx'\n    token = get_token(jms_url, username, password)\n    print('Token获取成功:', token)\n    # 暂时注释掉get_user_info调用，因为服务器返回HTML页面而不是JSON\n    # get_user_info(jms_url, token)\n</code><img src=\"/attachment/download/file/5092834780651520/7356780762226688/true\" style=\"display: inline-block;ccc:aaa\" fileid=\"7356780762226688\" permalinksrc=\"/attachment/download/file/5092834780651520/7356780762226688/true\">"
+  },
+  "module": {
+    "raw": "/JumpServer/控制台/用户管理/用户列表",
+    "path": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ]
+  },
+  "conversion": {
+    "producerVersion": "1.0.3",
+    "mode": "B",
+    "skill": "testcase-designer"
+  }
+}

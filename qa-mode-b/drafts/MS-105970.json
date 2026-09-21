@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组：测试导入更新用户组",
+    "browser": "chromium",
+    "outcome": "[1] 导入成功\n[2] 导入成功",
+    "requirementId": "MS-105970",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105970"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组：测试导入更新用户组，Excel格式",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户组：测试导入更新用户组，csv格式",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105970",
+  "title": "用户管理-用户组：测试导入更新用户组",
+  "revisionId": "9f9221b6d336d816da8441d49cf29e62ec704421bd62facce97652cbe1666c90",
+  "instanceId": "MS-105970--9f9221b6d336d816"
+}

@@ -1,0 +1,33 @@
+{
+  "testCaseId": "MS-108016",
+  "source": {
+    "type": "metersphere",
+    "file": "JumpServer-控制台-用户管理.xlsx",
+    "sheet": "模版",
+    "row": 2,
+    "originalId": "108016"
+  },
+  "irId": "108016",
+  "irWarnings": [],
+  "conversionNotes": [],
+  "priority": "P3",
+  "tags": [],
+  "metadata": {
+    "owner": "zhiming.zhu@fit2cloud.com",
+    "version": "v4.10.0",
+    "remark": null
+  },
+  "module": {
+    "raw": "/JumpServer/控制台/用户管理",
+    "path": [
+      "JumpServer",
+      "控制台",
+      "用户管理"
+    ]
+  },
+  "conversion": {
+    "producerVersion": "1.0.3",
+    "mode": "B",
+    "skill": "testcase-designer"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表-更新用户：更新用户，更新用户有效期",
+    "browser": "chromium",
+    "outcome": "[1] 使用该用户登录，登录失败，提示该用户已过期\n[2] 使用该用户登录，正确的用户密码，登录成功。",
+    "requirementId": "MS-105128",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105128"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表-更新用户：更新用户，更新用户有效期，更改为过期。测试使用该用户登录",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户列表-更新用户：更新用户，更新用户有效期，更改为未来时间。测试使用该用户登录",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105128",
+  "title": "用户管理-用户列表-更新用户：更新用户，更新用户有效期",
+  "revisionId": "81db706150256ba89854b5e8a149516ea0b3e2f12484ad013dd9114bf5a5fd8b",
+  "instanceId": "MS-105128--81db706150256ba8"
+}

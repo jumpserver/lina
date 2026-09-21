@@ -1,0 +1,75 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：创建用户，设置用户来源",
+    "browser": "chromium",
+    "outcome": "[1] 创建用户来源为数据库的用户成功。使用正确用户名和密码登录，登录成功。\n[2] 创建用户来源为LDAP/AD的用户成功。测试该用户登录，如果LDAP服务器有该用户，那么输入正确用户名和密码可正确登录，如果LDAP无该用户，则登录失败，提示用户名或者密码错误\n[3] 创建用户来源为OpenID的用户成功。测试该用户登录，如果OpenID服务器有该用户，那么输入正确用户名和密码可正确登录，如果OpenID无该用户，则登录失败，提示用户名或者密码错误\n[4] 创建用户来源为Radius的用户成功。测试该用户登录，如果Radius服务器有该用户，那么输入正确用户名和密码可正确登录，如果Radius无该用户，则登录失败，提示用户名或者密码错误\n[5] 创建用户来源为CAS的用户成功。测试该用户登录，如果CAS服务器有该用户，那么输入正确用户名和密码可正确登录，如果CAS无该用户，则登录失败，提示用户名或者密码错误\n[6] 创建用户来源为Saml2的用户成功。测试该用户登录，如果Saml2服务器有该用户，那么输入正确用户名和密码可正确登录，如果Saml2无该用户，则登录失败，提示用户名或者密码错误\n[7] .创建用户来源为oauth2的用户成功。测试该用户登录，如果oauth2服务器有该用户，那么输入正确用户名和密码可正确登录，如果oauth2无该用户，则登录失败，提示用户名或者密码错误",
+    "requirementId": "MS-104293",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104293"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "在创建用户表单上，设置用户来源：选择数据库，其他按照要求填写，提交",
+      "id": "step-1",
+      "sideEffect": "external"
+    },
+    {
+      "action": "在创建用户表单上，设置用户来源：选择LDAP/AD，其他按照要求填写，提交",
+      "id": "step-2",
+      "sideEffect": "external"
+    },
+    {
+      "action": "在创建用户表单上，设置用户来源：选择OpenID，其他按照要求填写，提交",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "在创建用户表单上，设置用户来源：选择Radius，其他按照要求填写，提交",
+      "id": "step-4",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "在创建用户表单上，设置用户来源：选择CAS，其他按照要求填写，提交",
+      "id": "step-5",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "在创建用户表单上，设置用户来源：选择SAML2，其他按照要求填写，提交",
+      "id": "step-6",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "在创建用户表单上，设置用户来源：选择Oauth2，其他按照要求填写，提交",
+      "id": "step-7",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104293",
+  "title": "用户管理-用户列表：创建用户，设置用户来源",
+  "revisionId": "02b1c6788ed317e9f808ef83711d1a96cc240b597784cc49b419aaae1679e25e",
+  "instanceId": "MS-104293--02b1c6788ed317e9"
+}

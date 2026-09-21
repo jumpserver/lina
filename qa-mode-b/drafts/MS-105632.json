@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组：测试批量删除用户组",
+    "browser": "chromium",
+    "outcome": "[1] 删除成功，这些被删除的用户组已不在用户组列表了",
+    "requirementId": "MS-105632",
+    "risk": "high",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105632"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组：测试批量删除用户组",
+      "id": "step-1",
+      "sideEffect": "destructive"
+    }
+  ],
+  "testCaseId": "MS-105632",
+  "title": "用户管理-用户组：测试批量删除用户组",
+  "revisionId": "c855c3335f1f4725e190d50daee5e5c22d8253122178e407b5cef4b312ba58a1",
+  "instanceId": "MS-105632--c855c3335f1f4725"
+}

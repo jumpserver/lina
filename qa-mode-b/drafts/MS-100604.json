@@ -1,0 +1,55 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 创建用户组表单优化为抽屉式表单（右侧弹出）",
+    "browser": "chromium",
+    "outcome": "[1] 右侧弹出抽屉式表单\n[2] 创建成功。显示用户组列表，查看改用户组信息是正确的。\n[3] 创建成功。抽屉式表单不会消失，能够继续添加用户组。用户组成功添加后，可查看用户组列表，刚才添加的几个用户组都正确显示。",
+    "requirementId": "MS-100604",
+    "risk": "high",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100604"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组：点击创建用户组",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写，设置名称，选择多个用户，点击创建",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写，设置名称，选择多个用户，点击保存并继续添加",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-100604",
+  "title": "创建用户组表单优化为抽屉式表单（右侧弹出）",
+  "revisionId": "3bbf4b6dea8194667b60396d0732cc2c86630ca36ed0a26976ef87be67531814",
+  "instanceId": "MS-100604--3bbf4b6dea819466"
+}

@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：测试导入更新用户",
+    "browser": "chromium",
+    "outcome": "[1] [2]",
+    "requirementId": "MS-104564",
+    "risk": "medium",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104564"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表：使用系统管理员测试导入更新用户",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户列表：使用组织管理员测试导入更新用户",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104564",
+  "title": "用户管理-用户列表：测试导入更新用户",
+  "revisionId": "63edb82a42f1c9ce24040252eea93f8ff4eb9d2f914c09069d4630d0237d149d",
+  "instanceId": "MS-104564--63edb82a42f1c9ce"
+}

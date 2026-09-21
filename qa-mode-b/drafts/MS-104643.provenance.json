@@ -1,0 +1,39 @@
+{
+  "testCaseId": "MS-104643",
+  "source": {
+    "type": "metersphere",
+    "file": "JumpServer-控制台-用户管理.xlsx",
+    "sheet": "模版",
+    "row": 52,
+    "originalId": "104643"
+  },
+  "irId": "104643",
+  "irWarnings": [
+    {
+      "type": "invalid_step_number",
+      "message": "编号序列异常: [1, 3, 5, 7]"
+    }
+  ],
+  "conversionNotes": [],
+  "priority": "P2",
+  "tags": [],
+  "metadata": {
+    "owner": "yumin.jiang@fit2cloud.com",
+    "version": null,
+    "remark": null
+  },
+  "module": {
+    "raw": "/JumpServer/控制台/用户管理/用户列表",
+    "path": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ]
+  },
+  "conversion": {
+    "producerVersion": "1.0.3",
+    "mode": "B",
+    "skill": "testcase-designer"
+  }
+}

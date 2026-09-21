@@ -1,0 +1,55 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：测试使用组织管理员移除用户",
+    "browser": "chromium",
+    "outcome": "[1] 移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户\n[2] 移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户\n[3] 移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户",
+    "requirementId": "MS-104785",
+    "risk": "medium",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104785"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表：测试使用组织管理员移除系统管理员",
+      "id": "step-1",
+      "sideEffect": "destructive"
+    },
+    {
+      "action": "用户管理-用户列表：测试使用组织管理员移除系统审计员",
+      "id": "step-2",
+      "sideEffect": "destructive"
+    },
+    {
+      "action": "用户管理-用户列表：测试使用组织管理员移除普通用户",
+      "id": "step-3",
+      "sideEffect": "destructive"
+    }
+  ],
+  "testCaseId": "MS-104785",
+  "title": "用户管理-用户列表：测试使用组织管理员移除用户",
+  "revisionId": "ba09066e1c4e916962ecef7249318102f0c21113c052739788b84061048f8d22",
+  "instanceId": "MS-104785--ba09066e1c4e9169"
+}

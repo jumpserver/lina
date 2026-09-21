@@ -1,0 +1,65 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户列表：验证用户 email 信息加密存储功能",
+    "browser": "chromium",
+    "outcome": "[1] 用户创建成功\n[2] 数据库中 email 字段为加密存储，非明文显示\n[3] 显示解密后的 email\n[4] API 返回解密后的 email 信息",
+    "requirementId": "MS-108955",
+    "risk": "high",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-108955"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "创建新用户并填写 email 信息",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "进入数据库直接查询用户表中的 email 字段",
+      "id": "step-2",
+      "sideEffect": "external"
+    },
+    {
+      "action": "在用户页面，查看用户的 email 显示",
+      "id": "step-3",
+      "sideEffect": "none"
+    },
+    {
+      "action": "通过 API 接口获取用户 email 信息",
+      "id": "step-5",
+      "sideEffect": "external"
+    },
+    {
+      "action": "通过 API 接口获取用户 email 信息",
+      "id": "step-4",
+      "sideEffect": "external"
+    }
+  ],
+  "testCaseId": "MS-108955",
+  "title": "用户列表：验证用户 email 信息加密存储功能",
+  "revisionId": "def9300440f4fc991889ea986101490899a4665318eb045b7ae0ac5e0471b860",
+  "instanceId": "MS-108955--def9300440f4fc99"
+}

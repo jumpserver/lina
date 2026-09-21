@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户列表-表头字段-登录被阻塞改成登录被锁定",
+    "browser": "chromium",
+    "outcome": "[1] 登录被阻塞改成登录被锁定\n[2] 显示“是”",
+    "requirementId": "MS-101555",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-101555"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户列表-表头字段",
+      "id": "step-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "登录失败次数超过限制，查看用户列表-登录被阻塞",
+      "id": "step-2",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-101555",
+  "title": "用户列表-表头字段-登录被阻塞改成登录被锁定",
+  "revisionId": "c9b3290b763c67844138e39d56553956445384113cc2e8cc8d77290ea472ef2d",
+  "instanceId": "MS-101555--c9b3290b763c6784"
+}

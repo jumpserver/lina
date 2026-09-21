@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组-更新用户组：更新名称",
+    "browser": "chromium",
+    "outcome": "[1] 更新成功，查看用户组列表，该用户组名称是更新后的信息",
+    "requirementId": "MS-105182",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105182"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-更新用户组：更新名称",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105182",
+  "title": "用户管理-用户组-更新用户组：更新名称",
+  "revisionId": "6333613e45879d82d29542b36a39bae54b27e765df6b6a34583a066ab08e470b",
+  "instanceId": "MS-105182--6333613e45879d82"
+}

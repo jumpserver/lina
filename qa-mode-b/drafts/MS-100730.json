@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 测试token登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。",
+    "browser": "chromium",
+    "outcome": "[1] 用户列表记录该用户最后一次token登录时间。（token登录模拟，可参考备注）",
+    "requirementId": "MS-100730",
+    "risk": "critical",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100730"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "测试token登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-100730",
+  "title": "测试token登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。",
+  "revisionId": "5f3927561f454da1562d61e1c13238a788f46672b37dfe7a5f358b4aebc332b0",
+  "instanceId": "MS-100730--5f3927561f454da1"
+}

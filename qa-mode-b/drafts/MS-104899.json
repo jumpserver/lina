@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表-更新用户：更新用户的用户组",
+    "browser": "chromium",
+    "outcome": "[1] 更新成功，查看用户列表，该用户的用户字段显示的更新后的用户组信息",
+    "requirementId": "MS-104899",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104899"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表-更新用户：更新用户的用户组，提交",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104899",
+  "title": "用户管理-用户列表-更新用户：更新用户的用户组",
+  "revisionId": "78509e57afa0aa72c93506174244abf8373be05439f9482a813ea07f4935471f",
+  "instanceId": "MS-104899--78509e57afa0aa72"
+}

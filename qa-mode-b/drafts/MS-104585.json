@@ -1,0 +1,55 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：测试导出用户",
+    "browser": "chromium",
+    "outcome": "[1] 导出所有用户成功。查看表格信息，用户数据正确，且是所有用户的信息\n[2] 导出选择项用户成功。查看表格信息，用户数据正确，且仅是选择项用户的信息\n[3] 导出搜索结果的用户成功。查看表格信息，用户数据正确，且仅是搜索结果用户的信息",
+    "requirementId": "MS-104585",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104585"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表-点击导出：测试导出所有用户",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户列表-选择几个用户-点击导出：测试导出选择项的用户",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "3用户管理-用户列表-搜索条交搜索出用户，点击导出：测试导出搜索结果的用户",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104585",
+  "title": "用户管理-用户列表：测试导出用户",
+  "revisionId": "4aff9bcbe3f6e4d66e8b0468c46a1333f4271d048bb978cb913a130b1abd77a3",
+  "instanceId": "MS-104585--4aff9bcbe3f6e4d6"
+}

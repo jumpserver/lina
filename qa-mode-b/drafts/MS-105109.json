@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组-创建用户组：名称重复",
+    "browser": "chromium",
+    "outcome": "[1] 创建失败，提示字段必须唯一",
+    "requirementId": "MS-105109",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105109"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-创建用户组：名称重复",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105109",
+  "title": "用户管理-用户组-创建用户组：名称重复",
+  "revisionId": "d3cfbddf47bda3b4f213c737010c39f88bad90df8d102a36d0bbf0f61e482baf",
+  "instanceId": "MS-105109--d3cfbddf47bda3b4"
+}

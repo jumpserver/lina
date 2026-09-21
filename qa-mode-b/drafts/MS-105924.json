@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组：测试导入创建用户组",
+    "browser": "chromium",
+    "outcome": "[1] 导入成功\n[2] 导入成功",
+    "requirementId": "MS-105924",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105924"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组：测试导入创建用户组，csv格式",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户组：测试导入创建用户组，Excel格式",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105924",
+  "title": "用户管理-用户组：测试导入创建用户组",
+  "revisionId": "3f415369ce1db9029c06b42c9035f2ae914a7af4db2b99d1c2232ff0b8071259",
+  "instanceId": "MS-105924--3f415369ce1db902"
+}

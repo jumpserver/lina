@@ -1,0 +1,55 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户组-详情页：添加全部成员时，弹出二次确认",
+    "browser": "chromium",
+    "outcome": "[1] 弹出窗口二次确认窗口，提示：你确定要添加全部成功员吗\n[2] 不会添加成员\n[3] 提示添加成功，页面会刷新，添加了全部成员",
+    "requirementId": "MS-100435",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100435"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户组-详情页：点击添加全部成员",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "点击取消",
+      "id": "step-2",
+      "sideEffect": "none"
+    },
+    {
+      "action": "点击确认",
+      "id": "step-3",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-100435",
+  "title": "用户组-详情页：添加全部成员时，弹出二次确认",
+  "revisionId": "035e4980c366d60f256fe63704f26847d343a67912b54147e485a6c41ca87e8b",
+  "instanceId": "MS-100435--035e4980c366d60f"
+}

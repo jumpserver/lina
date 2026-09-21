@@ -1,0 +1,34 @@
+{
+  "testCaseId": "MS-104585",
+  "source": {
+    "type": "metersphere",
+    "file": "JumpServer-控制台-用户管理.xlsx",
+    "sheet": "模版",
+    "row": 50,
+    "originalId": "104585"
+  },
+  "irId": "104585",
+  "irWarnings": [],
+  "conversionNotes": [],
+  "priority": "P2",
+  "tags": [],
+  "metadata": {
+    "owner": "yumin.jiang@fit2cloud.com",
+    "version": null,
+    "remark": "1.组织管理员导出数据字段如下：\n![image.png](/resource/md/get?fileName=19831595.png)\n![image.png](/resource/md/get?fileName=8c91dc69.png)\n\n2.系统管理员导出数据字段如下：\n![image.png](/resource/md/get?fileName=ea50ddd4.png)\n![image.png](/resource/md/get?fileName=07628ff8.png)"
+  },
+  "module": {
+    "raw": "/JumpServer/控制台/用户管理/用户列表",
+    "path": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ]
+  },
+  "conversion": {
+    "producerVersion": "1.0.3",
+    "mode": "B",
+    "skill": "testcase-designer"
+  }
+}

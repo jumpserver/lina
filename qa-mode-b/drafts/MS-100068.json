@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户列表-标签搜索：测试同key和不同key标签搜索",
+    "browser": "chromium",
+    "outcome": "[1] 搜索出来的结果是三个Key的或关系\n[2] 搜索出来的结果是这些Key的且关系",
+    "requirementId": "MS-100068",
+    "risk": "high",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100068"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "如标签A:a，A:b，A:c，三个同Key标签搜索",
+      "id": "step-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "如标签A:a，B:a，不同Key标签搜索",
+      "id": "step-2",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-100068",
+  "title": "用户列表-标签搜索：测试同key和不同key标签搜索",
+  "revisionId": "32064439c11b249ef4371ecbdec2b0afefbcf87fea7d04866eed87b570ed1559",
+  "instanceId": "MS-100068--32064439c11b249e"
+}

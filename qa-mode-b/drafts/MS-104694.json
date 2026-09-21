@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：测试克隆用户",
+    "browser": "chromium",
+    "outcome": "[1] （空预期）",
+    "requirementId": "MS-104694",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104694"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表：选择一个用户，点击克隆",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104694",
+  "title": "用户管理-用户列表：测试克隆用户",
+  "revisionId": "f5158971d0c0c542507de6e82a08898e5efaf003ebf13ec87081349e1b3db4a6",
+  "instanceId": "MS-104694--f5158971d0c0c542"
+}

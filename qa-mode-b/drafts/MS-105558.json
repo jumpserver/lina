@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组：测试克隆用户组",
+    "browser": "chromium",
+    "outcome": "[1] 克隆表单上的信息与被克隆的用户组信息一致，名称多了两个字，修改克隆表单信息，提交。提示创建成功。",
+    "requirementId": "MS-105558",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105558"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组：测试克隆用户组",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105558",
+  "title": "用户管理-用户组：测试克隆用户组",
+  "revisionId": "4037ba04e7c3f7e58d64197f09a0c4d783c5c80d90274df69334108941a1ed30",
+  "instanceId": "MS-105558--4037ba04e7c3f7e5"
+}

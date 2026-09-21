@@ -1,0 +1,55 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：创建用户，设置MFA",
+    "browser": "chromium",
+    "outcome": "[1] 创建用户成功，使用该用户登录，正确用户名密码成功登录。不需要绑定MFA\n[2] 创建用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，可到个人信息页面，自行关闭MFA。\n[3] 创建用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，在个人信息页面，无法关闭MFA",
+    "requirementId": "MS-104263",
+    "risk": "critical",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104263"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "在创建用户表单上，禁用MFA，其他按照要求填写，提交",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "在创建用户表单上，启用MFA，其他按照要求填写，提交",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "在创建用户表单上，强制启用MFA，其他按照要求填写，提交",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104263",
+  "title": "用户管理-用户列表：创建用户，设置MFA",
+  "revisionId": "ecc9d2499dc256403820bfc02b4139496eafe1cb70489cc0f0cc0394c8ba1e00",
+  "instanceId": "MS-104263--ecc9d2499dc25640"
+}

@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户列表：测试删除admin用户",
+    "browser": "chromium",
+    "outcome": "[1] 删除失败，提示：无法删除管理员，请先禁用它",
+    "requirementId": "MS-106590",
+    "risk": "high",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-106590"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "使用其他管系统理员登录，用户列表页面：测试删除admin",
+      "id": "step-1",
+      "sideEffect": "destructive"
+    }
+  ],
+  "testCaseId": "MS-106590",
+  "title": "用户列表：测试删除admin用户",
+  "revisionId": "9e41aa2539dbb4838c97fb8e673a25020db89dae86f6c26b6c5205e74ac454f6",
+  "instanceId": "MS-106590--9e41aa2539dbb483"
+}

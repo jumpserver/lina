@@ -1,0 +1,46 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表 / 详情页；验证: 优化二级页面资源列表字段显示",
+    "browser": "chromium",
+    "outcome": "[1] 默认显示字段：名称、地址、平台和可连接性",
+    "requirementId": "MS-100134",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表",
+      "详情页"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100134"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户详情 - 授权资产   字段太多，优化成保留的和默认资产一样就行",
+      "id": "step-1",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-100134",
+  "title": "优化二级页面资源列表字段显示",
+  "revisionId": "10d0dd23455db4ea861667c3926137adf0d365213bb798214d5a5e176ae20af8",
+  "instanceId": "MS-100134--10d0dd23455db4ea"
+}

@@ -1,0 +1,36 @@
+{
+  "testCaseId": "MS-108160",
+  "source": {
+    "type": "metersphere",
+    "file": "JumpServer-控制台-用户管理.xlsx",
+    "sheet": "模版",
+    "row": 5,
+    "originalId": "108160"
+  },
+  "irId": "108160",
+  "irWarnings": [],
+  "conversionNotes": [],
+  "priority": "P1",
+  "tags": [
+    "OSM"
+  ],
+  "metadata": {
+    "owner": "yumin.jiang@fit2cloud.com",
+    "version": "v4.10.2",
+    "remark": "下午两点会触发任务"
+  },
+  "module": {
+    "raw": "/JumpServer/控制台/用户管理/用户列表",
+    "path": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ]
+  },
+  "conversion": {
+    "producerVersion": "1.0.3",
+    "mode": "B",
+    "skill": "testcase-designer"
+  }
+}

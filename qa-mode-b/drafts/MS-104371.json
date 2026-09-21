@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：系统管理员获取非全局组织用户列表",
+    "browser": "chromium",
+    "outcome": "[1] 返回该组织用户列表信息，且数据是正确的。左上角有创建、邀请用户、更多操作按钮。右上角有搜索框、导入、导出、刷新按钮。默认一页显示15条数据，上翻、下翻数据显示正确。可切换至任意组织用户列表页面。",
+    "requirementId": "MS-104371",
+    "risk": "medium",
+    "role": "org-user",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104371"
+    ],
+    "userScope": [
+      "org-user"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表：系统管理员获取非全局组织用户列表",
+      "id": "step-1",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-104371",
+  "title": "用户管理-用户列表：系统管理员获取非全局组织用户列表",
+  "revisionId": "53dbf5207815d26c291fcc2bb13b97418fbb330068bd9b1ec498cab258668848",
+  "instanceId": "MS-104371--53dbf5207815d26c"
+}

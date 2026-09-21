@@ -1,0 +1,65 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：组织管理测试批量操作用户",
+    "browser": "chromium",
+    "outcome": "[1] 组织管理员没有批量删除权限。\n[2] 批量禁用成功，这些用户的激活字段都是打叉的。使用这些用户登录，登录失败，提示该用户已禁用\n[3] 批量激活成功，这些用户的激活字段都是打勾的。使用这些用户登录，正确的用户名和密码登录成功\n[4] 弹出批量更新用户表单，可更新用户组，过期时间。能够成功批量更新\n[5] 移除成功，查看用户列表，这些用户已不在该组织中。在全局组织下，可搜索到这些用户",
+    "requirementId": "MS-104472",
+    "risk": "high",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104472"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "测试组织管理员批量删除用户",
+      "id": "step-1",
+      "sideEffect": "destructive"
+    },
+    {
+      "action": "测试组织管理员批量禁用用户",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "测试组织管理员批量激活用户",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "测试组织管理员批量更新用户",
+      "id": "step-4",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "测试组织管理员批量移除用户",
+      "id": "step-5",
+      "sideEffect": "destructive"
+    }
+  ],
+  "testCaseId": "MS-104472",
+  "title": "用户管理-用户列表：组织管理测试批量操作用户",
+  "revisionId": "832901321daf75541a27f38c04e4e5d6e72ca9766e2f2609ec4b6a843f3f293f",
+  "instanceId": "MS-104472--832901321daf7554"
+}

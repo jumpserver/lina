@@ -1,0 +1,80 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：测试搜索功能",
+    "browser": "chromium",
+    "outcome": "[1] [2]\n[3] [4]\n[5] [6]\n[7] [8]",
+    "requirementId": "MS-104643",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104643"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表-搜索框：根据用户ID搜索",
+      "id": "step-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户管理-用户列表-搜索框：根据用户用户名搜索",
+      "id": "step-2",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户管理-用户列表-搜索框：根据用户名称搜索",
+      "id": "step-3",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户管理-用户列表-搜索框：根据用户邮箱搜索",
+      "id": "step-4",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户管理-用户列表-搜索框：根据用户来源搜索",
+      "id": "step-5",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户管理-用户列表-搜索框：根据用户是否激活搜索",
+      "id": "step-6",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户列表-搜索框：根据用户系统角色搜索",
+      "id": "step-7",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户管理-用户列表-搜索框：根据用户组织角色搜索",
+      "id": "step-8",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-104643",
+  "title": "用户管理-用户列表：测试搜索功能",
+  "revisionId": "777c44b77dded4a0d138be5c0785eb229a082665cc679eda0b0ed1688743277b",
+  "instanceId": "MS-104643--777c44b77dded4a0"
+}

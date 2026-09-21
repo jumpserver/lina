@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组-更新用户组：更新名称",
+    "browser": "chromium",
+    "outcome": "[1] 更新失败，提示字段必须唯一",
+    "requirementId": "MS-105239",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105239"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-更新用户组：更新名称",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105239",
+  "title": "用户管理-用户组-更新用户组：更新名称",
+  "revisionId": "7c738dc07b74f7891b836771ece485118fa44dc5aa69e5bb06a86cdbf18e9741",
+  "instanceId": "MS-105239--7c738dc07b74f789"
+}

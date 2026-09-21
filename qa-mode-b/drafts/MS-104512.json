@@ -1,0 +1,60 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：测试下载导入用户模版",
+    "browser": "chromium",
+    "outcome": "[1] [2]\n[3] [4]",
+    "requirementId": "MS-104512",
+    "risk": "low",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104512"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表-导入：测试系统管理员下载导入模版（CSV）",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户列表-导入：测试系统管理员下载导入模版（Excel）",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户列表-导入：测试组织管理员下载导入模版（CSV）",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户列表-导入：测试组织管理员下载导入模版（Excel）",
+      "id": "step-4",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104512",
+  "title": "用户管理-用户列表：测试下载导入用户模版",
+  "revisionId": "abf2f0371a81351b72a8262f75dd25f1ffb5800d9770711b5e0ebc510f5b9401",
+  "instanceId": "MS-104512--abf2f0371a81351b"
+}

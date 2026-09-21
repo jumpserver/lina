@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组-创建用户组：必填项不填写",
+    "browser": "chromium",
+    "outcome": "[1] 创建失败，提示该项为必填项",
+    "requirementId": "MS-105079",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105079"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-创建用户组：必填项不填写",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105079",
+  "title": "用户管理-用户组-创建用户组：必填项不填写",
+  "revisionId": "21827e7e0a3da1213a39658313dd2f4370a6c694d89dd14fae6514df8e2894e4",
+  "instanceId": "MS-105079--21827e7e0a3da121"
+}

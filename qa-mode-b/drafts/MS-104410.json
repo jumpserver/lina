@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：组织管理员获取其有权限的组织用户列表",
+    "browser": "chromium",
+    "outcome": "[1] 返回该组织用户列表信息，且数据是正确的。左上角有创建、邀请用户、更多操作按钮。右上角有搜索框、导入、导出、刷新按钮。默认一页显示15条数据，上翻、下翻数据显示正确。仅能获取其有权限的组织用户列表。",
+    "requirementId": "MS-104410",
+    "risk": "medium",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104410"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表：组织管理员获取其有权限的组织用户列表",
+      "id": "step-1",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-104410",
+  "title": "用户管理-用户列表：组织管理员获取其有权限的组织用户列表",
+  "revisionId": "72f1f3a99b410f6afed537509214a4c1ee3ecbe4ec6ea114eff2f81b67982fd8",
+  "instanceId": "MS-104410--72f1f3a99b410f6a"
+}

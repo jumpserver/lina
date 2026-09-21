@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表-更新用户：更新用户名称、用户名、邮箱信息",
+    "browser": "chromium",
+    "outcome": "[1] 更改成功，查看该用户信息，是更改后的信息。使用新修改的用户名登录，正确的密码登录成功。",
+    "requirementId": "MS-104855",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104855"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表-更新用户：更新用户名称、用户名、邮箱信息，提交",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104855",
+  "title": "用户管理-用户列表-更新用户：更新用户名称、用户名、邮箱信息",
+  "revisionId": "e26d5d28156d2d022a7a32b0c66e99e6908b79304c6939ecf10e5a208a0c9b40",
+  "instanceId": "MS-104855--e26d5d28156d2d02"
+}

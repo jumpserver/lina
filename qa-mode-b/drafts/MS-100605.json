@@ -1,0 +1,85 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 克隆用户表单优化为抽屉式表单（右侧弹出）",
+    "browser": "chromium",
+    "outcome": "[1] 右侧弹出抽屉式创建表单，并且表单显示该用户的对应信息。（备注：注意是创建表单，不是更新表单，克隆属于创建，只是复制了一份被克隆用户的信息）\n[2] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的\n[3] 创建用户成功。显示用户列表，可查看到该新用户的用户组信息是更新后信息\n[4] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA\n[5] 创建用户成功。使用该用户登录，登录成功后跳转修改密码，根据提示，修改密码成功。\n[6] 创建用户成功。该用户设置的邮箱收到修改密码链接，点击链接可重置密码成功。\n[7] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限\n[8] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。",
+    "requirementId": "MS-100605",
+    "risk": "high",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100605"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "前置条件: 克隆需要修改用户名、邮箱，不可重复",
+      "id": "pre-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户管理，点击克隆用户",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写，修改名称、用户名、邮箱，其他按照要求填写",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写,修改用户组。",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写,修改设置MFA开启/强制开启",
+      "id": "step-4",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写,密码策略，选择设置密码，并且勾选下次登录需修改密码。",
+      "id": "step-5",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写,密码策略，选择生成重置密码链接，通过邮件发送给永固",
+      "id": "step-6",
+      "sideEffect": "external"
+    },
+    {
+      "action": "表单填写,修改系统角色/组织角色",
+      "id": "step-7",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写,关闭激活",
+      "id": "step-8",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-100605",
+  "title": "克隆用户表单优化为抽屉式表单（右侧弹出）",
+  "revisionId": "3707c3377f08da3d56692ad3f8fc21bb5e8d0b8a8a3d4b98aca86b70edf4f766",
+  "instanceId": "MS-100605--3707c3377f08da3d"
+}

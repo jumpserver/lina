@@ -1,0 +1,49 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理；验证: 用户管理-普通组织管理员更新/删除管理员",
+    "browser": "chromium",
+    "outcome": "[1] 无法更新\n[2] 无法删除",
+    "requirementId": "MS-101420",
+    "risk": "high",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-101420"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "把admin加入到某个组织下，组织的管理员更新admin",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "把admin加入到某个组织下，组织的管理员删除admin",
+      "id": "step-2",
+      "sideEffect": "destructive"
+    }
+  ],
+  "testCaseId": "MS-101420",
+  "title": "用户管理-普通组织管理员更新/删除管理员",
+  "revisionId": "0f0ddca7231ea9a9b43fc56feac885178e2649e38aa36b28581f6cd88be93e6c",
+  "instanceId": "MS-101420--0f0ddca7231ea9a9"
+}

@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户组-详情页：更新用户组表单优化为抽屉式表单（右侧弹出）",
+    "browser": "chromium",
+    "outcome": "[1] 右侧弹出抽屉式表单，表单显示该用户组的信息\n[2] 更新成功过。该详情页自动刷新，查看该用户组信息是更新后信息正确的。",
+    "requirementId": "MS-100601",
+    "risk": "high",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100601"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-详情页：点击更新用户组",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写，更新名称，更新用户，点击更新",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-100601",
+  "title": "用户组-详情页：更新用户组表单优化为抽屉式表单（右侧弹出）",
+  "revisionId": "d734ef40b3079aaec5ada37247d54debf760249485677dcc6c2ea27b69ade208",
+  "instanceId": "MS-100601--d734ef40b3079aae"
+}

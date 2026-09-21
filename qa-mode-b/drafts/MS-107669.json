@@ -1,0 +1,60 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户列表：验证---",
+    "browser": "chromium",
+    "outcome": "[1] 页面显示密码过期的用户\n[2] 页面显示30天都没有登录的用户\n[3] 页面显示未启用MFA的用户\n[4] 页面显示被锁定的用户",
+    "requirementId": "MS-107669",
+    "risk": "critical",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-107669"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户列表：点击无密码过期：筛选密码过期的用户",
+      "id": "step-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户列表：点击长期未登录：筛选长期未登录的用户",
+      "id": "step-2",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户列表：点击未启用MFA：筛选未启用MFA的用户",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户列表：点击被锁定：筛选被锁定的用户",
+      "id": "step-4",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-107669",
+  "title": "用户列表：验证---",
+  "revisionId": "5dd0f110a423549061ffd14839e7cd18a6d8c45203302fe143d1be3c4a597b1c",
+  "instanceId": "MS-107669--5dd0f110a4235490"
+}

@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：系统管理员获取全局组织用户列表",
+    "browser": "chromium",
+    "outcome": "[1] 返回全局组织用户列表信息，获取的是所有用户的信息。左上角有创建、更多操作按钮。右上角有搜索框、导出、刷新按钮。无邀请用户按钮，无导入按钮。且全局组织下，可创建用户，更新、删除用户。可批量禁用/激活删除用户。无法导入用户。",
+    "requirementId": "MS-104339",
+    "risk": "medium",
+    "role": "org-user",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104339"
+    ],
+    "userScope": [
+      "org-user"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表：系统管理员获取全局组织用户列表",
+      "id": "step-1",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-104339",
+  "title": "用户管理-用户列表：系统管理员获取全局组织用户列表",
+  "revisionId": "f8910faa57eec2b76ab22fb5474c8b7e105399d8519bc20297bd160de2f6aba2",
+  "instanceId": "MS-104339--f8910faa57eec2b7"
+}

@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效",
+    "browser": "chromium",
+    "outcome": "[1] 过滤结果成功\n[2] 过滤结果成功",
+    "requirementId": "MS-100055",
+    "risk": "medium",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100055"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效，如组织用户",
+      "id": "step-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效，如组织管理员",
+      "id": "step-2",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-100055",
+  "title": "用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效",
+  "revisionId": "80feb2665c6aada1f99b6a8ae9d108f42145e11ef86cce32351fe9dce5f208bb",
+  "instanceId": "MS-100055--80feb2665c6aada1"
+}

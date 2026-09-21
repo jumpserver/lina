@@ -1,0 +1,55 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组：测试导出用户组",
+    "browser": "chromium",
+    "outcome": "[1] 导出成功，查看表格信息，是所有用户组信息，且数据正确\n[2] 导出成功，查看表格信息，是选择项用户组信息，且数据正确\n[3] 导出成功，查看表格信息，是搜索结果用户组信息，且数据正确",
+    "requirementId": "MS-105716",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105716"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组：测试导出用户组，导出所有用户组",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户组：测试导出用户组，导出选择项用户组",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户组：测试导出用户组，导出搜索结果的项用户组",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105716",
+  "title": "用户管理-用户组：测试导出用户组",
+  "revisionId": "f78aa472e05e1aa7c288d66d7545eb7e95fe77ddc9337c083de45fc19afb8db4",
+  "instanceId": "MS-105716--f78aa472e05e1aa7"
+}

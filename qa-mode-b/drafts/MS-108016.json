@@ -1,0 +1,59 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理；验证: 控制台:验证控制台用户模块标题英文翻译",
+    "browser": "chromium",
+    "outcome": "[1] 登录后用户管理模块菜单显示Users，用户管理列表标题显示Users\n[2] 切换后用户管理模块菜单显示Users，用户管理列表标题显示Users\n[3] 用户管理模块菜单显示Users，用户管理列表标题显示Users\n[4] 用户管理模块菜单显示Users，用户管理列表标题显示Users",
+    "requirementId": "MS-108016",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-108016"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "登录页面选择英文模式登录",
+      "id": "step-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "登录系统后，切换到英文模式",
+      "id": "step-2",
+      "sideEffect": "none"
+    },
+    {
+      "action": "登录后在英文状态下从控制台切换到其他平台，再切回控制台",
+      "id": "step-3",
+      "sideEffect": "none"
+    },
+    {
+      "action": "登录后在中文状态下切换到其他平台，切回控制台，修改语言为英文",
+      "id": "step-4",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-108016",
+  "title": "控制台:验证控制台用户模块标题英文翻译",
+  "revisionId": "18b94b7291c76376bfe9ac7353f1993c7e2ffc380ad2f62f44452c2ff278a504",
+  "instanceId": "MS-108016--18b94b7291c76376"
+}

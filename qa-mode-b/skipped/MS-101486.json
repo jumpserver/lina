@@ -1,0 +1,16 @@
+{
+  "id": "101486",
+  "title": "用户列表-批量更新-更新完自动关闭更新窗口",
+  "reason": "missing_steps",
+  "warnings": [
+    {
+      "type": "missing_steps",
+      "message": "当前测试用例没有步骤描述"
+    },
+    {
+      "type": "missing_expectations",
+      "message": "当前测试用例没有明确的预期结果"
+    }
+  ],
+  "message": "源用例无步骤，已跳过 Draft"
+}

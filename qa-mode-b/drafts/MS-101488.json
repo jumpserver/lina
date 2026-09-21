@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户列表-按用户组搜索",
+    "browser": "chromium",
+    "outcome": "[1] 筛选出符合条件的所有用户\n[2] 筛选出符合条件的所有用户",
+    "requirementId": "MS-101488",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-101488"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户列表搜索框，输入用户组名称，精确匹配",
+      "id": "step-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户列表搜索框，输入用户组名称，模糊匹配",
+      "id": "step-2",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-101488",
+  "title": "用户列表-按用户组搜索",
+  "revisionId": "9baa9899fbcd2d9361c36134ed9ce207406164c0cad483d5a5068d574ce35189",
+  "instanceId": "MS-101488--9baa9899fbcd2d93"
+}

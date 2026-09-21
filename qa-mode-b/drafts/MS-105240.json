@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表-更新用户：更新用户，更新手机号、微信、备注",
+    "browser": "chromium",
+    "outcome": "[1] 更新成功，查看该用户信息，是更新后的信息。",
+    "requirementId": "MS-105240",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105240"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表-更新用户：更新用户，更新手机号、微信、备注",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105240",
+  "title": "用户管理-用户列表-更新用户：更新用户，更新手机号、微信、备注",
+  "revisionId": "25ecd2693a8fb51b7a8342d6cf4861208167cd566d03b998b9ffb45c09c59430",
+  "instanceId": "MS-105240--25ecd2693a8fb51b"
+}

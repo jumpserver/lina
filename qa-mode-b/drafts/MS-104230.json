@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：使用组织管理员创建组织审计员",
+    "browser": "chromium",
+    "outcome": "[1] 返回创建用户表单。\n[2] 创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有的权限：包括审计台、工作台。不可切换到任意组织，只能在其有权限的组织下。",
+    "requirementId": "MS-104230",
+    "risk": "high",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104230"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "系统管理员登录。点击用户管理-用户列表：点击创建。",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统审计员、组织角色选用户，其他按要求填写，提交",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104230",
+  "title": "用户管理-用户列表：使用组织管理员创建组织审计员",
+  "revisionId": "479f14cf7258194e630948d605511d5a91cb6ff4a93bc2160f848dafc1193d0d",
+  "instanceId": "MS-104230--479f14cf7258194e"
+}

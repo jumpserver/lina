@@ -1,0 +1,46 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表 / 详情页；验证: 用户详情页-授权的资产：验证是否可查看资产的授权账号",
+    "browser": "chromium",
+    "outcome": "[1] 点击账号查看，可查资产授权的账号",
+    "requirementId": "MS-100058",
+    "risk": "high",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表",
+      "详情页"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100058"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户详情页-授权的资产：验证是否可查看资产的授权账号",
+      "id": "step-1",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-100058",
+  "title": "用户详情页-授权的资产：验证是否可查看资产的授权账号",
+  "revisionId": "842938545de0ef62bbad82daac1b2324741303f78a0673959700d7c3430bf2a4",
+  "instanceId": "MS-100058--842938545de0ef62"
+}

@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：使用系统管理员创建系统管理员",
+    "browser": "chromium",
+    "outcome": "[1] 返回创建用户表单。\n[2] 创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有所有权限：包括控制台、审计台、工作台、系统设置，可对资源进行增删改查，且可切换到任意组织",
+    "requirementId": "MS-104196",
+    "risk": "high",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104196"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "系统管理员登录。点击用户管理-用户列表：点击创建。",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统管理员、组织角色选用户，其他按要求填写，提交",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104196",
+  "title": "用户管理-用户列表：使用系统管理员创建系统管理员",
+  "revisionId": "9b89d3aa3adc143c6483ddbb0d6cd7055e372c8cfe66743618b8aa564f85f4c6",
+  "instanceId": "MS-104196--9b89d3aa3adc143c"
+}

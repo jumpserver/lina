@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组-详情页-基本信息tab：添加/删除成员",
+    "browser": "chromium",
+    "outcome": "[1] 提示添加成功，查看用户列表，这些用户的用户组字段显示正确\n[2] 提示删除成功，查看用户列表，这些用户的用户组字段已没有该用户组名称",
+    "requirementId": "MS-105392",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105392"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-详情页-基本信息tab：添加成员",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户组-详情页-基本信息tab：删除成员",
+      "id": "step-2",
+      "sideEffect": "destructive"
+    }
+  ],
+  "testCaseId": "MS-105392",
+  "title": "用户管理-用户组-详情页-基本信息tab：添加/删除成员",
+  "revisionId": "ad296f95854e332329b4060cde4ec5493c5d7e62911c78cde8f99ba77fbdb9bc",
+  "instanceId": "MS-105392--ad296f95854e3323"
+}

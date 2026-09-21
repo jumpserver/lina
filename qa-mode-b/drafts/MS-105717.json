@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组：测试搜索用户组",
+    "browser": "chromium",
+    "outcome": "[1] 输入名称全名，符合条件的用户组可被搜索出来。输入名称关键字，搜索不到任何东西。\n[2] 输入名称全名/或者关键字，符合条件的用户组可被搜索出来。",
+    "requirementId": "MS-105717",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105717"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-搜索框：选择名称搜索条件，进行搜索",
+      "id": "step-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户管理-用户组-搜索框：不选择搜索条件，进行搜索",
+      "id": "step-2",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-105717",
+  "title": "用户管理-用户组：测试搜索用户组",
+  "revisionId": "615a52398f26bf14e9d882a68bb9802a49b14bf279e399ad5084dfdfccf21d6c",
+  "instanceId": "MS-105717--615a52398f26bf14"
+}

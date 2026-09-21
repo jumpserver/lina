@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组：测试自定义显示表单字段",
+    "browser": "chromium",
+    "outcome": "[1] 返回用户组，用户列表只显示自定义表单字段",
+    "requirementId": "MS-105807",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105807"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组：测试自定义显示列表字段，勾选需要显示的字段，提交",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105807",
+  "title": "用户管理-用户组：测试自定义显示表单字段",
+  "revisionId": "e4550d9d55550c06afd09edc526cdcf3c66282917727c0fbca5f4fcbe9b61862",
+  "instanceId": "MS-105807--e4550d9d55550c06"
+}

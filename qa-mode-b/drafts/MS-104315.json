@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：创建用户，设置自定义的系统角色",
+    "browser": "chromium",
+    "outcome": "[1] 创建用户成功，使用该用户登录，用户拥有该自定义系统角色的权限",
+    "requirementId": "MS-104315",
+    "risk": "medium",
+    "role": "org-user",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104315"
+    ],
+    "userScope": [
+      "org-user"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "在创建用户表单上，系统角色选择自定义的系统角色，组织角色组织用户，其他按照要求填写，提交",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104315",
+  "title": "用户管理-用户列表：创建用户，设置自定义的系统角色",
+  "revisionId": "1331ffea1a49cd7ab1c31f5b8f19cda2b0975b6a910b4f0e439c410f96d02278",
+  "instanceId": "MS-104315--1331ffea1a49cd7a"
+}

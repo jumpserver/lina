@@ -1,0 +1,46 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表 / 详情页；验证: 【全局组织】用户详情页是否能显示用户所属的组织以及角色",
+    "browser": "chromium",
+    "outcome": "[1] 组织显示在前，用户在当前组织的角色跟在组织后面。所属的每个组织和和角色都会显示",
+    "requirementId": "MS-100059",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表",
+      "详情页"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100059"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "切换到全局组织，查看用户的详情页，师傅可看到用户所属的各个组织以及角色",
+      "id": "step-1",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-100059",
+  "title": "【全局组织】用户详情页是否能显示用户所属的组织以及角色",
+  "revisionId": "aa0709ef92ea1ea9110f25e029f4b1960cc955ff55c0dc18a556ee8e94266bfa",
+  "instanceId": "MS-100059--aa0709ef92ea1ea9"
+}

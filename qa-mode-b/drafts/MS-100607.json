@@ -1,0 +1,80 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 创建用户表单优化为抽屉式表单（右侧弹出）",
+    "browser": "chromium",
+    "outcome": "[1] 右侧弹出抽屉式表单\n[2] 创建用户成功。\n[3] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的\n[4] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA\n[5] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，登录成功跳转修改密码。\n[6] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的。用户所填写的邮箱收到了重置密码链接，点击链接，可根据流程重置密码。\n[7] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限\n[8] 创建用户成功。显示用户列表，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。",
+    "requirementId": "MS-100607",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100607"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理，点击创建用户",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写名称、用户名、邮箱，其他按照要求填写",
+      "id": "step-2",
+      "sideEffect": "none"
+    },
+    {
+      "action": "表单填写,添加用户组",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写,设置MFA开启/强制开启",
+      "id": "step-4",
+      "sideEffect": "none"
+    },
+    {
+      "action": "表单填写,密码策略为设置密码，并且勾选下次登录需要密码",
+      "id": "step-5",
+      "sideEffect": "none"
+    },
+    {
+      "action": "表单填写,密码策略为设置密码，生成重置密码连接，通过邮箱发送给用户",
+      "id": "step-6",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "表单填写,设置系统角色/组织角色",
+      "id": "step-7",
+      "sideEffect": "none"
+    },
+    {
+      "action": "表单填写,关闭激活",
+      "id": "step-8",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-100607",
+  "title": "创建用户表单优化为抽屉式表单（右侧弹出）",
+  "revisionId": "7802c37edceb11efaa4eb0e78d7e41044a92250edc96b886c91ec25d6b084b12",
+  "instanceId": "MS-100607--7802c37edceb11ef"
+}

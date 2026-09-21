@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：创建用户，设置用户组",
+    "browser": "chromium",
+    "outcome": "[1] 创建用户成功。返回用户列表，可查看用户组字段，显示正确。也可到用户组页面，查看该用户组详情页，可查看该用户组下有该用户。当授权规则有该用户组时，则用户拥有这个授权的资产权限。",
+    "requirementId": "MS-104248",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104248"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "在创建用户表单上，填写名称、用户名、邮箱，并设置用户组，其他按照要求填写。",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104248",
+  "title": "用户管理-用户列表：创建用户，设置用户组",
+  "revisionId": "045e1af30b5141e387de821f5aec5948e4ac87ee277794ff655c69d2f50b7df1",
+  "instanceId": "MS-104248--045e1af30b5141e3"
+}

@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表-创建用户：测试重复名称、用户名、邮箱",
+    "browser": "chromium",
+    "outcome": "[1] 创建失败，提示该名称、用户名、邮箱已重复",
+    "requirementId": "MS-102480",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-102480"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表-创建用户：测试重复名称、用户名、邮箱",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-102480",
+  "title": "用户管理-用户列表-创建用户：测试重复名称、用户名、邮箱",
+  "revisionId": "101a40d5e648432a691d556b7fdf23aa8902c8e3d5cda5957e1edaee464ceafc",
+  "instanceId": "MS-102480--101a40d5e648432a"
+}

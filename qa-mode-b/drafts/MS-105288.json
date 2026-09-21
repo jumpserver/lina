@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组-更新用户组：必填项不填写",
+    "browser": "chromium",
+    "outcome": "[1] 更新失败，提示名称不能重复",
+    "requirementId": "MS-105288",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105288"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-更新用户组：必填项不填写",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105288",
+  "title": "用户管理-用户组-更新用户组：必填项不填写",
+  "revisionId": "aee8ab2c8f3a417c92995093fac149da671333afcc03cd232b929e85a7daaa71",
+  "instanceId": "MS-105288--aee8ab2c8f3a417c"
+}

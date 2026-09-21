@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组-更新用户组：添加/删除用户",
+    "browser": "chromium",
+    "outcome": "[1] 更新成功，查看用户列表，这些用户属于该用户组",
+    "requirementId": "MS-105157",
+    "risk": "high",
+    "role": "org-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105157"
+    ],
+    "userScope": [
+      "org-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-更新用户组：添加用户",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105157",
+  "title": "用户管理-用户组-更新用户组：添加/删除用户",
+  "revisionId": "5a87df21999f2c62bf08d3884df8741468e50c72a1d66967c332aa2f1592231c",
+  "instanceId": "MS-105157--5a87df21999f2c62"
+}

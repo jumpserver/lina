@@ -1,0 +1,55 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表-更新用户：更新用户，设置MFA",
+    "browser": "chromium",
+    "outcome": "[1] 更新用户成功，使用该用户登录，正确用户名密码成功登录。不需要绑定MFA\n[2] 更新用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，可到个人信息页面，自行关闭MFA。\n[3] 更新用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，在个人信息页面，无法关闭MFA",
+    "requirementId": "MS-105019",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105019"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表-更新用户：更新用户，在更新用户表单上，禁用MFA，其他按照要求填写，提交",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户列表-更新用户：更新用户，在更新用户表单上，启用MFA，其他按照要求填写，提交",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "用户管理-用户列表-更新用户：更新用户，在更新用户表单上，强制启用MFA，其他按照要求填写，提交",
+      "id": "step-3",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105019",
+  "title": "用户管理-用户列表-更新用户：更新用户，设置MFA",
+  "revisionId": "52efe74a75e2ec307ff79da0621b28eda81ebd4499a3537e6ad55dffeb3e81ec",
+  "instanceId": "MS-105019--52efe74a75e2ec30"
+}

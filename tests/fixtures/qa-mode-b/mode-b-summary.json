@@ -1,0 +1,1532 @@
+{
+  "mode": "B",
+  "skill": "testcase-designer",
+  "runtime": {
+    "package": "@gwinnguyen/qa-skills",
+    "version": "1.0.3",
+    "verify": {
+      "executable": "/Users/zhaojisen/node_modules/@gwinnguyen/qa-skills/dist/src/cli/index.js",
+      "version": "1.0.3",
+      "range": ">=1.0.0 <2.0.0",
+      "compatible": true
+    }
+  },
+  "schemaVersion": "3.0.0",
+  "sourceIr": "testcase-ir.json",
+  "outputDir": "~/Desktop/qa-mode-b",
+  "totals": {
+    "irCases": 110,
+    "converted": 95,
+    "skipped": 15,
+    "schemaValid": 95,
+    "schemaInvalid": 0
+  },
+  "fingerprintNote": "revisionId 由 createTestCaseRevision 计算（排除 revisionId/fingerprint）。qa-skill fingerprint --file 对整文件（含 revisionId/instanceId）哈希，二者本就不会相等。",
+  "fingerprintSpotCheck": {
+    "testCaseId": "MS-108016",
+    "revisionId": "18b94b7291c76376bfe9ac7353f1993c7e2ffc380ad2f62f44452c2ff278a504",
+    "cliWholeFileFingerprint": "7660512de0d7ee6de105f5f13c473fba2b3873d81420a5488cb4889fd7bc9cff"
+  },
+  "skipped": [
+    {
+      "id": "101486",
+      "title": "用户列表-批量更新-更新完自动关闭更新窗口",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105138",
+      "title": "用户管理-用户列表-更新用户：更新用户来源信息",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105290",
+      "title": "用户管理-用户列表-详情页-基本信息tab:查看用户的基本信息",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105328",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：开启/关闭激活",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105366",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：重置MFA",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105422",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：重置密码",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105461",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：重置SSH密钥",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105531",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：解锁用户",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105586",
+      "title": "用户管理-用户列表-详情页-基本信息tab-用户组：添加/删除用户组",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105601",
+      "title": "用户管理-用户列表-详情页-基本信息tab：右上角更新按钮",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105694",
+      "title": "用户管理-用户列表-详情页-用户登录规则：",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105702",
+      "title": "用户管理-用户列表-详情页-基本信息tab：右上角删除按钮",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105765",
+      "title": "用户管理-用户列表-详情页-授权的资产tab：获取授权的资产信息",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105786",
+      "title": "用户管理-用户列表-详情页-授权的账号tab：获取授权的账号信息",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    },
+    {
+      "id": "105883",
+      "title": "用户管理-用户列表-详情页-资产授权规则tab：获取资产授权规则",
+      "reason": "missing_steps",
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ],
+      "message": "源用例无步骤，已跳过 Draft"
+    }
+  ],
+  "invalid": [],
+  "converted": [
+    {
+      "testCaseId": "MS-108016",
+      "title": "控制台:验证控制台用户模块标题英文翻译",
+      "file": "drafts/MS-108016.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "18b94b7291c76376bfe9ac7353f1993c7e2ffc380ad2f62f44452c2ff278a504",
+      "instanceId": "MS-108016--18b94b7291c76376",
+      "stepCount": 4,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-101420",
+      "title": "用户管理-普通组织管理员更新/删除管理员",
+      "file": "drafts/MS-101420.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "0f0ddca7231ea9a9b43fc56feac885178e2649e38aa36b28581f6cd88be93e6c",
+      "instanceId": "MS-101420--0f0ddca7231ea9a9",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-101536",
+      "title": "用户管理-批量操作-下拉列表显示选中条目数",
+      "file": "drafts/MS-101536.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "8e93b66a8053e812427a81e1b0a4e178bcf6b9d263b45e3b8a61600c67dbc461",
+      "instanceId": "MS-101536--8e93b66a8053e812",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-108160",
+      "title": "用户列表：优化用户快过期时有提醒信息",
+      "file": "drafts/MS-108160.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "b035eaef0899e3dd823549d0389ce6709fbf5961bcef4f216e24b2536e68d014",
+      "instanceId": "MS-108160--b035eaef0899e3dd",
+      "stepCount": 3,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-108955",
+      "title": "用户列表：验证用户 email 信息加密存储功能",
+      "file": "drafts/MS-108955.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "def9300440f4fc991889ea986101490899a4665318eb045b7ae0ac5e0471b860",
+      "instanceId": "MS-108955--def9300440f4fc99",
+      "stepCount": 5,
+      "risk": "high",
+      "irWarnings": [
+        {
+          "type": "invalid_step_number",
+          "message": "编号序列异常: [1, 2, 3, 5, 4]"
+        }
+      ],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-107668",
+      "title": "用户列表：验证快速筛选",
+      "file": "drafts/MS-107668.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "abd46fb497d2d1d5c140d3aa6539026119418bba864f2b0ea6c1854a3abccc1b",
+      "instanceId": "MS-107668--abd46fb497d2d1d5",
+      "stepCount": 4,
+      "risk": "critical",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-107669",
+      "title": "用户列表：验证---",
+      "file": "drafts/MS-107669.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "5dd0f110a423549061ffd14839e7cd18a6d8c45203302fe143d1be3c4a597b1c",
+      "instanceId": "MS-107669--5dd0f110a4235490",
+      "stepCount": 4,
+      "risk": "critical",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100055",
+      "title": "用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效",
+      "file": "drafts/MS-100055.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "80feb2665c6aada1f99b6a8ae9d108f42145e11ef86cce32351fe9dce5f208bb",
+      "instanceId": "MS-100055--80feb2665c6aada1",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100068",
+      "title": "用户列表-标签搜索：测试同key和不同key标签搜索",
+      "file": "drafts/MS-100068.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "32064439c11b249ef4371ecbdec2b0afefbcf87fea7d04866eed87b570ed1559",
+      "instanceId": "MS-100068--32064439c11b249e",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100211",
+      "title": "创建用户表单-查看一些字段使用select2组件，是否优化成 TableSelect2 组件",
+      "file": "drafts/MS-100211.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "f57904367e5fb27c4873bd9505dc62f796958a2e958503886b422507a0693ed8",
+      "instanceId": "MS-100211--f57904367e5fb27c",
+      "stepCount": 3,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100600",
+      "title": "用户-详情页：更新用户表单优化为抽屉式表单（右侧弹出）",
+      "file": "drafts/MS-100600.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "486bffe4f276f6c8b3863e89e3dafca318bc5831427f5300911b696c4e107c4b",
+      "instanceId": "MS-100600--486bffe4f276f6c8",
+      "stepCount": 8,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100605",
+      "title": "克隆用户表单优化为抽屉式表单（右侧弹出）",
+      "file": "drafts/MS-100605.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "3707c3377f08da3d56692ad3f8fc21bb5e8d0b8a8a3d4b98aca86b70edf4f766",
+      "instanceId": "MS-100605--3707c3377f08da3d",
+      "stepCount": 9,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100606",
+      "title": "更新用户表单优化为抽屉式表单（右侧弹出）",
+      "file": "drafts/MS-100606.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "d859cdec7f79b30e385d4c7a362f7e45b85da997ec1b225d719f4e8a179fcf45",
+      "instanceId": "MS-100606--d859cdec7f79b30e",
+      "stepCount": 8,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100607",
+      "title": "创建用户表单优化为抽屉式表单（右侧弹出）",
+      "file": "drafts/MS-100607.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "7802c37edceb11efaa4eb0e78d7e41044a92250edc96b886c91ec25d6b084b12",
+      "instanceId": "MS-100607--7802c37edceb11ef",
+      "stepCount": 8,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100730",
+      "title": "测试token登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。",
+      "file": "drafts/MS-100730.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "5f3927561f454da1562d61e1c13238a788f46672b37dfe7a5f358b4aebc332b0",
+      "instanceId": "MS-100730--5f3927561f454da1",
+      "stepCount": 1,
+      "risk": "critical",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100731",
+      "title": "测试AK登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。",
+      "file": "drafts/MS-100731.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "77c3bda6a66b1252136d9e662509ce884c16a3bad73512a5651e747b2a656122",
+      "instanceId": "MS-100731--77c3bda6a66b1252",
+      "stepCount": 2,
+      "risk": "critical",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100733",
+      "title": "用户管理-用户列表：创建用户，勾选下次登录需修改密码",
+      "file": "drafts/MS-100733.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "08ab368e0777160ba01c14d089115d3f1e734fccd9a3ccaea9dbf2d1e427ac43",
+      "instanceId": "MS-100733--08ab368e0777160b",
+      "stepCount": 1,
+      "risk": "critical",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-101488",
+      "title": "用户列表-按用户组搜索",
+      "file": "drafts/MS-101488.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "9baa9899fbcd2d9361c36134ed9ce207406164c0cad483d5a5068d574ce35189",
+      "instanceId": "MS-101488--9baa9899fbcd2d93",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-101555",
+      "title": "用户列表-表头字段-登录被阻塞改成登录被锁定",
+      "file": "drafts/MS-101555.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "c9b3290b763c67844138e39d56553956445384113cc2e8cc8d77290ea472ef2d",
+      "instanceId": "MS-101555--c9b3290b763c6784",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-101556",
+      "title": "用例列表-用户详情-快速复制用户id",
+      "file": "drafts/MS-101556.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "387e2aa2beec83f8207f5a41165aac467a2e62069ce835da7120db74b209df35",
+      "instanceId": "MS-101556--387e2aa2beec83f8",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-102480",
+      "title": "用户管理-用户列表-创建用户：测试重复名称、用户名、邮箱",
+      "file": "drafts/MS-102480.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "101a40d5e648432a691d556b7fdf23aa8902c8e3d5cda5957e1edaee464ceafc",
+      "instanceId": "MS-102480--101a40d5e648432a",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104196",
+      "title": "用户管理-用户列表：使用系统管理员创建系统管理员",
+      "file": "drafts/MS-104196.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "9b89d3aa3adc143c6483ddbb0d6cd7055e372c8cfe66743618b8aa564f85f4c6",
+      "instanceId": "MS-104196--9b89d3aa3adc143c",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104204",
+      "title": "用户管理-用户列表：使用系统管理员创建系统审计员",
+      "file": "drafts/MS-104204.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "45c78e7b30f9862a4c8a5ff6c36c91063b4a242f39db3e269ce1b197c8261ca0",
+      "instanceId": "MS-104204--45c78e7b30f9862a",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104214",
+      "title": "用户管理-用户列表：使用系统管理员创建普通用户",
+      "file": "drafts/MS-104214.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "94382b0412c7021d283520557aaeb6d0ea6de24a6ac3488c171de15521510014",
+      "instanceId": "MS-104214--94382b0412c7021d",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104220",
+      "title": "用户管理-用户列表：使用组织管理员创建组织管理员",
+      "file": "drafts/MS-104220.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "18a06080a753bf496f0e94ad1eb4665d49943083f990517ffa88fe153df16ce3",
+      "instanceId": "MS-104220--18a06080a753bf49",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104230",
+      "title": "用户管理-用户列表：使用组织管理员创建组织审计员",
+      "file": "drafts/MS-104230.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "479f14cf7258194e630948d605511d5a91cb6ff4a93bc2160f848dafc1193d0d",
+      "instanceId": "MS-104230--479f14cf7258194e",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104238",
+      "title": "用户管理-用户列表：使用组织管理员创建组织用户",
+      "file": "drafts/MS-104238.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "40f0b6c1834364d813a51739b00095245952be36a398b25f6edac933897d72dd",
+      "instanceId": "MS-104238--40f0b6c1834364d8",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104248",
+      "title": "用户管理-用户列表：创建用户，设置用户组",
+      "file": "drafts/MS-104248.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "045e1af30b5141e387de821f5aec5948e4ac87ee277794ff655c69d2f50b7df1",
+      "instanceId": "MS-104248--045e1af30b5141e3",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104258",
+      "title": "用户管理-用户列表：创建用户，设置密码策略",
+      "file": "drafts/MS-104258.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "517d89407c60a518f0e341662fa9e3d5a2514f199cc649dabe1f88083b2ba953",
+      "instanceId": "MS-104258--517d89407c60a518",
+      "stepCount": 3,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": [
+        "empty_step_3"
+      ]
+    },
+    {
+      "testCaseId": "MS-104263",
+      "title": "用户管理-用户列表：创建用户，设置MFA",
+      "file": "drafts/MS-104263.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "ecc9d2499dc256403820bfc02b4139496eafe1cb70489cc0f0cc0394c8ba1e00",
+      "instanceId": "MS-104263--ecc9d2499dc25640",
+      "stepCount": 3,
+      "risk": "critical",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104268",
+      "title": "用户管理-用户列表：创建用户，开启/关闭激活",
+      "file": "drafts/MS-104268.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "e60e16e0abfd7c0e5fbbcd8f920c6fa54701b65cf4491f9cdc78751eeddacac9",
+      "instanceId": "MS-104268--e60e16e0abfd7c0e",
+      "stepCount": 2,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104280",
+      "title": "用户管理-用户列表：创建用户，设置用户有效期",
+      "file": "drafts/MS-104280.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "a59703f2ce3658c3583e12dbcd3fb3c82181b1d3c5ee3d6b3d7957275eebeaaf",
+      "instanceId": "MS-104280--a59703f2ce3658c3",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104293",
+      "title": "用户管理-用户列表：创建用户，设置用户来源",
+      "file": "drafts/MS-104293.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "02b1c6788ed317e9f808ef83711d1a96cc240b597784cc49b419aaae1679e25e",
+      "instanceId": "MS-104293--02b1c6788ed317e9",
+      "stepCount": 7,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104298",
+      "title": "用户管理-用户列表：创建用户，设置用户其他信息",
+      "file": "drafts/MS-104298.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "054648dd94e5366b8b550cd6126196f92b9f51f9c38d6057cf749085b33e62fe",
+      "instanceId": "MS-104298--054648dd94e5366b",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104310",
+      "title": "用户管理-用户列表：创建用户，必填项不填写",
+      "file": "drafts/MS-104310.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "aa4c6e7fa50b2061b21118c0995db341c51a309c0c7709781bddd66ad057b53f",
+      "instanceId": "MS-104310--aa4c6e7fa50b2061",
+      "stepCount": 5,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104315",
+      "title": "用户管理-用户列表：创建用户，设置自定义的系统角色",
+      "file": "drafts/MS-104315.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "1331ffea1a49cd7ab1c31f5b8f19cda2b0975b6a910b4f0e439c410f96d02278",
+      "instanceId": "MS-104315--1331ffea1a49cd7a",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104329",
+      "title": "用户管理-用户列表：创建用户，设置自定义的组织角色",
+      "file": "drafts/MS-104329.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "ea74964d5132deac6b868d5d7ab1f1b2f810018efd793295fd5ab1f151324cb4",
+      "instanceId": "MS-104329--ea74964d5132deac",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104339",
+      "title": "用户管理-用户列表：系统管理员获取全局组织用户列表",
+      "file": "drafts/MS-104339.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "f8910faa57eec2b76ab22fb5474c8b7e105399d8519bc20297bd160de2f6aba2",
+      "instanceId": "MS-104339--f8910faa57eec2b7",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104371",
+      "title": "用户管理-用户列表：系统管理员获取非全局组织用户列表",
+      "file": "drafts/MS-104371.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "53dbf5207815d26c291fcc2bb13b97418fbb330068bd9b1ec498cab258668848",
+      "instanceId": "MS-104371--53dbf5207815d26c",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104398",
+      "title": "用户管理-用户列表：组织管理员获取全局组织用户列表",
+      "file": "drafts/MS-104398.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "fd25c4746966d15f2d528ea72f0509267ac14a8b2a842f77463234453287230e",
+      "instanceId": "MS-104398--fd25c4746966d15f",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104410",
+      "title": "用户管理-用户列表：组织管理员获取其有权限的组织用户列表",
+      "file": "drafts/MS-104410.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "72f1f3a99b410f6afed537509214a4c1ee3ecbe4ec6ea114eff2f81b67982fd8",
+      "instanceId": "MS-104410--72f1f3a99b410f6a",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104427",
+      "title": "用户管理-用户列表：组织管理员邀请用户到该组织",
+      "file": "drafts/MS-104427.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "865d41c6eec98d7f54a40a282acabca1d55da9a09438bffdea8491c8e629e6a8",
+      "instanceId": "MS-104427--865d41c6eec98d7f",
+      "stepCount": 3,
+      "risk": "critical",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104472",
+      "title": "用户管理-用户列表：组织管理测试批量操作用户",
+      "file": "drafts/MS-104472.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "832901321daf75541a27f38c04e4e5d6e72ca9766e2f2609ec4b6a843f3f293f",
+      "instanceId": "MS-104472--832901321daf7554",
+      "stepCount": 5,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104475",
+      "title": "用户管理-用户列表：系统管理员测试批量操作用户",
+      "file": "drafts/MS-104475.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "dee27021769a744e983985d4b82e4f6546b81d08669a0ac9a64e193683023f58",
+      "instanceId": "MS-104475--dee27021769a744e",
+      "stepCount": 5,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104512",
+      "title": "用户管理-用户列表：测试下载导入用户模版",
+      "file": "drafts/MS-104512.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "abf2f0371a81351b72a8262f75dd25f1ffb5800d9770711b5e0ebc510f5b9401",
+      "instanceId": "MS-104512--abf2f0371a81351b",
+      "stepCount": 4,
+      "risk": "low",
+      "irWarnings": [
+        {
+          "type": "invalid_step_number",
+          "message": "编号序列异常: [1, 3]"
+        }
+      ],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104541",
+      "title": "用户管理-用户列表：测试导入创建用户",
+      "file": "drafts/MS-104541.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "157be21459873ea43bf7f8556cf0ef9402c95f94ba5b9e104c3fa1bed82ae998",
+      "instanceId": "MS-104541--157be21459873ea4",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104564",
+      "title": "用户管理-用户列表：测试导入更新用户",
+      "file": "drafts/MS-104564.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "63edb82a42f1c9ce24040252eea93f8ff4eb9d2f914c09069d4630d0237d149d",
+      "instanceId": "MS-104564--63edb82a42f1c9ce",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104585",
+      "title": "用户管理-用户列表：测试导出用户",
+      "file": "drafts/MS-104585.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "4aff9bcbe3f6e4d66e8b0468c46a1333f4271d048bb978cb913a130b1abd77a3",
+      "instanceId": "MS-104585--4aff9bcbe3f6e4d6",
+      "stepCount": 3,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104634",
+      "title": "用户管理-用户列表：测试自定义列表字段",
+      "file": "drafts/MS-104634.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "7e56aa6208c181456e6d853d879f254320f14851d024175a4758a58c3ff9352f",
+      "instanceId": "MS-104634--7e56aa6208c18145",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104643",
+      "title": "用户管理-用户列表：测试搜索功能",
+      "file": "drafts/MS-104643.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "777c44b77dded4a0d138be5c0785eb229a082665cc679eda0b0ed1688743277b",
+      "instanceId": "MS-104643--777c44b77dded4a0",
+      "stepCount": 8,
+      "risk": "medium",
+      "irWarnings": [
+        {
+          "type": "invalid_step_number",
+          "message": "编号序列异常: [1, 3, 5, 7]"
+        }
+      ],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104694",
+      "title": "用户管理-用户列表：测试克隆用户",
+      "file": "drafts/MS-104694.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "f5158971d0c0c542507de6e82a08898e5efaf003ebf13ec87081349e1b3db4a6",
+      "instanceId": "MS-104694--f5158971d0c0c542",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [
+        {
+          "type": "missing_expectations",
+          "message": "预期结果编号存在但内容为空"
+        }
+      ],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104711",
+      "title": "用户管理-用户列表：测试使用组织管理员删除用户",
+      "file": "drafts/MS-104711.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "4f27393f8933f144186de867486fe26e51706b6499f7b69dbcc3490411ba997d",
+      "instanceId": "MS-104711--4f27393f8933f144",
+      "stepCount": 3,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104754",
+      "title": "用户管理-用户列表：测试使用系统管理员删除用户",
+      "file": "drafts/MS-104754.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "ea9b2a426def1acc9f6dcbf6397277ecfab14a24e2f82a40f75064a1e86b473e",
+      "instanceId": "MS-104754--ea9b2a426def1acc",
+      "stepCount": 3,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104785",
+      "title": "用户管理-用户列表：测试使用组织管理员移除用户",
+      "file": "drafts/MS-104785.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "ba09066e1c4e916962ecef7249318102f0c21113c052739788b84061048f8d22",
+      "instanceId": "MS-104785--ba09066e1c4e9169",
+      "stepCount": 3,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104812",
+      "title": "用户管理-用户列表：测试使用系统管理员移除用户",
+      "file": "drafts/MS-104812.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "a0bbe943fad04aaa4f9d0a75c671dcbb78e92aaf8193e530990bf4962a59d5d6",
+      "instanceId": "MS-104812--a0bbe943fad04aaa",
+      "stepCount": 3,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104855",
+      "title": "用户管理-用户列表-更新用户：更新用户名称、用户名、邮箱信息",
+      "file": "drafts/MS-104855.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "e26d5d28156d2d022a7a32b0c66e99e6908b79304c6939ecf10e5a208a0c9b40",
+      "instanceId": "MS-104855--e26d5d28156d2d02",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104869",
+      "title": "用户管理-用户列表-更新用户：更新用户密码",
+      "file": "drafts/MS-104869.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "0d6815454b9cd692963ac8b1681ac4de571a9541ca33112e2a81aaa7f27d65a0",
+      "instanceId": "MS-104869--0d6815454b9cd692",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104899",
+      "title": "用户管理-用户列表-更新用户：更新用户的用户组",
+      "file": "drafts/MS-104899.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "78509e57afa0aa72c93506174244abf8373be05439f9482a813ea07f4935471f",
+      "instanceId": "MS-104899--78509e57afa0aa72",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104938",
+      "title": "用户管理-用户列表-更新用户：更新用户系统角色",
+      "file": "drafts/MS-104938.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "a0d03c167d9ee3a91300b31ed5fa5f6e6fcb38e46fbc09490fdcf4dbcefd6f4e",
+      "instanceId": "MS-104938--a0d03c167d9ee3a9",
+      "stepCount": 4,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-104997",
+      "title": "用户管理-用户列表-更新用户：更新用户组织角色",
+      "file": "drafts/MS-104997.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "c2834d02431c60b018f77f0b9594600871270334cd96fa1b6648b520152babaf",
+      "instanceId": "MS-104997--c2834d02431c60b0",
+      "stepCount": 3,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105019",
+      "title": "用户管理-用户列表-更新用户：更新用户，设置MFA",
+      "file": "drafts/MS-105019.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "52efe74a75e2ec307ff79da0621b28eda81ebd4499a3537e6ad55dffeb3e81ec",
+      "instanceId": "MS-105019--52efe74a75e2ec30",
+      "stepCount": 3,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105066",
+      "title": "用户管理-用户列表-更新用户：更新用户，开启/关闭激活",
+      "file": "drafts/MS-105066.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "33402470f6a41570514f9ce88f8e2f5114629756be20ea3f82a73b2840cdf7fd",
+      "instanceId": "MS-105066--33402470f6a41570",
+      "stepCount": 2,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105128",
+      "title": "用户管理-用户列表-更新用户：更新用户，更新用户有效期",
+      "file": "drafts/MS-105128.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "81db706150256ba89854b5e8a149516ea0b3e2f12484ad013dd9114bf5a5fd8b",
+      "instanceId": "MS-105128--81db706150256ba8",
+      "stepCount": 2,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105240",
+      "title": "用户管理-用户列表-更新用户：更新用户，更新手机号、微信、备注",
+      "file": "drafts/MS-105240.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "25ecd2693a8fb51b7a8342d6cf4861208167cd566d03b998b9ffb45c09c59430",
+      "instanceId": "MS-105240--25ecd2693a8fb51b",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-106590",
+      "title": "用户列表：测试删除admin用户",
+      "file": "drafts/MS-106590.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "9e41aa2539dbb4838c97fb8e673a25020db89dae86f6c26b6c5205e74ac454f6",
+      "instanceId": "MS-106590--9e41aa2539dbb483",
+      "stepCount": 1,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100058",
+      "title": "用户详情页-授权的资产：验证是否可查看资产的授权账号",
+      "file": "drafts/MS-100058.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "842938545de0ef62bbad82daac1b2324741303f78a0673959700d7c3430bf2a4",
+      "instanceId": "MS-100058--842938545de0ef62",
+      "stepCount": 1,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100059",
+      "title": "【全局组织】用户详情页是否能显示用户所属的组织以及角色",
+      "file": "drafts/MS-100059.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "aa0709ef92ea1ea9110f25e029f4b1960cc955ff55c0dc18a556ee8e94266bfa",
+      "instanceId": "MS-100059--aa0709ef92ea1ea9",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100134",
+      "title": "优化二级页面资源列表字段显示",
+      "file": "drafts/MS-100134.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "10d0dd23455db4ea861667c3926137adf0d365213bb798214d5a5e176ae20af8",
+      "instanceId": "MS-100134--10d0dd23455db4ea",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100061",
+      "title": "用户组列表-标签搜索：测试同key和不同key标签搜索",
+      "file": "drafts/MS-100061.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "255b8b0ff0f1a17f377de914b81e13842040b6717dd63e9cebd0c26f83943a65",
+      "instanceId": "MS-100061--255b8b0ff0f1a17f",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100435",
+      "title": "用户组-详情页：添加全部成员时，弹出二次确认",
+      "file": "drafts/MS-100435.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "035e4980c366d60f256fe63704f26847d343a67912b54147e485a6c41ca87e8b",
+      "instanceId": "MS-100435--035e4980c366d60f",
+      "stepCount": 3,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100436",
+      "title": "创建用户组表单-查看一些字段使用select2组件，是否优化成 TableSelect2 组件",
+      "file": "drafts/MS-100436.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "f80ad59c9785bcebdd8c7ef6f27b42e92a6daf2167f0bbe5da721dd7fdd17f8a",
+      "instanceId": "MS-100436--f80ad59c9785bceb",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100601",
+      "title": "用户组-详情页：更新用户组表单优化为抽屉式表单（右侧弹出）",
+      "file": "drafts/MS-100601.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "d734ef40b3079aaec5ada37247d54debf760249485677dcc6c2ea27b69ade208",
+      "instanceId": "MS-100601--d734ef40b3079aae",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100602",
+      "title": "克隆用户组表单优化为抽屉式表单（右侧弹出）",
+      "file": "drafts/MS-100602.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "3f9f2b0c2168f439805c1c56ca270490f31440424736ff9ee15f31312d606970",
+      "instanceId": "MS-100602--3f9f2b0c2168f439",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100603",
+      "title": "更新用户组表单优化为抽屉式表单（右侧弹出）",
+      "file": "drafts/MS-100603.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "452cbdc37a73df07dba17be75fdd7b3337bfcd15c9ffbddd93dea8a4f958277e",
+      "instanceId": "MS-100603--452cbdc37a73df07",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-100604",
+      "title": "创建用户组表单优化为抽屉式表单（右侧弹出）",
+      "file": "drafts/MS-100604.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "3bbf4b6dea8194667b60396d0732cc2c86630ca36ed0a26976ef87be67531814",
+      "instanceId": "MS-100604--3bbf4b6dea819466",
+      "stepCount": 3,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-101383",
+      "title": "用户列表-用户组-添加全部成员",
+      "file": "drafts/MS-101383.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "dfe47e7fb45d0f799c302248d793cc9c9da4e1e7fdbf68f68dc1ca8f8b5492e2",
+      "instanceId": "MS-101383--dfe47e7fb45d0f79",
+      "stepCount": 2,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105024",
+      "title": "用户管理-用户组-创建用户组：添加用户",
+      "file": "drafts/MS-105024.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "18303a51d247c6d9f036bb47f0cca3c14e997801d95871cad0b37642e5420fc6",
+      "instanceId": "MS-105024--18303a51d247c6d9",
+      "stepCount": 1,
+      "risk": "critical",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105079",
+      "title": "用户管理-用户组-创建用户组：必填项不填写",
+      "file": "drafts/MS-105079.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "21827e7e0a3da1213a39658313dd2f4370a6c694d89dd14fae6514df8e2894e4",
+      "instanceId": "MS-105079--21827e7e0a3da121",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105109",
+      "title": "用户管理-用户组-创建用户组：名称重复",
+      "file": "drafts/MS-105109.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "d3cfbddf47bda3b4f213c737010c39f88bad90df8d102a36d0bbf0f61e482baf",
+      "instanceId": "MS-105109--d3cfbddf47bda3b4",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105157",
+      "title": "用户管理-用户组-更新用户组：添加/删除用户",
+      "file": "drafts/MS-105157.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "5a87df21999f2c62bf08d3884df8741468e50c72a1d66967c332aa2f1592231c",
+      "instanceId": "MS-105157--5a87df21999f2c62",
+      "stepCount": 1,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105182",
+      "title": "用户管理-用户组-更新用户组：更新名称",
+      "file": "drafts/MS-105182.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "6333613e45879d82d29542b36a39bae54b27e765df6b6a34583a066ab08e470b",
+      "instanceId": "MS-105182--6333613e45879d82",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105239",
+      "title": "用户管理-用户组-更新用户组：更新名称",
+      "file": "drafts/MS-105239.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "7c738dc07b74f7891b836771ece485118fa44dc5aa69e5bb06a86cdbf18e9741",
+      "instanceId": "MS-105239--7c738dc07b74f789",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105288",
+      "title": "用户管理-用户组-更新用户组：必填项不填写",
+      "file": "drafts/MS-105288.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "aee8ab2c8f3a417c92995093fac149da671333afcc03cd232b929e85a7daaa71",
+      "instanceId": "MS-105288--aee8ab2c8f3a417c",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105392",
+      "title": "用户管理-用户组-详情页-基本信息tab：添加/删除成员",
+      "file": "drafts/MS-105392.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "ad296f95854e332329b4060cde4ec5493c5d7e62911c78cde8f99ba77fbdb9bc",
+      "instanceId": "MS-105392--ad296f95854e3323",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105441",
+      "title": "用户管理-用户组-详情页-基本信息tab：更新用户组",
+      "file": "drafts/MS-105441.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "99c506df89deef2f2c0337cd0bac556af00e58b086c88c2b97f76d55f4d3afa8",
+      "instanceId": "MS-105441--99c506df89deef2f",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105454",
+      "title": "用户管理-用户组-详情页-基本信息tab：删除用户组",
+      "file": "drafts/MS-105454.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "006ae34e4f81f70e3d45014a3c2e0fd58d2b90733c0e2429e6d06a3f7ecab9e9",
+      "instanceId": "MS-105454--006ae34e4f81f70e",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105558",
+      "title": "用户管理-用户组：测试克隆用户组",
+      "file": "drafts/MS-105558.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "4037ba04e7c3f7e58d64197f09a0c4d783c5c80d90274df69334108941a1ed30",
+      "instanceId": "MS-105558--4037ba04e7c3f7e5",
+      "stepCount": 1,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105632",
+      "title": "用户管理-用户组：测试批量删除用户组",
+      "file": "drafts/MS-105632.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "c855c3335f1f4725e190d50daee5e5c22d8253122178e407b5cef4b312ba58a1",
+      "instanceId": "MS-105632--c855c3335f1f4725",
+      "stepCount": 1,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105699",
+      "title": "用户管理-用户组：测试删除用户组",
+      "file": "drafts/MS-105699.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "dff0770b964ee37d6b877b95e7f606b2ef81c5d4e5565fa76edbcdef1f7df316",
+      "instanceId": "MS-105699--dff0770b964ee37d",
+      "stepCount": 1,
+      "risk": "high",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105716",
+      "title": "用户管理-用户组：测试导出用户组",
+      "file": "drafts/MS-105716.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "f78aa472e05e1aa7c288d66d7545eb7e95fe77ddc9337c083de45fc19afb8db4",
+      "instanceId": "MS-105716--f78aa472e05e1aa7",
+      "stepCount": 3,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105717",
+      "title": "用户管理-用户组：测试搜索用户组",
+      "file": "drafts/MS-105717.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "615a52398f26bf14e9d882a68bb9802a49b14bf279e399ad5084dfdfccf21d6c",
+      "instanceId": "MS-105717--615a52398f26bf14",
+      "stepCount": 2,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105807",
+      "title": "用户管理-用户组：测试自定义显示表单字段",
+      "file": "drafts/MS-105807.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "e4550d9d55550c06afd09edc526cdcf3c66282917727c0fbca5f4fcbe9b61862",
+      "instanceId": "MS-105807--e4550d9d55550c06",
+      "stepCount": 1,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105894",
+      "title": "用户管理-用户组：测试下载导入用户组模版",
+      "file": "drafts/MS-105894.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "1ca2a72249b1361aebcb1e3af7dfce528c16243c5b322cc7a033d2c5e527f988",
+      "instanceId": "MS-105894--1ca2a72249b1361a",
+      "stepCount": 2,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105924",
+      "title": "用户管理-用户组：测试导入创建用户组",
+      "file": "drafts/MS-105924.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "3f415369ce1db9029c06b42c9035f2ae914a7af4db2b99d1c2232ff0b8071259",
+      "instanceId": "MS-105924--3f415369ce1db902",
+      "stepCount": 2,
+      "risk": "low",
+      "irWarnings": [],
+      "conversionNotes": []
+    },
+    {
+      "testCaseId": "MS-105970",
+      "title": "用户管理-用户组：测试导入更新用户组",
+      "file": "drafts/MS-105970.json",
+      "valid": true,
+      "errors": [],
+      "revisionId": "9f9221b6d336d816da8441d49cf29e62ec704421bd62facce97652cbe1666c90",
+      "instanceId": "MS-105970--9f9221b6d336d816",
+      "stepCount": 2,
+      "risk": "medium",
+      "irWarnings": [],
+      "conversionNotes": []
+    }
+  ]
+}

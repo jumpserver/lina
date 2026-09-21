@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户组；验证: 用户管理-用户组-创建用户组：添加用户",
+    "browser": "chromium",
+    "outcome": "[1] 创建用户组成功。可查看用户列表，所添加的用户的用户组字段都是新创建的用户组名称。",
+    "requirementId": "MS-105024",
+    "risk": "critical",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户组"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-105024"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户组-创建用户组：添加用户,其他按要求填写，提交",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-105024",
+  "title": "用户管理-用户组-创建用户组：添加用户",
+  "revisionId": "18303a51d247c6d9f036bb47f0cca3c14e997801d95871cad0b37642e5420fc6",
+  "instanceId": "MS-105024--18303a51d247c6d9"
+}

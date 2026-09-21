@@ -1,0 +1,50 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：创建用户，开启/关闭激活",
+    "browser": "chromium",
+    "outcome": "[1] 创建用户成功，使用该用户登录，输入正确账号密码，登录失败。提示：此账号已被禁用。\n[2] 创建用户成功，使用该用户登录，入正确账号密码，登录成功。",
+    "requirementId": "MS-104268",
+    "risk": "low",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-104268"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "在创建用户表单上，关闭激活，其他按照要求填写，提交",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    },
+    {
+      "action": "在创建用户表单上，开启激活，其他按照要求填写，提交",
+      "id": "step-2",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-104268",
+  "title": "用户管理-用户列表：创建用户，开启/关闭激活",
+  "revisionId": "e60e16e0abfd7c0e5fbbcd8f920c6fa54701b65cf4491f9cdc78751eeddacac9",
+  "instanceId": "MS-104268--e60e16e0abfd7c0e"
+}

@@ -1,0 +1,45 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理 / 用户列表；验证: 用户管理-用户列表：创建用户，勾选下次登录需修改密码",
+    "browser": "chromium",
+    "outcome": "[1] 创建成功，该用户登录后，跳转更改密码页面",
+    "requirementId": "MS-100733",
+    "risk": "critical",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理",
+      "用户列表"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-100733"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户管理-用户列表：创建用户，勾选下次登录需修改密码",
+      "id": "step-1",
+      "sideEffect": "reversible"
+    }
+  ],
+  "testCaseId": "MS-100733",
+  "title": "用户管理-用户列表：创建用户，勾选下次登录需修改密码",
+  "revisionId": "08ab368e0777160ba01c14d089115d3f1e734fccd9a3ccaea9dbf2d1e427ac43",
+  "instanceId": "MS-100733--08ab368e0777160b"
+}

@@ -1,0 +1,6142 @@
+{
+  "schemaVersion": "1.0",
+  "cases": [
+    {
+      "schemaVersion": "1.0",
+      "id": "108016",
+      "title": "控制台:验证控制台用户模块标题英文翻译",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 2,
+        "originalId": "108016"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "登录页面选择英文模式登录"
+        },
+        {
+          "index": 2,
+          "text": "登录系统后，切换到英文模式"
+        },
+        {
+          "index": 3,
+          "text": "登录后在英文状态下从控制台切换到其他平台，再切回控制台"
+        },
+        {
+          "index": 4,
+          "text": "登录后在中文状态下切换到其他平台，切回控制台，修改语言为英文"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "登录后用户管理模块菜单显示Users，用户管理列表标题显示Users"
+        },
+        {
+          "index": 2,
+          "text": "切换后用户管理模块菜单显示Users，用户管理列表标题显示Users"
+        },
+        {
+          "index": 3,
+          "text": "用户管理模块菜单显示Users，用户管理列表标题显示Users"
+        },
+        {
+          "index": 4,
+          "text": "用户管理模块菜单显示Users，用户管理列表标题显示Users"
+        }
+      ],
+      "metadata": {
+        "owner": "zhiming.zhu@fit2cloud.com",
+        "version": "v4.10.0",
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]登录页面选择英文模式登录\n[2]登录系统后，切换到英文模式\n[3]登录后在英文状态下从控制台切换到其他平台，再切回控制台\n[4]登录后在中文状态下切换到其他平台，切回控制台，修改语言为英文",
+        "expectations": "[1]登录后用户管理模块菜单显示Users，用户管理列表标题显示Users\n[2]切换后用户管理模块菜单显示Users，用户管理列表标题显示Users\n[3]用户管理模块菜单显示Users，用户管理列表标题显示Users\n[4]用户管理模块菜单显示Users，用户管理列表标题显示Users"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "101420",
+      "title": "用户管理-普通组织管理员更新/删除管理员",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 3,
+        "originalId": "101420"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理"
+        ]
+      },
+      "priority": "P1",
+      "tags": [
+        "OSM"
+      ],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "把admin加入到某个组织下，组织的管理员更新admin"
+        },
+        {
+          "index": 2,
+          "text": "把admin加入到某个组织下，组织的管理员删除admin"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "无法更新"
+        },
+        {
+          "index": 2,
+          "text": "无法删除"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]把admin加入到某个组织下，组织的管理员更新admin\n[2]把admin加入到某个组织下，组织的管理员删除admin",
+        "expectations": "[1]无法更新\n[2]无法删除"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "101536",
+      "title": "用户管理-批量操作-下拉列表显示选中条目数",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 4,
+        "originalId": "101536"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户列表-选择多个用户-批量处理"
+        },
+        {
+          "index": 2,
+          "text": "用户组列表-选择多个用户组-批量处理"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "下拉列表正确显示条目数"
+        },
+        {
+          "index": 2,
+          "text": "下拉列表正确显示条目数"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户列表-选择多个用户-批量处理\n[2]用户组列表-选择多个用户组-批量处理",
+        "expectations": "[1]下拉列表正确显示条目数\n[2]下拉列表正确显示条目数"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "108160",
+      "title": "用户列表：优化用户快过期时有提醒信息",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 5,
+        "originalId": "108160"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [
+        "OSM"
+      ],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "设置用户，离过期时间超过5天。（当触发任务时的时间）"
+        },
+        {
+          "index": 2,
+          "text": "设置用户，离过期时间还有5天（当触发任务时的时间）"
+        },
+        {
+          "index": 3,
+          "text": "设置用户，已经过期（当触发任务时的时间）"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "当触发检测过期用户任务，超过5天过期的用户，不会提醒"
+        },
+        {
+          "index": 2,
+          "text": "当触发检测过期用户任务，会提醒用户，还有5天时间过期。站内信和用户邮箱均可收到"
+        },
+        {
+          "index": 3,
+          "text": "当触发检测过期用户任务，会提醒用户，已过期。站内信和用户邮箱均可收到"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": "v4.10.2",
+        "remark": "下午两点会触发任务"
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]设置用户，离过期时间超过5天。（当触发任务时的时间）\n[2]设置用户，离过期时间还有5天（当触发任务时的时间）\n[3]设置用户，已经过期（当触发任务时的时间）",
+        "expectations": "[1]当触发检测过期用户任务，超过5天过期的用户，不会提醒\n[2]当触发检测过期用户任务，会提醒用户，还有5天时间过期。站内信和用户邮箱均可收到\n[3]当触发检测过期用户任务，会提醒用户，已过期。站内信和用户邮箱均可收到"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "108955",
+      "title": "用户列表：验证用户 email 信息加密存储功能",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 6,
+        "originalId": "108955"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "创建新用户并填写 email 信息"
+        },
+        {
+          "index": 2,
+          "text": "进入数据库直接查询用户表中的 email 字段"
+        },
+        {
+          "index": 3,
+          "text": "在用户页面，查看用户的 email 显示"
+        },
+        {
+          "index": 5,
+          "text": "通过 API 接口获取用户 email 信息"
+        },
+        {
+          "index": 4,
+          "text": "通过 API 接口获取用户 email 信息"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "用户创建成功"
+        },
+        {
+          "index": 2,
+          "text": "数据库中 email 字段为加密存储，非明文显示"
+        },
+        {
+          "index": 3,
+          "text": "显示解密后的 email"
+        },
+        {
+          "index": 4,
+          "text": "API 返回解密后的 email 信息"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]创建新用户并填写 email 信息\n[2]进入数据库直接查询用户表中的 email 字段\n[3]在用户页面，查看用户的 email 显示\n[5]通过 API 接口获取用户 email 信息\n[4]通过 API 接口获取用户 email 信息",
+        "expectations": "[1]用户创建成功\n[2]数据库中 email 字段为加密存储，非明文显示\n[3]显示解密后的 email\n[4]API 返回解密后的 email 信息"
+      },
+      "warnings": [
+        {
+          "type": "invalid_step_number",
+          "message": "编号序列异常: [1, 2, 3, 5, 4]"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "107668",
+      "title": "用户列表：验证快速筛选",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 7,
+        "originalId": "107668"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P0",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户列表：快速筛选，点击无效的：筛选无效的用户"
+        },
+        {
+          "index": 2,
+          "text": "用户列表：快速筛选，点击禁用的：筛选禁用的用户"
+        },
+        {
+          "index": 3,
+          "text": "用户列表：快速筛选，点击过期的：筛选已过期的用户"
+        },
+        {
+          "index": 4,
+          "text": "用户列表：快速筛选，点击从未登录的：筛选从未登录的用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "页面显示无效的用户，包含禁用的，过期的用户"
+        },
+        {
+          "index": 2,
+          "text": "页面显示已禁用的用户（未激活的用户）"
+        },
+        {
+          "index": 3,
+          "text": "页面显示已过期的用户"
+        },
+        {
+          "index": 4,
+          "text": "页面显示从未登录的用户"
+        }
+      ],
+      "metadata": {
+        "owner": null,
+        "version": "v4.3.0",
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户列表：快速筛选，点击无效的：筛选无效的用户\n[2]用户列表：快速筛选，点击禁用的：筛选禁用的用户\n[3]用户列表：快速筛选，点击过期的：筛选已过期的用户\n[4]用户列表：快速筛选，点击从未登录的：筛选从未登录的用户",
+        "expectations": "[1]页面显示无效的用户，包含禁用的，过期的用户\n[2]页面显示已禁用的用户（未激活的用户）\n[3]页面显示已过期的用户\n[4]页面显示从未登录的用户"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "107669",
+      "title": "用户列表：验证---",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 8,
+        "originalId": "107669"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P0",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户列表：点击无密码过期：筛选密码过期的用户"
+        },
+        {
+          "index": 2,
+          "text": "用户列表：点击长期未登录：筛选长期未登录的用户"
+        },
+        {
+          "index": 3,
+          "text": "用户列表：点击未启用MFA：筛选未启用MFA的用户"
+        },
+        {
+          "index": 4,
+          "text": "用户列表：点击被锁定：筛选被锁定的用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "页面显示密码过期的用户"
+        },
+        {
+          "index": 2,
+          "text": "页面显示30天都没有登录的用户"
+        },
+        {
+          "index": 3,
+          "text": "页面显示未启用MFA的用户"
+        },
+        {
+          "index": 4,
+          "text": "页面显示被锁定的用户"
+        }
+      ],
+      "metadata": {
+        "owner": null,
+        "version": "v4.3.0",
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户列表：点击无密码过期：筛选密码过期的用户\n[2]用户列表：点击长期未登录：筛选长期未登录的用户\n[3]用户列表：点击未启用MFA：筛选未启用MFA的用户\n[4]用户列表：点击被锁定：筛选被锁定的用户",
+        "expectations": "[1]页面显示密码过期的用户\n[2]页面显示30天都没有登录的用户\n[3]页面显示未启用MFA的用户\n[4]页面显示被锁定的用户"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100055",
+      "title": "用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 9,
+        "originalId": "100055"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效，如组织用户"
+        },
+        {
+          "index": 2,
+          "text": "用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效，如组织管理员"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "过滤结果成功"
+        },
+        {
+          "index": 2,
+          "text": "过滤结果成功"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效，如组织用户\n[2]用户列表-搜索-组织角色搜索：测试根据组织角色搜索是否有效，如组织管理员",
+        "expectations": "[1]过滤结果成功\n[2]过滤结果成功"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100068",
+      "title": "用户列表-标签搜索：测试同key和不同key标签搜索",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 10,
+        "originalId": "100068"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "如标签A:a，A:b，A:c，三个同Key标签搜索"
+        },
+        {
+          "index": 2,
+          "text": "如标签A:a，B:a，不同Key标签搜索"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "搜索出来的结果是三个Key的或关系"
+        },
+        {
+          "index": 2,
+          "text": "搜索出来的结果是这些Key的且关系"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]如标签A:a，A:b，A:c，三个同Key标签搜索\n[2]如标签A:a，B:a，不同Key标签搜索",
+        "expectations": "[1]搜索出来的结果是三个Key的或关系\n[2]搜索出来的结果是这些Key的且关系"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100211",
+      "title": "创建用户表单-查看一些字段使用select2组件，是否优化成 TableSelect2 组件",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 11,
+        "originalId": "100211"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "创建用户表单-添加用户组的select2组件，是否优化成 TableSelect2组件"
+        },
+        {
+          "index": 2,
+          "text": "创建用户表单-添加系统角色的select2组件，是否优化成 TableSelect2组件"
+        },
+        {
+          "index": 3,
+          "text": "创建用户表单-添加组织角色的select2组件，是否优化成 TableSelect2组件"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "有优化成 TableSelect2组件，可以批量选择，或批量删除"
+        },
+        {
+          "index": 2,
+          "text": "有优化成 TableSelect2组件，可以批量选择，或批量删除"
+        },
+        {
+          "index": 3,
+          "text": "有优化成 TableSelect2组件，可以批量选择，或批量删除"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]创建用户表单-添加用户组的select2组件，是否优化成 TableSelect2组件\n[2]创建用户表单-添加系统角色的select2组件，是否优化成 TableSelect2组件\n[3]创建用户表单-添加组织角色的select2组件，是否优化成 TableSelect2组件",
+        "expectations": "[1]有优化成 TableSelect2组件，可以批量选择，或批量删除\n[2]有优化成 TableSelect2组件，可以批量选择，或批量删除\n[3]有优化成 TableSelect2组件，可以批量选择，或批量删除"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100600",
+      "title": "用户-详情页：更新用户表单优化为抽屉式表单（右侧弹出）",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 12,
+        "originalId": "100600"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户-详情页，点击更新用户"
+        },
+        {
+          "index": 2,
+          "text": "表单填写，更新名称、用户名、邮箱，其他按照要求填写"
+        },
+        {
+          "index": 3,
+          "text": "表单填写,更新用户组"
+        },
+        {
+          "index": 4,
+          "text": "表单填写,更新设置MFA开启/强制开启"
+        },
+        {
+          "index": 5,
+          "text": "表单填写,更新密码"
+        },
+        {
+          "index": 6,
+          "text": "表单填写,更新公钥"
+        },
+        {
+          "index": 7,
+          "text": "表单填写,更新系统角色/组织角色"
+        },
+        {
+          "index": 8,
+          "text": "表单填写,关闭激活"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "右侧弹出抽屉式表单，并且表单显示该用户的对应信息"
+        },
+        {
+          "index": 2,
+          "text": "更新用户成功。该详情页自动刷新，可查看到该用户的信息是更新后的信息。"
+        },
+        {
+          "index": 3,
+          "text": "更新用户成功。该详情页自动刷新，，可查看到该用户的用户组信息是更新后信息"
+        },
+        {
+          "index": 4,
+          "text": "更新用户成功。该详情页自动刷新，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA"
+        },
+        {
+          "index": 5,
+          "text": "更新用户成功。使用该用户登录，使用新密码登录，登录成功"
+        },
+        {
+          "index": 6,
+          "text": "更新用户成功。使用该用户登录，使用新的密钥登录，登录成功. ssh username@IP -p2222 -i ./新密钥文件  免密登录成功"
+        },
+        {
+          "index": 7,
+          "text": "更新用户成功。该详情页自动刷新，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限"
+        },
+        {
+          "index": 8,
+          "text": "更新用户成功。该详情页自动刷新，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户-详情页，点击更新用户\n[2]表单填写，更新名称、用户名、邮箱，其他按照要求填写\n[3]表单填写,更新用户组\n[4]表单填写,更新设置MFA开启/强制开启\n[5]表单填写,更新密码\n[6]表单填写,更新公钥\n[7]表单填写,更新系统角色/组织角色\n[8]表单填写,关闭激活",
+        "expectations": "[1]右侧弹出抽屉式表单，并且表单显示该用户的对应信息\n[2]更新用户成功。该详情页自动刷新，可查看到该用户的信息是更新后的信息。\n[3]更新用户成功。该详情页自动刷新，，可查看到该用户的用户组信息是更新后信息\n[4]更新用户成功。该详情页自动刷新，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA\n[5]更新用户成功。使用该用户登录，使用新密码登录，登录成功\n[6]更新用户成功。使用该用户登录，使用新的密钥登录，登录成功. ssh username@IP -p2222 -i ./新密钥文件  免密登录成功\n[7]更新用户成功。该详情页自动刷新，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限\n[8]更新用户成功。该详情页自动刷新，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100605",
+      "title": "克隆用户表单优化为抽屉式表单（右侧弹出）",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 13,
+        "originalId": "100605"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [
+        {
+          "index": 1,
+          "text": "克隆需要修改用户名、邮箱，不可重复"
+        }
+      ],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理，点击克隆用户"
+        },
+        {
+          "index": 2,
+          "text": "表单填写，修改名称、用户名、邮箱，其他按照要求填写"
+        },
+        {
+          "index": 3,
+          "text": "表单填写,修改用户组。"
+        },
+        {
+          "index": 4,
+          "text": "表单填写,修改设置MFA开启/强制开启"
+        },
+        {
+          "index": 5,
+          "text": "表单填写,密码策略，选择设置密码，并且勾选下次登录需修改密码。"
+        },
+        {
+          "index": 6,
+          "text": "表单填写,密码策略，选择生成重置密码链接，通过邮件发送给永固"
+        },
+        {
+          "index": 7,
+          "text": "表单填写,修改系统角色/组织角色"
+        },
+        {
+          "index": 8,
+          "text": "表单填写,关闭激活"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "右侧弹出抽屉式创建表单，并且表单显示该用户的对应信息。（备注：注意是创建表单，不是更新表单，克隆属于创建，只是复制了一份被克隆用户的信息）"
+        },
+        {
+          "index": 2,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的"
+        },
+        {
+          "index": 3,
+          "text": "创建用户成功。显示用户列表，可查看到该新用户的用户组信息是更新后信息"
+        },
+        {
+          "index": 4,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA"
+        },
+        {
+          "index": 5,
+          "text": "创建用户成功。使用该用户登录，登录成功后跳转修改密码，根据提示，修改密码成功。"
+        },
+        {
+          "index": 6,
+          "text": "创建用户成功。该用户设置的邮箱收到修改密码链接，点击链接可重置密码成功。"
+        },
+        {
+          "index": 7,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限"
+        },
+        {
+          "index": 8,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": "克隆需要修改用户名、邮箱，不可重复",
+        "steps": "[1]用户管理，点击克隆用户\n[2]表单填写，修改名称、用户名、邮箱，其他按照要求填写\n[3]表单填写,修改用户组。\n[4]表单填写,修改设置MFA开启/强制开启\n[5]表单填写,密码策略，选择设置密码，并且勾选下次登录需修改密码。\n[6]表单填写,密码策略，选择生成重置密码链接，通过邮件发送给永固\n[7]表单填写,修改系统角色/组织角色\n[8]表单填写,关闭激活",
+        "expectations": "[1]右侧弹出抽屉式创建表单，并且表单显示该用户的对应信息。（备注：注意是创建表单，不是更新表单，克隆属于创建，只是复制了一份被克隆用户的信息）\n[2]创建用户成功。显示用户列表，可查看到该用户的信息是正确的\n[3]创建用户成功。显示用户列表，可查看到该新用户的用户组信息是更新后信息\n[4]创建用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA\n[5]创建用户成功。使用该用户登录，登录成功后跳转修改密码，根据提示，修改密码成功。\n[6]创建用户成功。该用户设置的邮箱收到修改密码链接，点击链接可重置密码成功。\n[7]创建用户成功。显示用户列表，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限\n[8]创建用户成功。显示用户列表，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100606",
+      "title": "更新用户表单优化为抽屉式表单（右侧弹出）",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 14,
+        "originalId": "100606"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理，点击更新用户"
+        },
+        {
+          "index": 2,
+          "text": "表单填写，更新名称、用户名、邮箱，其他按照要求填写"
+        },
+        {
+          "index": 3,
+          "text": "表单填写,更新用户组"
+        },
+        {
+          "index": 4,
+          "text": "表单填写,更新设置MFA开启/强制开启"
+        },
+        {
+          "index": 5,
+          "text": "表单填写,更新密码"
+        },
+        {
+          "index": 6,
+          "text": "表单填写,更新公钥"
+        },
+        {
+          "index": 7,
+          "text": "表单填写,更新系统角色/组织角色"
+        },
+        {
+          "index": 8,
+          "text": "表单填写,关闭激活"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "右侧弹出抽屉式表单，并且表单显示该用户的对应信息"
+        },
+        {
+          "index": 2,
+          "text": "更新用户成功。显示用户列表，可查看到该用户的信息是更新后的信息。"
+        },
+        {
+          "index": 3,
+          "text": "更新用户成功。显示用户列表，可查看到该用户的用户组信息是更新后信息"
+        },
+        {
+          "index": 4,
+          "text": "更新用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA"
+        },
+        {
+          "index": 5,
+          "text": "更新用户成功。使用该用户登录，使用新密码登录，登录成功"
+        },
+        {
+          "index": 6,
+          "text": "更新用户成功。使用该用户登录，使用新的密钥登录，登录成功. ssh username@IP -p2222 -i ./新密钥文件  免密登录成功"
+        },
+        {
+          "index": 7,
+          "text": "更新用户成功。显示用户列表，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限"
+        },
+        {
+          "index": 8,
+          "text": "更新用户成功。显示用户列表，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理，点击更新用户\n[2]表单填写，更新名称、用户名、邮箱，其他按照要求填写\n[3]表单填写,更新用户组\n[4]表单填写,更新设置MFA开启/强制开启\n[5]表单填写,更新密码\n[6]表单填写,更新公钥\n[7]表单填写,更新系统角色/组织角色\n[8]表单填写,关闭激活",
+        "expectations": "[1]右侧弹出抽屉式表单，并且表单显示该用户的对应信息\n[2]更新用户成功。显示用户列表，可查看到该用户的信息是更新后的信息。\n[3]更新用户成功。显示用户列表，可查看到该用户的用户组信息是更新后信息\n[4]更新用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA\n[5]更新用户成功。使用该用户登录，使用新密码登录，登录成功\n[6]更新用户成功。使用该用户登录，使用新的密钥登录，登录成功. ssh username@IP -p2222 -i ./新密钥文件  免密登录成功\n[7]更新用户成功。显示用户列表，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限\n[8]更新用户成功。显示用户列表，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100607",
+      "title": "创建用户表单优化为抽屉式表单（右侧弹出）",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 15,
+        "originalId": "100607"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理，点击创建用户"
+        },
+        {
+          "index": 2,
+          "text": "表单填写名称、用户名、邮箱，其他按照要求填写"
+        },
+        {
+          "index": 3,
+          "text": "表单填写,添加用户组"
+        },
+        {
+          "index": 4,
+          "text": "表单填写,设置MFA开启/强制开启"
+        },
+        {
+          "index": 5,
+          "text": "表单填写,密码策略为设置密码，并且勾选下次登录需要密码"
+        },
+        {
+          "index": 6,
+          "text": "表单填写,密码策略为设置密码，生成重置密码连接，通过邮箱发送给用户"
+        },
+        {
+          "index": 7,
+          "text": "表单填写,设置系统角色/组织角色"
+        },
+        {
+          "index": 8,
+          "text": "表单填写,关闭激活"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "右侧弹出抽屉式表单"
+        },
+        {
+          "index": 2,
+          "text": "创建用户成功。"
+        },
+        {
+          "index": 3,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的"
+        },
+        {
+          "index": 4,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA"
+        },
+        {
+          "index": 5,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，登录成功跳转修改密码。"
+        },
+        {
+          "index": 6,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的。用户所填写的邮箱收到了重置密码链接，点击链接，可根据流程重置密码。"
+        },
+        {
+          "index": 7,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限"
+        },
+        {
+          "index": 8,
+          "text": "创建用户成功。显示用户列表，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理，点击创建用户\n[2]表单填写名称、用户名、邮箱，其他按照要求填写\n[3]表单填写,添加用户组\n[4]表单填写,设置MFA开启/强制开启\n[5]表单填写,密码策略为设置密码，并且勾选下次登录需要密码\n[6]表单填写,密码策略为设置密码，生成重置密码连接，通过邮箱发送给用户\n[7]表单填写,设置系统角色/组织角色\n[8]表单填写,关闭激活",
+        "expectations": "[1]右侧弹出抽屉式表单\n[2]创建用户成功。\n[3]创建用户成功。显示用户列表，可查看到该用户的信息是正确的\n[4]创建用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，提示要绑定MFA\n[5]创建用户成功。显示用户列表，可查看到该用户的信息是正确的。使用该用户登录，登录成功跳转修改密码。\n[6]创建用户成功。显示用户列表，可查看到该用户的信息是正确的。用户所填写的邮箱收到了重置密码链接，点击链接，可根据流程重置密码。\n[7]创建用户成功。显示用户列表，可查看到该用户的信息是正确的。用户登录，拥有所选角色的权限\n[8]创建用户成功。显示用户列表，可查看到该用户的信息是正确的。且用户的有效字段是打岔的，且使用该用户登录失败。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100730",
+      "title": "测试token登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 16,
+        "originalId": "100730"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P0",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "测试token登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "用户列表记录该用户最后一次token登录时间。（token登录模拟，可参考备注）"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": "<code># Python 示例\n# pip install requests\nimport requests, json\n\ndef get_token(jms_url, username, password):\n    url = jms_url.rstrip('/') + '/api/v1/authentication/auth/'\n    query_args = {\n        \"username\": username,\n        \"password\": password\n    }\n    response = requests.post(url, data=query_args, verify=False)\n    print('Response status code:', response.status_code)\n    print('Response text:', response.text)\n    return json.loads(response.text)['token']\n\ndef get_user_info(jms_url, token):\n    url = jms_url.rstrip('/') + '/api/v1/users/users/'\n    headers = {\n        \"Authorization\": 'Bearer ' + token,\n        'X-JMS-ORG': '00000000-0000-0000-0000-000000000002'\n    }\n    response = requests.get(url, headers=headers, verify=False)\n    print('User info response status code:', response.status_code)\n    print('User info response text:', response.text)\n    print(json.loads(response.text))\n\nif __name__ == '__main__':\n    jms_url = 'https://osm.cmdb.cc/'\n    username = 'jym'\n    password = 'xxxxx'\n    token = get_token(jms_url, username, password)\n    print('Token获取成功:', token)\n    # 暂时注释掉get_user_info调用，因为服务器返回HTML页面而不是JSON\n    # get_user_info(jms_url, token)\n</code><img src=\"/attachment/download/file/5092834780651520/7356780762226688/true\" style=\"display: inline-block;ccc:aaa\" fileid=\"7356780762226688\" permalinksrc=\"/attachment/download/file/5092834780651520/7356780762226688/true\">"
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]测试token登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。",
+        "expectations": "[1]用户列表记录该用户最后一次token登录时间。（token登录模拟，可参考备注）"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100731",
+      "title": "测试AK登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 17,
+        "originalId": "100731"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P0",
+      "tags": [],
+      "preconditions": [
+        {
+          "index": 1,
+          "text": "<code></code>"
+        }
+      ],
+      "steps": [
+        {
+          "index": 1,
+          "text": "测试AK登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "用户列表记录该用户最后一次AK登录时间。（AK登录模拟，可参考备注）"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": "<code></code>"
+      },
+      "raw": {
+        "preconditions": "<code></code>",
+        "steps": "[1]测试AK登录，查看用户列表是否有记录登录时间，防止被认为不活跃用户被禁用。",
+        "expectations": "[1]用户列表记录该用户最后一次AK登录时间。（AK登录模拟，可参考备注）"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100733",
+      "title": "用户管理-用户列表：创建用户，勾选下次登录需修改密码",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 18,
+        "originalId": "100733"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P0",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：创建用户，勾选下次登录需修改密码"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建成功，该用户登录后，跳转更改密码页面"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：创建用户，勾选下次登录需修改密码",
+        "expectations": "[1]创建成功，该用户登录后，跳转更改密码页面"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "101486",
+      "title": "用户列表-批量更新-更新完自动关闭更新窗口",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 19,
+        "originalId": "101486"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "101488",
+      "title": "用户列表-按用户组搜索",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 20,
+        "originalId": "101488"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户列表搜索框，输入用户组名称，精确匹配"
+        },
+        {
+          "index": 2,
+          "text": "用户列表搜索框，输入用户组名称，模糊匹配"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "筛选出符合条件的所有用户"
+        },
+        {
+          "index": 2,
+          "text": "筛选出符合条件的所有用户"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户列表搜索框，输入用户组名称，精确匹配\n[2]用户列表搜索框，输入用户组名称，模糊匹配",
+        "expectations": "[1]筛选出符合条件的所有用户\n[2]筛选出符合条件的所有用户"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "101555",
+      "title": "用户列表-表头字段-登录被阻塞改成登录被锁定",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 21,
+        "originalId": "101555"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户列表-表头字段"
+        },
+        {
+          "index": 2,
+          "text": "登录失败次数超过限制，查看用户列表-登录被阻塞"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "登录被阻塞改成登录被锁定"
+        },
+        {
+          "index": 2,
+          "text": "显示“是”"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户列表-表头字段\n[2]登录失败次数超过限制，查看用户列表-登录被阻塞",
+        "expectations": "[1]登录被阻塞改成登录被锁定\n[2]显示“是”"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "101556",
+      "title": "用例列表-用户详情-快速复制用户id",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 22,
+        "originalId": "101556"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户列表-用户详情"
+        },
+        {
+          "index": 2,
+          "text": "点击用户id"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "新增id字段"
+        },
+        {
+          "index": 2,
+          "text": "可以快速复制id"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户列表-用户详情\n[2]点击用户id",
+        "expectations": "[1]新增id字段\n[2]可以快速复制id"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "102480",
+      "title": "用户管理-用户列表-创建用户：测试重复名称、用户名、邮箱",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 23,
+        "originalId": "102480"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-创建用户：测试重复名称、用户名、邮箱"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建失败，提示该名称、用户名、邮箱已重复"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-创建用户：测试重复名称、用户名、邮箱",
+        "expectations": "[1]创建失败，提示该名称、用户名、邮箱已重复"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104196",
+      "title": "用户管理-用户列表：使用系统管理员创建系统管理员",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 24,
+        "originalId": "104196"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "系统管理员登录。点击用户管理-用户列表：点击创建。"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统管理员、组织角色选用户，其他按要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回创建用户表单。"
+        },
+        {
+          "index": 2,
+          "text": "创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有所有权限：包括控制台、审计台、工作台、系统设置，可对资源进行增删改查，且可切换到任意组织"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": "![image.png](/resource/md/get?fileName=73ee5be3.png)"
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]系统管理员登录。点击用户管理-用户列表：点击创建。\n[2]在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统管理员、组织角色选用户，其他按要求填写，提交",
+        "expectations": "[1]返回创建用户表单。\n[2]创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有所有权限：包括控制台、审计台、工作台、系统设置，可对资源进行增删改查，且可切换到任意组织"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104204",
+      "title": "用户管理-用户列表：使用系统管理员创建系统审计员",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 25,
+        "originalId": "104204"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "系统管理员登录。点击用户管理-用户列表：点击创建。"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统审计员、组织角色选用户，其他按要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回创建用户表单。"
+        },
+        {
+          "index": 2,
+          "text": "创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有的权限：包括审计台、工作台。且可切换到任意组织查看日志审计"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": "![image.png](1)"
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]系统管理员登录。点击用户管理-用户列表：点击创建。\n[2]在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统审计员、组织角色选用户，其他按要求填写，提交",
+        "expectations": "[1]返回创建用户表单。\n[2]创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有的权限：包括审计台、工作台。且可切换到任意组织查看日志审计"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104214",
+      "title": "用户管理-用户列表：使用系统管理员创建普通用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 26,
+        "originalId": "104214"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "系统管理员登录。点击用户管理-用户列表：点击创建。"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上：填写名称、用户名、邮箱，系统角色选用户、组织角色选用户，其他按要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回创建用户表单。"
+        },
+        {
+          "index": 2,
+          "text": "创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有的权限：只有工作台"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": "![image.png](/resource/md/get?fileName=9ed2fead.png)"
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]系统管理员登录。点击用户管理-用户列表：点击创建。\n[2]在创建用户表单上：填写名称、用户名、邮箱，系统角色选用户、组织角色选用户，其他按要求填写，提交",
+        "expectations": "[1]返回创建用户表单。\n[2]创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有的权限：只有工作台"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104220",
+      "title": "用户管理-用户列表：使用组织管理员创建组织管理员",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 27,
+        "originalId": "104220"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "系统管理员登录。点击用户管理-用户列表：点击创建。"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统管理员、组织角色选用户，其他按要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回创建用户表单。"
+        },
+        {
+          "index": 2,
+          "text": "创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有权限：包括控制台、审计台、工作台、系统设置，可对资源进行增删改查。不可切换到任意组织，只能在其有权限的组织下。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]系统管理员登录。点击用户管理-用户列表：点击创建。\n[2]在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统管理员、组织角色选用户，其他按要求填写，提交",
+        "expectations": "[1]返回创建用户表单。\n[2]创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有权限：包括控制台、审计台、工作台、系统设置，可对资源进行增删改查。不可切换到任意组织，只能在其有权限的组织下。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104230",
+      "title": "用户管理-用户列表：使用组织管理员创建组织审计员",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 28,
+        "originalId": "104230"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "系统管理员登录。点击用户管理-用户列表：点击创建。"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统审计员、组织角色选用户，其他按要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回创建用户表单。"
+        },
+        {
+          "index": 2,
+          "text": "创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有的权限：包括审计台、工作台。不可切换到任意组织，只能在其有权限的组织下。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]系统管理员登录。点击用户管理-用户列表：点击创建。\n[2]在创建用户表单上：填写名称、用户名、邮箱，系统角色选系统审计员、组织角色选用户，其他按要求填写，提交",
+        "expectations": "[1]返回创建用户表单。\n[2]创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统管理员。使用该用户登录，其拥有的权限：包括审计台、工作台。不可切换到任意组织，只能在其有权限的组织下。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104238",
+      "title": "用户管理-用户列表：使用组织管理员创建组织用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 29,
+        "originalId": "104238"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "系统管理员登录。点击用户管理-用户列表：点击创建。"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上：填写名称、用户名、邮箱，系统角色选用户、组织角色选用户，其他按要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回创建用户表单。"
+        },
+        {
+          "index": 2,
+          "text": "创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统操作员。使用该用户登录，其拥有的权限：只有工作台。不可切换到任意组织，只能在其有权限的组织下。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]系统管理员登录。点击用户管理-用户列表：点击创建。\n[2]在创建用户表单上：填写名称、用户名、邮箱，系统角色选用户、组织角色选用户，其他按要求填写，提交",
+        "expectations": "[1]返回创建用户表单。\n[2]创建系统用户成功。返回用户列表，可查看到该用户信息，且系统角色字段显示系统操作员。使用该用户登录，其拥有的权限：只有工作台。不可切换到任意组织，只能在其有权限的组织下。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104248",
+      "title": "用户管理-用户列表：创建用户，设置用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 30,
+        "originalId": "104248"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，填写名称、用户名、邮箱，并设置用户组，其他按照要求填写。"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户成功。返回用户列表，可查看用户组字段，显示正确。也可到用户组页面，查看该用户组详情页，可查看该用户组下有该用户。当授权规则有该用户组时，则用户拥有这个授权的资产权限。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，填写名称、用户名、邮箱，并设置用户组，其他按照要求填写。",
+        "expectations": "[1]创建用户成功。返回用户列表，可查看用户组字段，显示正确。也可到用户组页面，查看该用户组详情页，可查看该用户组下有该用户。当授权规则有该用户组时，则用户拥有这个授权的资产权限。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104258",
+      "title": "用户管理-用户列表：创建用户，设置密码策略",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 31,
+        "originalId": "104258"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，密码策略选择：生成重置密码链接，通过邮件发送给用户，其他按照要求填写"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上，密码策略选择：密码，输入密码要求格式，不勾选下次登录重置密码，其他按照要求填写"
+        },
+        {
+          "index": 3,
+          "text": ""
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户成功。用户的邮箱会收到设置密码链接，用户通过该链接，按照提示可设置密码。设置成功后，用户使用密码登录，能够成功登录。"
+        },
+        {
+          "index": 2,
+          "text": "创建用户成功，用户使用该密码登录，成功登录。"
+        },
+        {
+          "index": 3,
+          "text": "创建用户成功，用户使用该密码登录，提示要重置密码，按照要求重新设置密码。用户使用重置后的密码登录，登录成功。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，密码策略选择：生成重置密码链接，通过邮件发送给用户，其他按照要求填写\n[2]在创建用户表单上，密码策略选择：密码，输入密码要求格式，不勾选下次登录重置密码，其他按照要求填写\n[3]",
+        "expectations": "[1]创建用户成功。用户的邮箱会收到设置密码链接，用户通过该链接，按照提示可设置密码。设置成功后，用户使用密码登录，能够成功登录。\n[2]创建用户成功，用户使用该密码登录，成功登录。\n[3]创建用户成功，用户使用该密码登录，提示要重置密码，按照要求重新设置密码。用户使用重置后的密码登录，登录成功。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104263",
+      "title": "用户管理-用户列表：创建用户，设置MFA",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 32,
+        "originalId": "104263"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P0",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，禁用MFA，其他按照要求填写，提交"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上，启用MFA，其他按照要求填写，提交"
+        },
+        {
+          "index": 3,
+          "text": "在创建用户表单上，强制启用MFA，其他按照要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户成功，使用该用户登录，正确用户名密码成功登录。不需要绑定MFA"
+        },
+        {
+          "index": 2,
+          "text": "创建用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，可到个人信息页面，自行关闭MFA。"
+        },
+        {
+          "index": 3,
+          "text": "创建用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，在个人信息页面，无法关闭MFA"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，禁用MFA，其他按照要求填写，提交\n[2]在创建用户表单上，启用MFA，其他按照要求填写，提交\n[3]在创建用户表单上，强制启用MFA，其他按照要求填写，提交",
+        "expectations": "[1]创建用户成功，使用该用户登录，正确用户名密码成功登录。不需要绑定MFA\n[2]创建用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，可到个人信息页面，自行关闭MFA。\n[3]创建用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，在个人信息页面，无法关闭MFA"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104268",
+      "title": "用户管理-用户列表：创建用户，开启/关闭激活",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 33,
+        "originalId": "104268"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，关闭激活，其他按照要求填写，提交"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上，开启激活，其他按照要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户成功，使用该用户登录，输入正确账号密码，登录失败。提示：此账号已被禁用。"
+        },
+        {
+          "index": 2,
+          "text": "创建用户成功，使用该用户登录，入正确账号密码，登录成功。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，关闭激活，其他按照要求填写，提交\n[2]在创建用户表单上，开启激活，其他按照要求填写，提交",
+        "expectations": "[1]创建用户成功，使用该用户登录，输入正确账号密码，登录失败。提示：此账号已被禁用。\n[2]创建用户成功，使用该用户登录，入正确账号密码，登录成功。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104280",
+      "title": "用户管理-用户列表：创建用户，设置用户有效期",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 34,
+        "originalId": "104280"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，设置用户有效期：为过期时间，其他按照要求填写，提交"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上，设置用户有效期：未过期，其他按照要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户成功，使用该用户登录，输入正确账号密码，登录失败。提示：此账号已过期。"
+        },
+        {
+          "index": 2,
+          "text": "创建用户成功，使用该用户登录，入正确账号密码，登录成功。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，设置用户有效期：为过期时间，其他按照要求填写，提交\n[2]在创建用户表单上，设置用户有效期：未过期，其他按照要求填写，提交",
+        "expectations": "[1]创建用户成功，使用该用户登录，输入正确账号密码，登录失败。提示：此账号已过期。\n[2]创建用户成功，使用该用户登录，入正确账号密码，登录成功。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104293",
+      "title": "用户管理-用户列表：创建用户，设置用户来源",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 35,
+        "originalId": "104293"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，设置用户来源：选择数据库，其他按照要求填写，提交"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上，设置用户来源：选择LDAP/AD，其他按照要求填写，提交"
+        },
+        {
+          "index": 3,
+          "text": "在创建用户表单上，设置用户来源：选择OpenID，其他按照要求填写，提交"
+        },
+        {
+          "index": 4,
+          "text": "在创建用户表单上，设置用户来源：选择Radius，其他按照要求填写，提交"
+        },
+        {
+          "index": 5,
+          "text": "在创建用户表单上，设置用户来源：选择CAS，其他按照要求填写，提交"
+        },
+        {
+          "index": 6,
+          "text": "在创建用户表单上，设置用户来源：选择SAML2，其他按照要求填写，提交"
+        },
+        {
+          "index": 7,
+          "text": "在创建用户表单上，设置用户来源：选择Oauth2，其他按照要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户来源为数据库的用户成功。使用正确用户名和密码登录，登录成功。"
+        },
+        {
+          "index": 2,
+          "text": "创建用户来源为LDAP/AD的用户成功。测试该用户登录，如果LDAP服务器有该用户，那么输入正确用户名和密码可正确登录，如果LDAP无该用户，则登录失败，提示用户名或者密码错误"
+        },
+        {
+          "index": 3,
+          "text": "创建用户来源为OpenID的用户成功。测试该用户登录，如果OpenID服务器有该用户，那么输入正确用户名和密码可正确登录，如果OpenID无该用户，则登录失败，提示用户名或者密码错误"
+        },
+        {
+          "index": 4,
+          "text": "创建用户来源为Radius的用户成功。测试该用户登录，如果Radius服务器有该用户，那么输入正确用户名和密码可正确登录，如果Radius无该用户，则登录失败，提示用户名或者密码错误"
+        },
+        {
+          "index": 5,
+          "text": "创建用户来源为CAS的用户成功。测试该用户登录，如果CAS服务器有该用户，那么输入正确用户名和密码可正确登录，如果CAS无该用户，则登录失败，提示用户名或者密码错误"
+        },
+        {
+          "index": 6,
+          "text": "创建用户来源为Saml2的用户成功。测试该用户登录，如果Saml2服务器有该用户，那么输入正确用户名和密码可正确登录，如果Saml2无该用户，则登录失败，提示用户名或者密码错误"
+        },
+        {
+          "index": 7,
+          "text": ".创建用户来源为oauth2的用户成功。测试该用户登录，如果oauth2服务器有该用户，那么输入正确用户名和密码可正确登录，如果oauth2无该用户，则登录失败，提示用户名或者密码错误"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，设置用户来源：选择数据库，其他按照要求填写，提交\n[2]在创建用户表单上，设置用户来源：选择LDAP/AD，其他按照要求填写，提交\n[3]在创建用户表单上，设置用户来源：选择OpenID，其他按照要求填写，提交\n[4]在创建用户表单上，设置用户来源：选择Radius，其他按照要求填写，提交\n[5]在创建用户表单上，设置用户来源：选择CAS，其他按照要求填写，提交\n[6]在创建用户表单上，设置用户来源：选择SAML2，其他按照要求填写，提交\n[7]在创建用户表单上，设置用户来源：选择Oauth2，其他按照要求填写，提交",
+        "expectations": "[1]创建用户来源为数据库的用户成功。使用正确用户名和密码登录，登录成功。\n[2]创建用户来源为LDAP/AD的用户成功。测试该用户登录，如果LDAP服务器有该用户，那么输入正确用户名和密码可正确登录，如果LDAP无该用户，则登录失败，提示用户名或者密码错误\n[3]创建用户来源为OpenID的用户成功。测试该用户登录，如果OpenID服务器有该用户，那么输入正确用户名和密码可正确登录，如果OpenID无该用户，则登录失败，提示用户名或者密码错误\n[4]创建用户来源为Radius的用户成功。测试该用户登录，如果Radius服务器有该用户，那么输入正确用户名和密码可正确登录，如果Radius无该用户，则登录失败，提示用户名或者密码错误\n[5]创建用户来源为CAS的用户成功。测试该用户登录，如果CAS服务器有该用户，那么输入正确用户名和密码可正确登录，如果CAS无该用户，则登录失败，提示用户名或者密码错误\n[6]创建用户来源为Saml2的用户成功。测试该用户登录，如果Saml2服务器有该用户，那么输入正确用户名和密码可正确登录，如果Saml2无该用户，则登录失败，提示用户名或者密码错误\n[7].创建用户来源为oauth2的用户成功。测试该用户登录，如果oauth2服务器有该用户，那么输入正确用户名和密码可正确登录，如果oauth2无该用户，则登录失败，提示用户名或者密码错误"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104298",
+      "title": "用户管理-用户列表：创建用户，设置用户其他信息",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 36,
+        "originalId": "104298"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，填写名称、用户名、邮箱，手机号、微信、备注等信息，其他按照要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户成功，使用该用户登录，输入正确账号密码，登录成功。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，填写名称、用户名、邮箱，手机号、微信、备注等信息，其他按照要求填写，提交",
+        "expectations": "[1]创建用户成功，使用该用户登录，输入正确账号密码，登录成功。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104310",
+      "title": "用户管理-用户列表：创建用户，必填项不填写",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 37,
+        "originalId": "104310"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，名称不填写，其他按照要求填写，提交"
+        },
+        {
+          "index": 2,
+          "text": "在创建用户表单上，用户名不填写，其他按照要求填写，提交"
+        },
+        {
+          "index": 3,
+          "text": "在创建用户表单上，邮箱不填写，其他按照要求填写，提交"
+        },
+        {
+          "index": 4,
+          "text": "在创建用户表单上，系统角色不填写，其他按照要求填写，提交"
+        },
+        {
+          "index": 5,
+          "text": "在创建用户表单上，组织角色不填写，其他按照要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户失败，提示：这个字段是必填项"
+        },
+        {
+          "index": 2,
+          "text": "创建用户失败，提示：这个字段是必填项"
+        },
+        {
+          "index": 3,
+          "text": "创建用户失败，提示：这个字段是必填项"
+        },
+        {
+          "index": 4,
+          "text": "创建用户失败，提示：这个字段是必填项"
+        },
+        {
+          "index": 5,
+          "text": "创建用户失败，提示：这个字段是必填项"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，名称不填写，其他按照要求填写，提交\n[2]在创建用户表单上，用户名不填写，其他按照要求填写，提交\n[3]在创建用户表单上，邮箱不填写，其他按照要求填写，提交\n[4]在创建用户表单上，系统角色不填写，其他按照要求填写，提交\n[5]在创建用户表单上，组织角色不填写，其他按照要求填写，提交",
+        "expectations": "[1]创建用户失败，提示：这个字段是必填项\n[2]创建用户失败，提示：这个字段是必填项\n[3]创建用户失败，提示：这个字段是必填项\n[4]创建用户失败，提示：这个字段是必填项\n[5]创建用户失败，提示：这个字段是必填项"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104315",
+      "title": "用户管理-用户列表：创建用户，设置自定义的系统角色",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 38,
+        "originalId": "104315"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，系统角色选择自定义的系统角色，组织角色组织用户，其他按照要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户成功，使用该用户登录，用户拥有该自定义系统角色的权限"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，系统角色选择自定义的系统角色，组织角色组织用户，其他按照要求填写，提交",
+        "expectations": "[1]创建用户成功，使用该用户登录，用户拥有该自定义系统角色的权限"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104329",
+      "title": "用户管理-用户列表：创建用户，设置自定义的组织角色",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 39,
+        "originalId": "104329"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "在创建用户表单上，组织角色选择自定义的组织角色，系统角色选择用户，其他按照要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户成功，使用该用户登录，用户拥有该自定义组织角色的权限"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]在创建用户表单上，组织角色选择自定义的组织角色，系统角色选择用户，其他按照要求填写，提交",
+        "expectations": "[1]创建用户成功，使用该用户登录，用户拥有该自定义组织角色的权限"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104339",
+      "title": "用户管理-用户列表：系统管理员获取全局组织用户列表",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 40,
+        "originalId": "104339"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：系统管理员获取全局组织用户列表"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回全局组织用户列表信息，获取的是所有用户的信息。左上角有创建、更多操作按钮。右上角有搜索框、导出、刷新按钮。无邀请用户按钮，无导入按钮。且全局组织下，可创建用户，更新、删除用户。可批量禁用/激活删除用户。无法导入用户。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：系统管理员获取全局组织用户列表",
+        "expectations": "[1]返回全局组织用户列表信息，获取的是所有用户的信息。左上角有创建、更多操作按钮。右上角有搜索框、导出、刷新按钮。无邀请用户按钮，无导入按钮。且全局组织下，可创建用户，更新、删除用户。可批量禁用/激活删除用户。无法导入用户。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104371",
+      "title": "用户管理-用户列表：系统管理员获取非全局组织用户列表",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 41,
+        "originalId": "104371"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：系统管理员获取非全局组织用户列表"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回该组织用户列表信息，且数据是正确的。左上角有创建、邀请用户、更多操作按钮。右上角有搜索框、导入、导出、刷新按钮。默认一页显示15条数据，上翻、下翻数据显示正确。可切换至任意组织用户列表页面。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：系统管理员获取非全局组织用户列表",
+        "expectations": "[1]返回该组织用户列表信息，且数据是正确的。左上角有创建、邀请用户、更多操作按钮。右上角有搜索框、导入、导出、刷新按钮。默认一页显示15条数据，上翻、下翻数据显示正确。可切换至任意组织用户列表页面。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104398",
+      "title": "用户管理-用户列表：组织管理员获取全局组织用户列表",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 42,
+        "originalId": "104398"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：组织管理员获取全局组织用户列表"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "1组织管理员无法获取全局组织用户列表"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：组织管理员获取全局组织用户列表",
+        "expectations": "[1]1组织管理员无法获取全局组织用户列表"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104410",
+      "title": "用户管理-用户列表：组织管理员获取其有权限的组织用户列表",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 43,
+        "originalId": "104410"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：组织管理员获取其有权限的组织用户列表"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回该组织用户列表信息，且数据是正确的。左上角有创建、邀请用户、更多操作按钮。右上角有搜索框、导入、导出、刷新按钮。默认一页显示15条数据，上翻、下翻数据显示正确。仅能获取其有权限的组织用户列表。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：组织管理员获取其有权限的组织用户列表",
+        "expectations": "[1]返回该组织用户列表信息，且数据是正确的。左上角有创建、邀请用户、更多操作按钮。右上角有搜索框、导入、导出、刷新按钮。默认一页显示15条数据，上翻、下翻数据显示正确。仅能获取其有权限的组织用户列表。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104427",
+      "title": "用户管理-用户列表：组织管理员邀请用户到该组织",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 44,
+        "originalId": "104427"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P0",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：组织管理员点击邀请用户，选择几个用户，选择组织角色为组织管理员，点击确定"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表：组织管理员点击邀请用户，选择几个用户，选择组织角色为组织审计员，点击确定"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表：组织管理员点击邀请用户，选择几个用户，选择组织角色为组织用户，点击确定"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "提示邀请成功，在用户列表可查看刚邀请的这些用户。且用户的组织角色为组织管理员。使用这些用户登录，其拥有该组织管理员权限"
+        },
+        {
+          "index": 2,
+          "text": "提示邀请成功，在用户列表可查看刚邀请的这些用户。且用户的组织角色为组织审计员。使用这些用户登录，其拥有该组织审计员权限"
+        },
+        {
+          "index": 3,
+          "text": "提示邀请成功，在用户列表可查看刚邀请的这些用户。且用户的组织角色为组织用户。使用这些用户登录，其拥有该组织用户权限"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：组织管理员点击邀请用户，选择几个用户，选择组织角色为组织管理员，点击确定\n[2]用户管理-用户列表：组织管理员点击邀请用户，选择几个用户，选择组织角色为组织审计员，点击确定\n[3]用户管理-用户列表：组织管理员点击邀请用户，选择几个用户，选择组织角色为组织用户，点击确定",
+        "expectations": "[1]提示邀请成功，在用户列表可查看刚邀请的这些用户。且用户的组织角色为组织管理员。使用这些用户登录，其拥有该组织管理员权限\n[2]提示邀请成功，在用户列表可查看刚邀请的这些用户。且用户的组织角色为组织审计员。使用这些用户登录，其拥有该组织审计员权限\n[3]提示邀请成功，在用户列表可查看刚邀请的这些用户。且用户的组织角色为组织用户。使用这些用户登录，其拥有该组织用户权限"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104472",
+      "title": "用户管理-用户列表：组织管理测试批量操作用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 45,
+        "originalId": "104472"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [
+        "OSM"
+      ],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "测试组织管理员批量删除用户"
+        },
+        {
+          "index": 2,
+          "text": "测试组织管理员批量禁用用户"
+        },
+        {
+          "index": 3,
+          "text": "测试组织管理员批量激活用户"
+        },
+        {
+          "index": 4,
+          "text": "测试组织管理员批量更新用户"
+        },
+        {
+          "index": 5,
+          "text": "测试组织管理员批量移除用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "组织管理员没有批量删除权限。"
+        },
+        {
+          "index": 2,
+          "text": "批量禁用成功，这些用户的激活字段都是打叉的。使用这些用户登录，登录失败，提示该用户已禁用"
+        },
+        {
+          "index": 3,
+          "text": "批量激活成功，这些用户的激活字段都是打勾的。使用这些用户登录，正确的用户名和密码登录成功"
+        },
+        {
+          "index": 4,
+          "text": "弹出批量更新用户表单，可更新用户组，过期时间。能够成功批量更新"
+        },
+        {
+          "index": 5,
+          "text": "移除成功，查看用户列表，这些用户已不在该组织中。在全局组织下，可搜索到这些用户"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]测试组织管理员批量删除用户\n[2]测试组织管理员批量禁用用户\n[3]测试组织管理员批量激活用户\n[4]测试组织管理员批量更新用户\n[5]测试组织管理员批量移除用户",
+        "expectations": "[1]组织管理员没有批量删除权限。\n[2]批量禁用成功，这些用户的激活字段都是打叉的。使用这些用户登录，登录失败，提示该用户已禁用\n[3]批量激活成功，这些用户的激活字段都是打勾的。使用这些用户登录，正确的用户名和密码登录成功\n[4]弹出批量更新用户表单，可更新用户组，过期时间。能够成功批量更新\n[5]移除成功，查看用户列表，这些用户已不在该组织中。在全局组织下，可搜索到这些用户"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104475",
+      "title": "用户管理-用户列表：系统管理员测试批量操作用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 46,
+        "originalId": "104475"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "测试系统管理员批量删除用户"
+        },
+        {
+          "index": 2,
+          "text": "测试系统管理员批量禁用用户"
+        },
+        {
+          "index": 3,
+          "text": "测试系统管理员批量激活用户"
+        },
+        {
+          "index": 4,
+          "text": "测试系统管理员批量更新用户"
+        },
+        {
+          "index": 5,
+          "text": "测试系统管理员批量移除用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "删除成功，查看用户列表，这些用户已不在列表中"
+        },
+        {
+          "index": 2,
+          "text": "批量禁用成功，这些用户的激活字段都是打叉的。使用这些用户登录，登录失败，提示该用户已禁用"
+        },
+        {
+          "index": 3,
+          "text": "批量激活成功，这些用户的激活字段都是打勾的。使用这些用户登录，正确的用户名和密码登录成功"
+        },
+        {
+          "index": 4,
+          "text": "弹出批量更新用户表单，可更新用户组，过期时间。能够成功批量更新"
+        },
+        {
+          "index": 5,
+          "text": "移除成功，查看用户列表，这些用户已不在该组织中。在全局组织下，可搜索到这些用户"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]测试系统管理员批量删除用户\n[2]测试系统管理员批量禁用用户\n[3]测试系统管理员批量激活用户\n[4]测试系统管理员批量更新用户\n[5]测试系统管理员批量移除用户",
+        "expectations": "[1]删除成功，查看用户列表，这些用户已不在列表中\n[2]批量禁用成功，这些用户的激活字段都是打叉的。使用这些用户登录，登录失败，提示该用户已禁用\n[3]批量激活成功，这些用户的激活字段都是打勾的。使用这些用户登录，正确的用户名和密码登录成功\n[4]弹出批量更新用户表单，可更新用户组，过期时间。能够成功批量更新\n[5]移除成功，查看用户列表，这些用户已不在该组织中。在全局组织下，可搜索到这些用户"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104512",
+      "title": "用户管理-用户列表：测试下载导入用户模版",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 47,
+        "originalId": "104512"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-导入：测试系统管理员下载导入模版（CSV）"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表-导入：测试系统管理员下载导入模版（Excel）"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表-导入：测试组织管理员下载导入模版（CSV）"
+        },
+        {
+          "index": 4,
+          "text": "用户管理-用户列表-导入：测试组织管理员下载导入模版（Excel）"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "[2]"
+        },
+        {
+          "index": 3,
+          "text": "[4]"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-导入：测试系统管理员下载导入模版（CSV）\n[2]用户管理-用户列表-导入：测试系统管理员下载导入模版（Excel）\n[3]用户管理-用户列表-导入：测试组织管理员下载导入模版（CSV）\n[4]用户管理-用户列表-导入：测试组织管理员下载导入模版（Excel）",
+        "expectations": "[1]\n[2]\n[3]\n[4]"
+      },
+      "warnings": [
+        {
+          "type": "invalid_step_number",
+          "message": "编号序列异常: [1, 3]"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104541",
+      "title": "用户管理-用户列表：测试导入创建用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 48,
+        "originalId": "104541"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：使用系统管理员测试导入创建用户"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表：使用组织管理员测试导入创建用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "[2]"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：使用系统管理员测试导入创建用户\n[2]用户管理-用户列表：使用组织管理员测试导入创建用户",
+        "expectations": "[1]\n[2]"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104564",
+      "title": "用户管理-用户列表：测试导入更新用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 49,
+        "originalId": "104564"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：使用系统管理员测试导入更新用户"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表：使用组织管理员测试导入更新用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "[2]"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：使用系统管理员测试导入更新用户\n[2]用户管理-用户列表：使用组织管理员测试导入更新用户",
+        "expectations": "[1]\n[2]"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104585",
+      "title": "用户管理-用户列表：测试导出用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 50,
+        "originalId": "104585"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-点击导出：测试导出所有用户"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表-选择几个用户-点击导出：测试导出选择项的用户"
+        },
+        {
+          "index": 3,
+          "text": "3用户管理-用户列表-搜索条交搜索出用户，点击导出：测试导出搜索结果的用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "导出所有用户成功。查看表格信息，用户数据正确，且是所有用户的信息"
+        },
+        {
+          "index": 2,
+          "text": "导出选择项用户成功。查看表格信息，用户数据正确，且仅是选择项用户的信息"
+        },
+        {
+          "index": 3,
+          "text": "导出搜索结果的用户成功。查看表格信息，用户数据正确，且仅是搜索结果用户的信息"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": "1.组织管理员导出数据字段如下：\n![image.png](/resource/md/get?fileName=19831595.png)\n![image.png](/resource/md/get?fileName=8c91dc69.png)\n\n2.系统管理员导出数据字段如下：\n![image.png](/resource/md/get?fileName=ea50ddd4.png)\n![image.png](/resource/md/get?fileName=07628ff8.png)"
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-点击导出：测试导出所有用户\n[2]用户管理-用户列表-选择几个用户-点击导出：测试导出选择项的用户\n[3]3用户管理-用户列表-搜索条交搜索出用户，点击导出：测试导出搜索结果的用户",
+        "expectations": "[1]导出所有用户成功。查看表格信息，用户数据正确，且是所有用户的信息\n[2]导出选择项用户成功。查看表格信息，用户数据正确，且仅是选择项用户的信息\n[3]导出搜索结果的用户成功。查看表格信息，用户数据正确，且仅是搜索结果用户的信息"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104634",
+      "title": "用户管理-用户列表：测试自定义列表字段",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 51,
+        "originalId": "104634"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-点击自定义表单字段：选择需要显示的字段，点击确定"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功，列表仅显示勾选的字段信息"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-点击自定义表单字段：选择需要显示的字段，点击确定",
+        "expectations": "[1]更新成功，列表仅显示勾选的字段信息"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104643",
+      "title": "用户管理-用户列表：测试搜索功能",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 52,
+        "originalId": "104643"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-搜索框：根据用户ID搜索"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表-搜索框：根据用户用户名搜索"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表-搜索框：根据用户名称搜索"
+        },
+        {
+          "index": 4,
+          "text": "用户管理-用户列表-搜索框：根据用户邮箱搜索"
+        },
+        {
+          "index": 5,
+          "text": "用户管理-用户列表-搜索框：根据用户来源搜索"
+        },
+        {
+          "index": 6,
+          "text": "用户管理-用户列表-搜索框：根据用户是否激活搜索"
+        },
+        {
+          "index": 7,
+          "text": "用户管理-用户列表-搜索框：根据用户系统角色搜索"
+        },
+        {
+          "index": 8,
+          "text": "用户管理-用户列表-搜索框：根据用户组织角色搜索"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "[2]"
+        },
+        {
+          "index": 3,
+          "text": "[4]"
+        },
+        {
+          "index": 5,
+          "text": "[6]"
+        },
+        {
+          "index": 7,
+          "text": "[8]"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-搜索框：根据用户ID搜索\n[2]用户管理-用户列表-搜索框：根据用户用户名搜索\n[3]用户管理-用户列表-搜索框：根据用户名称搜索\n[4]用户管理-用户列表-搜索框：根据用户邮箱搜索\n[5]用户管理-用户列表-搜索框：根据用户来源搜索\n[6]用户管理-用户列表-搜索框：根据用户是否激活搜索\n[7]用户管理-用户列表-搜索框：根据用户系统角色搜索\n[8]用户管理-用户列表-搜索框：根据用户组织角色搜索",
+        "expectations": "[1]\n[2]\n[3]\n[4]\n[5]\n[6]\n[7]\n[8]"
+      },
+      "warnings": [
+        {
+          "type": "invalid_step_number",
+          "message": "编号序列异常: [1, 3, 5, 7]"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104694",
+      "title": "用户管理-用户列表：测试克隆用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 53,
+        "originalId": "104694"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：选择一个用户，点击克隆"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": ""
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：选择一个用户，点击克隆",
+        "expectations": "[1]"
+      },
+      "warnings": [
+        {
+          "type": "missing_expectations",
+          "message": "预期结果编号存在但内容为空"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104711",
+      "title": "用户管理-用户列表：测试使用组织管理员删除用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 54,
+        "originalId": "104711"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：测试使用组织管理员删除系统管理员"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表：测试使用组织管理员删除系统审计员"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表：测试使用组织管理员删除普通用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "组织管理员不支持删除用户"
+        },
+        {
+          "index": 2,
+          "text": "组织管理员不支持删除用户"
+        },
+        {
+          "index": 3,
+          "text": "组织管理员不支持删除用户"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：测试使用组织管理员删除系统管理员\n[2]用户管理-用户列表：测试使用组织管理员删除系统审计员\n[3]用户管理-用户列表：测试使用组织管理员删除普通用户",
+        "expectations": "[1]组织管理员不支持删除用户\n[2]组织管理员不支持删除用户\n[3]组织管理员不支持删除用户"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104754",
+      "title": "用户管理-用户列表：测试使用系统管理员删除用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 55,
+        "originalId": "104754"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：测试使用系统管理员删除系统管理员"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表：测试使用系统管理员删除系统审计员"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表：测试使用系统管理员删除普通用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "删除成功，查看用户列表，该用户已不在用户列表中。全局组织下，也搜索不到该用户"
+        },
+        {
+          "index": 2,
+          "text": "删除成功，查看用户列表，该用户已不在用户列表中。全局组织下，也搜索不到该用户"
+        },
+        {
+          "index": 3,
+          "text": "删除成功，查看用户列表，该用户已不在用户列表中。全局组织下，也搜索不到该用户"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：测试使用系统管理员删除系统管理员\n[2]用户管理-用户列表：测试使用系统管理员删除系统审计员\n[3]用户管理-用户列表：测试使用系统管理员删除普通用户",
+        "expectations": "[1]删除成功，查看用户列表，该用户已不在用户列表中。全局组织下，也搜索不到该用户\n[2]删除成功，查看用户列表，该用户已不在用户列表中。全局组织下，也搜索不到该用户\n[3]删除成功，查看用户列表，该用户已不在用户列表中。全局组织下，也搜索不到该用户"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104785",
+      "title": "用户管理-用户列表：测试使用组织管理员移除用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 56,
+        "originalId": "104785"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：测试使用组织管理员移除系统管理员"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表：测试使用组织管理员移除系统审计员"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表：测试使用组织管理员移除普通用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户"
+        },
+        {
+          "index": 2,
+          "text": "移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户"
+        },
+        {
+          "index": 3,
+          "text": "移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：测试使用组织管理员移除系统管理员\n[2]用户管理-用户列表：测试使用组织管理员移除系统审计员\n[3]用户管理-用户列表：测试使用组织管理员移除普通用户",
+        "expectations": "[1]移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户\n[2]移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户\n[3]移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104812",
+      "title": "用户管理-用户列表：测试使用系统管理员移除用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 57,
+        "originalId": "104812"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表：测试使用系统管理员移除系统管理员"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表：测试使用系统管理员移除系统审计员"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表：测试使用系统管理员移除普通用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户"
+        },
+        {
+          "index": 2,
+          "text": "移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户"
+        },
+        {
+          "index": 3,
+          "text": "移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表：测试使用系统管理员移除系统管理员\n[2]用户管理-用户列表：测试使用系统管理员移除系统审计员\n[3]用户管理-用户列表：测试使用系统管理员移除普通用户",
+        "expectations": "[1]移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户\n[2]移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户\n[3]移除成功，查看用户列表，该用户已不在用户列表中。系统管理员可查看全局组织，可查看到该用户"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104855",
+      "title": "用户管理-用户列表-更新用户：更新用户名称、用户名、邮箱信息",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 58,
+        "originalId": "104855"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-更新用户：更新用户名称、用户名、邮箱信息，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更改成功，查看该用户信息，是更改后的信息。使用新修改的用户名登录，正确的密码登录成功。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-更新用户：更新用户名称、用户名、邮箱信息，提交",
+        "expectations": "[1]更改成功，查看该用户信息，是更改后的信息。使用新修改的用户名登录，正确的密码登录成功。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104869",
+      "title": "用户管理-用户列表-更新用户：更新用户密码",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 59,
+        "originalId": "104869"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-更新用户：更新用户密码，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功。测试用户登录，使用新密码登录成功；使用旧密码登录失败，提示用户名或密码错误。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-更新用户：更新用户密码，提交",
+        "expectations": "[1]更新成功。测试用户登录，使用新密码登录成功；使用旧密码登录失败，提示用户名或密码错误。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104899",
+      "title": "用户管理-用户列表-更新用户：更新用户的用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 60,
+        "originalId": "104899"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-更新用户：更新用户的用户组，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功，查看用户列表，该用户的用户字段显示的更新后的用户组信息"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-更新用户：更新用户的用户组，提交",
+        "expectations": "[1]更新成功，查看用户列表，该用户的用户字段显示的更新后的用户组信息"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104938",
+      "title": "用户管理-用户列表-更新用户：更新用户系统角色",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 61,
+        "originalId": "104938"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-更新用户：测试系统管理员更新用户系统角色，修改为系统管理员，提交"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表-更新用户：测试系统管理员更新用户系统角色，修改为系统审计员，提交"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表-更新用户：测试系统管理员更新用户系统角色，修改为用户，提交"
+        },
+        {
+          "index": 4,
+          "text": "用户管理-用户列表-更新用户：测组织管理员更新用户系统角色"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功。使用该用户登录，其拥有系统管理员权限，包括控制台、审计台、工作台、系统设置，可对资源增删改查，可切换至任意组织。"
+        },
+        {
+          "index": 2,
+          "text": "更新成功。使用该用户登录，其拥有系统审计员权限，包括审计台、工作台，可对资源增删改查，可切换至任意组织。"
+        },
+        {
+          "index": 3,
+          "text": "更新成功。使用该用户登录，其普通用户权限，包括工作台权限"
+        },
+        {
+          "index": 4,
+          "text": "组织管理员不支持更新用户的系统角色"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-更新用户：测试系统管理员更新用户系统角色，修改为系统管理员，提交\n[2]用户管理-用户列表-更新用户：测试系统管理员更新用户系统角色，修改为系统审计员，提交\n[3]用户管理-用户列表-更新用户：测试系统管理员更新用户系统角色，修改为用户，提交\n[4]用户管理-用户列表-更新用户：测组织管理员更新用户系统角色",
+        "expectations": "[1]更新成功。使用该用户登录，其拥有系统管理员权限，包括控制台、审计台、工作台、系统设置，可对资源增删改查，可切换至任意组织。\n[2]更新成功。使用该用户登录，其拥有系统审计员权限，包括审计台、工作台，可对资源增删改查，可切换至任意组织。\n[3]更新成功。使用该用户登录，其普通用户权限，包括工作台权限\n[4]组织管理员不支持更新用户的系统角色"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "104997",
+      "title": "用户管理-用户列表-更新用户：更新用户组织角色",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 62,
+        "originalId": "104997"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-更新用户：测试组织管理员更新用户组织角色，修改为组织管理员，提交"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表-更新用户：测试组织管理员更新用户组织角色，修改为组织审计员，提交"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表-更新用户：测试组织管理员更新用户组织角色，修改为组织用户，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功。使用该用户登录，其拥有组织管理员权限，包括控制台、审计台、工作台、仅对其有权限的组织的资源增删改查。仅可切换其有权限的组织"
+        },
+        {
+          "index": 2,
+          "text": "更新成功。使用该用户登录，其拥有系统审计员权限，包括审计台、工作台，仅对其有权限的组织的资源增删改查。仅可切换其有权限的组织"
+        },
+        {
+          "index": 3,
+          "text": "更新成功。使用该用户登录，其普通用户权限，包括工作台权限，仅可切换其有权限的组织"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-更新用户：测试组织管理员更新用户组织角色，修改为组织管理员，提交\n[2]用户管理-用户列表-更新用户：测试组织管理员更新用户组织角色，修改为组织审计员，提交\n[3]用户管理-用户列表-更新用户：测试组织管理员更新用户组织角色，修改为组织用户，提交",
+        "expectations": "[1]更新成功。使用该用户登录，其拥有组织管理员权限，包括控制台、审计台、工作台、仅对其有权限的组织的资源增删改查。仅可切换其有权限的组织\n[2]更新成功。使用该用户登录，其拥有系统审计员权限，包括审计台、工作台，仅对其有权限的组织的资源增删改查。仅可切换其有权限的组织\n[3]更新成功。使用该用户登录，其普通用户权限，包括工作台权限，仅可切换其有权限的组织"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105019",
+      "title": "用户管理-用户列表-更新用户：更新用户，设置MFA",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 63,
+        "originalId": "105019"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-更新用户：更新用户，在更新用户表单上，禁用MFA，其他按照要求填写，提交"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表-更新用户：更新用户，在更新用户表单上，启用MFA，其他按照要求填写，提交"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户列表-更新用户：更新用户，在更新用户表单上，强制启用MFA，其他按照要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新用户成功，使用该用户登录，正确用户名密码成功登录。不需要绑定MFA"
+        },
+        {
+          "index": 2,
+          "text": "更新用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，可到个人信息页面，自行关闭MFA。"
+        },
+        {
+          "index": 3,
+          "text": "更新用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，在个人信息页面，无法关闭MFA"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-更新用户：更新用户，在更新用户表单上，禁用MFA，其他按照要求填写，提交\n[2]用户管理-用户列表-更新用户：更新用户，在更新用户表单上，启用MFA，其他按照要求填写，提交\n[3]用户管理-用户列表-更新用户：更新用户，在更新用户表单上，强制启用MFA，其他按照要求填写，提交",
+        "expectations": "[1]更新用户成功，使用该用户登录，正确用户名密码成功登录。不需要绑定MFA\n[2]更新用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，可到个人信息页面，自行关闭MFA。\n[3]更新用户成功，使用该用户登录，输入正确的用户名密码后，弹出需要绑定MFA。根据提示绑定成功后，用户登录，需要输入MFA才可登录成功，且用户登录成功后，在个人信息页面，无法关闭MFA"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105066",
+      "title": "用户管理-用户列表-更新用户：更新用户，开启/关闭激活",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 64,
+        "originalId": "105066"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-更新用户：更新用户，关闭激活，提交"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表-更新用户：更新用户，开启激活，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功，返回用户列表，查看该用户信息，激活字段是打叉的。使用该用户登录，登录失败，提示该用户已被禁用"
+        },
+        {
+          "index": 2,
+          "text": "更新成功，返回用户列表，查看该用户信息，激活字段是打勾的。使用该用户登录，正确的账号密码，登录成功。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-更新用户：更新用户，关闭激活，提交\n[2]用户管理-用户列表-更新用户：更新用户，开启激活，提交",
+        "expectations": "[1]更新成功，返回用户列表，查看该用户信息，激活字段是打叉的。使用该用户登录，登录失败，提示该用户已被禁用\n[2]更新成功，返回用户列表，查看该用户信息，激活字段是打勾的。使用该用户登录，正确的账号密码，登录成功。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105128",
+      "title": "用户管理-用户列表-更新用户：更新用户，更新用户有效期",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 65,
+        "originalId": "105128"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-更新用户：更新用户，更新用户有效期，更改为过期。测试使用该用户登录"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户列表-更新用户：更新用户，更新用户有效期，更改为未来时间。测试使用该用户登录"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "使用该用户登录，登录失败，提示该用户已过期"
+        },
+        {
+          "index": 2,
+          "text": "使用该用户登录，正确的用户密码，登录成功。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-更新用户：更新用户，更新用户有效期，更改为过期。测试使用该用户登录\n[2]用户管理-用户列表-更新用户：更新用户，更新用户有效期，更改为未来时间。测试使用该用户登录",
+        "expectations": "[1]使用该用户登录，登录失败，提示该用户已过期\n[2]使用该用户登录，正确的用户密码，登录成功。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105138",
+      "title": "用户管理-用户列表-更新用户：更新用户来源信息",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 66,
+        "originalId": "105138"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105240",
+      "title": "用户管理-用户列表-更新用户：更新用户，更新手机号、微信、备注",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 67,
+        "originalId": "105240"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户列表-更新用户：更新用户，更新手机号、微信、备注"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功，查看该用户信息，是更新后的信息。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户列表-更新用户：更新用户，更新手机号、微信、备注",
+        "expectations": "[1]更新成功，查看该用户信息，是更新后的信息。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "106590",
+      "title": "用户列表：测试删除admin用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 68,
+        "originalId": "106590"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "使用其他管系统理员登录，用户列表页面：测试删除admin"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "删除失败，提示：无法删除管理员，请先禁用它"
+        }
+      ],
+      "metadata": {
+        "owner": null,
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]使用其他管系统理员登录，用户列表页面：测试删除admin",
+        "expectations": "[1]删除失败，提示：无法删除管理员，请先禁用它"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100058",
+      "title": "用户详情页-授权的资产：验证是否可查看资产的授权账号",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 69,
+        "originalId": "100058"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P1",
+      "tags": [
+        "OSM"
+      ],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户详情页-授权的资产：验证是否可查看资产的授权账号"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "点击账号查看，可查资产授权的账号"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户详情页-授权的资产：验证是否可查看资产的授权账号",
+        "expectations": "[1]点击账号查看，可查资产授权的账号"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100059",
+      "title": "【全局组织】用户详情页是否能显示用户所属的组织以及角色",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 70,
+        "originalId": "100059"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "切换到全局组织，查看用户的详情页，师傅可看到用户所属的各个组织以及角色"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "组织显示在前，用户在当前组织的角色跟在组织后面。所属的每个组织和和角色都会显示"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]切换到全局组织，查看用户的详情页，师傅可看到用户所属的各个组织以及角色",
+        "expectations": "[1]组织显示在前，用户在当前组织的角色跟在组织后面。所属的每个组织和和角色都会显示"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100134",
+      "title": "优化二级页面资源列表字段显示",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 71,
+        "originalId": "100134"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户详情 - 授权资产   字段太多，优化成保留的和默认资产一样就行"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "默认显示字段：名称、地址、平台和可连接性"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户详情 - 授权资产   字段太多，优化成保留的和默认资产一样就行",
+        "expectations": "[1]默认显示字段：名称、地址、平台和可连接性"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105290",
+      "title": "用户管理-用户列表-详情页-基本信息tab:查看用户的基本信息",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 72,
+        "originalId": "105290"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105328",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：开启/关闭激活",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 73,
+        "originalId": "105328"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105366",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：重置MFA",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 74,
+        "originalId": "105366"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105422",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：重置密码",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 75,
+        "originalId": "105422"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105461",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：重置SSH密钥",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 76,
+        "originalId": "105461"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105531",
+      "title": "用户管理-用户列表-详情页-基本信息tab-快速更新：解锁用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 77,
+        "originalId": "105531"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105586",
+      "title": "用户管理-用户列表-详情页-基本信息tab-用户组：添加/删除用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 78,
+        "originalId": "105586"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105601",
+      "title": "用户管理-用户列表-详情页-基本信息tab：右上角更新按钮",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 79,
+        "originalId": "105601"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105694",
+      "title": "用户管理-用户列表-详情页-用户登录规则：",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 80,
+        "originalId": "105694"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105702",
+      "title": "用户管理-用户列表-详情页-基本信息tab：右上角删除按钮",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 81,
+        "originalId": "105702"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105765",
+      "title": "用户管理-用户列表-详情页-授权的资产tab：获取授权的资产信息",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 82,
+        "originalId": "105765"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105786",
+      "title": "用户管理-用户列表-详情页-授权的账号tab：获取授权的账号信息",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 83,
+        "originalId": "105786"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105883",
+      "title": "用户管理-用户列表-详情页-资产授权规则tab：获取资产授权规则",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 84,
+        "originalId": "105883"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户列表/详情页",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户列表",
+          "详情页"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [],
+      "expectations": [],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": null,
+        "expectations": null
+      },
+      "warnings": [
+        {
+          "type": "missing_steps",
+          "message": "当前测试用例没有步骤描述"
+        },
+        {
+          "type": "missing_expectations",
+          "message": "当前测试用例没有明确的预期结果"
+        }
+      ]
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100061",
+      "title": "用户组列表-标签搜索：测试同key和不同key标签搜索",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 85,
+        "originalId": "100061"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P1",
+      "tags": [
+        "OSM"
+      ],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "如标签A:a，A:b，A:c，三个同Key标签搜索"
+        },
+        {
+          "index": 2,
+          "text": "如标签A:a，B:a，不同Key标签搜索"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "搜索出来的结果是三个Key的或关系"
+        },
+        {
+          "index": 2,
+          "text": "搜索出来的结果是这些Key的且关系"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]如标签A:a，A:b，A:c，三个同Key标签搜索\n[2]如标签A:a，B:a，不同Key标签搜索",
+        "expectations": "[1]搜索出来的结果是三个Key的或关系\n[2]搜索出来的结果是这些Key的且关系"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100435",
+      "title": "用户组-详情页：添加全部成员时，弹出二次确认",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 86,
+        "originalId": "100435"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户组-详情页：点击添加全部成员"
+        },
+        {
+          "index": 2,
+          "text": "点击取消"
+        },
+        {
+          "index": 3,
+          "text": "点击确认"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "弹出窗口二次确认窗口，提示：你确定要添加全部成功员吗"
+        },
+        {
+          "index": 2,
+          "text": "不会添加成员"
+        },
+        {
+          "index": 3,
+          "text": "提示添加成功，页面会刷新，添加了全部成员"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": "![image.png](/resource/md/get?fileName=e23277bf.png)"
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户组-详情页：点击添加全部成员\n[2]点击取消\n[3]点击确认",
+        "expectations": "[1]弹出窗口二次确认窗口，提示：你确定要添加全部成功员吗\n[2]不会添加成员\n[3]提示添加成功，页面会刷新，添加了全部成员"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100436",
+      "title": "创建用户组表单-查看一些字段使用select2组件，是否优化成 TableSelect2 组件",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 87,
+        "originalId": "100436"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "创建用户组表单-添加用户的select2组件，是否优化成 TableSelect2组件"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "有优化成 TableSelect2组件，可以批量选择，或批量删除"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]创建用户组表单-添加用户的select2组件，是否优化成 TableSelect2组件",
+        "expectations": "[1]有优化成 TableSelect2组件，可以批量选择，或批量删除"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100601",
+      "title": "用户组-详情页：更新用户组表单优化为抽屉式表单（右侧弹出）",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 88,
+        "originalId": "100601"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-详情页：点击更新用户组"
+        },
+        {
+          "index": 2,
+          "text": "表单填写，更新名称，更新用户，点击更新"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "右侧弹出抽屉式表单，表单显示该用户组的信息"
+        },
+        {
+          "index": 2,
+          "text": "更新成功过。该详情页自动刷新，查看该用户组信息是更新后信息正确的。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-详情页：点击更新用户组\n[2]表单填写，更新名称，更新用户，点击更新",
+        "expectations": "[1]右侧弹出抽屉式表单，表单显示该用户组的信息\n[2]更新成功过。该详情页自动刷新，查看该用户组信息是更新后信息正确的。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100602",
+      "title": "克隆用户组表单优化为抽屉式表单（右侧弹出）",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 89,
+        "originalId": "100602"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：点击克隆用户组"
+        },
+        {
+          "index": 2,
+          "text": "表单填写，修改名称，修改用户，点击更新"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "右侧弹出抽屉式表单，表单克隆了该用户组的信息"
+        },
+        {
+          "index": 2,
+          "text": "更新成功过。显示用户组列表，查看该用户组信息是更新后信息正确的。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：点击克隆用户组\n[2]表单填写，修改名称，修改用户，点击更新",
+        "expectations": "[1]右侧弹出抽屉式表单，表单克隆了该用户组的信息\n[2]更新成功过。显示用户组列表，查看该用户组信息是更新后信息正确的。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100603",
+      "title": "更新用户组表单优化为抽屉式表单（右侧弹出）",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 90,
+        "originalId": "100603"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：点击更新用户组"
+        },
+        {
+          "index": 2,
+          "text": "表单填写，更新名称，更新用户，点击更新"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "右侧弹出抽屉式表单，表单显示该用户组的信息"
+        },
+        {
+          "index": 2,
+          "text": "更新成功过。显示用户组列表，查看该用户组信息是更新后信息正确的。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：点击更新用户组\n[2]表单填写，更新名称，更新用户，点击更新",
+        "expectations": "[1]右侧弹出抽屉式表单，表单显示该用户组的信息\n[2]更新成功过。显示用户组列表，查看该用户组信息是更新后信息正确的。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "100604",
+      "title": "创建用户组表单优化为抽屉式表单（右侧弹出）",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 91,
+        "originalId": "100604"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P1",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：点击创建用户组"
+        },
+        {
+          "index": 2,
+          "text": "表单填写，设置名称，选择多个用户，点击创建"
+        },
+        {
+          "index": 3,
+          "text": "表单填写，设置名称，选择多个用户，点击保存并继续添加"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "右侧弹出抽屉式表单"
+        },
+        {
+          "index": 2,
+          "text": "创建成功。显示用户组列表，查看改用户组信息是正确的。"
+        },
+        {
+          "index": 3,
+          "text": "创建成功。抽屉式表单不会消失，能够继续添加用户组。用户组成功添加后，可查看用户组列表，刚才添加的几个用户组都正确显示。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：点击创建用户组\n[2]表单填写，设置名称，选择多个用户，点击创建\n[3]表单填写，设置名称，选择多个用户，点击保存并继续添加",
+        "expectations": "[1]右侧弹出抽屉式表单\n[2]创建成功。显示用户组列表，查看改用户组信息是正确的。\n[3]创建成功。抽屉式表单不会消失，能够继续添加用户组。用户组成功添加后，可查看用户组列表，刚才添加的几个用户组都正确显示。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "101383",
+      "title": "用户列表-用户组-添加全部成员",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 92,
+        "originalId": "101383"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P1",
+      "tags": [
+        "OSM"
+      ],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户列表，用户组，选择一个用户组，点击用户组名称"
+        },
+        {
+          "index": 2,
+          "text": "全部成员，点击添加按钮"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "进入用户组详情页，用户列表tab，右侧新增快速添加卡片"
+        },
+        {
+          "index": 2,
+          "text": "会将所有成员添加到该用户组"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户列表，用户组，选择一个用户组，点击用户组名称\n[2]全部成员，点击添加按钮",
+        "expectations": "[1]进入用户组详情页，用户列表tab，右侧新增快速添加卡片\n[2]会将所有成员添加到该用户组"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105024",
+      "title": "用户管理-用户组-创建用户组：添加用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 93,
+        "originalId": "105024"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P0",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-创建用户组：添加用户,其他按要求填写，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建用户组成功。可查看用户列表，所添加的用户的用户组字段都是新创建的用户组名称。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-创建用户组：添加用户,其他按要求填写，提交",
+        "expectations": "[1]创建用户组成功。可查看用户列表，所添加的用户的用户组字段都是新创建的用户组名称。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105079",
+      "title": "用户管理-用户组-创建用户组：必填项不填写",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 94,
+        "originalId": "105079"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-创建用户组：必填项不填写"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建失败，提示该项为必填项"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-创建用户组：必填项不填写",
+        "expectations": "[1]创建失败，提示该项为必填项"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105109",
+      "title": "用户管理-用户组-创建用户组：名称重复",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 95,
+        "originalId": "105109"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-创建用户组：名称重复"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "创建失败，提示字段必须唯一"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-创建用户组：名称重复",
+        "expectations": "[1]创建失败，提示字段必须唯一"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105157",
+      "title": "用户管理-用户组-更新用户组：添加/删除用户",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 96,
+        "originalId": "105157"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P1",
+      "tags": [
+        "OSM"
+      ],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-更新用户组：添加用户"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功，查看用户列表，这些用户属于该用户组"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-更新用户组：添加用户",
+        "expectations": "[1]更新成功，查看用户列表，这些用户属于该用户组"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105182",
+      "title": "用户管理-用户组-更新用户组：更新名称",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 97,
+        "originalId": "105182"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-更新用户组：更新名称"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功，查看用户组列表，该用户组名称是更新后的信息"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-更新用户组：更新名称",
+        "expectations": "[1]更新成功，查看用户组列表，该用户组名称是更新后的信息"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105239",
+      "title": "用户管理-用户组-更新用户组：更新名称",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 98,
+        "originalId": "105239"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-更新用户组：更新名称"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新失败，提示字段必须唯一"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-更新用户组：更新名称",
+        "expectations": "[1]更新失败，提示字段必须唯一"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105288",
+      "title": "用户管理-用户组-更新用户组：必填项不填写",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 99,
+        "originalId": "105288"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-更新用户组：必填项不填写"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新失败，提示名称不能重复"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-更新用户组：必填项不填写",
+        "expectations": "[1]更新失败，提示名称不能重复"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105392",
+      "title": "用户管理-用户组-详情页-基本信息tab：添加/删除成员",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 100,
+        "originalId": "105392"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-详情页-基本信息tab：添加成员"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户组-详情页-基本信息tab：删除成员"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "提示添加成功，查看用户列表，这些用户的用户组字段显示正确"
+        },
+        {
+          "index": 2,
+          "text": "提示删除成功，查看用户列表，这些用户的用户组字段已没有该用户组名称"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-详情页-基本信息tab：添加成员\n[2]用户管理-用户组-详情页-基本信息tab：删除成员",
+        "expectations": "[1]提示添加成功，查看用户列表，这些用户的用户组字段显示正确\n[2]提示删除成功，查看用户列表，这些用户的用户组字段已没有该用户组名称"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105441",
+      "title": "用户管理-用户组-详情页-基本信息tab：更新用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 101,
+        "originalId": "105441"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-详情页-基本信息tab：更新用户组，如更新名称、添加用户等信息，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "更新成功，查看用户组信息，是更新后的信息"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-详情页-基本信息tab：更新用户组，如更新名称、添加用户等信息，提交",
+        "expectations": "[1]更新成功，查看用户组信息，是更新后的信息"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105454",
+      "title": "用户管理-用户组-详情页-基本信息tab：删除用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 102,
+        "originalId": "105454"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-详情页-基本信息tab：删除用户组"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "删除成功。原该用户组下的用户已不属于该用户组了"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-详情页-基本信息tab：删除用户组",
+        "expectations": "[1]删除成功。原该用户组下的用户已不属于该用户组了"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105558",
+      "title": "用户管理-用户组：测试克隆用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 103,
+        "originalId": "105558"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：测试克隆用户组"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "克隆表单上的信息与被克隆的用户组信息一致，名称多了两个字，修改克隆表单信息，提交。提示创建成功。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：测试克隆用户组",
+        "expectations": "[1]克隆表单上的信息与被克隆的用户组信息一致，名称多了两个字，修改克隆表单信息，提交。提示创建成功。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105632",
+      "title": "用户管理-用户组：测试批量删除用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 104,
+        "originalId": "105632"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P1",
+      "tags": [
+        "OSM"
+      ],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：测试批量删除用户组"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "删除成功，这些被删除的用户组已不在用户组列表了"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：测试批量删除用户组",
+        "expectations": "[1]删除成功，这些被删除的用户组已不在用户组列表了"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105699",
+      "title": "用户管理-用户组：测试删除用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 105,
+        "originalId": "105699"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P1",
+      "tags": [
+        "OSM"
+      ],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：测试删除用户组"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "删除成功，查看用户组列表，该用户组已不在用户组列表中"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：测试删除用户组",
+        "expectations": "[1]删除成功，查看用户组列表，该用户组已不在用户组列表中"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105716",
+      "title": "用户管理-用户组：测试导出用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 106,
+        "originalId": "105716"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：测试导出用户组，导出所有用户组"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户组：测试导出用户组，导出选择项用户组"
+        },
+        {
+          "index": 3,
+          "text": "用户管理-用户组：测试导出用户组，导出搜索结果的项用户组"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "导出成功，查看表格信息，是所有用户组信息，且数据正确"
+        },
+        {
+          "index": 2,
+          "text": "导出成功，查看表格信息，是选择项用户组信息，且数据正确"
+        },
+        {
+          "index": 3,
+          "text": "导出成功，查看表格信息，是搜索结果用户组信息，且数据正确"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：测试导出用户组，导出所有用户组\n[2]用户管理-用户组：测试导出用户组，导出选择项用户组\n[3]用户管理-用户组：测试导出用户组，导出搜索结果的项用户组",
+        "expectations": "[1]导出成功，查看表格信息，是所有用户组信息，且数据正确\n[2]导出成功，查看表格信息，是选择项用户组信息，且数据正确\n[3]导出成功，查看表格信息，是搜索结果用户组信息，且数据正确"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105717",
+      "title": "用户管理-用户组：测试搜索用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 107,
+        "originalId": "105717"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组-搜索框：选择名称搜索条件，进行搜索"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户组-搜索框：不选择搜索条件，进行搜索"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "输入名称全名，符合条件的用户组可被搜索出来。输入名称关键字，搜索不到任何东西。"
+        },
+        {
+          "index": 2,
+          "text": "输入名称全名/或者关键字，符合条件的用户组可被搜索出来。"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组-搜索框：选择名称搜索条件，进行搜索\n[2]用户管理-用户组-搜索框：不选择搜索条件，进行搜索",
+        "expectations": "[1]输入名称全名，符合条件的用户组可被搜索出来。输入名称关键字，搜索不到任何东西。\n[2]输入名称全名/或者关键字，符合条件的用户组可被搜索出来。"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105807",
+      "title": "用户管理-用户组：测试自定义显示表单字段",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 108,
+        "originalId": "105807"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：测试自定义显示列表字段，勾选需要显示的字段，提交"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "返回用户组，用户列表只显示自定义表单字段"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：测试自定义显示列表字段，勾选需要显示的字段，提交",
+        "expectations": "[1]返回用户组，用户列表只显示自定义表单字段"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105894",
+      "title": "用户管理-用户组：测试下载导入用户组模版",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 109,
+        "originalId": "105894"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：测试下载导入用户组模版（CSV）"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户组：测试下载导入用户组模版（Excel）"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "下载导入用户组模版成功，文件格式为csv"
+        },
+        {
+          "index": 2,
+          "text": "下载导入用户组模版成功，文件格式为Excel"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：测试下载导入用户组模版（CSV）\n[2]用户管理-用户组：测试下载导入用户组模版（Excel）",
+        "expectations": "[1]下载导入用户组模版成功，文件格式为csv\n[2]下载导入用户组模版成功，文件格式为Excel"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105924",
+      "title": "用户管理-用户组：测试导入创建用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 110,
+        "originalId": "105924"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P3",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：测试导入创建用户组，csv格式"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户组：测试导入创建用户组，Excel格式"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "导入成功"
+        },
+        {
+          "index": 2,
+          "text": "导入成功"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：测试导入创建用户组，csv格式\n[2]用户管理-用户组：测试导入创建用户组，Excel格式",
+        "expectations": "[1]导入成功\n[2]导入成功"
+      }
+    },
+    {
+      "schemaVersion": "1.0",
+      "id": "105970",
+      "title": "用户管理-用户组：测试导入更新用户组",
+      "source": {
+        "type": "metersphere",
+        "file": "JumpServer-控制台-用户管理.xlsx",
+        "sheet": "模版",
+        "row": 111,
+        "originalId": "105970"
+      },
+      "module": {
+        "raw": "/JumpServer/控制台/用户管理/用户组",
+        "path": [
+          "JumpServer",
+          "控制台",
+          "用户管理",
+          "用户组"
+        ]
+      },
+      "priority": "P2",
+      "tags": [],
+      "preconditions": [],
+      "steps": [
+        {
+          "index": 1,
+          "text": "用户管理-用户组：测试导入更新用户组，Excel格式"
+        },
+        {
+          "index": 2,
+          "text": "用户管理-用户组：测试导入更新用户组，csv格式"
+        }
+      ],
+      "expectations": [
+        {
+          "index": 1,
+          "text": "导入成功"
+        },
+        {
+          "index": 2,
+          "text": "导入成功"
+        }
+      ],
+      "metadata": {
+        "owner": "yumin.jiang@fit2cloud.com",
+        "version": null,
+        "remark": null
+      },
+      "raw": {
+        "preconditions": null,
+        "steps": "[1]用户管理-用户组：测试导入更新用户组，Excel格式\n[2]用户管理-用户组：测试导入更新用户组，csv格式",
+        "expectations": "[1]导入成功\n[2]导入成功"
+      }
+    }
+  ]
+}

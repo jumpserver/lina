@@ -1,0 +1,49 @@
+{
+  "artifactType": "test-case",
+  "coverage": {
+    "accessibilityMethod": null,
+    "behavior": "模块: JumpServer / 控制台 / 用户管理；验证: 用户管理-批量操作-下拉列表显示选中条目数",
+    "browser": "chromium",
+    "outcome": "[1] 下拉列表正确显示条目数\n[2] 下拉列表正确显示条目数",
+    "requirementId": "MS-101536",
+    "risk": "medium",
+    "role": "console-admin",
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "producerVersion": "1.0.3",
+  "regressionIndex": {
+    "codeSurfaces": [
+      "JumpServer",
+      "控制台",
+      "用户管理"
+    ],
+    "declaredDependencies": [],
+    "gitPaths": [],
+    "requirementIds": [
+      "MS-101536"
+    ],
+    "userScope": [
+      "console-admin"
+    ]
+  },
+  "schemaVersion": "3.0.0",
+  "steps": [
+    {
+      "action": "用户列表-选择多个用户-批量处理",
+      "id": "step-1",
+      "sideEffect": "none"
+    },
+    {
+      "action": "用户组列表-选择多个用户组-批量处理",
+      "id": "step-2",
+      "sideEffect": "none"
+    }
+  ],
+  "testCaseId": "MS-101536",
+  "title": "用户管理-批量操作-下拉列表显示选中条目数",
+  "revisionId": "8e93b66a8053e812427a81e1b0a4e178bcf6b9d263b45e3b8a61600c67dbc461",
+  "instanceId": "MS-101536--8e93b66a8053e812"
+}
