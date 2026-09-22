@@ -2485,5 +2485,14 @@
   "MFASystemPolicyHelp": "可提前配置尚未开启的方式，仅在对应功能开启后生效。",
   "MFAStoredInactiveHelp": "已保留当前不生效的选择，满足条件后自动生效。",
   "MFANoEffectiveMethod": "当前没有可生效的 MFA 方式，强制启用 MFA 前请检查策略和功能配置。",
-  "MFACapabilitiesUnavailable": "无法获取 MFA 功能状态，请刷新后再编辑。"
+  "MFACapabilitiesUnavailable": "无法获取 MFA 功能状态，请刷新后再编辑。",
+  "ZoneAssetMatching": "资产匹配",
+  "CIDRRanges": "CIDR 网段",
+  "ZoneCIDRHelp": "选填，支持 IPv4 和 IPv6，每个 CIDR 输入后按回车。含主机位的地址会自动转换为网段地址。",
+  "ZoneAutoAssign": "自动纳入新建资产",
+  "ZoneAutoAssignHelp": "新建资产的 IP 地址匹配时自动纳入此 Zone，保留已有 Zone 归属；多个网段匹配时优先选择范围更精确的网段。",
+  "AddAssetByCIDR": "按 CIDR 添加资产",
+  "ZoneCIDRFilterPlaceholder": "输入 IPv4 或 IPv6 CIDR，以逗号分隔，例如 192.168.1.0/24",
+  "ZoneCIDRManualHelp": "按 IP 地址筛选后勾选要添加的资产。已属于其他 Zone 的所选资产将迁移到当前 Zone。本次筛选不会修改已保存的 CIDR。",
+  "AddSelectedToZone": "添加所选资产到当前 Zone"
 }

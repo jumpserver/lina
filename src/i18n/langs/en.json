@@ -2491,5 +2491,14 @@
   "MFASystemPolicyHelp": "You can configure methods before enabling their features. Only enabled methods take effect.",
   "MFAStoredInactiveHelp": "Inactive selections are retained and will take effect when their prerequisites are met.",
   "MFANoEffectiveMethod": "No MFA method is currently effective. Check the policy and feature settings before requiring MFA.",
-  "MFACapabilitiesUnavailable": "Unable to load MFA capabilities. Reload before editing."
+  "MFACapabilitiesUnavailable": "Unable to load MFA capabilities. Reload before editing.",
+  "ZoneAssetMatching": "Asset matching",
+  "CIDRRanges": "CIDR ranges",
+  "ZoneCIDRHelp": "Optional IPv4 or IPv6 networks. Press Enter after each CIDR. Host bits are normalized to the network address.",
+  "ZoneAutoAssign": "Auto assign new assets",
+  "ZoneAutoAssignHelp": "Assign new assets whose IP address matches a CIDR in this Zone. Existing Zone assignments are preserved. The most specific matching subnet takes priority.",
+  "AddAssetByCIDR": "Add assets by CIDR",
+  "ZoneCIDRFilterPlaceholder": "Enter IPv4 or IPv6 CIDRs, separated by commas, e.g. 192.168.1.0/24",
+  "ZoneCIDRManualHelp": "Filter assets by IP address and select those to add. Selected assets already in another Zone will move to this Zone. These filters do not change the saved CIDRs.",
+  "AddSelectedToZone": "Add selected to this Zone"
 }
