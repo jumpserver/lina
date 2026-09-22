@@ -1,5 +1,4 @@
 {
-  "FollowTemplateEnableConfirm": "Al activar, las credenciales de la cuenta se reemplazan por las de la plantilla y se sincronizan los cambios futuros. ¿Continuar?",
   "TemplateCredentialOverrideConfirm": "Esta cuenta sigue las credenciales de la plantilla. ¿Dejar de seguirla y continuar modificando o borrando las credenciales? La plantilla no cambiará.",
   "TemplateCredentialOverride": "Dejar de seguir y continuar",
   "Credentials": "Credenciales",

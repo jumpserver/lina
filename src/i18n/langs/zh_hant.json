@@ -1,5 +1,4 @@
 {
-  "FollowTemplateEnableConfirm": "啟用後將以範本目前憑證覆蓋帳號憑證，並同步範本後續的憑證變更。是否繼續？",
   "TemplateCredentialOverrideConfirm": "此帳號正在跟隨範本憑證。是否解除跟隨並繼續修改或清除憑證？此操作不會修改範本。",
   "TemplateCredentialOverride": "解除跟隨並繼續",
   "Credentials": "憑據",

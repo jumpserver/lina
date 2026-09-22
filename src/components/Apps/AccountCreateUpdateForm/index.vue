@@ -150,27 +150,10 @@ export default {
         return secretTypes.indexOf(item.value) > -1
       })
     },
-    async confirm(form) {
-      if (this.account?.name && !this.account.follow_template && form.follow_template) {
-        try {
-          await this.$confirm(this.$t('FollowTemplateEnableConfirm'), this.$t('Info'), {
-            confirmButtonText: this.$t('Confirm'),
-            cancelButtonText: this.$t('Cancel'),
-            type: 'warning',
-            closeOnClickModal: false
-          })
-        } catch {
-          return
-        }
-      }
+    confirm(form) {
       const secretType = form.secret_type || 'password'
-      if (form.follow_template) {
-        delete form.secret
-        delete form.passphrase
-      } else {
-        form.secret = form[secretType]
-        form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
-      }
+      form.secret = form[secretType]
+      form.secret = this.encryptPassword ? encryptPassword(form.secret) : form.secret
 
       // 如果不删除会明文显示
       delete form[secretType]

@@ -1,5 +1,4 @@
 {
-  "FollowTemplateEnableConfirm": "开启后将用模板当前凭据覆盖账号凭据，并同步模板后续的凭据变更。是否继续？",
   "TemplateCredentialOverrideConfirm": "该账号正在跟随模板凭据。是否解除跟随并继续修改或清除凭据？此操作不会修改模板。",
   "TemplateCredentialOverride": "解除跟随并继续",
   "Credentials": "凭据",
