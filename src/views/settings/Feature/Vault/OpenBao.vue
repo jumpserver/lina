@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { UploadKey } from '@/components'
 import BaseKV from './Base.vue'
 
 export default {
@@ -36,7 +37,7 @@ export default {
           }
         }
       ],
-      encryptedFields: ['VAULT_OPENBAO_TOKEN'],
+      encryptedFields: ['VAULT_OPENBAO_TOKEN', 'VAULT_OPENBAO_CACERT_CONTENT'],
       fields: [
         [
           this.$t('AccountStorage'),
@@ -44,7 +45,9 @@ export default {
             'VAULT_OPENBAO_ADDR',
             'VAULT_OPENBAO_TOKEN',
             'VAULT_OPENBAO_MOUNT_POINT',
-            'VAULT_OPENBAO_TIMEOUT'
+            'VAULT_OPENBAO_TIMEOUT',
+            'VAULT_OPENBAO_VERIFY_TLS',
+            'VAULT_OPENBAO_CACERT_CONTENT'
           ]
         ]
       ],
@@ -56,6 +59,17 @@ export default {
         VAULT_OPENBAO_MOUNT_POINT: {
           helpText: this.$t('VaultOpenBaoMountPoint'),
           helpTextAsTip: true
+        },
+        VAULT_OPENBAO_VERIFY_TLS: {
+          label: this.$t('SSHCAVerifyTLS')
+        },
+        VAULT_OPENBAO_CACERT_CONTENT: {
+          component: UploadKey,
+          label: this.$t('CACertificate'),
+          hidden: (formValue) => !formValue.VAULT_OPENBAO_VERIFY_TLS,
+          el: {
+            accept: '.crt,.pem,.cer'
+          }
         }
       },
       submitMethod() {
