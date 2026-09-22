@@ -1,4 +1,5 @@
 {
+  "FollowTemplateEnableConfirm": "Cette activation remplace les identifiants du compte par ceux du modèle et synchronise leurs modifications futures. Continuer ?",
   "TemplateCredentialOverrideConfirm": "Ce compte suit les identifiants du modèle. Cesser de le suivre et continuer la modification ou la suppression des identifiants ? Le modèle restera inchangé.",
   "TemplateCredentialOverride": "Cesser de suivre et continuer",
   "Credentials": "Identifiants",

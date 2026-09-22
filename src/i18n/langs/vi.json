@@ -1,4 +1,5 @@
 {
+  "FollowTemplateEnableConfirm": "Khi bật, thông tin xác thực của tài khoản sẽ được thay bằng thông tin hiện tại của mẫu và đồng bộ các thay đổi tiếp theo. Tiếp tục?",
   "TemplateCredentialOverrideConfirm": "Tài khoản này đang theo thông tin xác thực của mẫu. Ngừng theo mẫu và tiếp tục sửa hoặc xóa thông tin xác thực? Mẫu sẽ không thay đổi.",
   "TemplateCredentialOverride": "Ngừng theo mẫu và tiếp tục",
   "Credentials": "Thông tin xác thực",

@@ -1,4 +1,5 @@
 {
+  "FollowTemplateEnableConfirm": "Enabling this replaces the account credentials with the current template credentials and synchronizes future template credential changes. Continue?",
   "TemplateCredentialOverrideConfirm": "This account follows template credentials. Stop following and continue modifying or clearing credentials? The template will not be changed.",
   "TemplateCredentialOverride": "Stop following and continue",
   "Credentials": "Credentials",

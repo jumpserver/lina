@@ -1,4 +1,5 @@
 {
+  "FollowTemplateEnableConfirm": "Ao ativar, as credenciais da conta serão substituídas pelas do modelo e as alterações futuras serão sincronizadas. Continuar?",
   "TemplateCredentialOverrideConfirm": "Esta conta segue as credenciais do modelo. Parar de seguir e continuar alterando ou limpando as credenciais? O modelo não será alterado.",
   "TemplateCredentialOverride": "Parar de seguir e continuar",
   "Credentials": "Credenciais",
