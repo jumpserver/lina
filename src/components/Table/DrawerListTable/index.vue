@@ -20,7 +20,6 @@
       :component-props="mergedDrawerProps"
       :title="drawerTitle"
       class="page-drawer"
-      @close-drawer="handleDrawerShellClose"
     />
   </div>
 </template>
@@ -92,7 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['inDrawer']),
+    ...mapGetters(['inDrawer', 'drawerCloseNonce']),
     drawerListeners() {
       return {
         'close-drawer': this.handleDrawerRequestClose,
@@ -153,6 +152,12 @@ export default {
         this.drawerVisible = false
       }
     },
+    drawerCloseNonce() {
+      const top = this.$store.state.common.drawerStack.at(-1)
+      if (top && top.token === this.drawerToken && this.drawerVisible) {
+        this.drawerVisible = false
+      }
+    },
     drawerVisible: {
       handler(val, oldVal) {
         this.$log.debug('>>> drawerVisible changed: ', oldVal, '->', val, {
@@ -196,6 +201,9 @@ export default {
       immediate: true
     }
   },
+  created() {
+    this.drawerToken = Symbol('drawer')
+  },
   mounted() {
     this.routeMutationState = {
       params: {},
@@ -204,6 +212,7 @@ export default {
     this.$log.debug('>>> DrawerListTable mounted')
   },
   unmounted() {
+    this.$store.dispatch('common/leaveDrawer', this.drawerToken)
     this.$log.debug('>>> DrawerListTable destroyed')
   },
   activated() {
@@ -223,6 +232,7 @@ export default {
       this.$log.debug('>>> afterCloseDrawer: clearing drawerComponent')
       this.drawerComponent = ''
       this.drawerContext = null
+      this.$store.dispatch('common/leaveDrawer', this.drawerToken)
       this.$log.debug('>>> afterCloseDrawer: drawerComponent cleared', {
         drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY'
       })
@@ -240,7 +250,10 @@ export default {
       }
     },
     async setDrawerRuntime(actionMeta = {}, extra = {}) {
-      await this.$store.dispatch('common/setDrawerActionMeta', actionMeta)
+      await this.$store.dispatch('common/setDrawerActionMeta', {
+        ...actionMeta,
+        __drawerToken: this.drawerToken
+      })
       this.drawerContext = this.buildDrawerContext(actionMeta, extra)
       return this.drawerContext
     },
@@ -534,6 +547,7 @@ export default {
         this.drawerVisible = false
         this.drawerComponent = ''
         this.isReopeningDrawer = false
+        this.$store.dispatch('common/leaveDrawer', this.drawerToken)
       }
     },
     reloadTable() {
@@ -552,14 +566,8 @@ export default {
       this.reloadTable()
       this.$emit('resource-change', payload)
     },
-    handleDrawerShellClose() {
-      this.$store.dispatch('common/cleanDrawerActionMeta')
-    },
     handleDrawerRequestClose() {
       this.drawerVisible = false
-      this.$nextTick(() => {
-        this.$store.dispatch('common/cleanDrawerActionMeta')
-      })
     },
     handleDrawerRequestUpdate({ row, col, query = {} } = {}) {
       const nextRow = row || this.drawerContext?.row || {}

@@ -36,6 +36,7 @@ const getters = {
     state.users.profile.system_roles.some((i) => i?.id === '00000000-0000-0000-0000-000000000001'),
   sqlQueryCounter: (state) => state.common.sqlQueryCounter,
   showSqlQueryCounter: (state) => state.common.showSqlQueryCounter,
-  inDrawer: (state) => state.common.inDrawer
+  inDrawer: (state) => state.common.inDrawer,
+  drawerCloseNonce: (state) => state.common.drawerCloseNonce
 }
 export default getters
