@@ -1,4 +1,6 @@
 {
+  "TemplateCredentialOverrideConfirm": "Tài khoản này đang theo thông tin xác thực của mẫu. Ngừng theo mẫu và tiếp tục sửa hoặc xóa thông tin xác thực? Mẫu sẽ không thay đổi.",
+  "TemplateCredentialOverride": "Ngừng theo mẫu và tiếp tục",
   "Credentials": "Thông tin xác thực",
   "SecretResetHelpText": "Cho phép tự động đổi thông tin xác thực. Sau khi đổi thành công, tài khoản ngừng theo mẫu và sử dụng thông tin xác thực mới độc lập.",
   "SourceTemplate": "Mẫu nguồn",
@@ -1812,7 +1814,7 @@
   "Secret": "Mật khẩu",
   "SecretKey": "Khóa",
   "SecretKeyStrategy": "Chiến lược mật khẩu",
-  "SecretReset": "Có thể đổi mật khẩu",
+  "SecretReset": "Cho phép tự động đổi thông tin xác thực",
   "SecretStrategy": "Chiến lược mật khẩu",
   "SecretType": "Loại mật khẩu",
   "Secure": "An toàn",

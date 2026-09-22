@@ -1,4 +1,6 @@
 {
+  "TemplateCredentialOverrideConfirm": "Esta cuenta sigue las credenciales de la plantilla. ¿Dejar de seguirla y continuar modificando o borrando las credenciales? La plantilla no cambiará.",
+  "TemplateCredentialOverride": "Dejar de seguir y continuar",
   "Credentials": "Credenciales",
   "SecretResetHelpText": "Permitir la rotación automática de credenciales. Tras una rotación exitosa, las cuentas dejan de seguir la plantilla y usan sus propias credenciales nuevas.",
   "SourceTemplate": "Plantilla de origen",
@@ -1812,7 +1814,7 @@
   "Secret": "Contraseña",
   "SecretKey": "clave",
   "SecretKeyStrategy": "Estrategia de contraseñas",
-  "SecretReset": "Cambio de contraseña permitido",
+  "SecretReset": "Permitir la rotación automática de credenciales",
   "SecretStrategy": "Estrategia de texto cifrado",
   "SecretType": "Tipo de contraseña",
   "Secure": "Seguridad",

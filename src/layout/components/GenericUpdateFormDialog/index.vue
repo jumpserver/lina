@@ -313,6 +313,7 @@ export default {
               vm.$emit('update:visible', false)
             })
             .catch((error) => {
+              if (error.templateFollowCancelled) return
               vm.$emit('submitError', error)
               const response = error.response
               const data = response.data

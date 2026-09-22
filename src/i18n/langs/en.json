@@ -1,4 +1,6 @@
 {
+  "TemplateCredentialOverrideConfirm": "This account follows template credentials. Stop following and continue modifying or clearing credentials? The template will not be changed.",
+  "TemplateCredentialOverride": "Stop following and continue",
   "Credentials": "Credentials",
   "SecretResetHelpText": "Allow automatic credential rotation. Accounts following a template stop following after a successful rotation and use their own new credentials.",
   "SourceTemplate": "Source template",
@@ -1569,7 +1571,7 @@
   "Secret": "Secret",
   "SecretKey": "Key",
   "SecretKeyStrategy": "Password policy",
-  "SecretReset": "Secret reset",
+  "SecretReset": "Allow automatic credential rotation",
   "SecretStrategy": "Ciphertext Policy",
   "SecretType": "Secret Type",
   "Secure": "Security",

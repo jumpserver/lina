@@ -19,27 +19,24 @@ function createFields() {
   return { vm, fields: accountFieldsMeta(vm) }
 }
 
-test('turning off template following immediately unlocks editable fields', () => {
+test('independent fields remain editable while following a template', () => {
   const { vm, fields } = createFields()
-  for (const key of ['secret_type']) {
-    assert.equal(fields[key].el.disabled, true)
-  }
+  assert.equal(fields.secret_type.el.disabled, false)
+  assert.equal(fields.name.el.disabled, false)
+  assert.equal(fields.privileged.el.disabled, false)
   fields.follow_template.on.change([false])
-  for (const key of ['secret_type']) {
-    assert.equal(fields[key].el.disabled, false)
-  }
   assert.equal(vm.account.follow_template, true, 'do not mutate the saved account before submitting')
   assert.equal(fields.username.el.disabled, true, 'usernames remain immutable')
-  fields.follow_template.on.change([true])
-  assert.equal(fields.name.el.disabled, false, 'account names remain independent while following')
-  assert.equal(fields.privileged.el.disabled, false, 'privilege settings remain independent while following')
 })
 
-test('credential visibility follows the current form instead of the saved account', () => {
+test('credential inputs hide while following and reappear when unchecked', () => {
   const { fields } = createFields()
+  assert.equal(fields.secret_type.hidden({ follow_template: true }), true)
+  assert.equal(fields.secret_type.hidden({ follow_template: false }), false)
+  assert.equal(fields.passphrase.hidden({ secret_type: 'ssh_key', follow_template: true }), true)
+  assert.equal(fields.passphrase.hidden({ secret_type: 'ssh_key', follow_template: false }), false)
   for (const secretType of ['password', 'ssh_key', 'token', 'access_key', 'api_key']) {
     assert.equal(fields[secretType].hidden({ secret_type: secretType, follow_template: true }), true)
     assert.equal(fields[secretType].hidden({ secret_type: secretType, follow_template: false }), false)
   }
-  assert.equal(fields.passphrase.hidden({ secret_type: 'ssh_key', follow_template: false }), false)
 })

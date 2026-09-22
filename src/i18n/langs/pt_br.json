@@ -1,4 +1,6 @@
 {
+  "TemplateCredentialOverrideConfirm": "Esta conta segue as credenciais do modelo. Parar de seguir e continuar alterando ou limpando as credenciais? O modelo não será alterado.",
+  "TemplateCredentialOverride": "Parar de seguir e continuar",
   "Credentials": "Credenciais",
   "SecretResetHelpText": "Permitir a rotação automática de credenciais. Após uma rotação bem-sucedida, as contas deixam de seguir o modelo e usam suas próprias novas credenciais.",
   "SourceTemplate": "Modelo de origem",
@@ -1812,7 +1814,7 @@
   "Secret": "Senha",
   "SecretKey": "Chave",
   "SecretKeyStrategy": "Política de Senha",
-  "SecretReset": " Senha modificável ",
+  "SecretReset": "Permitir a rotação automática de credenciais",
   "SecretStrategy": "Estratégia de texto cifrado",
   "SecretType": "tipo de senha",
   "Secure": "Segurança",

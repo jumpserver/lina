@@ -1,4 +1,6 @@
 {
+  "TemplateCredentialOverrideConfirm": "이 계정은 템플릿 자격 증명을 따릅니다. 따르기를 해제하고 자격 증명 변경 또는 삭제를 계속하시겠습니까? 템플릿은 변경되지 않습니다.",
+  "TemplateCredentialOverride": "따르기 해제 후 계속",
   "Credentials": "자격 증명",
   "SecretResetHelpText": "자격 증명 자동 변경을 허용합니다. 템플릿을 따르는 계정은 변경에 성공하면 따르기를 해제하고 새 자격 증명을 독립적으로 사용합니다.",
   "SourceTemplate": "원본 템플릿",
@@ -1812,7 +1814,7 @@
   "Secret": "비밀번호",
   "SecretKey": "키",
   "SecretKeyStrategy": "비밀번호 정책",
-  "SecretReset": "비밀번호 변경 가능",
+  "SecretReset": "자격 증명 자동 변경 허용",
   "SecretStrategy": "암호 전략",
   "SecretType": "암호 유형",
   "Secure": "안전",

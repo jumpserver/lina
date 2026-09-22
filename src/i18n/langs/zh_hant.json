@@ -1,4 +1,6 @@
 {
+  "TemplateCredentialOverrideConfirm": "此帳號正在跟隨範本憑證。是否解除跟隨並繼續修改或清除憑證？此操作不會修改範本。",
+  "TemplateCredentialOverride": "解除跟隨並繼續",
   "Credentials": "憑據",
   "SecretResetHelpText": "允許自動改密；跟隨範本的帳號在改密成功後自動解除跟隨，使用改密後的獨立憑證。",
   "SourceTemplate": "來源範本",
@@ -1768,7 +1770,7 @@
   "Secret": "密碼",
   "SecretKey": "金鑰",
   "SecretKeyStrategy": "密碼策略",
-  "SecretReset": "可改密",
+  "SecretReset": "允許自動改密",
   "SecretStrategy": "密文策略",
   "SecretType": "密碼類型",
   "Secure": "安全",

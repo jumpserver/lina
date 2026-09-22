@@ -1,4 +1,6 @@
 {
+  "TemplateCredentialOverrideConfirm": "Ce compte suit les identifiants du modèle. Cesser de le suivre et continuer la modification ou la suppression des identifiants ? Le modèle restera inchangé.",
+  "TemplateCredentialOverride": "Cesser de suivre et continuer",
   "Credentials": "Identifiants",
   "SecretResetHelpText": "Autoriser la rotation automatique des identifiants. Après une rotation réussie, les comptes cessent de suivre le modèle et utilisent leurs propres nouveaux identifiants.",
   "SourceTemplate": "Modèle source",
@@ -1904,7 +1906,7 @@
   "Secret": "Secret",
   "SecretKey": "Clé",
   "SecretKeyStrategy": "Politique de mot de passe",
-  "SecretReset": "Réinitialisation du secret",
+  "SecretReset": "Autoriser la rotation automatique des identifiants",
   "SecretType": "Type de secret",
   "Secure": "Sécurité",
   "Security": "Sécurité",

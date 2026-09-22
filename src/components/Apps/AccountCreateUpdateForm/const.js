@@ -204,7 +204,7 @@ export const accountFieldsMeta = (vm) => {
         }
       },
       hidden: (formValue) => {
-        return formValue.secret_type !== 'password' || vm.addTemplate || formValue.follow_template
+        return formValue.secret_type !== 'password' || vm.addTemplate || !!formValue.follow_template
       }
     },
     ssh_key: {
@@ -216,7 +216,7 @@ export const accountFieldsMeta = (vm) => {
         }
       },
       hidden: (formValue) =>
-        formValue.secret_type !== 'ssh_key' || vm.addTemplate || formValue.follow_template
+        formValue.secret_type !== 'ssh_key' || vm.addTemplate || !!formValue.follow_template
     },
     passphrase: {
       label: vm.$t('Passphrase'),
@@ -227,7 +227,7 @@ export const accountFieldsMeta = (vm) => {
         }
       },
       hidden: (formValue) =>
-        formValue.secret_type !== 'ssh_key' || vm.addTemplate || formValue.follow_template
+        formValue.secret_type !== 'ssh_key' || vm.addTemplate || !!formValue.follow_template
     },
     token: {
       label: vm.$t('Token'),
@@ -238,7 +238,7 @@ export const accountFieldsMeta = (vm) => {
         }
       },
       hidden: (formValue) =>
-        formValue.secret_type !== 'token' || vm.addTemplate || formValue.follow_template
+        formValue.secret_type !== 'token' || vm.addTemplate || !!formValue.follow_template
     },
     access_key: {
       id: 'access_key',
@@ -250,7 +250,7 @@ export const accountFieldsMeta = (vm) => {
         }
       },
       hidden: (formValue) =>
-        formValue.secret_type !== 'access_key' || vm.addTemplate || formValue.follow_template
+        formValue.secret_type !== 'access_key' || vm.addTemplate || !!formValue.follow_template
     },
     api_key: {
       id: 'api_key',
@@ -262,7 +262,7 @@ export const accountFieldsMeta = (vm) => {
         }
       },
       hidden: (formValue) =>
-        formValue.secret_type !== 'api_key' || vm.addTemplate || formValue.follow_template
+        formValue.secret_type !== 'api_key' || vm.addTemplate || !!formValue.follow_template
     },
     secret_type: {
       type: 'radio-group',
@@ -281,11 +281,11 @@ export const accountFieldsMeta = (vm) => {
       },
       el: {
         get disabled() {
-          return vm.isDisabled || vm.followingTemplate
+          return vm.isDisabled
         }
       },
-      hidden: () => {
-        return vm.addTemplate
+      hidden: (formValue) => {
+        return vm.addTemplate || !!formValue.follow_template
       }
     },
     push_now: {

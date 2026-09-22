@@ -1,4 +1,6 @@
 {
+  "TemplateCredentialOverrideConfirm": "该账号正在跟随模板凭据。是否解除跟随并继续修改或清除凭据？此操作不会修改模板。",
+  "TemplateCredentialOverride": "解除跟随并继续",
   "Credentials": "凭据",
   "SecretResetHelpText": "允许自动改密；跟随模板的账号在改密成功后自动解除跟随，使用改密后的独立凭据。",
   "SourceTemplate": "来源模板",
@@ -1555,7 +1557,7 @@
   "Secret": "密码",
   "SecretKey": "密钥",
   "SecretKeyStrategy": "密码策略",
-  "SecretReset": "可改密",
+  "SecretReset": "允许自动改密",
   "SecretStrategy": "密文策略",
   "SecretType": "密码类型",
   "Secure": "安全",

@@ -200,6 +200,7 @@ export default {
                 })
                 .then(() => {
                   this.$message.success(this.$tc('ClearSuccessMsg'))
+                  this.$store.commit('common/reload')
                 })
             }
           })
@@ -269,6 +270,9 @@ export default {
               value: this.object.source_template,
               formatter: this.formatSourceTemplate
             }
+          }
+          if (field === 'secret_reset') {
+            return { key: this.$t('SecretReset'), value: this.object.secret_reset }
           }
           if (field === 'follow_template') {
             return { key: this.$t('FollowTemplate'), value: this.object.follow_template }
