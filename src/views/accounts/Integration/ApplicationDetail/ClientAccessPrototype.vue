@@ -1,43 +1,5 @@
 <template>
   <div class="client-access-page">
-    <IBox v-if="accessReadiness" :title="$t('AccessReadiness')" class="readiness-card">
-      <div class="readiness-summary">
-        <div>
-          <el-tag :type="readinessState.type">{{ $t(readinessState.title) }}</el-tag>
-          <span class="readiness-description">{{ $t(readinessState.description) }}</span>
-        </div>
-        <el-button
-          v-if="readinessState.action && readinessState.can"
-          link
-          type="primary"
-          @click="handleReadinessAction"
-        >
-          {{ $t(readinessState.action) }}
-        </el-button>
-      </div>
-      <div class="readiness-metrics">
-        <span>
-          {{ $t('AuthorizedAccountsCount', { count: accessReadiness.authorized_accounts_amount }) }}
-        </span>
-        <span>
-          {{
-            $t('AccessConfigurationsCount', {
-              count: accessReadiness.active_configurations_amount
-            })
-          }}
-        </span>
-        <span>
-          {{
-            $t('OnlineClientInstancesCount', {
-              online: accessReadiness.online_instances_amount,
-              total: accessReadiness.active_instances_amount
-            })
-          }}
-        </span>
-        <span>{{ $t('LastFetchedAt', { value: formatDate(accessReadiness.last_fetched) }) }}</span>
-      </div>
-    </IBox>
-
     <ListTable
       v-if="viewMode === 'list'"
       ref="configurationTable"
@@ -58,8 +20,8 @@
     >
       <ClientAccessCreateUpdate
         v-if="formVisible"
-        :application="object"
         :configuration="editingConfiguration"
+        :credential="object"
         @saved="handleConfigurationSaved"
         @submitting="saving = $event"
       />
@@ -67,6 +29,7 @@
 
     <template v-if="viewMode === 'detail' && selectedConfiguration">
       <div v-if="selectedConfiguration" class="client-access-detail">
+        <ActionsGroup :actions="detailPageActions" class="client-access-detail-actions" />
         <IBox :title="$t('ConnectionParameters')" class="detail-overview">
           <el-descriptions :column="2" :label-width="120" border class="connection-parameters">
             <el-descriptions-item
@@ -119,18 +82,33 @@
                 <p>{{ configFileName }}</p>
               </div>
               <div>
-                <el-button link type="primary" @click="copyText(configurationText)">
-                  {{ $t('Copy') }}
-                </el-button>
                 <el-button link type="primary" @click="downloadConfiguration">
                   {{ $t('Download') }}
                 </el-button>
               </div>
             </div>
-            <pre><code>{{ configurationText }}</code></pre>
+            <div class="code-block">
+              <div class="code-block__header">
+                <span>python</span>
+                <button type="button" @click="copyText(configurationText)">
+                  {{ $t('Copy') }}
+                </button>
+              </div>
+              <pre><code>{{ configurationText }}</code></pre>
+            </div>
             <template v-if="selectedConfiguration.type === 'sdk'">
-              <h4>{{ $t('InstallCommand') }}</h4>
-              <pre><code>{{ installCommand }}</code></pre>
+              <div class="material-heading material-heading--spaced">
+                <h4>{{ $t('InstallCommand') }}</h4>
+              </div>
+              <div class="code-block">
+                <div class="code-block__header">
+                  <span>bash</span>
+                  <button type="button" @click="copyText(installCommand)">
+                    {{ $t('Copy') }}
+                  </button>
+                </div>
+                <pre><code>{{ installCommand }}</code></pre>
+              </div>
             </template>
           </template>
 
@@ -149,11 +127,16 @@
                 }}
               </p>
             </div>
-            <el-button link type="primary" @click="copyText(executionText)">
-              {{ $t('Copy') }}
-            </el-button>
           </div>
-          <pre><code>{{ executionText }}</code></pre>
+          <div class="code-block">
+            <div class="code-block__header">
+              <span>{{ selectedConfiguration.type === 'sdk' ? 'python' : 'bash' }}</span>
+              <button type="button" @click="copyText(executionText)">
+                {{ $t('Copy') }}
+              </button>
+            </div>
+            <pre><code>{{ executionText }}</code></pre>
+          </div>
         </template>
       </IBox>
     </Drawer>
@@ -162,6 +145,7 @@
 
 <script lang="jsx">
 import { IBox, ListTable } from '@/components'
+import ActionsGroup from '@/components/Common/ActionsGroup'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import Drawer from '@/components/Drawer/index.vue'
 import ItemValue from '@/components/Cards/DetailCard/ItemValue.vue'
@@ -179,8 +163,9 @@ import {
 } from '@/api/applicationCredential'
 
 export default {
-  name: 'IntegrationApplicationClientAccess',
+  name: 'CredentialClientAccess',
   components: {
+    ActionsGroup,
     ClientAccessCreateUpdate,
     ItemValue,
     Drawer,
@@ -193,10 +178,8 @@ export default {
       required: true
     }
   },
-  emits: ['detail-actions-change', 'edit-application'],
   data() {
     return {
-      accessReadiness: null,
       configurationFileName: 'jms_pam_config.py',
       configurationText: '',
       editingConfiguration: null,
@@ -212,10 +195,15 @@ export default {
       tableConfig: {
         url: accessConfigurationUrl,
         request: requestAccessConfigurationTable,
-        extraQuery: { application: this.object.id },
+        extraQuery: { credentials: this.object.id },
         hasSelection: false,
         hasPagination: true,
         columns: [
+          {
+            prop: 'application_name',
+            label: this.$t('Application'),
+            minWidth: '160px'
+          },
           {
             prop: 'name',
             label: this.$t('Name'),
@@ -273,77 +261,6 @@ export default {
   },
   computed: {
     ...mapGetters(['currentOrg']),
-    readinessState() {
-      const readiness = this.accessReadiness
-      if (!readiness.authorized_accounts_amount) {
-        return {
-          type: 'warning',
-          title: 'AccessAccountsRequired',
-          description: 'AccessAccountsRequiredHelp',
-          action: 'ManageAuthorizedAccounts',
-          can: this.$hasPerm('accounts.change_integrationapplication'),
-          task: 'accounts'
-        }
-      }
-      if (!readiness.active_configurations_amount) {
-        return {
-          type: 'warning',
-          title: 'AccessConfigurationRequired',
-          description: 'AccessConfigurationRequiredHelp',
-          action: 'NewClientAccessConfiguration',
-          can: this.$hasPerm('accounts.add_clientaccessconfiguration'),
-          task: 'configuration'
-        }
-      }
-      if (readiness.missing_authorized_accounts_amount) {
-        return {
-          type: 'danger',
-          title: 'AccessAuthorizationIncomplete',
-          description: 'AccessAuthorizationIncompleteHelp',
-          action: 'ManageAuthorizedAccounts',
-          can: this.$hasPerm('accounts.change_integrationapplication'),
-          task: 'accounts'
-        }
-      }
-      if (!readiness.active_instances_amount) {
-        return {
-          type: 'warning',
-          title: 'AccessDeploymentPending',
-          description: 'AccessDeploymentPendingHelp',
-          action: 'ViewClientAccessConfiguration',
-          can: true,
-          task: 'configuration-detail'
-        }
-      }
-      if (!readiness.online_instances_amount) {
-        return {
-          type: 'warning',
-          title: 'AccessClientsOffline',
-          description: 'AccessClientsOfflineHelp',
-          action: 'ViewClientAccessConfiguration',
-          can: true,
-          task: 'configuration-detail'
-        }
-      }
-      if (!readiness.last_fetched) {
-        return {
-          type: 'warning',
-          title: 'AccessFirstFetchPending',
-          description: 'AccessFirstFetchPendingHelp',
-          action: 'ViewClientAccessConfiguration',
-          can: true,
-          task: 'configuration-detail'
-        }
-      }
-      return {
-        type: 'success',
-        title: 'AccessReady',
-        description: 'AccessReadyHelp',
-        action: '',
-        can: false,
-        task: ''
-      }
-    },
     headerActions() {
       return {
         hasCreate: this.$hasPerm('accounts.add_clientaccessconfiguration'),
@@ -550,24 +467,12 @@ export default {
       return [
         { key: this.$t('ClientAccessConfigurationID'), value: this.selectedConfiguration?.id },
         { key: this.$t('JumpServerAddress'), value: BASE_URL },
-        { key: this.$t('ApplicationID'), value: this.object.id },
+        { key: this.$t('ApplicationID'), value: this.selectedConfiguration?.application?.id },
         { key: this.$t('OrganizationID'), value: this.currentOrg?.id || '-' }
       ]
     }
   },
   watch: {
-    'object.access_readiness': {
-      immediate: true,
-      handler(value) {
-        this.accessReadiness = value || null
-      }
-    },
-    detailPageActions: {
-      immediate: true,
-      handler(actions) {
-        this.$emit('detail-actions-change', actions)
-      }
-    },
     'object.id': {
       immediate: true,
       async handler(id) {
@@ -578,7 +483,7 @@ export default {
         this.formVisible = false
         this.materialsVisible = false
         this.clearMaterials()
-        this.tableConfig.extraQuery = { application: id }
+        this.tableConfig.extraQuery = { credentials: id }
         await this.loadData()
         if (this.$route.query.configuration) {
           await this.openDetail({ id: this.$route.query.configuration })
@@ -605,21 +510,6 @@ export default {
       }
       await this.loadData()
     },
-    async refreshAccessReadiness() {
-      const application = await this.$axios.get(
-        `/api/v1/accounts/integration-applications/${this.object.id}/`
-      )
-      this.accessReadiness = application.access_readiness
-    },
-    handleReadinessAction() {
-      if (this.readinessState.task === 'accounts') {
-        this.$emit('edit-application')
-      } else if (this.readinessState.task === 'configuration') {
-        this.openCreate()
-      } else if (this.readinessState.task === 'configuration-detail') {
-        this.openDetail(this.accessReadiness.configuration)
-      }
-    },
     openCreate() {
       this.editingConfiguration = null
       this.formVisible = true
@@ -630,7 +520,7 @@ export default {
     },
     async openDetail(row) {
       const configuration = await getClientAccessConfiguration(row.id)
-      if (configuration.application?.id !== this.object.id) {
+      if (!configuration.credentials.some((credential) => credential.id === this.object.id)) {
         if (this.$route.query.configuration) {
           const query = { ...this.$route.query }
           delete query.configuration
@@ -643,7 +533,7 @@ export default {
       this.viewMode = 'detail'
     },
     async handleConfigurationSaved(saved, addContinue) {
-      await Promise.all([this.loadData(), this.refreshAccessReadiness()])
+      await this.loadData()
       if (addContinue) return
       this.formVisible = false
       if (this.viewMode === 'detail') await this.openDetail(saved)
@@ -660,7 +550,6 @@ export default {
       } else {
         await this.loadData()
       }
-      await this.refreshAccessReadiness()
       this.$message.success(this.$t('DeleteSuccessMsg'))
     },
     copyText(value) {
@@ -698,14 +587,29 @@ export default {
       }
     },
     async toggleInstance(row) {
+      let reason = ''
       if (row.is_active) {
-        await this.$confirm(this.$t('DisableCredentialClientConfirm'), this.$t('Warning'), {
-          type: 'warning'
-        })
+        const rotating = row.credential_statuses?.some(
+          (item) => (item.credential.status?.value || item.credential.status) !== 'idle'
+        )
+        if (rotating) {
+          const result = await this.$prompt(
+            this.$t('ExcludeRotatingClientReasonHelp'),
+            this.$t('Disable'),
+            {
+              inputValidator: (value) => !!value?.trim(),
+              inputErrorMessage: this.$t('ExclusionReasonRequired')
+            }
+          )
+          reason = result.value.trim()
+        } else {
+          await this.$confirm(this.$t('DisableCredentialClientConfirm'), this.$t('Warning'), {
+            type: 'warning'
+          })
+        }
       }
-      await setClientInstanceActive(row.id, !row.is_active)
+      await setClientInstanceActive(row.id, !row.is_active, reason)
       this.$refs.instancesTable.reloadTable()
-      await this.refreshAccessReadiness()
     },
     downloadConfiguration() {
       const blob = new Blob([this.configurationText], { type: 'text/x-python;charset=utf-8' })
@@ -721,40 +625,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.readiness-card {
-  margin-bottom: 15px;
-}
-
-.readiness-summary,
-.readiness-summary > div,
-.readiness-metrics {
-  display: flex;
-  align-items: center;
-}
-
-.readiness-summary {
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.readiness-summary > div {
-  min-width: 0;
-  gap: 10px;
-}
-
-.readiness-description {
-  color: var(--color-text-secondary);
-  font-size: 13px;
-}
-
-.readiness-metrics {
-  flex-wrap: wrap;
-  gap: 8px 24px;
-  margin-top: 14px;
-  color: var(--color-help-text);
-  font-size: 12px;
-}
-
 .material-heading p {
   margin: 4px 0 0;
   color: var(--color-help-text);
@@ -764,6 +634,12 @@ export default {
 
 .client-access-detail {
   padding-bottom: 15px;
+}
+
+.client-access-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
 }
 
 .detail-overview,
@@ -805,6 +681,51 @@ export default {
   color: var(--color-text-primary);
   font-size: 13px;
   font-weight: 600;
+}
+
+.code-block {
+  overflow: hidden;
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 8px;
+  background: var(--el-fill-color-light);
+}
+
+.code-block__header {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  color: var(--color-text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+}
+
+.code-block__header button {
+  min-width: 44px;
+  min-height: 28px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 4px;
+  color: var(--el-color-primary);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+
+.code-block__header button:hover {
+  background: var(--el-color-primary-light-9);
+}
+
+.code-block__header button:focus-visible {
+  outline: 2px solid var(--el-color-primary);
+  outline-offset: 2px;
+}
+
+.code-block pre {
+  border: 0;
+  border-radius: 0;
 }
 
 pre {

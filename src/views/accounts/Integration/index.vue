@@ -29,9 +29,15 @@ export default {
           },
           {
             name: 'rotations',
-            title: this.$t('ApplicationCredentials'),
+            title: this.$t('CredentialPolicies'),
             hidden: !this.$hasPerm('accounts.view_applicationcredential'),
             component: () => import('@/views/accounts/Integration/AccountRotationPrototype.vue')
+          },
+          {
+            name: 'notifications',
+            title: this.$t('EventNotifications'),
+            hidden: !this.$hasPerm('accounts.view_applicationwebhook'),
+            component: () => import('@/views/accounts/Integration/ApplicationWebhookRules.vue')
           },
           {
             name: 'docs',

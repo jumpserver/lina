@@ -6,33 +6,22 @@
       </el-tab-pane>
       <el-tab-pane
         v-if="$hasPerm('accounts.view_clientaccessconfiguration')"
-        :label="$t('AuthorizedAccess')"
+        :label="$t('ClientAccessConfigurations')"
         name="access"
       >
-        <GenericListTable
-          :key="object.id"
-          ref="accessTable"
-          :header-actions="readOnlyHeaderActions"
-          :table-config="accessTableConfig"
-        />
+        <ClientAccessPrototype :key="object.id" :object="object" />
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
-<script lang="jsx">
-import { DetailFormatter } from '@/components/Table/TableFormatters'
-import { GenericListTable } from '@/layout/components'
-import { toSafeLocalDateStr } from '@/composables/useDateTime'
-import {
-  accessConfigurationUrl,
-  requestAccessConfigurationTable
-} from '@/api/applicationCredential'
+<script>
 import AccountRotationInfo from './AccountRotationInfo.vue'
+import ClientAccessPrototype from '../ApplicationDetail/ClientAccessPrototype.vue'
 
 export default {
   name: 'ApplicationCredentialDetail',
-  components: { AccountRotationInfo, GenericListTable },
+  components: { AccountRotationInfo, ClientAccessPrototype },
   props: {
     object: {
       type: Object,
@@ -42,91 +31,10 @@ export default {
   emits: ['edit', 'updated'],
   data() {
     return {
-      activeTab: 'basic',
-      readOnlyHeaderActions: {
-        hasLeftActions: false,
-        hasImport: false,
-        hasExport: false,
-        searchConfig: { getUrlQuery: false }
-      },
-      accessTableConfig: {
-        name: 'ApplicationCredentialAccess',
-        url: accessConfigurationUrl,
-        extraQuery: { credentials: this.object.id },
-        request: requestAccessConfigurationTable,
-        hasSelection: false,
-        hasPagination: true,
-        columnsMeta: {
-          actions: { has: false },
-          name: {
-            label: this.$t('ClientAccessConfiguration'),
-            minWidth: '180px',
-            formatter: DetailFormatter,
-            formatterArgs: {
-              can: () => this.$hasPerm('accounts.view_integrationapplication'),
-              getRoute: ({ row }) => ({
-                name: 'IntegrationApplicationDetail',
-                params: { id: row.application.id },
-                query: { configuration: row.id }
-              })
-            }
-          }
-        },
-        columns: [
-          { prop: 'application_name', label: this.$t('Applications'), minWidth: '160px' },
-          'name',
-          {
-            prop: 'type',
-            label: this.$t('ClientType'),
-            width: '110px',
-            formatter: (row) => (
-              <el-tag effect="plain" type={row.type === 'sdk' ? 'primary' : 'success'}>
-                {row.type === 'sdk' ? this.$t('SDKAccess') : this.$t('AgentAccess')}
-              </el-tag>
-            )
-          },
-          {
-            prop: 'status',
-            label: this.$t('ClientStatus'),
-            width: '110px',
-            formatter: (row) => (
-              <el-tag type={row.status === 'online' ? 'success' : 'info'}>
-                {row.status === 'disabled'
-                  ? this.$t('Disabled')
-                  : row.status === 'online'
-                    ? this.$t('Online')
-                    : this.$t('Offline')}
-              </el-tag>
-            )
-          },
-          {
-            prop: 'last_reported',
-            label: this.$t('LastReportedAt'),
-            width: '175px',
-            formatter: (row) => this.formatDate(row.last_reported)
-          }
-        ]
-      }
-    }
-  },
-  watch: {
-    'object.id': {
-      immediate: true,
-      handler() {
-        this.loadRelatedData()
-      }
+      activeTab: 'basic'
     }
   },
   methods: {
-    formatDate(value) {
-      return value ? toSafeLocalDateStr(value) : '-'
-    },
-    async loadRelatedData() {
-      if (!this.object.id) return
-      this.accessTableConfig.extraQuery = { credentials: this.object.id }
-      await this.$nextTick()
-      this.$refs.accessTable?.reloadTable()
-    },
     updated(value) {
       this.$emit('updated', value)
     }

@@ -1,8 +1,8 @@
 <template>
   <!--
-    THESIS: One operational list makes fixed access and manual rotation peers instead of forcing every credential into a rotation workflow.
+    THESIS: One operational list makes update subscriptions and alternating rotations easy to scan and act on.
     OWN-WORLD: Lina's neutral working surface, compact tables, primary actions, restrained status tags, resizable drawers, and existing card hierarchy.
-    STORY: Administrators scan credential type and account state, open one detail, then create, edit, or manually rotate without leaving PAM application management.
+    STORY: Administrators scan policy mode and account state, open one detail, then create, edit, or manually rotate without leaving PAM application management.
     FIRST VIEWPORT: Lina's shared list toolbar places Create on the left and the standard search on the right.
     FORM: Existing Lina tabbed-resource extension; one mode-controlled drawer for create, edit, and detail.
     FINISH: The build ends with a closed independent review and runnable checks; it adds no new visual system or raster assets.
@@ -42,7 +42,10 @@ import AccountRotationCreateUpdate from './AccountRotationCreateUpdate.vue'
 import AccountRotationDetail from './AccountRotationDetail/index.vue'
 import { credentialStatusLabel } from './components/credentialStatus.js'
 
-const accountName = (row) => row.published_account?.username || row.published_account?.name || '-'
+const accountName = (row, t) =>
+  row.mode === 'subscription'
+    ? t('ApplicationAuthorizedAccounts')
+    : row.active_account?.username || row.active_account?.name || '-'
 
 export default {
   name: 'ApplicationCredentialList',
@@ -74,28 +77,25 @@ export default {
             }
           },
           {
-            prop: 'type',
-            label: this.$t('CredentialType'),
-            width: '130px',
-            formatter: (row) => this.typeLabel(row)
-          },
-          {
-            prop: 'rotation_mode',
-            label: this.$t('RotationMode'),
-            width: '130px',
-            formatter: (row) => this.rotationModeLabel(row)
+            prop: 'mode',
+            label: this.$t('CredentialPolicyMode'),
+            minWidth: '180px',
+            formatter: (row) => this.modeLabel(row)
           },
           {
             prop: 'asset',
             label: this.$t('Asset'),
             minWidth: '190px',
-            formatter: (row) => `${row.asset?.name || '-'} (${row.asset?.address || '-'})`
+            formatter: (row) =>
+              row.mode === 'subscription'
+                ? '-'
+                : `${row.asset?.name || '-'} (${row.asset?.address || '-'})`
           },
           {
-            prop: 'published_account',
+            prop: 'active_account',
             label: this.$t('CurrentAccount'),
             minWidth: '140px',
-            formatter: accountName
+            formatter: (row) => accountName(row, this.$t)
           },
           {
             prop: 'last_fetched',
@@ -185,14 +185,12 @@ export default {
     formatDate(value) {
       return value ? toSafeLocalDateStr(value) : '-'
     },
-    typeLabel(row) {
-      return row.type === 'fixed' ? this.$t('FixedAccount') : this.$t('AccountRotation')
-    },
-    rotationModeLabel(row) {
-      if (row.type === 'fixed') return '-'
-      return row.rotation_mode === 'dual'
-        ? this.$t('DualAccountRotation')
-        : this.$t('SingleAccountRotation')
+    modeLabel(row) {
+      return this.$t(
+        row.mode === 'alternating_rotation'
+          ? 'AlternatingAccountRotation'
+          : 'CredentialUpdateSubscription'
+      )
     },
     async loadRows() {
       return this.$refs.credentialTable.reloadTable()

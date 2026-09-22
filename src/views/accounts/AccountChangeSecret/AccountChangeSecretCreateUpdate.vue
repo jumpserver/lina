@@ -144,13 +144,15 @@ export default {
       if (!this.pamRotation || this.pamRotation.id !== this.$route.query.credential_rotation) {
         throw new Error(this.$t('PamRotationExpired'))
       }
+      const changeAccount = this.pamRotation.change_account
+      if (!changeAccount) throw new Error(this.$t('PamRotationExpired'))
       this.pamRotation.credential_id = credential.id
       this.asset_ids = [credential.asset.id]
       Object.assign(this.initial, {
         name: `${credential.name}-${this.$t('ChangeSecret')}-${this.pamRotation.id.slice(0, 8)}`,
         assets: this.asset_ids,
-        accounts: [credential.primary_account.username],
-        secret_type: choiceValue(credential.primary_account.secret_type),
+        accounts: [changeAccount.username],
+        secret_type: choiceValue(changeAccount.secret_type),
         secret_strategy: 'random',
         is_periodic: false,
         check_conn_after_change: true

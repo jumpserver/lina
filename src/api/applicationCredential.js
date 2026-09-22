@@ -2,13 +2,11 @@ import request from '@/utils/request'
 
 export const credentialUrl = '/api/v1/accounts/application-credentials/'
 export const accessConfigurationUrl = '/api/v1/accounts/client-access-configurations/'
-export const rotationRecordUrl = '/api/v1/accounts/credential-rotation-records/'
 export const choiceValue = (value) => value?.value ?? value
 
 export const normalizeCredential = (item) => ({
   ...item,
-  type: choiceValue(item.type),
-  rotation_mode: choiceValue(item.rotation_mode),
+  mode: choiceValue(item.mode),
   status: choiceValue(item.status)
 })
 
@@ -40,14 +38,16 @@ export async function getApplicationCredential(id) {
   return normalizeCredential(await request.get(`${credentialUrl}${id}/`))
 }
 
+export const getCredentialRotationStatus = (id) =>
+  request.get(`${credentialUrl}${id}/rotation-status/`)
+
 export async function saveApplicationCredential(form) {
-  const dual = form.type === 'rotation' && form.rotation_mode === 'dual'
   const data = {
     name: form.name,
-    type: form.type,
-    rotation_mode: form.type === 'rotation' ? form.rotation_mode : '',
-    primary_account: dual ? form.primary_account_id : form.account_id,
-    backup_account: dual ? form.backup_account_id : null,
+    mode: form.mode,
+    account: form.mode === 'alternating_rotation' ? form.account_id : null,
+    alternate_account: form.mode === 'alternating_rotation' ? form.alternate_account_id : null,
+    applications: form.application_ids,
     is_active: form.is_active,
     comment: form.comment
   }
@@ -62,12 +62,12 @@ export const deleteApplicationCredential = (id) => request.delete(`${credentialU
 export async function advanceApplicationCredentialRotation(credential) {
   const actions = {
     idle: 'start',
-    waiting_backup: 'check-usage',
+    waiting_switch: 'check-usage',
     ready_for_change: 'change-secret',
     changing_secret: 'check-secret-change',
     change_failed: 'check-secret-change',
     recovery_required: 'check-secret-change',
-    waiting_primary: 'complete'
+    waiting_revert: 'complete'
   }
   const action = actions[credential.status]
   if (!action) throw new Error(`Unknown credential status: ${credential.status}`)
@@ -111,5 +111,8 @@ export const getClientAccessConfiguration = async (id) =>
   normalizeAccessConfiguration(await request.get(`${accessConfigurationUrl}${id}/`))
 export const generateClientAccessMaterials = (id) =>
   request.post(`${accessConfigurationUrl}${id}/materials/`)
-export const setClientInstanceActive = (id, isActive) =>
-  request.patch(`/api/v1/accounts/credential-client-instances/${id}/`, { is_active: isActive })
+export const setClientInstanceActive = (id, isActive, reason = '') =>
+  request.patch(`/api/v1/accounts/credential-client-instances/${id}/`, {
+    is_active: isActive,
+    reason
+  })

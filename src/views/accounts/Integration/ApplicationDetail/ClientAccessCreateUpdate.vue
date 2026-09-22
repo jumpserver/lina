@@ -16,13 +16,24 @@ export default {
   name: 'ClientAccessCreateUpdate',
   components: { GenericCreateUpdatePage },
   props: {
-    application: { type: Object, required: true },
+    credential: { type: Object, required: true },
     configuration: { type: Object, default: null }
   },
   emits: ['saved', 'submitting'],
   data() {
     const item = this.configuration
+    const applicationId =
+      item?.application?.id ||
+      (this.credential.applications?.length === 1 ? this.credential.applications[0].id : '')
+    const accessType = item?.type || 'sdk'
+    const buildCredentialsUrl = (id, type) => {
+      if (!id) return ''
+      const mode = type === 'sdk' ? `&mode=${this.credential.mode}` : ''
+      return credentialUrl + `?fields_size=small&is_active=true&applications=${id}${mode}`
+    }
     return {
+      selectedApplicationId: applicationId,
+      selectedAccessType: accessType,
       formConfig: {
         url: accessConfigurationUrl,
         getUrl: () => accessConfigurationUrl,
@@ -30,9 +41,10 @@ export default {
         needGetObjectDetail: false,
         hasReset: false,
         initial: {
+          application_id: applicationId,
           name: item?.name || '',
-          type: item?.type || 'sdk',
-          credential_ids: [...(item?.credential_ids || [])],
+          type: accessType,
+          credential_ids: [...(item?.credential_ids || [this.credential.id])],
           language: item?.language || 'python',
           app_user: item?.app_user || '',
           install_path: item?.install_path || '/opt/jumpserver-pam',
@@ -42,7 +54,7 @@ export default {
           is_active: item?.is_active ?? true
         },
         fields: [
-          [this.$t('Basic'), ['name', 'type', 'credential_ids']],
+          [this.$t('Basic'), ['application_id', 'name', 'type', 'credential_ids']],
           [
             this.$t('Configuration'),
             [
@@ -57,6 +69,30 @@ export default {
           [this.$t('Other'), ['is_active']]
         ],
         fieldsMeta: {
+          application_id: {
+            label: this.$t('Application'),
+            component: Select2,
+            rules: [rules.RequiredChange],
+            el: {
+              multiple: false,
+              disabled: Boolean(item?.id),
+              options: (this.credential.applications || []).map((application) => ({
+                label: application.name,
+                value: application.id
+              })),
+              placeholder: this.$t('SelectApplications')
+            },
+            on: {
+              change: ([value], updateForm) => {
+                this.selectedApplicationId = value
+                Object.assign(this.formConfig.fieldsMeta.credential_ids.el, {
+                  url: buildCredentialsUrl(value, this.selectedAccessType),
+                  disabled: !value
+                })
+                updateForm({ credential_ids: value ? [this.credential.id] : [] })
+              }
+            }
+          },
           name: {
             label: this.$t('Name'),
             rules: [rules.Required],
@@ -70,7 +106,17 @@ export default {
               { label: this.$t('AgentAccess'), value: 'agent' }
             ],
             rules: [rules.RequiredChange],
-            el: { disabled: !!item?.id }
+            el: { disabled: !!item?.id },
+            on: {
+              change: ([value], updateForm) => {
+                this.selectedAccessType = value
+                this.formConfig.fieldsMeta.credential_ids.el.url = buildCredentialsUrl(
+                  this.selectedApplicationId,
+                  value
+                )
+                updateForm({ credential_ids: [this.credential.id] })
+              }
+            }
           },
           credential_ids: {
             label: this.$t('ApplicationCredentials'),
@@ -79,7 +125,9 @@ export default {
             helpText: this.$t('AccessCredentialSelectionHelp'),
             el: {
               multiple: true,
-              url: credentialUrl + '?fields_size=small&is_active=true',
+              disabled: !applicationId,
+              disabledValues: [this.credential.id],
+              url: buildCredentialsUrl(applicationId, accessType),
               placeholder: this.$t('SelectApplicationCredentials')
             }
           },
@@ -138,11 +186,14 @@ export default {
           const save = saveClientAccessConfiguration
           try {
             const submit = (removalReason) =>
-              save(this.application, {
-                ...values,
-                id: item?.id,
-                removal_reason: removalReason
-              })
+              save(
+                { id: item?.application?.id || values.application_id },
+                {
+                  ...values,
+                  id: item?.id,
+                  removal_reason: removalReason
+                }
+              )
             let removalReason = await this.getRemovalReason(values)
             try {
               return await submit(removalReason)
@@ -165,6 +216,7 @@ export default {
           if (response?.status === 400 && response.data) {
             formVm.$refs.form.setErrors({
               ...response.data,
+              application_id: response.data.application || response.data.application_id,
               credential_ids: response.data.credentials || response.data.credential_ids
             })
           }

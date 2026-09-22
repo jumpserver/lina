@@ -46,6 +46,10 @@ export default {
       return {
         name: 'ApplicationAudit',
         url: '/api/v1/accounts/application-audits/',
+        extraQuery: {
+          ...(this.object.id ? { application: this.object.id } : {}),
+          ...(this.credential.id ? { credential_id: this.credential.id } : {})
+        },
         permissions: { view: 'audits.view_integrationapplicationlog' },
         request: async (url, config) => {
           const response = await request.get(url, config)

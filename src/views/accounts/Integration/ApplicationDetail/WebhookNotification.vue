@@ -14,7 +14,7 @@
       </el-result>
     </IBox>
 
-    <IBox v-else :title="$t('WebhookNotification')" class="webhook-card">
+    <IBox v-else :title="$t('EventNotificationRule')" class="webhook-card">
       <p class="page-description">
         {{ $t('WebhookNotificationHelp') }}
       </p>
@@ -27,6 +27,21 @@
         label-position="top"
       >
         <div class="form-grid">
+          <el-form-item :label="$t('Name')" class="form-field--full" prop="name">
+            <el-input v-model.trim="form.name" :disabled="!canChange" />
+          </el-form-item>
+
+          <el-form-item :label="$t('Applications')" class="form-field--full" prop="application_ids">
+            <el-select v-model="form.application_ids" :disabled="!canChange" multiple filterable>
+              <el-option
+                v-for="application in applicationOptions"
+                :key="application.id"
+                :label="application.name"
+                :value="application.id"
+              />
+            </el-select>
+          </el-form-item>
+
           <el-form-item :label="$t('EnableStatus')" prop="is_active">
             <el-switch v-model="form.is_active" :disabled="!canChange" />
           </el-form-item>
@@ -44,8 +59,15 @@
 
             <div v-if="hasUrl && !urlEditing" class="configured-value">
               <code>{{ urlDisplay }}</code>
-              <el-button v-if="canChange" link type="primary" @click="startUrlEdit">
-                {{ $t('WebhookUpdateURL') }}
+              <el-button
+                v-if="canChange"
+                :aria-label="$t('WebhookUpdateURL')"
+                :title="$t('WebhookUpdateURL')"
+                class="configured-value__edit primary-link-button"
+                link
+                @click="startUrlEdit"
+              >
+                <el-icon><Edit /></el-icon>
               </el-button>
             </div>
             <template v-else-if="canChange">
@@ -78,8 +100,15 @@
                 </el-tag>
               </div>
               <span v-else>—</span>
-              <el-button v-if="canChange" link type="primary" @click="startHeadersEdit">
-                {{ $t('WebhookUpdateHeaders') }}
+              <el-button
+                v-if="canChange"
+                :aria-label="$t('WebhookUpdateHeaders')"
+                :title="$t('WebhookUpdateHeaders')"
+                class="configured-value__edit primary-link-button"
+                link
+                @click="startHeadersEdit"
+              >
+                <el-icon><Edit /></el-icon>
               </el-button>
             </div>
             <template v-else>
@@ -122,7 +151,7 @@
             <template #label>
               <span class="label-with-action">
                 <span>{{ $t('WebhookBodyTemplate') }}</span>
-                <el-button class="template-variables-button" link @click="showVariables = true">
+                <el-button class="primary-link-button" link @click="showVariables = true">
                   {{ $t('WebhookTemplateVariables') }}
                 </el-button>
               </span>
@@ -161,12 +190,13 @@
           <el-button v-if="canChange" :loading="saving" type="primary" @click="save">
             {{ $t('Save') }}
           </el-button>
-          <el-button :loading="previewing" @click="preview">
+          <el-button v-if="rule?.id" :loading="previewing" @click="preview">
             {{ $t('WebhookPreview') }}
           </el-button>
-          <el-button v-if="canChange" :loading="testing" @click="testWebhook">
+          <el-button v-if="canChange && rule?.id" :loading="testing" @click="testWebhook">
             {{ $t('WebhookTestSend') }}
           </el-button>
+          <el-button @click="$emit('cancel')">{{ $t('Cancel') }}</el-button>
         </div>
       </el-form>
 
@@ -193,6 +223,8 @@ const METHODS = ['POST', 'PUT', 'PATCH']
 
 function emptyForm() {
   return {
+    name: '',
+    application_ids: [],
     is_active: false,
     method: 'POST',
     url: '',
@@ -207,23 +239,24 @@ function isPlainObject(value) {
 }
 
 export default {
-  name: 'IntegrationApplicationWebhookNotification',
+  name: 'ApplicationWebhookRuleForm',
   components: {
     IBox,
     JsonEditor,
     VariablesHelpTextDialog
   },
   props: {
-    object: {
+    rule: {
       type: Object,
-      required: true,
       default: () => ({})
     }
   },
+  emits: ['cancel', 'saved'],
   data() {
     const vm = this
     return {
       methods: METHODS,
+      applicationOptions: [],
       form: emptyForm(),
       loading: true,
       loadError: false,
@@ -242,6 +275,8 @@ export default {
       hasPreview: false,
       previewBody: null,
       rules: {
+        name: [{ required: true, message: this.$t('Required'), trigger: 'blur' }],
+        application_ids: [{ required: true, message: this.$t('Required'), trigger: 'change' }],
         method: [{ required: true, message: this.$t('Required'), trigger: 'change' }],
         url: [
           {
@@ -273,7 +308,9 @@ export default {
   },
   computed: {
     canChange() {
-      return this.$hasPerm('accounts.change_integrationapplication')
+      return this.$hasPerm(
+        this.rule?.id ? 'accounts.change_applicationwebhook' : 'accounts.add_applicationwebhook'
+      )
     },
     hasHeaders() {
       return this.headerNames.length > 0
@@ -291,11 +328,12 @@ export default {
         : JSON.stringify(this.previewBody, null, 2)
     },
     endpoint() {
-      return `/api/v1/accounts/integration-applications/${this.object.id}/webhook/`
+      const base = '/api/v1/accounts/application-webhooks/'
+      return this.rule?.id ? `${base}${this.rule.id}/` : base
     }
   },
   watch: {
-    'object.id'(value, oldValue) {
+    'rule.id'(value, oldValue) {
       if (value && value !== oldValue) {
         this.loadConfig()
       }
@@ -306,14 +344,20 @@ export default {
   },
   methods: {
     async loadConfig() {
-      if (!this.object.id) {
-        return
-      }
       this.loading = true
       this.loadError = false
       try {
-        const data = await this.$axios.get(this.endpoint, { disableFlashErrorMsg: true })
-        this.applyConfig(data)
+        const [metadata, applications, data] = await Promise.all([
+          this.$axios.get('/api/v1/accounts/application-webhooks/metadata/'),
+          this.$axios.get(
+            '/api/v1/accounts/integration-applications/?fields_size=mini&limit=1000&is_active=true'
+          ),
+          this.rule?.id
+            ? this.$axios.get(this.endpoint, { disableFlashErrorMsg: true })
+            : Promise.resolve({})
+        ])
+        this.applicationOptions = applications.results || applications
+        this.applyConfig({ ...metadata, ...data })
       } catch (error) {
         this.loadError = true
       } finally {
@@ -336,6 +380,8 @@ export default {
 
       this.form = {
         ...emptyForm(),
+        name: data.name || '',
+        application_ids: (data.applications || []).map((application) => application.id),
         is_active: Boolean(data.is_active),
         method: data.method || 'POST',
         events: Array.isArray(data.events) ? [...data.events] : [],
@@ -418,6 +464,8 @@ export default {
     },
     buildPayload(bodyTemplate, headers) {
       const payload = {
+        name: this.form.name,
+        applications: this.form.application_ids,
         is_active: this.form.is_active,
         method: this.form.method,
         events: this.form.events,
@@ -435,11 +483,16 @@ export default {
       this.saving = true
       try {
         const { bodyTemplate, headers } = await this.validateForSend()
-        await this.$axios.patch(this.endpoint, this.buildPayload(bodyTemplate, headers), {
-          disableFlashErrorMsg: true
-        })
+        const method = this.rule?.id ? 'patch' : 'post'
+        const saved = await this.$axios[method](
+          this.endpoint,
+          this.buildPayload(bodyTemplate, headers),
+          {
+            disableFlashErrorMsg: true
+          }
+        )
         this.$message.success(this.$t('WebhookSaved'))
-        await this.loadConfig()
+        this.$emit('saved', saved)
       } catch (error) {
         if (!error?.fields) {
           this.showLocalError(error)
@@ -564,7 +617,7 @@ export default {
   gap: 12px;
 }
 
-.template-variables-button {
+.primary-link-button {
   --el-button-text-color: var(--color-primary);
   --el-button-hover-link-text-color: var(--el-color-primary-dark-2);
   --el-button-active-color: var(--el-color-primary-dark-2);
@@ -590,6 +643,13 @@ export default {
   overflow-wrap: anywhere;
   font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;
   font-size: 12px;
+}
+
+.configured-value__edit {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
 }
 
 .header-names {
