@@ -190,20 +190,12 @@
           <el-button v-if="canChange" :loading="saving" type="primary" @click="save">
             {{ $t('Save') }}
           </el-button>
-          <el-button v-if="rule?.id" :loading="previewing" @click="preview">
-            {{ $t('WebhookPreview') }}
-          </el-button>
           <el-button v-if="canChange && rule?.id" :loading="testing" @click="testWebhook">
             {{ $t('WebhookTestSend') }}
           </el-button>
           <el-button @click="$emit('cancel')">{{ $t('Cancel') }}</el-button>
         </div>
       </el-form>
-
-      <section v-if="hasPreview" class="preview-section" aria-live="polite">
-        <h3>{{ $t('WebhookPreviewResult') }}</h3>
-        <pre tabindex="0">{{ previewText }}</pre>
-      </section>
     </IBox>
 
     <VariablesHelpTextDialog
@@ -261,7 +253,6 @@ export default {
       loading: true,
       loadError: false,
       saving: false,
-      previewing: false,
       testing: false,
       hasUrl: false,
       urlDisplay: '',
@@ -272,8 +263,6 @@ export default {
       templateVariables: [],
       testEvent: '',
       showVariables: false,
-      hasPreview: false,
-      previewBody: null,
       rules: {
         name: [{ required: true, message: this.$t('Required'), trigger: 'blur' }],
         application_ids: [{ required: true, message: this.$t('Required'), trigger: 'change' }],
@@ -321,11 +310,6 @@ export default {
     },
     formattedBodyTemplate() {
       return JSON.stringify(this.form.body_template, null, 2)
-    },
-    previewText() {
-      return typeof this.previewBody === 'string'
-        ? this.previewBody
-        : JSON.stringify(this.previewBody, null, 2)
     },
     endpoint() {
       const base = '/api/v1/accounts/application-webhooks/'
@@ -388,8 +372,6 @@ export default {
         body_template: data.body_template ?? data.default_template ?? {}
       }
       this.syncTestEvent()
-      this.hasPreview = false
-      this.previewBody = null
     },
     formatVariableName(value) {
       if (!value) {
@@ -429,14 +411,12 @@ export default {
     },
     handleBodyChange(value) {
       this.form.body_template = value
-      this.hasPreview = false
     },
     syncTestEvent() {
       const available = this.selectedEventOptions.map((option) => option.value)
       if (!available.includes(this.testEvent)) {
         this.testEvent = available[0] || ''
       }
-      this.hasPreview = false
     },
     readJsonEditor(refName, fallback) {
       const editor = this.$refs[refName]
@@ -499,27 +479,6 @@ export default {
         }
       } finally {
         this.saving = false
-      }
-    },
-    async preview() {
-      if (!this.testEvent) {
-        this.$message.error(this.$t('WebhookSelectTestEvent'))
-        return
-      }
-      this.previewing = true
-      try {
-        const bodyTemplate = this.readBodyTemplate()
-        const data = await this.$axios.post(
-          `${this.endpoint}preview/`,
-          { body_template: bodyTemplate, event: this.testEvent },
-          { disableFlashErrorMsg: true }
-        )
-        this.previewBody = data.body
-        this.hasPreview = true
-      } catch (error) {
-        this.showLocalError(error)
-      } finally {
-        this.previewing = false
       }
     },
     async testWebhook() {
@@ -674,8 +633,7 @@ export default {
   height: 160px;
 }
 
-.readonly-json,
-.preview-section pre {
+.readonly-json {
   width: 100%;
   margin: 0;
   padding: 14px 16px;
@@ -708,30 +666,6 @@ export default {
 
 .form-actions :deep(.el-button + .el-button) {
   margin-left: 0;
-}
-
-.preview-section {
-  width: 100%;
-  max-width: 1080px;
-  margin-top: 28px;
-  padding-top: 22px;
-  border-top: 1px solid var(--el-border-color-lighter);
-}
-
-.preview-section h3 {
-  margin: 0 0 12px;
-  color: var(--el-text-color-primary);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.preview-section pre {
-  max-height: 360px;
-}
-
-.preview-section pre:focus-visible {
-  outline: 2px solid var(--el-color-primary-light-5);
-  outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
