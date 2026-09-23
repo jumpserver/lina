@@ -7,7 +7,7 @@
       :url="url"
     />
     <template #right>
-      <QuickActions :actions="quickActions" type="primary" />
+      <QuickActions :actions="visibleQuickActions" type="primary" />
       <RelationCard v-bind="relationConfig" type="info" />
     </template>
   </TwoCol>
@@ -130,6 +130,7 @@ export default {
           }
         },
         {
+          key: 'resetMFA',
           title: this.$t('ResetMFA'),
           attrs: {
             type: 'primary',
@@ -280,7 +281,17 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    visibleQuickActions() {
+      const currentUserId = this.$store.getters.currentUser?.id
+      const canResetMFA =
+        this.object.id &&
+        currentUserId &&
+        this.object.id !== currentUserId &&
+        (!this.object.is_superuser || this.$store.getters.currentUserIsSuperAdmin)
+      return this.quickActions.filter((action) => action.key !== 'resetMFA' || canResetMFA)
+    }
+  },
   watch: {
     group(iNew, iOld) {
       this.$log.debug('Group has changed')
