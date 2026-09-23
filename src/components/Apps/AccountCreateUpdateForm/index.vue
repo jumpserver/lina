@@ -50,6 +50,7 @@ export default {
       loading: true,
       isDisabled: false,
       usernameChanged: false,
+      followingTemplate: this.account?.follow_template ?? this.addTemplate,
       submitBtnText: this.$t('Confirm'),
       iPlatform: {
         automation: {},
@@ -69,7 +70,10 @@ export default {
         ]
       },
       url: '/api/v1/accounts/accounts/',
-      form: Object.assign({ on_invalid: 'error' }, this.account || {}),
+      form: Object.assign(
+        { on_invalid: 'error', ...(this.addTemplate ? { follow_template: true } : {}) },
+        this.account || {}
+      ),
       encryptedFields: ['secret'],
       fields: [
         [
@@ -78,8 +82,9 @@ export default {
         ],
         [this.$t('Asset'), ['nodes', 'assets']],
         [
-          this.$t('Secret'),
+          this.$t('Credentials'),
           [
+            'follow_template',
             'secret_type',
             'password',
             'ssh_key',
