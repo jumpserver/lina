@@ -81,7 +81,7 @@ export default {
             on: {
               input: ([value], updateForm) => {
                 if (value === '') {
-                  updateForm({ AUTH_OAUTH2_CERT_VERIFY_MODE: 'default' })
+                  updateForm({ AUTH_OAUTH2_CERT_VERIFY_MODE: 'system' })
                 }
               }
             }
