@@ -65,7 +65,16 @@
       @closed="clearMaterials"
     >
       <IBox v-if="materialsVisible" v-loading="generating" class="generated-material">
-        <el-empty v-if="!generated" :description="$t('GenerateAccessMaterialHelp')">
+        <el-empty
+          v-if="!generated"
+          :description="
+            $t(
+              selectedConfiguration.type === 'agent'
+                ? 'GenerateAgentMaterialHelp'
+                : 'GenerateAccessMaterialHelp'
+            )
+          "
+        >
           <el-button
             :disabled="!canGenerate || generating"
             type="primary"
@@ -112,31 +121,59 @@
             </template>
           </template>
 
-          <div class="material-heading material-heading--spaced">
-            <div>
-              <h4>
-                {{
-                  selectedConfiguration.type === 'sdk' ? $t('MinimalCode') : $t('InstallCommand')
-                }}
-              </h4>
-              <p>
-                {{
-                  selectedConfiguration.type === 'sdk'
-                    ? $t('MinimalCodeHelp')
-                    : $t('InstallCommandHelp')
-                }}
-              </p>
+          <template v-if="selectedConfiguration.type === 'sdk'">
+            <div class="material-heading material-heading--spaced">
+              <div>
+                <h4>{{ $t('MinimalCode') }}</h4>
+                <p>{{ $t('MinimalCodeHelp') }}</p>
+              </div>
             </div>
-          </div>
-          <div class="code-block">
-            <div class="code-block__header">
-              <span>{{ selectedConfiguration.type === 'sdk' ? 'python' : 'bash' }}</span>
-              <button type="button" @click="copyText(executionText)">
-                {{ $t('Copy') }}
-              </button>
+            <div class="code-block">
+              <div class="code-block__header">
+                <span>python</span>
+                <button type="button" @click="copyText(executionText)">
+                  {{ $t('Copy') }}
+                </button>
+              </div>
+              <pre><code>{{ executionText }}</code></pre>
             </div>
-            <pre><code>{{ executionText }}</code></pre>
-          </div>
+          </template>
+          <ol v-else class="agent-steps">
+            <li>
+              <h4>{{ $t('AgentInstallStep') }}</h4>
+              <p>{{ $t('AgentInstallStepHelp') }}</p>
+              <div class="code-block">
+                <div class="code-block__header">
+                  <span>bash</span>
+                  <button type="button" @click="copyText(agentPreparationCommand)">
+                    {{ $t('Copy') }}
+                  </button>
+                </div>
+                <pre><code>{{ agentPreparationCommand }}</code></pre>
+              </div>
+            </li>
+            <li>
+              <h4>{{ $t('AgentRegisterStep') }}</h4>
+              <p>{{ $t('AgentRegisterStepHelp') }}</p>
+              <el-button type="primary" @click="copyText(agentRegistrationCommand)">
+                {{ $t('CopyAgentRegistrationCommand') }}
+              </el-button>
+              <el-button :disabled="generating" @click="generateMaterials">
+                {{ $t('RegenerateAgentRegistrationCommand') }}
+              </el-button>
+              <details class="registration-details">
+                <summary>{{ $t('ViewAgentRegistrationCommand') }}</summary>
+                <div class="code-block">
+                  <div class="code-block__header"><span>bash</span></div>
+                  <pre><code>{{ agentRegistrationCommand }}</code></pre>
+                </div>
+              </details>
+            </li>
+            <li>
+              <h4>{{ $t('AgentVerifyStep') }}</h4>
+              <p>{{ $t('AgentVerifyStepHelp') }}</p>
+            </li>
+          </ol>
         </template>
       </IBox>
     </Drawer>
@@ -184,6 +221,8 @@ export default {
       configurationText: '',
       editingConfiguration: null,
       executionText: '',
+      agentPreparationCommand: '',
+      agentRegistrationCommand: '',
       generated: false,
       generating: false,
       materialsVisible: false,
@@ -560,6 +599,8 @@ export default {
       this.configurationFileName = 'jms_pam_config.py'
       this.configurationText = ''
       this.executionText = ''
+      this.agentPreparationCommand = ''
+      this.agentRegistrationCommand = ''
       this.installCommand = ''
     },
     async generateMaterials() {
@@ -579,7 +620,9 @@ export default {
         this.configurationText = materials.config || ''
         this.configurationFileName = materials.filename || 'jms_pam_config.py'
         this.installCommand = materials.install_command
-        this.executionText = materials.type === 'sdk' ? materials.code : materials.install_command
+        this.executionText = materials.code || ''
+        this.agentPreparationCommand = materials.preparation_command || ''
+        this.agentRegistrationCommand = materials.registration_command || ''
         this.generated = true
         this.$message.success(this.$t('ConfigurationGenerated'))
       } finally {
@@ -681,6 +724,45 @@ export default {
   color: var(--color-text-primary);
   font-size: 13px;
   font-weight: 600;
+}
+
+.agent-steps {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.agent-steps li + li {
+  margin-top: 24px;
+}
+
+.agent-steps h4 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 14px;
+}
+
+.agent-steps p {
+  margin: 6px 0 12px;
+  color: var(--color-help-text);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.registration-details {
+  margin-top: 12px;
+}
+
+.registration-details summary {
+  width: fit-content;
+  margin-bottom: 10px;
+  color: var(--el-color-primary);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.registration-details summary:focus-visible {
+  outline: 2px solid var(--el-color-primary);
+  outline-offset: 2px;
 }
 
 .code-block {
