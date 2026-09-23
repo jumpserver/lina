@@ -88,6 +88,7 @@ export default defineConfig(({ mode }) => {
   const coreHost = env.VITE_CORE_HOST || 'http://127.0.0.1:8080'
   const kaelHost = env.VITE_KAEL_HOST || 'http://127.0.0.1:8083'
   const kokoHost = env.VITE_KOKO_HOST || 'http://127.0.0.1:5050'
+  const lunaHost = env.VITE_LUNA_HOST || 'http://127.0.0.1:3000'
   const port = Number(process.env.PORT || process.env.port || process.env.npm_config_port || 9528)
 
   return {
@@ -145,7 +146,7 @@ export default defineConfig(({ mode }) => {
         '/koko/': createProxy(kokoHost, true),
         '/chen/': createProxy('http://127.0.0.1:9523', true),
         '/guacamole/': createProxy('http://127.0.0.1:8081', true),
-        '/luna/': createProxy('http://127.0.0.1:4200'),
+        '/luna/': createProxy(lunaHost, true),
         '/facelive/': createProxy(coreHost, true),
         '/core/': createProxy(coreHost),
         '/static/': createProxy(coreHost),
