@@ -71,7 +71,7 @@ function bytesToBase64(bytes) {
 }
 
 function rsaEncryptPassword(password, rsaPublicKey) {
-  const aesKey = (Math.random() + 1).toString(36).substring(2)
+  const aesKey = randomString(16)
   // public key 是 base64 存储的
   const keyCipher = rsaEncrypt(aesKey, rsaPublicKey)
   const passwordCipher = aesEncrypt(password, aesKey)
@@ -155,8 +155,21 @@ export function randomString(length) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   let result = ''
   const charactersLength = characters.length
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  const crypto = window.crypto || window.msCrypto
+  if (!crypto || !crypto.getRandomValues) {
+    throw new Error('Secure random number generation is unavailable')
+  }
+  // Rejection sampling keeps all characters equally likely.
+  const limit = 256 - (256 % charactersLength)
+  const bytes = new Uint8Array(32)
+  while (result.length < length) {
+    crypto.getRandomValues(bytes)
+    for (const value of bytes) {
+      if (value < limit) {
+        result += characters.charAt(value % charactersLength)
+        if (result.length === length) break
+      }
+    }
   }
 
   return result
