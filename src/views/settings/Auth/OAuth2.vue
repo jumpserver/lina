@@ -6,7 +6,7 @@
 import BaseAuth from './Base'
 import { JsonEditor } from '@/components/Form/FormFields'
 import { JsonRequired } from '@/components/Form/DataForm/rules'
-import { UploadField } from '@/components'
+import { UploadField, UploadKey } from '@/components'
 import request from '@/utils/request'
 import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
 
@@ -20,6 +20,7 @@ export default {
     return {
       settings: {
         url: '/api/v1/settings/setting/?category=oauth2',
+        encryptedFields: ['AUTH_OAUTH2_CLIENT_SECRET', 'AUTH_OAUTH2_CACERT_CONTENT'],
         fields: [
           [
             this.$t('Basic'),
@@ -39,7 +40,9 @@ export default {
               'AUTH_OAUTH2_PROVIDER_AUTHORIZATION_ENDPOINT',
               'AUTH_OAUTH2_ACCESS_TOKEN_ENDPOINT',
               'AUTH_OAUTH2_PROVIDER_USERINFO_ENDPOINT',
-              'AUTH_OAUTH2_PROVIDER_END_SESSION_ENDPOINT'
+              'AUTH_OAUTH2_PROVIDER_END_SESSION_ENDPOINT',
+              'AUTH_OAUTH2_CERT_VERIFY_MODE',
+              'AUTH_OAUTH2_CACERT_CONTENT'
             ]
           ],
           [this.$t('Search'), ['AUTH_OAUTH2_USER_ATTR_MAP']],
@@ -67,14 +70,35 @@ export default {
             rules: [JsonRequired]
           },
           AUTH_OAUTH2_ACCESS_TOKEN_METHOD: {},
+          AUTH_OAUTH2_CACERT_CONTENT: {
+            component: UploadKey,
+            hidden: (formValue) => formValue.AUTH_OAUTH2_CERT_VERIFY_MODE !== 'custom_ca',
+            el: {
+              accept: '.crt,.pem,.cer',
+              clearable: true,
+              fingerprint: ''
+            },
+            on: {
+              input: ([value], updateForm) => {
+                if (value === '') {
+                  updateForm({ AUTH_OAUTH2_CERT_VERIFY_MODE: 'system' })
+                }
+              }
+            }
+          },
           OAUTH2_ORG_IDS: getOrgSelect2Meta()
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
+          const configured = obj.AUTH_OAUTH2_CACERT_CONFIGURED
+          vm.settings.fieldsMeta.AUTH_OAUTH2_CACERT_CONTENT.el.fingerprint = configured
+            ? vm.$t('Configured')
+            : ''
           return obj
         },
         cleanFormValue(data) {
           delete data['AUTH_OAUTH2_LOGO_PATH']
+          delete data['AUTH_OAUTH2_CACERT_CONFIGURED']
           return data
         }
       }
