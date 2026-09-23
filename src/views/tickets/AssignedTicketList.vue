@@ -1,6 +1,17 @@
 <template>
   <div>
-    <BaseTicketList v-bind="$data" ref="BaseTicketList" :url="url" />
+    <el-tabs v-model="tab"
+      ><el-tab-pane name="pending" :label="$t('AwaitingMyApproval')" /><el-tab-pane
+        name="processed"
+        :label="$t('WFProcessedByMe')"
+    /></el-tabs>
+    <BaseTicketList
+      v-bind="$data"
+      :key="tab"
+      ref="BaseTicketList"
+      :url="url"
+      :extra-ticket-action="tab === 'pending' ? extraTicketAction : { hasCreate: false }"
+    />
     <Dialog
       v-if="isVisible"
       v-model:visible="isVisible"
@@ -40,6 +51,7 @@ export default {
   },
   data() {
     return {
+      tab: 'pending',
       ticketData: [],
       detailUrl: `/api/v1/tickets/tickets/`,
       isVisible: false,
@@ -65,7 +77,9 @@ export default {
   },
   computed: {
     url() {
-      return `/api/v1/tickets/tickets/?assignees__id=${this.currentUser.id}&state=pending`
+      return this.tab === 'pending'
+        ? `/api/v1/tickets/tickets/?assignees__id=${this.currentUser.id}&state=pending`
+        : `/api/v1/tickets/tickets/?processed_by=${this.currentUser.id}`
     },
     ...mapGetters(['currentUser'])
   },
@@ -73,59 +87,29 @@ export default {
     ticketTypeLabel(type) {
       return getTicketTypeLabel(type, this.$t)
     },
-    getAjaxData() {
-      let ticketType
-      const data = {}
-      this.ticketData.map((item) => {
-        switch (item.type.value) {
-          case 'apply_asset':
-            ticketType = 'apply-asset-tickets'
-            break
-          case 'login_confirm':
-            ticketType = 'apply-login-tickets'
-            break
-          case 'command_confirm':
-            ticketType = 'apply-command-tickets'
-            break
-          case 'login_asset_confirm':
-            ticketType = 'apply-login-asset-tickets'
-            break
-        }
-        if (!Object.prototype.hasOwnProperty.call(data, ticketType)) {
-          data[ticketType] = []
-        }
-        data[ticketType].push(item.id)
-      })
-      return data
-    },
     onConfirm() {
       this.bulk('approve')
     },
     onCancel() {
       this.bulk('reject')
     },
-    bulk(action) {
-      let current = 0
-      const data = this.getAjaxData()
-      const dataLength = Object.keys(data).length
-      for (const ticketType in data) {
-        current += 1
-        this.$axios
-          .put(`/api/v1/tickets/${ticketType}/bulk/?action=${action}`, {
-            tickets: data[ticketType]
-          })
-          .then((res) => {
-            this.$message.success(this.$tc('UpdateSuccessMsg'))
-            if (current === dataLength) {
-              this.$refs.BaseTicketList.reloadTable()
-              this.isVisible = false
-            }
-          })
-          .catch((err) => {
-            const errMsg = Object.values(err.response.data).join(', ')
-            this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + errMsg)
-          })
-      }
+    async bulk(action) {
+      const results = await Promise.allSettled(
+        this.ticketData.flatMap((ticket) =>
+          (ticket.my_tasks || []).map((task) =>
+            this.$axios.post(
+              `/api/v1/tickets/approval-tasks/${task}/${action}/`,
+              {},
+              { params: { oid: ticket.org_id } }
+            )
+          )
+        )
+      )
+      this.$refs.BaseTicketList.reloadTable()
+      this.isVisible = false
+      const failed = results.filter((r) => r.status === 'rejected').length
+      if (failed) this.$message.warning(this.$t('WFBulkFailed', { count: failed }))
+      else this.$message.success(this.$t('UpdateSuccessMsg'))
     },
     getDetailFields(item) {
       const ticketType = item?.type?.value

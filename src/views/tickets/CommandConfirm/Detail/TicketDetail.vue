@@ -77,26 +77,7 @@ export default {
         },
         {
           key: this.$t('ApplyFromCMDFilterRule'),
-          value: {
-            cmdFilterRuleId: object.apply_from_cmd_filter_rule,
-            cmdFilterId: object.apply_from_cmd_filter
-          },
-          formatter: function (item, value) {
-            const to = {
-              name: 'CommandFilterRulesUpdate',
-              params: {
-                id: value.cmdFilterRuleId
-              },
-              query: {
-                filter: value.cmdFilterId,
-                oid: object.org_id
-              }
-            }
-            if (!this.$hasPerm('assets.change_commandfilterrule')) {
-              return <span>{this.$t('CommandFilterRules')}</span>
-            }
-            return <router-link to={to}>{this.$t('CommandFilterRules')}</router-link>
-          }
+          value: object.rel_snapshot.apply_from_cmd_filter_acl
         }
       ]
     }
@@ -107,7 +88,7 @@ export default {
         action: 'detail',
         row: {},
         col: {},
-        id: value.id
+        id: value?.id || value
       })
       this.$nextTick(() => {
         this.drawerVisible = true

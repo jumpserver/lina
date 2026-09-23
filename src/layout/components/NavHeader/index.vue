@@ -99,7 +99,7 @@ export default {
       return (
         this.publicSettings['TICKETS_ENABLED'] &&
         this.$hasLicense() &&
-        this.$hasPerm('tickets.view_ticket')
+        this.$hasPerm('tickets.view_ticket | tickets.view_workflow')
       )
     },
     showLogo() {
