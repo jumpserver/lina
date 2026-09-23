@@ -2,17 +2,14 @@
   <div class="upload-key">
     <input ref="upLoadFile" :accept="accept" style="display: none" type="file" @change="onChange" />
     <div class="upload-key__actions">
-      <el-button v-if="!hasContent" size="small" @click.stop="onUpLoad">
+      <el-button v-if="!fingerprint" size="small" @click.stop="onUpLoad">
         {{ $t('SelectFile') }}
       </el-button>
       <template v-else>
         <el-button size="small" @click.stop="onUpLoad">
           {{ $t('Update') }}
         </el-button>
-        <el-button v-if="clearable" size="small" type="danger" link @click.stop="onClear">
-          {{ $t('Delete') }}
-        </el-button>
-        <span v-if="!fileName" class="fingerprint">{{ effectiveFingerprint }}</span>
+        <span v-if="!fileName" class="fingerprint">{{ fingerprint }}</span>
       </template>
       <span v-if="fileName" class="upload-key__filename">{{ fileName }}</span>
     </div>
@@ -38,24 +35,11 @@ export default {
     fingerprint: {
       type: String,
       default: ''
-    },
-    clearable: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
     return {
-      fileName: '',
-      cleared: false
-    }
-  },
-  computed: {
-    effectiveFingerprint() {
-      return this.cleared ? '' : this.fingerprint
-    },
-    hasContent() {
-      return Boolean(this.fileName || this.effectiveFingerprint)
+      fileName: ''
     }
   },
   methods: {
@@ -68,7 +52,6 @@ export default {
         return
       }
       const vm = this
-      this.cleared = false
       this.fileName = upLoadFile[0].name || ''
       const reader = new FileReader()
       reader.onload = function () {
@@ -79,12 +62,6 @@ export default {
         vm.$emit('input', result)
       }
       reader.readAsText(upLoadFile[0])
-    },
-    onClear() {
-      this.fileName = ''
-      this.cleared = true
-      this.$refs.upLoadFile.value = ''
-      this.$emit('input', '')
     }
   }
 }

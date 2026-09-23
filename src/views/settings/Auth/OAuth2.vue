@@ -75,15 +75,7 @@ export default {
             hidden: (formValue) => formValue.AUTH_OAUTH2_CERT_VERIFY_MODE !== 'custom_ca',
             el: {
               accept: '.crt,.pem,.cer',
-              clearable: true,
               fingerprint: ''
-            },
-            on: {
-              input: ([value], updateForm) => {
-                if (value === '') {
-                  updateForm({ AUTH_OAUTH2_CERT_VERIFY_MODE: 'system' })
-                }
-              }
             }
           },
           OAUTH2_ORG_IDS: getOrgSelect2Meta()
