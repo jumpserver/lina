@@ -56,6 +56,7 @@ export const riskActions = [
       return (
         !this.$hasPerm('accounts.remove_account') ||
         !this.$hasPerm('accounts.delete_account') ||
+        !this.$hasPerm('accounts.delete_gatheredaccount') ||
         !this.$hasPerm('accounts.change_accountrisk')
       )
     }
@@ -77,7 +78,8 @@ export const riskActions = [
     },
     disabled: async function () {
       return (
-        !this.$hasPerm('accounts.add_pushaccountexecution') ||
+        !this.$hasPerm('accounts.add_account') ||
+        !this.$hasPerm('accounts.push_account') ||
         !this.$hasPerm('accounts.change_accountrisk')
       )
     }
@@ -111,7 +113,9 @@ export const riskActions = [
     },
     disabled: async function () {
       return (
-        !this.$hasPerm('accounts.delete_account') || !this.$hasPerm('accounts.change_accountrisk')
+        !this.$hasPerm('accounts.delete_account') ||
+        !this.$hasPerm('accounts.delete_gatheredaccount') ||
+        !this.$hasPerm('accounts.change_accountrisk')
       )
     }
   },

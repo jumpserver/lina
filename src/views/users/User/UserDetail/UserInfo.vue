@@ -150,7 +150,7 @@ export default {
                   if (action !== 'confirm') return done()
                   instance.confirmButtonLoading = true
                   try {
-                    await vm.$axios.get(url)
+                    await vm.$axios.post(url, {})
                     done()
                     vm.$message.success(successMsg)
                   } finally {
