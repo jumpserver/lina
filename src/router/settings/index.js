@@ -595,7 +595,7 @@ export default {
       meta: {
         title: i18n.t('SystemTools'),
         icon: 'tools',
-        permissions: ['settings.change_other']
+        permissions: ['settings.change_systemtools']
       }
     },
     {
