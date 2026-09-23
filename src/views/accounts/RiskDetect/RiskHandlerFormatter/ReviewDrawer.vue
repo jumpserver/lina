@@ -50,6 +50,7 @@
 import { toSafeLocalDateStr } from '@/utils/common/time'
 import { riskActions } from './const'
 import IBox from '@/components/Common/IBox/index.vue'
+import escape from 'lodash/escape'
 
 export default {
   name: 'ReviewDraw',
@@ -184,8 +185,8 @@ export default {
         actionLabel = `${actionLabel} (${comment})`
       }
       return `
-          <div>${actionLabel}</div>
-          <div class="processor"><i class="fa fa-user-o"></i> <span> ${processor}</span></div>
+          <div>${escape(actionLabel)}</div>
+          <div class="processor"><i class="fa fa-user-o"></i> <span> ${escape(processor)}</span></div>
       `
     },
     handleInit(row, detail) {
@@ -199,7 +200,7 @@ export default {
         case 'authorized_key_changed':
           return this.$t('Diff') + `:
             <pre>
-              ${detail.diff}
+              ${escape(detail.diff)}
             </pre>
             `
         case 'long_time_password':
