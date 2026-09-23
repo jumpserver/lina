@@ -29,7 +29,7 @@
 
 <script>
 import Dialog from '@/components/Dialog/index.vue'
-import { createWsUrl } from '@/utils/common/index'
+import { requestLdap } from './request'
 
 export default {
   name: 'TestLoginDialog',
@@ -52,24 +52,23 @@ export default {
     }
   },
   methods: {
-    testUserLoginClick() {
-      this.testLdapLoginStatus = true
-      this.enableWS()
-      this.ws.onopen = (e) => {
-        this.ws.send(JSON.stringify({ msg_type: 'testing_login', ...this.userLoginForm }))
+    async testUserLoginClick() {
+      if (!this.$hasPerm('settings.change_auth')) {
+        this.$message.error(this.$t('BadRoleErrorMsg'))
+        return
       }
-      this.ws.onmessage = (e) => {
-        const data = JSON.parse(e.data)
-        if (data.ok) {
-          this.$message.success(data.msg)
-        } else {
-          this.$message.error(data.msg)
-        }
+      this.testLdapLoginStatus = true
+      try {
+        const data = await requestLdap(this.category, {
+          msg_type: 'testing_login',
+          ...this.userLoginForm
+        })
+        this.$message.success(data.msg)
+      } catch (error) {
+        this.$message.error(error.message)
+      } finally {
         this.testLdapLoginStatus = false
       }
-    },
-    enableWS() {
-      this.ws = new WebSocket(createWsUrl(`/ws/ldap/?category=${this.category}`))
     }
   }
 }
