@@ -206,7 +206,7 @@ export default {
           hidden: (formValue, field) => {
             field.el.dateExpired = formValue.date_expired
             field.el.disabled = !formValue.expire_soon_notice_switch
-            return false
+            return !formValue.expire_soon_notice_switch
           },
           rules: [
             {
