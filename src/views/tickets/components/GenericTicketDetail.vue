@@ -13,10 +13,10 @@
         :title="$tc('AssignedInfo')"
       />
       <slot id="MoreDetails" />
+      <WorkflowPanel :object="object" />
       <Comments v-bind="$attrs" :object="object" />
     </el-col>
     <el-col :md="7" :sm="24">
-      <Steps :object="object" />
       <Session v-if="$hasPerm('tickets.view_ticket')" :object="object" />
     </el-col>
   </el-row>
@@ -27,12 +27,12 @@ import Comments from './Comments'
 import CcUsers from './CcUsers'
 import Details from './Details'
 import Session from './Session'
-import Steps from './Steps'
+import WorkflowPanel from './WorkflowPanel'
 import { getTicketFlowLabel, getTicketStateLabel, getTicketTypeLabel } from '../const'
 export default {
   name: 'GenericTicketDetail',
   components: {
-    Steps,
+    WorkflowPanel,
     CcUsers,
     Comments,
     Details,

@@ -1,39 +1,17 @@
-<template>
-  <GenericTicketDetail :object="object" />
-</template>
-
+<template><GenericTicketDetail :object="object" :special-card-items="specialCardItems" /></template>
 <script>
-import { STATUS_MAP } from '../../const'
-import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
-import { getAssetUrl } from '@/utils/assets'
-
+import GenericTicketDetail from '../../components/GenericTicketDetail'
 export default {
-  name: 'AssetTicketDetail',
-  components: {
-    GenericTicketDetail
-  },
-  props: {
-    object: {
-      type: Object,
-      default: () => ({})
+  components: { GenericTicketDetail },
+  props: { object: { type: Object, required: true } },
+  computed: {
+    specialCardItems() {
+      return [
+        { key: this.$t('IP'), value: this.object.apply_login_ip },
+        { key: this.$t('City'), value: this.object.apply_login_city },
+        { key: this.$t('Date'), value: this.object.apply_login_datetime }
+      ]
     }
-  },
-  data() {
-    return {
-      statusMap:
-        this.object.status.value === 'open'
-          ? STATUS_MAP['pending']
-          : STATUS_MAP[this.object.state.value],
-      imageUrl: getAssetUrl('img/avatar.png'),
-      form: {
-        comments: ''
-      },
-      comments: ''
-    }
-  },
-  computed: {},
-  methods: {}
+  }
 }
 </script>
-
-<style scoped></style>

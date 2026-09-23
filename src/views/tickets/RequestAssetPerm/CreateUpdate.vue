@@ -45,6 +45,7 @@ export default {
       hasDetailInMsg: false,
       loading: true,
       flowOptions: [],
+      flowRequest: 0,
       initial: {
         ips_or_not: true,
         apply_date_expired: date_expired,
@@ -54,12 +55,12 @@ export default {
         apply_expire_soon_notice_minutes: null,
         apply_assets: [],
         org_id: '',
-        flow_id: '',
+        workflow_id: '',
         cc_users: [],
         apply_actions: [this.$t('All')]
       },
       fields: [
-        [this.$t('Basic'), ['title', 'org_id', 'flow_id', 'cc_users']],
+        [this.$t('Basic'), ['title', 'org_id', 'workflow_id', 'cc_users']],
         [
           this.$t('RequestPerm'),
           ['apply_nodes', 'apply_assets', 'apply_accounts', 'apply_actions']
@@ -187,21 +188,22 @@ export default {
           on: {
             change: async ([event], updateForm) => {
               updateForm({
-                flow_id: '',
+                workflow_id: '',
                 cc_users: [],
                 apply_nodes: [],
                 apply_assets: [],
-                apply_system_users: []
+                apply_accounts: []
               })
               const flow = await this.loadFlowOptions(event)
+              if (flow === undefined) return
               updateForm({
-                flow_id: flow?.id || '',
+                workflow_id: flow?.id || '',
                 cc_users: flow?.cc_users || []
               })
             }
           }
         },
-        flow_id: {
+        workflow_id: {
           component: Select2,
           label: this.$t('TicketFlow'),
           el: {
@@ -243,8 +245,8 @@ export default {
             }
           }
         })
-        if (!value.flow_id) {
-          delete value.flow_id
+        if (!value.workflow_id) {
+          delete value.workflow_id
         }
         delete value.cc_users
         return normalizeExpireNoticePayload(value, 'apply_')
@@ -276,29 +278,31 @@ export default {
     }
 
     const flow = await this.loadFlowOptions(this.initial.org_id)
-    this.initial.flow_id = flow?.id || ''
+    this.initial.workflow_id = flow?.id || ''
     this.initial.cc_users = flow?.cc_users || []
 
     this.loading = false
   },
   methods: {
     async loadFlowOptions(orgId) {
+      const requestId = ++this.flowRequest
       this.flowOptions = []
-      this.fieldsMeta.flow_id.el.options = []
-      this.fieldsMeta.flow_id.el.disabled = true
+      this.fieldsMeta.workflow_id.el.options = []
+      this.fieldsMeta.workflow_id.el.disabled = true
       if (!orgId) {
         return null
       }
       try {
-        const flows = await this.$axios.get('/api/v1/tickets/flows/options/', {
+        const flows = await this.$axios.get('/api/v1/tickets/workflows/options/', {
           params: { type: 'apply_asset', org_id: orgId }
         })
+        if (requestId !== this.flowRequest) return undefined
         this.flowOptions = flows
-        this.fieldsMeta.flow_id.el.options = flows.map((flow) => ({
+        this.fieldsMeta.workflow_id.el.options = flows.map((flow) => ({
           label: getTicketFlowLabel(flow, this.$t),
           value: flow.id
         }))
-        this.fieldsMeta.flow_id.el.disabled = flows.length <= 1
+        this.fieldsMeta.workflow_id.el.disabled = flows.length <= 1
         return flows[0] || null
       } catch (error) {
         return null

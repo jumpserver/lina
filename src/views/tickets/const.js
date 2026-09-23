@@ -17,7 +17,9 @@ export const TICKET_STATE_I18N_KEYS = {
   approved: 'Approved',
   rejected: 'Rejected',
   closed: 'StateClosed',
-  reopen: 'Reopen'
+  reopen: 'Reopen',
+  expired: 'WFExpired',
+  error: 'WFError'
 }
 
 function translate(t, key) {
@@ -31,6 +33,7 @@ export function getTicketTypeLabel(type, t) {
 }
 
 export function getTicketFlowLabel(ticketOrFlow, t) {
+  if (ticketOrFlow?.workflow?.name) return ticketOrFlow.workflow.name
   if (ticketOrFlow?.flow === null && ticketOrFlow?.type?.value === 'apply_asset') {
     return translate(t, 'TicketFlowDeleted')
   }

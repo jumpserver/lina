@@ -86,7 +86,7 @@ export function getPermedViews() {
     ['audit', store.getters.auditOrgs.length > 0],
     ['pam', store.getters.pamOrgs.length > 0],
     ['workbench', true],
-    ['tickets', hasPermission('tickets.view_ticket')],
+    ['tickets', hasPermission('tickets.view_ticket | tickets.view_workflow')],
     ['settings', hasPermission('settings.view_setting')]
   ]
   return viewShowMapper.filter((i) => i[1]).map((i) => i[0])

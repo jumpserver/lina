@@ -24,33 +24,6 @@
           <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
         </el-form-item>
         <el-form-item style="float: right">
-          <template v-if="hasActionPerm && !isAuditRoute">
-            <el-button
-              :disabled="isDisabled || isClosed"
-              size="small"
-              type="primary"
-              @click="handleApprove"
-            >
-              <i class="fa fa-check" /> {{ $t('Accept') }}
-            </el-button>
-            <el-button
-              :disabled="isDisabled || isClosed"
-              size="small"
-              type="warning"
-              @click="handleReject"
-            >
-              <i class="fa fa-ban" /> {{ $t('Reject') }}
-            </el-button>
-          </template>
-          <el-button
-            v-if="isSelfTicket && !isAuditRoute"
-            :disabled="isDisabled || isClosed"
-            size="small"
-            type="danger"
-            @click="handleClose"
-          >
-            <i class="fa fa-times" /> {{ $t('CancelTicket') }}
-          </el-button>
           <el-button
             v-if="canComment && !isAuditRoute"
             :disabled="isClosed"
@@ -113,16 +86,11 @@ export default {
       return this.object.status?.value === 'closed'
     },
     hasActionPerm() {
-      const approvalLevel = this.object.approval_step?.value
-      const currentStep = (this.object.process_map || []).find(
-        (item) => item.approval_level === approvalLevel
-      )
-      const profileId = this.$store.state.users.profile?.id
-      return (currentStep?.assignees || []).includes(profileId)
+      return (this.object.my_tasks || []).length > 0
     },
     isSelfTicket() {
       const profile = this.$store.state.users.profile
-      return this.object.applicant === `${profile.name}(${profile.username})`
+      return this.object.applicant === profile.id || this.object.applicant?.id === profile.id
     },
     canComment() {
       const profile = this.$store.state.users.profile
@@ -169,26 +137,6 @@ export default {
           this.form.comments = ''
         })
     },
-    defaultApprove() {
-      this.createComment(function () {})
-      const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/approve/`
-      return this.$axios.put(url).then((res) => {
-        this.reloadPage()
-      })
-    },
-    defaultReject() {
-      this.createComment(function () {})
-      const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/reject/`
-      return this.$axios.put(url).then((res) => {
-        this.reloadPage()
-      })
-    },
-    defaultClose() {
-      const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/close/`
-      return this.$axios.put(url).then((res) => {
-        this.reloadPage()
-      })
-    },
     createComment(successCallback) {
       const commentText = this.form.comments
       const ticketId = this.object.id
@@ -207,55 +155,6 @@ export default {
           this.reloadPage()
         }
       })
-    },
-    async handleAction(actionType) {
-      if (this.isDisabled) {
-        return
-      }
-
-      this.isDisabled = true
-      let handler
-      switch (actionType) {
-        case 'approve':
-          handler = this.approve || this.defaultApprove
-          break
-        case 'reject':
-          handler = this.reject || this.defaultReject
-          break
-        case 'close':
-          handler = this.close || this.defaultClose
-          break
-        default:
-          handler = null
-          break
-      }
-
-      if (handler) {
-        try {
-          await handler()
-        } catch (err) {
-          // HTTP errors are already displayed by the global Axios interceptor.
-          // Only handle errors without a response here to avoid replacing the
-          // server detail message with an unrenderable Axios error object.
-          if (!err.response) {
-            this.$message.error(err.message || String(err))
-          }
-        } finally {
-          this.isDisabled = false
-        }
-      } else {
-        this.$message.error('No handler for action')
-        this.isDisabled = false
-      }
-    },
-    handleApprove() {
-      this.handleAction('approve')
-    },
-    handleReject() {
-      this.handleAction('reject')
-    },
-    handleClose() {
-      this.handleAction('close')
     },
     handleComment() {
       this.createComment(this.getComment)

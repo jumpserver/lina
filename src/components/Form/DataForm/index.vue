@@ -310,7 +310,7 @@ export default {
   flex-direction: column;
   gap: var(--form-section-gap);
   margin: 0;
-  padding: 20px 0 24px;
+  padding: 20px 20px 24px 0;
 
   .el-form {
     margin-right: 0;

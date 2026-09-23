@@ -201,6 +201,18 @@ export const assetFieldsMeta = (vm, category, type) => {
         }
       }
     },
+    owner: {
+      label: vm.$t('AssetOwner'),
+      component: Select2,
+      el: {
+        multiple: false,
+        clearable: true,
+        ajax: {
+          url: '/api/v1/users/users/?fields_size=mini&is_valid=true',
+          transformOption: (item) => ({ label: `${item.name} (${item.username})`, value: item.id })
+        }
+      }
+    },
     accounts: {
       component: AssetAccounts,
       el: {

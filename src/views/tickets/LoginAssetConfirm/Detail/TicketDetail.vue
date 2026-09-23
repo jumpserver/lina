@@ -39,7 +39,7 @@ export default {
         : [
             {
               key: this.$t('ApplyLoginAsset'),
-              value: object.apply_login_asset?.name
+              value: object.rel_snapshot.apply_login_asset || '-'
             },
             {
               key: this.$t('ApplyLoginAccount'),
@@ -47,7 +47,7 @@ export default {
             },
             {
               key: this.$t('ApplyLoginUser'),
-              value: object.apply_login_user.name
+              value: object.rel_snapshot.apply_login_user || '-'
             }
           ]
     }

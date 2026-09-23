@@ -91,7 +91,7 @@ export default {
         updateSuccessNextRoute: this.updateSuccessNextRoute,
         hasDetailInMsg: false,
         fields: [
-          [this.$t('Basic'), ['name', 'address', 'platform', 'nodes']],
+          [this.$t('Basic'), ['name', 'address', 'platform', 'nodes', 'owner']],
           [this.$t('Protocol'), ['protocols']],
           [this.$t('Account'), ['accounts']],
           [this.$t('Other'), ['directory_services', 'zone', 'labels', 'is_active', 'comment']]
@@ -101,6 +101,9 @@ export default {
           let url = this.url
           const id = this.$context.get('id')
           const values = _.cloneDeep(validValues)
+          if ('owner' in values) {
+            values.owner = getRelatedId(values.owner) || null
+          }
           const submitMethod = id ? 'put' : 'post'
 
           // 后端 validate_nodes：nodes 为空会落到组织根节点。

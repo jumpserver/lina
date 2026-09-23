@@ -113,7 +113,14 @@ export default {
       ticketTableConfig: {
         url: this.url,
         extraQuery: this.extraQuery,
-        columnsExclude: ['process_map', 'rel_snapshot', 'cc_users'],
+        columnsExclude: [
+          'process_map',
+          'rel_snapshot',
+          'cc_users',
+          'my_tasks',
+          'workflow_instance',
+          'approval_step'
+        ],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
           default: ['title', 'serial_num', 'type', 'state', 'date_created']
