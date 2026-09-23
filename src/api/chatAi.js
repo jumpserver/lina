@@ -426,7 +426,7 @@ export async function getApproval(id) {
   return value
 }
 
-async function decideApproval(id, decision) {
+async function decideApproval(id, decision, approvalInputs = {}) {
   const approval = approvals.get(id) || (await getApproval(id))
   const value = await quietRequest({
     url: KAEL_BASE + '/approvals/' + id + '/decisions',
@@ -434,15 +434,21 @@ async function decideApproval(id, decision) {
     data: {
       decision,
       run_id: approval.run_id,
-      arguments_digest: approval.arguments_digest
+      arguments_digest: approval.arguments_digest,
+      ...(approvalInputs.accountPassword
+        ? { account_password: approvalInputs.accountPassword }
+        : {}),
+      ...(Object.keys(approvalInputs.secretInputs || {}).length
+        ? { secret_inputs: approvalInputs.secretInputs }
+        : {})
     }
   })
   approvals.set(id, value)
   return value
 }
 
-export function confirmApproval(id) {
-  return decideApproval(id, 'approve')
+export function confirmApproval(id, approvalInputs = {}) {
+  return decideApproval(id, 'approve', approvalInputs)
 }
 
 export function cancelApproval(id) {
