@@ -1,6 +1,13 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="17" :sm="24">
+      <el-alert
+        v-if="object.execution_mode === 'approval_only'"
+        :title="$t('TicketApprovalOnlyHint')"
+        type="info"
+        :closable="false"
+        show-icon
+      />
       <Details :detail-card-items="iDetailCardItems" :title="$tc('BasicInfo')" />
       <Details
         v-if="specialCardItems.length > 0"

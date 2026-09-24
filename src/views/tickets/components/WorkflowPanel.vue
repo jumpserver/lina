@@ -77,6 +77,9 @@
           {{ $t('WFConditionResult') }}:
           {{ node.result.result ? $t('WFTrueBranch') : $t('WFFalseBranch') }}
         </div>
+        <div v-if="node.type === 'cc' && node.state === 'approved'" class="hint">
+          {{ $t('CcUsers') }}: <CcUsers :users="node.result?.recipients || []" />
+        </div>
       </div>
       <el-collapse>
         <el-collapse-item :title="$t('WFTimeline')" name="timeline">
@@ -130,10 +133,11 @@
 <script>
 import IBox from '@/components/Common/IBox'
 import Select2 from '@/components/Form/FormFields/Select2'
+import CcUsers from './CcUsers'
 import { useDateTime } from '@/composables/useDateTime'
 import { stateLabels, eventLabels } from '../Workflow/graph'
 export default {
-  components: { IBox, Select2 },
+  components: { IBox, Select2, CcUsers },
   props: { object: { type: Object, required: true } },
   data: () => ({
     instance: null,

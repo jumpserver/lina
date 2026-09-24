@@ -25,6 +25,14 @@ test('additional approval levels remain ordered and can be removed', () => {
   assert.equal(removeNode(graph, inserted.id), true)
   assert.deepEqual(paths(graph), [['start', 'approval_1', 'end']])
 })
+test('CC can be placed after an approval and removed without changing the path', () => {
+  const graph = newDefinition()
+  const inserted = insertNode(graph, graph.edges[1], 'cc', 'Notify security')
+  assert.deepEqual(inserted.config, { users: [] })
+  assert.deepEqual(paths(graph), [['start', 'approval_1', inserted.id, 'end']])
+  assert.equal(removeNode(graph, inserted.id), true)
+  assert.deepEqual(paths(graph), [['start', 'approval_1', 'end']])
+})
 test('removing the only branch approval cannot collapse both condition outputs', () => {
   const graph = newDefinition()
   const condition = insertNode(graph, graph.edges[0], 'condition', 'Production?')

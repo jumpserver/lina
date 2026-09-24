@@ -12,7 +12,7 @@ export default {
           .filter((item) => item.name !== 'apply_expire_soon_notice_minutes')
           .map((item) => ({
             key: item.name === 'apply_users' ? this.$t('TicketAuthorizedUsers') : item.label,
-            value: item.value ?? '-'
+            value: Array.isArray(item.value) ? item.value.join(', ') : (item.value ?? '-')
           })),
         {
           key: this.$t('SystemExpireNotice'),
