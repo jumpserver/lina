@@ -31,7 +31,7 @@ export default {
       },
       config: {
         activeMenu: 'TicketDetail',
-        url: '/api/v1/tickets/apply-command-tickets/',
+        url: '/api/v1/tickets/tickets/',
         submenu: [
           {
             title: this.$t('Basic'),

@@ -54,6 +54,17 @@ export default {
       },
       children: [
         {
+          path: 'create',
+          name: 'PluginTicketCreate',
+          component: () => import('@/views/tickets/plugins/Create'),
+          meta: {
+            title: i18n.t('OpenTicket'),
+            permissions: ['tickets.view_ticket'],
+            activeMenu: '/tickets/my-tickets'
+          },
+          hidden: true
+        },
+        {
           path: 'request-host-perm/create',
           name: 'RequestAssetPermTicketCreateUpdate',
           component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),

@@ -70,7 +70,6 @@ export default {
     return {
       isDisabled: false,
       comments: [],
-      type_api: '',
       imageUrl: getAssetUrl('img/avatar.png'),
       form: {
         comments: ''
@@ -102,22 +101,6 @@ export default {
     return useDateTime()
   },
   mounted() {
-    switch (this.object.type?.value) {
-      case 'login_confirm':
-        this.type_api = 'apply-login-tickets'
-        break
-      case 'apply_asset':
-        this.type_api = 'apply-asset-tickets'
-        break
-      case 'login_asset_confirm':
-        this.type_api = 'apply-login-asset-tickets'
-        break
-      case 'command_confirm':
-        this.type_api = 'apply-command-tickets'
-        break
-      default:
-        this.type_api = 'tickets'
-    }
     this.getComment()
   },
   methods: {

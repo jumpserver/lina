@@ -29,6 +29,7 @@ export default {
         date_created: ''
       },
       config: {
+        actions: { detailApiUrl: `/api/v1/tickets/tickets/${this.$route.params.id}/` },
         activeMenu: 'TicketDetail',
         submenu: [
           {
@@ -53,6 +54,7 @@ export default {
         command_confirm: 'CommandConfirmDetail'
       }
       const routeName = ticketRouteMapper[ticket.type.value]
+      if (!routeName) return
       setTimeout(() => {
         this.$router.push({
           name: routeName,

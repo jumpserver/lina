@@ -1,13 +1,8 @@
-export const ticketTypes = [
-  'apply_asset',
-  'login_confirm',
-  'login_asset_confirm',
-  'command_confirm'
-]
 export const nodeLabels = {
   start: 'WFStart',
   approval: 'WFApproval',
   condition: 'WFCondition',
+  cc: 'WFCC',
   end: 'WFEnd'
 }
 export const stateLabels = {
@@ -34,6 +29,7 @@ export const eventLabels = {
   'approval.expired': 'WFExpired',
   'approval.timed_out': 'WFExpired',
   'condition.evaluated': 'WFConditionEvaluated',
+  'cc.added': 'WFCCAdded',
   'workflow.completed': 'WFCompleted',
   'workflow.cancelled': 'WFCancelled',
   'workflow.expired': 'WFExpired',
@@ -88,7 +84,7 @@ export function insertNode(definition, edge, type, name) {
     id: `${type}_${crypto.randomUUID().slice(0, 8)}`,
     type,
     name,
-    config: type === 'approval' ? newApproval() : newCondition()
+    config: type === 'approval' ? newApproval() : type === 'cc' ? { users: [] } : newCondition()
   }
   definition.nodes.push(node)
   const target = edge.target
@@ -112,7 +108,7 @@ export function insertNode(definition, edge, type, name) {
 }
 export function removeNode(definition, id) {
   const node = definition.nodes.find((n) => n.id === id)
-  if (!node || node.type !== 'approval') return false
+  if (!node || !['approval', 'cc'].includes(node.type)) return false
   const next = definition.edges.find((e) => e.source === id)?.target
   // A condition cannot point both branches at the same node.
   if (

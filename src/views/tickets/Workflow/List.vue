@@ -21,7 +21,10 @@ export default {
               getRoute: ({ row }) => ({ name: 'WorkflowDetail', params: { id: row.id } })
             }
           },
-          type: { formatter: (row) => getTicketTypeLabel({ value: row.type }, this.$t) },
+          type: {
+            formatter: (row) =>
+              getTicketTypeLabel({ value: row.type, label: row.type_label }, this.$t)
+          },
           active_version_number: { label: this.$t('WFVersion') },
           enabled: { label: this.$t('Enabled') }
         }

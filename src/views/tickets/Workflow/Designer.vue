@@ -50,22 +50,11 @@
               <el-select v-model="workflow.type" :disabled="!!workflow.active_version">
                 <el-option
                   v-for="type in ticketTypes"
-                  :key="type"
-                  :value="type"
+                  :key="type.type"
+                  :value="type.type"
                   :label="typeLabel(type)"
                 />
               </el-select>
-            </el-form-item>
-            <el-form-item :label="$t('CcUsers')">
-              <Select2
-                v-model="workflow.cc_users"
-                multiple
-                :placeholder="$t('WFCCPlaceholder')"
-                :ajax="{
-                  url: '/api/v1/users/users/?fields_size=mini&is_valid=true',
-                  transformOption: (u) => ({ label: u.name, value: u.id })
-                }"
-              />
             </el-form-item>
             <el-form-item :label="$t('Comment')" class="description-field">
               <el-input v-model="workflow.comment" :placeholder="$t('WFDescriptionPlaceholder')" />
@@ -158,7 +147,7 @@
                   <span class="node-heading">
                     <span class="node-icon"
                       ><el-icon
-                        ><User v-if="node.type === 'approval'" /><Share
+                        ><User v-if="node.type === 'approval' || node.type === 'cc'" /><Share
                           v-else-if="node.type === 'condition'" /><VideoPlay
                           v-else-if="node.type === 'start'" /><CircleCheck v-else /></el-icon
                     ></span>
@@ -171,6 +160,7 @@
                     >{{ $t(`WFResolver_${node.config.approvers.type}`) }} ·
                     {{ $t(`WFStrategy_${node.config.strategy}`) }}</small
                   >
+                  <small v-else-if="node.type === 'cc'">{{ $t('WFCCNodeHint') }}</small>
                   <small v-else>{{
                     $t(
                       node.type === 'start'
@@ -185,6 +175,7 @@
             </div>
             <div class="canvas-legend">
               <span><i class="legend-dot approval" />{{ $t('WFApproval') }}</span>
+              <span><i class="legend-dot cc" />{{ $t('WFCC') }}</span>
               <span><i class="legend-dot condition" />{{ $t('WFCondition') }}</span>
               <span><i class="legend-dot endpoint" />{{ $t('WFStart') }} / {{ $t('WFEnd') }}</span>
             </div>
@@ -247,9 +238,21 @@
                     />
                   </el-form-item>
                 </template>
+                <el-form-item v-if="selected.type === 'cc'" :label="$t('CcUsers')" required>
+                  <Select2
+                    v-model="selected.config.users"
+                    multiple
+                    :placeholder="$t('WFCCPlaceholder')"
+                    :ajax="{
+                      url: '/api/v1/users/users/?fields_size=mini&is_valid=true',
+                      transformOption: (user) => ({ label: user.name, value: user.id })
+                    }"
+                  />
+                </el-form-item>
                 <ConditionEditor
                   v-if="selected.type === 'condition'"
                   v-model="selected.config"
+                  :extra-fields="pluginConditionFields"
                   :disabled="!canEdit || saving"
                 />
               </section>
@@ -326,21 +329,24 @@
                     <el-button :disabled="saving" @click="insert(edge, 'condition')"
                       ><el-icon><Plus /></el-icon>{{ $t('WFCondition') }}</el-button
                     >
+                    <el-button :disabled="saving" @click="insert(edge, 'cc')"
+                      ><el-icon><Plus /></el-icon>{{ $t('WFCC') }}</el-button
+                    >
                   </div>
                 </div>
               </section>
               <div
-                v-if="canEdit && ['approval', 'condition'].includes(selected.type)"
+                v-if="canEdit && ['approval', 'condition', 'cc'].includes(selected.type)"
                 class="inspector-footer"
               >
                 <el-button
                   type="danger"
                   link
                   :disabled="saving"
-                  @click="selected.type === 'approval' ? remove() : removeBranch()"
+                  @click="selected.type === 'condition' ? removeBranch() : remove()"
                   ><el-icon><Delete /></el-icon
                   >{{
-                    $t(selected.type === 'approval' ? 'WFRemoveNode' : 'WFRemoveCondition')
+                    $t(selected.type === 'condition' ? 'WFRemoveCondition' : 'WFRemoveNode')
                   }}</el-button
                 >
               </div>
@@ -356,14 +362,7 @@ import { Page } from '@/layout/components'
 import IBox from '@/components/Common/IBox'
 import Select2 from '@/components/Form/FormFields/Select2'
 import ConditionEditor from './ConditionEditor'
-import {
-  newDefinition,
-  layoutGraph,
-  insertNode,
-  removeNode,
-  ticketTypes,
-  nodeLabels
-} from './graph'
+import { newDefinition, layoutGraph, insertNode, removeNode, nodeLabels } from './graph'
 import { getTicketTypeLabel } from '../const'
 export default {
   components: { Page, IBox, Select2, ConditionEditor },
@@ -375,24 +374,28 @@ export default {
       advancedOpen: [],
       savedDefinition: null,
       savedMetadata: null,
-      workflow: { name: '', type: 'apply_asset', comment: '', enabled: false, cc_users: [] },
+      workflow: { name: '', type: 'apply_asset', comment: '', enabled: false },
       definition: newDefinition(),
       versions: [],
       selectedVersion: null,
       moreVersions: false,
       selectedId: 'approval_1',
-      ticketTypes,
+      ticketTypes: [],
       nodeLabels,
       resolvers: ['user', 'user_group', 'role', 'applicant_manager', 'asset_owner', 'org_admin']
     }
   },
   computed: {
+    pluginConditionFields() {
+      return (
+        this.ticketTypes.find((plugin) => plugin.type === this.workflow.type)?.fields || []
+      ).map((field) => `request.${field.name}`)
+    },
     metadata() {
       return {
         name: this.workflow.name,
         type: this.workflow.type,
-        comment: this.workflow.comment,
-        cc_users: this.workflow.cc_users.map((user) => user.id || user)
+        comment: this.workflow.comment
       }
     },
     definitionDirty() {
@@ -451,12 +454,18 @@ export default {
   },
   async mounted() {
     this.captureBaseline()
+    this.ticketTypes = await this.$axios.get('/api/v1/tickets/ticket-types/')
     if (!this.$route.params.id) return
     this.loading = true
     try {
       this.workflow = await this.$axios.get(`/api/v1/tickets/workflows/${this.$route.params.id}/`)
       await this.loadVersions()
       if (this.versions.length) await this.selectVersion(this.workflow.active_version)
+      else if (this.workflow.migration_notes?.unpublished_cc_user_ids?.length) {
+        const node = insertNode(this.definition, this.definition.edges[0], 'cc', this.$t('WFCC'))
+        node.config.users = this.workflow.migration_notes.unpublished_cc_user_ids
+        this.selectedId = node.id
+      }
     } finally {
       this.loading = false
       this.captureBaseline()
@@ -465,7 +474,7 @@ export default {
   activated() {
     // The app caches route pages. Opening Create again must start a new draft.
     if (this.$route.name === 'WorkflowCreate' && this.workflow.active_version) {
-      this.workflow = { name: '', type: 'apply_asset', comment: '', enabled: false, cc_users: [] }
+      this.workflow = { name: '', type: 'apply_asset', comment: '', enabled: false }
       this.definition = newDefinition()
       this.versions = []
       this.selectedVersion = null
@@ -490,7 +499,7 @@ export default {
       this.savedMetadata = JSON.stringify(this.metadata)
     },
     typeLabel(type) {
-      return getTicketTypeLabel({ value: type }, this.$t)
+      return getTicketTypeLabel({ value: type.type, label: type.label }, this.$t)
     },
     selectNode(id) {
       this.selectedId = id
@@ -693,7 +702,7 @@ h3 {
 }
 .metadata {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1.2fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   column-gap: 24px;
   row-gap: 14px;
 }
@@ -708,17 +717,6 @@ h3 {
 }
 .description-field {
   grid-column: 1 / -1;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.description-field :deep(.el-form-item__label) {
-  margin: 0;
-  flex: none;
-}
-.description-field :deep(.el-form-item__content) {
-  flex: 1;
-  min-width: 0;
 }
 .workflow-designer :deep(.el-select) {
   width: 100%;
@@ -821,6 +819,9 @@ h3 {
 .node.condition {
   --node-color: var(--el-color-warning);
 }
+.node.cc {
+  --node-color: var(--el-color-success);
+}
 .node.start,
 .node.end {
   --node-color: var(--el-text-color-secondary);
@@ -901,6 +902,9 @@ h3 {
 }
 .legend-dot.condition {
   background: var(--el-color-warning);
+}
+.legend-dot.cc {
+  background: var(--el-color-success);
 }
 .inspector {
   min-width: 0;
@@ -1001,10 +1005,6 @@ h3 {
   }
   .description-field {
     grid-column: auto;
-    display: block;
-  }
-  .description-field :deep(.el-form-item__label) {
-    margin-bottom: 7px;
   }
 }
 @media (max-width: 800px) {

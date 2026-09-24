@@ -1,17 +1,21 @@
 <template>
   <div>
-    <el-tabs v-model="tab"
-      ><el-tab-pane name="pending" :label="$t('AwaitingMyApproval')" /><el-tab-pane
-        name="processed"
-        :label="$t('WFProcessedByMe')"
-    /></el-tabs>
     <BaseTicketList
       v-bind="$data"
       :key="tab"
       ref="BaseTicketList"
       :url="url"
       :extra-ticket-action="tab === 'pending' ? extraTicketAction : { hasCreate: false }"
-    />
+    >
+      <template #tableBefore>
+        <div class="ticket-list-filters">
+          <el-tabs v-model="tab" class="ticket-list-tabs">
+            <el-tab-pane name="pending" :label="$t('AwaitingMyApproval')" />
+            <el-tab-pane name="processed" :label="$t('WFProcessedByMe')" />
+          </el-tabs>
+        </div>
+      </template>
+    </BaseTicketList>
     <Dialog
       v-if="isVisible"
       v-model:visible="isVisible"
@@ -112,53 +116,19 @@ export default {
       else this.$message.success(this.$t('UpdateSuccessMsg'))
     },
     getDetailFields(item) {
-      const ticketType = item?.type?.value
-      let detailFields = [
+      return [
         {
           key: this.$t('Applicant'),
           value: item?.applicant?.name
-        }
+        },
+        ...(item.request_items || []).map((field) => ({
+          key: field.label,
+          value: Array.isArray(field.value) ? field.value.join(', ') : (field.value ?? '-')
+        }))
       ]
-      if (ticketType === 'command_confirm') {
-        detailFields = detailFields.concat([
-          {
-            key: this.$t('ApplyFromCMDFilterRule'),
-            value: item?.rel_snapshot?.apply_from_cmd_filter_acl
-          },
-          {
-            key: this.$t('ApplyFromSession'),
-            value: item?.rel_snapshot?.apply_from_session
-          },
-          {
-            key: this.$t('ApplyRunUser'),
-            value: item?.rel_snapshot?.apply_run_user
-          }
-        ])
-      } else if (ticketType === 'apply_asset') {
-        detailFields = detailFields.concat([
-          {
-            key: this.$t('Asset'),
-            value: item?.rel_snapshot?.apply_assets.join(', ')
-          },
-          {
-            key: this.$t('Node'),
-            value: item?.rel_snapshot?.apply_nodes.join(', ')
-          }
-        ])
-      } else if (ticketType === 'login_asset_confirm') {
-        detailFields = detailFields.concat([
-          {
-            key: this.$t('ApplyLoginAsset'),
-            value: item?.rel_snapshot?.apply_login_asset
-          },
-          {
-            key: this.$t('ApplyLoginUser'),
-            value: item?.rel_snapshot?.apply_login_user
-          }
-        ])
-      }
-      return detailFields
     }
   }
 }
 </script>
+
+<style src="./ticket-list-tabs.css" scoped></style>

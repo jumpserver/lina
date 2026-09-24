@@ -19,7 +19,7 @@
         :disabled="disabled"
         :placeholder="$t('WFField')"
       >
-        <el-option v-for="field in fields" :key="field" :value="field" :label="field" />
+        <el-option v-for="field in availableFields" :key="field" :value="field" :label="field" />
       </el-select>
       <span class="condition-caption">{{ $t('WFOperator') }}</span>
       <el-select v-model="modelValue.operator" :disabled="disabled" @change="changeOperator">
@@ -92,6 +92,7 @@
           :model-value="child"
           :disabled="disabled"
           :depth="depth + 1"
+          :extra-fields="extraFields"
           @update:model-value="replaceChild(index, $event)"
         />
         <el-button
@@ -117,6 +118,7 @@ export default {
   props: {
     modelValue: { type: Object, required: true },
     disabled: Boolean,
+    extraFields: { type: Array, default: () => [] },
     depth: { type: Number, default: 0 }
   },
   emits: ['update:modelValue'],
@@ -136,6 +138,9 @@ export default {
     ]
   }),
   computed: {
+    availableFields() {
+      return [...new Set([...this.fields, ...this.extraFields])]
+    },
     kind() {
       return ['and', 'or', 'not'].find((k) => k in this.modelValue) || 'rule'
     },
