@@ -2734,5 +2734,21 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "TicketViewSecret": "View account password",
+  "TicketChangeSecret": "Change account password",
+  "TicketFileTransfer": "File upload / download",
+  "TicketDownloadReplay": "Download session recording",
+  "TicketAuthorizedUsers": "Authorized users",
+  "TicketApprovalOnlyHint": "This request records the approval result. The requested operation is not performed automatically.",
+  "TicketOneItemPerLine": "Enter one item per line.",
+  "TicketSelectType": "Select ticket type",
+  "TicketManualRequests": "Manually created",
+  "TicketSystemTriggered": "Automatically created",
+  "TicketAllRequests": "All tickets",
+  "TicketInProgress": "In progress",
+  "TicketFinished": "Finished",
+  "WFCC": "CC",
+  "WFCCNodeHint": "Notifies recipients when this step is reached",
+  "WFCCAdded": "CC recipients added"
 }

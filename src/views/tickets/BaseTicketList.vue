@@ -3,12 +3,15 @@
     <GenericListPage
       ref="ListPage"
       :get-drawer-title="getDrawerTitle"
-      :create-drawer="createDrawer"
       :detail-drawer="detailDrawer"
       :header-actions="iTicketAction"
       :quick-filters="quickFilters"
       :table-config="ticketTableConfig"
-    />
+    >
+      <template #tableBefore>
+        <slot name="tableBefore" />
+      </template>
+    </GenericListPage>
   </div>
 </template>
 
@@ -42,7 +45,6 @@ export default {
     return {
       loading: true,
       getDrawerTitle: () => ' ',
-      createDrawer: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
       quickFilters: [
         {
           label: this.$t('Type'),
@@ -119,6 +121,9 @@ export default {
           'cc_users',
           'my_tasks',
           'workflow_instance',
+          'request_data',
+          'request_items',
+          'execution_mode',
           'approval_step'
         ],
         columnsShow: {
@@ -220,7 +225,6 @@ export default {
         hasLeftActions: true,
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
-        moreCreates: {},
         createTitle: this.$t('RequestTickets')
       }
     }
@@ -231,6 +235,12 @@ export default {
     }
   },
   mounted() {
+    this.$axios.get('/api/v1/tickets/ticket-types/').then((types) => {
+      this.quickFilters[0].options = types.map((type) => ({
+        label: getTicketTypeLabel({ value: type.type, label: type.label }, this.$t),
+        filter: { type: type.type }
+      }))
+    })
     setTimeout(() => {
       this.loading = false
     }, 500)

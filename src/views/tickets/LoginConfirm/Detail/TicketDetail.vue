@@ -6,11 +6,10 @@ export default {
   props: { object: { type: Object, required: true } },
   computed: {
     specialCardItems() {
-      return [
-        { key: this.$t('IP'), value: this.object.apply_login_ip },
-        { key: this.$t('City'), value: this.object.apply_login_city },
-        { key: this.$t('Date'), value: this.object.apply_login_datetime }
-      ]
+      return (this.object.request_items || []).map((item) => ({
+        key: item.label,
+        value: item.value
+      }))
     }
   }
 }

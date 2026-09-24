@@ -2725,5 +2725,21 @@
   "WFBranchHint": "根據條件選擇後續路徑",
   "WFAdvancedSettings": "逾時與審批操作",
   "WFConditionMode": "條件組合",
-  "WFOperator": "判斷方式"
+  "WFOperator": "判斷方式",
+  "TicketViewSecret": "檢視帳號密碼",
+  "TicketChangeSecret": "帳號改密",
+  "TicketFileTransfer": "檔案上傳下載",
+  "TicketDownloadReplay": "工作階段錄影下載",
+  "TicketAuthorizedUsers": "授權使用者",
+  "TicketApprovalOnlyHint": "此工單記錄審批結果，申請的操作不會自動執行。",
+  "TicketOneItemPerLine": "每行填寫一項。",
+  "TicketSelectType": "選擇工單類型",
+  "TicketManualRequests": "手動建立",
+  "TicketSystemTriggered": "自動建立",
+  "TicketAllRequests": "全部工單",
+  "TicketInProgress": "進行中",
+  "TicketFinished": "已完結",
+  "WFCC": "抄送",
+  "WFCCNodeHint": "到達此步驟時通知抄送人",
+  "WFCCAdded": "添加抄送人"
 }

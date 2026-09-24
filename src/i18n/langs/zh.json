@@ -2728,5 +2728,21 @@
   "WFBranchHint": "根据条件选择后续路径",
   "WFAdvancedSettings": "超时与审批操作",
   "WFConditionMode": "条件组合",
-  "WFOperator": "判断方式"
+  "WFOperator": "判断方式",
+  "TicketViewSecret": "查看账号密码",
+  "TicketChangeSecret": "账号改密",
+  "TicketFileTransfer": "文件上传下载",
+  "TicketDownloadReplay": "会话录屏下载",
+  "TicketAuthorizedUsers": "授权用户",
+  "TicketApprovalOnlyHint": "此工单记录审批结果，申请的操作不会自动执行。",
+  "TicketOneItemPerLine": "每行填写一项。",
+  "TicketSelectType": "选择工单类型",
+  "TicketManualRequests": "手动创建",
+  "TicketSystemTriggered": "自动创建",
+  "TicketAllRequests": "全部工单",
+  "TicketInProgress": "进行中",
+  "TicketFinished": "已完结",
+  "WFCC": "抄送",
+  "WFCCNodeHint": "到达此步骤时通知抄送人",
+  "WFCCAdded": "添加抄送人"
 }
