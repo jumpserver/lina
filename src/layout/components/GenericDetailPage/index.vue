@@ -7,9 +7,11 @@
     @tab-click="handleTabClick"
   >
     <template #headingRightSide>
-      <span v-if="hasRightSide">
-        <ActionsGroup :actions="pageActions" class="header-buttons" />
-      </span>
+      <slot name="headingRightSide">
+        <span v-if="hasRightSide">
+          <ActionsGroup :actions="pageActions" class="header-buttons" />
+        </span>
+      </slot>
     </template>
     <div v-if="!loading">
       <slot />
