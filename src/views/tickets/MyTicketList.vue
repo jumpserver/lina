@@ -10,6 +10,7 @@
           <el-tabs v-model="tab" class="ticket-list-tabs">
             <el-tab-pane name="manual" :label="$t('TicketManualRequests')" />
             <el-tab-pane name="system" :label="$t('TicketSystemTriggered')" />
+            <el-tab-pane name="beneficiary" :label="$t('TicketRequestedForMe')" />
             <el-tab-pane name="all" :label="$t('TicketAllRequests')" />
           </el-tabs>
           <el-radio-group v-if="tab !== 'all'" v-model="status" size="small">
@@ -59,10 +60,11 @@ export default {
   },
   computed: {
     url() {
-      const params = new URLSearchParams({
-        applicant: this.currentUser.id,
-        ...TAB_FILTERS[this.tab]
-      })
+      const filters =
+        this.tab === 'beneficiary'
+          ? { beneficiary: this.currentUser.id }
+          : { applicant: this.currentUser.id, ...TAB_FILTERS[this.tab] }
+      const params = new URLSearchParams(filters)
       if (this.tab !== 'all' && this.status !== 'all') params.set('status', this.status)
       return `/api/v1/tickets/tickets/?${params.toString()}`
     },

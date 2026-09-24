@@ -51,11 +51,13 @@ export function newDefinition() {
   return {
     nodes: [
       { id: 'start', type: 'start', name: '' },
+      { id: 'cc_1', type: 'cc', name: '', config: { users: [] } },
       { id: 'approval_1', type: 'approval', name: '', config: newApproval() },
       { id: 'end', type: 'end', name: '' }
     ],
     edges: [
-      { source: 'start', target: 'approval_1', condition: null },
+      { source: 'start', target: 'cc_1', condition: null },
+      { source: 'cc_1', target: 'approval_1', condition: null },
       { source: 'approval_1', target: 'end', condition: null }
     ]
   }
