@@ -2750,5 +2750,9 @@
   "TicketFinished": "Finished",
   "WFCC": "CC",
   "WFCCNodeHint": "Notifies recipients when this step is reached",
-  "WFCCAdded": "CC recipients added"
+  "WFCCAdded": "CC recipients added",
+  "TicketAuthorizedUser": "Authorized user",
+  "TicketRequestedForMe": "Requested for me",
+  "TicketRelatedToMe": "Related to me",
+  "TicketCopiedToMe": "Copied to me"
 }

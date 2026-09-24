@@ -2744,5 +2744,9 @@
   "TicketFinished": "已完结",
   "WFCC": "抄送",
   "WFCCNodeHint": "到达此步骤时通知抄送人",
-  "WFCCAdded": "添加抄送人"
+  "WFCCAdded": "添加抄送人",
+  "TicketAuthorizedUser": "授权用户",
+  "TicketRequestedForMe": "为我申请",
+  "TicketRelatedToMe": "与我相关",
+  "TicketCopiedToMe": "抄送我的"
 }

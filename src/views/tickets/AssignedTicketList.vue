@@ -12,6 +12,7 @@
           <el-tabs v-model="tab" class="ticket-list-tabs">
             <el-tab-pane name="pending" :label="$t('AwaitingMyApproval')" />
             <el-tab-pane name="processed" :label="$t('WFProcessedByMe')" />
+            <el-tab-pane name="cc" :label="$t('TicketCopiedToMe')" />
           </el-tabs>
         </div>
       </template>
@@ -81,6 +82,9 @@ export default {
   },
   computed: {
     url() {
+      if (this.tab === 'cc') {
+        return `/api/v1/tickets/tickets/?cc_users__id=${this.currentUser.id}`
+      }
       return this.tab === 'pending'
         ? `/api/v1/tickets/tickets/?assignees__id=${this.currentUser.id}&state=pending`
         : `/api/v1/tickets/tickets/?processed_by=${this.currentUser.id}`
