@@ -20,7 +20,7 @@
           :key="'group-' + group.name"
           :group="group"
           :index="i"
-          :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
+          :line="groups.slice(0, i).some((item, index) => !groupHidden(item, index))"
         />
       </template>
     </DataForm>

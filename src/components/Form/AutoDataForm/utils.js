@@ -200,6 +200,7 @@ export class FormFieldGenerator {
   }
 
   setChoicesTips(field, fieldMeta, fieldRemoteMeta) {
+    if (field.tips === false) return
     // 设置 checkbox 的 tips
     if (['checkbox-group', 'radio-group'].indexOf(field.type) !== -1) {
       field.options.map(option => {

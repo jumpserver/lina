@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" />
+    <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" @reset="$emit('reset')" />
   </IBox>
 </template>
 

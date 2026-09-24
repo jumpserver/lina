@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-alert v-if="refreshRequired" :title="$t('UKeyRefreshRequired')" type="warning" :closable="false" />
     <TwoCol>
       <template>
         <!-- 左上：设备驱动状态 -->
@@ -31,7 +32,7 @@
                 <td class="cp-action-btn">
                   <el-button
                     :type="op.btnType || 'primary'"
-                    :disabled="!deviceReady || running || op._disabled"
+                    :disabled="refreshRequired || (!deviceReady && op.requires_device !== false) || running || polling || op._disabled"
                     size="small"
                     @click="handleOperation(op)"
                   >
@@ -83,7 +84,7 @@
           </table>
           <el-empty
             v-else
-            :description="infoWhenPassed ? $t('NoCertificateIssued') : $t('NoCertificateInfo')"
+            :description="infoWhenPassed && !(config.capabilities && config.capabilities.requires_certificate_selection) ? $t('NoCertificateIssued') : $t('NoCertificateInfo')"
             :image-size="80"
             class="cp-cert-empty"
           />
@@ -110,7 +111,11 @@
           :label="f.label"
           :label-width="inputDialog.labelWidth"
         >
+          <el-select v-if="f.type === 'select'" v-model="inputDialog.form[f.key]" :placeholder="f.label">
+            <el-option v-for="item in f.options" :key="item.name" :label="item.label" :value="item.name" />
+          </el-select>
           <el-input
+            v-else
             v-model="inputDialog.form[f.key]"
             :type="f.type === 'password' ? 'password' : 'text'"
             :show-password="f.type === 'password'"
@@ -170,6 +175,10 @@ export default {
     return {
       sdkConfig: null,
       config: {},
+      certificateBinding: { bound: false, binding_version: '', hardware_serial: '' },
+      polling: false,
+      disposed: false,
+      refreshRequired: false,
       configLoaded: false,
       sdkLoaded: false,
 
@@ -290,17 +299,75 @@ export default {
 
   async mounted() {
     this.pollTimer = null // 非响应式，直接挂实例
-    await this.loadConfig()
-    this.loadSDKScript()
+    if (await this.loadConfig()) this.loadSDKScript()
   },
 
   beforeDestroy() {
+    this.disposed = true
     if (this.pollTimer) clearInterval(this.pollTimer)
+    if (this.inputDialog.visible) this.cancelInputDialog()
   },
 
   methods: {
     syncUkeySnapshot() {
+      if (this.disposed) return
+      if (this.config.capabilities?.binding_mode === 'certificate') _ukey.binding = this.certificateBinding
       this.ukeySnapshot = Object.assign({}, _ukey)
+    },
+
+    async selectSigningCertificate() {
+      const instance = _instance
+      if (!instance?.signingContainers?.length) throw new Error(this.$t('NoCertificateInfo'))
+      if (instance.signingContainer) return
+      const input = await this.showInputDialog([{
+        key: 'container', label: this.$t('UKeySigningCertificate'), type: 'select', options: instance.signingContainers
+      }], this.$t('UKeySigningCertificate'))
+      if (this.disposed) return
+      if (_instance !== instance) throw new Error(this.$t('UKeyConfigChanged'))
+      instance.signingContainer = input.container
+    },
+
+    async checkConfigRevision(expected = this.config) {
+      if (this.disposed || this.refreshRequired) return false
+      if (this.config.capabilities?.binding_mode !== 'certificate') return true
+      const latest = await this.$axios.get(CONFIG_API, { params: { revision_only: 1 } })
+      if (this.disposed) return false
+      if (latest.vendor !== this.config.vendor || latest.provider !== this.config.provider) {
+        this.requireRefresh()
+        return false
+      }
+      if (latest.revision === this.config.revision && latest.provider === this.config.provider) {
+        return latest.revision === expected.revision && latest.provider === expected.provider
+      }
+      if (this.pollTimer) clearInterval(this.pollTimer)
+      if (!await this.loadConfig()) {
+        if (this.disposed) return false
+        throw new Error(this.$t('ConfigLoadedFailed'))
+      }
+      if (this.config.vendor !== latest.vendor || this.config.provider !== latest.provider) {
+        this.requireRefresh()
+        return false
+      }
+      await this.initSDKInstance()
+      return false
+    },
+
+    requireRefresh() {
+      if (this.disposed) return
+      if (this.pollTimer) clearInterval(this.pollTimer)
+      this.refreshRequired = true
+      this.sdkLoaded = false
+      _instance = null
+      _ukey = {}
+      this.syncUkeySnapshot()
+    },
+
+    async readBinding(config) {
+      if (config.capabilities?.binding_mode !== 'certificate' || this.mode !== 'admin' || !this.object?.id) {
+        return { bound: false, binding_version: '', hardware_serial: '' }
+      }
+      const url = config.api.certificate_binding_url.replace('{user_id}', encodeURIComponent(this.object.id))
+      return this.$axios.get(url)
     },
 
     syncWhenGateLogs() {
@@ -340,13 +407,26 @@ export default {
     // 1. 配置加载
     // ═══════════════════════════════════════════════════════════════════════════
     async loadConfig() {
+      if (this.disposed) return false
       try {
-        this.sdkConfig = await this.$axios.get(CONFIG_API)
-        this.config = this.sdkConfig.config || {}
+        const sdkConfig = await this.$axios.get(CONFIG_API)
+        if (this.disposed) return false
+        const config = sdkConfig.config || {}
+        const binding = await this.readBinding(config)
+        if (this.disposed) return false
+        this.sdkConfig = sdkConfig
+        this.config = config
+        this.certificateBinding = binding
+        this.syncUkeySnapshot()
         this.configLoaded = true
         this.appendLog(this.$t('ConfigLoadedSuccess'), 'success')
+        return true
       } catch (e) {
+        if (this.disposed) return false
+        this.configLoaded = false
+        this.requireRefresh()
         this.appendLog(`${this.$t('ConfigLoadedFailed')}: ${e.message}`, 'error')
+        return false
       }
     },
 
@@ -354,9 +434,14 @@ export default {
     // 2. 驱动脚本注入
     // ═══════════════════════════════════════════════════════════════════════════
     loadSDKScript() {
-      if (!this.sdkConfig) return
+      if (this.disposed || !this.sdkConfig) return
 
-      if (document.getElementById(SCRIPT_TAG_ID)) {
+      const existingScript = document.getElementById(SCRIPT_TAG_ID)
+      if (existingScript) {
+        if (existingScript.dataset.vendor !== this.config.vendor || existingScript.dataset.provider !== this.config.provider) {
+          this.requireRefresh()
+          return
+        }
         // 脚本已注入（页面复用），直接初始化实例
         this.initSDKInstance()
         return
@@ -371,7 +456,18 @@ export default {
       script.id = SCRIPT_TAG_ID
       script.src = sdkUrl
       script.async = true
-      script.onload = () => this.initSDKInstance()
+      const vendor = this.config.vendor
+      const provider = this.config.provider
+      script.onload = () => {
+        script.dataset.vendor = vendor
+        script.dataset.provider = provider
+        if (this.disposed) return
+        if (vendor !== this.config.vendor || provider !== this.config.provider) {
+          this.requireRefresh()
+          return
+        }
+        this.initSDKInstance()
+      }
       script.onerror = () => {
         this.appendLog(this.$t('SdkScriptLoadFailed'), 'error')
       }
@@ -382,6 +478,9 @@ export default {
     // 3. UKey 实例创建 + setup 步骤执行
     // ═══════════════════════════════════════════════════════════════════════════
     async initSDKInstance() {
+      if (this.disposed || this.refreshRequired) return
+      this.sdkLoaded = false
+      _instance = null
       // 3a. 创建实例
       try {
         const constructorName = this.sdkConfig.sdk?.create?.constructor
@@ -395,6 +494,7 @@ export default {
         this.sdkLoaded = true
         this.appendLog(`${this.$t('DriverInstanceCreated')} (${constructorName})`, 'success')
       } catch (e) {
+        this.requireRefresh()
         this.appendLog(`${this.$t('DriverInstanceCreateFailed')}: ${e.message}`, 'error')
         return
       }
@@ -416,7 +516,9 @@ export default {
 
       // 3c. 读取设备信息和证书信息（无论 setup 是否成功都执行）
       await this.readDeviceInfo()
+      if (this.disposed) return
       await this.readCertInfo()
+      if (this.disposed) return
 
       // 3d. 启动轮询，定时刷新设备状态和证书信息
       const interval = this.config.poll_interval || 5000
@@ -481,21 +583,30 @@ export default {
     // 5. 轮询：定时刷新设备状态与证书信息
     // ═══════════════════════════════════════════════════════════════════════════
     async pollStatus() {
-      if (this.running) return // 操作进行中，跳过本次轮询
+      if (this.disposed || this.refreshRequired || this.running || this.polling) return // 操作进行中，跳过本次轮询
+      this.polling = true
       try {
-        // 重新执行 setup 步骤检测设备是否仍然在线
-        const setupSteps = this.sdkConfig?.sdk?.setup?.steps || []
-        for (const step of setupSteps) {
-          const ctx = this.buildContext({ vars: {}, input: {} })
-          const result = this.callUKeyMethod(step, ctx)
-          if (step.register) this.applyRegister(step.register, result, {})
+        try {
+          if (!await this.checkConfigRevision()) return
+          if (this.disposed || this.running) return
+          // 重新执行 setup 步骤检测设备是否仍然在线
+          const setupSteps = this.sdkConfig?.sdk?.setup?.steps || []
+          for (const step of setupSteps) {
+            const ctx = this.buildContext({ vars: {}, input: {} })
+            const result = this.callUKeyMethod(step, ctx)
+            if (step.register) this.applyRegister(step.register, result, {})
+          }
+        } catch (_) {
+          if (this.disposed) return
+          _ukey = {}
+          this.syncUkeySnapshot()
         }
-      } catch (_) {
-        _ukey = {}
-        this.syncUkeySnapshot()
+        await this.readDeviceInfo()
+        if (this.disposed) return
+        await this.readCertInfo()
+      } finally {
+        this.polling = false
       }
-      await this.readDeviceInfo()
-      await this.readCertInfo()
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -596,28 +707,43 @@ export default {
       }
     },
     async handleOperation(op) {
-      // 操作前全局确认（op.confirm 配置）
-      if (op.confirm) {
-        try {
-          await this.$confirm(
-            op.confirm.message || this.$t('ConfirmExecuteOperation'),
-            op.confirm.title || this.$t('OperationConfirm'),
-            {
-              type: op.confirm.type || 'warning',
-              confirmButtonText: this.$t('Confirm'),
-              cancelButtonText: this.$t('Cancel')
-            }
-          )
-        } catch (_) { return }
-      }
-
+      if (this.disposed || this.refreshRequired || this.running || this.polling) return
+      const operationConfig = { revision: this.config.revision, provider: this.config.provider }
       this.running = true
-      this.currentOperation = op.key
       try {
+        try {
+          if (!await this.checkConfigRevision(operationConfig)) {
+            if (this.disposed) return
+            this.$message.warning(this.$t('UKeyConfigChanged'))
+            return
+          }
+        } catch (_) {
+          if (this.disposed) return
+          this.$message.error(this.$t('ConfigLoadedFailed'))
+          return
+        }
+        // 确认期间也暂停轮询，后续步骤始终使用操作开始时的配置版本。
+        if (op.confirm) {
+          try {
+            await this.$confirm(
+              op.confirm.message || this.$t('ConfirmExecuteOperation'),
+              op.confirm.title || this.$t('OperationConfirm'),
+              {
+                type: op.confirm.type || 'warning',
+                confirmButtonText: this.$t('Confirm'),
+                cancelButtonText: this.$t('Cancel')
+              }
+            )
+          } catch (_) { return }
+        }
+
+        this.currentOperation = op.key
+        if (!await this.checkConfigRevision(operationConfig)) throw new Error(this.$t('UKeyConfigChanged'))
         const operationVars = {} // vars.* 命名空间，仅当前操作可见
         const collectedInput = {} // input.* 命名空间，跨步骤累积
         for (const step of (op.steps || [])) {
-          await this.executeStep(step, operationVars, collectedInput)
+          await this.executeStep(step, operationVars, collectedInput, operationConfig)
+          if (this.disposed) return
         }
         this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Completed')}`, 'success')
         await this.handleEvents(op.event)
@@ -632,7 +758,7 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     // 7. 单步执行器
     // ═══════════════════════════════════════════════════════════════════════════
-    async executeStep(step, operationVars, collectedInput = {}) {
+    async executeStep(step, operationVars, collectedInput = {}, operationConfig = this.config) {
       // 7a. 若步骤声明了 input，先弹对话框收集用户输入
       if (step.input) {
         try {
@@ -642,18 +768,29 @@ export default {
             step.input.title || step.label || this.$t('PleaseInput'),
             inputCtx
           )
+          if (this.disposed) return
           Object.assign(collectedInput, newInput)
         } catch (_) {
           throw new Error(this.$t('OperationCanceled'))
         }
       }
 
+      // 配置变化必须终止整个操作，不能被单步 on_error: skip 忽略。
+      if (step.input || /^(SOF|UKey)_(Create|Delete|Import|Unblock|Gen|Change)/.test(step.call || '')) {
+        if (!await this.checkConfigRevision(operationConfig)) throw new Error(this.$t('UKeyConfigChanged'))
+      }
       const ctx = this.buildContext({ vars: operationVars, input: collectedInput })
       let result
 
       try {
+        if (step.type === 'select_certificate') {
+          await this.selectSigningCertificate()
+          if (this.disposed) return
+          if (!await this.checkConfigRevision(operationConfig)) throw new Error(this.$t('UKeyConfigChanged'))
+        }
         if (step.type === 'api') {
           result = await this.executeApiStep(step, ctx)
+          if (this.disposed) return
         } else {
           result = this.callUKeyMethod(step, ctx)
         }
@@ -948,6 +1085,7 @@ export default {
      * register 格式：ukey.appHandle  /  vars.certData  /  vars.certData.certificate
      */
     applyRegister(register, value, operationVars) {
+      if (register === 'ukey.binding') this.certificateBinding = value
       const dot = register.indexOf('.')
       // 无点号：整体替换命名空间
       if (dot === -1) {
@@ -1025,6 +1163,10 @@ export default {
     confirmInputDialog() {
       // 校验各字段
       for (const f of this.inputDialog.fields) {
+        if (f.type === 'select' && !f.options.some(item => item.name === this.inputDialog.form[f.key])) {
+          this.inputDialog.error = f.label
+          return
+        }
         if (!f.validate) continue
         const val = this.inputDialog.form[f.key]
         if (f.validate.minLength !== undefined) {
@@ -1063,6 +1205,7 @@ export default {
     // 12. 日志
     // ═══════════════════════════════════════════════════════════════════════════
     appendLog(message, level = 'info') {
+      if (this.disposed) return
       const time = new Date().toLocaleTimeString()
       this.logs.push({ time, message, level })
       this.$nextTick(() => {
