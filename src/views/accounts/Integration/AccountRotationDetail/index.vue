@@ -12,7 +12,7 @@
         <ClientAccessPrototype :key="object.id" :object="object" />
       </el-tab-pane>
       <el-tab-pane :label="$t('RotationEventReception')" name="events">
-        <RotationEventTimeline
+        <CredentialEventBrowser
           v-if="activeTab === 'events'"
           :key="eventsKey"
           :credential-id="object.id"
@@ -25,7 +25,7 @@
 
 <script>
 import AccountRotationInfo from './AccountRotationInfo.vue'
-import RotationEventTimeline from './RotationEventTimeline.vue'
+import CredentialEventBrowser from './CredentialEventBrowser.vue'
 import ClientAccessPrototype from '../ApplicationDetail/ClientAccessPrototype.vue'
 
 export default {
@@ -33,7 +33,7 @@ export default {
   components: {
     AccountRotationInfo,
     ClientAccessPrototype,
-    RotationEventTimeline
+    CredentialEventBrowser
   },
   props: {
     object: {

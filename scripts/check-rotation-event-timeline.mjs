@@ -6,7 +6,7 @@ const helperUrl = new URL(
   import.meta.url
 )
 const helperSource = await readFile(helperUrl, 'utf8')
-const { buildEventLanes } = await import(
+const { buildEventLanes, groupClientEvents, receiptStatus } = await import(
   `data:text/javascript;charset=utf-8,${encodeURIComponent(helperSource)}`
 )
 
@@ -67,8 +67,106 @@ assert.ok(detail.includes(':subscription="object.mode === \'subscription\'"'))
 assert.ok(!detail.includes('<ApplicationAudit'))
 assert.ok(detail.includes('this.eventsKey += 1'))
 assert.ok(!basic.includes('RotationEventTimeline'))
-assert.ok(!timeline.includes('rotationId') && !timeline.includes('refreshKey'))
-assert.ok(timeline.includes("watch: { credentialId: { immediate: true, handler: 'load' } }"))
-assert.ok(timeline.includes("'configuration.updated': 'AppAuditConfigurationUpdated'"))
+assert.doesNotMatch(basic, /ApplicationSwitchStatus|switch-overview|instanceTableConfig/)
+assert.match(basic, /<QuickActions/)
+assert.match(basic, /\$t\('RotationProgress'\)/)
+assert.ok(detail.includes('<CredentialEventBrowser'))
+assert.ok(timeline.includes('rotationId'))
+const timelineComponent = new Function(
+  'IBox',
+  timeline
+    .match(/<script>([\s\S]*?)<\/script>/)[1]
+    .replace(/^import .*\n/gm, '')
+    .replace('export default', 'return')
+)({})
+let scrollPosition
+const pageVm = {
+  selection: { clientId: 'sdk', eventId: 'first' },
+  $nextTick: (callback) => callback(),
+  $refs: {
+    timelineScroll: {
+      scrollTo: (position) => {
+        scrollPosition = position
+      }
+    }
+  }
+}
+timelineComponent.watch.page.call(pageVm)
+assert.equal(pageVm.selection, null)
+assert.deepEqual(scrollPosition, { top: 0 })
+const browserSource = await readFile(
+  new URL(`${detailPath}CredentialEventBrowser.vue`, import.meta.url),
+  'utf8'
+)
+let resizeCallback
+let observedDrawer
+let observerDisconnected = false
+const browserComponent = new Function(
+  'IBox',
+  'RotationEventTimeline',
+  'receiptStatus',
+  'ResizeObserver',
+  browserSource
+    .match(/<script>([\s\S]*?)<\/script>/)[1]
+    .replace(/^import[\s\S]*?from ['"][^'"]+['"]\n/gm, '')
+    .replace('export default', 'return')
+)(
+  {},
+  {},
+  receiptStatus,
+  class {
+    constructor(callback) {
+      resizeCallback = callback
+    }
+    observe(drawer) {
+      observedDrawer = drawer
+    }
+    disconnect() {
+      observerDisconnected = true
+    }
+  }
+)
+let drawerWidth = 1400
+const parentDrawer = { getBoundingClientRect: () => ({ width: drawerWidth }) }
+const browserVm = {
+  $el: { closest: () => parentDrawer },
+  clientRequest: 0,
+  historyRequest: 0
+}
+browserComponent.mounted.call(browserVm)
+assert.equal(observedDrawer, parentDrawer)
+assert.equal(browserVm.comparisonWidth, '1400px')
+drawerWidth = 980
+resizeCallback()
+assert.equal(browserVm.comparisonWidth, '980px')
+browserComponent.beforeUnmount.call(browserVm)
+assert.equal(observerDisconnected, true)
+assert.ok(helperSource.includes("'configuration.updated': 'AppAuditConfigurationUpdated'"))
 assert.ok(!timeline.includes('setTimeout') && !timeline.includes('setInterval'))
+const { createCredentialEventFixture, fixtureHistory, fixtureRotation } =
+  await import('./fixtures/credential-events.mjs')
+for (const mode of ['rotation', 'subscription']) {
+  const fixture = createCredentialEventFixture(mode, 300)
+  const page = fixtureHistory(fixture, { limit: 20 })
+  assert.equal(page.count, 300)
+  assert.equal(page.results.length, 20)
+  assert.equal(fixtureHistory(fixture, { client_type: 'agent' }).count, 150)
+  assert.equal(fixtureHistory(fixture, { state: 'offline' }).count, 60)
+  assert.equal(fixtureHistory(fixture, { client_search: 'nothing-matches' }).count, 0)
+  const client = fixture.clients[0]
+  const history = fixtureHistory(fixture, { client_id: client.id, limit: 30 })
+  assert.equal(history.count, 180)
+  assert.equal(history.results.length, 30)
+  assert.ok(history.results[0].published_at > history.results[29].published_at)
+  assert.ok(groupClientEvents(history.results).length > 1)
+  const offline = fixtureHistory(fixture, { client_id: fixture.clients[7].id })
+  assert.notEqual(offline.latest_event.id, offline.latest_received_event.id)
+  assert.equal(receiptStatus(offline.latest_event), 'unacknowledged')
+  if (mode === 'rotation') {
+    const round = fixtureRotation(fixture, history.latest_event.rotation_id)
+    assert.equal(round.events.length, 6)
+    assert.equal(buildEventLanes(round).lanes.length, 300)
+  }
+}
+assert.equal(createCredentialEventFixture('subscription', 500).clients.length, 500)
 console.log('Rotation event timeline checks passed')

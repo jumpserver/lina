@@ -700,8 +700,7 @@ const actionVm = {
   actionLoading: false,
   openEdit: (row) => ['edit', row],
   remove: (row) => ['delete', row],
-  toggleInstance: (row) => ['toggle', row],
-  disableClient: (row) => ['disable', row]
+  toggleInstance: (row) => ['toggle', row]
 }
 const actionConfigs = [credentialPage, clientAccessPage, credentialInfo].flatMap((page) =>
   [
@@ -710,8 +709,8 @@ const actionConfigs = [credentialPage, clientAccessPage, credentialInfo].flatMap
     )
   ].map((match) => new Function(`return (${match[1]})`).call(actionVm))
 )
-assert.equal(actionConfigs.length, 4)
-const [credentialActions, configurationActions, instanceActions, blockerActions] = actionConfigs
+assert.equal(actionConfigs.length, 3)
+const [credentialActions, configurationActions, instanceActions] = actionConfigs
 const idleRow = { id: 'credential', status: 'idle' }
 for (const actions of [credentialActions, configurationActions]) {
   assert.equal(actions.hasClone, false)
@@ -723,24 +722,18 @@ for (const actions of [credentialActions, configurationActions]) {
 assert.equal(credentialActions.canUpdate({ row: { status: 'waiting_backup' } }), false)
 assert.equal(credentialActions.canDelete({ row: { status: 'changing_secret' } }), false)
 const toggle = instanceActions.extraActions[0]
-const disable = blockerActions.extraActions[0]
 for (const is_active of [true, false]) {
   const row = { id: 'instance', is_active }
   assert.equal(toggle.title({ row }), is_active ? 'Disable' : 'Enable')
   assert.equal(toggle.icon({ row }), is_active ? 'fa-solid fa-ban' : 'fa-circle-check')
   assert.deepEqual(toggle.callback({ row }), ['toggle', row])
 }
-assert.deepEqual(disable.callback({ row: idleRow }), ['disable', idleRow])
-assert.equal(disable.can(), true)
-actionVm.actionLoading = true
-assert.equal(disable.can(), false)
 actionVm.$hasPerm = () => false
 for (const actions of [credentialActions, configurationActions]) {
   assert.equal(actions.canUpdate({ row: idleRow }), false)
   assert.equal(actions.canDelete({ row: idleRow }), false)
 }
 assert.equal(toggle.can(), false)
-assert.equal(disable.can(), false)
 
 const credentialForm = await readFile(
   new URL('../src/views/accounts/Integration/AccountRotationCreateUpdate.vue', import.meta.url),

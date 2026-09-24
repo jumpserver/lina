@@ -41,8 +41,11 @@ export async function getApplicationCredential(id) {
 export const getCredentialRotationStatus = (id) =>
   request.get(`${credentialUrl}${id}/rotation-status/`)
 
-export const getCredentialRotationEvents = (id) =>
-  request.get(`${credentialUrl}${id}/rotation-events/`, { disableFlashErrorMsg: true })
+export const getCredentialRotationEvents = (id, params = {}) =>
+  request.get(`${credentialUrl}${id}/rotation-events/`, { params, disableFlashErrorMsg: true })
+
+export const getCredentialEventHistory = (id, params = {}) =>
+  request.get(`${credentialUrl}${id}/event-history/`, { params, disableFlashErrorMsg: true })
 
 export async function saveApplicationCredential(form) {
   const data = {

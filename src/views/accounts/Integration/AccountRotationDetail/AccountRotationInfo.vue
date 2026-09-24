@@ -10,125 +10,6 @@
       class="detail-block"
     />
     <DetailCard :items="detailItems" :title="$t('BasicInfo')" class="detail-block" />
-    <IBox
-      v-if="object.mode === 'alternating_rotation'"
-      v-loading="rotationStatusLoading && !rotationStatus"
-      :title="$t('ApplicationSwitchStatus')"
-      class="detail-block switch-status"
-    >
-      <template v-if="rotationStatus">
-        <div class="switch-overview" aria-live="polite">
-          <div class="account-route">
-            <div class="account-route__node">
-              <span>{{ $t('SwitchSourceAccount') }}</span>
-              <strong>{{ accountName(rotationStatus.switch_source_account) }}</strong>
-            </div>
-            <div class="account-route__arrow" aria-hidden="true">
-              <Icon icon="fa-solid fa-arrow-right" />
-            </div>
-            <div class="account-route__node account-route__node--target">
-              <span>{{ $t('TargetAccount') }}</span>
-              <strong>{{ accountName(rotationStatus.desired_account) }}</strong>
-            </div>
-          </div>
-
-          <div class="switch-readiness">
-            <span>{{ $t('ClientSwitchProgress') }}</span>
-            <div class="switch-readiness__value">
-              <strong>{{ rotationStatus.summary.switched }}/{{ activeParticipantTotal }}</strong>
-              <el-tag :type="rotationStatus.summary.blocking ? 'warning' : 'success'">
-                {{
-                  rotationStatus.summary.blocking
-                    ? $t('BlockingClientCount', { count: rotationStatus.summary.blocking })
-                    : $t('AllClientsReady')
-                }}
-              </el-tag>
-            </div>
-          </div>
-        </div>
-
-        <div class="switch-summary">
-          <div
-            v-for="item in switchSummary"
-            :key="item.key"
-            :class="`switch-summary__item switch-summary__item--${item.key}`"
-          >
-            <span class="switch-summary__dot" />
-            <span class="switch-summary__label">{{ item.label }}</span>
-            <strong>{{ item.value }}</strong>
-          </div>
-        </div>
-      </template>
-
-      <el-alert
-        v-for="warning in rotationStatus?.warnings || []"
-        :key="warning.configuration.id"
-        :title="
-          $t('NoActiveInstanceWarning', {
-            application: warning.application.name,
-            configuration: warning.configuration.name
-          })
-        "
-        type="warning"
-        :closable="false"
-        show-icon
-        class="switch-warning"
-      />
-
-      <template v-if="rotationStatus?.rotation_id">
-        <section class="switch-section">
-          <h4 class="switch-section-title">{{ $t('ApplicationSummary') }}</h4>
-          <div class="application-switch-list">
-            <div
-              v-for="application in rotationStatus.applications"
-              :key="application.application.id"
-              class="application-switch-row"
-            >
-              <div class="application-switch-row__name">
-                <strong>{{ application.application.name }}</strong>
-                <span>{{ applicationStatusLabel(application.status) }}</span>
-              </div>
-              <div class="application-switch-row__progress">
-                <el-progress
-                  :percentage="applicationProgress(application)"
-                  :show-text="false"
-                  :stroke-width="6"
-                  :status="application.status === 'all_switched' ? 'success' : undefined"
-                />
-                <span>{{ application.switched }}/{{ application.total }}</span>
-              </div>
-              <el-tag effect="plain" :type="applicationStatusType(application.status)">
-                {{ applicationStatusLabel(application.status) }}
-              </el-tag>
-              <span
-                :class="[
-                  'application-switch-row__blockers',
-                  { 'is-blocking': application.blocking }
-                ]"
-              >
-                {{ $t('BlockingClientCount', { count: application.blocking }) }}
-              </span>
-            </div>
-          </div>
-        </section>
-
-        <section class="switch-section switch-section--instances">
-          <div class="switch-instance-heading">
-            <div>
-              <h4 class="switch-section-title">{{ $t('ClientInstances') }}</h4>
-              <span v-if="isAutoRefreshing" class="auto-refresh-state">
-                <span class="auto-refresh-state__dot" />
-                {{ $t('AutoRefreshing') }}
-              </span>
-            </div>
-            <el-switch v-model="onlyBlockers" :active-text="$t('OnlyBlockers')" />
-          </div>
-          <DataTable :config="instanceTableConfig" />
-        </section>
-      </template>
-      <el-empty v-else :description="$t('NoRotationRecords')" />
-    </IBox>
-
     <template #right>
       <QuickActions :actions="quickActions" :title="$t('CurrentAction')" class="detail-block" />
 
@@ -152,11 +33,8 @@
 
 <script lang="jsx">
 import { IBox, QuickActions } from '@/components'
-import Icon from '@/components/Widgets/Icon/index.vue'
-import { ActionsFormatter } from '@/components/Table/TableFormatters'
 import DetailCard from '@/components/Cards/DetailCard/index.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import DataTable from '@/components/Table/DataTable/index.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { credentialStatusLabel } from '../components/credentialStatus.js'
 import { openTaskPage } from '@/utils/jms'
@@ -166,15 +44,14 @@ import {
   getApplicationCredential,
   executeCredentialChange,
   getCredentialRotationStatus,
-  retryCredentialChange,
-  setClientInstanceActive
+  retryCredentialChange
 } from '@/api/applicationCredential'
 
 const accountName = (account) => account?.username || account?.name || '-'
 
 export default {
   name: 'ApplicationCredentialInfo',
-  components: { DataTable, DetailCard, IBox, Icon, QuickActions, TwoCol },
+  components: { DetailCard, IBox, QuickActions, TwoCol },
   props: {
     object: {
       type: Object,
@@ -186,10 +63,8 @@ export default {
     return {
       actionLoading: false,
       disposed: false,
-      onlyBlockers: false,
       precheckTimer: null,
       rotationStatus: null,
-      rotationStatusLoading: false,
       rotationStatusTimer: null
     }
   },
@@ -220,13 +95,6 @@ export default {
     clearTimeout(this.rotationStatusTimer)
   },
   computed: {
-    activeParticipantTotal() {
-      const summary = this.rotationStatus?.summary || {}
-      return Math.max((summary.total || 0) - (summary.excluded || 0), 0)
-    },
-    isAutoRefreshing() {
-      return ['waiting_switch', 'ready_for_change', 'waiting_revert'].includes(this.object.status)
-    },
     precheckMessage() {
       const precheck = this.object.precheck
       if (precheck?.status === 'checking') return this.$t('PamPrecheckRunning')
@@ -251,117 +119,6 @@ export default {
         waiting_revert: 3
       }
       return steps[this.object.status] || 0
-    },
-    switchSummary() {
-      const summary = this.rotationStatus?.summary || {}
-      return [
-        {
-          key: 'source',
-          label: this.$t('UsingAccount', {
-            account: accountName(this.rotationStatus?.switch_source_account)
-          }),
-          value: summary.using_source || 0
-        },
-        {
-          key: 'target',
-          label: this.$t('SwitchedToAccount', {
-            account: accountName(this.rotationStatus?.desired_account)
-          }),
-          value: summary.switched || 0
-        },
-        {
-          key: 'waiting',
-          label: this.$t('AwaitingConfirmation'),
-          value: (summary.awaiting_confirmation || 0) + (summary.stale_confirmation || 0)
-        },
-        { key: 'offline', label: this.$t('Offline'), value: summary.offline || 0 },
-        { key: 'unknown', label: this.$t('StatusUnknown'), value: summary.unknown || 0 }
-      ]
-    },
-    visibleInstances() {
-      const instances = this.rotationStatus?.instances || []
-      return this.onlyBlockers ? instances.filter((item) => item.blocking) : instances
-    },
-    instanceTableConfig() {
-      return {
-        url: '',
-        totalData: this.visibleInstances,
-        hasPagination: false,
-        hasSelection: false,
-        columns: [
-          {
-            prop: 'client.instance_id',
-            label: this.$t('InstanceID'),
-            minWidth: 210,
-            formatter: (row) => (
-              <div class="instance-identity">
-                <strong>{row.client.instance_id}</strong>
-                <span>
-                  {row.application.name} · {row.configuration.name}
-                </span>
-              </div>
-            )
-          },
-          {
-            prop: 'applied_account',
-            label: this.$t('AccountUsage'),
-            minWidth: 170,
-            formatter: (row) => (
-              <div class="account-usage">
-                <strong>{accountName(row.applied_account)}</strong>
-                <span>
-                  {this.$t('TargetAccount')}: {accountName(row.desired_account)}
-                </span>
-              </div>
-            )
-          },
-          {
-            prop: 'revision',
-            label: this.$t('Version'),
-            width: 100,
-            formatter: (row) => `${row.applied_revision || 0}/${row.required_revision || 0}`
-          },
-          {
-            prop: 'status',
-            label: this.$t('Status'),
-            width: 130,
-            formatter: (row) => (
-              <el-tag effect="plain" type={this.instanceStatusType(row.status)}>
-                {this.instanceStatusLabel(row.status)}
-              </el-tag>
-            )
-          },
-          {
-            prop: 'date_applied',
-            label: this.$t('LastConfirmedAt'),
-            width: 165,
-            formatter: (row) => this.formatDate(row.date_applied)
-          },
-          {
-            prop: 'actions',
-            label: this.$t('Actions'),
-            width: 76,
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              hasUpdate: false,
-              hasDelete: false,
-              hasClone: false,
-              extraActions: [
-                {
-                  name: 'disable',
-                  title: this.$t('Disable'),
-                  type: 'danger',
-                  can: () =>
-                    this.$hasPerm('accounts.change_credentialclientinstance') &&
-                    !this.actionLoading,
-                  has: ({ row }) => row.status !== 'excluded',
-                  callback: ({ row }) => this.disableClient(row)
-                }
-              ]
-            }
-          }
-        ]
-      }
     },
     modeLabel() {
       return this.$t(
@@ -598,64 +355,15 @@ export default {
     }
   },
   methods: {
-    accountName,
-    applicationProgress(application) {
-      if (!application.total) return 0
-      return Math.round((application.switched / application.total) * 100)
-    },
-    applicationStatusLabel(status) {
-      return this.$t(
-        {
-          all_switched: 'FullySwitched',
-          partially_switched: 'PartiallySwitched',
-          not_switched: 'NotSwitched',
-          no_instance: 'NoActiveInstances'
-        }[status] || 'StatusUnknown'
-      )
-    },
-    applicationStatusType(status) {
-      return {
-        all_switched: 'success',
-        partially_switched: 'warning',
-        not_switched: 'warning',
-        no_instance: 'info'
-      }[status]
-    },
-    instanceStatusLabel(status) {
-      return this.$t(
-        {
-          switched: 'Switched',
-          using_source: 'UsingSourceAccount',
-          awaiting_confirmation: 'AwaitingConfirmation',
-          stale_confirmation: 'StaleConfirmation',
-          offline: 'Offline',
-          unknown: 'StatusUnknown',
-          excluded: 'Excluded'
-        }[status] || 'StatusUnknown'
-      )
-    },
-    instanceStatusType(status) {
-      return {
-        switched: 'success',
-        excluded: 'info',
-        using_source: 'warning',
-        awaiting_confirmation: 'warning',
-        stale_confirmation: 'warning',
-        offline: 'danger',
-        unknown: 'danger'
-      }[status]
-    },
     async loadRotationStatus() {
       clearTimeout(this.rotationStatusTimer)
       if (this.object.mode !== 'alternating_rotation' || !this.object.id) {
         this.rotationStatus = null
         return
       }
-      this.rotationStatusLoading = true
       try {
         this.rotationStatus = await getCredentialRotationStatus(this.object.id)
       } finally {
-        this.rotationStatusLoading = false
         this.scheduleRotationStatusRefresh()
       }
     },
@@ -809,18 +517,6 @@ export default {
         this.loadRotationStatus()
       ])
       this.$emit('updated', credential)
-    },
-    async disableClient(row) {
-      const { value } = await this.$prompt(
-        this.$t('ExcludeRotatingClientReasonHelp'),
-        this.$t('Disable'),
-        {
-          inputValidator: (value) => !!value?.trim(),
-          inputErrorMessage: this.$t('ExclusionReasonRequired')
-        }
-      )
-      await setClientInstanceActive(row.client.id, false, value.trim())
-      await this.refresh()
     }
   }
 }
@@ -829,279 +525,6 @@ export default {
 <style lang="scss" scoped>
 .detail-block {
   margin-bottom: 15px;
-}
-
-.switch-overview {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 18px 20px;
-  background: var(--el-fill-color-lighter);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-}
-
-.account-route {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  gap: 14px;
-}
-
-.account-route__node {
-  display: grid;
-  min-width: 140px;
-  gap: 4px;
-
-  span {
-    color: var(--color-help-text);
-    font-size: 12px;
-  }
-
-  strong {
-    overflow: hidden;
-    color: var(--color-text-primary);
-    font-size: 16px;
-    font-weight: 600;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-.account-route__node--target strong {
-  color: var(--color-primary);
-}
-
-.account-route__arrow {
-  color: var(--color-help-text);
-}
-
-.switch-readiness {
-  flex: none;
-  min-width: 220px;
-  padding-left: 24px;
-  border-left: 1px solid var(--color-border);
-  color: var(--color-help-text);
-  font-size: 12px;
-}
-
-.switch-readiness__value {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 6px;
-
-  strong {
-    color: var(--color-text-primary);
-    font-size: 22px;
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
-  }
-}
-
-.switch-summary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 24px;
-  padding: 14px 4px;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.switch-summary__item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--color-help-text);
-  font-size: 13px;
-
-  strong {
-    color: var(--color-text-primary);
-    font-size: 14px;
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-.switch-summary__dot {
-  width: 7px;
-  height: 7px;
-  background: var(--color-info);
-  border-radius: 50%;
-}
-
-.switch-summary__item--source .switch-summary__dot,
-.switch-summary__item--waiting .switch-summary__dot {
-  background: var(--color-warning);
-}
-
-.switch-summary__item--target .switch-summary__dot {
-  background: var(--color-primary);
-}
-
-.switch-summary__item--offline .switch-summary__dot {
-  background: var(--color-danger);
-}
-
-.switch-summary__item--unknown .switch-summary__dot {
-  background: var(--color-help-text);
-}
-
-.switch-warning {
-  margin-top: 14px;
-}
-
-.switch-section {
-  margin-top: 20px;
-}
-
-.switch-section-title {
-  margin: 0 0 10px;
-  color: var(--color-text-primary);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.application-switch-list {
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-}
-
-.application-switch-row {
-  display: grid;
-  grid-template-columns: minmax(160px, 1.4fr) minmax(160px, 1fr) auto minmax(90px, auto);
-  align-items: center;
-  gap: 20px;
-  padding: 14px 16px;
-}
-
-.application-switch-row + .application-switch-row {
-  border-top: 1px solid var(--color-border);
-}
-
-.application-switch-row__name {
-  display: grid;
-  min-width: 0;
-  gap: 3px;
-
-  strong {
-    overflow: hidden;
-    color: var(--color-text-primary);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  span {
-    color: var(--color-help-text);
-    font-size: 12px;
-  }
-}
-
-.application-switch-row__progress {
-  display: grid;
-  grid-template-columns: minmax(100px, 1fr) auto;
-  align-items: center;
-  gap: 10px;
-  color: var(--color-help-text);
-  font-variant-numeric: tabular-nums;
-}
-
-.application-switch-row__blockers {
-  color: var(--color-help-text);
-  text-align: right;
-  white-space: nowrap;
-
-  &.is-blocking {
-    color: var(--color-warning);
-    font-weight: 600;
-  }
-}
-
-.switch-instance-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-
-  > div {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-}
-
-.auto-refresh-state {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--color-help-text);
-  font-size: 12px;
-}
-
-.auto-refresh-state__dot {
-  width: 6px;
-  height: 6px;
-  background: var(--color-primary);
-  border-radius: 50%;
-  animation: switch-status-pulse 2s ease-in-out infinite;
-}
-
-:deep(.instance-identity),
-:deep(.account-usage) {
-  display: grid;
-  min-width: 0;
-  gap: 3px;
-
-  strong {
-    overflow: hidden;
-    color: var(--color-text-primary);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  span {
-    overflow: hidden;
-    color: var(--color-help-text);
-    font-size: 12px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-@keyframes switch-status-pulse {
-  50% {
-    opacity: 0.35;
-  }
-}
-
-@media (max-width: 1200px) {
-  .switch-overview {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .switch-readiness {
-    min-width: 0;
-    padding-top: 14px;
-    padding-left: 0;
-    border-top: 1px solid var(--color-border);
-    border-left: 0;
-  }
-
-  .application-switch-row {
-    grid-template-columns: minmax(150px, 1fr) minmax(140px, 1fr) auto;
-  }
-
-  .application-switch-row__blockers {
-    grid-column: 1 / -1;
-    text-align: left;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .auto-refresh-state__dot {
-    animation: none;
-  }
 }
 
 .rotation-steps :deep(.el-step__main) {

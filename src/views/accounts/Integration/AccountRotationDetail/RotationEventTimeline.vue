@@ -19,7 +19,7 @@
     <template v-else>
       <div class="timeline-heading">
         <span>{{
-          $t('RotationEventOverview', { instances: lanes.length, events: events.length })
+          $t('RotationEventOverview', { instances: timeline.lanes.length, events: events.length })
         }}</span>
         <div class="timeline-legend">
           <span
@@ -32,6 +32,7 @@
         {{ $t(subscription ? 'CredentialEventNoInstances' : 'RotationEventNoInstances') }}
       </p>
       <div
+        ref="timelineScroll"
         class="timeline-scroll"
         role="region"
         :aria-label="$t(subscription ? 'CredentialEventReception' : 'RotationEventTimeline')"
@@ -87,6 +88,16 @@
           </div>
         </div>
       </div>
+      <el-pagination
+        v-if="timeline.lanes.length > 20"
+        v-model:current-page="page"
+        class="timeline-pagination"
+        size="small"
+        layout="prev, pager, next"
+        :pager-count="5"
+        :page-size="20"
+        :total="timeline.lanes.length"
+      />
       <div v-if="selected" class="receipt-detail" aria-live="polite">
         <strong>{{ selected.client.instance_id }} · {{ eventName(selected.node.event) }}</strong>
         <div class="receipt-detail__meta">
@@ -113,37 +124,25 @@
 import IBox from '@/components/Common/IBox/index.vue'
 import { getCredentialRotationEvents } from '@/api/applicationCredential'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
-import { buildEventLanes } from './rotationEventTimeline'
-
-const eventLabels = {
-  'credential.updated': 'AppAuditCredentialPublished',
-  'credential.revoked': 'AppAuditAuthorizationRevoked',
-  'configuration.updated': 'AppAuditConfigurationUpdated',
-  'rotation.started': 'AppAuditRotationStarted',
-  'rotation.waiting_for_application': 'RotationEventWaitingForSwitch',
-  'rotation.completed': 'AppAuditRotationCompleted',
-  'rotation.failed': 'RotationEventFailed',
-  'credential.change.started': 'AppAuditSecretChangeStarted',
-  'credential.change.completed': 'AppAuditSecretChangeCompleted',
-  'credential.change.failed': 'AppAuditSecretChangeFailed'
-}
-const statusLabels = {
-  received: 'RotationEventReceived',
-  unacknowledged: 'RotationEventUnacknowledged',
-  failed: 'RotationEventPublishFailed',
-  publishing: 'RotationEventPublishing',
-  not_targeted: 'RotationEventNotTargeted'
-}
+import { buildEventLanes, eventLabels, statusLabels } from './rotationEventTimeline'
 
 export default {
   name: 'RotationEventTimeline',
   components: { IBox },
   props: {
     credentialId: { type: String, default: '' },
+    rotationId: { type: String, default: '' },
     subscription: { type: Boolean, default: false }
   },
   data() {
-    return { result: null, loading: false, failed: false, requestNumber: 0, selection: null }
+    return {
+      result: null,
+      loading: false,
+      failed: false,
+      requestNumber: 0,
+      selection: null,
+      page: 1
+    }
   },
   computed: {
     timeline() {
@@ -153,7 +152,7 @@ export default {
       return this.timeline.events
     },
     lanes() {
-      return this.timeline.lanes
+      return this.timeline.lanes.slice((this.page - 1) * 20, this.page * 20)
     },
     selected() {
       const client = this.lanes.find((client) => client.id === this.selection?.clientId)
@@ -161,7 +160,14 @@ export default {
       return node ? { client, node } : null
     }
   },
-  watch: { credentialId: { immediate: true, handler: 'load' } },
+  watch: {
+    credentialId: { immediate: true, handler: 'load' },
+    rotationId: 'load',
+    page() {
+      this.selection = null
+      this.$nextTick(() => this.$refs.timelineScroll?.scrollTo({ top: 0 }))
+    }
+  },
   beforeUnmount() {
     this.requestNumber += 1
   },
@@ -169,12 +175,16 @@ export default {
     async load() {
       const requestNumber = ++this.requestNumber
       this.result = null
+      this.page = 1
       this.failed = false
       this.loading = false
       if (!this.credentialId) return
       this.loading = true
       try {
-        const result = await getCredentialRotationEvents(this.credentialId)
+        const result = await getCredentialRotationEvents(
+          this.credentialId,
+          this.rotationId ? { rotation_id: this.rotationId } : {}
+        )
         if (requestNumber !== this.requestNumber) return
         this.result = result
         if (!this.selected) {
@@ -211,6 +221,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.event-timeline {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.event-timeline :deep(.el-card__header) {
+  flex-shrink: 0;
+}
+.event-timeline :deep(.el-card__body) {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.event-timeline :deep(.el-card__body > :not(.timeline-scroll)) {
+  flex-shrink: 0;
+}
+.timeline-pagination {
+  justify-content: flex-end;
+  padding-top: 12px;
+}
 .timeline-heading,
 .timeline-legend,
 .timeline-legend > span {
@@ -248,7 +279,9 @@ export default {
   margin: 16px 0 0;
 }
 .timeline-scroll {
-  overflow-x: auto;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
   padding: 4px 0;
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
