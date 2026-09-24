@@ -110,7 +110,8 @@ export default {
     isUpdate: {
       type: Function,
       default: (vm) => {
-        return vm.$context.get('id')
+        const action = vm.$context.get('action')
+        return (!action || action === 'update') && vm.$context.get('id')
       }
     }
   },
