@@ -46,11 +46,21 @@ export function buildEventLanes(data) {
       const status = receiptStatus(receipt)
       return { event, receipt, status }
     })
+    const receivedCount = nodes.filter((node) => node.status === 'received').length
+    const targetCount = nodes.filter((node) => node.receipt).length
+    const receiptState = !targetCount
+      ? 'not_targeted'
+      : nodes.some((node) => node.status === 'failed')
+        ? 'failed'
+        : receivedCount < targetCount
+          ? 'pending'
+          : 'received'
     return {
       ...client,
       nodes,
-      receivedCount: nodes.filter((node) => node.status === 'received').length,
-      targetCount: nodes.filter((node) => node.receipt).length
+      receivedCount,
+      targetCount,
+      receiptState
     }
   })
   return { events, lanes }

@@ -3,6 +3,14 @@
     <el-tabs v-model="activeTab" @tab-click="refreshEvents">
       <el-tab-pane :label="$t('Basic')" name="basic">
         <AccountRotationInfo :object="object" @edit="$emit('edit', object)" @updated="updated" />
+        <RotationEventTimeline
+          v-if="object.mode === 'alternating_rotation'"
+          ref="rotationEvents"
+          :key="object.id"
+          :credential-id="object.id"
+          overview
+          @view-history="viewClientHistory"
+        />
       </el-tab-pane>
       <el-tab-pane
         v-if="$hasPerm('accounts.view_clientaccessconfiguration')"
@@ -17,6 +25,7 @@
           :key="eventsKey"
           :credential-id="object.id"
           :subscription="object.mode === 'subscription'"
+          :initial-client="historyClient"
         />
       </el-tab-pane>
     </el-tabs>
@@ -26,6 +35,7 @@
 <script>
 import AccountRotationInfo from './AccountRotationInfo.vue'
 import CredentialEventBrowser from './CredentialEventBrowser.vue'
+import RotationEventTimeline from './RotationEventTimeline.vue'
 import ClientAccessPrototype from '../ApplicationDetail/ClientAccessPrototype.vue'
 
 export default {
@@ -33,7 +43,8 @@ export default {
   components: {
     AccountRotationInfo,
     ClientAccessPrototype,
-    CredentialEventBrowser
+    CredentialEventBrowser,
+    RotationEventTimeline
   },
   props: {
     object: {
@@ -45,16 +56,25 @@ export default {
   data() {
     return {
       activeTab: 'basic',
-      eventsKey: 0
+      eventsKey: 0,
+      historyClient: null
     }
   },
   methods: {
     refreshEvents(tab) {
+      if (tab.paneName === 'basic') this.$refs.rotationEvents?.load()
       if (tab.paneName !== 'events') return
+      this.historyClient = null
       this.eventsKey += 1
+    },
+    viewClientHistory(client) {
+      this.historyClient = client
+      this.eventsKey += 1
+      this.activeTab = 'events'
     },
     updated(value) {
       this.$emit('updated', value)
+      this.$refs.rotationEvents?.load()
     }
   }
 }

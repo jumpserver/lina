@@ -42,11 +42,13 @@ assert.deepEqual(
 )
 assert.equal(lanes[0].receivedCount, 2)
 assert.equal(lanes[0].targetCount, 3)
+assert.equal(lanes[0].receiptState, 'pending')
 assert.deepEqual(
   lanes[1].nodes.map((node) => node.status),
   ['not_targeted', 'not_targeted', 'failed']
 )
 assert.equal(lanes[1].targetCount, 1)
+assert.equal(lanes[1].receiptState, 'failed')
 assert.equal(data.events[0].id, 'third')
 assert.deepEqual(buildEventLanes(null), { events: [], lanes: [] })
 const detailPath = '../src/views/accounts/Integration/AccountRotationDetail/'
@@ -66,6 +68,15 @@ assert.ok(detail.includes(':key="eventsKey"'))
 assert.ok(detail.includes(':subscription="object.mode === \'subscription\'"'))
 assert.ok(!detail.includes('<ApplicationAudit'))
 assert.ok(detail.includes('this.eventsKey += 1'))
+assert.match(
+  detail,
+  /<RotationEventTimeline[\s\S]*?overview[\s\S]*?@view-history="viewClientHistory"/
+)
+assert.ok(detail.indexOf('<AccountRotationInfo') < detail.indexOf('<RotationEventTimeline'))
+assert.match(basic, /<TwoCol :gutter="20" :left="16" :right="8">/)
+assert.doesNotMatch(basic, /credential-facts|credential-actions|credential-summary|@container/)
+assert.match(basic, /direction="horizontal"/)
+assert.match(detail, /paneName === 'basic'.*rotationEvents\?\.load\(\)/)
 assert.ok(!basic.includes('RotationEventTimeline'))
 assert.doesNotMatch(basic, /ApplicationSwitchStatus|switch-overview|instanceTableConfig/)
 assert.match(basic, /<QuickActions/)
@@ -74,11 +85,110 @@ assert.ok(detail.includes('<CredentialEventBrowser'))
 assert.ok(timeline.includes('rotationId'))
 const timelineComponent = new Function(
   'IBox',
+  'buildEventLanes',
+  'getCredentialRotationEvents',
   timeline
     .match(/<script>([\s\S]*?)<\/script>/)[1]
     .replace(/^import .*\n/gm, '')
     .replace('export default', 'return')
-)({})
+)({}, buildEventLanes, (...args) => fetchEvents(...args))
+let fetchEvents
+function timelineVm(overrides = {}) {
+  const vm = {
+    ...timelineComponent.data(),
+    overview: true,
+    credentialId: 'policy',
+    $t: (key) => key,
+    $nextTick: (callback) => callback(),
+    $refs: {},
+    ...overrides
+  }
+  for (const [key, method] of Object.entries(timelineComponent.methods)) vm[key] = method.bind(vm)
+  for (const [key, getter] of Object.entries(timelineComponent.computed)) {
+    Object.defineProperty(vm, key, { get: getter.bind(vm) })
+  }
+  return vm
+}
+const receiptData = {
+  rotation_id: 'round-1',
+  status: 'running',
+  events: data.events,
+  instances: [
+    {
+      id: 'complete',
+      receipts: ['first', 'second', 'third'].map((event_id) => ({ event_id, received_at: 'now' }))
+    },
+    { id: 'not-targeted', receipts: [] },
+    ...data.instances,
+    { id: 'publishing', receipts: [{ event_id: 'first', publish_result: 'pending' }] }
+  ].map((client) => ({
+    ...client,
+    instance_id: client.id,
+    type: client.id === 'late-agent' ? 'agent' : 'sdk',
+    application: { name: 'Order' },
+    configuration: { name: 'East' }
+  }))
+}
+const overview = timelineVm({ result: receiptData })
+assert.equal(overview.title, 'CurrentRotationReceipts')
+assert.deepEqual(
+  overview.receiptFilters.map(({ count }) => count),
+  [5, 1, 2, 1, 1]
+)
+assert.deepEqual(
+  overview.lanes.map(({ id }) => id),
+  ['late-agent', 'sdk', 'publishing', 'complete', 'not-targeted']
+)
+overview.receiptFilter = 'pending'
+assert.equal(overview.filteredLanes.length, 2)
+overview.search = '  ORDER  '
+assert.equal(overview.filteredLanes.length, 2)
+overview.clientType = 'agent'
+assert.equal(overview.filteredLanes.length, 0)
+overview.receiptFilter = 'failed'
+assert.equal(overview.filteredLanes[0].id, 'late-agent')
+overview.search = 'no-match'
+assert.equal(overview.filteredLanes.length, 0)
+overview.resetPage()
+assert.equal(overview.page, 1)
+assert.equal(overview.selection, null)
+overview.overview = false
+assert.equal(overview.pageSize, 20)
+assert.equal(overview.lanes[0].id, 'complete') // Comparison keeps its original order.
+overview.overview = true
+overview.search = overview.clientType = overview.receiptFilter = ''
+for (const status of ['success', 'failed', 'cancelled']) {
+  overview.result = { ...receiptData, status }
+  assert.equal(overview.title, 'LatestRotationReceipts')
+}
+fetchEvents = async () => {
+  throw new Error('offline')
+}
+await overview.load()
+assert.equal(overview.failed, true)
+fetchEvents = async () => receiptData
+await overview.load()
+assert.equal(overview.failed, false)
+assert.equal(overview.loading, false)
+const queued = []
+fetchEvents = () => new Promise((resolve) => queued.push(resolve))
+const oldLoad = overview.load()
+const latestLoad = overview.load()
+queued[1]({ ...receiptData, rotation_id: 'round-2' })
+await latestLoad
+queued[0](receiptData)
+await oldLoad
+assert.equal(overview.result.rotation_id, 'round-2')
+const unmountedLoad = overview.load()
+timelineComponent.beforeUnmount.call(overview)
+queued[2](receiptData)
+await unmountedLoad
+assert.equal(overview.result.rotation_id, 'round-2')
+const empty = timelineVm()
+fetchEvents = async () => ({ rotation_id: null, events: [], instances: [] })
+await empty.load()
+assert.equal(empty.events.length, 0)
+assert.equal(empty.receiptFilters[1].count, 0)
 let scrollPosition
 const pageVm = {
   selection: { clientId: 'sdk', eventId: 'first' },
@@ -106,6 +216,7 @@ const browserComponent = new Function(
   'RotationEventTimeline',
   'receiptStatus',
   'ResizeObserver',
+  'getCredentialEventHistory',
   browserSource
     .match(/<script>([\s\S]*?)<\/script>/)[1]
     .replace(/^import[\s\S]*?from ['"][^'"]+['"]\n/gm, '')
@@ -124,7 +235,8 @@ const browserComponent = new Function(
     disconnect() {
       observerDisconnected = true
     }
-  }
+  },
+  async () => ({ count: 1, results: [receiptData.instances[0]] })
 )
 let drawerWidth = 1400
 const parentDrawer = { getBoundingClientRect: () => ({ width: drawerWidth }) }
@@ -141,6 +253,20 @@ resizeCallback()
 assert.equal(browserVm.comparisonWidth, '980px')
 browserComponent.beforeUnmount.call(browserVm)
 assert.equal(observerDisconnected, true)
+const preferredClient = receiptData.instances[3]
+let historyClient
+await browserComponent.methods.loadClients.call(
+  {
+    credentialId: 'policy',
+    clientRequest: 0,
+    selectClient: (client) => {
+      historyClient = client
+    }
+  },
+  1,
+  preferredClient
+)
+assert.equal(historyClient.id, preferredClient.id) // Never jump to a different client with the same display name.
 assert.ok(helperSource.includes("'configuration.updated': 'AppAuditConfigurationUpdated'"))
 assert.ok(!timeline.includes('setTimeout') && !timeline.includes('setInterval'))
 const { createCredentialEventFixture, fixtureHistory, fixtureRotation } =
@@ -166,6 +292,13 @@ for (const mode of ['rotation', 'subscription']) {
     const round = fixtureRotation(fixture, history.latest_event.rotation_id)
     assert.equal(round.events.length, 6)
     assert.equal(buildEventLanes(round).lanes.length, 300)
+    const many = timelineVm({ result: round, page: 2 })
+    assert.equal(many.lanes.length, 5)
+    const firstPageIds = new Set(timelineVm({ result: round }).lanes.map(({ id }) => id))
+    assert.ok(many.lanes.every(({ id }) => !firstPageIds.has(id)))
+    fetchEvents = async () => round
+    await many.load()
+    assert.equal(many.page, 2) // Refresh does not throw the operator back to the first page.
   }
 }
 assert.equal(createCredentialEventFixture('subscription', 500).clients.length, 500)

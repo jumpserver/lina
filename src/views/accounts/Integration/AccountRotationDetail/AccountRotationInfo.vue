@@ -1,5 +1,5 @@
 <template>
-  <TwoCol :gutter="20" :left="16" :right="8">
+  <section class="credential-info" :aria-label="$t('BasicInfo')">
     <el-alert
       v-if="object.precheck && object.precheck.status !== 'passed'"
       :title="precheckMessage"
@@ -7,28 +7,29 @@
       :type="object.precheck.status === 'checking' ? 'info' : 'error'"
       :closable="false"
       show-icon
-      class="detail-block"
     />
-    <DetailCard :items="detailItems" :title="$t('BasicInfo')" class="detail-block" />
-    <template #right>
-      <QuickActions :actions="quickActions" :title="$t('CurrentAction')" class="detail-block" />
+    <TwoCol :gutter="20" :left="16" :right="8">
+      <DetailCard :items="detailItems" :title="$t('BasicInfo')" />
+      <template #right>
+        <QuickActions :actions="quickActions" :title="$t('CurrentAction')" />
+      </template>
+    </TwoCol>
 
-      <IBox
-        v-if="object.mode === 'alternating_rotation'"
-        :title="$t('RotationProgress')"
-        class="detail-block rotation-steps"
-      >
-        <el-steps :active="rotationStep" direction="vertical" finish-status="success">
-          <el-step
-            v-for="step in rotationSteps"
-            :key="step.title"
-            :description="step.description"
-            :title="step.title"
-          />
-        </el-steps>
-      </IBox>
-    </template>
-  </TwoCol>
+    <IBox
+      v-if="object.mode === 'alternating_rotation'"
+      :title="$t('RotationProgress')"
+      class="rotation-steps"
+    >
+      <el-steps :active="rotationStep" direction="horizontal" finish-status="success">
+        <el-step
+          v-for="step in rotationSteps"
+          :key="step.title"
+          :description="step.description"
+          :title="step.title"
+        />
+      </el-steps>
+    </IBox>
+  </section>
 </template>
 
 <script lang="jsx">
@@ -523,25 +524,44 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.detail-block {
-  margin-bottom: 15px;
+.credential-info {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+  min-width: 0;
+}
+
+.rotation-steps {
+  min-width: 0;
+}
+
+.rotation-steps :deep(.el-card__body) {
+  overflow-x: auto;
+}
+
+.rotation-steps :deep(.el-steps) {
+  min-width: 640px;
 }
 
 .rotation-steps :deep(.el-step__main) {
   min-width: 0;
-  padding-bottom: 18px;
+  padding-right: 20px;
+}
+
+.rotation-steps :deep(.el-step:last-child .el-step__main) {
+  padding-right: 0;
 }
 
 .rotation-steps :deep(.el-step__title) {
   color: var(--color-text-primary);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   line-height: 24px;
 }
 
 .rotation-steps :deep(.el-step__description) {
   padding-right: 0;
-  color: var(--color-help-text);
-  line-height: 20px;
+  color: var(--el-text-color-regular);
+  line-height: 18px;
 }
 </style>

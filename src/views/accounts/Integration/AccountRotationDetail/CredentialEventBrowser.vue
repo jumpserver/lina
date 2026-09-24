@@ -244,7 +244,11 @@ import {
 export default {
   name: 'CredentialEventBrowser',
   components: { IBox, RotationEventTimeline },
-  props: { credentialId: { type: String, default: '' }, subscription: Boolean },
+  props: {
+    credentialId: { type: String, default: '' },
+    subscription: Boolean,
+    initialClient: { type: Object, default: null }
+  },
   data() {
     return {
       search: '',
@@ -284,7 +288,8 @@ export default {
         this.history = {}
         this.historyRequest++
         this.comparison = ''
-        this.loadClients(1)
+        this.search = this.initialClient?.instance_id || ''
+        this.loadClients(1, this.initialClient)
       }
     }
   },
@@ -305,7 +310,7 @@ export default {
   },
   methods: {
     receiptStatus,
-    async loadClients(page = 1) {
+    async loadClients(page = 1, preferredClient = null) {
       const request = ++this.clientRequest
       this.clientPage = page
       this.clientsLoading = true
@@ -326,7 +331,9 @@ export default {
         this.clients = data.results
         this.clientCount = data.count
         const current =
-          this.clients.find((client) => client.id === this.selected?.id) || this.clients[0]
+          this.clients.find((client) => client.id === (preferredClient || this.selected)?.id) ||
+          preferredClient ||
+          this.clients[0]
         if (current) this.selectClient(current)
         else {
           this.selected = null
