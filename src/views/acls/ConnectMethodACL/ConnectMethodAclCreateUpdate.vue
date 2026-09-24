@@ -18,8 +18,9 @@ export default {
     return {
       initial: {},
       fields: [
-        [this.$t('Basic'), ['name']],
+        [this.$t('Basic'), ['name', 'priority']],
         [this.$t('Users'), ['users']],
+        [this.$t('Asset'), ['assets']],
         [this.$t('ConnectMethod'), ['connect_methods']],
         [this.$t('Action'), ['action', 'reviewers']],
         [this.$t('Other'), ['is_active', 'comment']]
