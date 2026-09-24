@@ -513,7 +513,7 @@
   "ConnectMethodACLCreate": "创建连接方式控制",
   "ConnectMethodACLDetail": "连接方式控制详情",
   "ConnectMethodACLHelpMsg": "通过连接方式过滤，您可以控制用户是否可以使用某种连接方式登录到资产上。根据您设定的规则，某些连接方式可以被放行，而另一些连接方式则被禁止（全局生效）。",
-  "ConnectMethodACLHelpText": "通过连接方式过滤，您可以控制用户是否可以使用某种连接方式登录到资产上。根据您设定的规则，某些连接方式可以被放行，而另一些连接方式则被禁止。",
+  "ConnectMethodACLHelpText": "可按用户和资产控制连接方式。选择全部资产时沿用全局规则；指定资产的规则优先于全局规则。指定资产的规则按优先级数字从小到大匹配，同级时拒绝优先。",
   "ConnectMethodACLUpdate": "更新连接方式控制",
   "ConnectMethodACLs": "连接方式",
   "ConnectMethodAclDetail": "连接方式详情",

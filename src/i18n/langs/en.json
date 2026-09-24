@@ -524,7 +524,7 @@
   "ConnectMethodACLCreate": "Create connect method control",
   "ConnectMethodACLDetail": "Connect method control details",
   "ConnectMethodACLHelpMsg": "Connect methods can be filtered to control whether users can use a certain connect method to login to the asset. according to your set rules, some connect methods can be allowed, while others can be prohibited (globally effective).",
-  "ConnectMethodACLHelpText": "Connect methods can be filtered to control whether users can use a certain connect method to login to the asset. according to your set rules, some connect methods can be allowed, while others can be prohibited.",
+  "ConnectMethodACLHelpText": "Control connection methods by user and asset. Selecting all assets keeps the existing global behavior; rules for selected assets take precedence. For selected assets, lower priority numbers win and rejection wins ties.",
   "ConnectMethodACLUpdate": "Update the connect method control",
   "ConnectMethodACLs": "Connect method ACLs",
   "ConnectMethodAclDetail": "Connect method acl detail",
