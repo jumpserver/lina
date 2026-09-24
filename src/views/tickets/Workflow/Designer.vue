@@ -278,7 +278,7 @@
                         :label="$t('Reject')"
                     /></el-select>
                   </el-form-item>
-                  <div class="switch-row">
+                  <div v-if="workflow.type !== 'apply_asset'" class="switch-row">
                     <span>{{ $t('WFExcludeApplicant') }}</span
                     ><el-switch
                       v-model="selected.config.exclude_applicant"
@@ -462,7 +462,7 @@ export default {
       await this.loadVersions()
       if (this.versions.length) await this.selectVersion(this.workflow.active_version)
       else if (this.workflow.migration_notes?.unpublished_cc_user_ids?.length) {
-        const node = insertNode(this.definition, this.definition.edges[0], 'cc', this.$t('WFCC'))
+        const node = this.definition.nodes.find((n) => n.type === 'cc')
         node.config.users = this.workflow.migration_notes.unpublished_cc_user_ids
         this.selectedId = node.id
       }

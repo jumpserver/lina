@@ -20,13 +20,18 @@ test('inserting a condition preserves two complete exclusive paths', () => {
 })
 test('additional approval levels remain ordered and can be removed', () => {
   const graph = newDefinition()
-  const inserted = insertNode(graph, graph.edges[0], 'approval', 'Security')
-  assert.deepEqual(paths(graph), [['start', inserted.id, 'approval_1', 'end']])
+  const inserted = insertNode(graph, graph.edges[1], 'approval', 'Security')
+  assert.deepEqual(paths(graph), [['start', 'cc_1', inserted.id, 'approval_1', 'end']])
   assert.equal(removeNode(graph, inserted.id), true)
-  assert.deepEqual(paths(graph), [['start', 'approval_1', 'end']])
+  assert.deepEqual(paths(graph), [['start', 'cc_1', 'approval_1', 'end']])
 })
-test('CC can be placed after an approval and removed without changing the path', () => {
+test('default CC precedes approval and can be removed or added again', () => {
   const graph = newDefinition()
+  const cc = graph.nodes.find(node => node.type === 'cc')
+  assert.deepEqual(cc.config, { users: [] })
+  assert.deepEqual(paths(graph), [['start', cc.id, 'approval_1', 'end']])
+  assert.equal(removeNode(graph, cc.id), true)
+  assert.deepEqual(paths(graph), [['start', 'approval_1', 'end']])
   const inserted = insertNode(graph, graph.edges[1], 'cc', 'Notify security')
   assert.deepEqual(inserted.config, { users: [] })
   assert.deepEqual(paths(graph), [['start', 'approval_1', inserted.id, 'end']])

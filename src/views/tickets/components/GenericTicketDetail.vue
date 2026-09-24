@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="17" :sm="24">
+    <el-col :span="24">
       <el-alert
         v-if="object.execution_mode === 'approval_only'"
         :title="$t('TicketApprovalOnlyHint')"
@@ -23,7 +23,7 @@
       <WorkflowPanel :object="object" />
       <Comments v-bind="$attrs" :object="object" />
     </el-col>
-    <el-col :md="7" :sm="24">
+    <el-col :span="24">
       <Session v-if="$hasPerm('tickets.view_ticket')" :object="object" />
     </el-col>
   </el-row>

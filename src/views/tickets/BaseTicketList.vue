@@ -128,9 +128,12 @@ export default {
         ],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
-          default: ['title', 'serial_num', 'type', 'state', 'date_created']
+          default: ['title', 'serial_num', 'type', 'org_name', 'state', 'date_created']
         },
         columnsMeta: {
+          org_name: {
+            label: this.$t('Organization')
+          },
           serial_num: {
             label: this.$t('Number')
           },
@@ -191,7 +194,7 @@ export default {
             }
           },
           state: {
-            label: this.$t('Action'),
+            label: this.$t('State'),
             align: 'center',
             formatter: TagChoicesFormatter,
             formatterArgs: {

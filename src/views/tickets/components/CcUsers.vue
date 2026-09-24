@@ -6,7 +6,7 @@
         v-if="normalizedUsers.length > previewLimit"
         class="cc-users__more"
         type="primary"
-        :underline="false"
+        underline="never"
         @click="visible = true"
       >
         {{ $t('CcUsersViewAll', { count: normalizedUsers.length }) }}

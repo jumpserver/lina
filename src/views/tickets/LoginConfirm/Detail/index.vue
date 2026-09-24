@@ -11,11 +11,13 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import TicketDetail from './TicketDetail'
+import TicketActivity from '../../components/TicketActivity'
 
 export default {
   components: {
     GenericDetailPage,
     TicketDetail,
+    TicketActivity,
     TabPage
   },
   data() {
@@ -35,12 +37,17 @@ export default {
           {
             title: this.$t('TicketDetail'),
             name: 'TicketDetail'
+          },
+          {
+            title: this.$t('Activity'),
+            name: 'TicketActivity'
           }
         ],
         actions: {
           detailApiUrl: `/api/v1/tickets/tickets/${this.$route.params.id}/`
         },
         getObjectName: this.getObjectName,
+        hasActivity: false,
         hasRightSide: false
       }
     }

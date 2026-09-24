@@ -45,6 +45,7 @@ export default {
       loading: true,
       flowOptions: [],
       flowRequest: 0,
+      selectedOrgId: '',
       initial: {
         ips_or_not: true,
         apply_date_expired: date_expired,
@@ -53,7 +54,7 @@ export default {
         apply_expire_soon_notice_switch: false,
         apply_expire_soon_notice_minutes: null,
         apply_assets: [],
-        apply_users: [store.getters.currentUser.id],
+        apply_users: store.getters.currentUser.id,
         org_id: '',
         workflow_id: '',
         apply_actions: [this.$t('All')]
@@ -78,11 +79,12 @@ export default {
       ],
       fieldsMeta: {
         apply_users: {
-          label: this.$t('TicketAuthorizedUsers'),
+          label: this.$t('TicketAuthorizedUser'),
           component: Select2,
           required: true,
           el: {
-            multiple: true,
+            multiple: false,
+            clearable: false,
             options: [
               { value: store.getters.currentUser.id, label: store.getters.currentUser.name }
             ],
@@ -92,6 +94,14 @@ export default {
                 label: `${item.name} (${item.username})`,
                 value: item.id
               })
+            }
+          },
+          on: {
+            change: async ([userId], updateForm) => {
+              updateForm({ workflow_id: '' })
+              const flow = await this.loadFlowOptions(this.selectedOrgId, userId)
+              if (flow === undefined) return
+              updateForm({ workflow_id: flow?.id || '' })
             }
           }
         },
@@ -205,14 +215,15 @@ export default {
           },
           on: {
             change: async ([event], updateForm) => {
+              this.selectedOrgId = event
               updateForm({
                 workflow_id: '',
                 apply_nodes: [],
                 apply_assets: [],
                 apply_accounts: [],
-                apply_users: [store.getters.currentUser.id]
+                apply_users: store.getters.currentUser.id
               })
-              const flow = await this.loadFlowOptions(event)
+              const flow = await this.loadFlowOptions(event, store.getters.currentUser.id)
               if (flow === undefined) return
               updateForm({ workflow_id: flow?.id || '' })
             }
@@ -250,6 +261,7 @@ export default {
         if (!value.workflow_id) {
           delete value.workflow_id
         }
+        value.apply_users = value.apply_users ? [value.apply_users] : []
         return normalizeExpireNoticePayload(value, 'apply_')
       },
       url: '/api/v1/tickets/tickets/?type=apply_asset',
@@ -277,14 +289,15 @@ export default {
     } else {
       this.initial.org_id = userAllOrgIds[0]
     }
+    this.selectedOrgId = this.initial.org_id
 
-    const flow = await this.loadFlowOptions(this.initial.org_id)
+    const flow = await this.loadFlowOptions(this.initial.org_id, store.getters.currentUser.id)
     this.initial.workflow_id = flow?.id || ''
 
     this.loading = false
   },
   methods: {
-    async loadFlowOptions(orgId) {
+    async loadFlowOptions(orgId, beneficiary) {
       const requestId = ++this.flowRequest
       this.flowOptions = []
       this.fieldsMeta.workflow_id.el.options = []
@@ -294,7 +307,7 @@ export default {
       }
       try {
         const flows = await this.$axios.get('/api/v1/tickets/workflows/options/', {
-          params: { type: 'apply_asset', org_id: orgId }
+          params: { type: 'apply_asset', org_id: orgId, beneficiary }
         })
         if (requestId !== this.flowRequest) return undefined
         this.flowOptions = flows

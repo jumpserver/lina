@@ -36,7 +36,7 @@ export default {
       name: 'AssignedTicketList',
       component: () => import('@/views/tickets/AssignedTicketList'),
       meta: {
-        title: i18n.t('AwaitingMyApproval'),
+        title: i18n.t('TicketRelatedToMe'),
         icon: 'ticket-approval',
         showOrganization: false,
         permissions: ['tickets.view_ticket']

@@ -12,11 +12,13 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import TicketDetail from './TicketDetail'
+import TicketActivity from '../../components/TicketActivity'
 
 export default {
   components: {
     GenericDetailPage,
     TicketDetail,
+    TicketActivity,
     TabPage
   },
   data() {
@@ -36,8 +38,13 @@ export default {
           {
             title: this.$t('Basic'),
             name: 'TicketDetail'
+          },
+          {
+            title: this.$t('Activity'),
+            name: 'TicketActivity'
           }
         ],
+        hasActivity: false,
         hasRightSide: false
       }
     }

@@ -2584,6 +2584,8 @@
   "WFManager": "Manager",
   "WFACLHint": "Select a workflow, or leave empty to use a single approval step with the reviewers below.",
   "WFProcessedByMe": "Processed by me",
+  "TicketRelatedToMe": "自分に関連する申請",
+  "TicketCopiedToMe": "自分にCCされた申請",
   "Enabled": "有効",
   "WFUnsavedChanges": "Unpublished changes",
   "WFDraft": "Draft",

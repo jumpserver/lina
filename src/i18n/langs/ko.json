@@ -2491,6 +2491,8 @@
   "WFManager": "Manager",
   "WFACLHint": "Select a workflow, or leave empty to use a single approval step with the reviewers below.",
   "WFProcessedByMe": "Processed by me",
+  "TicketRelatedToMe": "나와 관련된 요청",
+  "TicketCopiedToMe": "내가 참조된 요청",
   "Enabled": "활성화됨",
   "WFUnsavedChanges": "Unpublished changes",
   "WFDraft": "Draft",
