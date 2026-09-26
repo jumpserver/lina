@@ -265,7 +265,8 @@ export async function startup({ to, from, next }) {
     await getPublicSetting({ to, from }, false)
     const viewResult = await changeCurrentViewIfNeed({ to, from })
     if (viewResult && viewResult !== true) return viewResult
-    await changeCurrentOrgIfNeed({ to, from })
+    const organizationResult = await changeCurrentOrgIfNeed({ to, from })
+    if (organizationResult && organizationResult !== true) return organizationResult
     const pageRoutesResult = await generatePageRoutes({ to, from })
     if (pageRoutesResult && pageRoutesResult !== true) return pageRoutesResult
     const firstLoginResult = await checkUserFirstLogin({ to, from })

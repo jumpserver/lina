@@ -21,6 +21,7 @@
         <component
           v-bind="componentProps"
           :is="resolvedComponent"
+          :key="componentKey"
           v-if="resolvedComponent"
           ref="dynamicComponent"
           v-on="componentListeners"
@@ -32,6 +33,7 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { getStoredDrawerWidth, useDrawerResize } from '@/composables/useDrawerResize'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
 import { DRAWER_RUNTIME_CONTEXT, TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
@@ -39,13 +41,17 @@ import { DRAWER_RUNTIME_CONTEXT, TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } 
 export default {
   provide() {
     return {
-      [DRAWER_RUNTIME_CONTEXT]: this.componentProps?.drawerContext || null,
-      [TAB_NAVIGATION_CONTEXT]: {
-        scope: TAB_NAVIGATION_SCOPE.LOCAL
-      }
+      [DRAWER_RUNTIME_CONTEXT]: computed(
+        () => this.componentProps?.drawerContext || { isDrawer: true }
+      ),
+      [TAB_NAVIGATION_CONTEXT]: computed(
+        () => this.tabNavigation || { scope: TAB_NAVIGATION_SCOPE.LOCAL }
+      )
     }
   },
   props: {
+    componentKey: { type: [String, Number], default: '' },
+    tabNavigation: { type: Object, default: null },
     title: {
       type: String,
       default: ''

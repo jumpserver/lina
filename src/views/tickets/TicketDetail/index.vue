@@ -56,7 +56,7 @@ export default {
       setTimeout(() => {
         this.$router.push({
           name: routeName,
-          params: { id: this.$route.params['id'] }
+          params: { id: this.$context.get('id') }
         })
       })
     }

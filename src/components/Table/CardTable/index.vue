@@ -45,6 +45,8 @@
       v-if="detailDrawer"
       v-model:visible="detailDrawerVisible"
       :component="detailDrawer"
+      :component-key="detailContext?.id"
+      :component-props="{ drawerContext: detailContext }"
       :title="detailTitle"
     />
   </div>
@@ -57,6 +59,7 @@ import TableAction from '@/components/Table/ListTable/TableAction'
 import IBox from '@/components/Common/IBox/index.vue'
 import Panel from './Panel'
 import Drawer from '@/components/Drawer/index.vue'
+import { eventBus } from '@/utils/vue/eventbus'
 
 const defaultFirstPage = 1
 
@@ -119,6 +122,8 @@ export default {
       },
       detailDrawerVisible: false,
       detailTitle: '',
+      detailContext: null,
+      tableActive: true,
       skipNextActivate: true
     }
   },
@@ -128,7 +133,26 @@ export default {
       return this.tableConfig.url || ''
     }
   },
+  watch: {
+    detailDrawerVisible(visible) {
+      if (!visible) this.clearDetailDrawer()
+    }
+  },
+  created() {
+    this.drawerToken = Symbol('card-drawer')
+  },
+  beforeUnmount() {
+    this.clearDetailDrawer()
+    eventBus.off('drawer-resource-change', this.onRouteDrawerResourceChange)
+  },
+  deactivated() {
+    this.tableActive = false
+    this.detailDrawerVisible = false
+    this.clearDetailDrawer()
+  },
   async mounted() {
+    this.ownerPath = this.$route.path
+    eventBus.on('drawer-resource-change', this.onRouteDrawerResourceChange)
     try {
       await this.getList()
     } finally {
@@ -136,6 +160,7 @@ export default {
     }
   },
   activated() {
+    this.tableActive = true
     // First keep-alive insert also fires activated after mounted; skip that one.
     if (this.skipNextActivate) {
       this.skipNextActivate = false
@@ -144,6 +169,13 @@ export default {
     this.reloadTable()
   },
   methods: {
+    clearDetailDrawer() {
+      this.detailContext = null
+      this.$store.dispatch('common/leaveDrawer', this.drawerToken)
+    },
+    onRouteDrawerResourceChange({ path }) {
+      if (this.tableActive && path === this.ownerPath) this.reloadTable()
+    },
     isDisabled(item) {
       return item.edition?.value === 'enterprise' && !this.hasValidLicense
     },
@@ -222,11 +254,10 @@ export default {
         return
       }
       if (this.detailDrawer) {
+        this.detailContext = { isDrawer: true, action: 'detail', row: obj, col: {}, id: obj.id }
         await this.$store.dispatch('common/setDrawerActionMeta', {
-          action: 'detail',
-          row: obj,
-          col: {},
-          id: obj.id
+          ...this.detailContext,
+          __drawerToken: this.drawerToken
         })
         this.detailTitle = `${this.$t('Detail')}: ${obj.name}`
         this.detailDrawerVisible = true

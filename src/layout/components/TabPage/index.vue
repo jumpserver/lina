@@ -89,6 +89,16 @@ export default {
       default: () => ({ scope: TAB_NAVIGATION_SCOPE.ROUTE })
     }
   },
+  provide() {
+    return {
+      // Only the outer TabPage owns drawerTab; tabs nested inside its content
+      // keep their own local state.
+      [TAB_NAVIGATION_CONTEXT]:
+        this.tabNavigationContext.scope === TAB_NAVIGATION_SCOPE.DRAWER
+          ? { scope: TAB_NAVIGATION_SCOPE.LOCAL }
+          : this.tabNavigationContext
+    }
+  },
   props: {
     submenu: {
       type: Array,
@@ -133,7 +143,9 @@ export default {
       loading: false,
       helpAlertVisible: true,
       toSentenceCase: toSentenceCase,
-      activeTab: this.activeMenu
+      activeTab: this.activeMenu,
+      navigationActive: true,
+      ownerPath: this.$route.path
     }
   },
   computed: {
@@ -148,6 +160,9 @@ export default {
     },
     shouldSyncTabState() {
       return this.effectiveNavigationScope === TAB_NAVIGATION_SCOPE.ROUTE
+    },
+    isDrawerNavigation() {
+      return this.effectiveNavigationScope === TAB_NAVIGATION_SCOPE.DRAWER
     },
     activeTabStorageKey() {
       const routeKey =
@@ -190,8 +205,15 @@ export default {
         this.activeTab = newValue
       }
     },
+    '$route.query.drawerTab'() {
+      if (this.navigationActive && this.isDrawerNavigation) this.syncActiveTab()
+    },
     '$route.query.tab'() {
-      if (!this.shouldSyncTabState) {
+      if (
+        !this.shouldSyncTabState ||
+        !this.navigationActive ||
+        this.$route.path !== this.ownerPath
+      ) {
         return
       }
       this.syncActiveTab()
@@ -200,30 +222,7 @@ export default {
       this.syncActiveTab()
     },
     iActiveMenu(newValue) {
-      if (!newValue) {
-        return
-      }
-      if (!this.shouldSyncTabState) {
-        return
-      }
-      if (this.rememberActiveTab) {
-        localStorage.setItem(this.activeTabStorageKey, newValue)
-      }
-      if (this.$route.query?.tab === newValue) {
-        return
-      }
-      const query = { ...this.$route.query }
-      for (const key of this.clearQueryKeysOnTabChange) {
-        delete query[key]
-      }
-      this.$router.replace({
-        path: this.$route.path,
-        query: {
-          ...query,
-          tab: newValue
-        },
-        hash: this.$route.hash
-      })
+      this.syncTabToRoute(newValue)
     },
     iHelpMessage() {
       this.helpAlertVisible = true
@@ -233,7 +232,31 @@ export default {
     this.syncActiveTab()
     this.loading = false
   },
+  activated() {
+    this.navigationActive = true
+    this.syncActiveTab()
+  },
+  deactivated() {
+    this.navigationActive = false
+  },
   methods: {
+    syncTabToRoute(tab) {
+      if (!tab || !this.navigationActive || this.$route.path !== this.ownerPath) return
+      if (this.isDrawerNavigation) {
+        this.tabNavigationContext.setTab(tab)
+        return
+      }
+      if (!this.shouldSyncTabState) return
+      if (this.rememberActiveTab) localStorage.setItem(this.activeTabStorageKey, tab)
+      if (this.$route.query.tab === tab) return
+      const query = { ...this.$route.query }
+      for (const key of this.clearQueryKeysOnTabChange) delete query[key]
+      this.$router.replace({
+        path: this.$route.path,
+        query: { ...query, tab },
+        hash: this.$route.hash
+      })
+    },
     handleTabClick(tab) {
       // Element Plus exposes the pane name as `paneName`. Keep `name` in the
       // forwarded event for existing consumers, but let el-tabs' v-model be
@@ -248,37 +271,37 @@ export default {
     getPropActiveTab() {
       let activeTab = ''
 
-      const preActiveTabs = this.shouldSyncTabState
-        ? [
-            this.$route.query['tab'],
-            this.rememberActiveTab ? localStorage.getItem(this.activeTabStorageKey) : undefined,
-            this.activeMenu
-          ]
-        : [
-            this.$context.get('tab', { scope: 'overlay' }),
-            this.$route.query['tab'],
-            this.activeMenu
-          ]
+      const preActiveTabs = this.isDrawerNavigation
+        ? [this.$route.query.drawerTab, this.activeMenu]
+        : this.shouldSyncTabState
+          ? [
+              this.$route.query['tab'],
+              this.rememberActiveTab ? localStorage.getItem(this.activeTabStorageKey) : undefined,
+              this.activeMenu
+            ]
+          : [this.$context.get('tab', { scope: 'overlay' }), this.activeMenu]
 
       for (const preTab of preActiveTabs) {
-        const currentTab = typeof preTab === 'object' ? preTab?.name || '' : preTab
+        const currentTab = typeof preTab === 'string' ? preTab : ''
         for (const tabName of this.tabIndices) {
           const currentTabName = tabName?.name || ''
-          if (currentTab?.toLowerCase() === currentTabName?.toLowerCase()) {
+          if (!tabName.disabled && currentTab.toLowerCase() === currentTabName.toLowerCase()) {
             return currentTabName
           }
         }
       }
 
-      activeTab = this.tabIndices[0]?.name || ''
+      activeTab = this.tabIndices.find((tab) => !tab.disabled)?.name || ''
       return activeTab
     },
     syncActiveTab() {
+      if (!this.navigationActive || this.$route.path !== this.ownerPath) return
       const activeTab = this.getPropActiveTab()
       if (!activeTab) {
         return
       }
       this.activeTab = activeTab
+      if (this.isDrawerNavigation) this.syncTabToRoute(activeTab)
       if (this.activeMenu !== activeTab) {
         this.$emit('update:activeMenu', activeTab)
       }
