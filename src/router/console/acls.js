@@ -12,7 +12,7 @@ export default [
     redirect: 'cmd-acls',
     meta: {
       title: i18n.t('ACLs'),
-      icon: 'acl',
+      icon: 'passkey',
       permissions: []
     },
     children: [
