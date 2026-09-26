@@ -574,7 +574,7 @@ export default {
   }
 
   > :deep(.page-content) {
-    overflow-y: hidden !important;
+    overflow-y: hidden;
     padding: var(--page-content-top-padding, 12px) 0 0;
     scrollbar-gutter: auto;
     background-color: var(--page-content-background-color, #f3f3f4);
@@ -618,17 +618,6 @@ export default {
   }
 
   /*
-   * .tab-page-content 是唯一的滚动容器：小屏空间不足时，应由它整体滚动，而不是让内部 card
-   * 自己出现滚动条。故强制卡片相关容器不自带滚动 / 高度上限，把溢出交还给 .tab-page-content。
-   */
-  .tab-page-content :deep(.el-card__body),
-  .tab-page-content :deep(.ibox),
-  .tab-page-content :deep(.el-card) {
-    overflow: visible !important;
-    max-height: none !important;
-  }
-
-  /*
    * <keep-alive> 要求单一根节点，内容组件因此普遍用一个
    * <div>（无 class 或 class=""）包裹多个区块（如 el-alert + IBox）。该 wrapper 会成为唯一的
    * flex 子节点，使外层 gap 对其内部区块失效。这里让纯结构 wrapper 自身成为 flex 列并复用同样的
@@ -640,38 +629,6 @@ export default {
     display: flex;
     flex-direction: column;
     gap: var(--page-section-gap, 8px);
-  }
-
-  .tab-page-content :deep(.tab-page-alert) {
-    margin: 0;
-  }
-
-  .tab-page-content :deep(.tab-page-alert .el-alert__icon) {
-    font-size: 16px;
-  }
-
-  .tab-page-content :deep(.tab-page-alert .el-alert__icon .el-icon),
-  .tab-page-content :deep(.tab-page-alert .el-alert__icon .el-icon svg) {
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-  }
-
-  .tab-page-content :deep(.tab-page-alert .el-alert__title),
-  .tab-page-content :deep(.tab-page-alert .el-alert__description),
-  .tab-page-content :deep(.tab-page-alert .el-alert__content),
-  .tab-page-content :deep(.tab-page-alert .announcement-main) {
-    font-size: 12px !important;
-    line-height: 1.5;
-  }
-
-  .tab-page-content :deep(.tab-page-alert .el-alert__closebtn) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
   }
 }
 

@@ -370,8 +370,8 @@ export default {
         height: 28px;
         background-color: rgba(255, 255, 255, 0.08);
         border-radius: 4px;
-        border: none !important;
-        box-shadow: inset 0 0 0 1px transparent !important;
+        border: none;
+        box-shadow: inset 0 0 0 1px transparent;
         cursor: pointer;
         transition: background-color 0.2s ease;
       }
@@ -380,7 +380,7 @@ export default {
         height: 100%;
         line-height: 1;
         background: transparent;
-        border: unset !important;
+        border: unset;
         cursor: pointer;
 
         &::placeholder {
@@ -474,11 +474,9 @@ body .v-modal {
   opacity: 0.3;
 }
 
-.search-modal.el-dialog {
+.el-overlay-dialog .search-modal.el-dialog {
   --el-dialog-padding-primary: 0;
-  padding: 0 !important;
-  margin: 5px auto 0 !important;
-  width: 70% !important;
+  margin: 5px auto 0;
   max-width: min(1280px, calc(100vw - 48px));
   max-height: calc(100vh - 40px);
   border-radius: 6px;
@@ -497,13 +495,7 @@ body .v-modal {
 }
 
 .search-modal-header {
-  display: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.search-modal-body {
-  padding: 0 !important;
+  display: none;
 }
 
 .search-modal-content {
@@ -523,24 +515,20 @@ body .v-modal {
     --jms-input-padding-block: 0;
     --jms-input-padding-inline: 12px;
 
-    width: 100% !important;
-
-    &.el-input {
-      width: 100% !important;
-    }
+    width: 100%;
 
     .el-input__wrapper {
       width: 100%;
       min-height: 32px;
       height: 32px;
       border-radius: 0;
-      border: 1px solid var(--el-border-color) !important;
-      box-shadow: none !important;
+      border: 1px solid var(--el-border-color);
+      box-shadow: none;
       box-sizing: border-box;
 
       &.is-focus {
-        border-color: var(--el-color-primary) !important;
-        box-shadow: none !important;
+        border-color: var(--el-color-primary);
+        box-shadow: none;
       }
     }
 
@@ -549,9 +537,9 @@ body .v-modal {
       height: 30px;
       line-height: 30px;
       font-size: 14px;
-      border: none !important;
-      box-shadow: none !important;
-      outline: none !important;
+      border: none;
+      box-shadow: none;
+      outline: none;
       background: transparent;
     }
 
@@ -564,9 +552,9 @@ body .v-modal {
       justify-content: center;
       min-height: 30px;
       height: 30px;
-      border: 0 !important;
-      box-shadow: none !important;
-      background: transparent !important;
+      border: 0;
+      box-shadow: none;
+      background: transparent;
     }
 
     .el-input__prefix-inner > :last-child {
@@ -575,12 +563,6 @@ body .v-modal {
 
     .el-input__suffix {
       padding-left: 0;
-    }
-
-    .el-input__clear,
-    .el-input__icon {
-      border: 0 !important;
-      box-shadow: none !important;
     }
   }
 }

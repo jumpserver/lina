@@ -296,38 +296,6 @@ export default {
     max-height: none !important;
   }
 
-  :deep(.page.tab-page .tab-page-content .tab-page-alert) {
-    margin: 0;
-  }
-
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon .el-icon),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon .el-icon svg) {
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-  }
-
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__title),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__description),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__description p),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content p),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content span),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .announcement-main) {
-    font-size: 12px !important;
-    line-height: 1.5;
-  }
-
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__closebtn) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-  }
-
   :deep(.el-form-item) {
     min-width: 565px;
 
