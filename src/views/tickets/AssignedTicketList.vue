@@ -2,7 +2,6 @@
   <div>
     <BaseTicketList
       v-bind="$data"
-      :key="tab"
       ref="BaseTicketList"
       :url="url"
       :extra-ticket-action="tab === 'pending' ? extraTicketAction : { hasCreate: false }"

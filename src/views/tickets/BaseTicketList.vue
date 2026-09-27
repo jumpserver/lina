@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div>
     <GenericListPage
       ref="ListPage"
       :get-drawer-title="getDrawerTitle"
@@ -43,7 +43,6 @@ export default {
   data() {
     const vm = this
     return {
-      loading: true,
       getDrawerTitle: () => ' ',
       quickFilters: [
         {
@@ -237,6 +236,12 @@ export default {
       return Object.assign({}, this.defaultTicketActions, this.extraTicketAction)
     }
   },
+  watch: {
+    url(url) {
+      this.$refs.ListPage?.$refs.ListTable?.$refs.ListTable?.dataTable?.$refs.table?.clearSelection()
+      this.ticketTableConfig.url = url
+    }
+  },
   mounted() {
     this.$axios.get('/api/v1/tickets/ticket-types/').then((types) => {
       this.quickFilters[0].options = types.map((type) => ({
@@ -244,9 +249,6 @@ export default {
         filter: { type: type.type }
       }))
     })
-    setTimeout(() => {
-      this.loading = false
-    }, 500)
   },
   methods: {
     reloadTable() {
