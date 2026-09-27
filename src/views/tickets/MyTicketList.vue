@@ -1,7 +1,6 @@
 <template>
   <div>
     <BaseTicketList
-      :key="url"
       :url="url"
       :extra-ticket-action="tab === 'manual' ? extraTicketAction : { hasCreate: false }"
     >
