@@ -4,11 +4,25 @@
       <AutoDetailCard v-bind="detail" :fields="detailFields" :object="object" />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
+        <IBox
+          v-if="object.secret_type?.value === 'password' && $hasPerm('tickets.view_ticket')"
+          title="TicketViewSecret"
+        >
+          <el-button type="primary" @click="requestSecretVisible = true">{{
+            $t('OpenTicket')
+          }}</el-button>
+        </IBox>
         <ViewSecret
           v-if="showViewSecretDialog"
           v-model:visible="showViewSecretDialog"
           :account="object"
           :url="secretUrl"
+        />
+        <AccountSecretTicketRequest
+          v-if="requestSecretVisible"
+          :account="object"
+          @close="requestSecretVisible = false"
+          @created="openSecretTicket"
         />
         <AutomationParamsForm
           v-model:visible="autoPushVisible"
@@ -28,7 +42,9 @@
 <script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import QuickActions from '@/components/Common/QuickActions/index.vue'
+import IBox from '@/components/Common/IBox'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
+import AccountSecretTicketRequest from './AccountSecretTicketRequest.vue'
 import { openTaskPage } from '@/utils/jms/index'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 import AssetDetail from '@/views/assets/Asset/AssetDetail'
@@ -40,9 +56,11 @@ export default {
     TwoCol,
     AutoDetailCard,
     QuickActions,
+    IBox,
     AssetDetail,
     AutomationParamsForm,
-    ViewSecret
+    ViewSecret,
+    AccountSecretTicketRequest
   },
   props: {
     object: {
@@ -59,6 +77,7 @@ export default {
       autoPushVisible: false,
       secretUrl: `/api/v1/accounts/account-secrets/${this.object.id}/`,
       showViewSecretDialog: false,
+      requestSecretVisible: false,
       quickActions: [
         {
           title: this.$t('Active'),
@@ -273,6 +292,10 @@ export default {
     }
   },
   methods: {
+    openSecretTicket({ id, orgId }) {
+      this.requestSecretVisible = false
+      this.$router.push({ name: 'TicketDetail', params: { id }, query: { oid: orgId } })
+    },
     formatSourceTemplate(item, template) {
       if (!template) {
         return this.object.source_id ? (
