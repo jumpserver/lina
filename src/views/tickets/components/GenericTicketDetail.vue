@@ -1,13 +1,9 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="24">
-      <el-alert
-        v-if="object.execution_mode === 'approval_only'"
-        :title="$t('TicketApprovalOnlyHint')"
-        type="info"
-        :closable="false"
-        show-icon
-      />
+      <p v-if="object.execution_mode === 'approval_only'" class="ticket-approval-hint">
+        {{ $t('TicketApprovalOnlyHint') }}
+      </p>
       <Details :detail-card-items="iDetailCardItems" :title="$tc('BasicInfo')" />
       <Details
         v-if="specialCardItems.length > 0"
@@ -19,6 +15,7 @@
         :detail-card-items="assignedCardItems"
         :title="$tc('AssignedInfo')"
       />
+      <TicketSecretAccess v-if="object.type?.value === 'view_secret'" :object="object" />
       <slot id="MoreDetails" />
       <WorkflowPanel :object="object" />
       <Comments v-bind="$attrs" :object="object" />
@@ -35,6 +32,7 @@ import CcUsers from './CcUsers'
 import Details from './Details'
 import Session from './Session'
 import WorkflowPanel from './WorkflowPanel'
+import TicketSecretAccess from './TicketSecretAccess'
 import { getTicketFlowLabel, getTicketStateLabel, getTicketTypeLabel } from '../const'
 export default {
   name: 'GenericTicketDetail',
@@ -43,7 +41,8 @@ export default {
     CcUsers,
     Comments,
     Details,
-    Session
+    Session,
+    TicketSecretAccess
   },
   props: {
     object: {
@@ -131,3 +130,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.ticket-approval-hint {
+  margin: 0 0 10px;
+  color: var(--color-text-secondary);
+}
+</style>

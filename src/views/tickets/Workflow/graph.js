@@ -35,6 +35,7 @@ export const eventLabels = {
   'workflow.expired': 'WFExpired',
   'workflow.error': 'WFError',
   'action.executed': 'WFActionExecuted',
+  'secret.viewed': 'ViewSecret',
   'workflow.migrated': 'WFMigrated'
 }
 export const newApproval = () => ({
