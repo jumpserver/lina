@@ -1,16 +1,12 @@
 <template>
   <div v-loading="loading">
     <IBox>
-      <div>
+      <div class="ticket-type-summary">
         {{ $t('Type') }}: <strong>{{ typeLabel(selectedPlugin) }}</strong>
+        <span v-if="selectedPlugin?.execution_mode === 'approval_only'" class="ticket-type-hint">
+          {{ $t('TicketApprovalOnlyHint') }}
+        </span>
       </div>
-      <el-alert
-        v-if="selectedPlugin?.execution_mode === 'approval_only'"
-        :title="$t('TicketApprovalOnlyHint')"
-        type="info"
-        :closable="false"
-        show-icon
-      />
     </IBox>
     <AssetRequest v-if="selectedType === 'apply_asset'" ref="form" />
     <GenericCreateUpdatePage
@@ -217,3 +213,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.ticket-type-hint {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-text-secondary);
+}
+</style>
