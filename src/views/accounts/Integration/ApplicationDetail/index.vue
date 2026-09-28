@@ -32,7 +32,10 @@ export default {
       object: {},
       config: {
         titlePrefix: this.$t('ApplicationDetail'),
-        activeMenu: 'IntegrationApplicationInfo',
+        activeMenu:
+          this.$route.query.access === '1'
+            ? 'ApplicationConnections'
+            : 'IntegrationApplicationInfo',
         url: '/api/v1/accounts/integration-applications',
         submenu: [
           {
@@ -46,7 +49,7 @@ export default {
             hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           },
           {
-            title: this.$t('ApplicationConnections'),
+            title: this.$t('AccessAndConnections'),
             name: 'ApplicationConnections',
             hidden: () => !this.$hasPerm('accounts.view_credentialclientinstance')
           },
@@ -62,6 +65,11 @@ export default {
           }
         ]
       }
+    }
+  },
+  watch: {
+    '$route.query.access'(value) {
+      if (value === '1') this.config.activeMenu = 'ApplicationConnections'
     }
   }
 }

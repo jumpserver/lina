@@ -7,6 +7,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import rules from '@/components/Form/DataForm/rules'
 import { credentialUrl, saveApplicationCredential } from '@/api/applicationCredential'
+import { subscribedAccountLabel } from './components/subscriptionAccount.js'
 
 const isRotation = (form) => form.mode === 'alternating_rotation'
 
@@ -113,6 +114,24 @@ export default {
           placeholder: this.$t('SelectAlternateAccount')
         }
       },
+      standby_no_traffic_days: {
+        label: this.$t('StandbyNoTrafficDays'),
+        hidden: (form) => !isRotation(form),
+        rules: [
+          rules.Required,
+          {
+            validator: (_rule, value, callback) =>
+              callback(
+                Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= 3650
+                  ? undefined
+                  : new Error(this.$t('StandbyNoTrafficDaysValidation'))
+              ),
+            trigger: 'blur'
+          }
+        ],
+        el: { type: 'number', min: 1, max: 3650, step: 1 },
+        helpText: this.$t('StandbyNoTrafficDaysHelp')
+      },
       subscription_account_ids: {
         label: this.$t('SubscribedAccounts'),
         component: Select2,
@@ -121,7 +140,13 @@ export default {
         helpTextFormatter: () => this.$t('SubscribedAccountsHelp'),
         el: {
           multiple: true,
-          url: '/api/v1/accounts/accounts/?fields_size=small',
+          url: '/api/v1/accounts/accounts/?fields=id,name,username,asset',
+          ajax: {
+            transformOption: (account) => ({
+              label: subscribedAccountLabel(account),
+              value: account.id
+            })
+          },
           placeholder: this.$t('SelectSubscribedAccounts')
         }
       },
@@ -160,6 +185,7 @@ export default {
           asset_id: assetId,
           account_id: item?.account?.id || '',
           alternate_account_id: item?.alternate_account?.id || '',
+          standby_no_traffic_days: item?.standby_no_traffic_days ?? 7,
           subscription_account_ids: (item?.subscription_accounts || []).map(
             (account) => account.id
           ),
@@ -171,7 +197,13 @@ export default {
           [this.$t('Basic'), ['name', 'mode']],
           [
             this.$t('AccountConfiguration'),
-            ['asset_id', 'account_id', 'alternate_account_id', 'subscription_account_ids']
+            [
+              'asset_id',
+              'account_id',
+              'alternate_account_id',
+              'standby_no_traffic_days',
+              'subscription_account_ids'
+            ]
           ],
           [this.$t('ApplicationBinding'), ['application_ids']],
           [this.$t('Other'), ['is_active', 'comment']]

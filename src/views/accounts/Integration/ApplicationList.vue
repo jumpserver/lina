@@ -12,6 +12,11 @@
     :warning-text="$t('ApplicationSecretWarning')"
     mask-secret
   />
+  <ApplicationEventSendDialog
+    v-if="eventApplication"
+    v-model:visible="eventDialogVisible"
+    :application="eventApplication"
+  />
 </template>
 
 <script lang="jsx">
@@ -19,15 +24,19 @@ import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormat
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import SecretDialog from '@/components/Dialog/Secret.vue'
 import { GenericListTable } from '@/layout/components'
+import ApplicationEventSendDialog from './components/ApplicationEventSendDialog.vue'
 export default {
   name: 'IntegrationApplicationList',
   components: {
     GenericListTable,
-    SecretDialog
+    SecretDialog,
+    ApplicationEventSendDialog
   },
   data() {
     const vm = this
     return {
+      eventApplication: null,
+      eventDialogVisible: false,
       createDrawer: () => import('@/views/accounts/Integration/ApplicationCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/Integration/ApplicationDetail/index.vue'),
       drawerTitle: '',
@@ -89,6 +98,17 @@ export default {
             formatterArgs: {
               hasClone: false,
               extraActions: [
+                {
+                  name: 'send-event',
+                  title: vm.$t('SendApplicationEvent'),
+                  icon: 'fa-solid fa-paper-plane',
+                  has: vm.$hasPerm('accounts.change_integrationapplication'),
+                  can: ({ row }) => row.is_active,
+                  callback: ({ row }) => {
+                    vm.eventApplication = row
+                    vm.eventDialogVisible = true
+                  }
+                },
                 {
                   name: 'reset-secret',
                   title: vm.$t('ResetApplicationSecret'),

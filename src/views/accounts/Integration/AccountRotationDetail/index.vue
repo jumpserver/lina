@@ -1,50 +1,84 @@
 <template>
-  <div class="application-credential-detail">
-    <el-tabs v-model="activeTab" @tab-click="refreshEvents">
-      <el-tab-pane :label="$t('Basic')" name="basic">
-        <AccountRotationInfo :object="object" @edit="$emit('edit', object)" @updated="updated" />
-        <RotationEventTimeline
-          v-if="object.mode === 'alternating_rotation'"
-          ref="rotationEvents"
-          :key="object.id"
-          :credential-id="object.id"
-          overview
-          @view-history="viewClientHistory"
-        />
-      </el-tab-pane>
-      <el-tab-pane
-        v-if="$hasPerm('accounts.view_clientaccessconfiguration')"
-        :label="$t('ClientAccessConfigurations')"
-        name="access"
-      >
-        <ClientAccessPrototype :key="object.id" :object="object" />
-      </el-tab-pane>
-      <el-tab-pane :label="$t('RotationEventReception')" name="events">
-        <CredentialEventBrowser
-          v-if="activeTab === 'events'"
-          :key="eventsKey"
-          :credential-id="object.id"
-          :subscription="object.mode === 'subscription'"
-          :initial-client="historyClient"
-        />
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+  <TabPage
+    v-model:active-menu="activeTab"
+    :submenu="submenu"
+    title="null"
+    navigation-scope="local"
+    class="application-credential-detail"
+    @tab-click="refreshEvents"
+  >
+    <AccountRotationInfo
+      ref="rotationInfo"
+      v-show="activeTab === 'basic'"
+      :object="object"
+      :cycle-starting="cycleStarting"
+      @edit="$emit('edit', object)"
+      @updated="$emit('updated', $event)"
+      @start-cycle="startCycle"
+    />
+    <ClientAccessPrototype
+      v-if="$hasPerm('accounts.view_integrationapplication')"
+      v-show="activeTab === 'access'"
+      :key="object.id"
+      :object="object"
+    />
+    <CredentialEventBrowser
+      v-if="activeTab === 'events'"
+      ref="eventBrowser"
+      :key="eventsKey"
+      :credential-id="object.id"
+      :subscription="object.mode === 'subscription'"
+      :initial-cycle-id="startedCycleId"
+    >
+      <template #actions="{ cycle }">
+        <el-button
+          v-if="pendingRotationAction && cycle?.id === object.rotation?.id"
+          :type="pendingRotationAction.attrs.type"
+          :loading="pendingRotationAction.attrs.loading"
+          :disabled="pendingRotationAction.attrs.disabled"
+          @click="advanceRotationFromEvents"
+          >{{ pendingRotationAction.attrs.label }}</el-button
+        >
+        <el-tooltip
+          v-else-if="$hasPerm('accounts.change_applicationcredential')"
+          :content="$t('PolicyCycleRunningHelp')"
+          :disabled="object.status === 'idle'"
+        >
+          <el-button
+            type="primary"
+            :loading="cycleStarting"
+            :disabled="
+              !object.is_active ||
+              object.status !== 'idle' ||
+              object.precheck?.status === 'checking'
+            "
+            @click="startCycle"
+            >{{ $t('StartNewPolicyCycle') }}</el-button
+          >
+        </el-tooltip>
+      </template>
+    </CredentialEventBrowser>
+    <CredentialPolicyDocumentation v-if="activeTab === 'docs'" :object="object" />
+  </TabPage>
 </template>
 
 <script>
+import { ref } from 'vue'
+import TabPage from '@/layout/components/TabPage'
 import AccountRotationInfo from './AccountRotationInfo.vue'
 import CredentialEventBrowser from './CredentialEventBrowser.vue'
-import RotationEventTimeline from './RotationEventTimeline.vue'
+import CredentialPolicyDocumentation from './CredentialPolicyDocumentation.vue'
 import ClientAccessPrototype from '../ApplicationDetail/ClientAccessPrototype.vue'
+import { startApplicationCredentialCycle } from '@/api/applicationCredential'
 
 export default {
   name: 'ApplicationCredentialDetail',
   components: {
+    TabPage,
     AccountRotationInfo,
     ClientAccessPrototype,
     CredentialEventBrowser,
-    RotationEventTimeline
+    CredentialPolicyDocumentation
   },
   props: {
     object: {
@@ -53,36 +87,84 @@ export default {
     }
   },
   emits: ['edit', 'updated'],
+  setup() {
+    const rotationInfo = ref(null)
+    const eventBrowser = ref(null)
+    return { rotationInfo, eventBrowser }
+  },
   data() {
     return {
       activeTab: 'basic',
       eventsKey: 0,
-      historyClient: null
+      cycleStarting: false,
+      startedCycleId: ''
+    }
+  },
+  computed: {
+    pendingRotationAction() {
+      if (this.object.status === 'idle') return null
+      const action = this.rotationInfo?.rotationAction
+      return action?.has ? action : null
+    },
+    submenu() {
+      return [
+        { title: this.$t('Basic'), name: 'basic' },
+        {
+          title: this.$t('BoundApplications'),
+          name: 'access',
+          hidden: !this.$hasPerm('accounts.view_integrationapplication')
+        },
+        { title: this.$t('RotationEventReception'), name: 'events' },
+        { title: this.$t('Documentation'), name: 'docs' }
+      ]
     }
   },
   methods: {
+    async advanceRotationFromEvents() {
+      const action = this.pendingRotationAction
+      if (
+        !action ||
+        action.attrs.disabled ||
+        action.attrs.loading ||
+        this.eventBrowser?.cycleId !== this.object.rotation?.id
+      ) {
+        return
+      }
+      await action.callbacks.click()
+      await this.eventBrowser?.loadCycles()
+    },
+    async startCycle() {
+      if (this.cycleStarting || !this.object.is_active || this.object.status !== 'idle') return
+      this.cycleStarting = true
+      const subscription = this.object.mode === 'subscription'
+      try {
+        try {
+          await this.$confirm(
+            this.$t(
+              subscription
+                ? 'StartSubscriptionNotificationCycleConfirm'
+                : 'StartRotationPreparationConfirm'
+            ),
+            this.$t('StartNewPolicyCycle'),
+            { type: 'info' }
+          )
+        } catch {
+          return
+        }
+        const { credential, cycle_id } = await startApplicationCredentialCycle(this.object.id)
+        this.$emit('updated', credential)
+        this.startedCycleId = cycle_id
+        this.eventsKey += 1
+        this.activeTab = 'events'
+        this.$message.success(this.$t('PolicyCycleStarted'))
+      } finally {
+        this.cycleStarting = false
+      }
+    },
     refreshEvents(tab) {
-      if (tab.paneName === 'basic') this.$refs.rotationEvents?.load()
       if (tab.paneName !== 'events') return
-      this.historyClient = null
       this.eventsKey += 1
-    },
-    viewClientHistory(client) {
-      this.historyClient = client
-      this.eventsKey += 1
-      this.activeTab = 'events'
-    },
-    updated(value) {
-      this.$emit('updated', value)
-      this.$refs.rotationEvents?.load()
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.application-credential-detail {
-  min-height: 100%;
-  padding: 0 20px 20px;
-}
-</style>

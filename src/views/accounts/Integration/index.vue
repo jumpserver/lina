@@ -34,12 +34,6 @@ export default {
             component: () => import('@/views/accounts/Integration/AccountRotationPrototype.vue')
           },
           {
-            name: 'notifications',
-            title: this.$t('EventNotifications'),
-            hidden: !this.$hasPerm('accounts.view_applicationwebhook'),
-            component: () => import('@/views/accounts/Integration/ApplicationWebhookRules.vue')
-          },
-          {
             name: 'docs',
             title: this.$t('Documentation'),
             hidden: !this.$hasPerm('accounts.view_integrationapplication'),

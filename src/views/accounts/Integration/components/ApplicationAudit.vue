@@ -78,7 +78,6 @@ export default {
           },
           { prop: 'service', label: this.$t('RelevantApp'), minWidth: 170 },
           { prop: 'credential', label: this.$t('ApplicationCredential'), minWidth: 170 },
-          { prop: 'configuration', label: this.$t('ClientAccessConfiguration'), minWidth: 180 },
           { prop: 'instance_id', label: this.$t('InstanceID'), minWidth: 170 },
           { prop: 'operator', label: this.$t('AppAuditActor'), minWidth: 130 },
           {

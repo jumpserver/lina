@@ -1,6 +1,8 @@
 import { rotationStatuses } from './credentialStatus.js'
 
 export const auditEvents = {
+  command_requested: 'SendApplicationEvent',
+  command_result: 'ApplicationCommandResult',
   configuration_created: 'AppAuditConfigurationCreated',
   configuration_updated: 'AppAuditConfigurationUpdated',
   configuration_deleted: 'AppAuditConfigurationDeleted',
@@ -8,6 +10,7 @@ export const auditEvents = {
   authorization_revoked: 'AppAuditAuthorizationRevoked',
   credential_fetched: 'AppAuditCredentialFetched',
   credential_published: 'AppAuditCredentialPublished',
+  credential_republished: 'AppAuditCredentialRepublished',
   credential_confirmed: 'AppAuditCredentialApplied',
   credential_stream_connected: 'AppAuditCredentialStreamConnected',
   credential_stream_disconnected: 'AppAuditCredentialStreamDisconnected',
@@ -25,6 +28,7 @@ export const auditEvents = {
   application_secret_reset: 'ApplicationSecretReset'
 }
 export const auditResults = {
+  running: 'Running',
   success: 'Success',
   failed: 'Failed',
   retrying: 'AppAuditRetrying',
@@ -56,6 +60,10 @@ const fieldLabels = {
   systemd_action: 'SystemdAction'
 }
 const summaries = {
+  'credential.switch.requested': 'ApplicationAccountSwitchRequest',
+  'application.restart.requested': 'ApplicationRestartRequest',
+  execution_failed: 'ApplicationCommandExecutionFailed',
+  superseded: 'ApplicationCommandSuperseded',
   'Notification failed; waiting for retry.': 'AppAuditRetrySummary',
   'Notification delivery deadline reached.': 'AppAuditDeadline',
   'Credential access was revoked.': 'AppAuditAuthorizationRevoked',

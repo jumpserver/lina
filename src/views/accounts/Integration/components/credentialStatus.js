@@ -1,5 +1,8 @@
 export const rotationStatuses = {
   idle: 'RotationNormal',
+  preparing: 'RotationPreparing',
+  waiting_standby: 'RotationWaitingStandby',
+  ready_to_switch: 'RotationReadyToSwitch',
   waiting_switch: 'WaitingForAccountSwitch',
   ready_for_change: 'ReadyForSecretChange',
   changing_secret: 'ChangingSecret',

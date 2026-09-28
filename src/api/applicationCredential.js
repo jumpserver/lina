@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 
 export const credentialUrl = '/api/v1/accounts/application-credentials/'
-export const accessConfigurationUrl = '/api/v1/accounts/client-access-configurations/'
 export const choiceValue = (value) => value?.value ?? value
 
 export const normalizeCredential = (item) => ({
@@ -10,27 +9,9 @@ export const normalizeCredential = (item) => ({
   status: choiceValue(item.status)
 })
 
-export const normalizeAccessConfiguration = (item) => ({
-  ...item,
-  type: choiceValue(item.type),
-  language: choiceValue(item.language),
-  delivery_mode: choiceValue(item.delivery_mode),
-  systemd_action: choiceValue(item.systemd_action),
-  credential_ids: item.credentials.map((credential) => credential.id),
-  application_name: item.application.name,
-  instances: item.instances_amount || 0,
-  status: !item.is_active ? 'disabled' : item.online_instances_amount > 0 ? 'online' : 'offline'
-})
-
 export async function requestCredentialTable(url, config) {
   const response = await request.get(url, config)
   response.data.results = response.data.results.map(normalizeCredential)
-  return response
-}
-
-export async function requestAccessConfigurationTable(url, config) {
-  const response = await request.get(url, config)
-  response.data.results = response.data.results.map(normalizeAccessConfiguration)
   return response
 }
 
@@ -41,11 +22,25 @@ export async function getApplicationCredential(id) {
 export const getCredentialRotationStatus = (id) =>
   request.get(`${credentialUrl}${id}/rotation-status/`)
 
+export const getCredentialAccessApplications = (id) =>
+  request.get(`${credentialUrl}${id}/access-applications/`, { disableFlashErrorMsg: true })
+
+export const generateApplicationAccessMaterials = (id, data) =>
+  request.post(`/api/v1/accounts/integration-applications/${id}/access-materials/`, data)
+
 export const getCredentialRotationEvents = (id, params = {}) =>
   request.get(`${credentialUrl}${id}/rotation-events/`, { params, disableFlashErrorMsg: true })
 
 export const getCredentialEventHistory = (id, params = {}) =>
   request.get(`${credentialUrl}${id}/event-history/`, { params, disableFlashErrorMsg: true })
+
+export const getCredentialEventCycles = (id, params = {}) =>
+  request.get(`${credentialUrl}${id}/event-cycles/`, { params, disableFlashErrorMsg: true })
+
+export async function startApplicationCredentialCycle(id) {
+  const response = await request.post(`${credentialUrl}${id}/start-cycle/`)
+  return { ...response, credential: normalizeCredential(response.credential) }
+}
 
 export async function saveApplicationCredential(form) {
   const data = {
@@ -53,6 +48,9 @@ export async function saveApplicationCredential(form) {
     mode: form.mode,
     account: form.mode === 'alternating_rotation' ? form.account_id : null,
     alternate_account: form.mode === 'alternating_rotation' ? form.alternate_account_id : null,
+    ...(form.mode === 'alternating_rotation'
+      ? { standby_no_traffic_days: Number(form.standby_no_traffic_days ?? 7) }
+      : {}),
     subscription_accounts: form.mode === 'subscription' ? form.subscription_account_ids : [],
     applications: form.application_ids,
     is_active: form.is_active,
@@ -68,7 +66,10 @@ export const deleteApplicationCredential = (id) => request.delete(`${credentialU
 
 export async function advanceApplicationCredentialRotation(credential) {
   const actions = {
-    idle: 'start',
+    idle: 'prepare',
+    preparing: 'check-preparation',
+    waiting_standby: 'check-preparation',
+    ready_to_switch: 'start',
     waiting_switch: 'check-usage',
     ready_for_change: 'change-secret',
     changing_secret: 'check-secret-change',
@@ -91,33 +92,6 @@ export const executeCredentialChange = (automation) =>
 export const retryCredentialChange = (id, execution_id, reason) =>
   request.post(`${credentialUrl}${id}/retry-change/`, { execution_id, reason })
 
-export async function saveClientAccessConfiguration(application, form) {
-  const data = {
-    application: application.id,
-    name: form.name,
-    type: form.type,
-    credentials: form.credential_ids,
-    language: 'python',
-    app_user: form.app_user,
-    install_path: form.install_path,
-    delivery_mode: form.delivery_mode,
-    systemd_unit: form.delivery_mode === 'environment' ? form.systemd_unit : '',
-    systemd_action: form.systemd_action,
-    is_active: form.is_active,
-    removal_reason: form.removal_reason || ''
-  }
-  const item = form.id
-    ? await request.patch(`${accessConfigurationUrl}${form.id}/`, data)
-    : await request.post(accessConfigurationUrl, data)
-  return normalizeAccessConfiguration(item)
-}
-
-export const deleteClientAccessConfiguration = (id) =>
-  request.delete(`${accessConfigurationUrl}${id}/`)
-export const getClientAccessConfiguration = async (id) =>
-  normalizeAccessConfiguration(await request.get(`${accessConfigurationUrl}${id}/`))
-export const generateClientAccessMaterials = (id) =>
-  request.post(`${accessConfigurationUrl}${id}/materials/`)
 export const setClientInstanceActive = (id, isActive, reason = '') =>
   request.patch(`/api/v1/accounts/credential-client-instances/${id}/`, {
     is_active: isActive,

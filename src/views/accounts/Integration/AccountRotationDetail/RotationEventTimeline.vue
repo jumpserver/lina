@@ -109,7 +109,7 @@
               <span
                 >{{ client.type === 'agent' ? 'Agent' : 'SDK' }} · {{ clientState(client) }}</span
               >
-              <span>{{ client.application.name }} · {{ client.configuration.name }}</span>
+              <span>{{ client.application.name }}</span>
               <span>{{
                 $t('RotationEventReceiptCount', {
                   received: client.receivedCount,
@@ -248,8 +248,8 @@ export default {
             (!this.clientType || client.type === this.clientType) &&
             (!this.receiptFilter || client.receiptState === this.receiptFilter) &&
             (!search ||
-              [client.instance_id, client.application.name, client.configuration.name].some(
-                (value) => value.toLowerCase().includes(search)
+              [client.instance_id, client.application.name].some((value) =>
+                value.toLowerCase().includes(search)
               ))
         )
         .sort((a, b) => priority[a.receiptState] - priority[b.receiptState])

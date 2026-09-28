@@ -75,13 +75,7 @@ export default {
       return [
         { key: this.$t('RelevantApp'), value: row.service },
         ...(!disabled ? [{ key: this.$t('ApplicationCredential'), value: row.credential }] : []),
-        {
-          key: this.$t('ClientAccessConfiguration'),
-          value:
-            disabled && !recorded(row.configuration)
-              ? this.$t('AppAuditNotRecorded')
-              : row.configuration
-        },
+
         {
           key: this.$t(disabled ? 'AppAuditDisabledInstance' : 'InstanceID'),
           value:

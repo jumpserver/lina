@@ -41,13 +41,13 @@ import {
 import AccountRotationCreateUpdate from './AccountRotationCreateUpdate.vue'
 import AccountRotationDetail from './AccountRotationDetail/index.vue'
 import { credentialStatusLabel } from './components/credentialStatus.js'
+import { subscribedAccountLabel } from './components/subscriptionAccount.js'
 
 const accountName = (row, t) =>
   row.mode === 'subscription'
     ? row.subscription_all_authorized
       ? t('LegacyAllAuthorizedAccounts')
-      : row.subscription_accounts?.map((account) => account.username || account.name).join(', ') ||
-        '-'
+      : row.subscription_accounts?.map(subscribedAccountLabel).join(', ') || '-'
     : row.active_account?.username || row.active_account?.name || '-'
 
 export default {
@@ -86,27 +86,6 @@ export default {
             formatter: (row) => this.modeLabel(row)
           },
           {
-            prop: 'asset',
-            label: this.$t('Asset'),
-            minWidth: '190px',
-            formatter: (row) =>
-              row.mode === 'subscription'
-                ? '-'
-                : `${row.asset?.name || '-'} (${row.asset?.address || '-'})`
-          },
-          {
-            prop: 'active_account',
-            label: this.$t('CurrentAccount'),
-            minWidth: '140px',
-            formatter: (row) => accountName(row, this.$t)
-          },
-          {
-            prop: 'last_fetched',
-            label: this.$t('LastFetched'),
-            width: '175px',
-            formatter: (row) => this.formatDate(row.last_fetched)
-          },
-          {
             prop: 'status',
             label: this.$t('Status'),
             width: '200px',
@@ -128,6 +107,27 @@ export default {
                 </el-tag>
               </el-tooltip>
             )
+          },
+          {
+            prop: 'asset',
+            label: this.$t('Asset'),
+            minWidth: '190px',
+            formatter: (row) =>
+              row.mode === 'subscription'
+                ? '-'
+                : `${row.asset?.name || '-'} (${row.asset?.address || '-'})`
+          },
+          {
+            prop: 'active_account',
+            label: this.$t('CurrentAccount'),
+            minWidth: '240px',
+            formatter: (row) => accountName(row, this.$t)
+          },
+          {
+            prop: 'last_fetched',
+            label: this.$t('LastFetched'),
+            width: '175px',
+            formatter: (row) => this.formatDate(row.last_fetched)
           },
           {
             prop: 'actions',

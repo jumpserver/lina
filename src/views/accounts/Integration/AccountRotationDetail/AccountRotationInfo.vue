@@ -14,30 +14,16 @@
         <QuickActions :actions="quickActions" :title="$t('CurrentAction')" />
       </template>
     </TwoCol>
-
-    <IBox
-      v-if="object.mode === 'alternating_rotation'"
-      :title="$t('RotationProgress')"
-      class="rotation-steps"
-    >
-      <el-steps :active="rotationStep" direction="horizontal" finish-status="success">
-        <el-step
-          v-for="step in rotationSteps"
-          :key="step.title"
-          :description="step.description"
-          :title="step.title"
-        />
-      </el-steps>
-    </IBox>
   </section>
 </template>
 
 <script lang="jsx">
-import { IBox, QuickActions } from '@/components'
+import { QuickActions } from '@/components'
 import DetailCard from '@/components/Cards/DetailCard/index.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { credentialStatusLabel } from '../components/credentialStatus.js'
+import { subscribedAccountLabel } from '../components/subscriptionAccount.js'
 import { openTaskPage } from '@/utils/jms'
 import {
   advanceApplicationCredentialRotation,
@@ -52,14 +38,15 @@ const accountName = (account) => account?.username || account?.name || '-'
 
 export default {
   name: 'ApplicationCredentialInfo',
-  components: { DetailCard, IBox, QuickActions, TwoCol },
+  components: { DetailCard, QuickActions, TwoCol },
   props: {
     object: {
       type: Object,
       required: true
-    }
+    },
+    cycleStarting: Boolean
   },
-  emits: ['edit', 'updated'],
+  emits: ['edit', 'updated', 'start-cycle'],
   data() {
     return {
       actionLoading: false,
@@ -87,6 +74,7 @@ export default {
       immediate: true,
       handler() {
         this.scheduleRotationStatusRefresh()
+        this.schedulePrecheckRefresh()
       }
     }
   },
@@ -106,20 +94,6 @@ export default {
         failed: 'PamPrecheckFailed'
       }
       return this.$t(keys[precheck?.code] || 'PamPrecheckFailed')
-    },
-    rotationStep() {
-      if (this.object.status === 'idle') {
-        return this.object.date_last_rotated ? this.rotationSteps.length : 0
-      }
-      const steps = {
-        waiting_switch: 0,
-        ready_for_change: 1,
-        changing_secret: 2,
-        change_failed: 2,
-        recovery_required: 2,
-        waiting_revert: 3
-      }
-      return steps[this.object.status] || 0
     },
     modeLabel() {
       return this.$t(
@@ -164,7 +138,13 @@ export default {
           },
           { key: this.$t('AssetType'), value: asset.platform?.name || '-' },
           { key: this.$t('CurrentAccount'), value: accountName(this.object.active_account) },
-          { key: this.$t('NextAccount'), value: accountName(nextAccount) }
+          { key: this.$t('NextAccount'), value: accountName(nextAccount) },
+          {
+            key: this.$t('StandbyNoTrafficDays'),
+            value: this.$t('StandbyNoTrafficDaysValue', {
+              days: this.object.standby_no_traffic_days ?? 7
+            })
+          }
         )
       } else {
         items.push(
@@ -172,7 +152,7 @@ export default {
             key: this.$t('SubscribedAccounts'),
             value: this.object.subscription_all_authorized
               ? this.$t('LegacyAllAuthorizedAccounts')
-              : this.object.subscription_accounts?.map(accountName).join(', ') || '-'
+              : this.object.subscription_accounts?.map(subscribedAccountLabel).join(', ') || '-'
           },
           {
             key: this.$t('SubscriptionScope'),
@@ -186,6 +166,29 @@ export default {
         { key: this.$t('LastRotation'), value: this.formatDate(this.object.date_last_rotated) },
         { key: this.$t('Comment'), value: this.object.comment || '-' }
       )
+      if (this.object.preparation) {
+        const preparation = this.object.preparation
+        items.push(
+          {
+            key: this.$t('RotationAlignment'),
+            value: preparation.applications
+              .map(
+                (app) =>
+                  `${app.name}: ${this.$t(app.aligned ? 'RotationAligned' : 'RotationNotAligned')}`
+              )
+              .join(', ')
+          },
+          {
+            key: this.$t('StandbyLastSecretAccess'),
+            value: this.formatDate(preparation.standby_last_access)
+          },
+          {
+            key: this.$t('StandbyIdleSince'),
+            value: this.formatDate(preparation.standby_idle_since)
+          },
+          { key: this.$t('RotationEligibleAt'), value: this.formatDate(preparation.eligible_at) }
+        )
+      }
       if (this.object.change_execution) {
         items.push({
           key: this.$t('ChangeSecretExecution'),
@@ -211,29 +214,13 @@ export default {
       }
       return items
     },
-    rotationSteps() {
-      return [
-        {
-          title: this.$t('SwitchToAlternateAccount'),
-          description: this.$t('WaitingForClientReport')
-        },
-        {
-          title: this.$t('ConfirmApplicationsSwitched'),
-          description: this.$t('SecretChangeGuard')
-        },
-        {
-          title: this.$t('ChangeAndVerifySecret'),
-          description: this.$t('ChangeInactiveAccountSecretHelp')
-        },
-        {
-          title: this.$t('RotationCompleted'),
-          description: this.$t('AllClientsConfirmed')
-        }
-      ]
-    },
     rotationActionLabel() {
       let label
       if (this.object.status === 'idle') {
+        label = this.$t('StartNewPolicyCycle')
+      } else if (['preparing', 'waiting_standby'].includes(this.object.status)) {
+        label = this.$t('CheckRotationPreparation')
+      } else if (this.object.status === 'ready_to_switch') {
         label = this.$t(
           this.object.precheck?.status === 'checking' ? 'PamPrecheckRunning' : 'StartRotation'
         )
@@ -246,8 +233,36 @@ export default {
       } else {
         label = this.$t('ContinueRotation')
       }
-      const blockers = this.rotationStatus?.summary?.blocking || 0
+      const blockers = this.object.preparation
+        ? this.object.preparation.applications.filter((app) => !app.aligned).length
+        : this.rotationStatus?.summary?.blocking || 0
       return blockers ? `${label} (${blockers})` : label
+    },
+    rotationAction() {
+      return {
+        title: this.$t('AccountRotation'),
+        has:
+          this.object.mode === 'alternating_rotation' &&
+          this.$hasPerm('accounts.change_applicationcredential'),
+        attrs: {
+          type: 'primary',
+          label: this.rotationActionLabel,
+          loading: this.actionLoading || this.cycleStarting,
+          disabled:
+            this.cycleStarting ||
+            !this.object.is_active ||
+            this.object.precheck?.status === 'checking' ||
+            (this.object.status === 'ready_to_switch' &&
+              !this.$hasPerm('accounts.verify_account')) ||
+            (this.object.status === 'ready_for_change' &&
+              !this.$hasPerm(
+                this.object.rotation?.automation_id
+                  ? 'accounts.add_changesecretexecution'
+                  : 'accounts.add_changesecretautomation'
+              ))
+        },
+        callbacks: { click: this.advanceRotation }
+      }
     },
     quickActions() {
       return [
@@ -269,31 +284,26 @@ export default {
         {
           title: this.$t('Configuration'),
           has: this.$hasPerm('accounts.change_applicationcredential'),
-          attrs: { label: this.$t('Edit'), disabled: this.object.status !== 'idle' },
+          attrs: {
+            label: this.$t('Edit'),
+            disabled: this.object.status !== 'idle' || this.cycleStarting
+          },
           callbacks: { click: () => this.$emit('edit', this.object) }
         },
         {
-          title: this.$t('AccountRotation'),
+          title: this.$t('PolicyEventCycle'),
           has:
-            this.object.mode === 'alternating_rotation' &&
+            this.object.mode === 'subscription' &&
             this.$hasPerm('accounts.change_applicationcredential'),
           attrs: {
             type: 'primary',
-            label: this.rotationActionLabel,
-            loading: this.actionLoading,
-            disabled:
-              !this.object.is_active ||
-              this.object.precheck?.status === 'checking' ||
-              (this.object.status === 'idle' && !this.$hasPerm('accounts.verify_account')) ||
-              (this.object.status === 'ready_for_change' &&
-                !this.$hasPerm(
-                  this.object.rotation?.automation_id
-                    ? 'accounts.add_changesecretexecution'
-                    : 'accounts.add_changesecretautomation'
-                ))
+            label: this.$t('StartNewPolicyCycle'),
+            loading: this.cycleStarting,
+            disabled: !this.object.is_active || this.object.status !== 'idle'
           },
-          callbacks: { click: this.advanceRotation }
+          callbacks: { click: () => this.$emit('start-cycle') }
         },
+        this.rotationAction,
         {
           title: this.$t('ExecutionLog'),
           has:
@@ -345,7 +355,14 @@ export default {
           title: this.$t('Cancel'),
           has:
             this.object.mode === 'alternating_rotation' &&
-            ['waiting_switch', 'ready_for_change', 'change_failed'].includes(this.object.status) &&
+            [
+              'preparing',
+              'waiting_standby',
+              'ready_to_switch',
+              'waiting_switch',
+              'ready_for_change',
+              'change_failed'
+            ].includes(this.object.status) &&
             this.$hasPerm('accounts.change_applicationcredential'),
           attrs: { label: this.$t('CancelRotation'), disabled: this.actionLoading },
           callbacks: { click: this.cancelRotation }
@@ -389,7 +406,13 @@ export default {
     },
     schedulePrecheckRefresh() {
       clearTimeout(this.precheckTimer)
-      if (this.disposed || this.object.precheck?.status !== 'checking') return
+      if (
+        this.disposed ||
+        (this.object.precheck?.status !== 'checking' &&
+          !['preparing', 'waiting_standby', 'ready_to_switch'].includes(this.object.status))
+      ) {
+        return
+      }
       this.precheckTimer = setTimeout(async () => {
         try {
           const id = this.object.id
@@ -407,13 +430,17 @@ export default {
       return value ? toSafeLocalDateStr(value) : '-'
     },
     async advanceRotation() {
+      if (this.object.status === 'idle') {
+        this.$emit('start-cycle')
+        return
+      }
       const createTask = this.object.status === 'ready_for_change'
       if (createTask) {
         if (this.object.rotation?.automation_id) return this.executeSavedTask()
         return this.openChangeSecretForm()
       }
       const previousStatus = this.object.status
-      if (previousStatus === 'idle') {
+      if (previousStatus === 'ready_to_switch') {
         try {
           await this.$confirm(this.$t('StartCredentialRotationConfirm'), this.$t('Warning'), {
             type: 'warning',
@@ -538,39 +565,5 @@ export default {
   gap: 16px;
   margin-bottom: 16px;
   min-width: 0;
-}
-
-.rotation-steps {
-  min-width: 0;
-}
-
-.rotation-steps :deep(.el-card__body) {
-  overflow-x: auto;
-}
-
-.rotation-steps :deep(.el-steps) {
-  min-width: 640px;
-}
-
-.rotation-steps :deep(.el-step__main) {
-  min-width: 0;
-  padding-right: 20px;
-}
-
-.rotation-steps :deep(.el-step:last-child .el-step__main) {
-  padding-right: 0;
-}
-
-.rotation-steps :deep(.el-step__title) {
-  color: var(--color-text-primary);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 24px;
-}
-
-.rotation-steps :deep(.el-step__description) {
-  padding-right: 0;
-  color: var(--el-text-color-regular);
-  line-height: 18px;
 }
 </style>

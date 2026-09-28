@@ -1,4 +1,9 @@
 export const eventLabels = {
+  'rotation.preparation.started': 'RotationPreparationStartedEvent',
+  'rotation.accounts.aligned': 'RotationAccountsAlignedEvent',
+  'rotation.standby.waiting': 'RotationStandbyWaitingEvent',
+  'rotation.preparation.ready': 'RotationPreparationReadyEvent',
+  'rotation.preparation.cancelled': 'RotationPreparationCancelledEvent',
   'credential.updated': 'AppAuditCredentialPublished',
   'credential.revoked': 'AppAuditAuthorizationRevoked',
   'configuration.updated': 'AppAuditConfigurationUpdated',
