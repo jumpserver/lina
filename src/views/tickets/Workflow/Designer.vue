@@ -99,6 +99,7 @@
               >
                 <svg
                   class="connections"
+                  fill="none"
                   :width="canvasWidth"
                   :height="canvasHeight"
                   aria-hidden="true"
@@ -106,6 +107,7 @@
                   <defs>
                     <marker
                       id="wf-arrow"
+                      fill="currentColor"
                       viewBox="0 0 10 10"
                       refX="8"
                       refY="5"
