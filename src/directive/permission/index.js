@@ -1,3 +1,4 @@
+import { getRuntimeRoute } from '@/libs/context/runtime'
 import {
   getCurrentResActionPerms,
   hasApiActionPerm,
@@ -16,7 +17,7 @@ export function installPermissionDirective(app) {
   }
 
   app.config.globalProperties.$hasCurrentResAction = function (action) {
-    return hasCurrentResAction(this.$route, action)
+    return hasCurrentResAction(getRuntimeRoute(this), action)
   }
 
   app.config.globalProperties.$hasLicense = function () {

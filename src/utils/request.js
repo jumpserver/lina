@@ -30,7 +30,7 @@ function beforeRequestAddToken(config) {
   const currentRoute = router?.currentRoute?.value || router?.currentRoute
   const queryOrgId = currentRoute?.query?.oid
   const storeOrgId = store.getters.currentOrg?.id
-  const orgId = queryOrgId || storeOrgId
+  const orgId = config.headers['X-JMS-ORG'] || queryOrgId || storeOrgId
   if (orgId) {
     config.headers['X-JMS-ORG'] = orgId
   }

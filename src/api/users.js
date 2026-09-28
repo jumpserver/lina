@@ -8,13 +8,16 @@ export function login(data) {
   })
 }
 
-export async function getProfile(token) {
+export async function getProfile({ orgId } = {}) {
+  const headers = orgId ? { 'X-JMS-ORG': orgId } : undefined
   let profile = await request({
     url: '/api/v1/users/profile/',
+    headers,
     method: 'get'
   })
   const perms = await request({
     url: '/api/v1/users/profile/permissions/',
+    headers,
     method: 'get'
   })
   profile = {

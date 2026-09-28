@@ -148,25 +148,36 @@ $single-menu-height: 38px;
 
       // 存在三级子菜单
       .level1-menu {
+        > .el-sub-menu__title > .el-sub-menu__icon-arrow {
+          right: 12px;
+        }
+
         &.el-sub-menu.is-opened {
           border-top: solid 1px
             var(--menu-border, var(--panel-border-color, var(--el-border-color)));
           background-color: var(--menu-is-open-bg, var(--menu-bg));
-        }
 
-        &.el-sub-menu.is-active {
-          .el-sub-menu__title {
-            @include only_active;
-          }
-        }
+          > .el-menu--inline {
+            position: relative;
 
-        .el-menu--inline .nest-menu .el-menu-item {
-          span {
             &::before {
-              content: '•'; /* 使用圆点符号 */
-              font-size: 15px;
-              position: absolute; /* 绝对定位伪元素 */
-              left: 25px; /* 调整伪元素位置 */
+              content: '';
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 25px;
+              z-index: 1;
+              width: 1px;
+              background-color: color-mix(in srgb, var(--menu-text) 25%, transparent);
+              pointer-events: none;
+            }
+
+            .nest-menu .el-menu-item.is-active {
+              &::before {
+                left: 25px;
+                z-index: 2;
+                width: 2px;
+              }
             }
           }
         }
@@ -254,6 +265,10 @@ $single-menu-height: 38px;
     }
 
     .group-title {
+      .nest-menu .level1-menu.el-sub-menu.is-active > .el-sub-menu__title {
+        @include only_active;
+      }
+
       & > span {
         display: none;
       }
