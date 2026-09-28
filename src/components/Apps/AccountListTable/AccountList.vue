@@ -411,8 +411,10 @@ export default {
                 .patch('/api/v1/accounts/accounts/clear-secret/', { account_ids: ids })
                 .then(() => {
                   this.$message.success(this.$tc('ClearSuccessMsg'))
+                  this.$refs.ListTable.reloadTable()
                 })
                 .catch((err) => {
+                  if (err.templateFollowCancelled) return
                   this.$message.error(this.$tc('ClearErrorMsg' + ' ' + err))
                 })
             }.bind(this)

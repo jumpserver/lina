@@ -73,7 +73,8 @@ export default {
         }
       },
       init: {
-        ...this.account
+        ...this.account,
+        follow_template: false
       }
     }
   },
@@ -89,9 +90,11 @@ export default {
         })
         .then((res) => {
           this.$message.success(this.$tc('UpdateSuccessMsg'))
+          this.$emit('update-auth-done', res)
           this.$emit('update:visible', false)
         })
         .catch((err) => {
+          if (err.templateFollowCancelled) return
           const errMsg = Object.values(err.response.data).join(', ')
           this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + errMsg)
           this.$emit('update:visible', false)

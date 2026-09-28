@@ -15,13 +15,13 @@ export default {
   },
   data() {
     return {
-      helpText: this.$t('ConnectMethodACLHelpMsg'),
+      helpText: this.$t('ConnectMethodACLHelpText'),
       tableConfig: {
         url: '/api/v1/acls/connect-method-acls/',
         columnsExclude: ['users', 'assets', 'accounts'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'is_active', 'comment', 'actions']
+          default: ['name', 'action', 'priority', 'is_active', 'comment', 'actions']
         },
         columnsMeta: {
           connect_methods: {

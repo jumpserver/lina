@@ -43,6 +43,34 @@
       {{ t('ChatAIApprovalPreviewTruncated') }}
     </p>
 
+    <div v-if="accountPasswordRequired && !approval.recovery" class="approval-account-password">
+      <label :for="`account-password-${approval.id}`">{{ t('ChatAIAccountPassword') }}</label>
+      <input
+        :id="`account-password-${approval.id}`"
+        v-model="accountPassword"
+        autocomplete="new-password"
+        :disabled="processing || expired"
+        type="password"
+      />
+      <small>{{ t('ChatAIAccountPasswordHint') }}</small>
+    </div>
+
+    <div v-if="secretInputFields.length && !approval.recovery" class="approval-secret-inputs">
+      <template v-for="field in secretInputFields" :key="field.name">
+        <label :for="`approval-secret-${approval.id}-${field.name}`">
+          {{ fieldLabel(field.name) }}{{ field.required ? ' *' : '' }}
+        </label>
+        <input
+          :id="`approval-secret-${approval.id}-${field.name}`"
+          v-model="secretInputs[field.name]"
+          autocomplete="new-password"
+          :disabled="processing || expired"
+          type="password"
+        />
+      </template>
+      <small>{{ t('ChatAISecretInputHint') }}</small>
+    </div>
+
     <details v-if="!approval.recovery" class="approval-technical" :open="isPreviewTruncated">
       <summary>
         <span
@@ -86,9 +114,14 @@
       <button
         v-if="!approval.recovery"
         class="approval-button primary"
-        :disabled="processing || expired"
+        :disabled="
+          processing ||
+          expired ||
+          (accountPasswordRequired && !accountPassword) ||
+          !secretInputsValid
+        "
         type="button"
-        @click="emit('confirm')"
+        @click="confirm"
       >
         <el-icon v-if="processing" class="spin"><Loading /></el-icon>
         <el-icon v-else><Check /></el-icon>
@@ -99,7 +132,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ArrowDown, Check, CircleCheck, Clock, Loading, Lock, View } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import { localizedFieldLabel } from '../../utils/presentation'
@@ -118,6 +151,8 @@ const props = defineProps({
 const emit = defineEmits(['confirm', 'cancel'])
 const { t, te } = useI18n()
 const now = ref(Date.now())
+const accountPassword = ref('')
+const secretInputs = ref({})
 let timer = null
 const previewEntryLimit = 12
 
@@ -134,6 +169,37 @@ const countdown = computed(() => {
   return `${String(minutes).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`
 })
 const preview = computed(() => props.approval.preview)
+const accountPasswordRequired = computed(() => preview.value?.account_password_required === true)
+const secretInputFields = computed(() =>
+  Array.isArray(preview.value?.secret_input_fields) ? preview.value.secret_input_fields : []
+)
+const secretInputsValid = computed(() =>
+  secretInputFields.value.every(
+    (field) => !field.required || Boolean(secretInputs.value[field.name])
+  )
+)
+
+watch(
+  () => props.approval.id,
+  () => {
+    accountPassword.value = ''
+    secretInputs.value = {}
+  }
+)
+
+function confirm() {
+  const approvalInputs = {
+    accountPassword: accountPasswordRequired.value ? accountPassword.value : '',
+    secretInputs: Object.fromEntries(
+      secretInputFields.value
+        .filter((field) => secretInputs.value[field.name])
+        .map((field) => [field.name, secretInputs.value[field.name]])
+    )
+  }
+  accountPassword.value = ''
+  secretInputs.value = {}
+  emit('confirm', approvalInputs)
+}
 const hasPreview = computed(() => hasValue(preview.value))
 const isPreviewTruncated = computed(() => {
   return Boolean(
@@ -536,6 +602,40 @@ onBeforeUnmount(() => {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+  }
+}
+
+.approval-account-password,
+.approval-secret-inputs {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+
+  label {
+    color: #514a3f;
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  input {
+    width: 100%;
+    min-height: 36px;
+    padding: 7px 10px;
+    border: 1px solid rgb(92 75 48 / 22%);
+    border-radius: var(--ai-radius-sm, 8px);
+    background: #fff;
+    font-size: 13px;
+
+    &:focus-visible {
+      outline: 2px solid rgb(25 160 137 / 40%);
+      outline-offset: 1px;
+    }
+  }
+
+  small {
+    color: #786f63;
+    font-size: 11px;
+    line-height: 1.5;
   }
 }
 

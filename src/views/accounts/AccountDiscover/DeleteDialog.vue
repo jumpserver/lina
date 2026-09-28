@@ -14,7 +14,7 @@
         {{ $t('DeleteWarningMsg') }} {{ account.username }}({{ account.asset.name }}) ?
 
         <div class="extra-delete">
-          <div v-if="hasDeleteAccount && assetAccounts.length > 0" class="delete-item">
+          <div v-if="canDeleteAccount && assetAccounts.length > 0" class="delete-item">
             <el-checkbox
               :model-value="iDeleteAccount"
               @update:model-value="iDeleteAccount = $event"
@@ -37,7 +37,7 @@
             </ul>
           </div>
 
-          <div v-if="hasDeleteRemote && account.present" class="delete-item">
+          <div v-if="canDeleteRemote && account.present" class="delete-item">
             <el-checkbox :model-value="iDeleteRemote" @update:model-value="iDeleteRemote = $event">
               {{ $t('RemoteAssetFoundAccountDeleteMsg') }} ?
               <!-- 远端主机上存在该账号，是否要同步删除 ? -->
@@ -106,17 +106,27 @@ export default {
       assetAccounts: []
     }
   },
+  computed: {
+    canDeleteAccount() {
+      return this.hasDeleteAccount && this.$hasPerm('accounts.delete_account')
+    },
+    canDeleteRemote() {
+      return this.hasDeleteRemote && this.$hasPerm('accounts.remove_account')
+    }
+  },
   methods: {
     handleConfirm() {
+      if (!this.$hasPerm('accounts.delete_gatheredaccount')) {
+        this.$message.error(this.$t('BadRoleErrorMsg'))
+        return
+      }
       this.$message.warning(this.$tc('ProcessingMessage'))
       const url = `/api/v1/accounts/gathered-accounts/${this.account.id}/`
       this.$axios
         .delete(url, {
           params: {
-            username: this.account.username,
-            asset: this.account.asset.id,
-            is_delete_account: this.iDeleteAccount,
-            is_delete_remote: this.iDeleteRemote
+            is_delete_account: this.canDeleteAccount && this.iDeleteAccount,
+            is_delete_remote: this.canDeleteRemote && this.iDeleteRemote
           }
         })
         .then((res) => {

@@ -110,7 +110,7 @@
         :approval="messageApproval"
         :processing="approvalProcessing"
         @cancel="emit('cancel-approval')"
-        @confirm="emit('confirm-approval')"
+        @confirm="emit('confirm-approval', $event)"
       />
 
       <footer
