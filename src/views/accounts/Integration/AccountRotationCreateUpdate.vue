@@ -113,6 +113,18 @@ export default {
           placeholder: this.$t('SelectAlternateAccount')
         }
       },
+      subscription_account_ids: {
+        label: this.$t('SubscribedAccounts'),
+        component: Select2,
+        rules: [rules.RequiredChange],
+        hidden: (form) => isRotation(form),
+        helpTextFormatter: () => this.$t('SubscribedAccountsHelp'),
+        el: {
+          multiple: true,
+          url: '/api/v1/accounts/accounts/?fields_size=small',
+          placeholder: this.$t('SelectSubscribedAccounts')
+        }
+      },
       application_ids: {
         label: this.$t('Applications'),
         component: Select2,
@@ -148,13 +160,19 @@ export default {
           asset_id: assetId,
           account_id: item?.account?.id || '',
           alternate_account_id: item?.alternate_account?.id || '',
+          subscription_account_ids: (item?.subscription_accounts || []).map(
+            (account) => account.id
+          ),
           application_ids: (item?.applications || []).map((application) => application.id),
           is_active: item?.is_active ?? true,
           comment: item?.comment || ''
         },
         fields: [
           [this.$t('Basic'), ['name', 'mode']],
-          [this.$t('AccountConfiguration'), ['asset_id', 'account_id', 'alternate_account_id']],
+          [
+            this.$t('AccountConfiguration'),
+            ['asset_id', 'account_id', 'alternate_account_id', 'subscription_account_ids']
+          ],
           [this.$t('ApplicationBinding'), ['application_ids']],
           [this.$t('Other'), ['is_active', 'comment']]
         ],
@@ -172,6 +190,7 @@ export default {
               ...response.data,
               account_id: response.data.account,
               alternate_account_id: response.data.alternate_account,
+              subscription_account_ids: response.data.subscription_accounts,
               application_ids: response.data.applications
             })
           }

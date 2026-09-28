@@ -53,6 +53,7 @@ export async function saveApplicationCredential(form) {
     mode: form.mode,
     account: form.mode === 'alternating_rotation' ? form.account_id : null,
     alternate_account: form.mode === 'alternating_rotation' ? form.alternate_account_id : null,
+    subscription_accounts: form.mode === 'subscription' ? form.subscription_account_ids : [],
     applications: form.application_ids,
     is_active: form.is_active,
     comment: form.comment

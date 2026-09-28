@@ -167,10 +167,19 @@ export default {
           { key: this.$t('NextAccount'), value: accountName(nextAccount) }
         )
       } else {
-        items.push({
-          key: this.$t('SubscriptionScope'),
-          value: this.object.applications?.map((application) => application.name).join(', ') || '-'
-        })
+        items.push(
+          {
+            key: this.$t('SubscribedAccounts'),
+            value: this.object.subscription_all_authorized
+              ? this.$t('LegacyAllAuthorizedAccounts')
+              : this.object.subscription_accounts?.map(accountName).join(', ') || '-'
+          },
+          {
+            key: this.$t('SubscriptionScope'),
+            value:
+              this.object.applications?.map((application) => application.name).join(', ') || '-'
+          }
+        )
       }
       items.push(
         { key: this.$t('LastFetched'), value: this.formatDate(this.object.last_fetched) },

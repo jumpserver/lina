@@ -15,13 +15,17 @@ import { GenericDetailPage } from '@/layout/components'
 import IntegrationApplicationAccount from '../components/AccountList.vue'
 import IntegrationApplicationInfo from './ServiceInfo.vue'
 import ApplicationAudit from '../components/ApplicationAudit.vue'
+import ApplicationConnections from './ApplicationConnections.vue'
+import ApplicationEventProcessing from './ApplicationEventProcessing.vue'
 
 export default {
   components: {
     GenericDetailPage,
     IntegrationApplicationInfo,
     IntegrationApplicationAccount,
-    ApplicationAudit
+    ApplicationAudit,
+    ApplicationConnections,
+    ApplicationEventProcessing
   },
   data() {
     return {
@@ -39,6 +43,16 @@ export default {
           {
             title: this.$t('Accounts'),
             name: 'IntegrationApplicationAccount',
+            hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
+          },
+          {
+            title: this.$t('ApplicationConnections'),
+            name: 'ApplicationConnections',
+            hidden: () => !this.$hasPerm('accounts.view_credentialclientinstance')
+          },
+          {
+            title: this.$t('ApplicationEventProcessing'),
+            name: 'ApplicationEventProcessing',
             hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           },
           {

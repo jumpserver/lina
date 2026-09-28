@@ -44,7 +44,10 @@ import { credentialStatusLabel } from './components/credentialStatus.js'
 
 const accountName = (row, t) =>
   row.mode === 'subscription'
-    ? t('ApplicationAuthorizedAccounts')
+    ? row.subscription_all_authorized
+      ? t('LegacyAllAuthorizedAccounts')
+      : row.subscription_accounts?.map((account) => account.username || account.name).join(', ') ||
+        '-'
     : row.active_account?.username || row.active_account?.name || '-'
 
 export default {
