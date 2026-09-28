@@ -2765,5 +2765,8 @@
   "TicketAuthorizedUser": "Authorized user",
   "TicketRequestedForMe": "Requested for me",
   "TicketRelatedToMe": "Related to me",
-  "TicketCopiedToMe": "Copied to me"
+  "TicketCopiedToMe": "Copied to me",
+  "TicketListCount": "{count} items",
+  "TicketListExpand": "View all {count} items",
+  "TicketListCollapse": "Hide details"
 }

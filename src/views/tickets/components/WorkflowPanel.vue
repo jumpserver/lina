@@ -144,30 +144,20 @@
               </div>
             </div>
             <div v-if="node.pendingTasks.length" class="pending-reviewers">
-              <div class="pending-heading">
-                <span class="hint">{{ $t('Assignees') }}</span>
-                <span class="hint">{{
-                  $t('TicketUserCount', { count: node.pendingTasks.length })
-                }}</span>
-              </div>
-              <div class="pending-list">
-                <span
-                  v-for="task in node.pendingTasks.slice(0, 3)"
-                  :key="task.id"
-                  class="reviewer-chip"
-                >
-                  {{ formatUser(task.assignee_snapshot) }}
-                  <span v-if="task.is_added" class="hint"> · {{ $t('WFAdded') }}</span>
-                </span>
-                <el-button
-                  v-if="node.pendingTasks.length > 3"
-                  link
-                  type="primary"
-                  @click="showPendingUsers(node)"
-                >
-                  {{ $t('CcUsersViewAll', { count: node.pendingTasks.length }) }}
-                </el-button>
-              </div>
+              <span class="hint">{{ $t('Assignees') }}</span>
+              <TicketValueList
+                inline
+                :items="
+                  node.pendingTasks.map(
+                    (task) =>
+                      formatUser(task.assignee_snapshot) +
+                      (task.is_added ? ' · ' + $t('WFAdded') : '')
+                  )
+                "
+                :label="$t('Assignees')"
+                :count-label="$t('TicketUserCount', { count: node.pendingTasks.length })"
+                :expand-label="$t('CcUsersViewAll', { count: node.pendingTasks.length })"
+              />
             </div>
             <div v-if="node.result?.condition" class="step-description">
               <span class="hint">{{ $t('WFConditionResult') }}</span>
@@ -235,18 +225,17 @@
         }}</el-button></template
       >
     </el-dialog>
-    <UserListDialog v-model="pendingUsersVisible" :title="$t('Assignees')" :users="pendingUsers" />
   </IBox>
 </template>
 <script>
 import IBox from '@/components/Common/IBox'
 import Select2 from '@/components/Form/FormFields/Select2'
 import CcUsers from './CcUsers'
-import UserListDialog from './UserListDialog'
+import TicketValueList from './TicketValueList'
 import { useDateTime } from '@/composables/useDateTime'
 import { stateLabels, nodeLabels } from '../Workflow/graph'
 export default {
-  components: { IBox, Select2, CcUsers, UserListDialog },
+  components: { IBox, Select2, CcUsers, TicketValueList },
   props: { object: { type: Object, required: true } },
   data: () => ({
     instance: null,
@@ -256,8 +245,6 @@ export default {
     target: null,
     operation: '',
     reassignVisible: false,
-    pendingUsersVisible: false,
-    pendingUsers: [],
     stateLabels,
     nodeLabels,
     timer: null,
@@ -324,10 +311,6 @@ export default {
     clearTimeout(this.timer)
   },
   methods: {
-    showPendingUsers(node) {
-      this.pendingUsers = node.pendingTasks.map((task) => task.assignee_snapshot)
-      this.pendingUsersVisible = true
-    },
     stateTone(state) {
       if (state === 'approved') return 'success'
       if (state === 'running' || state === 'pending') return 'primary'
@@ -618,27 +601,24 @@ export default {
   overflow-wrap: anywhere;
 }
 .pending-reviewers {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
   margin-top: 12px;
 }
-.pending-heading,
-.pending-list,
+.pending-reviewers > .hint {
+  flex-shrink: 0;
+}
+.pending-reviewers :deep(.ticket-value-list) {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 0;
+}
 .skipped-nodes {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 6px 10px;
-}
-.pending-heading {
-  margin-bottom: 8px;
-  font-size: 12px;
-}
-.reviewer-chip {
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: var(--el-bg-color);
-  border: 1px solid var(--el-border-color-light);
-  color: var(--el-text-color-regular);
-  overflow-wrap: anywhere;
 }
 .workflow-details {
   margin-top: 24px;
