@@ -259,6 +259,7 @@ export default {
     onPerformError: {
       type: Function,
       default(error, method, vm) {
+        if (error.templateFollowCancelled) return
         const response = error.response
         const data = response.data
         if (response.status === 400 && data && typeof data === 'object') {

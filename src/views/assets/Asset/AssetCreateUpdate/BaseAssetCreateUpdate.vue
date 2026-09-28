@@ -10,6 +10,11 @@ import { assetFieldsMeta, getWebAssetSettingDefaults } from '@/views/assets/cons
 
 const getRelatedId = (value) => value?.pk ?? value?.id ?? value?.value ?? value
 
+const getUpdateId = (vm) => {
+  const action = vm.$context.get('action')
+  return action && action !== 'update' ? '' : vm.$context.get('id')
+}
+
 // Node 的 value 字段是显示名，不能当作 id；只取真正的主键。
 const getNodeId = (value) => {
   if (value && typeof value === 'object') {
@@ -99,7 +104,7 @@ export default {
         fieldsMeta: {},
         performSubmit(validValues) {
           let url = this.url
-          const id = this.$context.get('id')
+          const id = getUpdateId(this)
           const values = _.cloneDeep(validValues)
           const submitMethod = id ? 'put' : 'post'
 
@@ -188,7 +193,7 @@ export default {
       const { addFields, addFieldsMeta, defaultConfig } = this
       defaultConfig.fieldsMeta = assetFieldsMeta(this)
       let url = this.url
-      const id = this.$context.get('id')
+      const id = getUpdateId(this)
       if (!id) {
         url = setUrlParam(url, 'platform', this.platformID)
       }

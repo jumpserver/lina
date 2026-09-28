@@ -179,17 +179,16 @@
   .el-input__wrapper,
   .el-select__wrapper,
   .el-cascader .el-input__wrapper {
-    box-shadow: none !important;
-    border: 1px solid var(--el-border-color) !important;
+    box-shadow: none;
+    border: 1px solid var(--el-border-color);
 
     &:hover {
-      border-color: var(--el-border-color-hover) !important;
+      border-color: var(--el-border-color-hover);
     }
 
     &.is-focus,
     &.is-focused {
-      box-shadow: none !important;
-      border-color: var(--el-color-primary) !important;
+      border-color: var(--el-color-primary);
     }
   }
 
@@ -284,15 +283,15 @@
   }
 
   .el-input__wrapper .el-input__inner {
-    border: 0 !important;
-    box-shadow: none !important;
+    border: 0;
+    box-shadow: none;
   }
 
   .el-select__wrapper .el-select__placeholder {
-    border: 0 !important;
-    box-shadow: none !important;
-    padding-inline-start: 0 !important;
-    margin-inline-start: 0 !important;
+    border: 0;
+    box-shadow: none;
+    padding-inline-start: 0;
+    margin-inline-start: 0;
   }
 
   .el-input.is-disabled .el-input__inner {
@@ -524,11 +523,12 @@
 // 日期范围选择器（表单字段 DatetimeRangePicker + 表格筛选 .datepicker）
 // ---------------------------------------------------------------------------
 
-.datepicker.el-date-editor,
-.datepicker.el-date-editor.el-range-editor,
-.datepicker.el-date-editor--daterange,
-.el-date-editor.el-date-editor--daterange,
-.el-date-editor.el-range-editor {
+:is(
+  .datepicker.el-date-editor,
+  .datepicker.el-date-editor--daterange,
+  .el-date-editor.el-date-editor--daterange,
+  .el-date-editor.el-range-editor
+) {
   width: 243px !important;
   min-width: 243px !important;
   max-width: 243px !important;
@@ -542,18 +542,12 @@
   box-sizing: border-box;
 }
 
-.datepicker.el-date-editor .el-range-input,
-.datepicker.el-date-editor .el-range-separator,
-.datepicker.el-date-editor .el-range__icon,
-.datepicker.el-date-editor .el-range__close-icon,
-.el-date-editor.el-date-editor--daterange .el-range-input,
-.el-date-editor.el-date-editor--daterange .el-range-separator,
-.el-date-editor.el-date-editor--daterange .el-range__icon,
-.el-date-editor.el-date-editor--daterange .el-range__close-icon,
-.el-date-editor.el-range-editor .el-range-input,
-.el-date-editor.el-range-editor .el-range-separator,
-.el-date-editor.el-range-editor .el-range__icon,
-.el-date-editor.el-range-editor .el-range__close-icon {
+:is(
+    .datepicker.el-date-editor,
+    .el-date-editor.el-date-editor--daterange,
+    .el-date-editor.el-range-editor
+  )
+  :is(.el-range-input, .el-range-separator, .el-range__icon, .el-range__close-icon) {
   height: 30px;
   line-height: 30px;
 }

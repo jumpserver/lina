@@ -379,6 +379,27 @@ export default {
     }
   }
 
+  :deep(.el-form-item.checkbox-inline-help) {
+    .el-form-item__content {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      column-gap: 8px;
+      align-items: center;
+    }
+
+    .el-checkbox {
+      margin-right: 0;
+      align-self: start;
+    }
+
+    .help-block {
+      grid-column: 2;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+  }
+
   :deep(.form-buttons) {
     display: flex;
     flex-wrap: wrap;

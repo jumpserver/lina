@@ -236,13 +236,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$btn-text-color: #ffffff;
-$color-btn-background: #e8f7f4;
-$color-btn-focus-background: #83cbba;
-$color-divided: #e4e7ed;
-$color-drop-menu-title: #909399;
-$color-drop-menu-border: #e4e7ed;
-
 // 通用
 .layout {
   display: inline-flex;
@@ -368,54 +361,44 @@ $color-drop-menu-border: #e4e7ed;
     }
   }
 
-  :deep(.action-item.el-button.el-button--default .pre-icon),
-  :deep(.action-item.el-button.el-button--default .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--default .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--default .el-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default .pre-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default .el-icon) {
+  :deep(.action-item.el-button.el-button--default :is(.pre-icon, .el-icon)),
+  :deep(.action-item.el-dropdown > .el-button.el-button--default :is(.pre-icon, .el-icon)),
+  :deep(
+    .action-item.el-dropdown .el-button-group .el-button.el-button--default :is(.pre-icon, .el-icon)
+  ) {
     color: var(--color-icon-primary);
   }
 
-  :deep(.action-item.el-button.el-button--default:hover .pre-icon),
-  :deep(.action-item.el-button.el-button--default:hover .el-icon),
-  :deep(.action-item.el-button.el-button--default:focus .pre-icon),
-  :deep(.action-item.el-button.el-button--default:focus .el-icon),
-  :deep(.action-item.el-button.el-button--default:active .pre-icon),
-  :deep(.action-item.el-button.el-button--default:active .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--default:hover .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--default:hover .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--default:focus .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--default:focus .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--default:active .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--default:active .el-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:hover .pre-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:hover .el-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:focus .pre-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:focus .el-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:active .pre-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--default:active .el-icon) {
+  :deep(
+    .action-item.el-button.el-button--default:is(:hover, :focus, :active) :is(.pre-icon, .el-icon)
+  ),
+  :deep(
+    .action-item.el-dropdown
+      > .el-button.el-button--default:is(:hover, :focus, :active)
+      :is(.pre-icon, .el-icon)
+  ),
+  :deep(
+    .action-item.el-dropdown
+      .el-button-group
+      .el-button.el-button--default:is(:hover, :focus, :active)
+      :is(.pre-icon, .el-icon)
+  ) {
     color: var(--color-primary);
   }
 
-  :deep(.action-item.el-button.el-button--primary.is-plain .pre-icon),
-  :deep(.action-item.el-button.el-button--primary.is-plain .el-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain .pre-icon),
-  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain .el-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .pre-icon),
-  :deep(.action-item.el-dropdown .el-button-group .el-button.el-button--primary.is-plain .el-icon) {
+  :deep(.action-item.el-button.el-button--primary.is-plain :is(.pre-icon, .el-icon)),
+  :deep(.action-item.el-dropdown > .el-button.el-button--primary.is-plain :is(.pre-icon, .el-icon)),
+  :deep(
+    .action-item.el-dropdown
+      .el-button-group
+      .el-button.el-button--primary.is-plain
+      :is(.pre-icon, .el-icon)
+  ) {
     color: inherit;
   }
 
   .action-item.el-dropdown {
     font-size: 12px;
-
-    // 确保下拉按钮也垂直居中
-    :deep(.el-button) {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
 
     :deep(.el-button-group) {
       display: inline-flex;

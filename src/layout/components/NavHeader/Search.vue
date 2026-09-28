@@ -378,8 +378,8 @@ export default {
         height: 28px;
         background-color: rgba(255, 255, 255, 0.08);
         border-radius: 4px;
-        border: none !important;
-        box-shadow: inset 0 0 0 1px transparent !important;
+        border: none;
+        box-shadow: inset 0 0 0 1px transparent;
         cursor: pointer;
         transition: background-color 0.2s ease;
       }
@@ -388,7 +388,7 @@ export default {
         height: 100%;
         line-height: 1;
         background: transparent;
-        border: unset !important;
+        border: unset;
         cursor: pointer;
 
         &::placeholder {
@@ -478,12 +478,11 @@ export default {
 </style>
 
 <style lang="scss">
-.search-modal.el-dialog {
+.el-overlay-dialog .search-modal.el-dialog {
   --el-dialog-padding-primary: 0;
 
-  width: min(640px, 100%) !important;
-  padding: 0 !important;
-  margin: 0 auto !important;
+  max-width: 100%;
+  margin: 0 auto;
   border: 1px solid var(--panel-border-color, var(--el-border-color));
   border-radius: 8px;
   box-shadow:
@@ -507,11 +506,7 @@ export default {
 }
 
 .search-modal-header {
-  display: none !important;
-}
-
-.search-modal-body {
-  padding: 0 !important;
+  display: none;
 }
 
 .search-modal {
@@ -542,9 +537,9 @@ export default {
     .el-input__wrapper {
       min-height: 54px;
       padding: 0;
-      border: 0 !important;
+      border: 0;
       border-radius: 0;
-      box-shadow: none !important;
+      box-shadow: none;
       background: transparent;
     }
 
@@ -552,8 +547,8 @@ export default {
       height: 54px;
       font-size: 15px;
       color: var(--color-text-primary);
-      border: 0 !important;
-      box-shadow: none !important;
+      border: 0;
+      box-shadow: none;
 
       &::placeholder {
         color: var(--el-text-color-placeholder);
