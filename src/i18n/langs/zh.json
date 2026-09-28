@@ -2754,5 +2754,8 @@
   "TicketAuthorizedUser": "授权用户",
   "TicketRequestedForMe": "为我申请",
   "TicketRelatedToMe": "与我相关",
-  "TicketCopiedToMe": "抄送我的"
+  "TicketCopiedToMe": "抄送我的",
+  "TicketListCount": "共 {count} 项",
+  "TicketListExpand": "查看全部 {count} 项",
+  "TicketListCollapse": "收起明细"
 }
