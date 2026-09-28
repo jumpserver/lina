@@ -43,6 +43,8 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import Dialog from '@/components/Dialog'
 import { mapGetters } from 'vuex'
+import { h } from 'vue'
+import TicketValueList from './components/TicketValueList'
 import BaseTicketList from './BaseTicketList'
 import { getTicketTypeLabel } from './const'
 
@@ -126,7 +128,10 @@ export default {
         },
         ...(item.request_items || []).map((field) => ({
           key: field.label,
-          value: Array.isArray(field.value) ? field.value.join(', ') : (field.value ?? '-')
+          value: field.value ?? '-',
+          formatter: Array.isArray(field.value)
+            ? (_item, value) => h(TicketValueList, { items: value, label: field.label })
+            : undefined
         }))
       ]
     }

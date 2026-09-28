@@ -8,7 +8,7 @@ export default {
     requestItems() {
       return (this.object.request_items || []).map((item) => ({
         key: item.label,
-        value: Array.isArray(item.value) ? item.value.join(', ') : String(item.value)
+        value: Array.isArray(item.value) ? item.value : String(item.value)
       }))
     }
   }

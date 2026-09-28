@@ -835,14 +835,15 @@ li.rmenu i.fa {
   }
 }
 
-.el-button--primary,
-.el-button--primary > span,
-.el-button--primary:hover,
-.el-button--primary:hover > span,
-.el-button--primary:focus,
-.el-button--primary:focus > span,
-.el-button--primary:active,
-.el-button--primary:active > span {
+// Transparent button variants retain the component text colors.
+.el-button--primary:not(:where(.is-link, .is-text)),
+.el-button--primary:not(:where(.is-link, .is-text)) > span,
+.el-button--primary:not(:where(.is-link, .is-text)):hover,
+.el-button--primary:not(:where(.is-link, .is-text)):hover > span,
+.el-button--primary:not(:where(.is-link, .is-text)):focus,
+.el-button--primary:not(:where(.is-link, .is-text)):focus > span,
+.el-button--primary:not(:where(.is-link, .is-text)):active,
+.el-button--primary:not(:where(.is-link, .is-text)):active > span {
   color: #fff;
 }
 
