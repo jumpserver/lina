@@ -19,7 +19,12 @@
         :disabled="disabled"
         :placeholder="$t('WFField')"
       >
-        <el-option v-for="field in availableFields" :key="field" :value="field" :label="field" />
+        <el-option
+          v-for="(label, field) in availableFields"
+          :key="field"
+          :value="field"
+          :label="label"
+        />
       </el-select>
       <span class="condition-caption">{{ $t('WFOperator') }}</span>
       <el-select v-model="modelValue.operator" :disabled="disabled" @change="changeOperator">
@@ -118,28 +123,33 @@ export default {
   props: {
     modelValue: { type: Object, required: true },
     disabled: Boolean,
-    extraFields: { type: Array, default: () => [] },
+    extraFields: { type: Object, default: () => ({}) },
     depth: { type: Number, default: 0 }
   },
   emits: ['update:modelValue'],
   data: () => ({
     operators: ['eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'in', 'not_in', 'contains', 'exists'],
-    fields: [
-      'asset.labels.env',
-      'asset.platform.type',
-      'asset.platform.category',
-      'asset.owner.id',
-      'account.username',
-      'duration',
-      'request.command',
-      'request.ip',
-      'applicant.username',
-      'actions'
-    ]
+    fields: {
+      'asset.labels.env': 'WFFieldAssetEnvironment',
+      'asset.platform.type': 'WFFieldAssetPlatformType',
+      'asset.platform.category': 'WFFieldAssetPlatformCategory',
+      'asset.owner.id': 'WFFieldAssetOwnerId',
+      'account.username': 'WFFieldAccountUsername',
+      duration: 'WFFieldDuration',
+      'request.command': 'ApplyRunCommand',
+      'request.ip': 'WFFieldRequestIP',
+      'applicant.username': 'WFFieldApplicantUsername',
+      actions: 'Actions'
+    }
   }),
   computed: {
     availableFields() {
-      return [...new Set([...this.fields, ...this.extraFields])]
+      return {
+        ...Object.fromEntries(
+          Object.entries(this.fields).map(([field, label]) => [field, this.$t(label)])
+        ),
+        ...this.extraFields
+      }
     },
     kind() {
       return ['and', 'or', 'not'].find((k) => k in this.modelValue) || 'rule'
