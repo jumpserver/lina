@@ -389,9 +389,20 @@ export default {
   },
   computed: {
     pluginConditionFields() {
-      return (
+      const labels = {
+        'Validity (seconds)': 'WFFieldValidity',
+        Direction: 'WFFieldDirection',
+        'File paths': 'WFFieldPaths',
+        'Session ID': 'SessionID'
+      }
+      const fields =
         this.ticketTypes.find((plugin) => plugin.type === this.workflow.type)?.fields || []
-      ).map((field) => `request.${field.name}`)
+      return Object.fromEntries(
+        fields.map((field) => [
+          `request.${field.name}`,
+          this.$t(labels[field.label] || field.label || field.name)
+        ])
+      )
     },
     metadata() {
       return {
