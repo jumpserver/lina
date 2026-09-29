@@ -39,7 +39,7 @@ export default {
           label: this.$t('ReviewExemptionDuration'),
           component: InputWithUnit,
           hidden: (formValue) => formValue.action !== 'review',
-          helpText: this.$t('ReviewExemptionDurationHelp'),
+          helpTip: this.$t('ReviewExemptionDurationHelp'),
           el: { unit: 'hour', type: 'number', min: 0, max: 2147483647, step: 1 },
           rules: [
             {
