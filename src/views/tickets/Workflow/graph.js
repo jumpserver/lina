@@ -36,6 +36,7 @@ export const eventLabels = {
   'workflow.error': 'WFError',
   'action.executed': 'WFActionExecuted',
   'secret.viewed': 'ViewSecret',
+  'replay.downloaded': 'DownloadReplay',
   'workflow.migrated': 'WFMigrated'
 }
 export const newApproval = () => ({

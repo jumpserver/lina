@@ -172,9 +172,10 @@ export default {
       pageSize: vm.defaultPageSize
     }
     // 设置axios全局报错提示不显示
-    const validateStatus = (status) => {
+    const validateStatus = (status, scope) => {
       if (status === 403) {
         setTimeout(() => {
+          if (scope !== vm.params) return
           vm.initialized = true
           vm.selectDisabled = true
         }, 200)
@@ -415,6 +416,7 @@ export default {
       if (this.transformed) {
         await this.hydrateSelectedOptions(normalizedValue)
       }
+      if (!_.isEqual(normalizedValue, this.normalizeValue(this.externalValue))) return
       if (!_.isEqual(this.innerValue, normalizedValue)) {
         this.innerValue = _.cloneDeep(normalizedValue)
       }
@@ -426,10 +428,13 @@ export default {
       const values = Array.isArray(value) ? value : [value]
       this.initialOptions = []
       this.resetParams()
+      const scope = this.params
+      const url = this.iAjax.url
       const data = await createSourceIdCache(values)
+      if (scope !== this.params || url !== this.iAjax.url) return
       this.params.spm = data['spm']
       await this.getInitialOptions()
-      this.transformed = false
+      if (scope === this.params && url === this.iAjax.url) this.transformed = false
     },
     async loadMore(load) {
       if (!this.iAjax.url) {
@@ -442,6 +447,7 @@ export default {
         return
       }
       this.loading = true
+      const scope = this.params
       const previousPage = this.params.page
       this.params.page = previousPage ? previousPage + 1 : 1
       const defaultLoad = this.getOptions
@@ -452,14 +458,18 @@ export default {
         await load()
       } catch {
         // 失败后保留当前页，允许下次滚动重试同一页
-        this.params.page = previousPage
-        this.requestError = true
+        if (scope === this.params) {
+          this.params.page = previousPage
+          this.requestError = true
+        }
       } finally {
-        this.loading = false
+        if (scope === this.params) this.loading = false
       }
     },
     resetParams() {
       this.params = _.cloneDeep(this.defaultParams)
+      this.loading = false
+      this.selectDisabled = this.disabled
     },
     safeMakeParams(params) {
       params = _.cloneDeep(params)
@@ -492,16 +502,20 @@ export default {
     },
     async getInitialOptions() {
       const { url, processResults, validateStatus } = this.iAjax
-      const params = this.safeMakeParams(this.params)
-      let data = await this.$axios.get(url, {
-        params,
-        validateStatus
-      })
+      const scope = this.params
+      const params = this.safeMakeParams(scope)
+      let data
+      try {
+        data = await this.$axios.get(url, {
+          params,
+          validateStatus: (status) => validateStatus(status, scope)
+        })
+      } catch (error) {
+        if (scope !== this.params || url !== this.iAjax.url) return
+        throw error
+      }
+      if (scope !== this.params || url !== this.iAjax.url) return
       data = processResults.bind(this)(data)
-      setTimeout(() => {
-        this.transformed = false
-      }, 100)
-
       data.results.forEach((v) => {
         this.initialOptions.push(v)
         if (this.optionsValues.indexOf(v.value) === -1) {
@@ -510,6 +524,7 @@ export default {
       })
       // 如果还有其它页，继续获取, 如果没有就停止
       if (!data.pagination) {
+        this.transformed = false
         this.$emit('loadInitialOptionsDone', this.initialOptions)
         this.params.hasMore = false
         this.resetParams()
@@ -520,11 +535,19 @@ export default {
     },
     async getOptions() {
       const { url, processResults, validateStatus } = this.iAjax
-      const params = this.safeMakeParams(this.params)
-      const resp = await this.$axios.get(url, {
-        params,
-        validateStatus
-      })
+      const scope = this.params
+      const params = this.safeMakeParams(scope)
+      let resp
+      try {
+        resp = await this.$axios.get(url, {
+          params,
+          validateStatus: (status) => validateStatus(status, scope)
+        })
+      } catch (error) {
+        if (scope !== this.params || url !== this.iAjax.url) return
+        throw error
+      }
+      if (scope !== this.params || url !== this.iAjax.url) return
       const data = processResults.bind(this)(resp)
       if (!data.pagination) {
         this.params.hasMore = false
@@ -536,7 +559,7 @@ export default {
       })
     },
     async initialSelect() {
-      // this.$log.debug('Select ajax config', this.iAjax)
+      this.remote = Boolean(this.iAjax.url)
       if (this.iAjax.url) {
         const normalizedValue = this.normalizeValue(this.externalValue)
         if (this.hasValue(normalizedValue)) {
@@ -544,17 +567,17 @@ export default {
           await this.hydrateSelectedOptions(normalizedValue)
         }
         await this.getOptions()
-        if (this.iOptions.length === 0) {
-          this.remote = false
-        }
-      } else {
-        this.remote = false
       }
     },
     async refresh() {
       this.resetParams()
+      this.remote = Boolean(this.iAjax.url)
       this.iOptions = []
       this.requestError = false
+      if (!this.remote) {
+        this.iOptions = this.options || []
+        return
+      }
       try {
         await this.getOptions()
       } catch {

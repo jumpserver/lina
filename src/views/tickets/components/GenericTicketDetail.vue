@@ -16,6 +16,7 @@
         :title="$tc('AssignedInfo')"
       />
       <TicketSecretAccess v-if="object.type?.value === 'view_secret'" :object="object" />
+      <TicketReplayAccess v-if="object.type?.value === 'download_replay'" :object="object" />
       <slot id="MoreDetails" />
       <WorkflowPanel :object="object" />
       <Comments v-bind="$attrs" :object="object" />
@@ -33,6 +34,7 @@ import Details from './Details'
 import Session from './Session'
 import WorkflowPanel from './WorkflowPanel'
 import TicketSecretAccess from './TicketSecretAccess'
+import TicketReplayAccess from './TicketReplayAccess'
 import { getTicketFlowLabel, getTicketStateLabel, getTicketTypeLabel } from '../const'
 export default {
   name: 'GenericTicketDetail',
@@ -42,7 +44,8 @@ export default {
     Comments,
     Details,
     Session,
-    TicketSecretAccess
+    TicketSecretAccess,
+    TicketReplayAccess
   },
   props: {
     object: {
