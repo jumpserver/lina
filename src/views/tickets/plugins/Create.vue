@@ -35,6 +35,7 @@ import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import AssetRequest from '../RequestAssetPerm/CreateUpdate'
 import { getTicketTypeLabel } from '../const'
 import { buildRequestPayload } from './form'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
   components: { IBox, GenericCreateUpdatePage, AssetRequest },
@@ -153,6 +154,28 @@ export default {
           meta.on = {
             change: ([assetId], updateForm) => this.loadAccountOptions(assetId, updateForm)
           }
+        } else if (field.resource === 'session') {
+          meta.component = Select2
+          meta.label = this.$t('Session')
+          meta.helpText = this.$t('TicketSelectSessionHelp')
+          meta.el = {
+            multiple: false,
+            placeholder: this.$t('TicketSelectSession'),
+            ajax: {
+              url: '',
+              transformOption: (session) => ({
+                value: session.id,
+                label: [
+                  session.asset,
+                  session.account,
+                  session.user,
+                  toSafeLocalDateStr(session.date_start)
+                ]
+                  .filter(Boolean)
+                  .join(' · ')
+              })
+            }
+          }
         } else if (field.resource === 'account') {
           meta.component = Select2
           meta.helpText = ''
@@ -185,9 +208,16 @@ export default {
           meta.el = { type: 'textarea', rows: 3 }
           meta.helpText = this.$t('TicketOneItemPerLine')
         }
-        if (this.selectedType === 'view_secret' && field.name === 'duration') {
-          meta.label = this.$t('TicketSecretDuration')
-          meta.helpText = this.$t('TicketSecretDurationHelp')
+        if (field.name === 'duration') {
+          meta.label = this.$t('WFFieldValidity')
+          if (this.selectedType === 'view_secret') {
+            meta.label = this.$t('TicketSecretDuration')
+            meta.helpText = this.$t('TicketSecretDurationHelp')
+          } else if (this.selectedType === 'download_replay') {
+            meta.helpText = this.$t('TicketReplayDurationHelp')
+          } else if (this.selectedPlugin.execution_mode === 'approval_only') {
+            meta.helpText = this.$t('TicketApprovalDurationHelp')
+          }
         }
         this.fieldsMeta[name] = meta
       }
@@ -244,6 +274,12 @@ export default {
         if (field.resource === 'asset') {
           this.fieldsMeta[`param_${field.name}`].el.ajax.url =
             `/api/v1/tickets/apply-assets/suggestions/?oid=${orgId}`
+        } else if (field.resource === 'session') {
+          const meta = this.fieldsMeta[`param_${field.name}`]
+          meta.el.disabled = !orgId
+          meta.el.ajax.url = orgId
+            ? `/api/v1/tickets/ticket-types/${type}/options/?org_id=${orgId}`
+            : ''
         }
       }
       if (!orgId) return null

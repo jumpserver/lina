@@ -55,6 +55,7 @@ async function createAccountForm(get) {
     'AssetRequest',
     'getTicketTypeLabel',
     'buildRequestPayload',
+    'toSafeLocalDateStr',
     script
   )(
     () => ({}),
@@ -66,7 +67,8 @@ async function createAccountForm(get) {
     {},
     {},
     () => '',
-    buildRequestPayload
+    buildRequestPayload,
+    (value) => `local:${value}`
   )
   const vm = {
     ...component.data(),
@@ -161,7 +163,7 @@ test('empty or failed account loads cannot retain old selections and can be retr
   assert.equal(vm.fieldsMeta.param_accounts.el.disabled, true)
 })
 
-test('only password-view duration gets a localized label and explanation', async () => {
+test('duration fields reuse validity translations and distinguish approval-only requests', async () => {
   const vm = await createAccountForm(async () => [])
   const duration = {
     name: 'duration',
@@ -172,17 +174,82 @@ test('only password-view duration gets a localized label and explanation', async
     max: 86400,
     default: 3600
   }
-  for (const type of ['view_secret', 'file_transfer']) {
-    vm.plugins.push({ type, fields: [duration] })
+  for (const type of ['view_secret', 'download_replay', 'file_transfer', 'custom']) {
+    vm.plugins.push({
+      type,
+      execution_mode: type === 'file_transfer' ? 'approval_only' : 'automatic',
+      fields: [duration]
+    })
     vm.selectedType = type
     await vm.configure()
     const meta = vm.fieldsMeta.param_duration
-    assert.equal(meta.label, type === 'view_secret' ? 'TicketSecretDuration' : duration.label)
+    assert.equal(meta.label, type === 'view_secret' ? 'TicketSecretDuration' : 'WFFieldValidity')
     assert.equal(
       meta.helpText,
-      type === 'view_secret' ? 'TicketSecretDurationHelp' : duration.help_text
+      type === 'view_secret'
+        ? 'TicketSecretDurationHelp'
+        : type === 'download_replay'
+          ? 'TicketReplayDurationHelp'
+          : type === 'custom'
+            ? duration.help_text
+            : 'TicketApprovalDurationHelp'
     )
     assert.deepEqual(meta.el, { min: 60, max: 86400, precision: 0 })
     assert.equal(vm.initial.param_duration, 3600)
   }
+})
+
+test('session picker labels recordings but submits only the UUID and resets across organizations', async () => {
+  const vm = await createAccountForm(async () => [])
+  vm.plugins.push({
+    type: 'download_replay',
+    fields: [{ name: 'session', resource: 'session', type: 'string', required: true }]
+  })
+  vm.selectedType = 'download_replay'
+  await vm.configure()
+  const picker = vm.fieldsMeta.param_session
+  assert.equal(picker.component, vm.fieldsMeta.org_id.component)
+  assert.equal(picker.el.multiple, false)
+  assert.equal(picker.el.disabled, false)
+  assert.equal(picker.label, 'Session')
+  assert.equal(picker.el.placeholder, 'TicketSelectSession')
+  assert.equal(picker.helpText, 'TicketSelectSessionHelp')
+  assert.equal(
+    picker.el.ajax.url,
+    '/api/v1/tickets/ticket-types/download_replay/options/?org_id=org-1'
+  )
+  const session = {
+    id: 'f8ad3549-932f-46d7-8d52-c1943487b733',
+    asset: 'Production database',
+    account: 'root',
+    user: 'alice',
+    date_start: '2026-09-29T01:02:03Z'
+  }
+  const option = picker.el.ajax.transformOption(session)
+  assert.equal(option.value, session.id)
+  for (const text of [
+    session.asset,
+    session.account,
+    session.user,
+    `local:${session.date_start}`
+  ]) {
+    assert.ok(option.label.includes(text), `session label must include ${text}`)
+  }
+  const form = { ...vm.initial, param_session: option.value }
+  assert.deepEqual(vm.cleanFormValue(form).request_data, { session: session.id })
+
+  const update = (value) => Object.assign(form, value)
+  form.org_id = 'org-2'
+  await vm.fieldsMeta.org_id.on.change(['org-2'], update)
+  assert.equal(form.param_session, '')
+  assert.equal(vm.selectedOrgId, 'org-2')
+  assert.equal(
+    picker.el.ajax.url,
+    '/api/v1/tickets/ticket-types/download_replay/options/?org_id=org-2'
+  )
+  form.param_session = 'bbf72d94-f00e-4134-af64-2c7349d0e687'
+  assert.deepEqual(vm.cleanFormValue(form).request_data, { session: form.param_session })
+  await vm.fieldsMeta.org_id.on.change([''], update)
+  assert.equal(form.param_session, '')
+  assert.equal(picker.el.disabled, true)
 })
