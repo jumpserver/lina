@@ -123,6 +123,8 @@ export default {
           'request_data',
           'request_items',
           'execution_mode',
+          'available_actions',
+          'secret_access_status',
           'approval_step'
         ],
         columnsShow: {

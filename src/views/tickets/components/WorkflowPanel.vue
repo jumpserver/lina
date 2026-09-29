@@ -207,44 +207,80 @@
         </el-collapse-item>
       </el-collapse>
     </template>
-    <el-dialog
-      v-model="reassignVisible"
+    <Dialog
+      v-model:visible="reassignVisible"
       :title="$t(operation === 'transfer' ? 'WFTransfer' : 'WFAddApprover')"
-      width="480px"
-      append-to-body
+      class="workflow-reassign-dialog"
+      width="520px"
+      :close-on-click-modal="!busy"
+      :close-on-press-escape="!busy"
+      :show-close="!busy"
+      destroy-on-close
+      @cancel="reassignVisible = false"
     >
-      <el-alert
-        :title="$t(operation === 'transfer' ? 'WFTransferHint' : 'WFAddHint')"
-        :closable="false"
+      <p class="reassign-description">
+        {{ $t(operation === 'transfer' ? 'WFTransferHint' : 'WFAddHint') }}
+      </p>
+      <p v-if="reassignTaskChanged" class="reassign-warning" role="alert">
+        {{ $t('WFReassignTaskChanged') }}
+      </p>
+      <WorkflowMemberSelect
+        v-if="myTask"
+        v-model="target"
+        :url="targetUrl"
+        :disabled="busy || reassignTaskChanged"
+        :label="$t(operation === 'transfer' ? 'WFTransferTo' : 'WFAddedApprover')"
       />
-      <Select2 v-if="myTask" v-model="target" :multiple="false" :ajax="targetAjax" />
-      <template #footer
-        ><el-button @click="reassignVisible = false">{{ $t('Cancel') }}</el-button
-        ><el-button type="primary" :disabled="!target || busy" @click="decide(operation)">{{
-          $t('Confirm')
-        }}</el-button></template
-      >
-    </el-dialog>
+      <el-form class="reassign-comment" label-position="top" @submit.prevent>
+        <el-form-item :label="$t(operation === 'transfer' ? 'WFTransferComment' : 'WFAddComment')">
+          <el-input
+            v-model="reassignComment"
+            type="textarea"
+            :rows="4"
+            maxlength="4096"
+            show-word-limit
+            :disabled="busy"
+            :placeholder="$t('WFReassignCommentPlaceholder')"
+            resize="vertical"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button :disabled="busy" @click="reassignVisible = false">{{ $t('Cancel') }}</el-button>
+        <el-button
+          type="primary"
+          :disabled="!target || !myTask || busy || reassignTaskChanged"
+          :loading="busy"
+          @click="decide(operation)"
+        >
+          {{ $t(operation === 'transfer' ? 'WFConfirmTransfer' : 'WFConfirmAddApprover') }}
+        </el-button>
+      </template>
+    </Dialog>
   </IBox>
 </template>
 <script>
 import IBox from '@/components/Common/IBox'
-import Select2 from '@/components/Form/FormFields/Select2'
+import Dialog from '@/components/Dialog'
+import WorkflowMemberSelect from './WorkflowMemberSelect'
 import CcUsers from './CcUsers'
 import TicketValueList from './TicketValueList'
 import { useDateTime } from '@/composables/useDateTime'
 import { stateLabels, nodeLabels } from '../Workflow/graph'
 export default {
-  components: { IBox, Select2, CcUsers, TicketValueList },
+  components: { IBox, Dialog, WorkflowMemberSelect, CcUsers, TicketValueList },
   props: { object: { type: Object, required: true } },
   data: () => ({
     instance: null,
     loading: false,
+    requestId: 0,
     busy: false,
     comment: '',
+    reassignComment: '',
     target: null,
     operation: '',
     reassignVisible: false,
+    reassignTaskId: null,
     stateLabels,
     nodeLabels,
     timer: null,
@@ -252,6 +288,12 @@ export default {
   }),
   setup: useDateTime,
   computed: {
+    workflowKey() {
+      return `${this.object.org_id || ''}:${this.object.id || ''}:${this.object.workflow_instance || ''}`
+    },
+    reassignTaskChanged() {
+      return this.reassignVisible && this.reassignTaskId !== this.myTask?.id
+    },
     timelineNodes() {
       return (this.instance?.nodes || [])
         .filter((node) => node.state !== 'skipped' && node.type !== 'end')
@@ -283,18 +325,24 @@ export default {
     requestConfig() {
       return { params: { oid: this.object.org_id } }
     },
-    targetAjax() {
-      return {
-        url: `/api/v1/tickets/approval-tasks/${this.myTask.id}/candidates/?oid=${this.object.org_id}`,
-        transformOption: (u) => ({ label: `${u.name} (${u.username})`, value: u.id })
-      }
+    targetUrl() {
+      return `/api/v1/tickets/approval-tasks/${this.myTask.id}/candidates/?oid=${this.object.org_id}`
     }
   },
   watch: {
-    'object.workflow_instance': {
+    workflowKey: {
       immediate: true,
-      handler(id) {
-        if (id) this.load()
+      handler() {
+        this.requestId++
+        clearTimeout(this.timer)
+        this.instance = null
+        this.loading = false
+        this.comment = ''
+        this.reassignComment = ''
+        this.reassignVisible = false
+        this.reassignTaskId = null
+        this.target = null
+        this.load()
       }
     }
   },
@@ -304,10 +352,14 @@ export default {
   },
   deactivated() {
     this.disposed = true
+    this.requestId++
+    this.loading = false
+    this.reassignVisible = false
     clearTimeout(this.timer)
   },
   beforeUnmount() {
     this.disposed = true
+    this.requestId++
     clearTimeout(this.timer)
   },
   methods: {
@@ -322,31 +374,44 @@ export default {
       const name = user?.name || user?.username || '-'
       return user?.username && name !== user.username ? `${name} (${user.username})` : name
     },
-    async load() {
-      if (this.loading) return
+    async load(force = false) {
+      if ((this.loading && !force) || !this.object.workflow_instance || this.disposed) return
       clearTimeout(this.timer)
+      const requestId = ++this.requestId
       this.loading = true
       try {
-        this.instance = await this.$axios.get(
+        const instance = await this.$axios.get(
           `/api/v1/tickets/workflow-instances/${this.object.workflow_instance}/`,
           this.requestConfig
         )
+        if (requestId === this.requestId) this.instance = instance
       } finally {
-        this.loading = false
-        if (!this.disposed && this.instance?.state === 'running') {
-          this.timer = setTimeout(() => this.load(), 15000)
+        if (requestId === this.requestId) {
+          this.loading = false
+          if (!this.disposed && this.instance?.state === 'running') {
+            this.timer = setTimeout(() => this.load(), 15000)
+          }
         }
       }
     },
     openReassign(operation) {
+      if (this.busy || !this.myTask) return
+      this.reassignTaskId = this.myTask.id
       this.operation = operation
       this.target = null
+      this.reassignComment = this.comment
       this.reassignVisible = true
     },
     async decide(operation) {
       if (this.busy) return
-      this.busy = true
       const taskId = this.myTask?.id
+      const reassign = ['transfer', 'add-approver'].includes(operation)
+      if (operation !== 'cancel' && !taskId) return
+      if (reassign && (!this.target || this.reassignTaskId !== taskId)) return
+      const workflowKey = this.workflowKey
+      const ticket = this.object
+      const requestConfig = this.requestConfig
+      this.busy = true
       try {
         const url =
           operation === 'cancel'
@@ -355,22 +420,27 @@ export default {
         await this.$axios.post(
           url,
           {
-            comment: this.comment,
-            ...(['transfer', 'add-approver'].includes(operation) ? { target: this.target } : {})
+            comment: reassign ? this.reassignComment : this.comment,
+            ...(reassign ? { target: this.target } : {})
           },
-          this.requestConfig
+          requestConfig
         )
+        if (workflowKey !== this.workflowKey || this.disposed) return
         this.reassignVisible = false
         this.comment = ''
-        await this.load()
-        const ticket = await this.$axios.get(
-          `/api/v1/tickets/tickets/${this.object.id}/`,
-          this.requestConfig
+        this.reassignComment = ''
+        await this.load(true)
+        const updatedTicket = await this.$axios.get(
+          `/api/v1/tickets/tickets/${ticket.id}/`,
+          requestConfig
         )
-        Object.assign(this.object, ticket)
+        if (workflowKey !== this.workflowKey || this.disposed) return
+        Object.assign(ticket, updatedTicket)
         this.$message.success(this.$t('UpdateSuccessMsg'))
       } catch (e) {
-        if (e.response?.status === 409) await this.load()
+        if (e.response?.status === 409 && workflowKey === this.workflowKey && !this.disposed) {
+          await this.load(true)
+        }
       } finally {
         this.busy = false
       }
@@ -644,6 +714,49 @@ export default {
   }
   .approval-actions {
     padding: 12px;
+  }
+}
+</style>
+
+<style lang="scss">
+.el-dialog.dialog.workflow-reassign-dialog {
+  max-height: calc(100dvh - 32px);
+  display: flex;
+  flex-direction: column;
+
+  .el-dialog__header,
+  .el-dialog__footer {
+    flex-shrink: 0;
+  }
+
+  .el-dialog__body {
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  .reassign-comment {
+    margin-top: 24px;
+
+    .el-form-item {
+      margin-bottom: 0;
+    }
+
+    .el-form-item__label {
+      color: var(--el-text-color-primary);
+    }
+  }
+
+  .reassign-warning {
+    margin: 0 0 16px;
+    color: var(--el-color-danger);
+    line-height: 1.7;
+  }
+
+  .reassign-description {
+    margin: 0 0 20px;
+    color: var(--el-text-color-regular);
+    font-size: 13px;
+    line-height: 1.7;
   }
 }
 </style>

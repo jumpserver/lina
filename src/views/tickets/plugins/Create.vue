@@ -45,6 +45,11 @@ export default {
       plugins: [],
       selectedType: 'apply_asset',
       flowRequest: 0,
+      accountRequest: 0,
+      selectedOrgId: '',
+      selectedAssetId: '',
+      accountsFailed: false,
+      accountHint: '',
       fields: [],
       fieldsMeta: {},
       initial: {}
@@ -53,6 +58,9 @@ export default {
   computed: {
     ...mapGetters(['currentOrg']),
     ...mapState({ organizations: (state) => state.users.noRootWorkbenchOrgs }),
+    accountField() {
+      return this.selectedPlugin?.fields.find((field) => field.resource === 'account')
+    },
     selectedPlugin() {
       return this.plugins.find((plugin) => plugin.type === this.selectedType)
     }
@@ -83,6 +91,7 @@ export default {
         this.organizations.find((org) => org.id === this.currentOrg.id)?.id ||
         this.organizations[0]?.id ||
         ''
+      this.selectedOrgId = orgId
       this.initial = { title: '', org_id: orgId, workflow_id: '', comment: '' }
       this.fieldsMeta = {
         title: { label: this.$t('Title'), required: true, type: 'input' },
@@ -96,6 +105,8 @@ export default {
           },
           on: {
             change: async ([value], updateForm) => {
+              this.selectedOrgId = value
+              this.loadAccountOptions('', updateForm)
               const cleared = { workflow_id: '' }
               for (const field of this.selectedPlugin.fields) {
                 cleared[`param_${field.name}`] = this.defaultValue(field)
@@ -139,6 +150,28 @@ export default {
               })
             }
           }
+          meta.on = {
+            change: ([assetId], updateForm) => this.loadAccountOptions(assetId, updateForm)
+          }
+        } else if (field.resource === 'account') {
+          meta.component = Select2
+          meta.helpText = ''
+          this.accountHint = this.$t('TicketSelectAssetFirst')
+          meta.helpTextFormatter = () => this.accountHint
+          meta.el = {
+            multiple: true,
+            multipleLimit: 100,
+            options: [],
+            disabled: true,
+            noDataText: this.$t('TicketNoAssetAccounts')
+          }
+          meta.on = {
+            'visible-change': ([visible], updateForm) => {
+              if (visible && this.accountsFailed) {
+                this.loadAccountOptions(this.selectedAssetId, updateForm)
+              }
+            }
+          }
         } else if (field.type === 'choice') {
           meta.component = Select2
           meta.el = { multiple: false, options: field.choices }
@@ -151,6 +184,10 @@ export default {
         } else if (field.type === 'list') {
           meta.el = { type: 'textarea', rows: 3 }
           meta.helpText = this.$t('TicketOneItemPerLine')
+        }
+        if (this.selectedType === 'view_secret' && field.name === 'duration') {
+          meta.label = this.$t('TicketSecretDuration')
+          meta.helpText = this.$t('TicketSecretDurationHelp')
         }
         this.fieldsMeta[name] = meta
       }
@@ -165,7 +202,37 @@ export default {
       this.formReady = true
     },
     defaultValue(field) {
+      if (field.resource === 'account') return []
       return field.default ?? (field.type === 'integer' ? field.min : '')
+    },
+    async loadAccountOptions(assetId, updateForm) {
+      const requestId = ++this.accountRequest
+      this.selectedAssetId = assetId
+      this.accountsFailed = false
+      if (!this.accountField) return
+      const name = `param_${this.accountField.name}`
+      const meta = this.fieldsMeta[name]
+      updateForm({ [name]: [] })
+      meta.el.options = []
+      meta.el.disabled = true
+      this.accountHint = this.$t('TicketSelectAssetFirst')
+      if (!assetId || !this.selectedOrgId) return
+      this.accountHint = this.$t('Loading')
+      try {
+        const accounts = await this.$axios.get(
+          `/api/v1/tickets/ticket-types/${this.selectedType}/options/`,
+          { params: { org_id: this.selectedOrgId, asset: assetId } }
+        )
+        if (requestId !== this.accountRequest) return
+        meta.el.options = accounts.map((username) => ({ value: username, label: username }))
+        this.accountHint = accounts.length ? '' : this.$t('TicketNoAssetAccounts')
+      } catch {
+        if (requestId !== this.accountRequest) return
+        this.accountsFailed = true
+        this.accountHint = this.$t('TicketAccountsLoadFailed')
+      } finally {
+        if (requestId === this.accountRequest) meta.el.disabled = false
+      }
     },
     async loadFlows(orgId) {
       const requestId = ++this.flowRequest
