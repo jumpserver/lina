@@ -1173,6 +1173,8 @@
   "NumberOfVisits": "Visits",
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "Note: authentication provider (recommended image size: 64px*64px)",
+  "OAuth2UserGroupAttribute": "User group attribute",
+  "OAuth2UserGroupAttributeTip": "Enter the field name in OAuth2 UserInfo that contains user groups. Leave blank to skip user group synchronization.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "No corresponding resources found or it has been deleted.",
   "ObjectStorage": "Object Storage",

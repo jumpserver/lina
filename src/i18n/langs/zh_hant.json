@@ -1375,6 +1375,8 @@
   "NumberOfVisits": "訪問次數",
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "提示：認證服務提供商（建議圖片大小為: 64px*64px）",
+  "OAuth2UserGroupAttribute": "使用者群組屬性",
+  "OAuth2UserGroupAttributeTip": "填寫 OAuth2 UserInfo 中表示使用者群組的欄位名稱；留空則不處理使用者群組。",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "沒有找到對應資源或者已被刪除",
   "ObjectStorage": "物件儲存",

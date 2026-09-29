@@ -1454,6 +1454,8 @@
   "NumberOfVisits": "Số lần truy cập",
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "Gợi ý: Nhà cung cấp dịch vụ xác thực (khuyên kích thước hình ảnh nên là: 64px*64px)",
+  "OAuth2UserGroupAttribute": "Thuộc tính nhóm người dùng",
+  "OAuth2UserGroupAttributeTip": "Nhập tên trường trong OAuth2 UserInfo chứa các nhóm người dùng. Để trống nếu không muốn xử lý nhóm người dùng.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "Không tìm thấy tài nguyên tương ứng hoặc đã bị xóa",
   "ObjectStorage": "Lưu trữ đối tượng",
