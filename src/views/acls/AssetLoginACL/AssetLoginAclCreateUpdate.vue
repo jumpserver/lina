@@ -6,6 +6,7 @@
 import rules from '@/components/Form/DataForm/rules'
 import { ResourceSelect, TagInput, WeekCronSelect } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
 import { assetJSONSelectMeta } from '@/views/assets/const'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 import { userJSONSelectMeta } from '@/views/users/const'
@@ -18,6 +19,7 @@ export default {
   data() {
     return {
       initial: {
+        review_duration: 0,
         accounts: ['@ALL'],
         rules: {
           ip_group: ['*']
@@ -29,10 +31,35 @@ export default {
         [this.$t('Asset'), ['assets']],
         [this.$t('Accounts'), ['accounts']],
         [this.$t('Rules'), ['rules']],
-        [this.$t('Action'), ['action', 'reviewers']],
+        [this.$t('Action'), ['action', 'reviewers', 'review_duration']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        review_duration: {
+          label: this.$t('ReviewExemptionDuration'),
+          component: InputWithUnit,
+          hidden: (formValue) => formValue.action !== 'review',
+          helpText: this.$t('ReviewExemptionDurationHelp'),
+          el: { unit: 'hour', type: 'number', min: 0, max: 2147483647, step: 1 },
+          rules: [
+            {
+              validator: (rule, value, callback) => {
+                const hours = Number(value)
+                if (
+                  value === '' ||
+                  value == null ||
+                  !Number.isInteger(hours) ||
+                  hours < 0 ||
+                  hours > 2147483647
+                ) {
+                  return callback(new Error(this.$t('ReviewExemptionDurationInvalid')))
+                }
+                callback()
+              },
+              trigger: ['blur', 'change']
+            }
+          ]
+        },
         priority: {
           rules: [rules.Required]
         },
@@ -83,6 +110,7 @@ export default {
       },
       url: '/api/v1/acls/login-asset-acls/',
       cleanFormValue(value) {
+        value.review_duration = value.action === 'review' ? Number(value.review_duration) : 0
         if (!Array.isArray(value.rules.ip_group)) {
           value.rules.ip_group = value.rules.ip_group ? value.rules.ip_group.split(',') : []
         }

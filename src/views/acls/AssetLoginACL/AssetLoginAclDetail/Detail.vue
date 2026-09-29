@@ -33,6 +33,16 @@ export default {
           key: this.$t('Reviewer'),
           value: this.object.reviewers.map((item) => item.name).join(', ')
         },
+        ...(this.object.action.value === 'review'
+          ? [
+              {
+                key: this.$t('ReviewExemptionDuration'),
+                value: this.$t('ReviewExemptionDurationHours', {
+                  hours: this.object.review_duration ?? 0
+                })
+              }
+            ]
+          : []),
         'priority',
         'date_created',
         'created_by',
