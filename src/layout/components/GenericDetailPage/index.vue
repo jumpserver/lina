@@ -2,7 +2,8 @@
   <TabPage
     v-model:active-menu="iActiveMenu"
     :submenu="iSubmenu"
-    :title="iTitle"
+    :title="detailTitle"
+    :hide-heading="drawer"
     class="generic-detail-page"
     @tab-click="handleTabClick"
   >
@@ -14,7 +15,8 @@
       </slot>
     </template>
     <div v-if="!loading">
-      <slot />
+      <el-result v-if="loadError" icon="warning" :title="loadError" />
+      <slot v-else />
     </div>
   </TabPage>
 </template>
@@ -24,8 +26,9 @@ import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common/index'
 import ActionsGroup from '@/components/Common/ActionsGroup'
-import { getRuntimeActionMeta } from '@/libs/context/runtime'
+import { getRuntimeActionMeta, getRuntimeRoute } from '@/libs/context/runtime'
 import { mapGetters } from 'vuex'
+import pagePresentation from '../pagePresentation'
 
 export default {
   name: 'GenericDetailPage',
@@ -33,6 +36,7 @@ export default {
     TabPage,
     ActionsGroup
   },
+  mixins: [pagePresentation],
   props: {
     url: {
       type: String,
@@ -104,7 +108,7 @@ export default {
       deleteCallback: function (item) {
         vm.defaultDelete(item)
       },
-      deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
+      deleteSuccessRoute: String(getRuntimeRoute(this).name || '').replace(/Detail$/, 'List'),
       // Update button
       canUpdate: () => {
         return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
@@ -113,12 +117,13 @@ export default {
       updateCallback: function (item) {
         this.defaultUpdate(item)
       },
-      updateRoute: this.$route.name.replace('Detail', 'Update')
+      updateRoute: String(getRuntimeRoute(this).name || '').replace(/(Detail|List)$/, 'Update')
     }
     return {
       defaultActions,
       loading: true,
-      drawer: false,
+      loadError: '',
+      detailDisposed: false,
       action: '',
       actionId: '',
       validActions: Object.assign(defaultActions, this.actions)
@@ -154,12 +159,6 @@ export default {
         }
       ]
     },
-    iTitle() {
-      if (this.drawer) {
-        return 'null'
-      }
-      return this.detailTitle
-    },
     detailTitle() {
       return this.title || this.getTitle(this.object)
     },
@@ -183,6 +182,9 @@ export default {
       return [...this.submenu, activity]
     }
   },
+  beforeUnmount() {
+    this.detailDisposed = true
+  },
   async created() {
     await this.loadObject()
   },
@@ -194,8 +196,8 @@ export default {
     async loadObject() {
       try {
         this.loading = true
-        await this.checkDrawer()
-        await this.getObject()
+        if (this.drawer) await this.checkDrawer()
+        if (!this.detailDisposed) await this.getObject()
       } finally {
         this.loading = false
       }
@@ -206,7 +208,6 @@ export default {
     async checkDrawer() {
       const drawActionMeta = await this.getDrawerMeta()
       if (drawActionMeta && drawActionMeta.action) {
-        this.drawer = true
         this.row = drawActionMeta.row
         this.actionId = drawActionMeta.id
       }
@@ -223,9 +224,9 @@ export default {
     },
     afterDelete() {
       if (this.drawer) {
-        this.$emit('close-drawer')
+        this.emitDrawerAction('close', 'close-drawer')
         this.$emit('detail-delete-success')
-        this.$emit('reload-table')
+        this.emitDrawerAction('reload', 'reload-table')
       } else {
         this.$message.success(this.$tc('DeleteSuccessMsg'))
         this.$router.push({ name: this.validActions.deleteSuccessRoute })
@@ -280,9 +281,11 @@ export default {
       }
       if (this.drawer) {
         const row = this.object?.id ? this.object : { ...(this.row || {}), id }
-        this.$emit('open-update-drawer', {
+        const location = typeof route === 'string' ? { name: route } : route
+        this.emitDrawerAction('update', 'open-update-drawer', {
           row,
-          query: route?.query || {}
+          route: { ...location, params: { ...location?.params, id } },
+          query: location?.query || {}
         })
         return
       }
@@ -302,21 +305,40 @@ export default {
       }
       this.$router.push(route)
     },
+    emitDrawerAction(action, event, payload) {
+      const handler = this.$context.get('handlers', { scope: 'overlay' })?.[action]
+      if (handler) handler(payload)
+      else this.$emit(event, payload)
+    },
     getObject() {
       // 兼容之前的 detailApiUrl
       const url = this.getDetailUrl()
+      this.loadError = ''
+      const onLoaded = this.$context.get('handlers', { scope: 'overlay' })?.loaded
       return this.$axios
         .get(url, { disableFlashErrorMsg: true })
         .then((data) => {
+          if (this.detailDisposed) return
+          onLoaded?.(data)
           this.$emit('update:object', data)
           this.$emit('getObjectDone', data)
         })
         .catch((error) => {
+          if (this.detailDisposed) return
+          this.loadError = this.$t(
+            error.response?.status === 404
+              ? 'ObjectNotFoundOrDeletedMsg'
+              : error.response?.status === 403
+                ? 'NoPermissionVew'
+                : 'PageLoadErrorMsg'
+          )
           if (error.response && error.response.status === 404) {
             const msg = this.$tc('ObjectNotFoundOrDeletedMsg')
             this.$message.error(msg)
-          } else {
+          } else if (error.response) {
             flashErrorMsg({ error, response: error.response })
+          } else {
+            this.$message.error(this.loadError)
           }
         })
     },

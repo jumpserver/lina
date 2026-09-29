@@ -1,6 +1,7 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 import XPackRoutes from './xpack'
+import { createViewSetRoutes } from '../viewset'
 
 export default [
   {
@@ -232,35 +233,13 @@ export default [
       icon: 'zone',
       permissions: ['assets.view_zone']
     },
-    children: [
-      {
-        path: '',
-        name: 'ZoneList',
-        component: () => import('@/views/assets/Zone/ZoneList.vue'),
-        meta: { title: i18n.t('ZoneList') }
-      },
-      {
-        path: 'create',
-        name: 'ZoneCreate',
-        component: () => import('@/views/assets/Zone/ZoneCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('ZoneCreate') }
-      },
-      {
-        path: ':id/update',
-        name: 'ZoneUpdate',
-        component: () => import('@/views/assets/Zone/ZoneCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('ZoneUpdate') }
-      },
-      {
-        path: ':id',
-        name: 'ZoneDetail',
-        component: () => import('@/views/assets/Zone/ZoneDetail'),
-        hidden: true,
-        meta: { title: i18n.t('Zone') }
-      }
-    ]
+    children: createViewSetRoutes({
+      name: 'Zone',
+      list: () => import('@/views/assets/Zone/ZoneList.vue'),
+      form: () => import('@/views/assets/Zone/ZoneCreateUpdate.vue'),
+      detail: () => import('@/views/assets/Zone/ZoneDetail'),
+      meta: { detail: { title: i18n.t('Zone') } }
+    })
   },
   {
     path: 'gateways',

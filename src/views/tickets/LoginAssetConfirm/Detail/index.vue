@@ -38,7 +38,7 @@ export default {
           }
         ],
         actions: {
-          detailApiUrl: `/api/v1/tickets/apply-login-asset-tickets/${this.$route.params.id}/`
+          detailApiUrl: `/api/v1/tickets/apply-login-asset-tickets/${this.$context.get('id')}/`
         },
         getObjectName: this.getObjectName,
         hasRightSide: false
