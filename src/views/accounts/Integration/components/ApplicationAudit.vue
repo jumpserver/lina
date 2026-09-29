@@ -56,7 +56,7 @@ export default {
           response.data.results = response.data.results.map((row) => normalizeAudit(row, this.$t))
           return response
         },
-        hasSelection: false,
+        hasSelection: true,
         columnsShow: {
           min: ['event_display', 'result', 'datetime'],
           default: ['event_display', 'service', 'credential', 'operator', 'result', 'datetime']

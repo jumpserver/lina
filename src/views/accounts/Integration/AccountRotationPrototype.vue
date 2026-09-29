@@ -10,7 +10,12 @@
   <div class="application-credential-list">
     <ListTable ref="credentialTable" :header-actions="headerActions" :table-config="tableConfig" />
 
-    <Drawer v-model:visible="drawerVisible" :has-footer="false" :title="drawerTitle">
+    <Drawer
+      v-model:visible="drawerVisible"
+      :has-footer="false"
+      :title="drawerTitle"
+      @closed="refreshListIfNeeded"
+    >
       <AccountRotationCreateUpdate
         v-if="drawerMode === 'form'"
         :credential="editingCredential"
@@ -31,7 +36,6 @@
 import { ListTable } from '@/components'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import Drawer from '@/components/Drawer/index.vue'
-import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import {
   deleteApplicationCredential,
   credentialUrl,
@@ -41,14 +45,7 @@ import {
 import AccountRotationCreateUpdate from './AccountRotationCreateUpdate.vue'
 import AccountRotationDetail from './AccountRotationDetail/index.vue'
 import { credentialStatusLabel } from './components/credentialStatus.js'
-import { subscribedAccountLabel } from './components/subscriptionAccount.js'
-
-const accountName = (row, t) =>
-  row.mode === 'subscription'
-    ? row.subscription_all_authorized
-      ? t('LegacyAllAuthorizedAccounts')
-      : row.subscription_accounts?.map(subscribedAccountLabel).join(', ') || '-'
-    : row.active_account?.username || row.active_account?.name || '-'
+import { credentialAssetLabels, subscribedAccountLabel } from './components/subscriptionAccount.js'
 
 export default {
   name: 'ApplicationCredentialList',
@@ -63,11 +60,12 @@ export default {
       drawerMode: 'detail',
       drawerVisible: false,
       editingCredential: null,
+      listRefreshPending: false,
       selectedCredential: null,
       tableConfig: {
         url: credentialUrl,
         request: requestCredentialTable,
-        hasSelection: false,
+        hasSelection: true,
         hasPagination: true,
         columns: [
           {
@@ -109,25 +107,10 @@ export default {
             )
           },
           {
-            prop: 'asset',
-            label: this.$t('Asset'),
-            minWidth: '190px',
-            formatter: (row) =>
-              row.mode === 'subscription'
-                ? '-'
-                : `${row.asset?.name || '-'} (${row.asset?.address || '-'})`
-          },
-          {
-            prop: 'active_account',
-            label: this.$t('CurrentAccount'),
-            minWidth: '240px',
-            formatter: (row) => accountName(row, this.$t)
-          },
-          {
-            prop: 'last_fetched',
-            label: this.$t('LastFetched'),
-            width: '175px',
-            formatter: (row) => this.formatDate(row.last_fetched)
+            prop: 'account_scope',
+            label: this.$t('CredentialPolicyAccountScope'),
+            minWidth: '300px',
+            formatter: (row) => this.renderAccountScope(row)
           },
           {
             prop: 'actions',
@@ -185,8 +168,78 @@ export default {
     }
   },
   methods: {
-    formatDate(value) {
-      return value ? toSafeLocalDateStr(value) : '-'
+    renderAccountScope(row) {
+      const accountName = (account) => account?.username || account?.name || '-'
+      if (row.mode === 'subscription') {
+        const accounts = row.subscription_accounts_preview || []
+        const remaining = Math.max(0, (row.subscription_accounts_amount ?? 0) - accounts.length)
+        const summary = row.subscription_all_authorized
+          ? this.$t('LegacyAllAuthorizedAccounts')
+          : accounts.map(accountName).join(', ') || '-'
+        return (
+          <el-tooltip
+            placement="top"
+            trigger={['hover', 'focus']}
+            disabled={row.subscription_all_authorized}
+            v-slots={{
+              content: () => (
+                <div>
+                  {accounts.map((account) => (
+                    <div key={account.id}>{subscribedAccountLabel(account)}</div>
+                  ))}
+                  <div>
+                    {this.$t('CredentialPolicyScopeSummary', {
+                      accounts: row.subscription_accounts_amount ?? 0,
+                      assets: row.subscription_assets_amount ?? 0
+                    })}
+                  </div>
+                </div>
+              )
+            }}
+          >
+            <button
+              type="button"
+              class="credential-account-summary truncate-content"
+              onClick={() => this.openDetail(row)}
+            >
+              <span class="credential-account-names">{summary}</span>
+              {!row.subscription_all_authorized && remaining > 0 && (
+                <span class="credential-account-more">+{remaining}</span>
+              )}
+            </button>
+          </el-tooltip>
+        )
+      }
+      const nextAccount =
+        row.active_account?.id === row.account?.id ? row.alternate_account : row.account
+      const summary = `${accountName(row.active_account)} → ${accountName(nextAccount)} · ${row.asset?.address || row.asset?.name || '-'}`
+      return (
+        <el-tooltip
+          placement="top"
+          trigger={['hover', 'focus']}
+          v-slots={{
+            content: () => (
+              <div>
+                <div>
+                  {this.$t('CurrentAccount')}: {subscribedAccountLabel(row.active_account)}
+                </div>
+                <div>
+                  {this.$t('NextAccount')}: {subscribedAccountLabel(nextAccount)}
+                </div>
+                <div>{credentialAssetLabels(row).join(', ') || '-'}</div>
+              </div>
+            )
+          }}
+        >
+          <button
+            type="button"
+            class="credential-account-summary truncate-content"
+            onClick={() => this.openDetail(row)}
+          >
+            <span class="credential-account-names">{summary}</span>
+          </button>
+        </el-tooltip>
+      )
     },
     modeLabel(row) {
       return this.$t(
@@ -196,7 +249,11 @@ export default {
       )
     },
     async loadRows() {
+      this.listRefreshPending = false
       return this.$refs.credentialTable.reloadTable()
+    },
+    refreshListIfNeeded() {
+      if (this.listRefreshPending) return this.loadRows()
     },
     openCreate() {
       this.editingCredential = null
@@ -218,9 +275,9 @@ export default {
       this.selectedCredential = saved
       this.drawerMode = 'detail'
     },
-    async handleDetailUpdated(updated) {
+    handleDetailUpdated(updated) {
       this.selectedCredential = updated
-      await this.loadRows()
+      this.listRefreshPending = true
     },
     async remove(row) {
       await this.$confirm(
@@ -235,3 +292,44 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.application-credential-list {
+  :deep(.credential-account-summary) {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text-primary);
+    font: inherit;
+    line-height: inherit;
+    vertical-align: middle;
+    cursor: pointer;
+
+    .credential-account-names {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .credential-account-more {
+      flex-shrink: 0;
+      margin-left: 6px;
+      color: var(--color-text-secondary);
+    }
+
+    &:hover .credential-account-names {
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 1px solid var(--color-link);
+      outline-offset: 2px;
+    }
+  }
+}
+</style>

@@ -13,9 +13,9 @@
     mask-secret
   />
   <ApplicationEventSendDialog
-    v-if="eventApplication"
+    v-if="eventApplications.length"
     v-model:visible="eventDialogVisible"
-    :application="eventApplication"
+    :applications="eventApplications"
   />
 </template>
 
@@ -24,6 +24,7 @@ import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormat
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import SecretDialog from '@/components/Dialog/Secret.vue'
 import { GenericListTable } from '@/layout/components'
+import { copy } from '@/utils/common/index'
 import ApplicationEventSendDialog from './components/ApplicationEventSendDialog.vue'
 export default {
   name: 'IntegrationApplicationList',
@@ -35,7 +36,7 @@ export default {
   data() {
     const vm = this
     return {
-      eventApplication: null,
+      eventApplications: [],
       eventDialogVisible: false,
       createDrawer: () => import('@/views/accounts/Integration/ApplicationCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/Integration/ApplicationDetail/index.vue'),
@@ -99,14 +100,26 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  name: 'send-event',
-                  title: vm.$t('SendApplicationEvent'),
-                  icon: 'fa-solid fa-paper-plane',
+                  name: 'copy-account-info',
+                  title: vm.$t('CopyApplicationAccountInfo'),
+                  icon: 'fa-regular fa-copy',
                   has: vm.$hasPerm('accounts.change_integrationapplication'),
-                  can: ({ row }) => row.is_active,
-                  callback: ({ row }) => {
-                    vm.eventApplication = row
-                    vm.eventDialogVisible = true
+                  callback: async ({ row }) => {
+                    const app = await vm.$axios.get(
+                      `/api/v1/accounts/integration-applications/${row.id}/secret/`
+                    )
+                    await copy(
+                      JSON.stringify(
+                        {
+                          endpoint: app.endpoint,
+                          app_id: app.id,
+                          app_secret: app.secret,
+                          org_id: app.org_id
+                        },
+                        null,
+                        2
+                      )
+                    )
                   }
                 },
                 {
@@ -141,6 +154,20 @@ export default {
       },
       headerActions: {
         hasImport: false,
+        extraMoreActions: [
+          {
+            name: 'send-event',
+            title: vm.$t('SendApplicationEvent'),
+            icon: 'fa-solid fa-paper-plane',
+            has: vm.$hasPerm('accounts.change_integrationapplication'),
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 && selectedRows.every((row) => row.is_active),
+            callback: ({ selectedRows }) => {
+              vm.eventApplications = selectedRows.map((row) => ({ ...row }))
+              vm.eventDialogVisible = true
+            }
+          }
+        ],
         searchConfig: {
           getUrlQuery: false
         }

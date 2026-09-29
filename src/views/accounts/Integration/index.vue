@@ -22,16 +22,16 @@ export default {
             component: () => import('@/views/accounts/Integration/ApplicationList.vue')
           },
           {
-            name: 'records',
-            title: this.$t('AppAuditLogs'),
-            hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
-            component: () => import('@/views/accounts/Integration/components/ApplicationAudit.vue')
-          },
-          {
             name: 'rotations',
             title: this.$t('CredentialPolicies'),
             hidden: !this.$hasPerm('accounts.view_applicationcredential'),
             component: () => import('@/views/accounts/Integration/AccountRotationPrototype.vue')
+          },
+          {
+            name: 'records',
+            title: this.$t('AppAuditLogs'),
+            hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
+            component: () => import('@/views/accounts/Integration/components/ApplicationAudit.vue')
           },
           {
             name: 'docs',

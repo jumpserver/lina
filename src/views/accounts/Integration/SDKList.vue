@@ -1,24 +1,34 @@
 <template>
-  <div class="sdk-docs-shell">
-    <aside class="sdk-docs-sidebar">
-      <h2>{{ $t('SDKCenter') }}</h2>
-      <nav class="sidebar-group" :aria-label="$t('SDKCenter')">
-        <button
-          :class="['sidebar-link', { active: documentationTab === 'agent' }]"
-          type="button"
-          @click="selectDocumentation('agent')"
-        >
-          {{ $t('AgentAccess') }}
-        </button>
-        <button
-          :class="['sidebar-link', { active: documentationTab === 'sdk' }]"
-          type="button"
-          @click="selectDocumentation('sdk')"
-        >
-          {{ $t('SDKAccess') }}
-        </button>
-      </nav>
-    </aside>
+  <IBox :title="$t('SDKCenter')" class="sdk-docs-shell">
+    <template #header>
+      <div class="documentation-toolbar">
+        <h5>{{ $t('SDKCenter') }}</h5>
+        <div class="documentation-controls">
+          <el-select
+            v-if="documentationTab === 'sdk'"
+            :model-value="sdkLanguage"
+            :aria-label="$t('SDKProgrammingLanguage')"
+            class="sdk-language-select"
+            @change="selectSDKLanguage"
+          >
+            <el-option
+              v-for="language in sdkLanguages"
+              :key="language.value"
+              :label="language.label"
+              :value="language.value"
+            />
+          </el-select>
+          <el-radio-group
+            :model-value="documentationTab"
+            :aria-label="$t('SDKCenter')"
+            @update:model-value="selectDocumentation"
+          >
+            <el-radio-button value="agent">{{ $t('AgentAccess') }}</el-radio-button>
+            <el-radio-button value="sdk">{{ $t('SDKAccess') }}</el-radio-button>
+          </el-radio-group>
+        </div>
+      </div>
+    </template>
 
     <main ref="docsMain" class="sdk-docs-main">
       <el-skeleton v-if="documentationLoading" :rows="8" animated />
@@ -36,21 +46,38 @@
       <template v-else>
         <header class="documentation-header">
           <h1>{{ $t(documentationTab === 'agent' ? 'AgentAccess' : 'SDKAccess') }}</h1>
-          <p>{{ $t(documentationTab === 'agent' ? 'AgentDescription' : 'SDKDescription') }}</p>
+          <p>{{ $t(documentationDescription) }}</p>
           <div class="documentation-meta">
             <template v-if="documentationTab === 'agent'">
               <el-tag effect="plain" size="small">Linux</el-tag>
               <el-tag effect="plain" size="small" type="info">systemd</el-tag>
             </template>
             <template v-else>
-              <el-tag effect="plain" size="small">Python 3.9+</el-tag>
-              <el-tag effect="plain" size="small" type="info">PyPI</el-tag>
+              <el-tag effect="plain" size="small">{{ sdkRuntime }}</el-tag>
+              <el-tag effect="plain" size="small" type="info">
+                {{ $t(credentialPolicies ? 'ApplicationCredential' : 'SDKLegacyExample') }}
+              </el-tag>
             </template>
           </div>
         </header>
 
         <el-empty v-if="!activeDocument" :description="$t('SDKDocumentationEmpty')" />
-        <div v-else class="documentation-layout">
+        <div v-else class="documentation-layout" :class="{ 'has-outline': headings.length }">
+          <nav v-if="headings.length" class="documentation-jump" :aria-label="$t('OnThisPage')">
+            <span>{{ $t('OnThisPage') }}</span>
+            <el-select
+              :model-value="activeHeading"
+              :aria-label="$t('OnThisPage')"
+              @change="scrollToHeading"
+            >
+              <el-option
+                v-for="heading in headings"
+                :key="heading.id"
+                :label="heading.text"
+                :value="heading.id"
+              />
+            </el-select>
+          </nav>
           <article class="documentation-content">
             <MarkdownRenderer
               :source="activeDocument"
@@ -82,15 +109,17 @@
         </div>
       </template>
     </main>
-  </div>
+  </IBox>
 </template>
 
 <script>
 import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer/index.vue'
+import IBox from '@/components/Common/IBox/index.vue'
 
 export default {
   name: 'SDKList',
   components: {
+    IBox,
     MarkdownRenderer
   },
   data() {
@@ -98,13 +127,30 @@ export default {
       activeHeading: '',
       documentationError: false,
       documentationLoading: false,
+      documentationRequestId: 0,
       documentationTab: 'agent',
+      credentialPolicies: true,
       headingObserver: null,
       headings: [],
-      readme: ''
+      readme: '',
+      sdkLanguage: 'python',
+      sdkLanguages: [
+        { value: 'python', label: 'Python' },
+        { value: 'go', label: 'Go' },
+        { value: 'java', label: 'Java' },
+        { value: 'node', label: 'Node.js' }
+      ],
+      sdkRuntime: 'Python 3.9+'
     }
   },
   computed: {
+    activeLanguage() {
+      return this.documentationTab === 'agent' ? 'python' : this.sdkLanguage
+    },
+    documentationDescription() {
+      if (this.documentationTab === 'agent') return 'AgentDescription'
+      return this.credentialPolicies ? 'SDKDescription' : 'SDKLegacyDescription'
+    },
     activeDocument() {
       const marker = `${this.documentationTab}-doc`
       const startMarker = `<!-- ${marker}:start -->`
@@ -127,10 +173,13 @@ export default {
     this.loadDocumentation()
   },
   beforeUnmount() {
+    this.documentationRequestId += 1
     this.disconnectHeadingObserver()
   },
   methods: {
     async loadDocumentation() {
+      const requestId = ++this.documentationRequestId
+      const language = this.activeLanguage
       this.disconnectHeadingObserver()
       this.headings = []
       this.activeHeading = ''
@@ -138,14 +187,19 @@ export default {
       this.documentationError = false
       try {
         const data = await this.$axios.get('/api/v1/accounts/integration-applications/sdks/', {
-          params: { language: 'python' }
+          params: { language }
         })
+        if (requestId !== this.documentationRequestId) return
         this.readme = data.readme || ''
+        this.sdkRuntime = data.runtime || language
+        this.credentialPolicies = data.credential_policies ?? language === 'python'
+        if (data.languages?.length) this.sdkLanguages = data.languages
       } catch {
+        if (requestId !== this.documentationRequestId) return
         this.readme = ''
         this.documentationError = true
       } finally {
-        this.documentationLoading = false
+        if (requestId === this.documentationRequestId) this.documentationLoading = false
       }
     },
     onHeadingsChange(headings) {
@@ -155,11 +209,19 @@ export default {
     },
     selectDocumentation(tab) {
       if (this.documentationTab === tab) return
+      const previousLanguage = this.activeLanguage
       this.disconnectHeadingObserver()
       this.documentationTab = tab
       this.headings = []
       this.activeHeading = ''
       this.$refs.docsMain?.scrollTo({ top: 0 })
+      if (previousLanguage !== this.activeLanguage) this.loadDocumentation()
+    },
+    selectSDKLanguage(language) {
+      if (this.sdkLanguage === language) return
+      this.sdkLanguage = language
+      this.$refs.docsMain?.scrollTo({ top: 0 })
+      this.loadDocumentation()
     },
     disconnectHeadingObserver() {
       this.headingObserver?.disconnect()
@@ -206,104 +268,89 @@ export default {
 
 <style lang="scss" scoped>
 .sdk-docs-shell {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  container-type: inline-size;
   height: 100%;
+  min-width: 0;
   min-height: 0;
   box-sizing: border-box;
   overflow: hidden;
-  border: 1px solid var(--el-border-color-lighter);
-  border-radius: 8px;
-  color: var(--color-text-primary);
-  background: var(--el-bg-color);
   flex: 1 1 auto !important;
-  grid-template-columns: 220px minmax(0, 1fr);
 }
 
-.sdk-docs-sidebar {
-  padding: 24px 18px;
-  border-right: 1px solid var(--el-border-color-lighter);
-  background: var(--el-fill-color-lighter);
+.sdk-docs-shell :deep(> .el-card__header) {
+  flex-shrink: 0;
 }
 
-.sdk-docs-sidebar h2 {
-  margin: 0 0 28px;
-  padding: 0 10px;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.4;
+.sdk-docs-shell :deep(> .el-card__body) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.sidebar-group {
+.documentation-toolbar {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.sidebar-link {
-  width: 100%;
-  min-height: 38px;
-  padding: 8px 10px;
-  border: 0;
-  border-radius: 4px;
-  color: var(--color-text-primary);
-  background: transparent;
-  cursor: pointer;
+.documentation-toolbar h5 {
+  margin: 0;
   font-size: 13px;
-  line-height: 1.4;
-  text-align: left;
+  font-weight: 500;
 }
 
-.sidebar-link:hover {
-  background: var(--el-fill-color);
+.documentation-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.sidebar-link.active {
-  color: var(--el-color-primary);
-  background: var(--el-color-primary-light-9);
-  font-weight: 600;
-}
-
-.sidebar-link:focus-visible {
-  outline: 2px solid var(--el-color-primary);
-  outline-offset: 2px;
+.sdk-language-select {
+  width: 128px;
 }
 
 .sdk-docs-main {
   height: 100%;
   min-width: 0;
-  box-sizing: border-box;
-  padding: 32px 40px 48px;
+  min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
   scrollbar-gutter: stable;
+  color: var(--el-text-color-primary);
 }
 
 .documentation-header {
-  max-width: 880px;
-  margin-bottom: 28px;
-  padding-bottom: 20px;
+  max-width: 1240px;
+  margin: 0 auto 24px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--el-border-color-lighter);
 }
 
 .documentation-header h1 {
   margin: 0 0 8px;
-  font-size: 30px;
-  font-weight: 500;
-  line-height: 1.25;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .documentation-header p {
-  max-width: 68ch;
+  max-width: 80ch;
   margin: 0;
-  color: var(--color-text-secondary);
-  font-size: 14px;
-  line-height: 1.65;
+  color: var(--el-text-color-regular);
+  font-size: 12px;
+  line-height: 1.75;
 }
 
 .documentation-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 .documentation-state {
@@ -323,7 +370,7 @@ export default {
 .documentation-state p {
   max-width: 52ch;
   margin: 0 0 16px;
-  color: var(--color-text-secondary);
+  color: var(--el-text-color-regular);
   font-size: 13px;
   line-height: 1.6;
 }
@@ -331,25 +378,46 @@ export default {
 .documentation-layout {
   display: grid;
   width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
   align-items: start;
-  justify-content: space-between;
-  gap: 48px;
-  grid-template-columns: minmax(0, 880px) minmax(180px, 220px);
+  gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.documentation-layout.has-outline {
+  grid-template-columns: minmax(0, 1fr) 200px;
 }
 
 .documentation-content {
   min-width: 0;
-  grid-column: 1;
-  grid-row: 1;
+}
+
+.documentation-jump {
+  display: none;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  font-size: 12px;
+  color: var(--el-text-color-secondary);
+}
+
+.documentation-jump :deep(.el-select) {
+  flex: 1 1 220px;
+  min-width: 0;
+  max-width: 460px;
 }
 
 .documentation-outline {
   position: sticky;
-  top: 16px;
+  top: 0;
   min-width: 0;
   align-self: start;
   grid-column: 2;
   grid-row: 1;
+  max-height: 70vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .documentation-outline nav {
@@ -362,24 +430,23 @@ export default {
 
 .documentation-outline h3 {
   margin: 0 0 8px;
-  color: var(--color-text-primary);
+  color: var(--el-text-color-primary);
   font-size: 12px;
   font-weight: 600;
 }
 
 .outline-link {
-  min-height: 32px;
+  min-height: 30px;
   padding: 5px 8px;
-  overflow: hidden;
   border: 0;
   border-radius: 4px;
-  color: var(--color-text-secondary);
+  color: var(--el-text-color-regular);
   background: transparent;
   cursor: pointer;
   font-size: 12px;
-  line-height: 1.45;
+  line-height: 1.5;
   text-align: left;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 
 .outline-link--level-3 {
@@ -399,9 +466,9 @@ export default {
 
 .readme-content {
   width: 100%;
-  max-width: 880px;
-  color: var(--color-text-primary);
-  font-size: 14px;
+  max-width: 1000px;
+  color: var(--el-text-color-primary);
+  font-size: 13px;
   line-height: 1.75;
 }
 
@@ -411,24 +478,28 @@ export default {
 
 .readme-content :deep(h2),
 .readme-content :deep(h3) {
-  color: var(--color-text-primary);
-  line-height: 1.4;
+  color: var(--el-text-color-primary);
+  line-height: 1.5;
   scroll-margin-top: 16px;
 }
 
 .readme-content :deep(h2) {
-  margin: 36px 0 12px;
-  font-size: 19px;
+  margin: 28px 0 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--el-border-color-lighter);
+  font-size: 16px;
   font-weight: 600;
 }
 
 .readme-content :deep(h2:first-of-type) {
   margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .readme-content :deep(h3) {
-  margin: 28px 0 10px;
-  font-size: 15px;
+  margin: 20px 0 10px;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -447,41 +518,66 @@ export default {
   margin: 5px 0;
 }
 
-.readme-content :deep(code:not(.hljs code)) {
-  padding: 2px 5px;
-  border: 1px solid var(--el-border-color-lighter);
+.readme-content :deep(code:not(pre code)) {
+  padding: 2px 4px;
   border-radius: 4px;
-  color: var(--el-color-primary-dark-2);
+  color: var(--el-text-color-primary);
   background: var(--el-fill-color-light);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.9em;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.readme-content :deep(.markdown-code-block) {
+  border-radius: 4px;
+}
+
+.readme-content :deep(pre) {
+  padding: 12px;
+  background: var(--el-fill-color-light);
+  line-height: 1.6;
+}
+
+.readme-content :deep(pre code) {
+  background: transparent;
+  color: var(--el-text-color-primary);
+  font-size: 12px;
 }
 
 .readme-content :deep(blockquote) {
-  margin: 18px 0;
+  margin: 16px 0;
   padding: 10px 14px;
-  border-left: 1px solid var(--el-color-primary);
-  color: var(--color-text-secondary);
+  border-left: 2px solid var(--el-color-primary);
+  color: var(--el-text-color-regular);
   background: var(--el-color-primary-light-9);
+}
+
+.readme-content :deep(blockquote > :last-child) {
+  margin-bottom: 0;
 }
 
 .readme-content :deep(table) {
   display: block;
   width: 100%;
-  margin: 18px 0;
+  max-width: 100%;
+  margin: 16px 0;
   overflow-x: auto;
   border-collapse: collapse;
 }
 
 .readme-content :deep(th),
 .readme-content :deep(td) {
-  padding: 9px 12px;
+  min-width: 140px;
+  padding: 8px 10px;
   border: 1px solid var(--el-border-color-lighter);
   text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
 }
 
 .readme-content :deep(th) {
   background: var(--el-fill-color-light);
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -495,76 +591,17 @@ export default {
   background: var(--el-color-primary-light-7);
 }
 
-@media (max-width: 991px) {
-  .sdk-docs-shell {
+@container (max-width: 1000px) {
+  .documentation-layout.has-outline {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .documentation-jump {
     display: flex;
-    flex-direction: column;
-  }
-
-  .sdk-docs-sidebar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    overflow-x: auto;
-    border-right: 0;
-    border-bottom: 1px solid var(--el-border-color-lighter);
-  }
-
-  .sdk-docs-sidebar h2 {
-    margin: 0;
-    padding: 0;
-    white-space: nowrap;
-  }
-
-  .sidebar-group {
-    flex-direction: row;
-  }
-
-  .sidebar-link {
-    width: auto;
-    white-space: nowrap;
-  }
-
-  .sdk-docs-main {
-    height: auto;
-    min-height: 0;
-    padding: 24px 20px 36px;
-    flex: 1 1 auto;
-  }
-
-  .documentation-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
   }
 
   .documentation-outline {
-    position: static;
-    width: 100%;
-    order: -1;
-  }
-
-  .documentation-outline nav {
-    position: static;
-    padding: 12px;
-    border: 1px solid var(--el-border-color-lighter);
-    border-radius: 6px;
-    background: var(--el-fill-color-lighter);
-  }
-}
-
-@media (max-width: 767px) {
-  .sdk-docs-sidebar h2 {
     display: none;
-  }
-
-  .sdk-docs-main {
-    padding: 20px 16px 32px;
-  }
-
-  .documentation-header h1 {
-    font-size: 25px;
   }
 }
 </style>

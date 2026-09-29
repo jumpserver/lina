@@ -235,7 +235,7 @@ export default {
 
 <style lang="scss" scoped>
 .application-connections {
-  padding: 16px 20px;
+  padding: 16px 0;
 }
 .access-summary {
   display: flex;

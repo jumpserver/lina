@@ -177,7 +177,7 @@ export default {
 
 <style lang="scss" scoped>
 .application-events {
-  padding: 16px 20px;
+  padding: 16px 0;
 }
 
 .context-help {

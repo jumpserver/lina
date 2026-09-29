@@ -114,7 +114,7 @@ export default {
           name: 'access',
           hidden: !this.$hasPerm('accounts.view_integrationapplication')
         },
-        { title: this.$t('RotationEventReception'), name: 'events' },
+        { title: this.$t('CredentialPolicyRunRecords'), name: 'events' },
         { title: this.$t('Documentation'), name: 'docs' }
       ]
     }

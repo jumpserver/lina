@@ -1,8 +1,8 @@
 <template>
-  <IBox :title="$t('CredentialEventReception')" class="event-browser">
+  <IBox :title="$t('CredentialPolicyRunRecords')" class="event-browser">
     <template #header>
       <div class="browser-heading">
-        <h5>{{ $t('PolicyEventCycles') }}</h5>
+        <h5>{{ $t('CredentialPolicyRunRecords') }}</h5>
         <div class="browser-actions">
           <slot name="actions" :cycle="detail" />
           <el-button :loading="cyclesLoading || detailLoading" @click="loadCycles(cyclePage)">{{
@@ -51,25 +51,33 @@
       />
       <el-skeleton v-else-if="detailLoading" :rows="8" animated />
       <template v-else-if="detail">
-        <header class="cycle-heading">
-          <div>
-            <h3>
-              {{ cycleKind(detail) }}
-              <el-tag :type="cycleStatusType(detail.status)">{{
-                cycleStatus(detail.status)
-              }}</el-tag>
-            </h3>
-            <p>
-              {{ formatDate(detail.date_started) }} ·
-              {{ $t('PolicyCycleEventCount', { count: detail.event_count }) }}
-            </p>
-            <p v-if="detail.accounts?.length > 1">
-              {{ detail.accounts.map(accountLabel).join(' · ') }}
-            </p>
-            <p v-else-if="detail.account">{{ accountLabel(detail.account) }}</p>
+        <section class="cycle-summary record-section" :aria-label="$t('PolicyCycleSummary')">
+          <h4 class="record-heading">
+            <el-icon><DataAnalysis /></el-icon>{{ $t('PolicyCycleSummary') }}
+          </h4>
+          <div class="cycle-heading">
+            <div>
+              <h3>
+                {{ cycleKind(detail) }}
+                <el-tag :type="cycleStatusType(detail.status)">{{
+                  cycleStatus(detail.status)
+                }}</el-tag>
+              </h3>
+              <p>
+                {{ formatDate(detail.date_started) }} ·
+                {{ $t('PolicyCycleEventCount', { count: detail.event_count }) }}
+              </p>
+              <p v-if="detail.accounts?.length > 1">
+                {{ detail.accounts.map(accountLabel).join(' · ') }}
+              </p>
+              <p v-else-if="detail.account">{{ accountLabel(detail.account) }}</p>
+            </div>
+            <div class="cycle-identifier">
+              <span>{{ $t('PolicyCycleID') }}</span>
+              <code>{{ detail.id }}</code>
+            </div>
           </div>
-          <code :title="detail.id">{{ detail.id }}</code>
-        </header>
+        </section>
         <el-alert
           v-if="detail.kind === 'legacy'"
           :title="$t('PolicyCycleLegacyHelp')"
@@ -85,67 +93,83 @@
           show-icon
         />
         <section
+          v-if="stages.length"
+          class="cycle-progress record-section"
+          :aria-label="$t('PolicyCycleStages')"
+        >
+          <h4 class="record-heading">
+            <el-icon><Guide /></el-icon>{{ $t('PolicyCycleStages') }}
+          </h4>
+          <div class="progress-content">
+            <div class="cycle-stages">
+              <div
+                v-for="stage in stages"
+                :key="stage.label"
+                :class="[
+                  'cycle-stage',
+                  {
+                    emitted: stage.event,
+                    current: stage.current,
+                    failed: stage.event?.event.endsWith('.failed')
+                  }
+                ]"
+              >
+                <el-icon
+                  ><component
+                    :is="
+                      stage.current
+                        ? 'Clock'
+                        : stage.event
+                          ? stage.event.event.endsWith('.failed')
+                            ? 'CircleClose'
+                            : 'Check'
+                          : 'Clock'
+                    "
+                /></el-icon>
+                <span>{{ $t(stage.label) }}</span>
+                <small>{{
+                  $t(
+                    stage.current
+                      ? 'StandbyObservationInProgress'
+                      : stage.event
+                        ? 'PolicyStageEmitted'
+                        : stage.skipped
+                          ? 'PolicyStageSkipped'
+                          : 'PolicyStageNotEmitted'
+                  )
+                }}</small>
+              </div>
+            </div>
+            <p class="stage-help">{{ $t('PolicyCycleStagesHelp') }}</p>
+          </div>
+        </section>
+        <section
           v-if="detail.preparation"
-          class="standby-observation"
+          class="standby-observation record-section"
           :aria-label="$t('RotationStandbyWaitingEvent')"
         >
-          <h4>
+          <h4 class="record-heading">
+            <el-icon><Timer /></el-icon>
             {{ $t('RotationStandbyWaitingEvent') }}
             <el-tag :type="detail.preparation.status === 'waiting_standby' ? 'warning' : 'info'">
               {{ observationStatus }}
             </el-tag>
           </h4>
-          <p>{{ observationHelp }}</p>
-          <dl>
-            <div v-for="item in observationItems" :key="item.label">
-              <dt>{{ $t(item.label) }}</dt>
-              <dd>{{ item.value }}</dd>
-            </div>
-          </dl>
-        </section>
-        <div v-if="stages.length" class="cycle-stages" :aria-label="$t('PolicyCycleStages')">
-          <div
-            v-for="stage in stages"
-            :key="stage.label"
-            :class="[
-              'cycle-stage',
-              {
-                emitted: stage.event,
-                current: stage.current,
-                failed: stage.event?.event.endsWith('.failed')
-              }
-            ]"
-          >
-            <el-icon
-              ><component
-                :is="
-                  stage.current
-                    ? 'Clock'
-                    : stage.event
-                      ? stage.event.event.endsWith('.failed')
-                        ? 'CircleClose'
-                        : 'Check'
-                      : 'Clock'
-                "
-            /></el-icon>
-            <span>{{ $t(stage.label) }}</span>
-            <small>{{
-              $t(
-                stage.current
-                  ? 'StandbyObservationInProgress'
-                  : stage.event
-                    ? 'PolicyStageEmitted'
-                    : stage.skipped
-                      ? 'PolicyStageSkipped'
-                      : 'PolicyStageNotEmitted'
-              )
-            }}</small>
+          <div class="observation-content">
+            <p>{{ observationHelp }}</p>
+            <dl>
+              <div v-for="item in observationItems" :key="item.label">
+                <dt>{{ $t(item.label) }}</dt>
+                <dd>{{ item.value }}</dd>
+              </div>
+            </dl>
           </div>
-        </div>
-        <p v-if="stages.length" class="stage-help">{{ $t('PolicyCycleStagesHelp') }}</p>
+        </section>
         <div class="event-workspace">
-          <section class="policy-timeline" :aria-label="$t('PolicyCycleTimeline')">
-            <h4>{{ $t('PolicyCycleTimeline') }}</h4>
+          <section class="policy-timeline record-section" :aria-label="$t('PolicyCycleTimeline')">
+            <h4 class="record-heading">
+              <el-icon><List /></el-icon>{{ $t('PolicyCycleTimeline') }}
+            </h4>
             <div class="timeline-scroll">
               <el-timeline>
                 <el-timeline-item
@@ -212,95 +236,107 @@
               </el-timeline>
             </div>
           </section>
-          <aside class="event-recipients" :aria-label="$t('PolicyEventRecipients')">
-            <template v-if="selectedEvent">
-              <h4>{{ $t('PolicyEventRecipients') }}</h4>
-              <div class="recipient-event">
-                <strong>{{ eventName(selectedEvent) }}</strong
-                ><code>{{ selectedEvent.event }}</code
-                ><span>{{ formatDate(selectedEvent.published_at) }}</span>
-              </div>
-              <p class="recipient-help">
-                {{
-                  $t(
-                    selectedEvent.requires_confirmation
-                      ? 'PolicyEventConfirmationHelp'
-                      : 'PolicyEventReceiptHelp'
-                  )
-                }}
-              </p>
-              <div class="recipient-filters" role="group" :aria-label="$t('RotationReceiptFilter')">
-                <button
-                  v-for="filter in receiptFilters"
-                  :key="filter.value"
-                  type="button"
-                  :aria-pressed="receiptFilter === filter.value"
-                  @click="receiptFilter = filter.value"
-                >
-                  {{ $t(filter.label) }} <strong>{{ filter.count }}</strong>
-                </button>
-              </div>
-              <el-input
-                v-model="search"
-                :placeholder="$t('PolicyEventClientSearch')"
-                :aria-label="$t('PolicyEventClientSearch')"
-                clearable
-              />
-              <el-empty
-                v-if="!selectedEvent.recipients.length"
-                :description="$t('PolicyEventNoRecipients')"
-                :image-size="48"
-              />
-              <el-empty
-                v-else-if="!filteredRecipients.length"
-                :description="$t('EventNoMatchingClients')"
-                :image-size="48"
-              />
-              <div v-else class="recipient-list">
+          <aside class="event-recipients record-section" :aria-label="$t('PolicyEventRecipients')">
+            <h4 class="record-heading">
+              <el-icon><Connection /></el-icon>{{ $t('PolicyEventRecipients') }}
+            </h4>
+            <div class="recipient-content">
+              <template v-if="selectedEvent">
+                <div class="recipient-event">
+                  <strong>{{ eventName(selectedEvent) }}</strong
+                  ><code>{{ selectedEvent.event }}</code
+                  ><span>{{ formatDate(selectedEvent.published_at) }}</span>
+                </div>
+                <p class="recipient-help">
+                  {{
+                    $t(
+                      selectedEvent.requires_confirmation
+                        ? 'PolicyEventConfirmationHelp'
+                        : 'PolicyEventReceiptHelp'
+                    )
+                  }}
+                </p>
                 <div
-                  v-for="client in visibleRecipients"
-                  :key="client.id"
-                  class="recipient-card"
-                  :class="{ preferred: initialClient?.id === client.id }"
+                  class="recipient-filters"
+                  role="group"
+                  :aria-label="$t('RotationReceiptFilter')"
                 >
-                  <div class="recipient-heading">
-                    <strong>{{ client.instance_id }}</strong
-                    ><el-tag size="small" effect="plain">{{
-                      client.type === 'agent' ? 'Agent' : 'SDK'
-                    }}</el-tag>
-                  </div>
-                  <p>{{ client.application.name }} · {{ stateLabel(client) }}</p>
-                  <div class="recipient-status">
-                    <span>{{ $t('PolicyEventReceipt') }}</span
-                    ><el-tag :type="receiptType(client)">{{
-                      $t(statusLabels[receiptStatus(client)])
-                    }}</el-tag>
-                  </div>
-                  <small v-if="client.received_at">{{ formatDate(client.received_at) }}</small>
-                  <small v-else-if="!client.supports_receipts">{{
-                    $t('RotationEventUpgradeClient')
-                  }}</small>
-                  <template v-if="selectedEvent.requires_confirmation">
-                    <div class="recipient-status">
-                      <span>{{ $t('PolicyEventApplicationConfirmation') }}</span
-                      ><el-tag :type="client.confirmed_at ? 'success' : 'warning'">{{
-                        $t(client.confirmed_at ? 'PolicyEventApplied' : 'PolicyEventNotApplied')
+                  <button
+                    v-for="filter in receiptFilters"
+                    :key="filter.value"
+                    type="button"
+                    :aria-pressed="receiptFilter === filter.value"
+                    @click="receiptFilter = filter.value"
+                  >
+                    {{ $t(filter.label) }} <strong>{{ filter.count }}</strong>
+                  </button>
+                </div>
+                <el-input
+                  v-model="search"
+                  :placeholder="$t('PolicyEventClientSearch')"
+                  :aria-label="$t('PolicyEventClientSearch')"
+                  clearable
+                />
+                <el-empty
+                  v-if="!selectedEvent.recipients.length"
+                  :description="$t('PolicyEventNoRecipients')"
+                  :image-size="48"
+                />
+                <el-empty
+                  v-else-if="!filteredRecipients.length"
+                  :description="$t('EventNoMatchingClients')"
+                  :image-size="48"
+                />
+                <div v-else class="recipient-list">
+                  <div
+                    v-for="client in visibleRecipients"
+                    :key="client.id"
+                    class="recipient-card"
+                    :class="{ preferred: initialClient?.id === client.id }"
+                  >
+                    <div class="recipient-heading">
+                      <strong>{{ client.instance_id }}</strong
+                      ><el-tag size="small" effect="plain">{{
+                        client.type === 'agent' ? 'Agent' : 'SDK'
                       }}</el-tag>
                     </div>
-                    <small v-if="client.confirmed_at">{{ formatDate(client.confirmed_at) }}</small>
-                  </template>
+                    <p>{{ client.application.name }} · {{ stateLabel(client) }}</p>
+                    <div class="recipient-status-block">
+                      <div class="recipient-status">
+                        <span>{{ $t('PolicyEventReceipt') }}</span
+                        ><el-tag :type="receiptType(client)">{{
+                          $t(statusLabels[receiptStatus(client)])
+                        }}</el-tag>
+                      </div>
+                      <small v-if="client.received_at">{{ formatDate(client.received_at) }}</small>
+                      <small v-else-if="!client.supports_receipts">{{
+                        $t('RotationEventUpgradeClient')
+                      }}</small>
+                    </div>
+                    <div v-if="selectedEvent.requires_confirmation" class="recipient-status-block">
+                      <div class="recipient-status">
+                        <span>{{ $t('PolicyEventApplicationConfirmation') }}</span
+                        ><el-tag :type="client.confirmed_at ? 'success' : 'warning'">{{
+                          $t(client.confirmed_at ? 'PolicyEventApplied' : 'PolicyEventNotApplied')
+                        }}</el-tag>
+                      </div>
+                      <small v-if="client.confirmed_at">{{
+                        formatDate(client.confirmed_at)
+                      }}</small>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <el-pagination
-                v-if="filteredRecipients.length > 10"
-                v-model:current-page="recipientPage"
-                size="small"
-                layout="prev, pager, next"
-                :page-size="10"
-                :total="filteredRecipients.length"
-                :pager-count="5"
-              />
-            </template>
+                <el-pagination
+                  v-if="filteredRecipients.length > 10"
+                  v-model:current-page="recipientPage"
+                  size="small"
+                  layout="prev, pager, next"
+                  :page-size="10"
+                  :total="filteredRecipients.length"
+                  :pager-count="5"
+                />
+              </template>
+            </div>
           </aside>
         </div>
       </template>
@@ -652,7 +688,11 @@ export default {
 
 <style lang="scss" scoped>
 .event-browser {
+  container-type: inline-size;
   color: var(--el-text-color-primary);
+}
+.event-browser :deep(.el-card__body) {
+  gap: 16px;
 }
 .browser-heading,
 .cycle-selector,
@@ -668,8 +708,12 @@ export default {
 .browser-heading h5 {
   margin: 0;
 }
+.browser-heading {
+  flex-wrap: wrap;
+}
 .browser-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
@@ -679,21 +723,43 @@ export default {
   color: var(--el-text-color-regular);
   font-size: 12px;
   line-height: 1.7;
-  margin: 0 0 18px;
+  margin: 0;
 }
 .cycle-selector {
-  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 .cycle-selector label {
   flex-shrink: 0;
 }
 .cycle-selector :deep(.el-select) {
   flex: 1;
+  flex-basis: 260px;
   min-width: 0;
+}
+.record-section {
+  min-width: 0;
+}
+.record-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+  color: var(--el-text-color-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+.record-heading > .el-icon {
+  color: var(--el-text-color-secondary);
+  font-size: 15px;
+}
+.cycle-summary {
+  padding: 16px;
+  border-radius: 4px;
+  background: var(--el-fill-color-light);
 }
 .cycle-heading {
   align-items: flex-start;
-  margin-bottom: 18px;
 }
 .cycle-heading h3 {
   margin: 0 0 8px;
@@ -707,21 +773,27 @@ export default {
   font-size: 12px;
   color: var(--el-text-color-regular);
 }
-.cycle-heading > code {
+.cycle-identifier {
+  display: grid;
+  gap: 6px;
+  max-width: 40%;
+  flex-shrink: 0;
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+}
+.cycle-identifier code {
   font-size: 11px;
   overflow-wrap: anywhere;
-  max-width: 40%;
-  color: var(--el-text-color-secondary);
 }
 .cycle-stages {
   display: flex;
   gap: 8px;
-  margin: 18px 0 10px;
+  margin: 0 0 12px;
   flex-wrap: wrap;
 }
 .cycle-stage {
-  flex: 1;
-  min-width: 110px;
+  flex: 1 1 140px;
+  min-width: 0;
   padding: 10px;
   border: 1px dashed var(--el-border-color);
   border-radius: 4px;
@@ -737,9 +809,12 @@ export default {
 }
 .cycle-stage.emitted {
   border-style: solid;
-  border-color: var(--el-color-primary-light-5);
+  border-color: var(--el-border-color);
+  color: var(--el-text-color-regular);
+  background: var(--el-fill-color-light);
+}
+.cycle-stage.emitted:not(.failed):not(.current) > .el-icon {
   color: var(--el-color-primary);
-  background: var(--el-color-primary-light-9);
 }
 .cycle-stage.failed {
   border-color: var(--el-color-danger-light-5);
@@ -748,22 +823,9 @@ export default {
 }
 .cycle-stage.current {
   border-style: solid;
-  border-color: var(--el-color-warning);
-  color: var(--el-color-warning-dark-2);
-  background: var(--el-color-warning-light-9);
-}
-.standby-observation {
-  margin: 18px 0;
-  padding: 16px 0;
-  border-top: 1px solid var(--el-border-color-lighter);
-  border-bottom: 1px solid var(--el-border-color-lighter);
-}
-.standby-observation h4 {
-  margin: 0 0 10px;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  border-color: var(--el-color-primary-light-5);
+  color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
 }
 .standby-observation p {
   color: var(--el-text-color-regular);
@@ -774,7 +836,7 @@ export default {
 .standby-observation dl {
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: 14px 20px;
   font-size: 12px;
 }
@@ -796,16 +858,13 @@ export default {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr);
   border-top: 1px solid var(--el-border-color-lighter);
-  padding-top: 18px;
+  padding-top: 20px;
+  align-items: start;
   min-height: 420px;
-}
-.event-workspace h4 {
-  margin: 0 0 18px;
-  font-size: 14px;
 }
 .policy-timeline {
   min-width: 0;
-  padding-right: 22px;
+  padding-right: 20px;
 }
 .timeline-scroll {
   max-height: 680px;
@@ -854,13 +913,16 @@ export default {
   flex-wrap: wrap;
 }
 .event-recipients {
-  padding-left: 22px;
-  border-left: 1px solid var(--el-border-color-lighter);
   min-width: 0;
+  padding-left: 20px;
+  border-left: 1px solid var(--el-border-color-lighter);
 }
 .recipient-event {
   display: grid;
   gap: 8px;
+  margin-bottom: 12px;
+}
+.recipient-help {
   margin-bottom: 12px;
 }
 .recipient-event > span {
@@ -913,27 +975,22 @@ export default {
   display: block;
 }
 .recipient-status {
-  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
   font-size: 12px;
+}
+.recipient-status-block {
+  margin-top: 12px;
+}
+.recipient-status-block small:last-child {
+  margin-bottom: 0;
 }
 .event-option:focus-visible,
 .recipient-filters button:focus-visible {
   outline: 2px solid var(--el-color-primary);
   outline-offset: 2px;
 }
-@media (max-width: 800px) {
-  .cycle-selector {
-    flex-wrap: wrap;
-  }
-  .cycle-selector :deep(.el-select) {
-    min-width: 220px;
-  }
-  .cycle-heading {
-    flex-wrap: wrap;
-  }
-  .cycle-heading > code {
-    max-width: 100%;
-  }
+@container (max-width: 760px) {
   .event-workspace {
     grid-template-columns: minmax(0, 1fr);
     gap: 20px;
@@ -945,6 +1002,17 @@ export default {
     padding: 20px 0 0;
     border-left: 0;
     border-top: 1px solid var(--el-border-color-lighter);
+  }
+}
+@container (max-width: 500px) {
+  .cycle-selector :deep(.el-select) {
+    flex-basis: 100%;
+  }
+  .cycle-heading {
+    flex-wrap: wrap;
+  }
+  .cycle-identifier {
+    max-width: 100%;
   }
 }
 </style>

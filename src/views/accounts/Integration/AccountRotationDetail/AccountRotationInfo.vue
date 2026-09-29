@@ -152,7 +152,15 @@ export default {
             key: this.$t('SubscribedAccounts'),
             value: this.object.subscription_all_authorized
               ? this.$t('LegacyAllAuthorizedAccounts')
-              : this.object.subscription_accounts?.map(subscribedAccountLabel).join(', ') || '-'
+              : this.object.subscription_accounts?.map(subscribedAccountLabel) || [],
+            formatter: (_item, value) =>
+              Array.isArray(value) ? (
+                <div class="subscription-account-list">
+                  {value.length ? value.map((label, index) => <div key={index}>{label}</div>) : '-'}
+                </div>
+              ) : (
+                value
+              )
           },
           {
             key: this.$t('SubscriptionScope'),
@@ -162,7 +170,6 @@ export default {
         )
       }
       items.push(
-        { key: this.$t('LastFetched'), value: this.formatDate(this.object.last_fetched) },
         { key: this.$t('LastRotation'), value: this.formatDate(this.object.date_last_rotated) },
         { key: this.$t('Comment'), value: this.object.comment || '-' }
       )
@@ -565,5 +572,11 @@ export default {
   gap: 16px;
   margin-bottom: 16px;
   min-width: 0;
+
+  :deep(.subscription-account-list) {
+    width: 100%;
+    max-height: 240px;
+    overflow-y: auto;
+  }
 }
 </style>
