@@ -68,9 +68,13 @@ export default {
         }
       },
       hasSaveContinue: false,
-      createSuccessNextRoute: {
-        name: 'ApplicationDetail'
+      objectDetailRoute: {
+        name: 'IntegrationApplicationDetail'
       },
+      getNextRoute: (res) => ({
+        name: 'IntegrationApplicationDetail',
+        params: { id: res.id }
+      }),
       performSubmit(values) {
         const formData = new FormData()
         delete values['logo']

@@ -6,20 +6,38 @@
     :header-actions="headerActions"
     :table-config="tableConfig"
   />
+  <SecretDialog
+    ref="secretDialog"
+    :title="$t('ApplicationSecret')"
+    :warning-text="$t('ApplicationSecretWarning')"
+    mask-secret
+  />
+  <ApplicationEventSendDialog
+    v-if="eventApplications.length"
+    v-model:visible="eventDialogVisible"
+    :applications="eventApplications"
+  />
 </template>
 
 <script lang="jsx">
 import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import SecretDialog from '@/components/Dialog/Secret.vue'
 import { GenericListTable } from '@/layout/components'
+import { copy } from '@/utils/common/index'
+import ApplicationEventSendDialog from './components/ApplicationEventSendDialog.vue'
 export default {
-  name: 'CloudAccountList',
+  name: 'IntegrationApplicationList',
   components: {
-    GenericListTable
+    GenericListTable,
+    SecretDialog,
+    ApplicationEventSendDialog
   },
   data() {
     const vm = this
     return {
+      eventApplications: [],
+      eventDialogVisible: false,
       createDrawer: () => import('@/views/accounts/Integration/ApplicationCreateUpdate.vue'),
       detailDrawer: () => import('@/views/accounts/Integration/ApplicationDetail/index.vue'),
       drawerTitle: '',
@@ -40,7 +58,7 @@ export default {
                 <img
                   src={row.logo?.replace(/^http:/, location.protocol)}
                   alt={row.name}
-                  style="width: 40px; height: 40px; border-radius: 50%;"
+                  style="width: 28px; height: 28px; border-radius: 50%;"
                 />
               )
             }
@@ -64,7 +82,7 @@ export default {
             formatter: DetailFormatter
           },
           secret: {
-            label: 'Secret',
+            label: vm.$t('ApplicationSecret'),
             formatter: CopyableFormatter,
             formatterArgs: {
               shadow: true,
@@ -82,16 +100,43 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  name: 'refresh-secret',
-                  title: vm.$t('RefreshSecret'),
-                  can: vm.$hasPerm('accounts.change_integrationapplication'),
-                  type: 'primary',
+                  name: 'copy-account-info',
+                  title: vm.$t('CopyApplicationAccountInfo'),
+                  icon: 'fa-regular fa-copy',
+                  has: vm.$hasPerm('accounts.change_integrationapplication'),
                   callback: async ({ row }) => {
-                    await vm.$axios.get(
-                      `/api/v1/accounts/integration-applications/${row.id}/refresh-secret/`
+                    const app = await vm.$axios.get(
+                      `/api/v1/accounts/integration-applications/${row.id}/secret/`
                     )
-                    vm.$message.success(vm.$t('RefreshSuccessMsg'))
-                    vm.$refs.listTable.reloadTable()
+                    await copy(
+                      JSON.stringify(
+                        {
+                          endpoint: app.endpoint,
+                          app_id: app.id,
+                          app_secret: app.secret,
+                          org_id: app.org_id
+                        },
+                        null,
+                        2
+                      )
+                    )
+                  }
+                },
+                {
+                  name: 'reset-secret',
+                  title: vm.$t('ResetApplicationSecret'),
+                  can: vm.$hasPerm('accounts.change_integrationapplication'),
+                  type: 'danger',
+                  callback: async ({ row }) => {
+                    await vm.$confirm(vm.$t('ResetApplicationSecretConfirm'), vm.$t('Warning'), {
+                      confirmButtonText: vm.$t('Confirm'),
+                      type: 'warning'
+                    })
+                    const app = await vm.$axios.post(
+                      `/api/v1/accounts/integration-applications/${row.id}/reset-secret/`
+                    )
+                    vm.$refs.secretDialog.show(app)
+                    vm.$message.success(vm.$t('ResetApplicationSecretSuccess'))
                   }
                 }
               ]
@@ -109,6 +154,20 @@ export default {
       },
       headerActions: {
         hasImport: false,
+        extraMoreActions: [
+          {
+            name: 'send-event',
+            title: vm.$t('SendApplicationEvent'),
+            icon: 'fa-solid fa-paper-plane',
+            has: vm.$hasPerm('accounts.change_integrationapplication'),
+            can: ({ selectedRows }) =>
+              selectedRows.length > 0 && selectedRows.every((row) => row.is_active),
+            callback: ({ selectedRows }) => {
+              vm.eventApplications = selectedRows.map((row) => ({ ...row }))
+              vm.eventDialogVisible = true
+            }
+          }
+        ],
         searchConfig: {
           getUrlQuery: false
         }
@@ -117,3 +176,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+:deep(.el-table__body .copyable) {
+  display: inline-flex;
+  width: auto;
+  max-width: 100%;
+}
+</style>
