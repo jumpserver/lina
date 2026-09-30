@@ -1383,6 +1383,8 @@
   "NumberOfVisits": "アクセス回数",
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "ヒント：認証サービスプロバイダ（推奨画像サイズ: 64px*64px）",
+  "OAuth2UserGroupAttribute": "ユーザーグループ属性",
+  "OAuth2UserGroupAttributeTip": "OAuth2 UserInfo でユーザーグループを表すフィールド名を入力します。空欄の場合、ユーザーグループは処理されません。",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "該当するリソースが見つからないか削除されています",
   "ObjectStorage": "オブジェクトストレージ",

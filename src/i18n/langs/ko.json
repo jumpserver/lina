@@ -1454,6 +1454,8 @@
   "NumberOfVisits": "접속 횟수",
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "안내: 인증 서비스 제공업체(권장 이미지 크기: 64×64px)",
+  "OAuth2UserGroupAttribute": "사용자 그룹 속성",
+  "OAuth2UserGroupAttributeTip": "OAuth2 UserInfo에서 사용자 그룹을 나타내는 필드 이름을 입력하세요. 비워 두면 사용자 그룹을 처리하지 않습니다.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "해당 리소스가 없거나 이미 삭제됨",
   "ObjectStorage": "객체 저장소",

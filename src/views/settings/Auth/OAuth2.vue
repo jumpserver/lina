@@ -45,7 +45,7 @@ export default {
               'AUTH_OAUTH2_CACERT_CONTENT'
             ]
           ],
-          [this.$t('Search'), ['AUTH_OAUTH2_USER_ATTR_MAP']],
+          [this.$t('Search'), ['AUTH_OAUTH2_USER_ATTR_MAP', 'OAUTH2_GROUP_ATTRIBUTE']],
           [
             this.$t('Other'),
             ['OAUTH2_ORG_IDS', 'AUTH_OAUTH2_ALWAYS_UPDATE_USER', 'AUTH_OAUTH2_LOGOUT_COMPLETELY']
@@ -69,6 +69,14 @@ export default {
             component: JsonEditor,
             rules: [JsonRequired]
           },
+          OAUTH2_GROUP_ATTRIBUTE: {
+            type: 'input',
+            label: this.$t('OAuth2UserGroupAttribute'),
+            helpTip: this.$t('OAuth2UserGroupAttributeTip'),
+            el: {
+              clearable: true
+            }
+          },
           AUTH_OAUTH2_ACCESS_TOKEN_METHOD: {},
           AUTH_OAUTH2_CACERT_CONTENT: {
             component: UploadKey,
@@ -86,9 +94,21 @@ export default {
           vm.settings.fieldsMeta.AUTH_OAUTH2_CACERT_CONTENT.el.fingerprint = configured
             ? vm.$t('Configured')
             : ''
+          const attrMap = { ...obj.AUTH_OAUTH2_USER_ATTR_MAP }
+          obj.OAUTH2_GROUP_ATTRIBUTE = typeof attrMap.groups === 'string' ? attrMap.groups : ''
+          delete attrMap.groups
+          obj.AUTH_OAUTH2_USER_ATTR_MAP = attrMap
           return obj
         },
         cleanFormValue(data) {
+          const groupAttribute = data.OAUTH2_GROUP_ATTRIBUTE?.trim()
+          const attrMap = { ...data.AUTH_OAUTH2_USER_ATTR_MAP }
+          delete attrMap.groups
+          if (groupAttribute) {
+            attrMap.groups = groupAttribute
+          }
+          data.AUTH_OAUTH2_USER_ATTR_MAP = attrMap
+          delete data.OAUTH2_GROUP_ATTRIBUTE
           delete data['AUTH_OAUTH2_LOGO_PATH']
           delete data['AUTH_OAUTH2_CACERT_CONFIGURED']
           return data

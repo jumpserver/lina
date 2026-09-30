@@ -1454,6 +1454,8 @@
   "NumberOfVisits": "Número de Visitas",
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "Dica: Provedor de Serviços de Autenticação (Tamanho da imagem recomendado: 64px*64px)",
+  "OAuth2UserGroupAttribute": "Atributo de grupos de usuários",
+  "OAuth2UserGroupAttributeTip": "Informe o nome do campo no UserInfo do OAuth2 que contém os grupos de usuários. Deixe em branco para não processar os grupos.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "Não foi encontrado o recurso correspondente ou foi excluído",
   "ObjectStorage": "Armazenamento de objeto",
