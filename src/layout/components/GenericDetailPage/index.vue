@@ -53,6 +53,10 @@ export default {
       type: String,
       default: ''
     },
+    notFoundMessage: {
+      type: String,
+      default: ''
+    },
     submenu: {
       type: Array,
       default: () => []
@@ -323,16 +327,12 @@ export default {
         })
         .catch((error) => {
           if (this.detailDisposed) return
-          this.loadError = this.$t(
+          this.loadError =
             error.response?.status === 404
-              ? 'ObjectNotFoundOrDeletedMsg'
-              : error.response?.status === 403
-                ? 'NoPermissionVew'
-                : 'PageLoadErrorMsg'
-          )
+              ? this.notFoundMessage || this.$t('ObjectNotFoundOrDeletedMsg')
+              : this.$t(error.response?.status === 403 ? 'NoPermissionVew' : 'PageLoadErrorMsg')
           if (error.response && error.response.status === 404) {
-            const msg = this.$tc('ObjectNotFoundOrDeletedMsg')
-            this.$message.error(msg)
+            this.$message.error(this.loadError)
           } else if (error.response) {
             flashErrorMsg({ error, response: error.response })
           } else {

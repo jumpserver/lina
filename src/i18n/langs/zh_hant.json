@@ -1379,6 +1379,7 @@
   "OAuth2UserGroupAttributeTip": "填寫 OAuth2 UserInfo 中表示使用者群組的欄位名稱；留空則不處理使用者群組。",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "沒有找到對應資源或者已被刪除",
+  "UserNotFoundOrDeletedMsg": "用戶不存在或已刪除",
   "ObjectStorage": "物件儲存",
   "Offline": "離線",
   "OfflineSelected": "Action所選",

@@ -1458,6 +1458,7 @@
   "OAuth2UserGroupAttributeTip": "Introduzca el nombre del campo de OAuth2 UserInfo que contiene los grupos de usuarios. Déjelo vacío para no procesar los grupos.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "No se encontraron recursos correspondientes o ya han sido eliminados",
+  "UserNotFoundOrDeletedMsg": "El usuario no existe o ha sido eliminado.",
   "ObjectStorage": "Almacenamiento de objetos",
   "Offline": "Fuera de línea",
   "OfflineSelected": "Desconectar seleccionado",
