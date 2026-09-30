@@ -2952,10 +2952,16 @@
   "AccessGetMaterials": "获取接入材料",
   "AccessVerifyConnection": "验证连接",
   "AccessGenerateMaterials": "生成接入材料",
-  "AccessSDKHelp": "当前提供 Python SDK 示例。请为每个运行实例设置稳定且唯一的 instance_id。",
+  "AccessSDKHelp": "向导会为 SDK 配置生成实例 ID。容器重建时请复用配置文件；多个副本应分别生成材料，或为每个副本设置稳定且不同的 JMS_INSTANCE_ID。",
   "AccessMaterialsSecretHelp": "下载文件包含应用的 AK/SK，请妥善保存并限制文件访问权限。",
-  "AccessSDKConfigurationHelp": "下载配置文件，与示例代码放在同一目录，安装 SDK 后按业务逻辑处理凭据变更事件。",
-  "AccessAgentConfigurationHelp": "将下载文件放到目标主机，切换到文件所在目录后运行安装命令。运行用户必须已存在；安装完成后可删除下载的引导文件。",
+  "AccessSDKConfigurationHelp": "下载 Python 配置文件，与示例代码放在同一目录。复用此文件可保持实例 ID 不变；请按业务逻辑处理凭据变更。",
+  "AccessSDKEnvironmentHelp": "下载环境变量文件并限制为应用用户可读，启动前加载。复用此文件可保持实例 ID 不变。",
+  "AccessAgentConfigurationHelp": "在目标主机妥善保存引导文件，选择下方 Linux 服务安装或前台运行命令。后续启动请复用初始化生成的本地配置。",
+  "AccessAgentLinuxService": "Linux systemd 服务",
+  "AccessAgentForegroundUnix": "macOS/Linux 前台运行",
+  "AccessAgentForegroundWindows": "Windows 前台运行（PowerShell）",
+  "AccessAgentForegroundHelp": "只需初始化一次，之后每次启动复用本地配置。前台模式以当前用户运行，不执行 systemd 动作。",
+  "AccessAgentLinuxOnlyDeliveryHelp": "EnvironmentFile 交付依赖 Linux systemd。前台运行请选择 JSON 文件或 Socket 交付。",
   "AccessVerifyHelp": "启动 SDK 或 Agent 后点击刷新，查看应用的连接实例。在线状态依据最近两分钟的连接活动判断。",
   "CredentialDeliveryMode": "凭据交付方式",
   "DeliveryJSON": "JSON 文件",
@@ -3151,5 +3157,7 @@
   "CopyApplicationAccountInfo": "复制账号信息",
   "ApplicationBatchEventHelp": "向选中的应用发送相同类型的事件，分别选择各应用的策略和目标实例。",
   "ApplicationEventSendFailed": "事件发送失败",
-  "ApplicationBatchEventRetryHelp": "重试只发送失败的应用，已发送的请求不会重复发送。"
+  "ApplicationBatchEventRetryHelp": "重试只发送失败的应用，已发送的请求不会重复发送。",
+  "ApplicationUnsupportedPullScope": "此应用原有的全部或动态账号授权已不再支持，请选择具体账号后保存。",
+  "ApplicationPullAccountLimit": "此应用最多授权 10 个具体账号。"
 }

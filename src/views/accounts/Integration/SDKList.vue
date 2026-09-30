@@ -116,6 +116,8 @@
 import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer/index.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 
+const sdkLanguageValues = ['python', 'go', 'java', 'node']
+
 export default {
   name: 'SDKList',
   components: {
@@ -128,12 +130,16 @@ export default {
       documentationError: false,
       documentationLoading: false,
       documentationRequestId: 0,
-      documentationTab: 'agent',
+      documentationTab: sdkLanguageValues.includes(this.$route.query.sdk_language)
+        ? 'sdk'
+        : 'agent',
       credentialPolicies: true,
       headingObserver: null,
       headings: [],
       readme: '',
-      sdkLanguage: 'python',
+      sdkLanguage: sdkLanguageValues.includes(this.$route.query.sdk_language)
+        ? this.$route.query.sdk_language
+        : 'python',
       sdkLanguages: [
         { value: 'python', label: 'Python' },
         { value: 'go', label: 'Go' },
@@ -212,6 +218,7 @@ export default {
       const previousLanguage = this.activeLanguage
       this.disconnectHeadingObserver()
       this.documentationTab = tab
+      this.syncLanguageQuery()
       this.headings = []
       this.activeHeading = ''
       this.$refs.docsMain?.scrollTo({ top: 0 })
@@ -220,8 +227,17 @@ export default {
     selectSDKLanguage(language) {
       if (this.sdkLanguage === language) return
       this.sdkLanguage = language
+      this.syncLanguageQuery()
       this.$refs.docsMain?.scrollTo({ top: 0 })
       this.loadDocumentation()
+    },
+    syncLanguageQuery() {
+      const language = this.documentationTab === 'sdk' ? this.sdkLanguage : undefined
+      if (this.$route.query.sdk_language === language) return
+      const query = { ...this.$route.query }
+      if (language) query.sdk_language = language
+      else delete query.sdk_language
+      this.$router.replace({ path: this.$route.path, query, hash: this.$route.hash })
     },
     disconnectHeadingObserver() {
       this.headingObserver?.disconnect()

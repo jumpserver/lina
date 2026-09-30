@@ -2958,10 +2958,16 @@
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
   "AccessGenerateMaterials": "Generate access materials",
-  "AccessSDKHelp": "Python SDK examples are available. Set a stable, unique instance_id for each running instance.",
+  "AccessSDKHelp": "The wizard generates an SDK instance ID. Reuse the configuration file when recreating a container. Generate separate materials for each replica, or set a distinct, stable JMS_INSTANCE_ID for each one.",
   "AccessMaterialsSecretHelp": "The download contains the application’s AK/SK. Store it securely and restrict file access.",
-  "AccessSDKConfigurationHelp": "Download the configuration next to the example code. Install the SDK and handle credential changes in your application.",
-  "AccessAgentConfigurationHelp": "Copy the download to the target host and run the installation command from that directory. The application user must already exist. Delete the bootstrap download after installation.",
+  "AccessSDKConfigurationHelp": "Download the Python configuration alongside the example. Reuse this file to keep the instance ID stable; implement credential handling in your application.",
+  "AccessSDKEnvironmentHelp": "Download the shell file and restrict access to the application user. Source it before starting; reuse the file to keep the instance ID stable.",
+  "AccessAgentConfigurationHelp": "Keep this bootstrap file private on the target host. Choose the Linux service installation or a foreground command below. Keep the generated local configuration for later restarts.",
+  "AccessAgentLinuxService": "Linux systemd service",
+  "AccessAgentForegroundUnix": "macOS/Linux foreground",
+  "AccessAgentForegroundWindows": "Windows foreground (PowerShell)",
+  "AccessAgentForegroundHelp": "Initialize once, then reuse the local configuration on every start. Foreground mode runs as the current user and does not perform systemd actions.",
+  "AccessAgentLinuxOnlyDeliveryHelp": "EnvironmentFile delivery requires Linux systemd. Choose JSON file or Socket delivery for foreground runs.",
   "AccessVerifyHelp": "Start the SDK or Agent and refresh to view this application’s instances. Online status reflects connection activity in the last two minutes.",
   "CredentialDeliveryMode": "Credential delivery mode",
   "DeliveryJSON": "JSON file",
@@ -3157,5 +3163,7 @@
   "CopyApplicationAccountInfo": "Copy account information",
   "ApplicationBatchEventHelp": "Send the same event type to each selected application. Select its policy and target instances separately.",
   "ApplicationEventSendFailed": "Failed to send event",
-  "ApplicationBatchEventRetryHelp": "Retry sends only applications whose requests failed. Requests already sent are not sent again."
+  "ApplicationBatchEventRetryHelp": "Retry sends only applications whose requests failed. Requests already sent are not sent again.",
+  "ApplicationUnsupportedPullScope": "This existing account scope is no longer supported. Select specific accounts before saving.",
+  "ApplicationPullAccountLimit": "Authorize up to 10 specific accounts for this application."
 }

@@ -2516,10 +2516,16 @@
   "AccessGetMaterials": "获取接入材料",
   "AccessVerifyConnection": "验证连接",
   "AccessGenerateMaterials": "生成接入材料",
-  "AccessSDKHelp": "当前提供 Python SDK 示例。请为每个运行实例设置稳定且唯一的 instance_id。",
+  "AccessSDKHelp": "精靈會為 SDK 設定產生執行個體 ID。容器重建時請重複使用設定檔；多個副本應分別產生材料，或為每個副本設定穩定且不同的 JMS_INSTANCE_ID。",
   "AccessMaterialsSecretHelp": "下载文件包含应用的 AK/SK，请妥善保存并限制文件访问权限。",
-  "AccessSDKConfigurationHelp": "下载配置文件，与示例代码放在同一目录，安装 SDK 后按业务逻辑处理凭据变更事件。",
-  "AccessAgentConfigurationHelp": "将下载文件放到目标主机，切换到文件所在目录后运行安装命令。运行用户必须已存在；安装完成后可删除下载的引导文件。",
+  "AccessSDKConfigurationHelp": "下載 Python 設定檔，與範例程式碼放在同一目錄。重複使用此檔案可保持執行個體 ID 不變；請依業務邏輯處理憑證變更。",
+  "AccessSDKEnvironmentHelp": "下載環境變數檔案並限制為應用程式使用者可讀，啟動前載入。重複使用此檔案可保持執行個體 ID 不變。",
+  "AccessAgentConfigurationHelp": "請在目標主機妥善保存引導檔，選擇下方 Linux 服務安裝或前景執行命令。後續啟動請重複使用初始化產生的本機設定。",
+  "AccessAgentLinuxService": "Linux systemd 服務",
+  "AccessAgentForegroundUnix": "macOS/Linux 前景執行",
+  "AccessAgentForegroundWindows": "Windows 前景執行（PowerShell）",
+  "AccessAgentForegroundHelp": "只需初始化一次，之後每次啟動重複使用本機設定。前景模式以目前使用者執行，不執行 systemd 動作。",
+  "AccessAgentLinuxOnlyDeliveryHelp": "EnvironmentFile 交付依賴 Linux systemd。前景執行請選擇 JSON 檔案或 Socket 交付。",
   "AccessVerifyHelp": "启动 SDK 或 Agent 后点击刷新，查看应用的连接实例。在线状态依据最近两分钟的连接活动判断。",
   "CredentialDeliveryMode": "凭据交付方式",
   "DeliveryJSON": "JSON 文件",
@@ -2721,5 +2727,7 @@
   "CopyApplicationAccountInfo": "複製帳號資訊",
   "ApplicationBatchEventHelp": "向選取的應用程式傳送相同類型的事件，分別選擇各應用程式的策略與目標執行個體。",
   "ApplicationEventSendFailed": "事件傳送失敗",
-  "ApplicationBatchEventRetryHelp": "重試僅傳送失敗的應用程式，已傳送的請求不會重複傳送。"
+  "ApplicationBatchEventRetryHelp": "重試僅傳送失敗的應用程式，已傳送的請求不會重複傳送。",
+  "ApplicationUnsupportedPullScope": "此應用程式原有的全部或動態帳號授權已不再支援，請選擇具體帳號後儲存。",
+  "ApplicationPullAccountLimit": "此應用程式最多可授權 10 個具體帳號。"
 }

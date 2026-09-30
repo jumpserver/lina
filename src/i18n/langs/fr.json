@@ -2586,10 +2586,16 @@
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
   "AccessGenerateMaterials": "Generate access materials",
-  "AccessSDKHelp": "Python SDK examples are available. Set a stable, unique instance_id for each running instance.",
+  "AccessSDKHelp": "L’assistant génère un ID d’instance SDK. Réutilisez le fichier de configuration après la recréation d’un conteneur. Générez des fichiers distincts pour chaque réplique ou définissez un JMS_INSTANCE_ID stable et distinct pour chacune.",
   "AccessMaterialsSecretHelp": "The download contains the application’s AK/SK. Store it securely and restrict file access.",
-  "AccessSDKConfigurationHelp": "Download the configuration next to the example code. Install the SDK and handle credential changes in your application.",
-  "AccessAgentConfigurationHelp": "Copy the download to the target host and run the installation command from that directory. The application user must already exist. Delete the bootstrap download after installation.",
+  "AccessSDKConfigurationHelp": "Téléchargez la configuration Python avec l’exemple. Réutilisez ce fichier pour conserver l’ID d’instance ; intégrez la gestion des identifiants à votre application.",
+  "AccessSDKEnvironmentHelp": "Téléchargez le fichier shell et limitez son accès à l’utilisateur de l’application. Chargez-le avant de démarrer et réutilisez-le pour conserver l’ID d’instance.",
+  "AccessAgentConfigurationHelp": "Conservez le fichier d’amorçage de façon privée sur l’hôte cible. Choisissez ci-dessous l’installation du service Linux ou l’exécution au premier plan. Réutilisez ensuite la configuration locale générée.",
+  "AccessAgentLinuxService": "Service Linux systemd",
+  "AccessAgentForegroundUnix": "macOS/Linux au premier plan",
+  "AccessAgentForegroundWindows": "Windows au premier plan (PowerShell)",
+  "AccessAgentForegroundHelp": "Initialisez une seule fois, puis réutilisez la configuration locale à chaque démarrage. Le mode premier plan s’exécute sous l’utilisateur courant sans action systemd.",
+  "AccessAgentLinuxOnlyDeliveryHelp": "La livraison EnvironmentFile nécessite Linux systemd. Choisissez JSON ou Socket pour une exécution au premier plan.",
   "AccessVerifyHelp": "Start the SDK or Agent and refresh to view this application’s instances. Online status reflects connection activity in the last two minutes.",
   "CredentialDeliveryMode": "Credential delivery mode",
   "DeliveryJSON": "JSON file",
@@ -2791,5 +2797,7 @@
   "CopyApplicationAccountInfo": "Copier les informations du compte",
   "ApplicationBatchEventHelp": "Envoyez le même type d’événement à chaque application sélectionnée. Choisissez séparément sa politique et ses instances cibles.",
   "ApplicationEventSendFailed": "Échec de l’envoi de l’événement",
-  "ApplicationBatchEventRetryHelp": "La nouvelle tentative concerne uniquement les applications dont l’envoi a échoué. Les requêtes déjà envoyées ne sont pas renvoyées."
+  "ApplicationBatchEventRetryHelp": "La nouvelle tentative concerne uniquement les applications dont l’envoi a échoué. Les requêtes déjà envoyées ne sont pas renvoyées.",
+  "ApplicationUnsupportedPullScope": "L’ancien périmètre couvrant tous les comptes ou des comptes dynamiques n’est plus pris en charge. Sélectionnez des comptes précis avant d’enregistrer.",
+  "ApplicationPullAccountLimit": "Autorisez au maximum 10 comptes précis pour cette application."
 }

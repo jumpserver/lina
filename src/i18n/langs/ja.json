@@ -2508,10 +2508,16 @@
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
   "AccessGenerateMaterials": "Generate access materials",
-  "AccessSDKHelp": "Python SDK examples are available. Set a stable, unique instance_id for each running instance.",
+  "AccessSDKHelp": "ウィザードが SDK のインスタンス ID を生成します。コンテナーを再作成するときは設定ファイルを再利用してください。複数のレプリカにはそれぞれ資料を生成するか、異なる安定した JMS_INSTANCE_ID を設定してください。",
   "AccessMaterialsSecretHelp": "The download contains the application’s AK/SK. Store it securely and restrict file access.",
-  "AccessSDKConfigurationHelp": "Download the configuration next to the example code. Install the SDK and handle credential changes in your application.",
-  "AccessAgentConfigurationHelp": "Copy the download to the target host and run the installation command from that directory. The application user must already exist. Delete the bootstrap download after installation.",
+  "AccessSDKConfigurationHelp": "Python の設定ファイルをサンプルコードと同じ場所に置いてください。このファイルを再利用するとインスタンス ID を維持できます。認証情報の変更処理を実装してください。",
+  "AccessSDKEnvironmentHelp": "シェルファイルをダウンロードし、アプリケーションユーザーのみにアクセスを制限してください。起動前に読み込み、ファイルを再利用してインスタンス ID を維持してください。",
+  "AccessAgentConfigurationHelp": "ブートストラップファイルを対象ホストで安全に保管し、以下の Linux サービスのインストールまたはフォアグラウンド実行を選択してください。以後は生成されたローカル設定を再利用します。",
+  "AccessAgentLinuxService": "Linux systemd サービス",
+  "AccessAgentForegroundUnix": "macOS/Linux フォアグラウンド",
+  "AccessAgentForegroundWindows": "Windows フォアグラウンド（PowerShell）",
+  "AccessAgentForegroundHelp": "初期化は一度だけ行い、以後の起動ではローカル設定を再利用してください。フォアグラウンドモードは現在のユーザーで実行され、systemd 操作は行いません。",
+  "AccessAgentLinuxOnlyDeliveryHelp": "EnvironmentFile の配信には Linux systemd が必要です。フォアグラウンド実行には JSON ファイルまたは Socket を選択してください。",
   "AccessVerifyHelp": "Start the SDK or Agent and refresh to view this application’s instances. Online status reflects connection activity in the last two minutes.",
   "CredentialDeliveryMode": "Credential delivery mode",
   "DeliveryJSON": "JSON file",
@@ -2713,5 +2719,7 @@
   "CopyApplicationAccountInfo": "アカウント情報をコピー",
   "ApplicationBatchEventHelp": "選択した各アプリケーションに同じ種類のイベントを送信します。ポリシーと対象インスタンスはそれぞれ選択してください。",
   "ApplicationEventSendFailed": "イベントの送信に失敗しました",
-  "ApplicationBatchEventRetryHelp": "再試行では送信に失敗したアプリケーションのみを送信します。送信済みのリクエストは再送信しません。"
+  "ApplicationBatchEventRetryHelp": "再試行では送信に失敗したアプリケーションのみを送信します。送信済みのリクエストは再送信しません。",
+  "ApplicationUnsupportedPullScope": "既存の全アカウントまたは動的な許可範囲はサポートされなくなりました。保存する前に個別のアカウントを選択してください。",
+  "ApplicationPullAccountLimit": "このアプリケーションには最大 10 件のアカウントを許可できます。"
 }

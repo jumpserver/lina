@@ -2415,10 +2415,16 @@
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
   "AccessGenerateMaterials": "Generate access materials",
-  "AccessSDKHelp": "Python SDK examples are available. Set a stable, unique instance_id for each running instance.",
+  "AccessSDKHelp": "El asistente genera un ID de instancia del SDK. Reutilice el archivo de configuración al recrear un contenedor. Genere materiales distintos para cada réplica o defina un JMS_INSTANCE_ID estable y diferente para cada una.",
   "AccessMaterialsSecretHelp": "The download contains the application’s AK/SK. Store it securely and restrict file access.",
-  "AccessSDKConfigurationHelp": "Download the configuration next to the example code. Install the SDK and handle credential changes in your application.",
-  "AccessAgentConfigurationHelp": "Copy the download to the target host and run the installation command from that directory. The application user must already exist. Delete the bootstrap download after installation.",
+  "AccessSDKConfigurationHelp": "Descargue la configuración de Python junto al ejemplo. Reutilice este archivo para conservar el ID de instancia; implemente el tratamiento de credenciales en la aplicación.",
+  "AccessSDKEnvironmentHelp": "Descargue el archivo de shell y restrinja el acceso al usuario de la aplicación. Cárguelo antes de iniciar y reutilícelo para conservar el ID de instancia.",
+  "AccessAgentConfigurationHelp": "Guarde el archivo de inicio de forma privada en el host de destino. Elija abajo la instalación del servicio Linux o la ejecución en primer plano. Reutilice después la configuración local generada.",
+  "AccessAgentLinuxService": "Servicio Linux systemd",
+  "AccessAgentForegroundUnix": "macOS/Linux en primer plano",
+  "AccessAgentForegroundWindows": "Windows en primer plano (PowerShell)",
+  "AccessAgentForegroundHelp": "Inicialice una sola vez y reutilice la configuración local en cada inicio. El modo en primer plano se ejecuta con el usuario actual y no realiza acciones systemd.",
+  "AccessAgentLinuxOnlyDeliveryHelp": "La entrega EnvironmentFile requiere Linux systemd. Elija JSON o Socket para ejecutar en primer plano.",
   "AccessVerifyHelp": "Start the SDK or Agent and refresh to view this application’s instances. Online status reflects connection activity in the last two minutes.",
   "CredentialDeliveryMode": "Credential delivery mode",
   "DeliveryJSON": "JSON file",
@@ -2620,5 +2626,7 @@
   "CopyApplicationAccountInfo": "Copiar información de la cuenta",
   "ApplicationBatchEventHelp": "Envíe el mismo tipo de evento a cada aplicación seleccionada. Seleccione su política e instancias de destino por separado.",
   "ApplicationEventSendFailed": "No se pudo enviar el evento",
-  "ApplicationBatchEventRetryHelp": "El reintento solo envía a las aplicaciones cuyos envíos fallaron. Las solicitudes ya enviadas no se vuelven a enviar."
+  "ApplicationBatchEventRetryHelp": "El reintento solo envía a las aplicaciones cuyos envíos fallaron. Las solicitudes ya enviadas no se vuelven a enviar.",
+  "ApplicationUnsupportedPullScope": "El alcance anterior de todas las cuentas o de cuentas dinámicas ya no se admite. Seleccione cuentas concretas antes de guardar.",
+  "ApplicationPullAccountLimit": "Autorice como máximo 10 cuentas concretas para esta aplicación."
 }

@@ -2415,10 +2415,16 @@
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
   "AccessGenerateMaterials": "Generate access materials",
-  "AccessSDKHelp": "Python SDK examples are available. Set a stable, unique instance_id for each running instance.",
+  "AccessSDKHelp": "Мастер создаёт ID экземпляра SDK. При повторном создании контейнера используйте тот же файл конфигурации. Для каждой реплики создайте отдельные материалы или задайте ей уникальный стабильный JMS_INSTANCE_ID.",
   "AccessMaterialsSecretHelp": "The download contains the application’s AK/SK. Store it securely and restrict file access.",
-  "AccessSDKConfigurationHelp": "Download the configuration next to the example code. Install the SDK and handle credential changes in your application.",
-  "AccessAgentConfigurationHelp": "Copy the download to the target host and run the installation command from that directory. The application user must already exist. Delete the bootstrap download after installation.",
+  "AccessSDKConfigurationHelp": "Скачайте конфигурацию Python вместе с примером. Повторное использование файла сохраняет ID экземпляра; реализуйте обработку смены учётных данных.",
+  "AccessSDKEnvironmentHelp": "Скачайте файл shell и ограничьте доступ пользователем приложения. Загрузите его перед запуском и используйте повторно, чтобы сохранить ID экземпляра.",
+  "AccessAgentConfigurationHelp": "Храните файл первоначальной настройки в закрытом месте на целевом узле. Выберите ниже установку службы Linux или запуск на переднем плане. Затем повторно используйте созданную локальную конфигурацию.",
+  "AccessAgentLinuxService": "Служба Linux systemd",
+  "AccessAgentForegroundUnix": "macOS/Linux на переднем плане",
+  "AccessAgentForegroundWindows": "Windows на переднем плане (PowerShell)",
+  "AccessAgentForegroundHelp": "Выполните инициализацию один раз и используйте локальную конфигурацию при каждом запуске. Режим переднего плана работает от текущего пользователя без действий systemd.",
+  "AccessAgentLinuxOnlyDeliveryHelp": "Для доставки EnvironmentFile требуется Linux systemd. Для запуска на переднем плане выберите JSON или Socket.",
   "AccessVerifyHelp": "Start the SDK or Agent and refresh to view this application’s instances. Online status reflects connection activity in the last two minutes.",
   "CredentialDeliveryMode": "Credential delivery mode",
   "DeliveryJSON": "JSON file",
@@ -2620,5 +2626,7 @@
   "CopyApplicationAccountInfo": "Копировать данные аккаунта",
   "ApplicationBatchEventHelp": "Отправьте событие одного типа каждому выбранному приложению. Политику и целевые экземпляры выбирайте отдельно для каждого приложения.",
   "ApplicationEventSendFailed": "Не удалось отправить событие",
-  "ApplicationBatchEventRetryHelp": "Повторная попытка отправляет запросы только приложениям с ошибкой. Уже отправленные запросы не отправляются повторно."
+  "ApplicationBatchEventRetryHelp": "Повторная попытка отправляет запросы только приложениям с ошибкой. Уже отправленные запросы не отправляются повторно.",
+  "ApplicationUnsupportedPullScope": "Прежняя область доступа ко всем или динамически выбранным аккаунтам больше не поддерживается. Перед сохранением выберите конкретные аккаунты.",
+  "ApplicationPullAccountLimit": "Разрешите этому приложению доступ не более чем к 10 конкретным аккаунтам."
 }

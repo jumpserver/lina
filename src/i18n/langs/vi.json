@@ -2415,10 +2415,16 @@
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
   "AccessGenerateMaterials": "Generate access materials",
-  "AccessSDKHelp": "Python SDK examples are available. Set a stable, unique instance_id for each running instance.",
+  "AccessSDKHelp": "Trình hướng dẫn tạo ID phiên bản SDK. Hãy dùng lại tệp cấu hình khi tạo lại container. Tạo tài liệu riêng cho từng bản sao hoặc đặt JMS_INSTANCE_ID ổn định và khác nhau cho mỗi bản sao.",
   "AccessMaterialsSecretHelp": "The download contains the application’s AK/SK. Store it securely and restrict file access.",
-  "AccessSDKConfigurationHelp": "Download the configuration next to the example code. Install the SDK and handle credential changes in your application.",
-  "AccessAgentConfigurationHelp": "Copy the download to the target host and run the installation command from that directory. The application user must already exist. Delete the bootstrap download after installation.",
+  "AccessSDKConfigurationHelp": "Tải cấu hình Python cùng với ví dụ. Dùng lại tệp này để giữ nguyên ID phiên bản; hãy triển khai xử lý thay đổi thông tin xác thực.",
+  "AccessSDKEnvironmentHelp": "Tải tệp shell và chỉ cho người dùng ứng dụng đọc. Nạp tệp trước khi khởi động và dùng lại tệp để giữ nguyên ID phiên bản.",
+  "AccessAgentConfigurationHelp": "Giữ riêng tư tệp khởi tạo trên máy đích. Chọn cài đặt dịch vụ Linux hoặc chạy trực tiếp bên dưới. Dùng lại cấu hình cục bộ đã tạo cho những lần khởi động sau.",
+  "AccessAgentLinuxService": "Dịch vụ Linux systemd",
+  "AccessAgentForegroundUnix": "macOS/Linux chạy trực tiếp",
+  "AccessAgentForegroundWindows": "Windows chạy trực tiếp (PowerShell)",
+  "AccessAgentForegroundHelp": "Chỉ khởi tạo một lần rồi dùng lại cấu hình cục bộ mỗi khi khởi động. Chế độ chạy trực tiếp dùng người dùng hiện tại và không thực hiện thao tác systemd.",
+  "AccessAgentLinuxOnlyDeliveryHelp": "Phân phối EnvironmentFile cần Linux systemd. Hãy chọn tệp JSON hoặc Socket để chạy trực tiếp.",
   "AccessVerifyHelp": "Start the SDK or Agent and refresh to view this application’s instances. Online status reflects connection activity in the last two minutes.",
   "CredentialDeliveryMode": "Credential delivery mode",
   "DeliveryJSON": "JSON file",
@@ -2620,5 +2626,7 @@
   "CopyApplicationAccountInfo": "Sao chép thông tin tài khoản",
   "ApplicationBatchEventHelp": "Gửi cùng loại sự kiện đến từng ứng dụng đã chọn. Chọn riêng chính sách và các phiên bản đích cho từng ứng dụng.",
   "ApplicationEventSendFailed": "Không gửi được sự kiện",
-  "ApplicationBatchEventRetryHelp": "Thử lại chỉ gửi đến ứng dụng có yêu cầu thất bại. Không gửi lại yêu cầu đã gửi thành công."
+  "ApplicationBatchEventRetryHelp": "Thử lại chỉ gửi đến ứng dụng có yêu cầu thất bại. Không gửi lại yêu cầu đã gửi thành công.",
+  "ApplicationUnsupportedPullScope": "Phạm vi cấp quyền cũ cho tất cả hoặc tài khoản động không còn được hỗ trợ. Hãy chọn tài khoản cụ thể trước khi lưu.",
+  "ApplicationPullAccountLimit": "Chỉ cấp quyền tối đa 10 tài khoản cụ thể cho ứng dụng này."
 }

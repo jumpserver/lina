@@ -1,10 +1,16 @@
 <template>
   <div class="json-m2m-select">
     <el-radio-group v-model="iValue.type" @change="handleTypeChange">
-      <el-radio v-for="tp of types" :key="tp.name" :value="tp.name">
+      <el-radio v-for="tp of types" :key="tp.name" :value="tp.name" :disabled="tp.disabled">
         {{ tp.label }}
       </el-radio>
     </el-radio-group>
+    <div
+      v-if="!allowedTypes.includes(iValue.type) && unsupportedScopeHelp"
+      class="unsupported-scope-help"
+    >
+      {{ unsupportedScopeHelp }}
+    </div>
     <ResourceSelect
       v-bind="select2"
       v-if="iValue.type === 'ids'"
@@ -13,7 +19,8 @@
       summary-count-only
       @change="onChangeEmit"
     />
-    <div v-if="iValue.type === 'attrs'">
+    <div v-if="iValue.type === 'ids' && idsHelp" class="ids-scope-help">{{ idsHelp }}</div>
+    <div v-if="iValue.type === 'attrs' && allowedTypes.includes('attrs')">
       <DataTable ref="attrTable" :config="tableConfig" class="attr-list" />
       <div class="actions">
         <el-button size="small" type="primary" @click="handleAttrAdd">
@@ -154,6 +161,18 @@ export default {
       type: String,
       default: ''
     },
+    allowedTypes: {
+      type: Array,
+      default: () => ['all', 'ids', 'attrs']
+    },
+    unsupportedScopeHelp: {
+      type: String,
+      default: ''
+    },
+    idsHelp: {
+      type: String,
+      default: ''
+    },
     attrTableColumns: {
       type: Array,
       default: () => ['name']
@@ -185,11 +204,6 @@ export default {
       attrMatchTableUrl: '',
       ids: Array.isArray(initialValue.ids) ? initialValue.ids : [],
       editIndex: -1,
-      types: [
-        { name: 'all', label: this.$t('All') + this.$t('WordSep') + this.resource.toLowerCase() },
-        { name: 'ids', label: this.$t('Spec') + this.$t('WordSep') + this.resource.toLowerCase() },
-        { name: 'attrs', label: this.$t('SelectByAttr') }
-      ],
       tableConfig: {
         columns: [
           { prop: 'name', label: this.$t('AttrName'), formatter: tableFormatter('name') },
@@ -218,6 +232,15 @@ export default {
     }
   },
   computed: {
+    types() {
+      return [
+        { name: 'all', label: this.$t('All') + this.$t('WordSep') + this.resource.toLowerCase() },
+        { name: 'ids', label: this.$t('Spec') + this.$t('WordSep') + this.resource.toLowerCase() },
+        { name: 'attrs', label: this.$t('SelectByAttr') }
+      ]
+        .filter((type) => this.allowedTypes.includes(type.name) || type.name === this.iValue.type)
+        .map((type) => ({ ...type, disabled: !this.allowedTypes.includes(type.name) }))
+    },
     attrsAdded() {
       return this.tableConfig.totalData.map((item) => item.name)
     }
@@ -351,6 +374,16 @@ export default {
 // 不会自动拉伸块级子元素，否则本组件(radio + 属性表格)会按内容宽度收缩、不占满表单项宽度。
 .json-m2m-select {
   width: 100%;
+}
+
+.unsupported-scope-help {
+  margin-top: 8px;
+  color: var(--el-color-warning);
+}
+
+.ids-scope-help {
+  margin-top: 8px;
+  color: var(--el-text-color-secondary);
 }
 
 .attr-list {
