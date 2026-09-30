@@ -1458,6 +1458,7 @@
   "OAuth2UserGroupAttributeTip": "Nhập tên trường trong OAuth2 UserInfo chứa các nhóm người dùng. Để trống nếu không muốn xử lý nhóm người dùng.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "Không tìm thấy tài nguyên tương ứng hoặc đã bị xóa",
+  "UserNotFoundOrDeletedMsg": "Người dùng không tồn tại hoặc đã bị xóa.",
   "ObjectStorage": "Lưu trữ đối tượng",
   "Offline": "Ngoại tuyến",
   "OfflineSelected": "Đưa ra ngoài các lựa chọn",

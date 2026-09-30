@@ -1458,6 +1458,7 @@
   "OAuth2UserGroupAttributeTip": "Укажите имя поля OAuth2 UserInfo, содержащего группы пользователей. Оставьте пустым, чтобы не обрабатывать группы.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "Соответствующие ресурсы не найдены или были удалены.",
+  "UserNotFoundOrDeletedMsg": "Пользователь не существует или был удалён.",
   "ObjectStorage": "Хранилище объектов",
   "Offline": "Оффлайн",
   "OfflineSelected": "Отключить выбранных",

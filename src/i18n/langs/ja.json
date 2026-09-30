@@ -1387,6 +1387,7 @@
   "OAuth2UserGroupAttributeTip": "OAuth2 UserInfo でユーザーグループを表すフィールド名を入力します。空欄の場合、ユーザーグループは処理されません。",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "該当するリソースが見つからないか削除されています",
+  "UserNotFoundOrDeletedMsg": "ユーザーが存在しないか、削除されています。",
   "ObjectStorage": "オブジェクトストレージ",
   "Offline": "オフライン",
   "OfflineSelected": "選択したものをオフライン",

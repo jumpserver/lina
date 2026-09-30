@@ -1458,6 +1458,7 @@
   "OAuth2UserGroupAttributeTip": "OAuth2 UserInfo에서 사용자 그룹을 나타내는 필드 이름을 입력하세요. 비워 두면 사용자 그룹을 처리하지 않습니다.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "해당 리소스가 없거나 이미 삭제됨",
+  "UserNotFoundOrDeletedMsg": "사용자가 존재하지 않거나 삭제되었습니다.",
   "ObjectStorage": "객체 저장소",
   "Offline": "오프라인",
   "OfflineSelected": "선택한 오프라인",

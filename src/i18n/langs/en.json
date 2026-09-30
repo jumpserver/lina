@@ -1177,6 +1177,7 @@
   "OAuth2UserGroupAttributeTip": "Enter the field name in OAuth2 UserInfo that contains user groups. Leave blank to skip user group synchronization.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "No corresponding resources found or it has been deleted.",
+  "UserNotFoundOrDeletedMsg": "The user does not exist or has been deleted.",
   "ObjectStorage": "Object Storage",
   "Offline": "Offline",
   "OfflineSelected": "Offline selected",

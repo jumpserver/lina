@@ -1165,6 +1165,7 @@
   "OAuth2UserGroupAttributeTip": "填写 OAuth2 UserInfo 中表示用户组的字段名；留空则不处理用户组。",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除",
+  "UserNotFoundOrDeletedMsg": "用户不存在或已删除",
   "ObjectStorage": "对象存储",
   "Offline": "离线",
   "OfflineSelected": "下线所选",
