@@ -57,7 +57,7 @@
     "markdown-it": "^14.2.0",
     "markdown-it-link-attributes": "^4.0.1",
     "mitt": "^3.0.1",
-    "moment": "^2.30.1",
+    "moment": "^2.31.0",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
     "path-browserify": "^1.0.1",
