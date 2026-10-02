@@ -1,6 +1,7 @@
 <template>
   <section class="app-main">
     <CachedRouterView />
+    <RouteDrawerHost />
 
     <ChatAI v-if="chatAiEnabled" />
   </section>
@@ -9,12 +10,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import ChatAI from '@/components/Apps/ChatAi'
+import RouteDrawerHost from '@/components/Drawer/RouteDrawerHost.vue'
 import CachedRouterView from '@/layout/components/CachedRouterView.vue'
 
 export default {
   name: 'AppMain',
   components: {
     CachedRouterView,
+    RouteDrawerHost,
     ChatAI
   },
   computed: {

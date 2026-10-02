@@ -172,6 +172,7 @@ export const accountOtherActions = (vm) => {
           .patch(`/api/v1/accounts/accounts/clear-secret/`, { account_ids: [row.id] })
           .then(() => {
             vm.$message.success(vm.$tc('ClearSuccessMsg'))
+            vm.$refs.ListTable.reloadTable()
           })
       }
     },

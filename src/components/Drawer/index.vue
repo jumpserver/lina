@@ -21,6 +21,7 @@
         <component
           v-bind="componentProps"
           :is="resolvedComponent"
+          :key="componentKey"
           v-if="resolvedComponent"
           ref="dynamicComponent"
           v-on="componentListeners"
@@ -32,6 +33,7 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { getStoredDrawerWidth, useDrawerResize } from '@/composables/useDrawerResize'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
 import { DRAWER_RUNTIME_CONTEXT, TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
@@ -39,13 +41,17 @@ import { DRAWER_RUNTIME_CONTEXT, TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } 
 export default {
   provide() {
     return {
-      [DRAWER_RUNTIME_CONTEXT]: this.componentProps?.drawerContext || null,
-      [TAB_NAVIGATION_CONTEXT]: {
-        scope: TAB_NAVIGATION_SCOPE.LOCAL
-      }
+      [DRAWER_RUNTIME_CONTEXT]: computed(
+        () => this.componentProps?.drawerContext || { isDrawer: true }
+      ),
+      [TAB_NAVIGATION_CONTEXT]: computed(
+        () => this.tabNavigation || { scope: TAB_NAVIGATION_SCOPE.LOCAL }
+      )
     }
   },
   props: {
+    componentKey: { type: [String, Number], default: '' },
+    tabNavigation: { type: Object, default: null },
     title: {
       type: String,
       default: ''
@@ -288,38 +294,6 @@ export default {
   :deep(.page.tab-page .tab-page-content .page-content) {
     overflow: visible !important;
     max-height: none !important;
-  }
-
-  :deep(.page.tab-page .tab-page-content .tab-page-alert) {
-    margin: 0;
-  }
-
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon .el-icon),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__icon .el-icon svg) {
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-  }
-
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__title),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__description),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__description p),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content p),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__content span),
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .announcement-main) {
-    font-size: 12px !important;
-    line-height: 1.5;
-  }
-
-  :deep(.page.tab-page .tab-page-content .tab-page-alert .el-alert__closebtn) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
   }
 
   :deep(.el-form-item) {

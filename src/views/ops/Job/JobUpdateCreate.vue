@@ -1,7 +1,7 @@
 <template>
   <div v-if="ready">
     <VariableHelpDialog v-model:visible="showHelpDialog" />
-    <GenericCreateUpdatePage v-bind="$data" ref="form" />
+    <GenericCreateUpdatePage v-bind="{ ...$data, ...$attrs }" ref="form" />
   </div>
 </template>
 

@@ -1,3 +1,4 @@
+import { unref } from 'vue'
 import { DRAWER_RUNTIME_CONTEXT } from '@/components/Drawer/context'
 
 const DEFAULT_ROUTE_KEY = 'default'
@@ -19,7 +20,7 @@ function getProvidedScope(vm, provideKey) {
   while (instance) {
     const provides = instance.provides
     if (provides && Object.prototype.hasOwnProperty.call(provides, provideKey)) {
-      return provides[provideKey] || null
+      return unref(provides[provideKey]) || null
     }
     instance = instance.parent
   }
@@ -230,14 +231,14 @@ function createContextService({ router } = {}) {
   return {
     install(app) {
       app.mixin({
+        beforeCreate() {
+          // A getter on globalProperties is called with globalProperties as its
+          // receiver in Vue 3, not the component proxy. Bind each facade here
+          // so overlay lookup can actually walk this component's ancestors.
+          this.$context = createFacade(this)
+        },
         unmounted() {
           deleteViewScope(this)
-        }
-      })
-
-      Object.defineProperty(app.config.globalProperties, '$context', {
-        get() {
-          return createFacade(this)
         }
       })
     }

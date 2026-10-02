@@ -1,4 +1,8 @@
 import axios from 'axios'
+import {
+  isTemplateFollowingConflict,
+  retryWithoutTemplateFollowing
+} from './accountTemplateFollowing'
 import i18n from '@/i18n/i18n'
 import { eventBus } from '@/utils/vue/eventbus'
 import { getTokenFromCookie } from '@/utils/jms/auth'
@@ -26,7 +30,7 @@ function beforeRequestAddToken(config) {
   const currentRoute = router?.currentRoute?.value || router?.currentRoute
   const queryOrgId = currentRoute?.query?.oid
   const storeOrgId = store.getters.currentOrg?.id
-  const orgId = queryOrgId || storeOrgId
+  const orgId = config.headers['X-JMS-ORG'] || queryOrgId || storeOrgId
   if (orgId) {
     config.headers['X-JMS-ORG'] = orgId
   }
@@ -167,6 +171,20 @@ service.interceptors.response.use(
       return Promise.reject(error)
     }
     const response = error.response
+
+    if (isTemplateFollowingConflict(error)) {
+      return retryWithoutTemplateFollowing(
+        error,
+        () =>
+          MessageBox.confirm(i18n.t('TemplateCredentialOverrideConfirm'), i18n.t('Info'), {
+            confirmButtonText: i18n.t('TemplateCredentialOverride'),
+            cancelButtonText: i18n.t('Cancel'),
+            type: 'warning',
+            closeOnClickModal: false
+          }),
+        service
+      )
+    }
 
     const confirming = ifConfirmRequired({ response, error })
 

@@ -581,7 +581,7 @@ export default {
     transition: none;
     // The outer card owns the list border and rounded corners. Clip the inner
     // table so its square layers cannot interrupt the four corner arcs.
-    overflow: hidden !important;
+    overflow: hidden;
   }
 
   :deep(.el-card__body) {

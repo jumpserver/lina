@@ -16,7 +16,12 @@
     <template #header>
       <div class="drawer-title">
         <span>{{ $tc('SelectPlatform') }}</span>
-        <el-link underline="never" size="small" type="primary" @click="handleManagePlatform">
+        <el-link
+          class="platform-manage-link"
+          underline="never"
+          size="small"
+          @click="handleManagePlatform"
+        >
           <i class="fa fa-external-link" />
           {{ $tc('ManagePlatform') }}
         </el-link>
@@ -149,6 +154,18 @@ export default {
 .el-drawer.drawer .el-drawer__body.platform-drawer__body {
   padding: 0;
   overflow-y: auto;
+}
+
+.platform-manage-link {
+  --el-link-text-color: var(--color-link);
+  --el-link-hover-text-color: var(--color-link);
+
+  color: var(--color-link);
+
+  .fa-external-link {
+    margin-right: 2px;
+    color: inherit;
+  }
 }
 </style>
 

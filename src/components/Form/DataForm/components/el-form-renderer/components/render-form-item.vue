@@ -2,7 +2,13 @@
   <el-form-item
     v-bind="data.attrs"
     v-if="_show"
-    :class="classes"
+    :class="[
+      classes,
+      {
+        'checkbox-inline-help':
+          rawComponent === 'el-checkbox' && (helpText || data.helpTextFormatter)
+      }
+    ]"
     :label="data.label"
     :prop="itemProp"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
@@ -442,10 +448,6 @@ export default {
 .help-block {
   :deep(.el-alert__icon) {
     font-size: 16px;
-  }
-
-  &.checkbox {
-    //display: inline;
   }
 }
 

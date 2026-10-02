@@ -15,9 +15,11 @@ export default {
     BaseAuth
   },
   data() {
+    const vm = this
     return {
       settings: {
         url: '/api/v1/settings/setting/?category=saml2',
+        encryptedFields: ['SAML2_IDP_METADATA_CACERT_CONTENT'],
         fields: [
           [
             this.$t('Basic'),
@@ -26,6 +28,8 @@ export default {
               'SAML2_SP_KEY_CONTENT',
               'SAML2_SP_CERT_CONTENT',
               'SAML2_IDP_METADATA_URL',
+              'SAML2_IDP_METADATA_CERT_VERIFY_MODE',
+              'SAML2_IDP_METADATA_CACERT_CONTENT',
               'SAML2_IDP_METADATA_XML',
               'SAML2_SP_ADVANCED_SETTINGS'
             ]
@@ -40,6 +44,16 @@ export default {
           SAML2_IDP_METADATA_URL: {
             component: 'el-input',
             helpText: this.$t('IdpMetadataUrlHelpText')
+          },
+          SAML2_IDP_METADATA_CACERT_CONTENT: {
+            component: UploadKey,
+            hidden: (formValue) =>
+              !formValue.SAML2_IDP_METADATA_URL ||
+              formValue.SAML2_IDP_METADATA_CERT_VERIFY_MODE !== 'custom_ca',
+            el: {
+              accept: '.crt,.pem,.cer',
+              fingerprint: ''
+            }
           },
           SAML2_IDP_METADATA_XML: {
             component: 'el-input',
@@ -71,9 +85,14 @@ export default {
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
+          const configured = obj.SAML2_IDP_METADATA_CACERT_CONFIGURED
+          vm.settings.fieldsMeta.SAML2_IDP_METADATA_CACERT_CONTENT.el.fingerprint = configured
+            ? vm.$t('Configured')
+            : ''
           return obj
         },
         cleanFormValue(data) {
+          delete data['SAML2_IDP_METADATA_CACERT_CONFIGURED']
           return data
         }
       }
