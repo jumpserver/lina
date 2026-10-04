@@ -2,11 +2,11 @@
   <TwoCol>
     <ListTable ref="table" :header-actions="headerConfig" :table-config="config" />
     <template #right>
-      <QuickActions :actions="quickActions" type="primary" />
       <TinkerDeploymentActions
         v-if="object.id"
         :key="object.id"
         :host-id="object.id"
+        :initial-actions="quickActions"
         @changed="$refs.table?.reloadTable()"
       />
     </template>
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="jsx">
-import { ListTable, QuickActions } from '@/components'
+import { ListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import TinkerDeploymentActions from './TinkerDeploymentActions.vue'
@@ -23,7 +23,6 @@ export default {
   components: {
     TwoCol,
     ListTable,
-    QuickActions,
     TinkerDeploymentActions
   },
   props: {

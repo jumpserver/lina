@@ -1,6 +1,5 @@
 <template>
   <div>
-    <TinkerVersionNotice :show-link="false" />
     <el-alert type="info">
       <span ref="helpRef" class="applet-host-help" />
     </el-alert>
@@ -19,13 +18,11 @@ import { DrawerListTable } from '@/components'
 import { ProtocolsFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
 import TinkerVersion from './TinkerVersion.vue'
-import TinkerVersionNotice from './TinkerVersionNotice.vue'
 
 export default {
   name: 'AppletHost',
   components: {
-    DrawerListTable,
-    TinkerVersionNotice
+    DrawerListTable
   },
   data() {
     const appletRouteQuery = { type: 'windows', category: 'host', platform: 'RemoteAppHost' }
@@ -40,7 +37,9 @@ export default {
           'gathered_info',
           'deploy_options',
           'tinker_target_version',
-          'tinker_version_status'
+          'tinker_min_version',
+          'tinker_version_status',
+          'tinker_upgrade_message'
         ],
         columnsShow: {
           min: ['name', 'actions'],
@@ -50,7 +49,7 @@ export default {
           tinker_version: {
             label: this.$t('TinkerVersion'),
             formatter: TinkerVersion,
-            minWidth: 220
+            minWidth: 160
           },
           name: {
             formatterArgs: {

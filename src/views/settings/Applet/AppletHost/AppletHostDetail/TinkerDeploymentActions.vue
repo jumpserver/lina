@@ -5,17 +5,37 @@ import { ElMessageBox } from 'element-plus'
 import request from '@/utils/request'
 import { hasPermission } from '@/utils/jms/permission'
 import { openTaskPage } from '@/utils/jms/index'
-import IBox from '@/components/Common/IBox/index.vue'
-import TinkerVersion from '../TinkerVersion.vue'
+import QuickActions from '@/components/Common/QuickActions/index.vue'
 import { useTinkerRefresh } from '../useTinkerRefresh'
 
-const props = defineProps<{ hostId: string }>()
+interface QuickAction {
+  title: string
+  attrs: Record<string, unknown>
+  callbacks: Record<string, () => void>
+  has?: boolean
+}
+
+const props = defineProps<{ hostId: string; initialActions: QuickAction[] }>()
 const emit = defineEmits<{ changed: [] }>()
 const { t } = useI18n()
 const host = shallowRef<Record<string, string> | null>(null)
 const submitting = shallowRef(false)
 const canView = computed(() => hasPermission('terminal.view_applethost'))
 const canDeploy = computed(() => hasPermission('terminal.add_applethostdeployment'))
+const actions = computed(() => [
+  ...props.initialActions,
+  {
+    title: t('TinkerRedeploy'),
+    has: Boolean(canView.value && canDeploy.value && host.value?.date_synced),
+    attrs: {
+      type: 'primary',
+      label: t('Update'),
+      disabled: submitting.value,
+      loading: submitting.value
+    },
+    callbacks: { click: deploy }
+  }
+])
 
 const refresh = useTinkerRefresh(async (signal) => {
   if (!canView.value) return
@@ -33,7 +53,7 @@ async function deploy() {
   try {
     await ElMessageBox.confirm(
       t('TinkerRedeployConfirm', {
-        current: host.value.tinker_version || t('TinkerVersionUnknown'),
+        current: host.value.tinker_version?.trim() || t('TinkerVersionUnknown'),
         target: host.value.tinker_target_version
       }),
       t('TinkerRedeploy'),
@@ -55,23 +75,5 @@ async function deploy() {
 </script>
 
 <template>
-  <IBox v-if="canView && host" :title="t('TinkerVersion')" class="tinker-deployment">
-    <TinkerVersion :row="host" />
-    <p>{{ t('TinkerRecommendedVersion', { version: host.tinker_target_version }) }}</p>
-    <el-button
-      v-if="canDeploy && host.date_synced"
-      type="primary"
-      :disabled="submitting"
-      :loading="submitting"
-      @click="deploy"
-    >
-      {{ t('TinkerRedeploy') }}
-    </el-button>
-  </IBox>
+  <QuickActions :actions="actions" type="primary" />
 </template>
-
-<style scoped>
-.tinker-deployment {
-  margin-top: 16px;
-}
-</style>
