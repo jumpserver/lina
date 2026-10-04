@@ -6,7 +6,6 @@
         v-if="object.id"
         :key="object.id"
         :host-id="object.id"
-        :initial-actions="quickActions"
         @changed="$refs.table?.reloadTable()"
       />
     </template>
@@ -83,27 +82,7 @@ export default {
             }
           }
         }
-      },
-      quickActions: [
-        {
-          title: this.$t('InitialDeploy'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('Deploy')
-          },
-          callbacks: {
-            click: function () {
-              this.$axios
-                .post(`/api/v1/terminal/applet-host-deployments/`, {
-                  host: this.object.id
-                })
-                .then((res) => {
-                  openTaskPage(res['task'])
-                })
-            }.bind(this)
-          }
-        }
-      ]
+      }
     }
   }
 }
