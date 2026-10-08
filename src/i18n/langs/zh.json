@@ -139,5 +139,8 @@
   "GatherFactsParams": "资产信息采集参数",
   "VerifyAccountParams": "账号验证参数",
   "GatherAccountsParams": "账号收集参数",
-  "RemoveAccountParams": "账号移除参数"
+  "RemoveAccountParams": "账号移除参数",
+  "NoUnreadMsg": "暂无未读消息",
+  "LoadFailed": "加载失败",
+  "Retry": "重试"
 }

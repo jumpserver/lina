@@ -122,5 +122,8 @@
   "GatherFactsParams": "アセット情報収集パラメータ",
   "VerifyAccountParams": "アカウント検証パラメータ",
   "GatherAccountsParams": "アカウント収集パラメータ",
-  "RemoveAccountParams": "アカウント削除パラメータ"
+  "RemoveAccountParams": "アカウント削除パラメータ",
+  "NoUnreadMsg": "未読メッセージなし",
+  "LoadFailed": "読み込みに失敗しました",
+  "Retry": "再試行"
 }
