@@ -86,7 +86,12 @@
           show-icon
         />
         <el-alert
-          v-if="detail.kind === 'rotation' && !detail.preparation"
+          v-if="
+            detail.kind === 'rotation' &&
+            !detail.preparation &&
+            !detail.source_traffic &&
+            !detail.events.some((event) => event.event.startsWith('rotation.verification.'))
+          "
           :title="$t('RotationLegacyPreparationMissing')"
           type="info"
           :closable="false"
@@ -165,6 +170,50 @@
             </dl>
           </div>
         </section>
+        <section
+          v-if="detail.source_traffic"
+          class="standby-observation record-section"
+          :aria-label="$t('RotationSourceWaitingEvent')"
+        >
+          <h4 class="record-heading">
+            <el-icon><Timer /></el-icon>
+            {{ $t('RotationSourceWaitingEvent') }}
+            <el-tag :type="detail.source_traffic.ready ? 'success' : 'warning'">
+              {{
+                $t(
+                  detail.source_traffic.ready
+                    ? 'RotationSourceReadyEvent'
+                    : 'StandbyObservationInProgress'
+                )
+              }}
+            </el-tag>
+          </h4>
+          <div class="observation-content">
+            <p>{{ $t('SourceNoTrafficDaysHelp') }}</p>
+            <dl>
+              <div>
+                <dt>{{ $t('SourceNoTrafficDays') }}</dt>
+                <dd>
+                  {{
+                    $t('StandbyNoTrafficDaysValue', { days: detail.source_traffic.no_traffic_days })
+                  }}
+                </dd>
+              </div>
+              <div>
+                <dt>{{ $t('SourceLastSecretAccess') }}</dt>
+                <dd>{{ formatDate(detail.source_traffic.last_secret_access) }}</dd>
+              </div>
+              <div>
+                <dt>{{ $t('SourceIdleSince') }}</dt>
+                <dd>{{ formatDate(detail.source_traffic.idle_since) }}</dd>
+              </div>
+              <div>
+                <dt>{{ $t('SourceChangeEligibleAt') }}</dt>
+                <dd>{{ formatDate(detail.source_traffic.eligible_at) }}</dd>
+              </div>
+            </dl>
+          </div>
+        </section>
         <div class="event-workspace">
           <section class="policy-timeline record-section" :aria-label="$t('PolicyCycleTimeline')">
             <h4 class="record-heading">
@@ -212,6 +261,20 @@
                       <span
                         >{{ $t('StandbyObservationEventEligibleAt') }}：{{
                           formatDate(event.preparation.eligible_at)
+                        }}</span
+                      >
+                    </span>
+                    <span v-if="event.source_traffic" class="event-observation">
+                      <span
+                        >{{ $t('SourceNoTrafficDays') }}：{{
+                          $t('StandbyNoTrafficDaysValue', {
+                            days: event.source_traffic.no_traffic_days
+                          })
+                        }}</span
+                      >
+                      <span
+                        >{{ $t('SourceChangeEligibleAt') }}：{{
+                          formatDate(event.source_traffic.eligible_at)
                         }}</span
                       >
                     </span>
@@ -373,8 +436,11 @@ const subscriptionStages = [
   ['PolicyStageCredentialPublished', ['credential.updated']]
 ]
 const rotationStages = [
+  ['RotationVerificationStartedEvent', ['rotation.verification.started']],
   ['PolicyStageAccountPublished', ['rotation.started']],
   ['PolicyStageWaitingForApplication', ['rotation.waiting_for_application']],
+  ['RotationSourceWaitingEvent', ['rotation.source.waiting']],
+  ['RotationSourceReadyEvent', ['rotation.source.ready']],
   ['PolicyStageChangeStarted', ['credential.change.started']],
   ['PolicyStageChangeResult', ['credential.change.completed', 'credential.change.failed']],
   ['PolicyStageRotationResult', ['rotation.completed', 'rotation.failed']]
@@ -490,15 +556,16 @@ export default {
           label,
           event,
           current:
-            this.detail.preparation?.is_current &&
-            ((label === 'RotationStandbyWaitingEvent' &&
-              this.detail.preparation.status === 'waiting_standby') ||
-              (label === 'RotationAccountsAlignedEvent' &&
-                this.detail.preparation.status === 'preparing')),
-          skipped:
-            !event &&
-            (this.detail.status === 'cancelled' ||
-              (this.detail.kind === 'subscription' && this.detail.status === 'failed'))
+            (this.detail.status === 'running' &&
+              label === 'RotationSourceWaitingEvent' &&
+              this.detail.source_traffic &&
+              !this.detail.source_traffic.ready) ||
+            (this.detail.preparation?.is_current &&
+              ((label === 'RotationStandbyWaitingEvent' &&
+                this.detail.preparation.status === 'waiting_standby') ||
+                (label === 'RotationAccountsAlignedEvent' &&
+                  this.detail.preparation.status === 'preparing'))),
+          skipped: !event && ['cancelled', 'failed'].includes(this.detail.status)
         }
       })
     },

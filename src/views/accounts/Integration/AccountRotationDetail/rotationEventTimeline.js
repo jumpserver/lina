@@ -1,4 +1,7 @@
 export const eventLabels = {
+  'rotation.verification.started': 'RotationVerificationStartedEvent',
+  'rotation.verification.failed': 'RotationVerificationFailedEvent',
+  'rotation.verification.cancelled': 'RotationVerificationCancelledEvent',
   'rotation.preparation.started': 'RotationPreparationStartedEvent',
   'rotation.accounts.aligned': 'RotationAccountsAlignedEvent',
   'rotation.standby.waiting': 'RotationStandbyWaitingEvent',
@@ -9,6 +12,8 @@ export const eventLabels = {
   'configuration.updated': 'AppAuditConfigurationUpdated',
   'rotation.started': 'AppAuditRotationStarted',
   'rotation.waiting_for_application': 'RotationEventWaitingForSwitch',
+  'rotation.source.waiting': 'RotationSourceWaitingEvent',
+  'rotation.source.ready': 'RotationSourceReadyEvent',
   'rotation.completed': 'AppAuditRotationCompleted',
   'rotation.failed': 'RotationEventFailed',
   'credential.change.started': 'AppAuditSecretChangeStarted',

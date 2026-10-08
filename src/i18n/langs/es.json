@@ -2626,7 +2626,5 @@
   "CopyApplicationAccountInfo": "Copiar información de la cuenta",
   "ApplicationBatchEventHelp": "Envíe el mismo tipo de evento a cada aplicación seleccionada. Seleccione su política e instancias de destino por separado.",
   "ApplicationEventSendFailed": "No se pudo enviar el evento",
-  "ApplicationBatchEventRetryHelp": "El reintento solo envía a las aplicaciones cuyos envíos fallaron. Las solicitudes ya enviadas no se vuelven a enviar.",
-  "ApplicationUnsupportedPullScope": "El alcance anterior de todas las cuentas o de cuentas dinámicas ya no se admite. Seleccione cuentas concretas antes de guardar.",
-  "ApplicationPullAccountLimit": "Autorice como máximo 10 cuentas concretas para esta aplicación."
+  "ApplicationBatchEventRetryHelp": "El reintento solo envía a las aplicaciones cuyos envíos fallaron. Las solicitudes ya enviadas no se vuelven a enviar."
 }

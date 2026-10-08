@@ -27,9 +27,7 @@ export default {
           component: JSONManyToManySelect,
           el: {
             value: { type: 'ids', ids: [] },
-            allowedTypes: ['ids'],
-            unsupportedScopeHelp: vm.$t('ApplicationUnsupportedPullScope'),
-            idsHelp: vm.$t('ApplicationPullAccountLimit'),
+            allowedTypes: ['all', 'ids', 'attrs'],
             resource: vm.$t('Accounts'),
             select2: {
               url: '/api/v1/accounts/accounts/',

@@ -143,7 +143,7 @@ export default {
             this.$t(
               subscription
                 ? 'StartSubscriptionNotificationCycleConfirm'
-                : 'StartRotationPreparationConfirm'
+                : 'StartRotationCycleConfirm'
             ),
             this.$t('StartNewPolicyCycle'),
             { type: 'info' }

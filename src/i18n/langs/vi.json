@@ -2626,7 +2626,5 @@
   "CopyApplicationAccountInfo": "Sao chép thông tin tài khoản",
   "ApplicationBatchEventHelp": "Gửi cùng loại sự kiện đến từng ứng dụng đã chọn. Chọn riêng chính sách và các phiên bản đích cho từng ứng dụng.",
   "ApplicationEventSendFailed": "Không gửi được sự kiện",
-  "ApplicationBatchEventRetryHelp": "Thử lại chỉ gửi đến ứng dụng có yêu cầu thất bại. Không gửi lại yêu cầu đã gửi thành công.",
-  "ApplicationUnsupportedPullScope": "Phạm vi cấp quyền cũ cho tất cả hoặc tài khoản động không còn được hỗ trợ. Hãy chọn tài khoản cụ thể trước khi lưu.",
-  "ApplicationPullAccountLimit": "Chỉ cấp quyền tối đa 10 tài khoản cụ thể cho ứng dụng này."
+  "ApplicationBatchEventRetryHelp": "Thử lại chỉ gửi đến ứng dụng có yêu cầu thất bại. Không gửi lại yêu cầu đã gửi thành công."
 }

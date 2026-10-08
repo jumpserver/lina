@@ -2719,7 +2719,5 @@
   "CopyApplicationAccountInfo": "アカウント情報をコピー",
   "ApplicationBatchEventHelp": "選択した各アプリケーションに同じ種類のイベントを送信します。ポリシーと対象インスタンスはそれぞれ選択してください。",
   "ApplicationEventSendFailed": "イベントの送信に失敗しました",
-  "ApplicationBatchEventRetryHelp": "再試行では送信に失敗したアプリケーションのみを送信します。送信済みのリクエストは再送信しません。",
-  "ApplicationUnsupportedPullScope": "既存の全アカウントまたは動的な許可範囲はサポートされなくなりました。保存する前に個別のアカウントを選択してください。",
-  "ApplicationPullAccountLimit": "このアプリケーションには最大 10 件のアカウントを許可できます。"
+  "ApplicationBatchEventRetryHelp": "再試行では送信に失敗したアプリケーションのみを送信します。送信済みのリクエストは再送信しません。"
 }

@@ -114,8 +114,8 @@ export default {
           placeholder: this.$t('SelectAlternateAccount')
         }
       },
-      standby_no_traffic_days: {
-        label: this.$t('StandbyNoTrafficDays'),
+      source_no_traffic_days: {
+        label: this.$t('SourceNoTrafficDays'),
         hidden: (form) => !isRotation(form),
         rules: [
           rules.Required,
@@ -130,7 +130,7 @@ export default {
           }
         ],
         el: { type: 'number', min: 1, max: 3650, step: 1 },
-        helpText: this.$t('StandbyNoTrafficDaysHelp')
+        helpText: this.$t('SourceNoTrafficDaysHelp')
       },
       subscription_account_ids: {
         label: this.$t('SubscribedAccounts'),
@@ -185,7 +185,8 @@ export default {
           asset_id: assetId,
           account_id: item?.account?.id || '',
           alternate_account_id: item?.alternate_account?.id || '',
-          standby_no_traffic_days: item?.standby_no_traffic_days ?? 7,
+          source_no_traffic_days:
+            item?.source_no_traffic_days ?? item?.standby_no_traffic_days ?? 7,
           subscription_account_ids: (item?.subscription_accounts || []).map(
             (account) => account.id
           ),
@@ -201,7 +202,7 @@ export default {
               'asset_id',
               'account_id',
               'alternate_account_id',
-              'standby_no_traffic_days',
+              'source_no_traffic_days',
               'subscription_account_ids'
             ]
           ],

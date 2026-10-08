@@ -4,7 +4,11 @@
       v-if="object.precheck && object.precheck.status !== 'passed'"
       :title="precheckMessage"
       :description="object.precheck.code === 'changed' ? object.precheck.detail : ''"
-      :type="object.precheck.status === 'checking' ? 'info' : 'error'"
+      :type="
+        object.precheck.status === 'checking' || object.precheck.code === 'cancelled'
+          ? 'info'
+          : 'error'
+      "
       :closable="false"
       show-icon
     />
@@ -91,6 +95,7 @@ export default {
         timeout: 'PamPrecheckTimeout',
         changed: 'PamPrecheckChanged',
         dispatch_failed: 'PamPrecheckDispatchFailed',
+        cancelled: 'PamPrecheckCancelled',
         failed: 'PamPrecheckFailed'
       }
       return this.$t(keys[precheck?.code] || 'PamPrecheckFailed')
@@ -101,6 +106,9 @@ export default {
           ? 'AlternatingAccountRotation'
           : 'CredentialUpdateSubscription'
       )
+    },
+    sourceTraffic() {
+      return this.rotationStatus?.source_traffic
     },
     detailItems() {
       const items = [
@@ -140,9 +148,9 @@ export default {
           { key: this.$t('CurrentAccount'), value: accountName(this.object.active_account) },
           { key: this.$t('NextAccount'), value: accountName(nextAccount) },
           {
-            key: this.$t('StandbyNoTrafficDays'),
+            key: this.$t('SourceNoTrafficDays'),
             value: this.$t('StandbyNoTrafficDaysValue', {
-              days: this.object.standby_no_traffic_days ?? 7
+              days: this.object.source_no_traffic_days ?? this.object.standby_no_traffic_days ?? 7
             })
           }
         )
@@ -196,6 +204,22 @@ export default {
           { key: this.$t('RotationEligibleAt'), value: this.formatDate(preparation.eligible_at) }
         )
       }
+      if (this.sourceTraffic) {
+        items.push(
+          {
+            key: this.$t('SourceLastSecretAccess'),
+            value: this.formatDate(this.sourceTraffic.last_secret_access)
+          },
+          {
+            key: this.$t('SourceIdleSince'),
+            value: this.formatDate(this.sourceTraffic.idle_since)
+          },
+          {
+            key: this.$t('SourceChangeEligibleAt'),
+            value: this.formatDate(this.sourceTraffic.eligible_at)
+          }
+        )
+      }
       if (this.object.change_execution) {
         items.push({
           key: this.$t('ChangeSecretExecution'),
@@ -224,7 +248,9 @@ export default {
     rotationActionLabel() {
       let label
       if (this.object.status === 'idle') {
-        label = this.$t('StartNewPolicyCycle')
+        label = this.$t(
+          this.object.precheck?.status === 'checking' ? 'PamPrecheckRunning' : 'StartNewPolicyCycle'
+        )
       } else if (['preparing', 'waiting_standby'].includes(this.object.status)) {
         label = this.$t('CheckRotationPreparation')
       } else if (this.object.status === 'ready_to_switch') {
@@ -233,6 +259,8 @@ export default {
         )
       } else if (this.object.status === 'ready_for_change') {
         label = this.$t(this.object.rotation?.automation_id ? 'Execute' : 'ChangeSecret')
+      } else if (this.object.status === 'waiting_switch') {
+        label = this.$t('CheckRotationReadiness')
       } else if (
         ['changing_secret', 'change_failed', 'recovery_required'].includes(this.object.status)
       ) {
@@ -242,7 +270,12 @@ export default {
       }
       const blockers = this.object.preparation
         ? this.object.preparation.applications.filter((app) => !app.aligned).length
-        : this.rotationStatus?.summary?.blocking || 0
+        : (this.rotationStatus?.summary?.blocking || 0) +
+          (this.object.status === 'waiting_switch' &&
+          this.sourceTraffic &&
+          !this.sourceTraffic.ready
+            ? 1
+            : 0)
       return blockers ? `${label} (${blockers})` : label
     },
     rotationAction() {
@@ -259,6 +292,7 @@ export default {
             this.cycleStarting ||
             !this.object.is_active ||
             this.object.precheck?.status === 'checking' ||
+            (this.object.status === 'idle' && !this.$hasPerm('accounts.verify_account')) ||
             (this.object.status === 'ready_to_switch' &&
               !this.$hasPerm('accounts.verify_account')) ||
             (this.object.status === 'ready_for_change' &&
@@ -362,14 +396,15 @@ export default {
           title: this.$t('Cancel'),
           has:
             this.object.mode === 'alternating_rotation' &&
-            [
+            ([
               'preparing',
               'waiting_standby',
               'ready_to_switch',
               'waiting_switch',
               'ready_for_change',
               'change_failed'
-            ].includes(this.object.status) &&
+            ].includes(this.object.status) ||
+              (this.object.status === 'idle' && this.object.precheck?.status === 'checking')) &&
             this.$hasPerm('accounts.change_applicationcredential'),
           attrs: { label: this.$t('CancelRotation'), disabled: this.actionLoading },
           callbacks: { click: this.cancelRotation }
@@ -397,6 +432,12 @@ export default {
       }
       try {
         this.rotationStatus = await getCredentialRotationStatus(this.object.id)
+        if (
+          this.rotationStatus?.credential_status &&
+          this.rotationStatus.credential_status !== this.object.status
+        ) {
+          this.$emit('updated', await getApplicationCredential(this.object.id))
+        }
       } finally {
         this.scheduleRotationStatusRefresh()
       }

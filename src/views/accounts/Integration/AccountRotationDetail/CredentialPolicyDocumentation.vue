@@ -67,7 +67,7 @@ export default {
     },
     modeSummary() {
       return this.$t(
-        this.subscription ? 'PolicyDocsSubscriptionSummary' : 'PolicyDocsRotationSummary'
+        this.subscription ? 'PolicyDocsSubscriptionSummary' : 'PolicyDocsRotationSummaryV2'
       )
     },
     exampleKey() {
@@ -112,12 +112,14 @@ export default {
       if (!this.subscription) {
         events.push(
           ...[
-            'rotation.preparation.started',
-            'rotation.accounts.aligned',
-            'rotation.standby.waiting',
-            'rotation.preparation.ready',
-            'rotation.preparation.cancelled'
-          ].map((event) => [event, 'PolicyDocsPreparationTrigger', 'PolicyDocsPreparationAction']),
+            'rotation.verification.started',
+            'rotation.verification.failed',
+            'rotation.verification.cancelled'
+          ].map((event) => [
+            event,
+            'PolicyDocsVerificationTrigger',
+            'PolicyDocsVerificationAction'
+          ]),
           [
             'rotation.started',
             'PolicyDocsRotationStartedTrigger',
@@ -128,6 +130,11 @@ export default {
             'PolicyDocsRotationWaitingTrigger',
             'PolicyDocsRotationWaitingAction'
           ],
+          ...['rotation.source.waiting', 'rotation.source.ready'].map((event) => [
+            event,
+            'PolicyDocsSourceObservationTrigger',
+            'PolicyDocsSourceObservationAction'
+          ]),
           [
             'rotation.completed',
             'PolicyDocsRotationCompletedTrigger',
@@ -153,7 +160,7 @@ export default {
         revision: 1,
         account_id: this.subscription
           ? this.object.subscription_accounts?.[0]?.id || '<account-id>'
-          : null,
+          : this.object.active_account?.id || '<active-account-id>',
         operation_id: '00000000-0000-0000-0000-000000000002',
         result: 'success'
       }
@@ -162,7 +169,12 @@ export default {
         credential_mode: this.object.mode,
         revision: 1
       }
-      if (this.subscription) snapshotItem.account_id = exampleEvent.account_id
+      snapshotItem.account_id = exampleEvent.account_id
+      if (!this.subscription) {
+        const ids = [this.object.account?.id, this.object.alternate_account?.id].filter(Boolean)
+        exampleEvent.account_switch = { account_ids: ids }
+        snapshotItem.account_switch = exampleEvent.account_switch
+      }
 
       const fields = [
         ['event_id', 'PolicyDocsFieldEventId'],
@@ -199,10 +211,15 @@ export default {
       const lifecycle = [
         ...(this.subscription
           ? []
-          : [heading('PolicyDocsPreparationTitle'), paragraph('PolicyDocsPreparationFlow')]),
+          : [
+              heading('PolicyDocsSourceObservationTitle'),
+              paragraph('PolicyDocsSourceObservationFlow')
+            ]),
         heading('StartNewPolicyCycle'),
         paragraph(
-          this.subscription ? 'PolicyDocsManualSubscriptionCycle' : 'PolicyDocsManualRotationCycle'
+          this.subscription
+            ? 'PolicyDocsManualSubscriptionCycle'
+            : 'PolicyDocsManualRotationCycleV2'
         )
       ].join('')
       const protocol = [

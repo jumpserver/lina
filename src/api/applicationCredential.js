@@ -49,7 +49,7 @@ export async function saveApplicationCredential(form) {
     account: form.mode === 'alternating_rotation' ? form.account_id : null,
     alternate_account: form.mode === 'alternating_rotation' ? form.alternate_account_id : null,
     ...(form.mode === 'alternating_rotation'
-      ? { standby_no_traffic_days: Number(form.standby_no_traffic_days ?? 7) }
+      ? { source_no_traffic_days: Number(form.source_no_traffic_days ?? 7) }
       : {}),
     subscription_accounts: form.mode === 'subscription' ? form.subscription_account_ids : [],
     applications: form.application_ids,
@@ -66,7 +66,7 @@ export const deleteApplicationCredential = (id) => request.delete(`${credentialU
 
 export async function advanceApplicationCredentialRotation(credential) {
   const actions = {
-    idle: 'prepare',
+    idle: 'start',
     preparing: 'check-preparation',
     waiting_standby: 'check-preparation',
     ready_to_switch: 'start',
