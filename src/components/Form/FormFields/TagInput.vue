@@ -282,33 +282,45 @@ export default {
     overflow: visible;
   }
 
-  & :deep(.el-tag) {
+  :deep(.el-tag) {
     flex: 0 0 auto;
     height: 24px;
     line-height: 22px;
     margin-top: 2px;
     margin-bottom: 2px;
-    font-family: sans-serif !important;
+    font-family: sans-serif;
     margin-left: 5px;
     padding: 0 8px;
   }
 
-  & :deep(.el-input) {
+  :deep(.el-input) {
     width: 100%;
-    border: none !important;
-    box-shadow: none !important;
+    border: none;
+    box-shadow: none;
     background: transparent;
   }
 
-  & :deep(.el-input__wrapper) {
+  :deep(.el-input__wrapper) {
     min-height: 28px;
     height: 28px;
-    border: none !important;
+    border: none;
     background: transparent;
-    box-shadow: none !important;
+    box-shadow: none;
   }
 
-  & :deep(.el-autocomplete) {
+  :deep(input.el-input__inner) {
+    max-width: 100%;
+    height: 28px;
+    line-height: 28px;
+    border: none;
+    outline: none;
+    appearance: none;
+    box-shadow: none;
+    background: transparent;
+    font-size: 13px;
+  }
+
+  :deep(.el-autocomplete) {
     height: 28px;
   }
 }
@@ -323,37 +335,10 @@ export default {
 .search-input {
   flex: 1 1 auto;
   min-width: 0;
-  width: auto !important;
+  width: auto;
   max-width: 100%;
-  border: none !important;
-  box-shadow: none !important;
-
-  & :deep(input.el-input__inner) {
-    max-width: 100%;
-    border: none !important;
-    outline: none !important;
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    height: 28px;
-    line-height: 28px;
-  }
-
-  & :deep(.el-input) {
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-  }
-}
-
-.filter-field :deep(input.el-input__inner) {
-  border: none !important;
-  outline: none !important;
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  font-size: 13px;
-  background: transparent !important;
+  border: none;
+  box-shadow: none;
 }
 
 .filter-field :deep(.el-input__suffix),

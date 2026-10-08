@@ -742,15 +742,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$innerHeight: 28px;
-$headerHeight: 30px;
-$btn-text-color: #ffffff;
-$color-btn-background: #e8f7f4;
-$color-btn-focus-background: #83cbba;
-$color-divided: #e4e7ed;
-$color-drop-menu-title: #909399;
-$color-drop-menu-border: #e4e7ed;
-
 .table-action {
   display: flex;
   flex-direction: column;
@@ -759,71 +750,18 @@ $color-drop-menu-border: #e4e7ed;
 }
 
 .table-header {
-  // 主要是 Table 中的操作列
-  // :deep(.data-actions) {
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: flex-end;
-
-  //   .el-button {
-  //     padding: 2px 5px;
-  //     font-size: 13px;
-  //     display: inline-block !important;
-  //     height: 30px;
-  //     line-height: 30px;
-
-  //     &:not(.is-plain) {
-  //       color: $btn-text-color;
-  //     }
-
-  //     overflow: hidden;
-  //     text-overflow: ellipsis;
-  //     white-space: nowrap;
-
-  //     // 确保按钮内部所有内容都垂直居中
-  //     :deep(span) {
-  //       display: inline-flex;
-  //       align-items: center;
-  //       line-height: 1;
-  //       vertical-align: middle;
-  //     }
-  //   }
-
-  //   :deep(.action-item.el-dropdown .el-button) {
-  //     display: block;
-  //     color: var(--color-primary);
-  //     background-color: $color-btn-background;
-  //     border-color: $color-btn-focus-background;
-
-  //     &:focus {
-  //       color: $btn-text-color;
-  //       background-color: $color-btn-focus-background !important;
-  //     }
-
-  //     &:hover {
-  //       color: $btn-text-color;
-  //       background-color: $color-btn-focus-background;
-  //     }
-  //   }
-  // }
-
   .left-side {
     --data-actions-gap: 5px;
 
     display: inline-flex;
-    //float: left;
 
-    :deep(.action-item.el-dropdown > .el-button) {
-      min-height: 30px;
-    }
-
+    :deep(.action-item.el-dropdown > .el-button),
     :deep(.action-item.el-button) {
       min-height: 30px;
     }
   }
 
   .right-side {
-    //float: right;
     height: 30px;
     align-self: flex-start;
   }
@@ -909,11 +847,7 @@ $color-drop-menu-border: #e4e7ed;
         opacity: 1;
       }
 
-      &:hover {
-        color: var(--color-text-primary) !important;
-        background-color: rgba(0, 0, 0, 0.05);
-      }
-
+      &:hover,
       &.is-active {
         color: var(--color-text-primary) !important;
         background-color: rgba(0, 0, 0, 0.05);
@@ -929,7 +863,6 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   .search.right {
-    display: flex;
     flex-wrap: nowrap;
     padding-right: 0;
   }
@@ -1053,6 +986,7 @@ $color-drop-menu-border: #e4e7ed;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: inherit;
   }
 
   &:hover {
@@ -1077,12 +1011,6 @@ $color-drop-menu-border: #e4e7ed;
       color: #000 !important;
       background-color: rgba(0, 0, 0, 0.16);
     }
-  }
-}
-
-.condition-chip {
-  :deep(.el-tag__content) {
-    line-height: inherit;
   }
 
   &__text {

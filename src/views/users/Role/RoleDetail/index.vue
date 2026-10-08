@@ -19,7 +19,7 @@ export default {
   },
   data() {
     const vm = this
-    const scope = this.$route.query['scope']
+    const scope = this.$context.get('scope')
     const scopeRole = `${scope}role`
     return {
       scope: scope,
@@ -40,7 +40,9 @@ export default {
             return vm.hasPermNotBuiltin(this.role, `rbac.change_${scopeRole}`)
           },
           updateRoute: {
-            name: this.$route.name.replace('Detail', 'Update'),
+            name: String(
+              this.$context.get('routeName', { scope: 'overlay' }) || this.$route.name
+            ).replace(/(Detail|List)$/, 'Update'),
             params: {},
             query: { scope: scope }
           }

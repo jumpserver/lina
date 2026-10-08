@@ -232,12 +232,10 @@ function createContextService({ router } = {}) {
     install(app) {
       app.mixin({
         beforeCreate() {
-          // Vue 3 reads globalProperties accessors with globalProperties as `this`,
-          // not the component proxy. Bind the facade to each component instead.
-          Object.defineProperty(this, '$context', {
-            configurable: true,
-            value: createFacade(this)
-          })
+          // A getter on globalProperties is called with globalProperties as its
+          // receiver in Vue 3, not the component proxy. Bind each facade here
+          // so overlay lookup can actually walk this component's ancestors.
+          this.$context = createFacade(this)
         },
         unmounted() {
           deleteViewScope(this)

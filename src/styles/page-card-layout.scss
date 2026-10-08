@@ -1,0 +1,6 @@
+// PageContent owns scrolling for ordinary pages. Cards inside it must grow with
+// their content; full-height lists opt into clipping in list-layout.scss.
+.page .page-content :is(.el-card, .ibox, .el-card__body) {
+  overflow: visible;
+  max-height: none;
+}

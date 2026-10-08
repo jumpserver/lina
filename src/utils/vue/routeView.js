@@ -1,11 +1,20 @@
+import { DRAWER_QUERY_KEYS } from '@/components/Drawer/route'
+
 function trimTrailingSlash(path) {
   return path?.replace(/\/+$/, '') || '/'
 }
 
-export function getRouteCacheKey(route) {
+export function getRouteCacheKey(route, orgId = '') {
   const query = {}
   for (const [key, value] of Object.entries(route.query || {})) {
-    if (key === 'tab' || key.includes('updated') || key.includes('order') || key.startsWith('_')) {
+    if (
+      DRAWER_QUERY_KEYS.includes(key) ||
+      key === 'oid' ||
+      key === 'tab' ||
+      key.includes('updated') ||
+      key.includes('order') ||
+      key.startsWith('_')
+    ) {
       continue
     }
     query[key] = value
@@ -18,6 +27,8 @@ export function getRouteCacheKey(route) {
     return trimTrailingSlash(route.path)
   }
 
+  const effectiveOrg = route.query?.oid || orgId
+  if (effectiveOrg) query.oid = effectiveOrg
   const routeName = route.name?.toLowerCase?.() || ''
   const queryString = new URLSearchParams(query).toString()
   let key = trimTrailingSlash(route.path)
