@@ -18,7 +18,6 @@ import ExpireSoonNoticeMinutes from './components/ExpireSoonNoticeMinutes.vue'
 import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
 import {
-  getDefaultExpireSoonNoticeMinutes,
   hydrateExpireNoticeFormValue,
   isExpireSoonNoticeAtFuture,
   isPositiveInteger,
@@ -53,9 +52,6 @@ export default {
     if (this.$route.query['asset_id']) {
       assetsInitial.push(this.$route.query.asset_id)
     }
-    const defaultExpireSoonNoticeMinutes = getDefaultExpireSoonNoticeMinutes(
-      this.$store.getters.publicSettings
-    )
     return {
       initial: {
         nodes: nodesInitial,
@@ -231,7 +227,7 @@ export default {
         }
       },
       afterGetFormValue(value) {
-        return hydrateExpireNoticeFormValue(value, '', defaultExpireSoonNoticeMinutes)
+        return hydrateExpireNoticeFormValue(value)
       },
       cleanFormValue(value) {
         if (!Array.isArray(value.accounts)) {

@@ -2563,8 +2563,6 @@
   "Minutes": "minutes",
   "ExpireSoonNoticePreview": "Un rappel sera envoyé à {time}",
   "ExpireSoonNoticeFutureError": "Saisissez un entier positif afin que l’heure du rappel reste dans le futur.",
-  "DefaultExpireSoonNoticeMinutes": "Notification d’expiration imminente par défaut",
-  "DefaultExpireSoonNoticeMinutesHelpText": "Délai d’anticipation par défaut, en minutes, proposé lors de l’activation d’une notification d’expiration imminente. Les autorisations existantes ne sont pas modifiées.",
   "ValidityPeriod": "Période de validité",
   "PageLoadErrorMsg": "Impossible de charger les ressources de la page. Vérifiez votre connexion réseau, puis actualisez la page et réessayez.",
   "MFAFollowSystem": "Suivre le système",
