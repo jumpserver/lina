@@ -616,8 +616,7 @@ export default {
     text-overflow: ellipsis;
   }
 
-  :deep(td.show-full-content .cell),
-  :deep(.cell:has(.col-full-content)) {
+  :deep(:is(td.show-full-content .cell, .cell:has(.col-full-content))) {
     overflow: visible;
     height: auto;
     white-space: normal !important;

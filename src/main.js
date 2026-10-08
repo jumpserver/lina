@@ -1,3 +1,4 @@
+import './utils/browser-polyfills'
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import { getElementLocale } from '@/i18n/langs'

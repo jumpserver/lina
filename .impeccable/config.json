@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/styles/menu.scss"
+        ],
+        "createdAt": "2026-10-08T03:20:42.376Z",
+        "reason": "Codex: existing only_active mixin is applied to .el-menu-item.is-active and active submenu titles to indicate current navigation; this compatibility change only adds a color-mix fallback elsewhere in the file. Preserve the established navigation state indicator."
+      }
+    ]
+  }
+}

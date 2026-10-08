@@ -29,8 +29,15 @@
 
 // 所有 Element Plus 多选框使用同一套标签尺寸与间距。契约锚定 selection，
 // 以同时覆盖主控件和 collapse-tags-tooltip teleport 出去的标签列表。
-.el-select__selection:has(.el-tag) {
-  gap: 0;
+.el-select__selection {
+  &:has(.el-tag) {
+    gap: 0;
+
+    // Tag 的起始 margin 负责 tag-to-tag 间距；输入容器补齐末尾 Tag 到光标的间距。
+    > .el-select__input-wrapper:not(.is-hidden) {
+      margin-inline-start: 6px;
+    }
+  }
 
   .el-tag {
     margin: 2px 0 2px 6px;
@@ -46,11 +53,6 @@
     .el-tag__close {
       margin-top: -1px !important;
     }
-  }
-
-  // Tag 的起始 margin 负责 tag-to-tag 间距；输入容器单独补齐末尾 Tag 到光标的间距。
-  > .el-select__input-wrapper:not(.is-hidden) {
-    margin-inline-start: 6px;
   }
 }
 
@@ -224,7 +226,7 @@
       border-left: 0 !important;
     }
 
-    .el-input__wrapper:has(+ .el-input-group__append) {
+    &.el-input-group--append > .el-input__wrapper {
       border-right: 0 !important;
     }
   }

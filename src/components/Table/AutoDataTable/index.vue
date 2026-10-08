@@ -436,7 +436,7 @@ export default {
           direction: 'horizontal',
           forceFallback: true,
           fallbackTolerance: 4,
-          draggable: 'th:has(.is-column-draggable)',
+          draggable: 'th.is-column-draggable-header',
           handle: 'th',
           filter: (event, cell) => {
             const control = event.target.closest(
@@ -732,7 +732,7 @@ export default {
   width: 100%;
   min-width: 0;
 
-  :deep(th:has(.is-column-draggable) > .cell) {
+  :deep(th.is-column-draggable-header > .cell) {
     cursor: grab;
     user-select: none;
   }
