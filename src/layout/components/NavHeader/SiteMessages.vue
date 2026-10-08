@@ -13,6 +13,7 @@
     </el-badge>
     <el-drawer
       v-model="show"
+      :append-to-body="true"
       :before-close="handleClose"
       :modal="true"
       :lock-scroll="false"
@@ -23,7 +24,7 @@
       modal-class="site-msg-modal"
       header-class="site-msg-header"
       body-class="site-msg-body"
-      @open="getMessages"
+      @open="getMessages()"
     >
       <template #header="{ close }">
         <span class="msg-header-title">{{ $t('SiteMessage') }}</span>
@@ -40,37 +41,55 @@
           </el-icon>
         </div>
       </template>
-      <div v-if="unreadMsgCount !== 0" class="msg-list">
-        <div
-          v-for="msg of messages"
-          :key="msg.id"
-          class="msg-item"
-          :class="{ 'is-read': msg['has_read'] }"
-          @click="showMsgDetail(msg)"
-          @mouseleave="hoverMsgId = ''"
-          @mouseover="hoverMsgId = msg.id"
-        >
-          <div class="msg-item__head">
-            <span v-if="!msg['has_read']" class="msg-item__dot" />
-            <span class="msg-item__subject">{{ msg.content.subject }}</span>
-            <span class="msg-item__meta">
-              <a
-                v-if="hoverMsgId === msg.id && !msg['has_read']"
-                class="msg-item__read"
-                @click.stop="markAsRead([msg])"
-              >
-                {{ $t('MarkAsRead') }}
-              </a>
-              <template v-else>{{ formatDate(msg.date_created) }}</template>
-            </span>
+      <div ref="messageList" v-loading="loading" class="msg-content" :aria-busy="loading">
+        <div v-if="loadFailed" class="msg-empty" role="alert">
+          <span>{{ $t('LoadFailed') }}</span>
+          <el-button @click="getMessages()">{{ $t('Retry') }}</el-button>
+        </div>
+        <div v-else-if="messages.length" class="msg-list">
+          <div
+            v-for="msg of messages"
+            :key="msg.id"
+            class="msg-item"
+            :class="{ 'is-read': msg['has_read'] }"
+            @click="showMsgDetail(msg)"
+            @mouseleave="hoverMsgId = ''"
+            @mouseover="hoverMsgId = msg.id"
+          >
+            <div class="msg-item__head">
+              <span v-if="!msg['has_read']" class="msg-item__dot" />
+              <span class="msg-item__subject">{{ msg.content.subject }}</span>
+              <span class="msg-item__meta">
+                <a
+                  v-if="hoverMsgId === msg.id && !msg['has_read']"
+                  class="msg-item__read"
+                  @click.stop="markAsRead([msg])"
+                >
+                  {{ $t('MarkAsRead') }}
+                </a>
+                <template v-else>{{ formatDate(msg.date_created) }}</template>
+              </span>
+            </div>
+            <div class="msg-item__preview">{{ stripMarkdown(msg.content.message) }}</div>
           </div>
-          <div class="msg-item__preview">{{ stripMarkdown(msg.content.message) }}</div>
+        </div>
+        <div v-else-if="!loading" class="msg-empty">
+          <svg-icon icon-class="remind" class="msg-empty__icon" />
+          <span>{{ $t('NoUnreadMsg') }}</span>
         </div>
       </div>
-      <div v-else class="msg-empty">
-        <svg-icon icon-class="remind" class="msg-empty__icon" />
-        <span>{{ $t('NoUnreadMsg') }}</span>
-      </div>
+      <el-pagination
+        v-if="unreadMsgCount > 0"
+        class="msg-pagination"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="unreadMsgCount"
+        :pager-count="5"
+        :disabled="loading"
+        size="small"
+        layout="total, prev, pager, next"
+        @update:current-page="getMessages"
+      />
     </el-drawer>
 
     <Dialog
@@ -108,6 +127,11 @@ export default {
     return {
       show: false,
       messages: [],
+      currentPage: 1,
+      pageSize: 15,
+      loading: false,
+      loadFailed: false,
+      messageRequestId: 0,
       hoverMsgId: '',
       msgDetailVisible: false,
       currentMsg: null,
@@ -117,7 +141,7 @@ export default {
   },
   computed: {
     width() {
-      return this.$store.state.app.device === 'mobile' ? '70%' : '450px'
+      return this.$store.state.app.device === 'mobile' ? '100%' : '450px'
     }
   },
   watch: {
@@ -156,12 +180,26 @@ export default {
         .replace(/\s+/g, ' ') // 折叠空白
         .trim()
     },
-    getMessages() {
-      const url = '/api/v1/notifications/site-messages/?offset=0&limit=15&has_read=false'
-      this.$axios.get(url).then((resp) => {
-        this.messages = [...resp.results]
+    async getMessages(page = this.currentPage) {
+      const requestId = ++this.messageRequestId
+      const url = '/api/v1/notifications/site-messages/'
+      const params = { offset: (page - 1) * this.pageSize, limit: this.pageSize, has_read: false }
+      this.currentPage = page
+      this.loading = true
+      this.loadFailed = false
+      try {
+        const resp = await this.$axios.get(url, { params })
+        if (requestId !== this.messageRequestId) return
         this.unreadMsgCount = resp.count
-      })
+        const lastPage = Math.max(1, Math.ceil(resp.count / this.pageSize))
+        if (page > lastPage) return this.getMessages(lastPage)
+        this.messages = resp.results
+        this.$refs.messageList?.scrollTo({ top: 0 })
+      } catch {
+        if (requestId === this.messageRequestId) this.loadFailed = true
+      } finally {
+        if (requestId === this.messageRequestId) this.loading = false
+      }
     },
     formatDate(s) {
       if (!s) {
@@ -237,11 +275,11 @@ export default {
     },
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
-      this.$axios
+      return this.$axios
         .patch(url, {})
         .then((res) => {
           this.msgDetailVisible = false
-          this.getMessages()
+          return this.getMessages()
         })
         .catch((err) => {
           this.$message(err.detail)
@@ -249,17 +287,20 @@ export default {
     },
     markAsRead(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read/`
-      const msgIds = [...new Set(msgs.filter(Boolean).map((item) => item.id))].filter(
-        (id) => !this.markingMessageIds.includes(id)
-      )
-      if (!msgIds.length) return
+      const msgIds = [
+        ...new Set(msgs.filter((item) => item && !item.has_read).map((item) => item.id))
+      ].filter((id) => !this.markingMessageIds.includes(id))
+      if (!msgIds.length) {
+        this.msgDetailVisible = false
+        return
+      }
 
       this.markingMessageIds.push(...msgIds)
-      this.$axios
+      return this.$axios
         .patch(url, { ids: msgIds })
         .then((res) => {
           this.msgDetailVisible = false
-          this.getMessages()
+          return this.getMessages()
         })
         .catch((err) => {
           this.$message(err.detail)
@@ -305,6 +346,22 @@ export default {
 <style lang="scss" scoped>
 .el-badge :deep(.el-badge__content.is-fixed) {
   top: 10px;
+}
+
+.msg-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.msg-pagination {
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--el-border-color-lighter);
 }
 
 .msg-list {
@@ -497,14 +554,15 @@ export default {
   }
 }
 
-:deep(:focus) {
-  outline: 0;
+:deep(:focus-visible) {
+  outline: 2px solid var(--el-color-primary);
+  outline-offset: 2px;
 }
 </style>
 
 <style lang="scss">
 /*
- * el-drawer 默认 teleport 到 body，且 EP 2.14 无 customClass 且 inheritAttrs:false，
+ * el-drawer 通过 append-to-body 脱离导航栏样式，且 EP 2.14 无 customClass 且 inheritAttrs:false，
  * 故用 header-class/body-class/modal-class 注入真实类名，并用非 scoped 全局样式命中。
  * modal-class 设为透明遮罩：保留遮罩以支持点击外部关闭，但视觉上不变暗。
  */
@@ -514,7 +572,7 @@ export default {
 
 /*
  * 站内信不是通用 Drawer 组件，避免复用 `.drawer` 后误命中全局抽屉的
- * `overflow: hidden` 规则。抽屉根节点锁定视口高度，body 作为唯一滚动容器。
+ * `overflow: hidden` 规则。抽屉根节点锁定视口高度，消息列表作为滚动容器，分页保持可见。
  */
 .site-msg-drawer {
   height: 100%;
@@ -580,11 +638,11 @@ export default {
 }
 
 .site-msg-body {
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
   padding: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  overflow: hidden;
 }
 </style>

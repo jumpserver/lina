@@ -121,5 +121,8 @@
   "GatherFactsParams": "資產資訊採集參數",
   "VerifyAccountParams": "帳號驗證參數",
   "GatherAccountsParams": "帳號收集參數",
-  "RemoveAccountParams": "帳號移除參數"
+  "RemoveAccountParams": "帳號移除參數",
+  "NoUnreadMsg": "暫無未讀消息",
+  "LoadFailed": "載入失敗",
+  "Retry": "重試"
 }

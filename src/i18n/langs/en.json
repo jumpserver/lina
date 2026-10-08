@@ -141,5 +141,8 @@
   "GatherFactsParams": "Asset information collection parameters",
   "VerifyAccountParams": "Account verification parameters",
   "GatherAccountsParams": "Account collection parameters",
-  "RemoveAccountParams": "Account removal parameters"
+  "RemoveAccountParams": "Account removal parameters",
+  "NoUnreadMsg": "No unread notifications",
+  "LoadFailed": "Load failed",
+  "Retry": "Retry"
 }
