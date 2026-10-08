@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>Table content height regression check</title>
+  <!-- Run yarn dev, then open /ui/tests/table-content-height.html. No backend is needed. -->
+  <style>
+    body {
+      margin: 20px;
+      font: 14px sans-serif;
+      background: #f3f3f4;
+    }
+    #fixture {
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+      width: 900px;
+    }
+    /* Match Lina's global cell padding. */
+    .el-table td {
+      padding: 6px 0;
+    }
+  </style>
+  <pre id="results">Running…</pre>
+  <div id="fixture"></div>
+  <script type="module">
+    import { createApp, h, nextTick, reactive } from 'vue'
+    import ElementPlus from 'element-plus'
+    import _ from 'lodash'
+    import 'element-plus/dist/index.css'
+    import ElDataTable from '../src/components/Table/DataTable/compenents/el-data-table/el-data-table.vue'
+
+    window._ = _
+    const fixture = document.querySelector('#fixture')
+    const results = document.querySelector('#results')
+    const passed = []
+    const state = reactive({ count: 2, logoHeight: 40, hasPagination: true, hasSelection: true })
+    let table
+    const settle = async () => {
+      await nextTick()
+      for (let i = 0; i < 12; i++) await new Promise(requestAnimationFrame)
+    }
+    function check(condition, message) {
+      if (!condition) throw new Error(message)
+      passed.push(message)
+      results.textContent = passed.map((line) => `PASS: ${line}`).join('\n')
+    }
+    function metrics() {
+      const wrap = fixture.querySelector('.el-table__body-wrapper .el-scrollbar__wrap')
+      const surface = fixture.querySelector('.el-data-table__surface')
+      const body = fixture.querySelector('.el-table__body-wrapper .el-table__body')
+      return {
+        overflow: wrap.scrollHeight - wrap.clientHeight,
+        surfaceHeight: surface.getBoundingClientRect().height,
+        bodyHeight: body.getBoundingClientRect().height
+      }
+    }
+    const app = createApp({
+      render: () =>
+        h(ElDataTable, {
+          ref: (value) => {
+            table = value
+          },
+          fillHeight: true,
+          totalData: Array.from({ length: state.count }, (_, i) => ({
+            id: String(i),
+            name: `App ${i + 1}`
+          })),
+          columns: [
+            {
+              prop: 'logo',
+              label: 'Logo',
+              width: 80,
+              formatter: () =>
+                h('div', {
+                  style: { width: '40px', height: `${state.logoHeight}px`, background: '#16b393' }
+                })
+            },
+            { prop: 'name', label: 'Name' }
+          ],
+          tableAttrs: { border: true },
+          hasSelection: state.hasSelection,
+          hasPagination: state.hasPagination,
+          hasNew: false,
+          hasEdit: false,
+          hasDelete: false,
+          hasOperation: false,
+          paginationSize: 15,
+          paginationSizes: [15, 30, 50, 100],
+          paginationLayout: 'total, sizes, prev, pager, next'
+        })
+    })
+    app.use(ElementPlus, { size: 'small' })
+    app.config.globalProperties.$log = { debug() {}, error() {} }
+    app.config.globalProperties.$t = (key) => key
+
+    try {
+      app.mount(fixture)
+      await settle()
+      check(metrics().bodyHeight > 80, '40px logos produce rows taller than the old 40px estimate')
+      check(metrics().overflow <= 1, 'Two application rows fit without vertical scrolling')
+      const shortHeight = metrics().surfaceHeight
+
+      state.logoHeight = 80
+      await settle()
+      check(
+        metrics().surfaceHeight > shortHeight + 60,
+        'Surface grows when cell content gets taller'
+      )
+      check(metrics().overflow <= 1, 'Taller asynchronous cell content stays fully visible')
+
+      state.hasSelection = false
+      await settle()
+      check(
+        metrics().overflow <= 1,
+        'Measurement reconnects after Element Plus recreates the table'
+      )
+
+      state.logoHeight = 20
+      state.count = 5
+      await settle()
+      check(metrics().bodyHeight === 200, 'Account-style rows keep their 40px height')
+      check(metrics().overflow <= 1, 'Five normal rows fit without vertical scrolling')
+
+      state.logoHeight = 40
+      state.count = 15
+      await settle()
+      check(metrics().overflow > 0, 'Long lists scroll inside the table body')
+      check(metrics().surfaceHeight <= 600, 'Long lists stay inside the available page height')
+      const pagination = fixture.querySelector('.el-pagination').getBoundingClientRect()
+      check(
+        pagination.bottom <= fixture.getBoundingClientRect().bottom + 1,
+        'Pagination stays visible'
+      )
+
+      fixture.style.height = '250px'
+      state.count = 2
+      state.logoHeight = 80
+      await settle()
+      check(
+        metrics().overflow > 0 && metrics().surfaceHeight <= 250,
+        'Small viewports retain body scrolling'
+      )
+
+      fixture.style.height = '600px'
+      state.logoHeight = 40
+      state.count = 0
+      await settle()
+      const emptyWrap = fixture.querySelector('.el-table__body-wrapper .el-scrollbar__wrap')
+      check(
+        emptyWrap.scrollHeight <= emptyWrap.clientHeight + 1,
+        'Empty tables do not gain vertical overflow'
+      )
+
+      state.count = 2
+      state.hasPagination = false
+      await settle()
+      check(metrics().overflow <= 1, 'Unpaginated short lists grow to their rows')
+      table.tableLoading = true
+      table.data = []
+      await settle()
+      check(Number.isFinite(metrics().surfaceHeight), 'Loading/empty state retains a finite height')
+      state.logoHeight = 40
+      state.hasPagination = true
+      state.hasSelection = true
+      await nextTick()
+      table.getList()
+      await settle()
+      check(
+        metrics().overflow <= 1,
+        'Returning from empty/loading state restores the application rows'
+      )
+      results.textContent += '\nALL CHECKS PASSED'
+    } catch (error) {
+      results.textContent += `\nFAIL: ${error.stack}`
+      throw error
+    }
+  </script>
+</html>

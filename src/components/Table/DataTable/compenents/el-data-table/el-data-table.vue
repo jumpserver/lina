@@ -6,6 +6,7 @@
     </template>
     <template v-else>
       <div
+        ref="tableSurface"
         :class="[
           'el-data-table__surface',
           { 'is-paginated': hasPagination, 'is-empty': !tableLoading && data.length === 0 }
@@ -193,6 +194,7 @@ import * as queryUtil from './utils/query'
 import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import getSelectStrategy from './utils/select-strategy'
 import { isColumnDraggable } from '@/components/Table/AutoDataTable/column-order'
+import { useTableContentHeight } from './useTableContentHeight'
 
 const defaultFirstPage = 1
 const noPaginationDataPath = 'payload'
@@ -205,6 +207,9 @@ export default {
     ElDataTableColumn
   },
   inheritAttrs: false,
+  setup(props) {
+    return useTableContentHeight(() => props.fillHeight)
+  },
 
   props: {
     /**
@@ -806,14 +811,19 @@ export default {
       if (!this.fillHeight) {
         return undefined
       }
-      // Element Plus renders a 40px header plus its 1px bottom separator.
-      const headerHeight = 41
+      // Use intrinsic rendered heights so logos, wrapped cells and expanded
+      // rows can grow. Estimates only cover the initial/loading/empty render.
+      const headerHeight = this.contentHeights.header || 41
       const rowHeight = 40
       const emptyBodyHeight = 96
       const loadingRows = this.tableLoading && !this.data.length && this.hasPagination
       const visibleRows = loadingRows ? this.size : this.data.length
-      const rowsHeight = visibleRows ? visibleRows * rowHeight : emptyBodyHeight
-      const paginationHeight = this.hasPagination ? 44 : 0
+      const rowsHeight = visibleRows
+        ? loadingRows
+          ? visibleRows * rowHeight
+          : this.contentHeights.body || visibleRows * rowHeight
+        : emptyBodyHeight
+      const paginationHeight = this.hasPagination ? this.contentHeights.pagination || 44 : 0
       const surfaceBorderHeight = 2 // 1px top and bottom borders.
       const surfaceContentHeight =
         headerHeight + rowsHeight + paginationHeight + surfaceBorderHeight
