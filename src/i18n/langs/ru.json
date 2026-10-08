@@ -1455,7 +1455,7 @@
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "Примечание: провайдер аутентификации (рекомендуемый размер изображения: 64px*64px)",
   "OAuth2UserGroupAttribute": "Атрибут групп пользователей",
-  "OAuth2UserGroupAttributeTip": "Укажите имя поля OAuth2 UserInfo, содержащего группы пользователей. Оставьте пустым, чтобы не обрабатывать группы.",
+  "OAuth2UserGroupAttributeTip": "Укажите имя поля OAuth2 UserInfo с группами пользователей, например groups, department или memberOf. Каждое значение поля синхронизируется с группой OAuth2_<значение>. Оставьте поле пустым, чтобы не обрабатывать группы.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "Соответствующие ресурсы не найдены или были удалены.",
   "UserNotFoundOrDeletedMsg": "Пользователь не существует или был удалён.",

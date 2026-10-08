@@ -1376,7 +1376,7 @@
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "提示：認證服務提供商（建議圖片大小為: 64px*64px）",
   "OAuth2UserGroupAttribute": "使用者群組屬性",
-  "OAuth2UserGroupAttributeTip": "填寫 OAuth2 UserInfo 中表示使用者群組的欄位名稱；留空則不處理使用者群組。",
+  "OAuth2UserGroupAttributeTip": "填寫 OAuth2 UserInfo 中表示使用者群組的欄位名稱，例如 groups、department、memberOf；欄位值將同步為 OAuth2_<值> 使用者群組，留空則不處理使用者群組。",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "沒有找到對應資源或者已被刪除",
   "UserNotFoundOrDeletedMsg": "用戶不存在或已刪除",
