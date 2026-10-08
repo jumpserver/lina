@@ -36,10 +36,7 @@ export default {
           'auto_config',
           'gathered_info',
           'deploy_options',
-          'tinker_target_version',
-          'tinker_min_version',
-          'tinker_version_status',
-          'tinker_upgrade_message'
+          'tinker_version_status'
         ],
         columnsShow: {
           min: ['name', 'actions'],
