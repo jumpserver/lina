@@ -139,7 +139,7 @@
   "AppletHelpText": "Trong quá trình tải lên, nếu ứng dụng không tồn tại, hãy tạo ứng dụng đó; nếu đã tồn tại, hãy tiến hành cập nhật ứng dụng.",
   "AppletHostCreate": "Thêm máy phát ứng dụng từ xa",
   "AppletHostDetail": "Chi tiết máy phát ứng dụng từ xa",
-  "AppletHostSelectHelpMessage": "Khi kết nối tài sản, máy phát hành ứng dụng được chọn ngẫu nhiên (ưu tiên máy đã dùng gần nhất). Để cố định máy phát hành cho một tài sản, hãy gán một trong các nhãn: <Máy phát hành: tên máy phát hành>, <AppletHost: tên máy phát hành>, <Chỉ máy phát hành: tên máy phát hành> hoặc <AppletHostOnly: tên máy phát hành>.<br>Khi chọn tài khoản, hệ thống sẽ dùng <b>tài khoản cùng tên hoặc tài khoản chuyên dụng (bắt đầu bằng js)</b> trong các trường hợp phù hợp; nếu không sẽ dùng tài khoản dùng chung (bắt đầu bằng jms).",
+  "AppletHostSelectHelpMessage": "Khi kết nối đến tài sản, hệ thống tự động chọn máy chủ phát hành ứng dụng khả dụng. Nhãn tài sản “AppletHost:tên máy chủ” ưu tiên máy chủ được chỉ định; “AppletHostOnly:tên máy chủ” chỉ cho phép sử dụng máy chủ đó.<br>Tinker tự động quản lý tài khoản đăng nhập và cấp tài khoản riêng cho các kết nối đồng thời. Nếu phiên bản cần được cập nhật, hãy triển khai lại máy chủ phát hành.",
   "AppletHostUpdate": "Cập nhật công cụ phát hành từ xa",
   "AppletHostZoneHelpText": "Miền ở đây thuộc về tổ chức System",
   "AppletHosts": "Ứng dụng phát hành",
