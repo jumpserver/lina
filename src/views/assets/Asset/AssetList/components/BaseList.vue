@@ -260,6 +260,8 @@ export default {
     },
     async updateOrCloneAsset(row, action) {
       this.createDrawer = this.drawer[row.category.value]
+      // 等待所选类别的抽屉组件传递到 ListTable，再调用其打开方法。
+      await this.$nextTick()
 
       const query = {
         platform: row.platform.id,
@@ -274,7 +276,7 @@ export default {
 
       this.$refs.ListTable.onUpdate({ row, query })
     },
-    createAsset(platform) {
+    async createAsset(platform) {
       this.showPlatform = false
       this.createDrawer = this.drawer[platform.category.value]
       // 必须优先用浏览器 URL 中的 node_id（树点击实时写入），不能先读 $context/$route.query.node：
@@ -288,6 +290,7 @@ export default {
         node_id: nodeId
       }
       this.$log.debug('createProps', createProps)
+      await this.$nextTick()
       this.$refs.ListTable.onCreate({ query: createProps })
     },
     handleAssetBulkUpdate() {

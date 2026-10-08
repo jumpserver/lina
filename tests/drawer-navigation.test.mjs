@@ -206,6 +206,69 @@ const Local = {
   methods: { reloadTable() {}, handleDetailDeleteSuccess() {}, handleDrawerSubmitSuccess() {} }
 }
 
+for (const action of ['create', 'update', 'clone']) {
+  test(`asset ${action} waits for the selected category drawer prop`, async () => {
+    const BaseList = await load('views/assets/Asset/AssetList/components/BaseList.vue', {
+      ListTable: {},
+      AssetBulkUpdateDialog: {},
+      PlatformDialog: {},
+      GatewayDialog: {},
+      AccountDiscoverDialog: {},
+      AccountCreateUpdate: {},
+      mapState: () => ({}),
+      getSelectedAssetNodeId: () => 'selected-node'
+    })
+    const editors = {
+      host: markRaw({ render: () => null }),
+      database: markRaw({ render: () => null })
+    }
+    const AssetList = {
+      inheritAttrs: false,
+      data() {
+        return { createDrawer: '', drawer: editors, showPlatform: true }
+      },
+      methods: {
+        createAsset: BaseList.methods.createAsset,
+        updateOrCloneAsset: BaseList.methods.updateOrCloneAsset
+      },
+      render() {
+        return h(Local, { ref: 'ListTable', createDrawer: this.createDrawer })
+      }
+    }
+    const f = await fixture('/assets?tab=all', AssetList)
+    try {
+      for (const category of ['host', 'database']) {
+        const platform = {
+          id: `${category}-platform`,
+          category: { value: category },
+          type: { value: category }
+        }
+        if (action === 'create') {
+          await f.vm.createAsset(platform)
+        } else {
+          await f.vm.updateOrCloneAsset({ ...platform, id: `${category}-asset`, platform }, action)
+        }
+        await flush()
+        const drawer = f.vm.$refs.ListTable
+        assert.equal(drawer.drawerVisible, true)
+        assert.equal(toRaw(drawer.drawerComponent), editors[category])
+        assert.equal(drawer.drawerContext.action, action)
+        assert.equal(drawer.drawerContext.query.platform, platform.id)
+        assert.equal(drawer.drawerContext.query.category, category)
+        if (action === 'create') {
+          assert.equal(drawer.drawerContext.query.node_id, 'selected-node')
+        } else {
+          assert.equal(drawer.drawerContext.id, `${category}-asset`)
+        }
+        drawer.handleDrawerRequestClose()
+        await flush()
+      }
+    } finally {
+      f.app.unmount()
+    }
+  })
+}
+
 test('first close cleans stack and route; reopening the same editor reads the new object', async () => {
   const f = await fixture('/assets?tab=all', Local)
   f.vm.onUpdate({ row: { id: 'A' } })
@@ -502,7 +565,10 @@ test('detail and form pages use their entry context for presentation on first re
     return h('div', { 'data-mode': this.presentationMode, 'data-title': this.detailTitle })
   }
   FormPage.render = function () {
-    return h('div', { 'data-mode': this.presentationMode, 'data-hide-heading': this.pageAttrs.hideHeading })
+    return h('div', {
+      'data-mode': this.presentationMode,
+      'data-hide-heading': this.pageAttrs.hideHeading
+    })
   }
   const requests = []
   let overlay
