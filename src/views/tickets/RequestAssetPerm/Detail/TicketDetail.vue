@@ -63,7 +63,6 @@
           <ExpireSoonNoticeMinutes
             v-model="requestForm.apply_expire_soon_notice_minutes"
             :date-expired="requestForm.apply_date_expired"
-            :default-minutes="defaultExpireSoonNoticeMinutes"
           />
         </el-form-item>
         <el-form-item :label="$tc('Action')">
@@ -81,10 +80,7 @@ import Select2 from '@/components/Form/FormFields/Select2'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireNoticePolicy.vue'
 import ExpireSoonNoticeMinutes from '@/views/perms/AssetPermission/components/ExpireSoonNoticeMinutes.vue'
-import {
-  getDefaultExpireSoonNoticeMinutes,
-  isPositiveInteger
-} from '@/views/perms/AssetPermission/expireSoonNotice'
+import { isPositiveInteger } from '@/views/perms/AssetPermission/expireSoonNotice'
 import { AccountLabelMapper } from '@/views/perms/const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import { STATUS_MAP, treeNodes } from '../../const'
@@ -114,9 +110,6 @@ export default {
   data() {
     return {
       treeNodes,
-      defaultExpireSoonNoticeMinutes: getDefaultExpireSoonNoticeMinutes(
-        this.$store.getters.publicSettings
-      ),
       statusMap:
         this.object.status.value === 'open'
           ? STATUS_MAP['pending']

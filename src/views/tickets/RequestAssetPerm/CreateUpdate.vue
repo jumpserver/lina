@@ -16,7 +16,6 @@ import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFo
 import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireNoticePolicy.vue'
 import ExpireSoonNoticeMinutes from '@/views/perms/AssetPermission/components/ExpireSoonNoticeMinutes.vue'
 import {
-  getDefaultExpireSoonNoticeMinutes,
   hydrateExpireNoticeFormValue,
   isExpireSoonNoticeAtFuture,
   isPositiveInteger,
@@ -37,9 +36,6 @@ export default {
     const dividend = unit === 'hour' ? 24 : 1
     const date_expired = getDaysFuture(time / dividend, new Date()).toISOString()
     const date_start = now.toISOString()
-    const defaultExpireSoonNoticeMinutes = getDefaultExpireSoonNoticeMinutes(
-      store.getters.publicSettings
-    )
     return {
       // 工单创建 隐藏提示信息中的跳转连接
       hasDetailInMsg: false,
@@ -226,7 +222,7 @@ export default {
         }
       },
       afterGetFormValue(value) {
-        return hydrateExpireNoticeFormValue(value, 'apply_', defaultExpireSoonNoticeMinutes)
+        return hydrateExpireNoticeFormValue(value, 'apply_')
       },
       cleanFormValue(value) {
         const apply_actions = value['apply_actions'] || []
