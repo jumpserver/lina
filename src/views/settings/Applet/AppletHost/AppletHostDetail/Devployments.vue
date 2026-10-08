@@ -2,27 +2,25 @@
   <TwoCol>
     <ListTable ref="table" :header-actions="headerConfig" :table-config="config" />
     <template #right>
-      <TinkerDeploymentActions
-        v-if="object.id"
-        :key="object.id"
-        :host-id="object.id"
-        @changed="$refs.table?.reloadTable()"
+      <QuickActions
+        v-if="$hasPerm(['terminal.view_applethost', 'terminal.add_applethostdeployment'])"
+        :actions="quickActions"
+        type="primary"
       />
     </template>
   </TwoCol>
 </template>
 
 <script lang="jsx">
-import { ListTable } from '@/components'
+import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms/index'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import TinkerDeploymentActions from './TinkerDeploymentActions.vue'
 export default {
   name: 'Developments',
   components: {
     TwoCol,
     ListTable,
-    TinkerDeploymentActions
+    QuickActions
   },
   props: {
     object: {
@@ -82,7 +80,46 @@ export default {
             }
           }
         }
-      }
+      },
+      quickActions: [
+        {
+          title: this.$t('HostDeployment'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Deploy'),
+            loading: false
+          },
+          callbacks: {
+            click: async (_, action) => {
+              const host = this.object.id
+              if (
+                !host ||
+                action.attrs.loading ||
+                !this.$hasPerm(['terminal.view_applethost', 'terminal.add_applethostdeployment'])
+              ) {
+                return
+              }
+              action.attrs.loading = true
+              try {
+                await this.$confirm(this.$t('AppletHostDeployConfirm'), this.$t('Deploy'), {
+                  type: 'warning',
+                  confirmButtonText: this.$t('Deploy'),
+                  cancelButtonText: this.$t('Cancel')
+                })
+                const result = await this.$axios.post('/api/v1/terminal/applet-host-deployments/', {
+                  host
+                })
+                this.$refs.table?.reloadTable()
+                openTaskPage(result.task)
+              } catch {
+                // Cancellation needs no action; request errors are shown by the request client.
+              } finally {
+                action.attrs.loading = false
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }
