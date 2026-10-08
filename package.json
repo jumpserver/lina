@@ -112,9 +112,11 @@
     ]
   },
   "browserslist": [
-    "> 1%",
-    "last 4 versions",
-    "not ie <= 11"
+    "Chrome >= 97",
+    "Edge >= 97",
+    "Firefox >= 96",
+    "Safari >= 15",
+    "iOS >= 15"
   ],
   "engines": {
     "node": ">=24 <25",

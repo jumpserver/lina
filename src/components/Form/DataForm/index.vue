@@ -497,7 +497,7 @@ export default {
  * 设置页即使运行在 desktop 设备上，也可能因抽屉或分栏被压缩。此处按表单自身宽度
  * 切换布局，避免百分比 label 被挤成逐字换行，并让帮助文案跟随控件完整展示。
  */
-@container data-form (max-width: 640px) {
+@mixin compact-data-form {
   .form-fields.el-form {
     :deep(.el-form-item) {
       flex-direction: column;
@@ -543,5 +543,14 @@ export default {
       padding-inline-start: 0;
     }
   }
+}
+
+@container data-form (max-width: 640px) {
+  @include compact-data-form;
+}
+
+// Keep fields usable in narrow drawers when container queries are unavailable.
+@supports not (container-type: inline-size) {
+  @include compact-data-form;
 }
 </style>

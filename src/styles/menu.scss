@@ -169,6 +169,9 @@ $single-menu-height: 38px;
               z-index: 1;
               width: 1px;
               background-color: color-mix(in srgb, var(--menu-text) 25%, transparent);
+              @supports not (color: color-mix(in srgb, black, white)) {
+                background-color: var(--menu-border, var(--el-border-color));
+              }
               pointer-events: none;
             }
 

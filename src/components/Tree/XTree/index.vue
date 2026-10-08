@@ -3852,10 +3852,16 @@ export default {
 
   &:hover {
     scrollbar-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent) transparent;
+    @supports not (color: color-mix(in srgb, black, white)) {
+      scrollbar-color: var(--el-text-color-placeholder) transparent;
+    }
   }
 
   &:hover::-webkit-scrollbar-thumb {
     background-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent);
+    @supports not (color: color-mix(in srgb, black, white)) {
+      background-color: var(--el-text-color-placeholder);
+    }
   }
 }
 
@@ -3908,10 +3914,16 @@ export default {
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list:hover) {
   scrollbar-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent) transparent;
+  @supports not (color: color-mix(in srgb, black, white)) {
+    scrollbar-color: var(--el-text-color-placeholder) transparent;
+  }
 }
 
 .x-tree__body.is-virtual :deep(.el-tree-virtual-list:hover)::-webkit-scrollbar-thumb {
   background-color: color-mix(in srgb, var(--el-text-color-secondary) 45%, transparent);
+  @supports not (color: color-mix(in srgb, black, white)) {
+    background-color: var(--el-text-color-placeholder);
+  }
 }
 
 .x-tree__body.is-virtual :deep(.el-virtual-scrollbar) {
@@ -3941,6 +3953,9 @@ export default {
 .x-tree__body :deep(.el-tree-node__content:hover) {
   background: var(--el-fill-color-light);
   background: color-mix(in srgb, var(--el-text-color-primary) 8%, transparent);
+  @supports not (color: color-mix(in srgb, black, white)) {
+    background: var(--el-fill-color-light);
+  }
 }
 
 .x-tree__body :deep(.el-tree-node.is-current > .el-tree-node__content) {
@@ -3951,6 +3966,9 @@ export default {
 .x-tree__body :deep(.el-tree-node:focus-visible > .el-tree-node__content) {
   box-shadow: inset 0 0 0 2px var(--el-border-color);
   box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--el-text-color-primary) 24%, transparent);
+  @supports not (color: color-mix(in srgb, black, white)) {
+    box-shadow: inset 0 0 0 2px var(--el-border-color);
+  }
 }
 
 .x-tree__body

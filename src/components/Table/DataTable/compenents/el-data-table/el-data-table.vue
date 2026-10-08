@@ -807,6 +807,9 @@ export default {
     }
   },
   computed: {
+    selectedRowIds() {
+      return new Set(this.selected.map((row) => row[this.id]))
+    },
     tableSurfaceStyle() {
       if (!this.fillHeight) {
         return undefined
@@ -1077,6 +1080,12 @@ export default {
       // 所以这里不排除 formatter，而是在 el-data-table-column 中处理
       const { hideHeaderLabel, pinOriginalFixed, pinState, ...columnProps } = col
       const props = { align: this.columnsAlign, ...columnProps }
+      // Put the drag marker on the header itself; older browsers cannot match :has().
+      if (isColumnDraggable(col)) {
+        props.labelClassName = [props.labelClassName, 'is-column-draggable-header']
+          .filter(Boolean)
+          .join(' ')
+      }
       if (col.type === 'index' && !props.index) {
         props.index = (index) => (this.page - 1) * this.size + index + 1
       }
@@ -1507,6 +1516,10 @@ export default {
       let rcn = this.tableAttrs.rowClassName || this.tableAttrs['row-class-name'] || ''
       if (typeof rcn === 'function') rcn = rcn(...args)
       if (this.isTree) rcn += ' ' + this.showRow(...args)
+      const row = args[0].row
+      const isSelected =
+        row[this.id] == null ? this.selected.includes(row) : this.selectedRowIds.has(row[this.id])
+      if (isSelected) rcn += ' selected-row'
       return rcn
     },
     showRow({ row }) {
