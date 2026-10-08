@@ -1384,7 +1384,7 @@
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "ヒント：認証サービスプロバイダ（推奨画像サイズ: 64px*64px）",
   "OAuth2UserGroupAttribute": "ユーザーグループ属性",
-  "OAuth2UserGroupAttributeTip": "OAuth2 UserInfo でユーザーグループを表すフィールド名を入力します。空欄の場合、ユーザーグループは処理されません。",
+  "OAuth2UserGroupAttributeTip": "OAuth2 UserInfo でユーザーグループを表すフィールド名（groups、department、memberOf など）を入力します。フィールドの値は OAuth2_<値> グループとして同期されます。空欄の場合はユーザーグループを処理しません。",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "該当するリソースが見つからないか削除されています",
   "UserNotFoundOrDeletedMsg": "ユーザーが存在しないか、削除されています。",

@@ -1162,7 +1162,7 @@
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "提示：认证服务提供商（建议图片大小为: 64px*64px）",
   "OAuth2UserGroupAttribute": "用户组属性",
-  "OAuth2UserGroupAttributeTip": "填写 OAuth2 UserInfo 中表示用户组的字段名；留空则不处理用户组。",
+  "OAuth2UserGroupAttributeTip": "填写 OAuth2 UserInfo 中表示用户组的字段名，例如 groups、department、memberOf；字段值将同步为 OAuth2_<值> 用户组，留空则不处理用户组。",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除",
   "UserNotFoundOrDeletedMsg": "用户不存在或已删除",

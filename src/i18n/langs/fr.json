@@ -1473,7 +1473,7 @@
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "Remarque : fournisseur d'authentification (taille d'image recommandée : 64px*64px)",
   "OAuth2UserGroupAttribute": "Attribut des groupes d’utilisateurs",
-  "OAuth2UserGroupAttributeTip": "Saisissez le nom du champ UserInfo OAuth2 contenant les groupes d’utilisateurs. Laissez ce champ vide pour ne pas traiter les groupes.",
+  "OAuth2UserGroupAttributeTip": "Saisissez le nom du champ OAuth2 UserInfo contenant les groupes d’utilisateurs, par exemple groups, department ou memberOf. Chaque valeur est synchronisée dans un groupe OAuth2_<valeur>. Laissez ce champ vide pour ne pas traiter les groupes.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "Aucune ressource correspondante trouvée ou elle a été supprimée.",
   "UserNotFoundOrDeletedMsg": "L’utilisateur n’existe pas ou a été supprimé.",

@@ -1174,7 +1174,7 @@
   "OAuth2": "OAuth2",
   "OAuth2LogoTip": "Note: authentication provider (recommended image size: 64px*64px)",
   "OAuth2UserGroupAttribute": "User group attribute",
-  "OAuth2UserGroupAttributeTip": "Enter the field name in OAuth2 UserInfo that contains user groups. Leave blank to skip user group synchronization.",
+  "OAuth2UserGroupAttributeTip": "Enter the OAuth2 UserInfo field name for user groups, such as groups, department, or memberOf. Each field value is synchronized to an OAuth2_<value> user group. Leave blank to skip user groups.",
   "OIDC": "OIDC",
   "ObjectNotFoundOrDeletedMsg": "No corresponding resources found or it has been deleted.",
   "UserNotFoundOrDeletedMsg": "The user does not exist or has been deleted.",
