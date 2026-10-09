@@ -2262,7 +2262,7 @@
   "ZStack": "ZStack",
   "Zone": "도메인",
   "ZoneCreate": "도메인 생성",
-  "ZoneEnabled": "딩딩 인증 설정",
+  "ZoneEnabled": "게이트웨이 활성화",
   "ZoneHelpMessage": "도메인은 자산이 위치한 곳으로, 데이터 센터, 공용 클라우드 또는 VPC가 될 수 있습니다. 도메인 내에 게이트웨이를 설정할 수 있으며, 네트워크가 직접 연결되지 않을 때 게이트웨이를 사용하여 자산에 로그인할 수 있습니다.",
   "ZoneList": "도메인 목록",
   "ZoneUpdate": "도메인 업데이트",
