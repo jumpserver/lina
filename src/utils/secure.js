@@ -1,5 +1,3 @@
-import { encryptPassword } from './session-encrypt'
-
 /**
  * @param {string} path
  * @returns {Boolean}
@@ -42,5 +40,3 @@ const options = {
 }
 const filter = new xss.FilterXSS(options)
 export default filter
-
-window.encryptPassword = encryptPassword
