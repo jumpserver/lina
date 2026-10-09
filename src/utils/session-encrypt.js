@@ -37,15 +37,6 @@ function rsaEncrypt(text, pubKey) {
   return jsEncrypt.encrypt(text)
 }
 
-function rsaDecrypt(cipher, pkey) {
-  const jsEncrypt = new JSEncrypt()
-  jsEncrypt.setPrivateKey(pkey)
-  return jsEncrypt.decrypt(cipher)
-}
-
-window.rsaEncrypt = rsaEncrypt
-window.rsaDecrypt = rsaDecrypt
-
 function hexToBytes(hex) {
   if (!hex) return new Uint8Array([])
   hex = hex.toString().trim().toLowerCase()
