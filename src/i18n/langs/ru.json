@@ -1240,7 +1240,7 @@
   "LicenseReachedAssetAmountLimit": "Количество активов превышает лимит, установленный лицензией",
   "LicenseWillBe": "Лицензия истекает через",
   "LicenseWillExpire": "Срок действия лицензии скоро истечёт",
-  "LinkedDomains": "Связанные домены",
+  "LinkedDomains": "Связанные зоны",
   "ListPreference": "Настройка списка",
   "LoadFailed": "Ошибка загрузки",
   "LoadTemplate": "Загрузить из шаблона",
