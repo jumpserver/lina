@@ -17,8 +17,15 @@ const component = new Function(
 
 function documentationView() {
   const requests = []
+  const route = { query: {} }
   const view = {
-    ...component.data(),
+    ...component.data.call({ $route: route }),
+    $route: route,
+    $router: {
+      replace: ({ query }) => {
+        route.query = query
+      }
+    },
     $refs: {},
     $axios: {
       get(url, options) {

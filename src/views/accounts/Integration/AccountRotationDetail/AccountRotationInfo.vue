@@ -32,6 +32,7 @@ import { openTaskPage } from '@/utils/jms'
 import {
   advanceApplicationCredentialRotation,
   cancelApplicationCredentialRotation,
+  forceStopApplicationCredentialRotation,
   getApplicationCredential,
   executeCredentialChange,
   getCredentialRotationStatus,
@@ -410,6 +411,19 @@ export default {
           callbacks: { click: this.cancelRotation }
         },
         {
+          title: this.$t('ForceStopRotation'),
+          has:
+            this.object.mode === 'alternating_rotation' &&
+            this.object.status === 'waiting_revert' &&
+            this.$hasPerm('accounts.change_applicationcredential'),
+          attrs: {
+            type: 'danger',
+            label: this.$t('ForceStopRotation'),
+            disabled: this.actionLoading
+          },
+          callbacks: { click: this.forceStopRotation }
+        },
+        {
           title: this.$t('Status'),
           attrs: { label: this.$t('Refresh'), disabled: this.actionLoading },
           callbacks: { click: this.refresh }
@@ -560,6 +574,33 @@ export default {
       try {
         await retryCredentialChange(this.object.id, this.object.rotation.execution_id, value.trim())
         await this.refresh()
+      } finally {
+        this.actionLoading = false
+      }
+    },
+    async forceStopRotation() {
+      let reason
+      try {
+        const { value } = await this.$prompt(
+          this.$t('ForceStopRotationConfirm'),
+          this.$t('ForceStopRotation'),
+          {
+            type: 'warning',
+            inputValidator: (value) => !!value?.trim() && value.trim().length <= 512,
+            inputErrorMessage: this.$t('ForceStopRotationReason'),
+            confirmButtonClass: 'el-button--danger'
+          }
+        )
+        reason = value.trim()
+      } catch {
+        return
+      }
+      this.actionLoading = true
+      try {
+        const updated = await forceStopApplicationCredentialRotation(this.object.id, reason)
+        this.$emit('updated', updated)
+        await this.loadRotationStatus()
+        this.$message.success(this.$t('UpdateSuccessMsg'))
       } finally {
         this.actionLoading = false
       }

@@ -73,7 +73,7 @@ export default {
     exampleKey() {
       if (!this.subscription) return this.object.key
       const accountId = this.object.subscription_accounts?.[0]?.id || '<account-id>'
-      return `${this.object.key}:${accountId}`
+      return `account:${accountId}`
     },
     policyEvents() {
       const suffix = this.subscription ? 'Subscription' : 'Rotation'
@@ -140,7 +140,8 @@ export default {
             'PolicyDocsRotationCompletedTrigger',
             'PolicyDocsRotationCompletedAction'
           ],
-          ['rotation.failed', 'PolicyDocsRotationFailedTrigger', 'PolicyDocsChangeFailedAction']
+          ['rotation.failed', 'PolicyDocsRotationFailedTrigger', 'PolicyDocsChangeFailedAction'],
+          ['rotation.force_stopped', 'ForceStopRotation', 'PolicyDocsForceStop']
         )
       }
       return events
@@ -158,6 +159,7 @@ export default {
         credential_mode: this.object.mode,
         credential_key: this.exampleKey,
         revision: 1,
+        account_revision: 1,
         account_id: this.subscription
           ? this.object.subscription_accounts?.[0]?.id || '<account-id>'
           : this.object.active_account?.id || '<active-account-id>',
@@ -165,9 +167,11 @@ export default {
         result: 'success'
       }
       const snapshotItem = {
+        event_id: exampleEvent.event_id,
         key: this.exampleKey,
         credential_mode: this.object.mode,
-        revision: 1
+        revision: 1,
+        account_revision: 1
       }
       snapshotItem.account_id = exampleEvent.account_id
       if (!this.subscription) {
@@ -180,33 +184,25 @@ export default {
         ['event_id', 'PolicyDocsFieldEventId'],
         ['event / occurred_at', 'PolicyDocsFieldEvent'],
         ['credential_mode', 'PolicyDocsFieldMode'],
-        [
-          'credential_key',
-          this.subscription ? 'PolicyDocsFieldKeySubscription' : 'PolicyDocsFieldKeyRotation'
-        ],
-        [
-          'revision',
-          this.subscription
-            ? 'PolicyDocsFieldRevisionSubscription'
-            : 'PolicyDocsFieldRevisionRotation'
-        ],
+        ['credential_key / revision', 'PolicyDocsLegacyMetadata'],
         ['account_id', 'PolicyDocsFieldAccount'],
+        ['account_revision', 'PolicyDocsAccountRevision'],
         ['operation_id / result', 'PolicyDocsFieldOperation']
       ]
-      let sdkExample =
-        `from jms_pam.credential.v1 import models\n\n\n` +
-        `def on_credential_updated(client, key):\n` +
-        `    response = client.GetCredential(models.GetCredentialRequest(Key=key))\n` +
-        `    # ${this.$t('PolicyDocsApplyComment')}\n` +
-        `    apply_credential(response)\n`
-      if (!this.subscription) {
-        sdkExample +=
-          `    client.ConfirmCredential(models.ConfirmCredentialRequest(\n` +
-          `        Key=response.Key, Revision=response.Revision,\n` +
-          `        AccountId=response.Account.Id,\n` +
-          `    ))\n`
-      }
-      sdkExample += `\n\non_credential_updated(client, ${JSON.stringify(this.exampleKey)})`
+      const sdkExample =
+        `def on_credential_updated(client, event):\n` +
+        `    try:\n` +
+        `        account = client.get_account(\n` +
+        `            account_id=event["account_id"], allow_local_fallback=False,\n` +
+        `        )\n` +
+        `        if account.revision != event["account_revision"]:\n` +
+        `            raise RuntimeError("Event account version is superseded")\n` +
+        `        # ${this.$t('PolicyDocsApplyComment')}\n` +
+        `        apply_account(account)\n` +
+        `    except Exception:\n` +
+        `        client.confirm_event(event_id=event["event_id"], status="failed", error_code="application_failed")\n` +
+        `        raise\n` +
+        `    client.confirm_event(event_id=event["event_id"])\n`
 
       const lifecycle = [
         ...(this.subscription
@@ -244,21 +240,15 @@ export default {
       const integration = [
         heading('PolicyDocsSDK'),
         paragraph('PolicyDocsSDKSteps'),
-        paragraph(this.subscription ? 'PolicyDocsSDKSubscription' : 'PolicyDocsSDKRotation'),
         paragraph('PolicyDocsSDKExample'),
         codeBlock('python', sdkExample),
         heading('PolicyDocsAgent'),
         paragraph('PolicyDocsAgentDescription'),
-        paragraph(this.subscription ? 'PolicyDocsAgentSubscription' : 'PolicyDocsAgentRotation'),
-        ...(!this.subscription
-          ? [
-              codeBlock(
-                'http',
-                `POST /v1/confirm\nContent-Type: application/json\n\n${JSON.stringify({ key: this.object.key, revision: 1 })}`
-              ),
-              paragraph('PolicyDocsAgentConfirmExample')
-            ]
-          : [])
+        paragraph('PolicyDocsAgentEventResult'),
+        codeBlock(
+          'http',
+          `POST /v1/confirm\nContent-Type: application/json\n\n${JSON.stringify({ event_id: exampleEvent.event_id })}`
+        )
       ].join('')
       return [
         { id: 'lifecycle', title: 'PolicyDocsLifecycle', content: lifecycle },
@@ -267,7 +257,9 @@ export default {
         {
           id: 'recovery',
           title: 'PolicyDocsRecoveryGuide',
-          content: paragraph('PolicyDocsRecoveryDescription')
+          content:
+            paragraph('PolicyDocsRecoveryDescription') +
+            (this.subscription ? '' : paragraph('PolicyDocsForceStop'))
         }
       ]
     }

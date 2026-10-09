@@ -14,6 +14,7 @@ export const eventLabels = {
   'rotation.waiting_for_application': 'RotationEventWaitingForSwitch',
   'rotation.source.waiting': 'RotationSourceWaitingEvent',
   'rotation.source.ready': 'RotationSourceReadyEvent',
+  'rotation.force_stopped': 'ForceStopRotation',
   'rotation.completed': 'AppAuditRotationCompleted',
   'rotation.failed': 'RotationEventFailed',
   'credential.change.started': 'AppAuditSecretChangeStarted',
