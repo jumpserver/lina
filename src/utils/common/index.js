@@ -555,28 +555,46 @@ export function randomString(length, includeSymbols = false) {
     allCharacters += symbols
   }
 
+  const randomIndex = max => {
+    const crypto = window.crypto || window.msCrypto
+    if (!crypto || !crypto.getRandomValues) {
+      throw new Error('Secure random number generation is unavailable')
+    }
+    const range = 0x100000000
+    const limit = range - (range % max)
+    const sample = new Uint32Array(1)
+    do {
+      crypto.getRandomValues(sample)
+    } while (sample[0] >= limit)
+    return sample[0] % max
+  }
+
   let result = ''
 
   // 如果包含特殊字符，确保至少包含一个大写字母、一个小写字母、一个数字、一个符号
   if (includeSymbols) {
-    result += upperCase.charAt(Math.floor(Math.random() * upperCase.length))
-    result += lowerCase.charAt(Math.floor(Math.random() * lowerCase.length))
-    result += numbers.charAt(Math.floor(Math.random() * numbers.length))
-    result += symbols.charAt(Math.floor(Math.random() * symbols.length))
+    result += upperCase.charAt(randomIndex(upperCase.length))
+    result += lowerCase.charAt(randomIndex(lowerCase.length))
+    result += numbers.charAt(randomIndex(numbers.length))
+    result += symbols.charAt(randomIndex(symbols.length))
   }
 
   const allCharactersLength = allCharacters.length
 
   // 填充剩余的字符
   for (let i = result.length; i < length; i++) {
-    result += allCharacters.charAt(Math.floor(Math.random() * allCharactersLength))
+    result += allCharacters.charAt(randomIndex(allCharactersLength))
   }
 
   // 随机打乱结果
-  return result
-    .split('')
-    .sort(() => 0.5 - Math.random())
-    .join('')
+  const characters = result.split('')
+  for (let i = characters.length - 1; i > 0; i--) {
+    const j = randomIndex(i + 1)
+    const temporary = characters[i]
+    characters[i] = characters[j]
+    characters[j] = temporary
+  }
+  return characters.join('')
 }
 
 export function createWsUrl(path) {

@@ -72,7 +72,6 @@
 
 <script>
 import ElFormRender from './components/el-form-renderer'
-import { randomString } from '@/utils/common/index'
 
 const scrollToError = (
   el,
@@ -155,7 +154,7 @@ export default {
   data() {
     return {
       basicForm: this.form,
-      id: randomString(16),
+      id: `data_form_${this._uid}_`,
       iSubmitBtnText: this.submitBtnText
     }
   },
