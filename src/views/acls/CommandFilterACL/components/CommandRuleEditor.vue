@@ -70,6 +70,7 @@
                 :placeholder="$t('CommandRuleAIMatchExamplesPlaceholder')"
                 :rows="3"
                 resize="vertical"
+                show-word-limit
                 type="textarea"
               />
             </el-form-item>
@@ -81,6 +82,7 @@
                 :placeholder="$t('CommandRuleAIExcludeExamplesPlaceholder')"
                 :rows="3"
                 resize="vertical"
+                show-word-limit
                 type="textarea"
               />
             </el-form-item>
@@ -206,7 +208,8 @@ export default {
   setup() {
     const formRendererContext = inject(FORM_RENDERER_KEY, {
       updateForm: null,
-      getFormValue: null
+      getFormValue: null,
+      getElForm: null
     })
     return { formRendererContext }
   },
@@ -306,6 +309,9 @@ export default {
       if (!this.formRendererContext.updateForm) this.emitValue(content)
       this.draftApplied = true
       this.dialogVisible = false
+      this.$nextTick(() => {
+        this.formRendererContext.getElForm?.()?.validateField('content', () => {})
+      })
       this.$message.success(this.$t('CommandRuleAIApplied'))
     }
   }
