@@ -12,7 +12,7 @@ export default [
     meta: {
       title: i18n.t('TicketList'),
       icon: 'audit',
-      permissions: ['audits.view_joblog']
+      permissions: ['audits.view_ticketaudit']
     },
     children: [
       {
