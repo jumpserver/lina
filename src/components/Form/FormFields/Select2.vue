@@ -175,8 +175,8 @@ export default {
       return this.iOptions.map((v) => v.value)
     },
     selectAllDisabled() {
-      const validOptions = this.iOptions.filter(item => this.disabledValues.indexOf(item.value) === -1)
-      return validOptions.length === 0
+      const validOptions = this.iOptions.filter(item => !this.checkDisabled(item))
+      return validOptions.length === 0 && (!this.iAjax.url || !this.params.hasMore)
     },
     iValue: {
       set(val) {
@@ -387,7 +387,7 @@ export default {
     refresh() {
       this.resetParams()
       this.iOptions = []
-      this.getOptions()
+      return this.getOptions()
     },
     addOption(option) {
       this.iOptions.push(option)
@@ -403,6 +403,7 @@ export default {
     },
     clearSelected() {
       this.iValue = this.multiple ? [] : ''
+      this.allSelected = false
     },
     checkDisabled(item) {
       return item.disabled === undefined ? this.disabledValues.indexOf(item.value) !== -1 : item.disabled
@@ -430,7 +431,7 @@ export default {
     },
     async selectAll() {
       await this.loadAll()
-      this.iValue = this.iOptions.map((v) => v.value)
+      this.iValue = this.iOptions.filter(item => !this.checkDisabled(item)).map(item => item.value)
     },
     handleSelectAllChange(checked) {
       if (checked) {

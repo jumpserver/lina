@@ -18,6 +18,7 @@ import { ListTable, RelationCard } from '@/components'
 import { mapGetters } from 'vuex'
 import { DeleteActionFormatter } from '@/components/Table/TableFormatters'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { fetchAllData } from '@/utils/request'
 
 export default {
   components: {
@@ -34,6 +35,7 @@ export default {
   data() {
     return {
       loading: true,
+      memberIds: [],
       relationConfig: {
         disabled: !this.$hasPerm(`rbac.add_${this.object.scope.value}rolebinding`),
         icon: 'fa-user',
@@ -41,7 +43,9 @@ export default {
         objectsAjax: {
           url: `/api/v1/users/users/?fields_size=mini&order=name${this.object.scope.value === 'system' ? '&oid=root' : ''}`,
           transformOption: (item) => {
-            return { label: item.name + '(' + item.username + ')', value: item.id }
+            const disabled = this.memberIds.includes(item.id)
+            const label = `${item.name}(${item.username})${disabled ? ' (' + this.$t('RoleMemberAlreadyAdded') + ')' : ''}`
+            return { label, value: item.id, disabled }
           }
         },
         performAdd: (items) => {
@@ -56,10 +60,11 @@ export default {
           })
           return this.$axios.post(relationUrl, data)
         },
-        onAddSuccess: () => {
+        onAddSuccess: async () => {
           this.$message.success(this.$tc('UpdateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
           this.$refs.userRelation.$refs.select2.clearSelected()
+          await this.refreshMembers()
         }
       },
       tableConfig: {
@@ -88,14 +93,12 @@ export default {
             onDelete: function(col, row, cellValue, reload) {
               this.$axios.delete(
                 `/api/v1/rbac/${this.object.scope.value}-role-bindings/${row.id}/?role=${this.object.id}`,
-              ).then(res => {
+              ).then(async res => {
                 this.$message.success(this.$tc('DeleteSuccessMsg'))
                 reload()
-              }).catch(error => {
-                this.$message.error({
-                  message: error.response.data.detail,
-                  duration: 3000
-                })
+                await this.refreshMembers()
+              }).catch(() => {
+                // Request errors are displayed by the shared response interceptor.
               })
             }.bind(this)
           },
@@ -135,12 +138,25 @@ export default {
   computed: {
     ...mapGetters(['currentOrg', 'currentOrgIsRoot'])
   },
-  created() {
+  async created() {
     try {
       const scope = this.$route.query['scope']
       this.relationConfig.disabled = !this.$hasPerm(`rbac.add_${this.object.scope.value}rolebinding`) || (scope === 'org' && this.currentOrgIsRoot)
+      await this.refreshMembers()
+    } catch (error) {
+      // Request errors are displayed by the shared response interceptor.
     } finally {
       this.loading = false
+    }
+  },
+  methods: {
+    async refreshMembers() {
+      const bindings = await fetchAllData(this.tableConfig.url, { limit: 100 })
+      this.memberIds = bindings.map(binding => binding.user.id)
+      const select = this.$refs.userRelation && this.$refs.userRelation.$refs.select2
+      if (select) {
+        await select.refresh()
+      }
     }
   }
 }

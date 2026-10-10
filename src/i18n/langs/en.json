@@ -26,5 +26,6 @@
     "PleaseEnterReason": "Please enter a reason | Please enter reasons",
     "AssetsInOtherZonesTitle": "Confirm asset zone change",
     "AssetsInOtherZonesConfirm": "The following assets currently belong to other zones. Continuing will change their assigned zones: {assets}. Do you want to continue?",
-    "AssetsInOtherZonesRemaining": "and {count} more assets not shown"
+    "AssetsInOtherZonesRemaining": "and {count} more assets not shown",
+    "RoleMemberAlreadyAdded": "Already added"
 }
