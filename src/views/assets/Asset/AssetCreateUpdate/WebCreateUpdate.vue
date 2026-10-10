@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { h } from 'vue'
+import WebScriptExample from '@/components/Form/FormFields/WebScriptExample.vue'
 import BaseAssetCreateUpdate from './BaseAssetCreateUpdate'
 
 export default {
@@ -73,6 +75,7 @@ export default {
         },
         script: {
           helpText: this.$t('WebScriptStepsHelp'),
+          helpTextFormatter: () => h(WebScriptExample),
           hidden: (formValue) => !this.$hasLicense() || formValue['autofill'] !== 'script'
         }
       }

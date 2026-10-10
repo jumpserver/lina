@@ -33,8 +33,10 @@
 </template>
 
 <script>
+import { h } from 'vue'
 import { AutoDataForm, Dialog } from '@/components'
 import JsonEditor from '@/components/Form/FormFields/JsonEditor.vue'
+import WebScriptExample from '@/components/Form/FormFields/WebScriptExample.vue'
 import { getRuntimeActionMeta } from '@/libs/context/runtime'
 
 export default {
@@ -101,6 +103,7 @@ export default {
               script: {
                 component: JsonEditor,
                 helpText: this.$t('WebScriptStepsHelp'),
+                helpTextFormatter: () => h(WebScriptExample),
                 hidden: (formValue) => !this.$hasLicense() || formValue['autofill'] !== 'script'
               }
             }
