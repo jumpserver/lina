@@ -55,6 +55,7 @@ export const accountFieldsMeta = (vm) => {
       type: 'resourceSelect',
       component: ResourceSelect,
       label: vm.$t('Asset'),
+      rules: vm.addTemplate ? [] : [RequiredChange],
       el: {
         value: [],
         url: '/api/v1/assets/assets/?fields_size=mini',
