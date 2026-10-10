@@ -104,14 +104,6 @@ export default {
                 hidden: (formValue) => !this.$hasLicense() || formValue['autofill'] !== 'script'
               }
             }
-          },
-          public: {
-            disabled: this.protocol.name === 'winrm',
-            hidden: (formValue) => {
-              if (this.protocol.name === 'winrm') {
-                formValue['public'] = false
-              }
-            }
           }
         }
       }
