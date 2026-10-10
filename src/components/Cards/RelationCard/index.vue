@@ -311,16 +311,23 @@ export default {
         this.onDeleteFail(error, this)
       })
     },
-    addObjects() {
+    async addObjects() {
+      if (this.submitLoading) {
+        return
+      }
       const objects = this.$refs.select2.$refs.select.selected.map(item => ({ label: item.label, value: item.value }))
       if (objects.length === 0) {
         return
       }
-      this.performAdd(objects, this).then(
-        () => {
-          this.onAddSuccess(objects, this)
-        }
-      )
+      this.submitLoading = true
+      try {
+        await this.performAdd(objects, this)
+        await this.onAddSuccess(objects, this)
+      } catch (error) {
+        // Request errors are displayed by the shared response interceptor.
+      } finally {
+        this.submitLoading = false
+      }
     },
     async selectAll() {
       this.selectAllDisabled = true
