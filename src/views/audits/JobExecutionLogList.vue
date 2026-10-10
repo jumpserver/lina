@@ -108,6 +108,9 @@ export default {
         }
       },
       headerActions: {
+        searchConfig: {
+          excludeFields: ['id']
+        },
         hasLeftActions: false,
         hasReportExport: true,
         hasDatePicker: true,
