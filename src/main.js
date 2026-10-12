@@ -2,7 +2,7 @@ import './utils/browser-polyfills'
 import { createApp } from 'vue'
 import ElementPlus, { ElTooltip } from 'element-plus'
 import { getElementLocale } from '@/i18n/langs'
-import { getLangCode } from '@/i18n/utils'
+import { getLangCode, getMomentLocale } from '@/i18n/utils'
 import 'element-plus/dist/index.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import '@fortawesome/fontawesome-free/css/v4-shims.min.css'
@@ -35,12 +35,20 @@ import { message } from '@/utils/vue/message'
 import { toPlainTextMessage } from '@/utils/common/message'
 import xss from '@/utils/secure'
 import moment from 'moment'
+import 'moment/locale/es'
 import 'moment/locale/fr'
+import 'moment/locale/ja'
+import 'moment/locale/ko'
+import 'moment/locale/pt-br'
+import 'moment/locale/ru'
+import 'moment/locale/vi'
+import 'moment/locale/zh-cn'
+import 'moment/locale/zh-tw'
 import DOMPurify from 'dompurify'
 import _ from 'lodash'
 import { ElMessageBox } from 'element-plus'
 
-moment.locale(getLangCode().toLowerCase().split('-')[0] === 'fr' ? 'fr' : 'zh-cn')
+moment.locale(getMomentLocale())
 
 // 构建时间：生产环境为 Docker 构建时刻，开发环境为 dev server 启动时刻（见 vite.config.js）
 // 用双色徽章样式打印，与其它 console 信息区分开。

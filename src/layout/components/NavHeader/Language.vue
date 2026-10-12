@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { getLangCode } from '@/i18n/utils'
+import { getLangCode, getMomentLocale } from '@/i18n/utils'
 import store from '@/store'
 
 export default {
@@ -59,7 +59,7 @@ export default {
   methods: {
     changeMomentLang() {
       const lang = getLangCode()
-      this.$moment.locale(lang)
+      this.$moment.locale(getMomentLocale())
       document.documentElement.lang = lang
     },
     changeLangTo(item) {

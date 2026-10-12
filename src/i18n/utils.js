@@ -30,3 +30,13 @@ export function getI18nLocale() {
   const lang = (getLangCode() || 'en').toLowerCase()
   return localeAliases[lang] || lang.split('-')[0]
 }
+
+export function getMomentLocale() {
+  const locale = getI18nLocale()
+  const momentLocales = {
+    zh: 'zh-cn',
+    zh_hant: 'zh-tw',
+    pt_br: 'pt-br'
+  }
+  return momentLocales[locale] || locale
+}
