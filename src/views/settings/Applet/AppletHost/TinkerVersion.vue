@@ -22,7 +22,7 @@ const updateHint = computed(() => {
 
 <template>
   <span class="tinker-version">
-    <span>{{ version || '—' }}</span>
+    <span>{{ version || '' }}</span>
     <el-tooltip v-if="updateHint" :content="updateHint">
       <el-tag type="warning" size="small">{{ t('TinkerVersionUnsupported') }}</el-tag>
     </el-tooltip>
