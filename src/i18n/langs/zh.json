@@ -1,4 +1,6 @@
 {
+  "NotExecuted": "未执行",
+  "CommandRejectedByACL": "命令被 ACL 拦截",
   "TemplateCredentialOverrideConfirm": "该账号正在跟随模板凭据。是否解除跟随并继续修改或清除凭据？此操作不会修改模板。",
   "TemplateCredentialOverride": "解除跟随并继续",
   "Credentials": "凭据",

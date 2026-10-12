@@ -1,4 +1,6 @@
 {
+  "NotExecuted": "Not executed",
+  "CommandRejectedByACL": "Command blocked by ACL",
   "TemplateCredentialOverrideConfirm": "This account follows template credentials. Stop following and continue modifying or clearing credentials? The template will not be changed.",
   "TemplateCredentialOverride": "Stop following and continue",
   "Credentials": "Credentials",
