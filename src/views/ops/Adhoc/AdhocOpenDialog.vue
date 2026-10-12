@@ -53,6 +53,7 @@ export default {
                   {
                     title: this.$tc('Select'),
                     name: 'select',
+                    icon: 'fa-solid fa-file-import',
                     can: true,
                     type: 'primary',
                     callback: ({ row }) => {
