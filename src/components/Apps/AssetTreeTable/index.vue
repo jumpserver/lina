@@ -65,9 +65,12 @@ export default {
     const showAssets = this.treeSetting?.showAssets || this.showAssets
     const treeUrlQuery = this.setTreeUrlQuery()
     let assetTreeUrl = setUrlParam(this.treeUrl, 'assets', showAssets ? '1' : '0')
-    assetTreeUrl = setUrlParam(assetTreeUrl, 'asset_amount', '0')
     if (treeUrlQuery) {
       assetTreeUrl += `${assetTreeUrl.includes('?') ? '&' : '?'}${treeUrlQuery}`
+    }
+    assetTreeUrl = this.treeSetting.treeUrl != null ? this.treeSetting.treeUrl : assetTreeUrl
+    if (assetTreeUrl) {
+      assetTreeUrl = setUrlParam(assetTreeUrl, 'asset_amount', '0')
     }
     const vm = this
 
@@ -81,7 +84,6 @@ export default {
             name: 'CustomTree',
             icon: 'fa-tree',
             treeSetting: {
-              ...this.treeSetting,
               showAssets,
               showMenu: this.treeSetting.showMenu == null ? false : this.treeSetting.showMenu,
               showRefresh: true,
@@ -92,7 +94,6 @@ export default {
               showSearch: true,
               url: this.url,
               nodeUrl: this.nodeUrl,
-              treeUrl: assetTreeUrl,
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode),
                 beforeRefresh: () => {
@@ -101,7 +102,9 @@ export default {
                     vm.$router.replace({ query: query })
                   }, 100)
                 }
-              }
+              },
+              ...this.treeSetting,
+              treeUrl: assetTreeUrl
             }
           },
           {
