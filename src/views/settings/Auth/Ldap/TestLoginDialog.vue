@@ -2,7 +2,7 @@
   <Dialog
     v-bind="$attrs"
     :destroy-on-close="true"
-    :loading-status="testLdapLoginStatus"
+    :disabled-status="testLdapLoginStatus"
     :show-cancel="false"
     :title="$tc('TestLdapLoginTitle')"
     @confirm="testUserLoginClick()"
@@ -53,6 +53,7 @@ export default {
   },
   methods: {
     async testUserLoginClick() {
+      if (this.testLdapLoginStatus) return
       if (!this.$hasPerm('settings.change_auth')) {
         this.$message.error(this.$t('BadRoleErrorMsg'))
         return
