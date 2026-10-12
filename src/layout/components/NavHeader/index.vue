@@ -17,7 +17,14 @@
       </li>
     </ul>
     <ul class="navbar-right">
-      <li class="header-item header-icon none-hover">
+      <li
+        v-if="
+          $hasPerm(
+            'users.view_user | users.view_usergroup | assets.view_asset | accounts.view_account | perms.view_assetpermission'
+          )
+        "
+        class="header-item header-icon none-hover"
+      >
         <Search @search-open="handleSearchOpen" />
       </li>
       <li class="header-item header-icon">
