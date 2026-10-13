@@ -1542,7 +1542,7 @@
   "Pause": "Pausa",
   "PauseTaskSendSuccessMsg": " A tarefa de pausa foi emitida, por favor atualize e verifique mais tarde ",
   "Pending": " Pendente",
-  "PowerShellOutputWait": "Aguardando o resultado do comando. A saída do PowerShell será exibida após o término do comando.",
+  "CommandOutputWait": "Aguardando o resultado do comando. A saída será exibida após o término do comando.",
   "Periodic": "Regularmente",
   "PermAccount": "Conta Autorizada",
   "PermAction": "Action autorizado",
