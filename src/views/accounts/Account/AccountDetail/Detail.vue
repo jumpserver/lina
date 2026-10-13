@@ -19,14 +19,6 @@
         />
       </template>
     </TwoCol>
-    <Drawer
-      v-if="sourceTemplateVisible"
-      v-model:visible="sourceTemplateVisible"
-      :title="$t('AccountTemplate')"
-      :component="sourceTemplateComponent"
-      :component-props="sourceTemplateProps"
-      :has-footer="false"
-    />
     <el-drawer v-model="pamDrawerShow" :append-to-body="true" :with-header="false" size="50%">
       <component :is="drawerRefName" />
     </el-drawer>
@@ -41,11 +33,10 @@ import { openTaskPage } from '@/utils/jms/index'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import Drawer from '@/components/Drawer/index.vue'
+import { withoutDrawerQuery } from '@/components/Drawer/route'
 export default {
   name: 'Detail',
   components: {
-    Drawer,
     TwoCol,
     AutoDetailCard,
     QuickActions,
@@ -62,9 +53,6 @@ export default {
   data() {
     const vm = this
     return {
-      sourceTemplateVisible: false,
-      sourceTemplateProps: {},
-      sourceTemplateComponent: () => import('@/views/accounts/AccountTemplate/Detail/index.vue'),
       pamDrawerShow: false,
       drawerRefName: null,
       needSetAutoPushParams: false,
@@ -311,19 +299,15 @@ export default {
     },
     openSourceTemplate(template) {
       if (!template?.id || !this.$hasPerm('accounts.view_accounttemplate')) return
-      this.sourceTemplateProps = {
-        drawerContext: {
-          isDrawer: true,
-          action: 'detail',
-          row: template,
-          col: {},
-          id: template.id,
-          params: { id: template.id },
-          query: {},
-          routeName: 'AccountTemplateDetail'
+      return this.$router.push({
+        path: this.$route.path,
+        hash: this.$route.hash,
+        query: {
+          ...withoutDrawerQuery(this.$route.query),
+          drawer: 'AccountTemplateDetail',
+          drawerId: template.id
         }
-      }
-      this.sourceTemplateVisible = true
+      })
     },
     onCanSetting(item) {
       this.needSetAutoPushParams = item
