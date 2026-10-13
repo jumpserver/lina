@@ -1264,6 +1264,7 @@
   "Pause": "Pause",
   "PauseTaskSendSuccessMsg": "Task pausing issued, please refresh and check later",
   "Pending": "Pending",
+  "PowerShellOutputWait": "Waiting for the command result. PowerShell output will appear after the command finishes.",
   "Periodic": "Periodic",
   "PermAccount": "Authorized accounts",
   "PermAction": "Permission Action",

@@ -1563,6 +1563,7 @@
   "Pause": "Pause",
   "PauseTaskSendSuccessMsg": "Mise en pause de la tâche émise, veuillez actualiser et vérifier plus tard",
   "Pending": "En attente",
+  "PowerShellOutputWait": "En attente du résultat de la commande. La sortie PowerShell sera affichée après la fin de la commande.",
   "Periodic": "Périodique",
   "PermAccount": "Comptes autorisés",
   "PermAction": "Action d'autorisation",

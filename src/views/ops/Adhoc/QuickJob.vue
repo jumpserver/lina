@@ -415,7 +415,10 @@ export default {
     },
     writeExecutionOutput() {
       let msg = this.$t('Pending')
-      this.xterm.write(msg)
+      if (this.module === 'win_shell') {
+        msg = this.$t(this.isRunning ? 'PowerShellOutputWait' : 'Loading')
+      }
+      this.xterm.write(`${msg}\r\n`)
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
     },
