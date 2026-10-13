@@ -1542,6 +1542,7 @@
   "Pause": "Tạm dừng",
   "PauseTaskSendSuccessMsg": "Nhiệm vụ tạm dừng đã được phát lệnh, vui lòng làm mới lại để xem sau",
   "Pending": "Chờ xử lý",
+  "PowerShellOutputWait": "Đang chờ kết quả lệnh. Đầu ra PowerShell sẽ hiển thị sau khi lệnh kết thúc.",
   "Periodic": "Định kỳ",
   "PermAccount": "Tài khoản cấp phép",
   "PermAction": "Hành động được ủy quyền",

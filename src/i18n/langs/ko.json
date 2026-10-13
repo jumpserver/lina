@@ -1542,6 +1542,7 @@
   "Pause": "일시 중지",
   "PauseTaskSendSuccessMsg": "작업 중단이 지시되었습니다. 잠시 후 새로 고침하여 확인하세요",
   "Pending": "처리 대기중",
+  "PowerShellOutputWait": "명령 결과를 기다리는 중입니다. PowerShell 출력은 명령 실행이 끝난 후 표시됩니다.",
   "Periodic": "정기적",
   "PermAccount": "권한 계정",
   "PermAction": "권한 행동",

@@ -1463,6 +1463,7 @@
   "Pause": "暫停",
   "PauseTaskSendSuccessMsg": "暫停任務已下發，請稍後刷新查看",
   "Pending": "待處理",
+  "PowerShellOutputWait": "正在等待命令結果。PowerShell 輸出將在命令執行結束後顯示。",
   "Periodic": "定期",
   "PermAccount": "授權帳號",
   "PermAction": "授權Action",

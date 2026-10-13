@@ -1471,6 +1471,7 @@
   "Pause": "停止",
   "PauseTaskSendSuccessMsg": "停止タスクが発行されていますので、しばらくしてから再度更新してください。",
   "Pending": "未処理",
+  "PowerShellOutputWait": "コマンドの結果を待機しています。PowerShell の出力はコマンドの終了後に表示されます。",
   "Periodic": "定期",
   "PermAccount": "認証済みアカウント",
   "PermAction": "Actionを承認する",
