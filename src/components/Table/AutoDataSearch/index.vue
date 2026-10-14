@@ -89,6 +89,12 @@ export default {
     removeCondition(key) {
       return this.$refs.tagSearch?.handleTagClose(key)
     },
+    getConditionEditorConfig(key) {
+      return this.$refs.tagSearch?.getConditionEditorConfig(key)
+    },
+    updateConditionValue(key, value) {
+      return this.$refs.tagSearch?.updateConditionValue(key, value)
+    },
     clearConditions() {
       return this.$refs.tagSearch?.clearConditions()
     },
