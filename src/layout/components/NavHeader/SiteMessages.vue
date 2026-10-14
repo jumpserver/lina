@@ -136,7 +136,9 @@ export default {
       msgDetailVisible: false,
       currentMsg: null,
       unreadMsgCount: 0,
-      markingMessageIds: []
+      markingMessageIds: [],
+      pendingPopupMessages: [],
+      popupMessageIds: new Set()
     }
   },
   computed: {
@@ -145,6 +147,9 @@ export default {
     }
   },
   watch: {
+    msgDetailVisible(visible) {
+      if (!visible) this.$nextTick(() => this.showNextPopupMessage())
+    },
     '$route.fullPath'() {
       this.msgDetailVisible = false
     }
@@ -160,8 +165,32 @@ export default {
       this.show = !this.show
     },
     showMsgDetail(msg) {
+      this.pendingPopupMessages = this.pendingPopupMessages.filter((item) => item.id !== msg.id)
+      if (msg.content?.display_mode === 'popup') this.popupMessageIds.add(msg.id)
       this.currentMsg = msg
       this.msgDetailVisible = true
+    },
+    queuePopupMessage(msg) {
+      if (
+        typeof msg?.id !== 'string' ||
+        !msg.id ||
+        msg.has_read ||
+        msg.content?.display_mode !== 'popup' ||
+        typeof msg.content.subject !== 'string' ||
+        typeof msg.content.message !== 'string' ||
+        this.popupMessageIds.has(msg.id)
+      ) {
+        return
+      }
+
+      this.popupMessageIds.add(msg.id)
+      if (this.msgDetailVisible && this.currentMsg?.id === msg.id) return
+      this.pendingPopupMessages.push(msg)
+      this.showNextPopupMessage()
+    },
+    showNextPopupMessage() {
+      if (this.msgDetailVisible || !this.pendingPopupMessages.length) return
+      this.showMsgDetail(this.pendingPopupMessages.shift())
     },
     // 列表预览：正文是 Markdown（工单类还含 HTML 片段），这里剥离标记语法/标签，
     // 得到干净的纯文本用于 1~2 行预览，避免像详情那样把 # / ** 直接暴露出来。
@@ -278,6 +307,7 @@ export default {
       return this.$axios
         .patch(url, {})
         .then((res) => {
+          this.pendingPopupMessages = []
           this.msgDetailVisible = false
           return this.getMessages()
         })
@@ -291,7 +321,7 @@ export default {
         ...new Set(msgs.filter((item) => item && !item.has_read).map((item) => item.id))
       ].filter((id) => !this.markingMessageIds.includes(id))
       if (!msgIds.length) {
-        this.msgDetailVisible = false
+        if (msgs.some((msg) => msg?.id === this.currentMsg?.id)) this.msgDetailVisible = false
         return
       }
 
@@ -299,7 +329,10 @@ export default {
       return this.$axios
         .patch(url, { ids: msgIds })
         .then((res) => {
-          this.msgDetailVisible = false
+          this.pendingPopupMessages = this.pendingPopupMessages.filter(
+            (msg) => !msgIds.includes(msg.id)
+          )
+          if (msgIds.includes(this.currentMsg?.id)) this.msgDetailVisible = false
           return this.getMessages()
         })
         .catch((err) => {
@@ -330,6 +363,7 @@ export default {
           if (unreadCount !== undefined) {
             this.unreadMsgCount = unreadCount
           }
+          if (data.type === 'display') this.queuePopupMessage(data.site_msg)
         } catch (e) {
           this.$log.debug('Recv site message error')
         }
