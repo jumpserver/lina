@@ -751,8 +751,13 @@ export default {
       this.hoveredTagValueId = hovered ? condition.id : ''
     },
     handleConditionSelectVisibleChange(visible) {
-      if (!visible && this.conditionEditorConfig.multiple) {
+      if (visible) {
+        return
+      }
+      if (this.conditionEditorConfig.multiple) {
         this.commitTagConditionEdit()
+      } else {
+        this.cancelTagConditionEdit()
       }
     },
     clearAllSearchConditions() {
