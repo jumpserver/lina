@@ -142,6 +142,8 @@ export default {
     getActionDrawerTitle({ action, row, col, cellValue, payload }) {
       if (this.getDrawerTitle) return this.getDrawerTitle({ ...this.drawerContext, action })
       if (action === 'detail') return this.getDetailDrawerTitle({ col, row, cellValue, payload })
+      const routeTitle = this.drawerContext?.route?.meta?.title
+      if (routeTitle) return this.$t(routeTitle)
       const title =
         this.resource ||
         String(this.$route.meta?.title || '')
