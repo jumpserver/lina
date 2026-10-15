@@ -49,17 +49,25 @@
         </el-form-item>
         <el-form-item :label="$t('ExpireSoonNotice')">
           <template #label>
-            {{ $t('ExpireSoonNotice') }}
-            <el-tooltip
-              :content="$t('ExpireSoonNoticeHelpText')"
-              :show-after="500"
-              effect="dark"
-              placement="right"
-              popper-class="help-tips"
-            >
-              <i class="fa fa-question-circle-o" />
-            </el-tooltip>
+            <span>
+              {{ $t('ExpireSoonNotice') }}
+              <el-tooltip
+                :content="$t('ExpireSoonNoticeHelpText')"
+                :show-after="500"
+                effect="dark"
+                placement="right"
+                popper-class="help-tips"
+              >
+                <i class="fa fa-question-circle-o" />
+              </el-tooltip>
+            </span>
           </template>
+          <el-switch v-model="requestForm.apply_expire_soon_notice_switch" />
+        </el-form-item>
+        <el-form-item
+          v-if="requestForm.apply_expire_soon_notice_switch"
+          :label="$t('ExpireSoonNoticeMinutes')"
+        >
           <ExpireSoonNoticeMinutes
             v-model="requestForm.apply_expire_soon_notice_minutes"
             :date-expired="requestForm.apply_date_expired"
@@ -80,7 +88,10 @@ import Select2 from '@/components/Form/FormFields/Select2'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import ExpireNoticePolicy from '@/views/perms/AssetPermission/components/ExpireNoticePolicy.vue'
 import ExpireSoonNoticeMinutes from '@/views/perms/AssetPermission/components/ExpireSoonNoticeMinutes.vue'
-import { isPositiveInteger } from '@/views/perms/AssetPermission/expireSoonNotice'
+import {
+  hydrateExpireNoticeFormValue,
+  isPositiveInteger
+} from '@/views/perms/AssetPermission/expireSoonNotice'
 import { AccountLabelMapper } from '@/views/perms/const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import { STATUS_MAP, treeNodes } from '../../const'
@@ -114,16 +125,19 @@ export default {
         this.object.status.value === 'open'
           ? STATUS_MAP['pending']
           : STATUS_MAP[this.object.state.value],
-      requestForm: {
-        nodes: this.object.apply_nodes?.map((i) => i.id),
-        assets: this.object.apply_assets?.map((i) => i.id),
-        accounts: this.object.apply_accounts,
-        actions: this.object.apply_actions,
-        oid: this.object.org_id,
-        apply_date_expired: this.object.apply_date_expired,
-        apply_date_start: this.object.apply_date_start,
-        apply_expire_soon_notice_minutes: this.object.apply_expire_soon_notice_minutes
-      },
+      requestForm: hydrateExpireNoticeFormValue(
+        {
+          nodes: this.object.apply_nodes?.map((i) => i.id),
+          assets: this.object.apply_assets?.map((i) => i.id),
+          accounts: this.object.apply_accounts,
+          actions: this.object.apply_actions,
+          oid: this.object.org_id,
+          apply_date_expired: this.object.apply_date_expired,
+          apply_date_start: this.object.apply_date_start,
+          apply_expire_soon_notice_minutes: this.object.apply_expire_soon_notice_minutes
+        },
+        'apply_'
+      ),
       nodeSelect2: {
         multiple: true,
         options: (this.object.apply_nodes || []).map(toOption),
@@ -289,12 +303,12 @@ export default {
           return
         }
       }
-      const minutes = this.requestForm.apply_expire_soon_notice_minutes
-      if (minutes !== null && minutes !== undefined) {
-        if (!isPositiveInteger(minutes)) {
-          this.$message.error(this.$t('PositiveIntegerRequired'))
-          return
-        }
+      const minutes = this.requestForm.apply_expire_soon_notice_switch
+        ? this.requestForm.apply_expire_soon_notice_minutes
+        : null
+      if (this.requestForm.apply_expire_soon_notice_switch && !isPositiveInteger(minutes)) {
+        this.$message.error(this.$t('PositiveIntegerRequired'))
+        return
       }
       return this.$axios
         .patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
@@ -306,7 +320,7 @@ export default {
           apply_actions: this.requestForm.actions,
           apply_date_start: this.requestForm.apply_date_start,
           apply_date_expired: this.requestForm.apply_date_expired,
-          apply_expire_soon_notice_minutes: this.requestForm.apply_expire_soon_notice_minutes
+          apply_expire_soon_notice_minutes: minutes
         })
         .then(() => {
           this.$message.success(this.$tc('UpdateSuccessMsg'))
