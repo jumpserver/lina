@@ -164,7 +164,7 @@ export default {
     }
   },
   mounted() {
-    this.updateTableConfigUrl(this.$route.params.id)
+    this.updateTableConfigUrl(this.$context.get('id'))
   },
   methods: {
     // 对于 url 中的 id 值有可能会捕获到上一个页面路由对象中的 id 值，因此会导致权限报错

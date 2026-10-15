@@ -204,7 +204,17 @@ export default {
               h(
                 ElLink,
                 {
-                  onClick: () => this.$router.push(detailRoute),
+                  onClick: () => {
+                    const path = this.$router.resolve(detailRoute).path
+                    return this.$router.push({
+                      ...detailRoute,
+                      query: {
+                        ...detailRoute.query,
+                        // Recreate cached details so the title and cards use the saved data.
+                        _: `${path}:${Date.now()}`
+                      }
+                    })
+                  },
                   style: { 'vertical-align': 'top', 'margin-right': '5px' }
                 },
                 () => msgLinkName
@@ -249,6 +259,7 @@ export default {
     onPerformError: {
       type: Function,
       default(error, method, vm) {
+        if (error.templateFollowCancelled) return
         const response = error.response
         const data = response.data
         if (response.status === 400 && data && typeof data === 'object') {
@@ -372,6 +383,10 @@ export default {
       }
     },
     getUpdateId() {
+      // 克隆上下文中的 id 是源对象，不应拼入创建/OPTIONS 地址。
+      if (this.action && this.action !== 'update') {
+        return ''
+      }
       if (this.actionId && this.action === 'update') {
         return this.actionId
       }

@@ -233,6 +233,10 @@ $origin-color: #ffffff;
           transparent
         );
 
+      @supports not (color: color-mix(in srgb, black, white)) {
+        border-bottom-color: var(--menu-border, var(--panel-border-color, var(--el-border-color)));
+      }
+
       .switch-view {
         width: 100%;
         padding: 5px;

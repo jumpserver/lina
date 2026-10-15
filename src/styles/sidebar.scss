@@ -44,6 +44,11 @@
       --el-scrollbar-opacity: 1;
       --el-scrollbar-hover-opacity: 1;
 
+      @supports not (color: color-mix(in srgb, black, white)) {
+        --el-scrollbar-bg-color: var(--el-text-color-placeholder, #a8abb2);
+        --el-scrollbar-hover-bg-color: var(--el-text-color-secondary, #909399);
+      }
+
       flex: 1;
       min-height: 0;
 

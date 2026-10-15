@@ -21,6 +21,7 @@
 </template>
 
 <script lang="jsx">
+import MFAMethodSelect from '@/components/Form/FormFields/MFAMethodSelect.vue'
 import { createSourceIdCache } from '@/api/common'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
 import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
@@ -383,6 +384,7 @@ export default {
         },
         formSetting: {
           initial: {
+            allowed_mfa_types: [],
             date_expired: getDayFuture(36500, new Date()).toISOString()
           },
           fields: ['groups', 'allowed_mfa_types', 'date_expired', 'comment'],
@@ -400,7 +402,7 @@ export default {
                 value: []
               }
             },
-            allowed_mfa_types: {},
+            allowed_mfa_types: { component: MFAMethodSelect, type: 'mfa-method-select' },
             date_expired: {
               label: this.$t('DateExpired'),
               hidden: () => false

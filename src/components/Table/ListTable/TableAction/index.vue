@@ -142,14 +142,18 @@
         <el-tag
           v-for="condition in activeSearchConditions"
           :key="condition.id"
-          :title="condition.title"
+          :title="isEditingTagCondition(condition) ? '' : condition.title"
+          :class="{
+            'is-editing': isEditingTagCondition(condition),
+            'is-value-hovered': isConditionValueHovered(condition)
+          }"
           class="condition-chip"
           closable
           disable-transitions
           effect="plain"
           @close="removeSearchCondition(condition)"
         >
-          <span class="condition-chip__text">
+          <span v-if="isEditingTagCondition(condition)" class="condition-chip__editor" @click.stop>
             <span v-if="condition.displayKey" class="condition-chip__key">
               {{ condition.displayKey }}
               <span v-if="!condition.displayOperator">:</span>
@@ -157,8 +161,73 @@
             <span v-if="condition.displayOperator" class="condition-chip__operator">
               {{ condition.displayOperator }}
             </span>
-            <span class="condition-chip__value">
-              {{ condition.displayValue }}
+            <el-select
+              v-if="conditionEditorConfig.type === 'select'"
+              v-model="conditionEditorValue"
+              :collapse-tags="conditionEditorConfig.multiple"
+              :max-collapse-tags="1"
+              :multiple="conditionEditorConfig.multiple"
+              :show-arrow="false"
+              class="condition-chip__select"
+              popper-class="tag-search-field-popper condition-chip-value-popper"
+              @change="handleConditionSelectChange"
+              @keydown.esc.stop.prevent="cancelTagConditionEdit"
+              @visible-change="handleConditionSelectVisibleChange"
+            >
+              <el-option
+                v-for="option in conditionEditorConfig.options"
+                :key="option.value"
+                :label="option.label"
+                :value="option.value"
+              >
+                <span
+                  :class="conditionEditorConfig.multiple ? 'has-checkbox' : 'has-radio'"
+                  class="field-menu-option"
+                >
+                  <span
+                    v-if="conditionEditorConfig.multiple"
+                    :class="{ 'is-checked': isConditionEditorOptionSelected(option.value) }"
+                    aria-hidden="true"
+                    class="choice-value-checkbox"
+                  />
+                  <span
+                    v-else
+                    :class="{ 'is-checked': isConditionEditorOptionSelected(option.value) }"
+                    aria-hidden="true"
+                    class="choice-value-radio"
+                  />
+                  <span class="field-menu-option__label">{{ option.label }}</span>
+                </span>
+              </el-option>
+            </el-select>
+            <el-input
+              v-else
+              v-model="conditionEditorValue"
+              class="condition-chip__input"
+              @blur="commitTagConditionEdit"
+              @keydown.esc.stop.prevent="cancelTagConditionEdit"
+              @keydown.enter.stop="handleConditionEditorEnter"
+            />
+          </span>
+          <span v-else class="condition-chip__text">
+            <span v-if="condition.displayKey" class="condition-chip__key">
+              {{ condition.displayKey }}
+              <span v-if="!condition.displayOperator">:</span>
+            </span>
+            <span v-if="condition.displayOperator" class="condition-chip__operator">
+              {{ condition.displayOperator }}
+            </span>
+            <span
+              :class="{ 'is-editable': condition.source === 'tag' }"
+              class="condition-chip__value"
+              @click.stop="startEditingTagCondition(condition)"
+              @mouseenter="handleConditionValueHover(condition, true)"
+              @mouseleave="handleConditionValueHover(condition, false)"
+            >
+              <span>{{ condition.displayValue }}</span>
+              <el-icon v-if="condition.source === 'tag'" class="condition-chip__edit-icon">
+                <EditPen />
+              </el-icon>
             </span>
           </span>
         </el-tag>
@@ -309,6 +378,14 @@ export default {
       presetSaveVisible: false,
       presetName: '',
       searchHistoryVisible: false,
+      editingTagConditionKey: '',
+      conditionEditorConfig: {
+        type: 'text',
+        multiple: false,
+        options: []
+      },
+      conditionEditorValue: '',
+      hoveredTagValueId: '',
       initializationDone: false
     }
   },
@@ -579,6 +656,9 @@ export default {
       this.iHasLeftActions = actions.filter((i) => i && i.has !== false).length > 0
     },
     removeSearchCondition(condition) {
+      if (this.isEditingTagCondition(condition)) {
+        this.cancelTagConditionEdit()
+      }
       if (condition.source === 'tag') {
         this.$refs.autoDataSearch?.removeCondition(condition.conditionKey || condition.key)
       } else if (condition.source === 'label') {
@@ -587,7 +667,101 @@ export default {
         this.$refs.nodeSearch?.clearSelection()
       }
     },
+    isEditingTagCondition(condition) {
+      return (
+        condition.source === 'tag' &&
+        this.editingTagConditionKey === (condition.conditionKey || condition.key)
+      )
+    },
+    startEditingTagCondition(condition) {
+      if (condition.source !== 'tag' || this.isEditingTagCondition(condition)) {
+        return
+      }
+
+      const conditionKey = condition.conditionKey || condition.key
+      const config = this.$refs.autoDataSearch?.getConditionEditorConfig(conditionKey)
+      if (!config) {
+        return
+      }
+
+      this.hoveredTagValueId = ''
+      this.editingTagConditionKey = conditionKey
+      this.conditionEditorConfig = config
+      this.conditionEditorValue = Array.isArray(config.value) ? [...config.value] : config.value
+      this.$nextTick(() => {
+        const editor = this.$el?.querySelector('.condition-chip.is-editing')
+        const input = editor?.querySelector('input')
+        if (config.type === 'select') {
+          input?.focus()
+          editor?.querySelector('.el-select__wrapper')?.click()
+        } else {
+          input?.focus()
+          input?.select()
+        }
+      })
+    },
+    commitTagConditionEdit() {
+      if (!this.editingTagConditionKey) {
+        return
+      }
+      const updated = this.$refs.autoDataSearch?.updateConditionValue(
+        this.editingTagConditionKey,
+        this.conditionEditorValue
+      )
+      if (!updated) {
+        this.cancelTagConditionEdit()
+        return
+      }
+      this.cancelTagConditionEdit()
+    },
+    handleConditionEditorEnter(event) {
+      if (event?.isComposing || event?.keyCode === 229) {
+        return
+      }
+      event.preventDefault()
+      this.commitTagConditionEdit()
+    },
+    cancelTagConditionEdit() {
+      this.editingTagConditionKey = ''
+      this.conditionEditorValue = ''
+      this.conditionEditorConfig = {
+        type: 'text',
+        multiple: false,
+        options: []
+      }
+    },
+    handleConditionSelectChange() {
+      if (!this.conditionEditorConfig.multiple) {
+        this.commitTagConditionEdit()
+      }
+    },
+    isConditionEditorOptionSelected(value) {
+      const selectedValues = Array.isArray(this.conditionEditorValue)
+        ? this.conditionEditorValue
+        : [this.conditionEditorValue]
+      return selectedValues.some((item) => String(item) === String(value))
+    },
+    isConditionValueHovered(condition) {
+      return condition.source === 'tag' && this.hoveredTagValueId === condition.id
+    },
+    handleConditionValueHover(condition, hovered) {
+      if (condition.source !== 'tag') {
+        return
+      }
+      this.hoveredTagValueId = hovered ? condition.id : ''
+    },
+    handleConditionSelectVisibleChange(visible) {
+      if (visible) {
+        return
+      }
+      if (this.conditionEditorConfig.multiple) {
+        this.commitTagConditionEdit()
+      } else {
+        this.cancelTagConditionEdit()
+      }
+    },
     clearAllSearchConditions() {
+      this.cancelTagConditionEdit()
       this.$refs.autoDataSearch?.clearConditions()
       this.$refs.labelSearch?.clearSelection()
       this.$refs.nodeSearch?.clearSelection()
@@ -742,15 +916,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$innerHeight: 28px;
-$headerHeight: 30px;
-$btn-text-color: #ffffff;
-$color-btn-background: #e8f7f4;
-$color-btn-focus-background: #83cbba;
-$color-divided: #e4e7ed;
-$color-drop-menu-title: #909399;
-$color-drop-menu-border: #e4e7ed;
-
 .table-action {
   display: flex;
   flex-direction: column;
@@ -759,71 +924,18 @@ $color-drop-menu-border: #e4e7ed;
 }
 
 .table-header {
-  // 主要是 Table 中的操作列
-  // :deep(.data-actions) {
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: flex-end;
-
-  //   .el-button {
-  //     padding: 2px 5px;
-  //     font-size: 13px;
-  //     display: inline-block !important;
-  //     height: 30px;
-  //     line-height: 30px;
-
-  //     &:not(.is-plain) {
-  //       color: $btn-text-color;
-  //     }
-
-  //     overflow: hidden;
-  //     text-overflow: ellipsis;
-  //     white-space: nowrap;
-
-  //     // 确保按钮内部所有内容都垂直居中
-  //     :deep(span) {
-  //       display: inline-flex;
-  //       align-items: center;
-  //       line-height: 1;
-  //       vertical-align: middle;
-  //     }
-  //   }
-
-  //   :deep(.action-item.el-dropdown .el-button) {
-  //     display: block;
-  //     color: var(--color-primary);
-  //     background-color: $color-btn-background;
-  //     border-color: $color-btn-focus-background;
-
-  //     &:focus {
-  //       color: $btn-text-color;
-  //       background-color: $color-btn-focus-background !important;
-  //     }
-
-  //     &:hover {
-  //       color: $btn-text-color;
-  //       background-color: $color-btn-focus-background;
-  //     }
-  //   }
-  // }
-
   .left-side {
     --data-actions-gap: 5px;
 
     display: inline-flex;
-    //float: left;
 
-    :deep(.action-item.el-dropdown > .el-button) {
-      min-height: 30px;
-    }
-
+    :deep(.action-item.el-dropdown > .el-button),
     :deep(.action-item.el-button) {
       min-height: 30px;
     }
   }
 
   .right-side {
-    //float: right;
     height: 30px;
     align-self: flex-start;
   }
@@ -909,11 +1021,7 @@ $color-drop-menu-border: #e4e7ed;
         opacity: 1;
       }
 
-      &:hover {
-        color: var(--color-text-primary) !important;
-        background-color: rgba(0, 0, 0, 0.05);
-      }
-
+      &:hover,
       &.is-active {
         color: var(--color-text-primary) !important;
         background-color: rgba(0, 0, 0, 0.05);
@@ -929,7 +1037,6 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   .search.right {
-    display: flex;
     flex-wrap: nowrap;
     padding-right: 0;
   }
@@ -1043,7 +1150,12 @@ $color-drop-menu-border: #e4e7ed;
   border-color: var(--el-border-color);
   background-color: transparent;
   max-width: min(480px, 100%);
-  cursor: pointer;
+  cursor: default;
+
+  &.is-editing {
+    max-width: min(560px, 100%);
+    background-color: var(--el-fill-color-light);
+  }
 
   :deep(.el-tag__content) {
     display: inline-flex;
@@ -1053,6 +1165,7 @@ $color-drop-menu-border: #e4e7ed;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: inherit;
   }
 
   &:hover {
@@ -1078,12 +1191,6 @@ $color-drop-menu-border: #e4e7ed;
       background-color: rgba(0, 0, 0, 0.16);
     }
   }
-}
-
-.condition-chip {
-  :deep(.el-tag__content) {
-    line-height: inherit;
-  }
 
   &__text {
     display: inline-flex;
@@ -1092,6 +1199,13 @@ $color-drop-menu-border: #e4e7ed;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &__editor {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    height: 100%;
   }
 
   &__key {
@@ -1120,9 +1234,54 @@ $color-drop-menu-border: #e4e7ed;
   }
 
   &__value {
+    display: inline-flex;
+    align-items: center;
     color: var(--el-text-color-primary);
-    cursor: text;
     user-select: text;
+
+    &.is-editable {
+      cursor: pointer;
+    }
+  }
+
+  &__edit-icon {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    margin-left: 6px;
+    color: var(--el-text-color-primary);
+    font-size: 10px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.08);
+    flex: 0 0 auto;
+  }
+
+  &.is-value-hovered {
+    :deep(.el-tag__close) {
+      display: none;
+    }
+
+    .condition-chip__edit-icon {
+      display: inline-flex;
+    }
+  }
+
+  &__input,
+  &__select {
+    width: 180px;
+    min-width: 90px;
+    height: 24px;
+  }
+
+  :deep(.condition-chip__input .el-input__wrapper),
+  :deep(.condition-chip__select .el-select__wrapper) {
+    min-height: 24px;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 0 1px var(--el-border-color) inset !important;
   }
 }
 
@@ -1253,5 +1412,50 @@ $color-drop-menu-border: #e4e7ed;
   white-space: pre-wrap !important;
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+.condition-chip-value-popper {
+  .el-select-dropdown {
+    width: max-content;
+    min-width: 180px;
+  }
+
+  .el-select-dropdown__wrap {
+    max-height: min(300px, calc(100vh - 160px));
+  }
+
+  .el-select-dropdown__list {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .el-select-dropdown__item {
+    width: max-content;
+    min-width: 100%;
+    height: 36px;
+    padding: 0;
+    color: var(--el-text-color-regular);
+    font-weight: 400;
+    line-height: normal;
+    overflow: visible;
+
+    &.is-selected {
+      color: var(--el-text-color-regular);
+      font-weight: 400;
+      background-color: transparent;
+    }
+
+    &.is-hovering,
+    &:hover,
+    &:focus-visible {
+      color: var(--el-text-color-regular);
+      background-color: var(--el-fill-color-light);
+      outline: none;
+    }
+  }
+
+  &.el-select__popper .el-select-dropdown.is-multiple .el-select-dropdown__item.is-selected::after {
+    display: none;
+  }
 }
 </style>

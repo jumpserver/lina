@@ -13,6 +13,14 @@
   --list-table-scrollbar-space: 16px;
   --list-table-scrollbar-size: 6px;
 
+  // Unsupported functions remain valid custom-property tokens, so a preceding
+  // declaration alone cannot provide a fallback for these theme variables.
+  @supports not (color: color-mix(in srgb, black, white)) {
+    --list-table-stripe-bg-color: var(--el-fill-color-lighter, #fafafa);
+    --list-table-scrollbar-thumb-color: var(--el-text-color-placeholder, #a8abb2);
+    --list-table-scrollbar-thumb-hover-color: var(--el-text-color-secondary, #909399);
+  }
+
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -45,16 +53,11 @@
     background-color: var(--list-table-row-hover-bg-color);
   }
 
-  :deep(.el-table__body tr.el-table__row:has(.el-checkbox.is-checked) > td.el-table__cell),
   :deep(.el-table__body tr.el-table__row.selected-row > td.el-table__cell),
   :deep(.el-table__body tr.el-table__row.current-row > td.el-table__cell) {
     background-color: var(--list-table-selected-bg-color);
   }
 
-  :deep(.el-table__body tr.el-table__row:has(.el-checkbox.is-checked):hover > td.el-table__cell),
-  :deep(
-    .el-table__body tr.el-table__row:has(.el-checkbox.is-checked).hover-row > td.el-table__cell
-  ),
   :deep(.el-table__body tr.el-table__row.selected-row:hover > td.el-table__cell),
   :deep(.el-table__body tr.el-table__row.selected-row.hover-row > td.el-table__cell),
   :deep(.el-table__body tr.el-table__row.current-row:hover > td.el-table__cell),
@@ -101,6 +104,11 @@
         var(--menu-text) 30%,
         var(--el-bg-color, #fff)
       );
+
+      @supports not (color: color-mix(in srgb, black, white)) {
+        --el-scrollbar-bg-color: var(--list-table-scrollbar-thumb-color);
+        --el-scrollbar-hover-bg-color: var(--list-table-scrollbar-thumb-hover-color);
+      }
 
       bottom: calc(var(--list-table-scrollbar-space) + 2px);
       right: 0;

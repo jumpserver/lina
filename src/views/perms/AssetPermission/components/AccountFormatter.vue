@@ -283,7 +283,7 @@ export default {
       const isAll = value.includes(this.ALL)
 
       if (isAll) {
-        this.realRadioSelected = this.ALL
+        this.realRadioSelected = excludeAccountsInput.length > 0 ? this.EXCLUDE : this.ALL
       } else if (specAccountsInput.length > 0 || value.includes(this.SPEC)) {
         this.realRadioSelected = this.SPEC
       } else if (excludeAccountsInput.length > 0 || value.includes(this.EXCLUDE)) {
@@ -341,8 +341,8 @@ export default {
         choicesSelected = [this.realRadioSelected, ...this.specAccountsInput, ...templateIds]
       } else if (this.realRadioSelected === NoneAccount) {
         choicesSelected = []
-      } else if (this.realRadioSelected === this.EXCLUDE && this.excludeAccountsInput) {
-        choicesSelected = [...this.excludeAccountsInput].map((i) => '!' + i)
+      } else if (this.realRadioSelected === this.EXCLUDE && this.excludeAccountsInput.length > 0) {
+        choicesSelected = [this.ALL, ...this.excludeAccountsInput.map((i) => '!' + i)]
       }
 
       if (this.virtualChecked) {

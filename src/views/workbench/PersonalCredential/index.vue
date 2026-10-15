@@ -128,8 +128,8 @@ export default {
                   icon: 'fa-desktop',
                   type: 'primary',
                   order: 6,
-                  can: ({ row }) => Boolean(row.asset?.id),
-                  callback: ({ row }) => this.connectAsset(row.asset)
+                  can: ({ row }) => this.canConnectCredential(row),
+                  callback: ({ row }) => this.connectCredential(row)
                 }
               ]
             }
@@ -172,12 +172,29 @@ export default {
         this.testingCredentialIds = testingCredentialIds
       }
     },
-    connectAsset(asset) {
-      if (!asset?.id) {
+    canConnectCredential(credential) {
+      const protocol = credential.protocol?.value || credential.protocol
+      return Boolean(
+        credential.id &&
+        credential.asset?.id &&
+        protocol &&
+        credential.is_active &&
+        credential.has_secret
+      )
+    },
+    connectCredential(credential) {
+      if (!this.canConnectCredential(credential)) {
         return
       }
+      const params = new URLSearchParams({
+        protocol: credential.protocol?.value || credential.protocol,
+        account: '@INPUT',
+        accountMode: 'manual',
+        personalCredentialId: credential.id
+      })
       const oid = this.currentOrgId
-      const url = `/luna/?login_to=${asset.id}${oid ? `&oid=${oid}` : ''}`
+      if (oid) params.set('org', oid)
+      const url = `/luna/session/${encodeURIComponent(credential.asset.id)}?${params.toString()}`
       window.open(addBasePath(url), '_blank')
     }
   }

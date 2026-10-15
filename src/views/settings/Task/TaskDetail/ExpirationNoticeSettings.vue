@@ -76,16 +76,10 @@ export default {
       this.$message.success(this.$t('UpdateSuccessMsg'))
     },
     normalizeFormValue(value) {
-      return {
-        [this.noticeFields.first]: String(value[this.noticeFields.first] ?? ''),
-        [this.noticeFields.daily]: String(value[this.noticeFields.daily] ?? '')
-      }
+      return Object.fromEntries(this.fields.map((name) => [name, String(value[name] ?? '')]))
     },
     cleanFormValue(value) {
-      return {
-        [this.noticeFields.first]: Number(value[this.noticeFields.first]),
-        [this.noticeFields.daily]: Number(value[this.noticeFields.daily])
-      }
+      return Object.fromEntries(this.fields.map((name) => [name, Number(value[name])]))
     },
     parseNoticeDays(value, max, maxMessage) {
       const text = String(value ?? '').trim()
@@ -99,7 +93,7 @@ export default {
       if (days < 1) {
         return { error: this.$t('PositiveIntegerRequired') }
       }
-      if (days > max) {
+      if (max && days > max) {
         return { error: this.$t(maxMessage) }
       }
       return { days }

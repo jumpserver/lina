@@ -48,6 +48,10 @@ export default {
           {
             title: this.$t('MenuUsers'),
             name: 'UserJsonTab'
+          },
+          {
+            title: this.$t('Assets'),
+            name: 'AssetJsonTab'
           }
         ],
         hasRightSide: true,

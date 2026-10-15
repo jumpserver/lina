@@ -105,6 +105,14 @@ const faceStyle = computed(() => {
   --mark-edge-light: color-mix(in srgb, currentColor 46%, #071f20);
   --mark-edge: color-mix(in srgb, currentColor 28%, #071f20);
   --mark-eye: #111;
+
+  @supports not (color: color-mix(in srgb, black, white)) {
+    --mark-highlight: var(--el-color-primary-light-5);
+    --mark-face: var(--el-color-primary-light-3);
+    --mark-face-shade: var(--el-color-primary);
+    --mark-edge-light: var(--el-color-primary-dark-2);
+    --mark-edge: var(--el-color-primary-dark-2);
+  }
   position: relative;
   display: inline-flex;
   width: var(--mark-size);
@@ -136,6 +144,10 @@ const faceStyle = computed(() => {
     height: 100%;
     place-items: center;
     filter: drop-shadow(0 2px 3px color-mix(in srgb, currentColor 20%, transparent));
+
+    @supports not (color: color-mix(in srgb, black, white)) {
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+    }
   }
 
   svg {

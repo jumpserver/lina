@@ -29,6 +29,7 @@ actions_display_mapper = {
 }
 langs_display_map = {
     'en': '英文',
+    'fr': '法文',
     'ja': '日文',
     'zh_Hant': '繁体中文',
 }
@@ -115,7 +116,7 @@ if __name__ == '__main__':
         'action', type=str, choices=("diff", "apply"),
     )
     parser.add_argument(
-        'langs', type=str, choices=("en", "ja", "zh_Hant"), nargs='*'
+        'langs', type=str, choices=("en", "fr", "ja", "zh_Hant"), nargs='*'
     )
     args = parser.parse_args()
     action = args.action

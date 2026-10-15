@@ -7,6 +7,8 @@ const getDefaultState = () => {
     showSqlQueryCounter: true,
     confirmDialogVisible: false,
     drawerActionMeta: {},
+    drawerStack: [],
+    drawerCloseNonce: 0,
     successActionMeta: {},
     inDrawer: false
   }
@@ -64,20 +66,55 @@ const actions = {
     state.showSqlQueryCounter = show
   },
   setDrawerActionMeta({ commit, state }, meta) {
-    state.drawerActionMeta = meta
+    const token = meta && meta.__drawerToken
+    const publicMeta = { ...(meta || {}) }
+    delete publicMeta.__drawerToken
+
+    if (token) {
+      const index = state.drawerStack.findIndex((item) => item.token === token)
+      if (index >= 0) {
+        state.drawerStack[index].meta = publicMeta
+        if (index === state.drawerStack.length - 1) {
+          state.drawerActionMeta = publicMeta
+        }
+      } else {
+        state.drawerStack.push({ token, meta: publicMeta })
+        state.drawerActionMeta = publicMeta
+      }
+      state.inDrawer = true
+      return
+    }
+
+    // 没有 token 的旧调用方只覆盖当前 meta，不入栈。
+    state.drawerActionMeta = publicMeta
     state.inDrawer = true
   },
   getDrawerActionMeta({ commit, state }) {
     return state.drawerActionMeta
   },
+  leaveDrawer({ commit, state }, token) {
+    const index = state.drawerStack.findIndex((item) => item.token === token)
+    if (index < 0) {
+      return
+    }
+    state.drawerStack.splice(index, 1)
+    const top = state.drawerStack[state.drawerStack.length - 1]
+    if (top) {
+      state.drawerActionMeta = top.meta
+      state.inDrawer = true
+      return
+    }
+    state.drawerActionMeta = {}
+    state.inDrawer = false
+  },
   cleanDrawerActionMeta({ commit, state }) {
+    state.drawerStack = []
     state.drawerActionMeta = {}
     state.inDrawer = false
   },
   finishDrawerActionMeta({ commit, state }, payload) {
     state.successActionMeta = payload
-    state.drawerActionMeta = {}
-    state.inDrawer = false
+    state.drawerCloseNonce += 1
   }
 }
 

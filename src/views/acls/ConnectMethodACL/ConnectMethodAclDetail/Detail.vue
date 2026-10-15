@@ -25,6 +25,7 @@ export default {
       url: `/api/v1/acls/connect-method-acls/${this.object.id}/`,
       detailFields: [
         'name',
+        'priority',
         {
           key: this.$t('Action'),
           value: this.object.action.label

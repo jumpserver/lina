@@ -16,6 +16,7 @@ export default {
           app: 'audits',
           resource: 'userloginlog'
         },
+        columnsExclude: ['backend'],
         columnsShow: {
           min: ['username', 'status'],
           default: ['username', 'backend_display', 'city', 'reason_display', 'status', 'datetime']

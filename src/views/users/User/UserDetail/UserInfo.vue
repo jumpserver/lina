@@ -7,7 +7,7 @@
       :url="url"
     />
     <template #right>
-      <QuickActions :actions="quickActions" type="primary" />
+      <QuickActions :actions="visibleQuickActions" type="primary" />
       <RelationCard v-bind="relationConfig" type="info" />
     </template>
   </TwoCol>
@@ -130,6 +130,7 @@ export default {
           }
         },
         {
+          key: 'resetMFA',
           title: this.$t('ResetMFA'),
           attrs: {
             type: 'primary',
@@ -150,7 +151,7 @@ export default {
                   if (action !== 'confirm') return done()
                   instance.confirmButtonLoading = true
                   try {
-                    await vm.$axios.get(url)
+                    await vm.$axios.post(url, {})
                     done()
                     vm.$message.success(successMsg)
                   } finally {
@@ -237,7 +238,7 @@ export default {
               const item = prettyKey + ': ' + value.join(', ')
               doms.push([item, <br />])
             })
-            return <div>{doms}</div>
+            return <div class="orgs-roles-list">{doms}</div>
           }
         },
         'wecom_id',
@@ -280,7 +281,17 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    visibleQuickActions() {
+      const currentUserId = this.$store.getters.currentUser?.id
+      const canResetMFA =
+        this.object.id &&
+        currentUserId &&
+        this.object.id !== currentUserId &&
+        (!this.object.is_superuser || this.$store.getters.currentUserIsSuperAdmin)
+      return this.quickActions.filter((action) => action.key !== 'resetMFA' || canResetMFA)
+    }
+  },
   watch: {
     group(iNew, iOld) {
       this.$log.debug('Group has changed')
@@ -292,6 +303,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+:deep(.orgs-roles-list) {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
 .mfa-setting :deep(.el-slider__runway) {
   margin-top: 0;
   margin-bottom: 0;

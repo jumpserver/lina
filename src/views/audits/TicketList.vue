@@ -14,6 +14,8 @@ export default {
     return {
       extraTicketAction: {
         hasImport: false,
+        hasExport: this.$hasPerm('audits.view_ticketaudit'),
+        hasDatePicker: true,
         hasLeftActions: false
       }
     }

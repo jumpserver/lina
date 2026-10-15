@@ -1,7 +1,7 @@
 <template>
   <div>
     <TwoCol>
-      <AutoDetailCard v-bind="detail" :object="object" />
+      <AutoDetailCard v-bind="detail" :fields="detailFields" :object="object" />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
         <ViewSecret
@@ -33,6 +33,7 @@ import { openTaskPage } from '@/utils/jms/index'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import { withoutDrawerQuery } from '@/components/Drawer/route'
 export default {
   name: 'Detail',
   components: {
@@ -187,6 +188,7 @@ export default {
                 })
                 .then(() => {
                   this.$message.success(this.$tc('ClearSuccessMsg'))
+                  this.$store.commit('common/reload')
                 })
             }
           })
@@ -243,11 +245,70 @@ export default {
     }
   },
   computed: {
+    detailFields() {
+      const isTemplate = (this.object.source?.value || this.object.source) === 'template'
+      return Object.keys(this.object)
+        .filter(
+          (field) => field !== 'source_template' && (isTemplate || field !== 'follow_template')
+        )
+        .map((field) => {
+          if (field === 'source_id' && isTemplate) {
+            return {
+              key: this.$t('SourceTemplate'),
+              value: this.object.source_template,
+              formatter: this.formatSourceTemplate
+            }
+          }
+          if (field === 'secret_reset') {
+            return { key: this.$t('SecretReset'), value: this.object.secret_reset }
+          }
+          if (field === 'follow_template') {
+            return { key: this.$t('FollowTemplate'), value: this.object.follow_template }
+          }
+          return field
+        })
+    },
     pushAccountMethod() {
       return this.object.asset?.auto_config?.push_account_method || ''
     }
   },
   methods: {
+    formatSourceTemplate(item, template) {
+      if (!template) {
+        return this.object.source_id ? (
+          <span>
+            {this.$t('SourceTemplateDeleted')} ({this.object.source_id})
+          </span>
+        ) : (
+          <span>-</span>
+        )
+      }
+      if (!this.$hasPerm('accounts.view_accounttemplate')) {
+        return <span title={template.id}>{template.name}</span>
+      }
+      return (
+        <el-link
+          type="primary"
+          underline="hover"
+          title={template.id}
+          onClick={() => this.openSourceTemplate(template)}
+        >
+          {template.name}
+        </el-link>
+      )
+    },
+    openSourceTemplate(template) {
+      if (!template?.id || !this.$hasPerm('accounts.view_accounttemplate')) return
+      return this.$router.push({
+        path: this.$route.path,
+        hash: this.$route.hash,
+        query: {
+          ...withoutDrawerQuery(this.$route.query),
+          drawer: 'AccountTemplateDetail',
+          drawerId: template.id
+        }
+      })
+    },
     onCanSetting(item) {
       this.needSetAutoPushParams = item
     },

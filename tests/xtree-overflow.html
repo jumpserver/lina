@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>XTree overflow regression check</title>
+  <!-- Run yarn dev, then open /ui/tests/xtree-overflow.html. No backend is needed. -->
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font: 14px sans-serif;
+    }
+    #fixture {
+      width: 280px;
+    }
+    #fixture .x-tree {
+      height: 600px;
+    }
+  </style>
+  <pre id="results">Running…</pre>
+  <div id="fixture"></div>
+  <script type="module">
+    import { createApp, h, nextTick } from 'vue'
+    import ElementPlus from 'element-plus'
+    import 'element-plus/dist/index.css'
+    import _ from 'lodash'
+    import { MoreFilled, Search } from '@element-plus/icons-vue'
+    import SvgIcon from '../src/components/Widgets/SvgIcon/index.vue'
+    import XTree from '../src/components/Tree/XTree/index.vue'
+
+    window._ = _
+    const fixture = document.querySelector('#fixture')
+    const results = document.querySelector('#results')
+    const passed = []
+    const longName = 'Very long node name '.repeat(12)
+    const settle = async () => {
+      await nextTick()
+      for (let i = 0; i < 6; i++) await new Promise(requestAnimationFrame)
+    }
+    function check(condition, message) {
+      if (!condition) throw new Error(message)
+      passed.push(message)
+      results.textContent = passed.map((line) => `PASS: ${line}`).join('\n')
+    }
+
+    try {
+      for (const virtualize of [false, true]) {
+        const mode = virtualize ? 'virtual' : 'normal'
+        const nodes = Array.from({ length: 19 }, (_, i) => ({
+          id: String(i),
+          pId: i ? String(i - 1) : null,
+          name: i ? longName : 'a',
+          assets_amount: 12,
+          meta: { type: 'node' }
+        }))
+        let tree
+        let ready
+        const initialized = new Promise((resolve) => {
+          ready = resolve
+        })
+        const app = createApp({
+          render: () =>
+            h(XTree, {
+              ref: (value) => {
+                tree = value
+              },
+              setting: {
+                loadMode: 'static',
+                initialData: nodes,
+                initialExpandedKeys: [],
+                virtualize,
+                virtualThreshold: 0,
+                readOnly: true,
+                selectSyncToRoute: false
+              },
+              onTreeInitFinish: ready
+            })
+        })
+        app.use(ElementPlus)
+        app.component('MoreFilled', MoreFilled)
+        app.component('Search', Search)
+        app.component('SvgIcon', SvgIcon)
+        Object.assign(app.config.globalProperties, {
+          $t: (key) => key,
+          $store: { getters: {} },
+          $route: { query: {} }
+        })
+        fixture.style.width = '280px'
+        app.mount(fixture)
+        await initialized
+        await settle()
+        const scroller = () =>
+          fixture.querySelector(virtualize ? '.el-tree-virtual-list' : '.x-tree__viewport')
+        const overflows = () => scroller().scrollWidth > scroller().clientWidth + 1
+        check(!overflows(), `${mode}: short names fit`)
+        const label = fixture.querySelector('.x-tree__node-label')
+        const amount = fixture.querySelector('.x-tree__node-amount')
+        check(
+          Math.abs(amount.getBoundingClientRect().left - label.getBoundingClientRect().right - 4) <
+            1,
+          `${mode}: count stays next to short name`
+        )
+
+        tree.treeData[0].name = longName
+        await settle()
+        check(
+          !overflows() && label.scrollWidth > label.clientWidth,
+          `${mode}: long names truncate without widening the tree`
+        )
+        await tree.expandAll()
+        await settle()
+        check(overflows(), `${mode}: deep indentation can scroll horizontally`)
+        scroller().scrollLeft = scroller().scrollWidth
+        check(scroller().scrollLeft > 0, `${mode}: overflow remains reachable`)
+        fixture.style.width = '600px'
+        await settle()
+        check(!overflows(), `${mode}: widening the panel removes overflow`)
+        fixture.style.width = '280px'
+        await settle()
+        check(overflows(), `${mode}: narrowing the panel restores necessary overflow`)
+        await tree.collapseAll()
+        await settle()
+        check(
+          !overflows() && scroller().scrollLeft === 0,
+          `${mode}: collapsing releases the old width and scroll offset`
+        )
+        await tree.expandAll()
+        await settle()
+        check(overflows(), `${mode}: reopening already rendered branches restores overflow`)
+        await tree.collapseAll()
+        fixture.style.width = '125px'
+        await settle()
+        check(overflows(), `${mode}: narrow panels preserve readable labels`)
+        tree.treeData[0].name = 'a'
+        await settle()
+        check(!overflows(), `${mode}: shorter content releases the old width`)
+        fixture.style.width = '180px'
+        tree.editingKey = '0'
+        tree.editValue = longName
+        await settle()
+        check(
+          !overflows() && fixture.querySelector('.x-tree__rename').clientWidth >= 96,
+          `${mode}: rename input fits while retaining a readable minimum`
+        )
+        tree.cancelRename()
+        await settle()
+        let measurements = 0
+        const observer = new MutationObserver(() => {
+          measurements++
+        })
+        observer.observe(fixture.querySelector('.x-tree__viewport'), { attributes: true })
+        await settle()
+        observer.disconnect()
+        check(measurements === 0, `${mode}: width measurement settles without an observer loop`)
+        app.unmount()
+      }
+      results.textContent += `\n\nAll ${passed.length} checks passed.`
+    } catch (error) {
+      results.textContent += `\nFAIL: ${error.stack}`
+      throw error
+    }
+  </script>
+</html>

@@ -167,6 +167,9 @@ export default {
       }
 
       await setAutomations(this)
+      if (type === 'website') {
+        this.initial.automation.ansible_enabled = false
+      }
       await this.updateSuMethods(constraints)
     }
   }

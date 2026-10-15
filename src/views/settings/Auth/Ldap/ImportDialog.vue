@@ -26,6 +26,7 @@
           </span>
           <el-button
             :loading="dialogLdapUserSyncStatus"
+            :disabled="!canSync"
             size="small"
             type="primary"
             @click="SyncUserClick"
@@ -34,6 +35,7 @@
           </el-button>
           <el-button
             :loading="dialogLdapUserImportLoginStatus"
+            :disabled="!canImport"
             size="small"
             type="primary"
             @click="importUserClick"
@@ -42,6 +44,7 @@
           </el-button>
           <el-button
             :loading="dialogLdapUserImportAllLoginStatus"
+            :disabled="!canImport"
             size="small"
             type="primary"
             @click="importAllUserClick"
@@ -60,7 +63,8 @@ import Select2 from '@/components/Form/FormFields/Select2.vue'
 import ListTable from '@/components/Table/ListTable'
 import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 import store from '@/store'
-import { DEFAULT_ORG_ID, SYSTEM_ORG_ID } from '@/utils/jms/org'
+import { DEFAULT_ORG_ID, SYSTEM_ORG_ID, GLOBAL_ORG_ID } from '@/utils/jms/org'
+import { requestLdap } from './request'
 export default {
   name: 'ImportDialog',
   components: {
@@ -127,7 +131,7 @@ export default {
         ajax: {
           url: '/api/v1/orgs/orgs/',
           transformOption: (item) => {
-            if (item.id !== SYSTEM_ORG_ID) {
+            if (![SYSTEM_ORG_ID, GLOBAL_ORG_ID].includes(item.id)) {
               return {
                 label: item.name,
                 value: item.id
@@ -140,6 +144,17 @@ export default {
     }
   },
   computed: {
+    canSync() {
+      return this.$hasPerm('settings.change_auth')
+    },
+    canImport() {
+      return [
+        'settings.change_auth',
+        'users.add_user',
+        'users.change_user',
+        'users.invite_user'
+      ].every((permission) => this.$hasPerm(permission))
+    },
     showOrgSelect() {
       return store.getters.hasValidLicense
     }
@@ -178,57 +193,33 @@ export default {
       }
       if (org_ids.length === 0) {
         this.$message.error(this.$tc('UnselectedOrg'))
-        this.dialogLdapUserImportLoginStatus = false
+        this.dialogLdapUserImportAllLoginStatus = false
       } else {
         this.importLdapUser(data)
       }
     },
-    importLdapUser(data) {
-      this.enableWS()
-      this.ws.onopen = (e) => {
-        this.ws.send(
-          JSON.stringify({
-            msg_type: 'import_user',
-            ...data
-          })
-        )
-      }
-      this.ws.onmessage = (e) => {
-        const data = JSON.parse(e.data)
-        if (data.ok) {
-          this.$message.success(data.msg)
-          this.$refs.listTable.reloadTable()
-        } else {
-          this.$message.error(data.msg) || this.$t('ImportFail')
-        }
+    async importLdapUser(payload) {
+      try {
+        if (!this.canImport) throw new Error(this.$t('BadRoleErrorMsg'))
+        const data = await requestLdap(this.category, { msg_type: 'import_user', ...payload })
+        this.$message.success(data.msg)
+        this.$refs.listTable.reloadTable()
+      } catch (error) {
+        this.$message.error(error.message)
+      } finally {
         this.dialogLdapUserImportLoginStatus = false
         this.dialogLdapUserImportAllLoginStatus = false
       }
     },
-    enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = `/ws/ldap/?category=${this.category}`
-      const wsURL = scheme + '://' + document.location.hostname + port + url
-      this.ws = new WebSocket(wsURL)
-    },
-    SyncUserClick() {
+    async SyncUserClick() {
       this.dialogLdapUserSyncStatus = true
-      this.enableWS()
-      this.ws.onopen = (e) => {
-        this.ws.send(
-          JSON.stringify({
-            msg_type: 'sync_user'
-          })
-        )
-      }
-      this.ws.onmessage = (e) => {
-        const data = JSON.parse(e.data)
-        if (data.ok) {
-          this.$refs.listTable.reloadTable()
-        } else {
-          this.$message.error(data.msg)
-        }
+      try {
+        if (!this.canSync) throw new Error(this.$t('BadRoleErrorMsg'))
+        await requestLdap(this.category, { msg_type: 'sync_user' })
+        this.$refs.listTable.reloadTable()
+      } catch (error) {
+        this.$message.error(error.message)
+      } finally {
         this.dialogLdapUserSyncStatus = false
       }
     },

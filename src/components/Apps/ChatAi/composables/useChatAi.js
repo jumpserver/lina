@@ -975,14 +975,14 @@ export function useChatAi(options = {}) {
     }
   }
 
-  async function confirmApproval() {
+  async function confirmApproval(approvalInputs = {}) {
     if (!approval.value?.id || approvalProcessing.value) return null
     const approvalId = approval.value.id
     const conversationId = activeConversationId.value
     const liveStream = streaming.value && streamConversationId === conversationId
     approvalProcessing.value = true
     try {
-      const response = await confirmApprovalRequest(approvalId)
+      const response = await confirmApprovalRequest(approvalId, approvalInputs)
       forgetApproval(conversationId)
       if (approval.value?.id === approvalId) approval.value = null
       if (!liveStream) {

@@ -1290,6 +1290,51 @@ export default {
       // this.$emit('tagSearch', this.filterMaps)
       return true
     },
+    getConditionEditorConfig(conditionKey) {
+      const condition = this.filterTags[conditionKey]
+      if (!condition) {
+        return null
+      }
+
+      const field = this.getOptionByKey(condition.key)
+      const options = (field?.children || []).map((option) => ({
+        label: option.label,
+        value: String(option.value)
+      }))
+      const isSelect = options.length > 0
+      const multiple = isSelect && condition.operator === 'in'
+      const values = this.normalizeConditionValues(condition.value)
+
+      return {
+        type: isSelect ? 'select' : 'text',
+        multiple,
+        options,
+        value: isSelect ? (multiple ? values : (values[0] ?? '')) : String(condition.value ?? '')
+      }
+    },
+    updateConditionValue(conditionKey, value) {
+      const condition = this.filterTags[conditionKey]
+      if (!condition) {
+        return false
+      }
+
+      const values = this.normalizeConditionValues(value)
+      if (values.length === 0) {
+        return false
+      }
+
+      const field = this.getOptionByKey(condition.key)
+      const optionLabels = new Map(
+        (field?.children || []).map((option) => [String(option.value), option.label])
+      )
+      const isSelect = optionLabels.size > 0
+      this.filterTags[conditionKey] = {
+        ...condition,
+        value: values.join(','),
+        valueLabel: isSelect ? values.map((item) => optionLabels.get(item) || item).join(',') : ''
+      }
+      return true
+    },
     clearConditions() {
       const conditions = this.filterTags
       const conditionKeys = Object.keys(this.filterTags)
@@ -1477,36 +1522,6 @@ export default {
       this.filterValue = ''
       this.valueLabel = ''
       this.fieldMenuValue = null
-    },
-    handleTagClick(v, k) {
-      let unableChange = false
-
-      for (const field of this.options) {
-        if (field.value === v.key) {
-          if (field.type === 'choice') {
-            unableChange = true
-          }
-          if (field.type === 'boolean') {
-            unableChange = true
-          }
-          if (field.type === 'labeled_choice') {
-            unableChange = true
-          }
-        }
-      }
-
-      if (unableChange) return
-
-      if (this.filterValue.length !== 0) {
-        this.handleConfirm()
-      }
-
-      delete this.filterTags[k]
-
-      this.filterKey = v.key
-      this.filterValue = v.value
-      this.filterOperator = v.operator || this.getDefaultOperator(v.key, v.value)
-      this.focusSearchInput()
     },
     handleKeyUp(event) {
       // 如果当前有输入框聚焦，不触发搜索

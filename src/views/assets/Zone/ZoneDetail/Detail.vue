@@ -25,6 +25,14 @@ export default {
       url: `/api/v1/assets/zones/${this.object.id}/`,
       detailFields: [
         'name',
+        {
+          key: this.$t('CIDRRanges'),
+          value: (this.object.cidrs || []).join(', ') || '-'
+        },
+        {
+          key: this.$t('ZoneAutoAssign'),
+          value: this.object.auto_assign ? this.$t('Yes') : this.$t('No')
+        },
         'assets_amount',
         {
           key: this.$t('Gateway'),

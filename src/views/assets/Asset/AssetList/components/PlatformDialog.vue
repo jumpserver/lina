@@ -16,7 +16,12 @@
     <template #header>
       <div class="drawer-title">
         <span>{{ $tc('SelectPlatform') }}</span>
-        <el-link underline="never" size="small" type="primary" @click="handleManagePlatform">
+        <el-link
+          class="platform-manage-link"
+          underline="never"
+          size="small"
+          @click="handleManagePlatform"
+        >
           <i class="fa fa-external-link" />
           {{ $tc('ManagePlatform') }}
         </el-link>
@@ -32,19 +37,19 @@
             :title="cName"
           >
             <el-col v-for="(platform, index) of ps" :key="platform.id" :span="8">
-              <el-tooltip :content="platform.name">
-                <el-card
-                  :style="{ borderLeftColor: randomBorderColor(index) }"
-                  class="platform-item"
-                  shadow="never"
-                  @click="handleSelect(platform)"
-                >
-                  <div class="icon-zone">
-                    <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon" />
-                  </div>
-                  <span class="platform-name">{{ platform.name }}</span>
-                </el-card>
-              </el-tooltip>
+              <el-card
+                :style="{ borderLeftColor: randomBorderColor(index) }"
+                class="platform-item"
+                shadow="never"
+                @click="handleSelect(platform)"
+              >
+                <div class="icon-zone">
+                  <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon" />
+                </div>
+                <span class="platform-name" @mouseenter="updatePlatformTitle">{{
+                  platform.name
+                }}</span>
+              </el-card>
             </el-col>
           </el-collapse-item>
         </el-collapse>
@@ -121,6 +126,13 @@ export default {
     this.loading = false
   },
   methods: {
+    updatePlatformTitle({ currentTarget: el }) {
+      if (el.scrollWidth > el.clientWidth) {
+        el.setAttribute('title', el.textContent)
+      } else {
+        el.removeAttribute('title')
+      }
+    },
     getPlatformLogo(platform) {
       return loadPlatformIcon(platform.name, platform.type.value)
     },
@@ -149,6 +161,18 @@ export default {
 .el-drawer.drawer .el-drawer__body.platform-drawer__body {
   padding: 0;
   overflow-y: auto;
+}
+
+.platform-manage-link {
+  --el-link-text-color: var(--color-link);
+  --el-link-hover-text-color: var(--color-link);
+
+  color: var(--color-link);
+
+  .fa-external-link {
+    margin-right: 2px;
+    color: inherit;
+  }
 }
 </style>
 

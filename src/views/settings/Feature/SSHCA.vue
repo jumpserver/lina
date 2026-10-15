@@ -136,6 +136,7 @@
 </template>
 
 <script>
+import { UploadKey } from '@/components'
 import IBox from '@/components/Common/IBox/index.vue'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { copy, downloadText } from '@/utils/common/index'
@@ -240,7 +241,7 @@ export default {
       hasDetailInMsg: false,
       labelWidth: '30%',
       submitBtnText: this.$t('Save'),
-      encryptedFields: ['SSH_CA_OPENBAO_TOKEN'],
+      encryptedFields: ['SSH_CA_OPENBAO_TOKEN', 'SSH_CA_OPENBAO_CACERT_CONTENT'],
       moreButtons: [
         {
           title: this.$t('Test'),
@@ -261,7 +262,8 @@ export default {
             'SSH_CA_OPENBAO_ADDR',
             'SSH_CA_OPENBAO_TOKEN',
             'SSH_CA_OPENBAO_TIMEOUT',
-            'SSH_CA_OPENBAO_VERIFY_TLS'
+            'SSH_CA_OPENBAO_VERIFY_TLS',
+            'SSH_CA_OPENBAO_CACERT_CONTENT'
           ]
         ],
         [
@@ -306,6 +308,14 @@ export default {
         SSH_CA_OPENBAO_VERIFY_TLS: {
           label: this.$t('SSHCAVerifyTLS')
         },
+        SSH_CA_OPENBAO_CACERT_CONTENT: {
+          component: UploadKey,
+          label: this.$t('CACertificate'),
+          hidden: (formValue) => !formValue.SSH_CA_OPENBAO_VERIFY_TLS,
+          el: {
+            accept: '.crt,.pem,.cer'
+          }
+        },
         SSH_CA_OPENBAO_SOURCE_ADDRESS: {
           label: this.$t('SSHCAAllowedSources'),
           helpText: this.$t('SSHCAAllowedSourcesHelp'),
@@ -333,8 +343,10 @@ export default {
       }
 
       const testValue = { ...value }
-      if (testValue.SSH_CA_OPENBAO_TOKEN) {
-        testValue.SSH_CA_OPENBAO_TOKEN = encryptPassword(testValue.SSH_CA_OPENBAO_TOKEN)
+      for (const field of this.encryptedFields) {
+        if (testValue[field]) {
+          testValue[field] = encryptPassword(testValue[field])
+        }
       }
       btn.loading = true
       this.$axios

@@ -15,7 +15,7 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import OrganizationDetail from './OrganizationDetail'
 
 const performDelete = function () {
-  const url = `${this.url}/${this.$route.params.id}/`
+  const url = `${this.url}/${this.$context.get('id')}/`
   return this.$axios.delete(url)
 }
 export default {
@@ -37,7 +37,7 @@ export default {
           }
         ],
         actions: {
-          deleteApiUrl: `${this.url}/${this.$route.params.id}/`,
+          deleteApiUrl: `${this.url}/${this.$context.get('id')}/`,
           canUpdate: this.$hasPerm('orgs.change_organization'),
           canDelete: this.$hasPerm('orgs.delete_organization'),
           deleteCallback: function () {

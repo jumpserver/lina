@@ -29,7 +29,7 @@
         @command="handleToolCommand"
       >
         <el-button :aria-label="$t('TreeActions')" class="user-tree__tool-button">
-          <el-icon class="user-tree__tool-icon"><More /></el-icon>
+          <el-icon class="user-tree__tool-icon"><MoreFilled /></el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu class="x-tree-tools__menu">
@@ -801,8 +801,9 @@ export default {
 .user-tree__search-control :deep(.el-input__wrapper:hover),
 .user-tree__search-control :deep(.el-input__wrapper.is-focus) {
   width: 100%;
-  min-height: 28px;
-  height: 28px;
+  min-height: 24px;
+  height: 24px;
+  padding-block: 0;
   border: 0 !important;
   outline: none !important;
   background-color: transparent;
@@ -810,8 +811,9 @@ export default {
 }
 
 .user-tree__search-control :deep(.el-input__inner) {
-  height: 28px;
-  font-size: 13px;
+  height: 24px;
+  line-height: 24px;
+  font-size: 12px;
 }
 
 .user-tree__resource-icon {

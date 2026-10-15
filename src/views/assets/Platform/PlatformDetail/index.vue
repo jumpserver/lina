@@ -65,13 +65,13 @@ export default {
             })
           }
         },
-        hasRightSide: this.$route.params.id > 7
+        hasRightSide: this.$context.get('id') > 7
       }
     }
   },
   computed: {
     hasRightSide() {
-      return this.$route.params.id > 7
+      return this.$context.get('id') > 7
     }
   }
 }

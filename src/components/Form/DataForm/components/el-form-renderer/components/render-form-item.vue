@@ -2,14 +2,20 @@
   <el-form-item
     v-bind="data.attrs"
     v-if="_show"
-    :class="classes"
+    :class="[
+      classes,
+      {
+        'checkbox-inline-help':
+          rawComponent === 'el-checkbox' && (helpText || data.helpTextFormatter)
+      }
+    ]"
     :label="data.label"
     :prop="itemProp"
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
     :error="errorText"
   >
     <template v-if="data.label" #label>
-      <span :title="data.label">
+      <span :title="data.helpTip ? undefined : data.label">
         <span v-if="data.required" class="form-item-required-mark">*</span>
         {{ data.label }}
         <el-tooltip
@@ -106,7 +112,7 @@ import _get from 'lodash/get'
 import _includes from 'lodash/includes'
 import _topairs from 'lodash/toPairs'
 import { markRaw, toRaw, inject } from 'vue'
-import { FORM_RENDERER_KEY } from '../el-form-renderer.vue'
+import { FORM_RENDERER_KEY } from '../context'
 import getEnableWhenStatus from '../util/enable-when'
 import { noop } from '../util/utils'
 
@@ -160,7 +166,8 @@ export default {
     const formRendererContext = inject(FORM_RENDERER_KEY, {
       updateForm: null,
       setOptions: null,
-      getElForm: null
+      getElForm: null,
+      getFormValue: null
     })
     return { formRendererContext }
   },
@@ -441,10 +448,6 @@ export default {
 .help-block {
   :deep(.el-alert__icon) {
     font-size: 16px;
-  }
-
-  &.checkbox {
-    //display: inline;
   }
 }
 

@@ -124,7 +124,7 @@ export default {
   },
   created() {
     try {
-      const scope = this.$route.query['scope']
+      const scope = this.$context.get('scope')
       this.relationConfig.disabled =
         !this.$hasPerm(`rbac.add_${this.object.scope.value}rolebinding`) ||
         (scope === 'org' && this.currentOrgIsRoot)

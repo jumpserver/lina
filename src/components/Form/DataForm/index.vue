@@ -379,6 +379,27 @@ export default {
     }
   }
 
+  :deep(.el-form-item.checkbox-inline-help) {
+    .el-form-item__content {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      column-gap: 8px;
+      align-items: center;
+    }
+
+    .el-checkbox {
+      margin-right: 0;
+      align-self: start;
+    }
+
+    .help-block {
+      grid-column: 2;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+  }
+
   :deep(.form-buttons) {
     display: flex;
     flex-wrap: wrap;
@@ -476,7 +497,7 @@ export default {
  * 设置页即使运行在 desktop 设备上，也可能因抽屉或分栏被压缩。此处按表单自身宽度
  * 切换布局，避免百分比 label 被挤成逐字换行，并让帮助文案跟随控件完整展示。
  */
-@container data-form (max-width: 640px) {
+@mixin compact-data-form {
   .form-fields.el-form {
     :deep(.el-form-item) {
       flex-direction: column;
@@ -522,5 +543,14 @@ export default {
       padding-inline-start: 0;
     }
   }
+}
+
+@container data-form (max-width: 640px) {
+  @include compact-data-form;
+}
+
+// Keep fields usable in narrow drawers when container queries are unavailable.
+@supports not (container-type: inline-size) {
+  @include compact-data-form;
 }
 </style>

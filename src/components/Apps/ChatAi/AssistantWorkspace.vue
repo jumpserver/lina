@@ -656,9 +656,9 @@ function handleAttachmentError(detail) {
   message.warning(detail)
 }
 
-async function handleConfirmApproval() {
+async function handleConfirmApproval(approvalInputs = {}) {
   try {
-    const result = await confirmApproval()
+    const result = await confirmApproval(approvalInputs)
     if (['approved', 'consumed'].includes(result?.status)) message.success(t('ChatAIExecuting'))
     else if (result?.result?.ok) message.success(t('ChatAIExecutionSucceeded'))
     else message.warning(t('ChatAIExecutionIssue'))

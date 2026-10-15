@@ -1148,6 +1148,21 @@ onBeforeUnmount(() => {
     transform: translateY(1px);
   }
 
+  @supports not (color: color-mix(in srgb, black, white)) {
+    border-color: var(--el-color-primary-light-7);
+    background: linear-gradient(145deg, #fff 10%, var(--el-color-primary-light-9) 100%);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+
+    &:hover {
+      border-color: var(--el-color-primary-light-5);
+      box-shadow: 0 11px 24px rgba(0, 0, 0, 0.16);
+    }
+
+    &:active {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    }
+  }
+
   &:focus-visible {
     outline: 2px solid var(--el-color-primary-light-8, #d1efe8);
     outline-offset: 3px;
@@ -1289,6 +1304,7 @@ onBeforeUnmount(() => {
   right: 16px;
   bottom: 16px;
   width: min(450px, calc(100vw - 32px));
+  height: min(780px, calc(100vh - 32px));
   height: min(780px, calc(100dvh - 32px));
   overflow: hidden;
   box-sizing: border-box;
@@ -1425,6 +1441,7 @@ onBeforeUnmount(() => {
 
 .is-expanded .assistant-panel {
   width: 100vw;
+  height: 100vh;
   height: 100dvh;
   max-width: none;
   max-height: none;
@@ -1574,6 +1591,7 @@ onBeforeUnmount(() => {
   .assistant-panel,
   .is-expanded .assistant-panel {
     width: 100vw;
+    height: 100vh;
     height: 100dvh;
     max-width: none;
     max-height: none;

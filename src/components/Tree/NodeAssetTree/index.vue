@@ -29,7 +29,7 @@
         @command="handleToolCommand"
       >
         <el-button :aria-label="$t('TreeActions')" class="node-asset-tree__tool-button">
-          <el-icon class="node-asset-tree__tool-icon"><More /></el-icon>
+          <el-icon class="node-asset-tree__tool-icon"><MoreFilled /></el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu class="x-tree-tools__menu">
@@ -299,7 +299,7 @@
               class="node-asset-tree__node-tools-trigger"
               type="button"
             >
-              <el-icon><More /></el-icon>
+              <el-icon><MoreFilled /></el-icon>
             </button>
             <template #dropdown>
               <el-dropdown-menu class="node-asset-tree-node-tools__menu">
@@ -1389,8 +1389,9 @@ export default {
 .node-asset-tree__search-control :deep(.el-select__wrapper:hover),
 .node-asset-tree__search-control :deep(.el-select__wrapper.is-focused) {
   width: 100%;
-  min-height: 28px;
-  height: 28px;
+  min-height: 24px;
+  height: 24px;
+  padding-block: 0;
   border: 0 !important;
   outline: none !important;
   background-color: transparent;
@@ -1398,8 +1399,9 @@ export default {
 }
 
 .node-asset-tree__search-control :deep(.el-input__inner) {
-  height: 28px;
-  font-size: 13px;
+  height: 24px;
+  line-height: 24px;
+  font-size: 12px;
 }
 
 .node-asset-tree__search-input :deep(.el-input__suffix-inner) {

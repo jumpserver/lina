@@ -149,6 +149,11 @@ export default {
       this.reviewDrawer = true
     },
     async handleCommon(cmd, payload) {
+      const action = riskActions.find((item) => item.name === cmd)
+      if (!action || (await this.checkDisabled(action))) {
+        this.$message.error(this.$t('BadRoleErrorMsg'))
+        return
+      }
       let rows = this.rows
       this.processing = true
       if (this.rows.length === 0) {
@@ -166,12 +171,16 @@ export default {
           action: cmd,
           ...payload
         }
+        const previousStatus = row.status
         row.status = { value: '3', label: this.$t('Processing') }
         let risk = {}
         try {
           risk = await this.$axios.post(`/api/v1/accounts/account-risks/handle/`, data)
         } catch (e) {
+          row.status = previousStatus
           this.$emit('processDone', { index: i, row })
+          // Cancelling secondary authentication must stop the whole batch.
+          if (e.response?.status === 412) break
           continue
         }
         await sleep(100)

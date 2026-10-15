@@ -1,26 +1,30 @@
 import { constantRoutes } from '@/router'
 import store from '@/store'
 import { getAssetUrlOr } from '@/utils/assets'
+import { getRouter } from '@/router/registry'
 import { checkPermission, getResourceNameByPath, hasPermission } from './permission'
 
 export { checkPermission, getResourceNameByPath, hasPermission } from './permission'
 
-let taskWindowOffset = 0
+let taskWindowRequest = 0
 
 function openTaskWindow(url, iWidth = 900, iHeight = 600) {
-  const offset = taskWindowOffset * 30
   const maxTop = Math.max(0, window.screen.height - iHeight)
   const maxLeft = Math.max(0, window.screen.width - iWidth)
-  const iTop = Math.min(maxTop, Math.max(0, (maxTop - 30) / 2 + offset))
-  const iLeft = Math.min(maxLeft, Math.max(0, (maxLeft - 10) / 2 + offset))
-
-  taskWindowOffset = (taskWindowOffset + 1) % 6
-
-  window.open(
-    url,
-    '_blank',
+  const iTop = Math.max(0, (maxTop - 30) / 2)
+  const iLeft = Math.max(0, (maxLeft - 10) / 2)
+  // The hash router changes the task without reloading the shared log window.
+  // A fresh request also activates an existing tab when its URL has not changed.
+  const { href } = getRouter().resolve({
+    name: 'TaskLogWindow',
+    query: { url, request: `${Date.now()}-${++taskWindowRequest}` }
+  })
+  const taskWindow = window.open(
+    href,
+    'jumpserver-task-logs',
     'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft
   )
+  taskWindow?.focus()
 }
 
 export function openTaskPage(taskId, taskType, taskUrl) {

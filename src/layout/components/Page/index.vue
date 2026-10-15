@@ -207,15 +207,8 @@ export default {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    overflow-y: auto !important;
+    overflow-y: auto;
     scrollbar-gutter: stable;
-
-    :deep(> div) {
-      // 这个当时为什么设置的
-      //margin-bottom: 50px;
-      // 别设置，用户列页面会被撑开
-      //height: 100%;
-    }
   }
 }
 
@@ -225,7 +218,7 @@ export default {
   overflow: visible;
 
   .page-content {
-    overflow: visible !important;
+    overflow: visible;
   }
 }
 

@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import { createViewSetRoutes } from '../viewset'
 
 export default [
   {
@@ -81,44 +82,20 @@ export default [
       icon: 'template',
       permissions: ['accounts.view_accounttemplate']
     },
-    children: [
-      {
-        path: '',
-        name: 'AccountTemplateList',
-        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
-        meta: {
+    children: createViewSetRoutes({
+      name: 'AccountTemplate',
+      list: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
+      form: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+      detail: () => import('@/views/accounts/AccountTemplate/Detail/index.vue'),
+      meta: {
+        list: {
           menuTitle: i18n.t('MenuAccountTemplates'),
-          title: i18n.t('AccountTemplateList'),
           permissions: ['accounts.view_accounttemplate']
-        }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
-        name: 'AccountTemplateCreate',
-        meta: {
-          title: i18n.t('CreateAccountTemplate'),
-          action: 'create'
         },
-        hidden: true
-      },
-      {
-        path: ':id/update',
-        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
-        name: 'AccountTemplateUpdate',
-        meta: {
-          title: i18n.t('UpdateAccountTemplate'),
-          action: 'update'
-        },
-        hidden: true
-      },
-      {
-        path: ':id',
-        component: () => import('@/views/accounts/AccountTemplate/Detail/index.vue'),
-        name: 'AccountTemplateDetail',
-        meta: { title: i18n.t('AccountTemplate') },
-        hidden: true
+        create: { title: i18n.t('CreateAccountTemplate') },
+        update: { title: i18n.t('UpdateAccountTemplate') },
+        detail: { title: i18n.t('AccountTemplate') }
       }
-    ]
+    })
   }
 ]

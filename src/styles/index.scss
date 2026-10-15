@@ -4,6 +4,7 @@
 @use './sidebar';
 @use './menu';
 @use './element-form-controls';
+@use './page-card-layout';
 @use './list-layout';
 @use './compact-loading';
 
@@ -47,8 +48,8 @@ html {
   box-sizing: inherit;
 }
 
-a:focus,
-a:active {
+a:focus:not(:focus-visible),
+a:active:not(:focus-visible) {
   outline: none;
 }
 
@@ -60,7 +61,7 @@ a:hover {
   text-decoration: none;
 }
 
-div:focus {
+div:focus:not(:focus-visible) {
   outline: none;
 }
 

@@ -3,7 +3,7 @@
 // above the sidebar footer; overflow then stays inside the table body.
 .page .page-content.wrapper-content[data-list-layout='viewport'],
 .page.tab-page .tab-page-content[data-list-layout='viewport'] {
-  overflow: hidden !important;
+  overflow: hidden;
   scrollbar-gutter: auto;
   padding-bottom: var(--list-viewport-bottom-offset, 44px);
   background-color: var(--page-content-background-color, #f3f3f4);
@@ -150,8 +150,8 @@
 
     > .ibox,
     > .ibox > .el-card__body {
-      // Override PageContent/TabPage's deliberately unbounded detail cards.
-      overflow: hidden !important;
+      // A full-height list clips its own card while ordinary page cards grow.
+      overflow: hidden;
     }
   }
 }

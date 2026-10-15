@@ -173,6 +173,7 @@ export default {
       }
     },
     setFieldError(error) {
+      if (error.templateFollowCancelled) return
       const response = error.response
       const data = response.data
       const refsAutoDataForm = this.$refs.form.$refs.AutoDataForm

@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import { createViewSetRoutes } from '../viewset'
 
 export default [
   {
@@ -14,27 +15,15 @@ export default [
       icon: 'tag',
       app: 'labels'
     },
-    children: [
-      {
-        path: '',
-        component: () => import('@/views/labels/LabelList.vue'),
-        name: 'LabelList',
-        meta: { title: i18n.t('TagList') }
-      },
-      {
-        path: 'create',
-        name: 'LabelCreate',
-        component: () => import('@/views/labels/LabelCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('TagCreate') }
-      },
-      {
-        path: ':id/update',
-        name: 'LabelUpdate',
-        component: () => import('@/views/labels/LabelCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('TagUpdate') }
+    children: createViewSetRoutes({
+      name: 'Label',
+      list: () => import('@/views/labels/LabelList.vue'),
+      form: () => import('@/views/labels/LabelCreateUpdate.vue'),
+      meta: {
+        list: { title: i18n.t('TagList') },
+        create: { title: i18n.t('TagCreate') },
+        update: { title: i18n.t('TagUpdate') }
       }
-    ]
+    })
   }
 ]

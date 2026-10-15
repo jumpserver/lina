@@ -17,7 +17,7 @@ export default {
     }
   },
   data() {
-    const getZoneId = () => this.zone.id || this.$route.query.zone
+    const getZoneId = () => this.zone.id || this.$context.get('zone')
 
     return {
       url: '/api/v1/assets/gateways/',

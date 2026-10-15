@@ -55,6 +55,7 @@ export const accountFieldsMeta = (vm) => {
       type: 'resourceSelect',
       component: ResourceSelect,
       label: vm.$t('Asset'),
+      rules: vm.addTemplate ? [] : [RequiredChange],
       el: {
         value: [],
         url: '/api/v1/assets/assets/?fields_size=mini',
@@ -87,6 +88,18 @@ export const accountFieldsMeta = (vm) => {
       hidden: () => {
         return vm.platform || vm.asset || !vm.addTemplate
       }
+    },
+    follow_template: {
+      label: vm.$t('FollowTemplate'),
+      helpText: vm.$t('FollowTemplateHelpText'),
+      on: {
+        change: ([value]) => {
+          vm.followingTemplate = value
+        }
+      },
+      hidden: () =>
+        !vm.addTemplate &&
+        !((vm.account?.source?.value || vm.account?.source) === 'template' && vm.account?.source_id)
     },
     on_invalid: {
       rules: [Required],
@@ -192,7 +205,7 @@ export const accountFieldsMeta = (vm) => {
         }
       },
       hidden: (formValue) => {
-        return formValue.secret_type !== 'password' || vm.addTemplate
+        return formValue.secret_type !== 'password' || vm.addTemplate || !!formValue.follow_template
       }
     },
     ssh_key: {
@@ -203,7 +216,8 @@ export const accountFieldsMeta = (vm) => {
           return vm.isDisabled
         }
       },
-      hidden: (formValue) => formValue.secret_type !== 'ssh_key' || vm.addTemplate
+      hidden: (formValue) =>
+        formValue.secret_type !== 'ssh_key' || vm.addTemplate || !!formValue.follow_template
     },
     passphrase: {
       label: vm.$t('Passphrase'),
@@ -213,7 +227,8 @@ export const accountFieldsMeta = (vm) => {
           return vm.isDisabled
         }
       },
-      hidden: (formValue) => formValue.secret_type !== 'ssh_key' || vm.addTemplate
+      hidden: (formValue) =>
+        formValue.secret_type !== 'ssh_key' || vm.addTemplate || !!formValue.follow_template
     },
     token: {
       label: vm.$t('Token'),
@@ -223,7 +238,8 @@ export const accountFieldsMeta = (vm) => {
           return vm.isDisabled
         }
       },
-      hidden: (formValue) => formValue.secret_type !== 'token' || vm.addTemplate
+      hidden: (formValue) =>
+        formValue.secret_type !== 'token' || vm.addTemplate || !!formValue.follow_template
     },
     access_key: {
       id: 'access_key',
@@ -234,7 +250,8 @@ export const accountFieldsMeta = (vm) => {
           return vm.isDisabled
         }
       },
-      hidden: (formValue) => formValue.secret_type !== 'access_key' || vm.addTemplate
+      hidden: (formValue) =>
+        formValue.secret_type !== 'access_key' || vm.addTemplate || !!formValue.follow_template
     },
     api_key: {
       id: 'api_key',
@@ -245,7 +262,8 @@ export const accountFieldsMeta = (vm) => {
           return vm.isDisabled
         }
       },
-      hidden: (formValue) => formValue.secret_type !== 'api_key' || vm.addTemplate
+      hidden: (formValue) =>
+        formValue.secret_type !== 'api_key' || vm.addTemplate || !!formValue.follow_template
     },
     secret_type: {
       type: 'radio-group',
@@ -267,8 +285,8 @@ export const accountFieldsMeta = (vm) => {
           return vm.isDisabled
         }
       },
-      hidden: () => {
-        return vm.addTemplate
+      hidden: (formValue) => {
+        return vm.addTemplate || !!formValue.follow_template
       }
     },
     push_now: {
@@ -326,6 +344,7 @@ export const accountFieldsMeta = (vm) => {
     },
     secret_reset: {
       label: vm.$t('SecretReset'),
+      helpText: vm.$t('SecretResetHelpText'),
       hidden: (formValue) => formValue.secret_type === 'ssh_certificate',
       el: {
         get disabled() {

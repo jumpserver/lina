@@ -86,6 +86,10 @@ export default {
         }
         delete this.formSetting.fieldsMeta[field]
       }
+      // ssh_certificate 账号不支持改密，与单账号表单的 secret_reset.hidden 保持一致
+      if (secret_type !== 'ssh_certificate') {
+        fields.push('secret_reset')
+      }
       fields = fields.concat(['is_active', 'comment'])
       for (const field of fields) {
         fieldsMeta[field] = this.formSetting.fieldsMeta[field]

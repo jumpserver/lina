@@ -221,8 +221,8 @@ export default {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 30px;
-    height: 30px;
+    min-width: 26px;
+    height: 26px;
     padding: 0;
   }
 
@@ -239,7 +239,7 @@ export default {
 
   :deep(.el-button) {
     border: none;
-    padding: 7px;
+    padding: 5px;
     font-size: 13px;
     color: var(--color-text-primary) !important;
     background-color: transparent;

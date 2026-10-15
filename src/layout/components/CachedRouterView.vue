@@ -28,7 +28,9 @@ export default {
     }
   },
   methods: {
-    getRouteCacheKey,
+    getRouteCacheKey(route) {
+      return getRouteCacheKey(route, this.$store.getters.currentOrg?.id)
+    },
     isRouteShellComponent
   }
 }

@@ -79,6 +79,7 @@ export default {
       currentTaskId: '',
       executionInfo: {
         status: '',
+        summary: null,
         timeCost: 0,
         cancel: 0
       },
@@ -356,6 +357,7 @@ export default {
             this.toolbar.fold.timeout.callback(res.timeout)
             this.command = res.args
             this.executionInfo.status = data['status']
+            this.executionInfo.summary = data['summary']
             this.executionInfo.timeCost = data['time_cost']
             this.setCostTimeInterval()
             this.writeExecutionOutput()
@@ -404,6 +406,7 @@ export default {
     getTaskStatus() {
       getTaskDetail(this.currentTaskId).then((data) => {
         this.executionInfo.status = data['status']
+        this.executionInfo.summary = data['summary']
         this.setBtn()
       })
     },
@@ -411,8 +414,8 @@ export default {
       return `\r\n${msg}\r\n`
     },
     writeExecutionOutput() {
-      let msg = this.$t('Pending')
-      this.xterm.write(msg)
+      let msg = this.$t('CommandOutputWait')
+      this.xterm.write(`${msg}\r\n`)
       msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
     },
@@ -498,6 +501,7 @@ export default {
       createJob(data)
         .then((res) => {
           this.executionInfo.timeCost = 0
+          this.executionInfo.summary = null
           this.executionInfo.status = { value: 'running', label: this.$t('Running') }
           this.currentTaskId = res.task_id
           this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }

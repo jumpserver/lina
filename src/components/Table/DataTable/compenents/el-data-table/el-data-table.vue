@@ -6,6 +6,7 @@
     </template>
     <template v-else>
       <div
+        ref="tableSurface"
         :class="[
           'el-data-table__surface',
           { 'is-paginated': hasPagination, 'is-empty': !tableLoading && data.length === 0 }
@@ -193,6 +194,7 @@ import * as queryUtil from './utils/query'
 import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import getSelectStrategy from './utils/select-strategy'
 import { isColumnDraggable } from '@/components/Table/AutoDataTable/column-order'
+import { useTableContentHeight } from './useTableContentHeight'
 
 const defaultFirstPage = 1
 const noPaginationDataPath = 'payload'
@@ -205,6 +207,9 @@ export default {
     ElDataTableColumn
   },
   inheritAttrs: false,
+  setup(props) {
+    return useTableContentHeight(() => props.fillHeight)
+  },
 
   props: {
     /**
@@ -802,18 +807,26 @@ export default {
     }
   },
   computed: {
+    selectedRowIds() {
+      return new Set(this.selected.map((row) => row[this.id]))
+    },
     tableSurfaceStyle() {
       if (!this.fillHeight) {
         return undefined
       }
-      // Element Plus renders a 40px header plus its 1px bottom separator.
-      const headerHeight = 41
+      // Use intrinsic rendered heights so logos, wrapped cells and expanded
+      // rows can grow. Estimates only cover the initial/loading/empty render.
+      const headerHeight = this.contentHeights.header || 41
       const rowHeight = 40
       const emptyBodyHeight = 96
       const loadingRows = this.tableLoading && !this.data.length && this.hasPagination
       const visibleRows = loadingRows ? this.size : this.data.length
-      const rowsHeight = visibleRows ? visibleRows * rowHeight : emptyBodyHeight
-      const paginationHeight = this.hasPagination ? 44 : 0
+      const rowsHeight = visibleRows
+        ? loadingRows
+          ? visibleRows * rowHeight
+          : this.contentHeights.body || visibleRows * rowHeight
+        : emptyBodyHeight
+      const paginationHeight = this.hasPagination ? this.contentHeights.pagination || 44 : 0
       const surfaceBorderHeight = 2 // 1px top and bottom borders.
       const surfaceContentHeight =
         headerHeight + rowsHeight + paginationHeight + surfaceBorderHeight
@@ -1067,6 +1080,12 @@ export default {
       // 所以这里不排除 formatter，而是在 el-data-table-column 中处理
       const { hideHeaderLabel, pinOriginalFixed, pinState, ...columnProps } = col
       const props = { align: this.columnsAlign, ...columnProps }
+      // Put the drag marker on the header itself; older browsers cannot match :has().
+      if (isColumnDraggable(col)) {
+        props.labelClassName = [props.labelClassName, 'is-column-draggable-header']
+          .filter(Boolean)
+          .join(' ')
+      }
       if (col.type === 'index' && !props.index) {
         props.index = (index) => (this.page - 1) * this.size + index + 1
       }
@@ -1497,6 +1516,10 @@ export default {
       let rcn = this.tableAttrs.rowClassName || this.tableAttrs['row-class-name'] || ''
       if (typeof rcn === 'function') rcn = rcn(...args)
       if (this.isTree) rcn += ' ' + this.showRow(...args)
+      const row = args[0].row
+      const isSelected =
+        row[this.id] == null ? this.selected.includes(row) : this.selectedRowIds.has(row[this.id])
+      if (isSelected) rcn += ' selected-row'
       return rcn
     },
     showRow({ row }) {

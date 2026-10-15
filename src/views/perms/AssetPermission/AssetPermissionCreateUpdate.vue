@@ -13,8 +13,16 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import ResourceSelect from '@/components/Form/FormFields/ResourceSelect'
 import NodeSelect from '@/components/Form/FormFields/NodeSelect'
 import AccountFormatter from './components/AccountFormatter'
+import ExpireNoticePolicy from './components/ExpireNoticePolicy.vue'
+import ExpireSoonNoticeMinutes from './components/ExpireSoonNoticeMinutes.vue'
 import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
+import {
+  hydrateExpireNoticeFormValue,
+  isExpireSoonNoticeAtFuture,
+  isPositiveInteger,
+  normalizeExpireNoticePayload
+} from './expireSoonNotice'
 
 function normalizeResourceIds(values) {
   if (!Array.isArray(values)) {
@@ -48,7 +56,10 @@ export default {
       initial: {
         nodes: nodesInitial,
         assets: assetsInitial,
-        accounts: [AllAccount]
+        accounts: [AllAccount],
+        expire_notice_policy: '',
+        expire_soon_notice_switch: false,
+        expire_soon_notice_minutes: null
       },
       fields: [
         [this.$t('Basic'), ['name']],
@@ -58,7 +69,17 @@ export default {
         [this.$t('Account'), ['accounts']],
         [this.$t('Protocol'), ['protocols']],
         [this.$t('Action'), ['actions']],
-        [this.$t('Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
+        [
+          this.$t('ValidityPeriod'),
+          [
+            'date_start',
+            'date_expired',
+            'expire_notice_policy',
+            'expire_soon_notice_switch',
+            'expire_soon_notice_minutes'
+          ]
+        ],
+        [this.$t('Other'), ['is_active', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
       createSuccessNextRoute: { name: 'AssetPermissionDetail' },
@@ -162,16 +183,57 @@ export default {
         },
         date_start: {},
         date_expired: {},
+        expire_notice_policy: {
+          component: ExpireNoticePolicy,
+          label: this.$t('SystemExpireNotice')
+        },
+        expire_soon_notice_switch: {
+          type: 'switch',
+          label: this.$t('ExpireSoonNotice'),
+          helpTip: this.$t('ExpireSoonNoticeHelpText'),
+          el: {
+            style: { marginTop: '4px' }
+          }
+        },
+        expire_soon_notice_minutes: {
+          component: ExpireSoonNoticeMinutes,
+          label: this.$t('ExpireSoonNoticeMinutes'),
+          el: {},
+          hidden: (formValue, field) => {
+            field.el.dateExpired = formValue.date_expired
+            field.el.disabled = !formValue.expire_soon_notice_switch
+            return !formValue.expire_soon_notice_switch
+          },
+          rules: [
+            {
+              validator: (rule, value, callback, source) => {
+                if (
+                  source.expire_soon_notice_switch &&
+                  (!isPositiveInteger(value) ||
+                    !isExpireSoonNoticeAtFuture(source.date_expired, value))
+                ) {
+                  callback(new Error(this.$t('ExpireSoonNoticeFutureError')))
+                  return
+                }
+                callback()
+              },
+              trigger: ['blur', 'change']
+            }
+          ]
+        },
         comment: {},
         is_active: {
           type: 'checkbox'
         }
       },
+      afterGetFormValue(value) {
+        return hydrateExpireNoticeFormValue(value)
+      },
       cleanFormValue(value) {
         if (!Array.isArray(value.accounts)) {
           value.accounts = value.accounts ? value.accounts.split(',') : []
         }
-        return value
+        return normalizeExpireNoticePayload(value)
       }
     }
   }

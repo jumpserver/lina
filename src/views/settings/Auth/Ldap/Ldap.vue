@@ -15,6 +15,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import ImportDialog from './ImportDialog.vue'
 import TestLoginDialog from './TestLoginDialog.vue'
 import SyncSettingDialog from './SyncSettingDialog.vue'
+import { requestLdap } from './request'
 import { IBox, UploadKey } from '@/components'
 import rules, { JsonRequired } from '@/components/Form/DataForm/rules'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
@@ -109,8 +110,9 @@ export default {
       moreButtons: [
         {
           title: this.$t('LdapConnectTest'),
+          disabled: !this.$hasPerm('settings.change_auth'),
           loading: false,
-          callback: function (value, form, btn) {
+          callback: async function (value, form, btn) {
             if (value['AUTH_LDAP_BIND_PASSWORD'] === undefined) {
               value['AUTH_LDAP_BIND_PASSWORD'] = ''
             }
@@ -124,35 +126,36 @@ export default {
               }
             })
             btn.loading = true
-            this.enableWS()
-            this.ws.onopen = (e) => {
-              this.ws.send(JSON.stringify({ msg_type: 'testing_config', ...value }))
-            }
-            this.ws.onmessage = (e) => {
-              const data = JSON.parse(e.data)
-              if (data.ok) {
-                this.$message.success(data.msg)
-              } else {
-                this.$message.error(data.msg)
-              }
+            try {
+              const data = await requestLdap(this.category, {
+                msg_type: 'testing_config',
+                ...value
+              })
+              this.$message.success(data.msg)
+            } catch (error) {
+              this.$message.error(error.message)
+            } finally {
               btn.loading = false
             }
           }.bind(this)
         },
         {
           title: this.$t('LdapLoginTest'),
+          disabled: !this.$hasPerm('settings.change_auth'),
           callback: function (value, form) {
             this.dialogTest = true
           }.bind(this)
         },
         {
           title: this.$t('LdapBulkImport'),
+          disabled: !this.$hasPerm('settings.change_auth'),
           callback: function (value, form) {
             this.dialogLdapUserImport = true
           }.bind(this)
         },
         {
           title: this.$t('SyncSetting'),
+          disabled: !this.$hasPerm('settings.change_auth'),
           callback: function (value, form) {
             this.dialogSyncSetting = true
           }.bind(this)
@@ -175,15 +178,6 @@ export default {
         )
         return data
       }
-    }
-  },
-  methods: {
-    enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/ldap/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
-      this.ws = new WebSocket(wsURL)
     }
   }
 }

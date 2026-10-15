@@ -159,7 +159,8 @@ export default {
           has: !this.row.present,
           disabled:
             this.$store.getters.currentOrgIsRoot ||
-            !this.$hasPerm('accounts.add_pushaccountexecution') ||
+            !this.$hasPerm('accounts.add_account') ||
+            !this.$hasPerm('accounts.push_account') ||
             !this.$hasPerm('accounts.change_accountrisk')
         }
       ]

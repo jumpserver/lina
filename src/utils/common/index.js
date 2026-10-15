@@ -1,3 +1,4 @@
+import { getRuntimeRoute } from '@/libs/context/runtime'
 import i18n from '@/i18n/i18n'
 import { message } from '@/utils/vue/message'
 import { getBasePath } from '@/utils/storage'
@@ -9,7 +10,7 @@ import _ from 'lodash'
 export { toSentenceCase }
 
 export function getApiPath(that, objectId) {
-  let pagePath = that.$route.path
+  let pagePath = getRuntimeRoute(that).path
   const pagePathArray = pagePath.split('/')
   if (pagePathArray.indexOf('orgs') !== -1) {
     pagePathArray[pagePathArray.indexOf('xpack')] = 'orgs'

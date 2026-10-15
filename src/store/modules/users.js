@@ -96,13 +96,14 @@ const mutations = {
 
 const actions = {
   // get user Profile
-  getProfile({ commit, state }, refresh = false) {
+  getProfile({ commit, state }, options = false) {
+    const { refresh, orgId } = typeof options === 'object' ? options : { refresh: options }
     return new Promise((resolve, reject) => {
       if (!refresh && state.profile && Object.keys(state.profile).length > 0) {
         resolve(state.profile)
         return
       }
-      apiGetProfile()
+      apiGetProfile({ orgId })
         .then((response) => {
           if (!response) {
             reject('Verification failed, please Login again.')

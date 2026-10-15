@@ -394,6 +394,10 @@ export default {
         transparent;
       scrollbar-width: thin;
 
+      @supports not (color: color-mix(in srgb, black, white)) {
+        scrollbar-color: var(--el-text-color-placeholder) transparent;
+      }
+
       &::-webkit-scrollbar {
         -webkit-appearance: none;
         width: 6px;
@@ -416,11 +420,17 @@ export default {
         border: 0;
         border-radius: 999px;
         background-color: color-mix(in srgb, var(--el-text-color-secondary) 36%, transparent);
+        @supports not (color: color-mix(in srgb, black, white)) {
+          background-color: var(--el-text-color-placeholder);
+        }
         box-shadow: none;
       }
 
       &:hover::-webkit-scrollbar-thumb {
         background-color: color-mix(in srgb, var(--el-text-color-secondary) 48%, transparent);
+        @supports not (color: color-mix(in srgb, black, white)) {
+          background-color: var(--el-text-color-secondary);
+        }
       }
     }
 

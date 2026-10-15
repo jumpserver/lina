@@ -581,7 +581,7 @@ export default {
     transition: none;
     // The outer card owns the list border and rounded corners. Clip the inner
     // table so its square layers cannot interrupt the four corner arcs.
-    overflow: hidden !important;
+    overflow: hidden;
   }
 
   :deep(.el-card__body) {
@@ -616,8 +616,7 @@ export default {
     text-overflow: ellipsis;
   }
 
-  :deep(td.show-full-content .cell),
-  :deep(.cell:has(.col-full-content)) {
+  :deep(:is(td.show-full-content .cell, .cell:has(.col-full-content))) {
     overflow: visible;
     height: auto;
     white-space: normal !important;

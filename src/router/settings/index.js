@@ -429,7 +429,7 @@ export default {
           meta: {
             title: i18n.t('Applets'),
             icon: 'application',
-            permissions: ['terminal.view_applet']
+            permissions: ['terminal.view_applet | terminal.view_applethost']
           }
         },
         {
@@ -595,7 +595,7 @@ export default {
       meta: {
         title: i18n.t('SystemTools'),
         icon: 'tools',
-        permissions: ['settings.change_other']
+        permissions: ['settings.change_systemtools']
       }
     },
     {

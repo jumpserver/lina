@@ -1,4 +1,5 @@
 import en from './en.json'
+import fr from './fr.json'
 import es from './es.json'
 import ja from './ja.json'
 import ko from './ko.json'
@@ -8,6 +9,7 @@ import vi from './vi.json'
 import zh from './zh.json'
 import zh_hant from './zh_hant.json'
 import elementEn from 'element-plus/es/locale/lang/en'
+import elementFr from 'element-plus/es/locale/lang/fr'
 import elementEs from 'element-plus/es/locale/lang/es'
 import elementJa from 'element-plus/es/locale/lang/ja'
 import elementKo from 'element-plus/es/locale/lang/ko'
@@ -21,6 +23,7 @@ const elementLocaleByAppLocale = {
   zh: elementZhCn,
   zh_hant: elementZhTw,
   en: elementEn,
+  fr: elementFr,
   ja: elementJa,
   pt_br: elementPtBr,
   es: elementEs,
@@ -33,6 +36,7 @@ const appLocaleMessages = {
   zh,
   zh_hant,
   en,
+  fr,
   ja,
   pt_br,
   es,
@@ -58,6 +62,7 @@ const elementLocaleByCookieLang = {
   'zh-hant': elementZhTw,
   'zh-tw': elementZhTw,
   en: elementEn,
+  fr: elementFr,
   ja: elementJa,
   'pt-br': elementPtBr,
   es: elementEs,

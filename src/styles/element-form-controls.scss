@@ -29,8 +29,15 @@
 
 // 所有 Element Plus 多选框使用同一套标签尺寸与间距。契约锚定 selection，
 // 以同时覆盖主控件和 collapse-tags-tooltip teleport 出去的标签列表。
-.el-select__selection:has(.el-tag) {
-  gap: 0;
+.el-select__selection {
+  &:has(.el-tag) {
+    gap: 0;
+
+    // Tag 的起始 margin 负责 tag-to-tag 间距；输入容器补齐末尾 Tag 到光标的间距。
+    > .el-select__input-wrapper:not(.is-hidden) {
+      margin-inline-start: 6px;
+    }
+  }
 
   .el-tag {
     margin: 2px 0 2px 6px;
@@ -46,11 +53,6 @@
     .el-tag__close {
       margin-top: -1px !important;
     }
-  }
-
-  // Tag 的起始 margin 负责 tag-to-tag 间距；输入容器单独补齐末尾 Tag 到光标的间距。
-  > .el-select__input-wrapper:not(.is-hidden) {
-    margin-inline-start: 6px;
   }
 }
 
@@ -179,17 +181,16 @@
   .el-input__wrapper,
   .el-select__wrapper,
   .el-cascader .el-input__wrapper {
-    box-shadow: none !important;
-    border: 1px solid var(--el-border-color) !important;
+    box-shadow: none;
+    border: 1px solid var(--el-border-color);
 
     &:hover {
-      border-color: var(--el-border-color-hover) !important;
+      border-color: var(--el-border-color-hover);
     }
 
     &.is-focus,
     &.is-focused {
-      box-shadow: none !important;
-      border-color: var(--el-color-primary) !important;
+      border-color: var(--el-color-primary);
     }
   }
 
@@ -225,7 +226,7 @@
       border-left: 0 !important;
     }
 
-    .el-input__wrapper:has(+ .el-input-group__append) {
+    &.el-input-group--append > .el-input__wrapper {
       border-right: 0 !important;
     }
   }
@@ -284,15 +285,15 @@
   }
 
   .el-input__wrapper .el-input__inner {
-    border: 0 !important;
-    box-shadow: none !important;
+    border: 0;
+    box-shadow: none;
   }
 
   .el-select__wrapper .el-select__placeholder {
-    border: 0 !important;
-    box-shadow: none !important;
-    padding-inline-start: 0 !important;
-    margin-inline-start: 0 !important;
+    border: 0;
+    box-shadow: none;
+    padding-inline-start: 0;
+    margin-inline-start: 0;
   }
 
   .el-input.is-disabled .el-input__inner {
@@ -524,11 +525,12 @@
 // 日期范围选择器（表单字段 DatetimeRangePicker + 表格筛选 .datepicker）
 // ---------------------------------------------------------------------------
 
-.datepicker.el-date-editor,
-.datepicker.el-date-editor.el-range-editor,
-.datepicker.el-date-editor--daterange,
-.el-date-editor.el-date-editor--daterange,
-.el-date-editor.el-range-editor {
+:is(
+  .datepicker.el-date-editor,
+  .datepicker.el-date-editor--daterange,
+  .el-date-editor.el-date-editor--daterange,
+  .el-date-editor.el-range-editor
+) {
   width: 243px !important;
   min-width: 243px !important;
   max-width: 243px !important;
@@ -542,18 +544,12 @@
   box-sizing: border-box;
 }
 
-.datepicker.el-date-editor .el-range-input,
-.datepicker.el-date-editor .el-range-separator,
-.datepicker.el-date-editor .el-range__icon,
-.datepicker.el-date-editor .el-range__close-icon,
-.el-date-editor.el-date-editor--daterange .el-range-input,
-.el-date-editor.el-date-editor--daterange .el-range-separator,
-.el-date-editor.el-date-editor--daterange .el-range__icon,
-.el-date-editor.el-date-editor--daterange .el-range__close-icon,
-.el-date-editor.el-range-editor .el-range-input,
-.el-date-editor.el-range-editor .el-range-separator,
-.el-date-editor.el-range-editor .el-range__icon,
-.el-date-editor.el-range-editor .el-range__close-icon {
+:is(
+    .datepicker.el-date-editor,
+    .el-date-editor.el-date-editor--daterange,
+    .el-date-editor.el-range-editor
+  )
+  :is(.el-range-input, .el-range-separator, .el-range__icon, .el-range__close-icon) {
   height: 30px;
   line-height: 30px;
 }

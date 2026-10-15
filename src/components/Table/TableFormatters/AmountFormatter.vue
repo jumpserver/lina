@@ -1,7 +1,8 @@
 <template>
   <DetailFormatter :col="col" :row="row" :prevent-click="formatterArgs.preventClick">
     <el-popover
-      :disabled="!showItems"
+      ref="popover"
+      :disabled="popoverClosed || !showItems"
       :show-after="500"
       :title="title"
       placement="top-start"
@@ -19,7 +20,7 @@
         </div>
       </div>
       <template #reference>
-        <span>{{ amount }}</span>
+        <span @click="closePopover">{{ amount }}</span>
       </template>
     </el-popover>
   </DetailFormatter>
@@ -58,7 +59,8 @@ export default {
       formatterArgs: formatterArgs,
       listData: formatterArgs.async ? [] : this.cellValue || [],
       amount: '',
-      asyncGetDone: false
+      asyncGetDone: false,
+      popoverClosed: false
     }
   },
   computed: {
@@ -109,7 +111,20 @@ export default {
   async mounted() {
     this.computeAmount()
   },
+  activated() {
+    this.popoverClosed = false
+  },
+  deactivated() {
+    this.closePopover()
+  },
+  beforeUnmount() {
+    this.closePopover()
+  },
   methods: {
+    closePopover() {
+      this.popoverClosed = true
+      this.$refs.popover?.hide?.()
+    },
     computeAmount() {
       if (this.formatterArgs.async) {
         this.amount = this.cellValue

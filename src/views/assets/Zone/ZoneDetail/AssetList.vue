@@ -9,19 +9,27 @@
       :setting="addAssetSetting"
       @close="handleAddAssetDialogClose"
     />
+    <AddAssetByCIDRDialog
+      v-if="cidrDialogVisible"
+      :object="object"
+      @close="cidrDialogVisible = false"
+      @added="reloadTable"
+    />
   </div>
 </template>
 
 <script>
 import BaseList from '@/views/assets/Asset/AssetList/components/BaseList'
 import AddAssetDialog from '@/views/assets/Zone/components/AddAssetDialog.vue'
+import AddAssetByCIDRDialog from '@/views/assets/Zone/components/AddAssetByCIDRDialog.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
   components: {
     TwoCol,
     BaseList,
-    AddAssetDialog
+    AddAssetDialog,
+    AddAssetByCIDRDialog
   },
   props: {
     object: {
@@ -31,6 +39,7 @@ export default {
   },
   data() {
     return {
+      cidrDialogVisible: false,
       config: {
         category: 'all',
         url: `/api/v1/assets/assets/?zone=${this.object.id}&is_gateway=0`,
@@ -57,11 +66,19 @@ export default {
           extraActions: [
             {
               name: 'AddAsset',
-              title: this.$t('Add'),
+              title: this.$t('AddAsset'),
               type: 'primary',
               can: !this.$store.getters.currentOrgIsRoot,
               callback: () => {
                 this.addAssetSetting.addAssetDialogVisible = true
+              }
+            },
+            {
+              name: 'AddAssetByCIDR',
+              title: this.$t('AddAssetByCIDR'),
+              can: !this.$store.getters.currentOrgIsRoot && this.$hasPerm('assets.change_asset'),
+              callback: () => {
+                this.cidrDialogVisible = true
               }
             }
           ]
