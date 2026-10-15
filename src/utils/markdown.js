@@ -9,10 +9,10 @@ const markdown = new MarkdownIt({
   breaks: false,
   highlight(code, language) {
     if (language && hljs.getLanguage(language)) {
-      return `<pre class="hljs"><code>${hljs.highlight(language, code, true).value}</code></pre>`
+      return `<pre class="hljs" data-language="${language}"><code>${hljs.highlight(language, code, true).value}</code></pre>`
     }
 
-    return `<pre class="hljs"><code>${hljs.highlightAuto(code).value}</code></pre>`
+    return `<pre class="hljs" data-language="text"><code>${hljs.highlightAuto(code).value}</code></pre>`
   }
 })
 

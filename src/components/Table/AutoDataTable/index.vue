@@ -786,7 +786,12 @@ export default {
     word-break: normal !important;
   }
 
-  :deep(.el-table__body td.el-table__cell .cell > :not(.label-container):not(.copyable)) {
+  :deep(
+    .el-table__body
+      td.el-table__cell
+      .cell
+      > :not(.label-container):not(.copyable):not(.truncate-content)
+  ) {
     min-width: max-content;
     max-width: none !important;
   }

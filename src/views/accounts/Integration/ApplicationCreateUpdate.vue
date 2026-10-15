@@ -26,7 +26,8 @@ export default {
         accounts: {
           component: JSONManyToManySelect,
           el: {
-            value: [],
+            value: { type: 'ids', ids: [] },
+            allowedTypes: ['all', 'ids', 'attrs'],
             resource: vm.$t('Accounts'),
             select2: {
               url: '/api/v1/accounts/accounts/',
@@ -68,9 +69,13 @@ export default {
         }
       },
       hasSaveContinue: false,
-      createSuccessNextRoute: {
-        name: 'ApplicationDetail'
+      objectDetailRoute: {
+        name: 'IntegrationApplicationDetail'
       },
+      getNextRoute: (res) => ({
+        name: 'IntegrationApplicationDetail',
+        params: { id: res.id }
+      }),
       performSubmit(values) {
         const formData = new FormData()
         delete values['logo']

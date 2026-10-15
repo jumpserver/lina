@@ -6,7 +6,7 @@
         :key="k"
         :disable-transitions="true"
         :type="tagType(v)"
-        closable
+        :closable="!disabled"
         size="small"
         @click="handleTagClick(v, k)"
         @close="handleTagClose(v)"
@@ -22,6 +22,7 @@
           :placeholder="iPlaceholder"
           :trigger-on-focus="false"
           :type="inputType"
+          :disabled="disabled"
           class="search-input"
           @blur="handleBlur"
           @focus="handleFocus"
@@ -37,7 +38,7 @@
     >
       <i :class="[isCheckShowPassword ? 'fa-eye-slash' : 'fa-eye']" class="fa" />
     </span>
-    <span v-if="filterTags.length > 0" class="clear-icon" @click="handleClearAll">
+    <span v-if="!disabled && filterTags.length > 0" class="clear-icon" @click="handleClearAll">
       <el-icon :title="$t('Clear')"><CircleClose /></el-icon>
     </span>
   </div>
@@ -55,6 +56,10 @@ function normalizeTags(value) {
 export default {
   emits: ['input', 'change', 'update:modelValue', 'update:model-value'],
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: [Array, String],
       default: () => []
@@ -139,6 +144,7 @@ export default {
       this.$emit('change', payload)
     },
     handleTagClose(tag) {
+      if (this.disabled) return
       this.filterTags = this.filterTags.filter((item) => item !== tag)
       this.emitTags()
     },
@@ -160,6 +166,7 @@ export default {
       this.focus = true
     },
     handleConfirm(refocus = true) {
+      if (this.disabled) return
       const value = this.filterValue.trim()
       if (value === '') return
 
@@ -174,6 +181,7 @@ export default {
       }
     },
     handleTagClick(v, k) {
+      if (this.disabled) return
       this.filterTags.splice(k, 1)
       this.filterValue = v
       this.$refs.SearchInput?.focus()
@@ -195,6 +203,7 @@ export default {
       this.isCheckShowPassword = !this.isCheckShowPassword
     },
     handleClearAll() {
+      if (this.disabled) return
       this.filterTags = []
       this.emitTags()
     },
@@ -223,6 +232,7 @@ export default {
       input.getData?.(String(this.filterValue || ''))
     },
     focusInput() {
+      if (this.disabled) return
       const input = this.$refs.SearchInput
       this.scrollInputIntoView()
       input?.focus()

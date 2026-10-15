@@ -25,7 +25,7 @@
 
 <script>
 import { Codemirror } from 'vue-codemirror'
-import { basicSetup } from 'codemirror'
+import { basicSetup, EditorView } from 'codemirror'
 import { StreamLanguage } from '@codemirror/language'
 import { json } from '@codemirror/legacy-modes/mode/javascript'
 import { markRaw } from 'vue'
@@ -61,6 +61,10 @@ export default {
       type: String,
       validator: (value) => ['none', 'vertical'].includes(value),
       default: 'vertical'
+    },
+    lineWrapping: {
+      type: Boolean,
+      default: false
     }
   },
   // 声明 input / update:modelValue：DataForm 的 render-form-item 会向每个字段组件
@@ -77,7 +81,11 @@ export default {
       // 直接传给 StreamLanguage.define；JSON 编辑器使用 json 模式。
       // markRaw：CodeMirror 6 的 extension 实例靠对象身份去重，若被 Vue 响应式
       // Proxy 包裹会导致 lineNumbers 等 gutter 无法去重而重复渲染（行号出现多列）。
-      extensions: markRaw([basicSetup, StreamLanguage.define(json)])
+      extensions: markRaw([
+        basicSetup,
+        StreamLanguage.define(json),
+        ...(this.lineWrapping ? [EditorView.lineWrapping] : [])
+      ])
     }
   },
   computed: {
