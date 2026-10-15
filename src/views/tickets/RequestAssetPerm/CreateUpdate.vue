@@ -225,12 +225,9 @@ export default {
         return hydrateExpireNoticeFormValue(value, 'apply_')
       },
       cleanFormValue(value) {
-        const apply_actions = value['apply_actions'] || []
-        apply_actions.forEach((item, index) => {
-          if (item === this.$t('All')) {
-            apply_actions[index] = 'all'
-          }
-        })
+        value.apply_actions = (value.apply_actions || []).map((item) =>
+          item === this.$t('All') ? 'all' : item
+        )
 
         Object.keys(value).forEach((item, index, arr) => {
           if (['apply_accounts', 'apply_assets', 'apply_nodes'].includes(item)) {
