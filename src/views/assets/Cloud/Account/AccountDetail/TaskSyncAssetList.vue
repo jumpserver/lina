@@ -1,9 +1,5 @@
 <template>
-  <GenericListTable
-    ref="GenericListTable"
-    :header-actions="headerActions"
-    :table-config="tableConfig"
-  />
+  <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script lang="jsx">
@@ -23,31 +19,22 @@ export default {
   data() {
     return {
       headerActions: {
-        hasLeftActions: true,
+        hasLeftActions: false,
         hasBulkDelete: false,
         hasImport: false,
-        hasExport: false,
+        hasExport: true,
         hasSearch: true,
         hasCreate: false,
-        moreActionsTitle: this.$t('MoreActions'),
-        moreActionsType: 'primary',
+        exportOptions: {
+          canExportSelected: true
+        },
         searchConfig: {
           getUrlQuery: false
-        },
-        extraMoreActions: [
-          {
-            name: this.$t('DeleteReleasedAssets'),
-            title: this.$t('DeleteReleasedAssets'),
-            icon: 'fa-solid fa-trash-can',
-            type: 'primary',
-            can: true,
-            callback: this.DeleteReleasedAssets.bind(this)
-          }
-        ]
+        }
       },
       tableConfig: {
         url: '',
-        hasSelection: false,
+        hasSelection: true,
         columns: [
           'instance_id',
           {
@@ -91,28 +78,18 @@ export default {
   },
   computed: {
     dynamicUrl() {
-      const category = this.$context.get('category')
+      const category =
+        this.$context?.get?.('category') ||
+        this.object?.category ||
+        this.$route.query.category ||
+        'host'
       const baseUrl = `/api/v1/xpack/cloud/sync-instance-tasks/instances/?category=${category}`
-      return this.object ? `${baseUrl}&task_id=${this.object.task.id}` : baseUrl
+      const taskId = this.object?.task?.id
+      return taskId ? `${baseUrl}&task_id=${taskId}` : baseUrl
     }
   },
   mounted() {
     this.tableConfig.url = this.dynamicUrl
-  },
-  methods: {
-    DeleteReleasedAssets() {
-      const baseUrl = '/api/v1/xpack/cloud/sync-instance-tasks/released-assets/'
-      const url = this.object ? `${baseUrl}?task_id=${this.object.task.id}` : baseUrl
-      this.$axios
-        .delete(url)
-        .then((res) => {
-          this.$message.success(this.$tc('DeleteSuccessMsg'))
-          this.$refs.GenericListTable.$refs.ListTable.reloadTable()
-        })
-        .catch(() => {
-          this.$message.error(this.$tc('DeleteErrorMsg'))
-        })
-    }
   }
 }
 </script>
