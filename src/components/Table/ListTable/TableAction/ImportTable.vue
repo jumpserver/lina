@@ -28,7 +28,9 @@
         v-for="button in moreButtons"
         v-show="!button.hidden"
         :key="button.title"
-        :disabled="disableImportBtn"
+        :disabled="
+          origin === 'cloudSync' ? (button.disabled ?? disableImportBtn) : disableImportBtn
+        "
         :loading="button.loading"
         @click="handleClick(button)"
       >
@@ -172,6 +174,14 @@ export default {
       }
     },
     importActionTitle() {
+      if (
+        this.origin === 'cloudSync' &&
+        this.importAction === 'import' &&
+        this.failedCount > 0 &&
+        this.pendingCount === 0
+      ) {
+        return this.$t('RetrySelected')
+      }
       return this.importActions[this.importAction]
     },
     successData() {
@@ -386,15 +396,17 @@ export default {
       let currentData
       if (this.tableConfig.hasSelection) {
         currentData = this.elDataTable.selected
+        if (this.origin === 'cloudSync') currentData = [...currentData]
       } else {
         currentData = this.elDataTable.getPageData()
       }
       for (const item of currentData) {
+        if (this.taskIsStopped()) return
+        if (this.origin === 'cloudSync' && item['@status']?.name === 'error') {
+          item['@status'] = 'pending'
+        }
         if (item['@status'] !== 'pending') {
           continue
-        }
-        if (this.taskIsStopped()) {
-          return
         }
         const handler = this.performUploadObject || this.defaultPerformUploadObject
         await handler(item)
@@ -403,7 +415,7 @@ export default {
     },
     async performUpload() {
       this.importTaskStatus = 'started'
-      this.importStatusFilter = 'pending'
+      this.importStatusFilter = this.origin === 'cloudSync' ? 'all' : 'pending'
       while (!this.taskIsStopped()) {
         await this.performUploadCurrentPageData()
         const hasNextPage = this.elDataTable.hasNextPage()
@@ -416,9 +428,10 @@ export default {
       }
       this.importTaskStatus = 'done'
 
-      // 在不影响其他组件使用本组件的基础上，对云同步中导入按钮的变化
+      // Cloud imports stay interactive until the user explicitly finishes.
       if (this.origin === 'cloudSync') {
-        this.tableConfig.totalData = this.pendingData
+        this.importStatusFilter = 'all'
+        this.tableConfig.totalData = this.iTotalData
         this.importTaskStatus = 'pending'
       }
 
