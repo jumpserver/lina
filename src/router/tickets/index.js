@@ -6,7 +6,11 @@ import i18n from '@/i18n/i18n'
 export default {
   path: '/tickets',
   redirect: () => ({
-    name: hasPermission('tickets.view_ticket') ? 'MyTicketList' : 'WorkflowList'
+    name: hasPermission('tickets.view_ticket')
+      ? 'MyTicketList'
+      : hasPermission('tickets.view_workflow')
+        ? 'WorkflowList'
+        : 'AuditTicketList'
   }),
   component: Layout,
   meta: {
@@ -17,7 +21,7 @@ export default {
     showNavSwitcher: false,
     resource: 'ticket',
     licenseRequired: true,
-    permissions: ['tickets.view_ticket | tickets.view_workflow']
+    permissions: ['tickets.view_ticket | tickets.view_workflow | audits.view_ticketaudit']
   },
   children: [
     {
@@ -81,7 +85,7 @@ export default {
           component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
           meta: {
             title: i18n.t('TicketDetail'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         },
@@ -91,7 +95,7 @@ export default {
           component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
           meta: {
             title: i18n.t('TicketDetail'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         },
@@ -101,7 +105,7 @@ export default {
           component: () => import('@/views/tickets/LoginConfirm/Detail'),
           meta: {
             title: i18n.t('TicketDetail'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         },
@@ -111,7 +115,7 @@ export default {
           component: () => import('@/views/tickets/CommandConfirm/Detail'),
           meta: {
             title: i18n.t('CommandConfirm'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         },
@@ -121,7 +125,7 @@ export default {
           component: () => import('@/views/tickets/TicketDetail'),
           meta: {
             title: i18n.t('TicketDetail'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         }
