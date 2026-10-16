@@ -378,17 +378,37 @@ export default {
       if ((this.loading && !force) || !this.object.workflow_instance || this.disposed) return
       clearTimeout(this.timer)
       const requestId = ++this.requestId
+      const workflowKey = this.workflowKey
+      const ticket = this.object
+      const requestConfig = this.requestConfig
+      let retry = true
       this.loading = true
       try {
         const instance = await this.$axios.get(
-          `/api/v1/tickets/workflow-instances/${this.object.workflow_instance}/`,
-          this.requestConfig
+          `/api/v1/tickets/workflow-instances/${ticket.workflow_instance}/`,
+          requestConfig
         )
-        if (requestId === this.requestId) this.instance = instance
+        if (requestId !== this.requestId || workflowKey !== this.workflowKey || this.disposed) {
+          return
+        }
+        if (force || instance.state !== this.instance?.state) {
+          const updatedTicket = await this.$axios.get(
+            `/api/v1/tickets/tickets/${ticket.id}/`,
+            requestConfig
+          )
+          if (requestId !== this.requestId || workflowKey !== this.workflowKey || this.disposed) {
+            return
+          }
+          Object.assign(ticket, updatedTicket)
+        }
+        this.instance = instance
+        retry = instance.state === 'running'
+      } catch {
+        // Axios reports errors; retry until ticket details and access actions are refreshed.
       } finally {
-        if (requestId === this.requestId) {
+        if (requestId === this.requestId && workflowKey === this.workflowKey) {
           this.loading = false
-          if (!this.disposed && this.instance?.state === 'running') {
+          if (!this.disposed && retry) {
             this.timer = setTimeout(() => this.load(), 15000)
           }
         }
@@ -409,7 +429,6 @@ export default {
       if (operation !== 'cancel' && !taskId) return
       if (reassign && (!this.target || this.reassignTaskId !== taskId)) return
       const workflowKey = this.workflowKey
-      const ticket = this.object
       const requestConfig = this.requestConfig
       this.busy = true
       try {
@@ -430,12 +449,7 @@ export default {
         this.comment = ''
         this.reassignComment = ''
         await this.load(true)
-        const updatedTicket = await this.$axios.get(
-          `/api/v1/tickets/tickets/${ticket.id}/`,
-          requestConfig
-        )
         if (workflowKey !== this.workflowKey || this.disposed) return
-        Object.assign(ticket, updatedTicket)
         this.$message.success(this.$t('UpdateSuccessMsg'))
       } catch (e) {
         if (e.response?.status === 409 && workflowKey === this.workflowKey && !this.disposed) {

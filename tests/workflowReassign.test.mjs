@@ -198,6 +198,7 @@ test('workflow refreshes and submitted decisions cannot overwrite a newer ticket
     object: { id: 'ticket-a', org_id: 'org-a', workflow_instance: 'workflow-a' },
     $axios: {
       get(url, config) {
+        if (url.includes('/tickets/tickets/')) return Promise.resolve({ state: 'approved' })
         return new Promise((resolve) => requests.push({ url, config, resolve }))
       }
     },
@@ -238,7 +239,7 @@ test('workflow refreshes and submitted decisions cannot overwrite a newer ticket
     assert.equal(requests[3].url, '/api/v1/tickets/workflow-instances/workflow-b/')
     assert.deepEqual(requests[3].config, { params: { oid: 'org-b' } })
     requests[3].resolve({ id: 'workflow-b', state: 'approved' })
-    await Promise.resolve()
+    await new Promise(setImmediate)
     assert.equal(vm.instance.id, 'workflow-b')
 
     let finishDecision
@@ -265,5 +266,182 @@ test('workflow refreshes and submitted decisions cannot overwrite a newer ticket
     assert.equal(vm.comment, 'new ticket draft')
   } finally {
     panel.beforeUnmount.call(vm)
+  }
+})
+
+test('polling refreshes approved access actions and other terminal ticket states', async (t) => {
+  t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 1000 })
+  const panel = await workflowPanel()
+  for (const [name, type, field] of [
+    ['TicketSecretAccess', 'view_secret', 'secret_access_status'],
+    ['TicketReplayAccess', 'download_replay', 'replay_access_status']
+  ]) {
+    const access = await component(name, { IBox: {}, Dialog: {}, copy() {}, useDateTime() {} })
+    const object = {
+      id: 'ticket',
+      org_id: 'org',
+      workflow_instance: 'workflow',
+      state: { value: 'pending' },
+      status: { value: 'open' },
+      available_actions: [],
+      [field]: { state: 'pending' }
+    }
+    const accessVm = { ...access.data(), object }
+    for (const [key, getter] of Object.entries(access.computed)) {
+      Object.defineProperty(accessVm, key, { get: () => getter.call(accessVm) })
+    }
+    const requests = []
+    let state = 'running'
+    const vm = bindMethods(panel, {
+      ...panel.data(),
+      object,
+      requestConfig: { params: { oid: 'org' } },
+      $axios: {
+        async get(url, config) {
+          requests.push({ url, config })
+          if (url.includes('/workflow-instances/')) return { id: 'workflow', state }
+          return {
+            state: {
+              value: state === 'running' ? 'pending' : state === 'cancelled' ? 'closed' : state
+            },
+            status: { value: state === 'running' ? 'open' : 'closed' },
+            [field]: {
+              state:
+                state === 'approved' ? 'available' : state === 'running' ? 'pending' : 'unapproved'
+            },
+            available_actions:
+              state === 'approved'
+                ? [
+                    {
+                      type,
+                      account_id: 'account',
+                      session_id: 'session',
+                      expires_at: new Date(61000).toISOString()
+                    }
+                  ]
+                : []
+          }
+        }
+      }
+    })
+    try {
+      assert.equal(accessVm.accessState, 'pending')
+      await vm.load()
+      await vm.load()
+      assert.equal(
+        requests.filter(({ url }) => url.includes('/tickets/tickets/')).length,
+        1,
+        'unchanged workflow polls do not repeatedly fetch ticket details'
+      )
+      state = 'approved'
+      t.mock.timers.tick(15000)
+      await new Promise(setImmediate)
+      assert.equal(object.state.value, 'approved')
+      assert.equal(object.status.value, 'closed')
+      assert.equal(accessVm.accessState, 'available')
+      if (type === 'download_replay') assert.match(accessVm.downloadUrl, /ticket\/replay\/download/)
+      else assert.equal(accessVm.activeActions[0].account_id, 'account')
+      const completedRequests = requests.length
+      t.mock.timers.tick(15000)
+      await new Promise(setImmediate)
+      assert.equal(requests.length, completedRequests, 'polling stops after details are refreshed')
+      for (state of ['rejected', 'expired', 'cancelled', 'error']) {
+        await vm.load()
+        assert.equal(object.state.value, state === 'cancelled' ? 'closed' : state)
+        assert.equal(accessVm.accessState, 'unapproved')
+        assert.deepEqual(object.available_actions, [])
+      }
+      for (const { config } of requests) assert.deepEqual(config, { params: { oid: 'org' } })
+    } finally {
+      panel.beforeUnmount.call(vm)
+    }
+    t.mock.timers.setTime(1000)
+  }
+})
+
+test('a failed terminal ticket refresh retries before stopping polling', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  const panel = await workflowPanel()
+  let attempts = 0
+  const vm = bindMethods(panel, {
+    ...panel.data(),
+    object: {
+      id: 'ticket',
+      workflow_instance: 'workflow',
+      state: 'pending',
+      available_actions: []
+    },
+    $axios: {
+      async get(url) {
+        if (url.includes('/workflow-instances/')) return { state: 'approved' }
+        if (++attempts === 1) throw new Error('Temporary network error')
+        return { state: 'approved', available_actions: [{ type: 'download_replay' }] }
+      }
+    }
+  })
+  try {
+    await vm.load()
+    assert.equal(vm.object.state, 'pending')
+    t.mock.timers.tick(15000)
+    await new Promise(setImmediate)
+    assert.equal(attempts, 2)
+    assert.equal(vm.object.state, 'approved')
+    assert.equal(vm.object.available_actions.length, 1)
+    t.mock.timers.tick(15000)
+    await new Promise(setImmediate)
+    assert.equal(attempts, 2)
+  } finally {
+    panel.beforeUnmount.call(vm)
+  }
+})
+
+test('stale ticket detail responses cannot overwrite a newer poll, organization or unmounted page', async () => {
+  const panel = await workflowPanel()
+  for (const change of ['poll', 'organization', 'unmount']) {
+    const details = []
+    const object = {
+      id: 'ticket',
+      org_id: 'original',
+      workflow_instance: 'workflow',
+      state: 'pending'
+    }
+    const vm = bindMethods(panel, {
+      ...panel.data(),
+      object,
+      $axios: {
+        get(url) {
+          if (url.includes('/workflow-instances/')) return Promise.resolve({ state: 'approved' })
+          return new Promise((resolve) => details.push(resolve))
+        }
+      }
+    })
+    for (const key of ['workflowKey', 'requestConfig']) {
+      Object.defineProperty(vm, key, { get: () => panel.computed[key].call(vm) })
+    }
+    try {
+      const old = vm.load()
+      await new Promise(setImmediate)
+      if (change === 'poll') {
+        const latest = vm.load(true)
+        await new Promise(setImmediate)
+        details[1]({ state: 'approved', available_actions: ['current'] })
+        await latest
+      } else if (change === 'organization') {
+        vm.object = { ...object, org_id: 'another' }
+        panel.watch.workflowKey.handler.call(vm)
+        await new Promise(setImmediate)
+        details[1]({ state: 'approved', available_actions: ['current'] })
+        await new Promise(setImmediate)
+      } else {
+        panel.beforeUnmount.call(vm)
+      }
+      details[0]({ state: 'rejected', available_actions: ['stale'] })
+      await old
+      assert.notEqual(object.state, 'rejected')
+      assert.notEqual(vm.object.state, 'rejected')
+      if (change !== 'unmount') assert.deepEqual(vm.object.available_actions, ['current'])
+    } finally {
+      panel.beforeUnmount.call(vm)
+    }
   }
 })
