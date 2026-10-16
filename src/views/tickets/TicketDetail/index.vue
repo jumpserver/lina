@@ -31,7 +31,7 @@ export default {
         date_created: ''
       },
       config: {
-        actions: { detailApiUrl: `/api/v1/tickets/tickets/${this.$route.params.id}/` },
+        actions: { detailApiUrl: `/api/v1/tickets/tickets/${this.$context.get('id')}/` },
         activeMenu: 'TicketDetail',
         submenu: [
           {
