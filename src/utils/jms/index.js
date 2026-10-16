@@ -167,10 +167,13 @@ export function loadPlatformIcon(name, type) {
     Gateway: 'gateway',
     macOS: 'macos',
     BSD: 'bsd',
-    'Vmware-vSphere': 'vmware'
+    'Vmware-vSphere': 'vmware',
+    'OceanBase-MySQL': 'oceanbase',
+    'OceanBase-Oracle': 'oceanbase'
   }
 
   const value = platformMap[name] || type
+  const extension = value === 'oceanbase' ? 'svg' : 'png'
 
-  return getAssetUrlOr(`img/icons/${value}.png`, 'img/icons/other.png')
+  return getAssetUrlOr(`img/icons/${value}.${extension}`, 'img/icons/other.png')
 }
