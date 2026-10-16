@@ -9,7 +9,11 @@ export const TICKET_TYPE_I18N_KEYS = {
   apply_asset: 'ApplyAsset',
   login_confirm: 'LoginConfirm',
   command_confirm: 'CommandConfirm',
-  login_asset_confirm: 'LoginAssetConfirm'
+  login_asset_confirm: 'LoginAssetConfirm',
+  view_secret: 'TicketViewSecret',
+  change_secret: 'TicketChangeSecret',
+  file_transfer: 'TicketFileTransfer',
+  download_replay: 'TicketDownloadReplay'
 }
 
 export const TICKET_STATE_I18N_KEYS = {
@@ -17,7 +21,9 @@ export const TICKET_STATE_I18N_KEYS = {
   approved: 'Approved',
   rejected: 'Rejected',
   closed: 'StateClosed',
-  reopen: 'Reopen'
+  reopen: 'Reopen',
+  expired: 'WFExpired',
+  error: 'WFError'
 }
 
 function translate(t, key) {
@@ -27,10 +33,11 @@ function translate(t, key) {
 export function getTicketTypeLabel(type, t) {
   if (!type) return ''
   const key = TICKET_TYPE_I18N_KEYS[type.value]
-  return key ? translate(t, key) : type.label || ''
+  return key ? translate(t, key) : type.label || type.value || ''
 }
 
 export function getTicketFlowLabel(ticketOrFlow, t) {
+  if (ticketOrFlow?.workflow?.name) return ticketOrFlow.workflow.name
   if (ticketOrFlow?.flow === null && ticketOrFlow?.type?.value === 'apply_asset') {
     return translate(t, 'TicketFlowDeleted')
   }

@@ -36,7 +36,7 @@ export default {
         can_public_key_auth: false
       },
       fields: [
-        [this.$t('Basic'), ['name', 'username', 'email', 'groups']],
+        [this.$t('Basic'), ['name', 'username', 'email', 'groups', 'manager']],
         [
           this.$t('Authentication'),
           [
@@ -54,6 +54,18 @@ export default {
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
+        manager: {
+          component: Select2,
+          label: this.$t('WFManager'),
+          el: {
+            multiple: false,
+            clearable: true,
+            ajax: {
+              url: '/api/v1/users/users/?fields_size=mini&is_valid=true',
+              transformOption: (u) => ({ label: `${u.name} (${u.username})`, value: u.id })
+            }
+          }
+        },
         allowed_mfa_types: {
           component: MFAMethodSelect,
           type: 'mfa-method-select'
@@ -215,6 +227,7 @@ export default {
         return obj
       },
       cleanFormValue(value) {
+        value.manager = value.manager?.id || value.manager || null
         const method = this.submitMethod()
         if (method === 'post' && value.password_strategy === 'email') {
           delete value['password']

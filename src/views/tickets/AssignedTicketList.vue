@@ -1,6 +1,21 @@
 <template>
   <div>
-    <BaseTicketList v-bind="$data" ref="BaseTicketList" :url="url" />
+    <BaseTicketList
+      v-bind="$data"
+      ref="BaseTicketList"
+      :url="url"
+      :extra-ticket-action="tab === 'pending' ? extraTicketAction : { hasCreate: false }"
+    >
+      <template #tableBefore>
+        <div class="ticket-list-filters">
+          <el-tabs v-model="tab" class="ticket-list-tabs">
+            <el-tab-pane name="pending" :label="$t('AwaitingMyApproval')" />
+            <el-tab-pane name="processed" :label="$t('WFProcessedByMe')" />
+            <el-tab-pane name="cc" :label="$t('TicketCopiedToMe')" />
+          </el-tabs>
+        </div>
+      </template>
+    </BaseTicketList>
     <Dialog
       v-if="isVisible"
       v-model:visible="isVisible"
@@ -28,6 +43,8 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import Dialog from '@/components/Dialog'
 import { mapGetters } from 'vuex'
+import { h } from 'vue'
+import TicketValueList from './components/TicketValueList'
 import BaseTicketList from './BaseTicketList'
 import { getTicketTypeLabel } from './const'
 
@@ -40,6 +57,7 @@ export default {
   },
   data() {
     return {
+      tab: 'pending',
       ticketData: [],
       detailUrl: `/api/v1/tickets/tickets/`,
       isVisible: false,
@@ -65,7 +83,12 @@ export default {
   },
   computed: {
     url() {
-      return `/api/v1/tickets/tickets/?assignees__id=${this.currentUser.id}&state=pending`
+      if (this.tab === 'cc') {
+        return `/api/v1/tickets/tickets/?cc_users__id=${this.currentUser.id}`
+      }
+      return this.tab === 'pending'
+        ? `/api/v1/tickets/tickets/?assignees__id=${this.currentUser.id}&state=pending`
+        : `/api/v1/tickets/tickets/?processed_by=${this.currentUser.id}`
     },
     ...mapGetters(['currentUser'])
   },
@@ -73,108 +96,47 @@ export default {
     ticketTypeLabel(type) {
       return getTicketTypeLabel(type, this.$t)
     },
-    getAjaxData() {
-      let ticketType
-      const data = {}
-      this.ticketData.map((item) => {
-        switch (item.type.value) {
-          case 'apply_asset':
-            ticketType = 'apply-asset-tickets'
-            break
-          case 'login_confirm':
-            ticketType = 'apply-login-tickets'
-            break
-          case 'command_confirm':
-            ticketType = 'apply-command-tickets'
-            break
-          case 'login_asset_confirm':
-            ticketType = 'apply-login-asset-tickets'
-            break
-        }
-        if (!Object.prototype.hasOwnProperty.call(data, ticketType)) {
-          data[ticketType] = []
-        }
-        data[ticketType].push(item.id)
-      })
-      return data
-    },
     onConfirm() {
       this.bulk('approve')
     },
     onCancel() {
       this.bulk('reject')
     },
-    bulk(action) {
-      let current = 0
-      const data = this.getAjaxData()
-      const dataLength = Object.keys(data).length
-      for (const ticketType in data) {
-        current += 1
-        this.$axios
-          .put(`/api/v1/tickets/${ticketType}/bulk/?action=${action}`, {
-            tickets: data[ticketType]
-          })
-          .then((res) => {
-            this.$message.success(this.$tc('UpdateSuccessMsg'))
-            if (current === dataLength) {
-              this.$refs.BaseTicketList.reloadTable()
-              this.isVisible = false
-            }
-          })
-          .catch((err) => {
-            const errMsg = Object.values(err.response.data).join(', ')
-            this.$message.error(this.$tc('UpdateErrorMsg') + ' ' + errMsg)
-          })
-      }
+    async bulk(action) {
+      const results = await Promise.allSettled(
+        this.ticketData.flatMap((ticket) =>
+          (ticket.my_tasks || []).map((task) =>
+            this.$axios.post(
+              `/api/v1/tickets/approval-tasks/${task}/${action}/`,
+              {},
+              { params: { oid: ticket.org_id } }
+            )
+          )
+        )
+      )
+      this.$refs.BaseTicketList.reloadTable()
+      this.isVisible = false
+      const failed = results.filter((r) => r.status === 'rejected').length
+      if (failed) this.$message.warning(this.$t('WFBulkFailed', { count: failed }))
+      else this.$message.success(this.$t('UpdateSuccessMsg'))
     },
     getDetailFields(item) {
-      const ticketType = item?.type?.value
-      let detailFields = [
+      return [
         {
           key: this.$t('Applicant'),
           value: item?.applicant?.name
-        }
+        },
+        ...(item.request_items || []).map((field) => ({
+          key: field.label,
+          value: field.value ?? '-',
+          formatter: Array.isArray(field.value)
+            ? (_item, value) => h(TicketValueList, { items: value, label: field.label })
+            : undefined
+        }))
       ]
-      if (ticketType === 'command_confirm') {
-        detailFields = detailFields.concat([
-          {
-            key: this.$t('ApplyFromCMDFilterRule'),
-            value: item?.rel_snapshot?.apply_from_cmd_filter_acl
-          },
-          {
-            key: this.$t('ApplyFromSession'),
-            value: item?.rel_snapshot?.apply_from_session
-          },
-          {
-            key: this.$t('ApplyRunUser'),
-            value: item?.rel_snapshot?.apply_run_user
-          }
-        ])
-      } else if (ticketType === 'apply_asset') {
-        detailFields = detailFields.concat([
-          {
-            key: this.$t('Asset'),
-            value: item?.rel_snapshot?.apply_assets.join(', ')
-          },
-          {
-            key: this.$t('Node'),
-            value: item?.rel_snapshot?.apply_nodes.join(', ')
-          }
-        ])
-      } else if (ticketType === 'login_asset_confirm') {
-        detailFields = detailFields.concat([
-          {
-            key: this.$t('ApplyLoginAsset'),
-            value: item?.rel_snapshot?.apply_login_asset
-          },
-          {
-            key: this.$t('ApplyLoginUser'),
-            value: item?.rel_snapshot?.apply_login_user
-          }
-        ])
-      }
-      return detailFields
     }
   }
 }
 </script>
+
+<style src="./ticket-list-tabs.css" scoped></style>

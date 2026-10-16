@@ -1,6 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="17" :sm="24">
+    <el-col :span="24">
+      <p v-if="object.execution_mode === 'approval_only'" class="ticket-approval-hint">
+        {{ $t('TicketApprovalOnlyHint') }}
+      </p>
       <Details :detail-card-items="iDetailCardItems" :title="$tc('BasicInfo')" />
       <Details
         v-if="specialCardItems.length > 0"
@@ -12,11 +15,13 @@
         :detail-card-items="assignedCardItems"
         :title="$tc('AssignedInfo')"
       />
+      <TicketSecretAccess v-if="object.type?.value === 'view_secret'" :object="object" />
+      <TicketReplayAccess v-if="object.type?.value === 'download_replay'" :object="object" />
       <slot id="MoreDetails" />
+      <WorkflowPanel :object="object" />
       <Comments v-bind="$attrs" :object="object" />
     </el-col>
-    <el-col :md="7" :sm="24">
-      <Steps :object="object" />
+    <el-col :span="24">
       <Session v-if="$hasPerm('tickets.view_ticket')" :object="object" />
     </el-col>
   </el-row>
@@ -27,16 +32,20 @@ import Comments from './Comments'
 import CcUsers from './CcUsers'
 import Details from './Details'
 import Session from './Session'
-import Steps from './Steps'
+import WorkflowPanel from './WorkflowPanel'
+import TicketSecretAccess from './TicketSecretAccess'
+import TicketReplayAccess from './TicketReplayAccess'
 import { getTicketFlowLabel, getTicketStateLabel, getTicketTypeLabel } from '../const'
 export default {
   name: 'GenericTicketDetail',
   components: {
-    Steps,
+    WorkflowPanel,
     CcUsers,
     Comments,
     Details,
-    Session
+    Session,
+    TicketSecretAccess,
+    TicketReplayAccess
   },
   props: {
     object: {
@@ -124,3 +133,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.ticket-approval-hint {
+  margin: 0 0 10px;
+  color: var(--color-text-secondary);
+}
+</style>

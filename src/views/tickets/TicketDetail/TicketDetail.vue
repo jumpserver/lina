@@ -1,87 +1,25 @@
-<template>
-  <GenericTicketDetail :detail-card-items="detailCardItems" :object="object" />
-</template>
-
-<script lang="jsx">
-import { STATUS_MAP, getTicketFlowLabel, getTicketTypeLabel } from '../const'
+<template><GenericTicketDetail :object="object" :special-card-items="requestItems" /></template>
+<script>
+import GenericTicketDetail from '../components/GenericTicketDetail'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
-import CcUsers from '@/views/tickets/components/CcUsers'
-import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
-import { getAssetUrl } from '@/utils/assets'
 export default {
-  name: 'TicketDetail',
-  components: {
-    CcUsers,
-    GenericTicketDetail
-  },
-  props: {
-    object: {
-      type: Object,
-      default: () => ({})
-    }
-  },
-  data() {
-    return {
-      statusMap:
-        this.object.status.value === 'open'
-          ? STATUS_MAP['pending']
-          : STATUS_MAP[this.object.state.value],
-      imageUrl: getAssetUrl('img/avatar.png'),
-      form: {
-        comments: ''
-      },
-      comments: ''
-    }
-  },
+  components: { GenericTicketDetail },
+  props: { object: { type: Object, required: true } },
   computed: {
-    detailCardItems() {
-      const { object } = this
-      return [
-        {
-          key: this.$t('Applicant'),
-          value: object.rel_snapshot.applicant
-        },
-        {
-          key: this.$t('Type'),
-          value: getTicketTypeLabel(object.type, this.$t)
-        },
-        {
-          key: this.$t('TicketFlow'),
-          value: getTicketFlowLabel(object, this.$t)
-        },
-        {
-          key: this.$t('Status'),
-          value: object.status,
-          formatter: (item, val) => {
-            return (
-              <el-tag type={this.statusMap.type} size="small">
-                {' '}
-                {this.statusMap.title}
-              </el-tag>
-            )
-          }
-        },
-        {
-          key: this.$t('Assignees'),
-          value: object.process_map[object.approval_step.value - 1].assignees_display.join(',')
-        },
-        {
-          key: this.$t('Assignee'),
-          value: object.process_map[object.approval_step.value - 1].processor_display
-        },
-        {
-          key: this.$t('CcUsers'),
-          value: object.cc_users,
-          formatter: (item, users) => <CcUsers users={users} />
-        },
-        {
-          key: this.$t('DateCreated'),
-          value: toSafeLocalDateStr(object.date_created)
-        }
-      ]
+    requestItems() {
+      const labels = {
+        duration: 'WFFieldValidity',
+        session_asset: 'Asset',
+        session_account: 'Account',
+        session_user: 'User',
+        session_date_start: 'DateStart'
+      }
+      return (this.object.request_items || []).map((item) => ({
+        key: labels[item.name] ? this.$t(labels[item.name]) : item.label,
+        value:
+          item.name === 'session_date_start' ? toSafeLocalDateStr(item.value) : (item.value ?? '-')
+      }))
     }
   }
 }
 </script>
-
-<style scoped></style>

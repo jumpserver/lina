@@ -1,14 +1,17 @@
 <template>
-  <div v-loading="loading">
+  <div>
     <GenericListPage
       ref="ListPage"
       :get-drawer-title="getDrawerTitle"
-      :create-drawer="createDrawer"
       :detail-drawer="detailDrawer"
       :header-actions="iTicketAction"
       :quick-filters="quickFilters"
       :table-config="ticketTableConfig"
-    />
+    >
+      <template #tableBefore>
+        <slot name="tableBefore" />
+      </template>
+    </GenericListPage>
   </div>
 </template>
 
@@ -40,9 +43,7 @@ export default {
   data() {
     const vm = this
     return {
-      loading: true,
       getDrawerTitle: () => ' ',
-      createDrawer: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
       quickFilters: [
         {
           label: this.$t('Type'),
@@ -113,12 +114,27 @@ export default {
       ticketTableConfig: {
         url: this.url,
         extraQuery: this.extraQuery,
-        columnsExclude: ['process_map', 'rel_snapshot', 'cc_users'],
+        columnsExclude: [
+          'process_map',
+          'rel_snapshot',
+          'cc_users',
+          'my_tasks',
+          'workflow_instance',
+          'request_data',
+          'request_items',
+          'execution_mode',
+          'available_actions',
+          'secret_access_status',
+          'approval_step'
+        ],
         columnsShow: {
           min: ['title', 'serial_num', 'type', 'state', 'date_created'],
-          default: ['title', 'serial_num', 'type', 'state', 'date_created']
+          default: ['title', 'serial_num', 'type', 'org_name', 'state', 'date_created']
         },
         columnsMeta: {
+          org_name: {
+            label: this.$t('Organization')
+          },
           serial_num: {
             label: this.$t('Number')
           },
@@ -179,7 +195,7 @@ export default {
             }
           },
           state: {
-            label: this.$t('Action'),
+            label: this.$t('State'),
             align: 'center',
             formatter: TagChoicesFormatter,
             formatterArgs: {
@@ -213,7 +229,6 @@ export default {
         hasLeftActions: true,
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
-        moreCreates: {},
         createTitle: this.$t('RequestTickets')
       }
     }
@@ -223,10 +238,19 @@ export default {
       return Object.assign({}, this.defaultTicketActions, this.extraTicketAction)
     }
   },
+  watch: {
+    url(url) {
+      this.$refs.ListPage?.$refs.ListTable?.$refs.ListTable?.dataTable?.$refs.table?.clearSelection()
+      this.ticketTableConfig.url = url
+    }
+  },
   mounted() {
-    setTimeout(() => {
-      this.loading = false
-    }, 500)
+    this.$axios.get('/api/v1/tickets/ticket-types/').then((types) => {
+      this.quickFilters[0].options = types.map((type) => ({
+        label: getTicketTypeLabel({ value: type.type, label: type.label }, this.$t),
+        filter: { type: type.type }
+      }))
+    })
   },
   methods: {
     reloadTable() {

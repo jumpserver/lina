@@ -21,7 +21,6 @@ import {
   isPositiveInteger,
   normalizeExpireNoticePayload
 } from '@/views/perms/AssetPermission/expireSoonNotice'
-import CcUsers from '@/views/tickets/components/CcUsers'
 import { getTicketFlowLabel } from '@/views/tickets/const'
 import { mapGetters, mapState } from 'vuex'
 
@@ -41,6 +40,8 @@ export default {
       hasDetailInMsg: false,
       loading: true,
       flowOptions: [],
+      flowRequest: 0,
+      selectedOrgId: '',
       initial: {
         ips_or_not: true,
         apply_date_expired: date_expired,
@@ -49,16 +50,16 @@ export default {
         apply_expire_soon_notice_switch: false,
         apply_expire_soon_notice_minutes: null,
         apply_assets: [],
+        apply_users: store.getters.currentUser.id,
         org_id: '',
-        flow_id: '',
-        cc_users: [],
+        workflow_id: '',
         apply_actions: [this.$t('All')]
       },
       fields: [
-        [this.$t('Basic'), ['title', 'org_id', 'flow_id', 'cc_users']],
+        [this.$t('Basic'), ['title', 'org_id', 'workflow_id']],
         [
           this.$t('RequestPerm'),
-          ['apply_nodes', 'apply_assets', 'apply_accounts', 'apply_actions']
+          ['apply_users', 'apply_nodes', 'apply_assets', 'apply_accounts', 'apply_actions']
         ],
         [
           this.$t('ValidityPeriod'),
@@ -73,6 +74,33 @@ export default {
         [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
+        apply_users: {
+          label: this.$t('TicketAuthorizedUser'),
+          component: Select2,
+          required: true,
+          el: {
+            multiple: false,
+            clearable: false,
+            options: [
+              { value: store.getters.currentUser.id, label: store.getters.currentUser.name }
+            ],
+            ajax: {
+              url: '',
+              transformOption: (item) => ({
+                label: `${item.name} (${item.username})`,
+                value: item.id
+              })
+            }
+          },
+          on: {
+            change: async ([userId], updateForm) => {
+              updateForm({ workflow_id: '' })
+              const flow = await this.loadFlowOptions(this.selectedOrgId, userId)
+              if (flow === undefined) return
+              updateForm({ workflow_id: flow?.id || '' })
+            }
+          }
+        },
         title: {
           el: {
             type: 'input'
@@ -176,28 +204,28 @@ export default {
           },
           hidden: (form) => {
             const fieldsMeta = this.fieldsMeta
+            fieldsMeta.apply_users.el.ajax.url = `/api/v1/tickets/ticket-types/apply_asset/options/?org_id=${form['org_id']}`
             fieldsMeta.apply_assets.el.ajax.url = `/api/v1/tickets/apply-assets/suggestions/?oid=${form['org_id']}`
             fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/tickets/apply-nodes/suggestions/?oid=${form['org_id']}`
             fieldsMeta.apply_accounts.el.oid = form['org_id']
           },
           on: {
             change: async ([event], updateForm) => {
+              this.selectedOrgId = event
               updateForm({
-                flow_id: '',
-                cc_users: [],
+                workflow_id: '',
                 apply_nodes: [],
                 apply_assets: [],
-                apply_system_users: []
+                apply_accounts: [],
+                apply_users: store.getters.currentUser.id
               })
-              const flow = await this.loadFlowOptions(event)
-              updateForm({
-                flow_id: flow?.id || '',
-                cc_users: flow?.cc_users || []
-              })
+              const flow = await this.loadFlowOptions(event, store.getters.currentUser.id)
+              if (flow === undefined) return
+              updateForm({ workflow_id: flow?.id || '' })
             }
           }
         },
-        flow_id: {
+        workflow_id: {
           component: Select2,
           label: this.$t('TicketFlow'),
           el: {
@@ -205,19 +233,6 @@ export default {
             clearable: false,
             disabled: true,
             options: []
-          },
-          on: {
-            change: ([event], updateForm) => {
-              const flow = this.flowOptions.find((item) => item.id === event)
-              updateForm({ cc_users: flow?.cc_users || [] })
-            }
-          }
-        },
-        cc_users: {
-          component: CcUsers,
-          label: this.$t('CcUsers'),
-          el: {
-            value: []
           }
         }
       },
@@ -236,13 +251,13 @@ export default {
             }
           }
         })
-        if (!value.flow_id) {
-          delete value.flow_id
+        if (!value.workflow_id) {
+          delete value.workflow_id
         }
-        delete value.cc_users
+        value.apply_users = value.apply_users ? [value.apply_users] : []
         return normalizeExpireNoticePayload(value, 'apply_')
       },
-      url: '/api/v1/tickets/apply-asset-tickets/?state=pending',
+      url: '/api/v1/tickets/tickets/?type=apply_asset',
       createSuccessNextRoute: {
         name: 'MyTicketList'
       }
@@ -267,38 +282,51 @@ export default {
     } else {
       this.initial.org_id = userAllOrgIds[0]
     }
+    this.selectedOrgId = this.initial.org_id
 
-    const flow = await this.loadFlowOptions(this.initial.org_id)
-    this.initial.flow_id = flow?.id || ''
-    this.initial.cc_users = flow?.cc_users || []
+    const flow = await this.loadFlowOptions(this.initial.org_id, store.getters.currentUser.id)
+    this.initial.workflow_id = flow?.id || ''
 
     this.loading = false
   },
   methods: {
-    async loadFlowOptions(orgId) {
+    async loadFlowOptions(orgId, beneficiary) {
+      const requestId = ++this.flowRequest
       this.flowOptions = []
-      this.fieldsMeta.flow_id.el.options = []
-      this.fieldsMeta.flow_id.el.disabled = true
+      this.fieldsMeta.workflow_id.el.options = []
+      this.fieldsMeta.workflow_id.el.disabled = true
       if (!orgId) {
         return null
       }
       try {
-        const flows = await this.$axios.get('/api/v1/tickets/flows/options/', {
-          params: { type: 'apply_asset', org_id: orgId }
+        const flows = await this.$axios.get('/api/v1/tickets/workflows/options/', {
+          params: { type: 'apply_asset', org_id: orgId, beneficiary }
         })
+        if (requestId !== this.flowRequest) return undefined
         this.flowOptions = flows
-        this.fieldsMeta.flow_id.el.options = flows.map((flow) => ({
+        this.fieldsMeta.workflow_id.el.options = flows.map((flow) => ({
           label: getTicketFlowLabel(flow, this.$t),
           value: flow.id
         }))
-        this.fieldsMeta.flow_id.el.disabled = flows.length <= 1
+        this.fieldsMeta.workflow_id.el.disabled = flows.length <= 1
         return flows[0] || null
       } catch (error) {
         return null
       }
     },
     performSubmit(validValues) {
-      return this.$axios['post'](`/api/v1/tickets/apply-asset-tickets/open/`, validValues)
+      const { title, org_id, workflow_id, comment } = validValues
+      const request_data = Object.fromEntries(
+        Object.entries(validValues).filter(([key]) => key.startsWith('apply_'))
+      )
+      return this.$axios.post('/api/v1/tickets/tickets/open/', {
+        type: 'apply_asset',
+        title,
+        org_id,
+        workflow_id,
+        comment,
+        request_data
+      })
     }
   }
 }

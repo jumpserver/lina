@@ -12,11 +12,13 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import TicketDetail from './TicketDetail'
+import TicketActivity from '../components/TicketActivity'
 
 export default {
   components: {
     GenericDetailPage,
     TicketDetail,
+    TicketActivity,
     TabPage
   },
   data() {
@@ -29,14 +31,20 @@ export default {
         date_created: ''
       },
       config: {
+        actions: { detailApiUrl: `/api/v1/tickets/tickets/${this.$context.get('id')}/` },
         activeMenu: 'TicketDetail',
         submenu: [
           {
             title: this.$t('TicketDetail'),
             name: 'TicketDetail'
+          },
+          {
+            title: this.$t('Activity'),
+            name: 'TicketActivity'
           }
         ],
         getObjectName: this.getObjectName,
+        hasActivity: false,
         hasRightSide: false
       }
     }
@@ -53,6 +61,7 @@ export default {
         command_confirm: 'CommandConfirmDetail'
       }
       const routeName = ticketRouteMapper[ticket.type.value]
+      if (!routeName) return
       setTimeout(() => {
         this.$router.push({
           name: routeName,

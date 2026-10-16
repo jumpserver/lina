@@ -33,23 +33,10 @@ export default {
   },
   computed: {
     specialCardItems() {
-      const { object } = this
-      return object.type === 'login_confirm'
-        ? []
-        : [
-            {
-              key: this.$t('ApplyLoginAsset'),
-              value: object.apply_login_asset?.name
-            },
-            {
-              key: this.$t('ApplyLoginAccount'),
-              value: object.apply_login_account
-            },
-            {
-              key: this.$t('ApplyLoginUser'),
-              value: object.apply_login_user.name
-            }
-          ]
+      return (this.object.request_items || []).map((item) => ({
+        key: item.label,
+        value: item.value
+      }))
     }
   },
   methods: {}
