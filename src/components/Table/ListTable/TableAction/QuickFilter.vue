@@ -106,6 +106,9 @@ export default {
   mounted() {
     this.iFilters = this.cleanFilters()
     this.iSummary = this.cleanSummary()
+    this.activeFilters = this.iFilters
+      .flatMap((category) => category.options)
+      .filter((option) => option.active)
     this.generateCount()
   },
   methods: {
@@ -165,7 +168,7 @@ export default {
             return {
               category: category.label,
               ...option,
-              active: false,
+              active: Boolean(option.active),
               filter: option.filter || {}
             }
           })
@@ -189,7 +192,7 @@ export default {
         this.activeFilters.push(option)
       } else {
         this.activeFilters = this.activeFilters.filter((item) => {
-          return item.label !== option.label && item.category !== option.category
+          return item !== option
         })
       }
       option.active = !option.active

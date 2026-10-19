@@ -54,6 +54,7 @@ export default {
             },
             {
               label: this.$t('Valid'),
+              active: true,
               filter: {
                 is_valid: true
               }
@@ -74,6 +75,12 @@ export default {
               label: this.$t('NoResource'),
               filter: {
                 is_no_resource: true
+              }
+            },
+            {
+              label: this.$t('FromTicket'),
+              filter: {
+                from_ticket: true
               }
             }
           ]
