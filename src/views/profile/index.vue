@@ -11,13 +11,6 @@
           style="margin-top: 15px"
           type="info"
         />
-        <QuickActions
-          v-if="biometricFeaturesActions.some((action) => action.has)"
-          :actions="biometricFeaturesActions"
-          :title="$tc('BiometricFeatures')"
-          style="margin-top: 15px"
-          type="warning"
-        />
         <IBox
           v-if="!store.getters.publicSettings['PRIVACY_MODE']"
           :title="$tc('InformationModification')"
@@ -72,29 +65,55 @@ export default {
       profilePhone: null,
       showPasswordDialog: false,
       currentEdit: '',
-      biometricFeaturesActions: [
+      authQuickActions: [
         {
-          title: this.$t('FacialFeatures'),
-          has:
-            this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
-            !store.getters.publicSettings['PRIVACY_MODE'],
+          title: this.$t('ChangePassword'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_face_code_set
-              ? this.$t('Unbind')
-              : this.$t('Bind')
+            label: this.$t('Update'),
+            disabled: !this.isUserFromSource('local')
           },
           callbacks: {
-            click: () => {
-              const next_url = this.$store.state.users.profile.is_face_code_set
-                ? '/core/auth/profile/face/disable/'
-                : '/core/auth/profile/face/enable/'
-              window.open(next_url, '_blank')
+            click: function () {
+              this.$router.push({
+                name: 'SSHKeyList',
+                query: {
+                  tab: 'Password'
+                }
+              })
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('UpdateSSHKey'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Update'),
+            disabled: !this.$store.state.users.profile.can_public_key_auth
+          },
+          callbacks: {
+            click: function () {
+              this.$router.push({
+                name: 'SSHKeyList',
+                query: {
+                  tab: 'SSHKeyList'
+                }
+              })
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('SetMFA'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Setting')
+          },
+          callbacks: {
+            click: function () {
+              window.open('/core/auth/profile/mfa/', '_blank')
             }
           }
-        }
-      ],
-      authQuickActions: [
+        },
         {
           title: this.$t('WeComOAuth'),
           attrs: {
@@ -191,51 +210,23 @@ export default {
           }
         },
         {
-          title: this.$t('SetMFA'),
+          title: this.$t('FacialFeatures'),
+          has:
+            this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
+            !store.getters.publicSettings['PRIVACY_MODE'],
           attrs: {
             type: 'primary',
-            label: this.$t('Setting')
+            label: this.$store.state.users.profile.is_face_code_set
+              ? this.$t('Unbind')
+              : this.$t('Bind')
           },
           callbacks: {
-            click: function () {
-              window.open('/core/auth/profile/mfa/', '_blank')
+            click: () => {
+              const next_url = this.$store.state.users.profile.is_face_code_set
+                ? '/core/auth/profile/face/disable/'
+                : '/core/auth/profile/face/enable/'
+              window.open(next_url, '_blank')
             }
-          }
-        },
-        {
-          title: this.$t('ChangePassword'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('Update'),
-            disabled: !this.isUserFromSource('local')
-          },
-          callbacks: {
-            click: function () {
-              this.$router.push({
-                name: 'SSHKeyList',
-                query: {
-                  tab: 'Password'
-                }
-              })
-            }.bind(this)
-          }
-        },
-        {
-          title: this.$t('UpdateSSHKey'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('Update'),
-            disabled: !this.$store.state.users.profile.can_public_key_auth
-          },
-          callbacks: {
-            click: function () {
-              this.$router.push({
-                name: 'SSHKeyList',
-                query: {
-                  tab: 'SSHKeyList'
-                }
-              })
-            }.bind(this)
           }
         }
       ],
