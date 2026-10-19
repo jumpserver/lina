@@ -21,12 +21,12 @@ export default {
       activeMenu: 'Adhoc',
       submenu: [
         {
-          title: this.$t('AdhocManage'),
+          title: this.$t('ScriptTemplate'),
           name: 'Adhoc',
           hidden: () => !this.$hasPerm('ops.view_adhoc')
         },
         {
-          title: this.$t('PlaybookManage'),
+          title: this.$t('PlaybookTemplate'),
           name: 'Playbook',
           hidden: () => !this.$hasPerm('ops.view_playbook')
         }

@@ -10,6 +10,7 @@
           :on-change="onFileChange"
           accept=".zip"
           action="string"
+          class="playbook-upload"
           drag
           list-type="text/csv"
         >
@@ -77,6 +78,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.playbook-upload {
+  width: 100%;
+  min-width: 0;
+}
+
 .file-uploader.el-form-item {
   margin-bottom: 0;
 
