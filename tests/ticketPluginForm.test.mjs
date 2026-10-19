@@ -1,6 +1,86 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { getTicketPlugin, configurePluginField } from '../src/views/tickets/plugins/registry.js'
+import { reactive } from 'vue'
 import { buildRequestPayload } from '../src/views/tickets/plugins/form.js'
+
+test('boolean and multiple-choice fields keep their types through the generic form', async () => {
+  const vm = await createAccountForm(async () => [])
+  vm.plugins.push({
+    type: 'example',
+    fields: [
+      { name: 'enabled', type: 'boolean', required: true },
+      { name: 'scopes', type: 'multiple_choice', choices: [{ value: 'one', label: 'One' }] }
+    ]
+  })
+  vm.selectedType = 'example'
+  await vm.configure()
+  assert.equal(vm.fieldsMeta.param_enabled.type, 'switch')
+  assert.equal(vm.fieldsMeta.param_scopes.el.multiple, true)
+  assert.equal(vm.initial.param_enabled, false)
+  assert.deepEqual(vm.initial.param_scopes, [])
+  assert.deepEqual(vm.cleanFormValue({ ...vm.initial, param_scopes: ['one'] }).request_data, {
+    enabled: false,
+    scopes: ['one']
+  })
+})
+
+test('multiple account fields load independently and discard responses after organization changes', async () => {
+  const requests = []
+  const vm = await createAccountForm((url, config) => {
+    if (url.includes('/workflows/')) return Promise.resolve([])
+    return new Promise((resolve) => requests.push({ config, resolve }))
+  })
+  vm.plugins.push({
+    type: 'example',
+    fields: [
+      { name: 'source', resource: 'asset', type: 'string' },
+      { name: 'target', resource: 'asset', type: 'string' },
+      { name: 'reader', resource: 'account', depends_on: 'source', type: 'string' },
+      { name: 'writers', resource: 'account', depends_on: 'target', type: 'list', max_length: 2 }
+    ]
+  })
+  vm.selectedType = 'example'
+  await vm.configure()
+  const values = { ...vm.initial }
+  const update = (patch) => Object.assign(values, patch)
+  const source = vm.fieldsMeta.param_source.on.change(['asset-a'], update)
+  const target = vm.fieldsMeta.param_target.on.change(['asset-b'], update)
+  assert.deepEqual(requests[0].config.params, {
+    org_id: 'org-1',
+    field: 'reader',
+    source: 'asset-a'
+  })
+  assert.deepEqual(requests[1].config.params, {
+    org_id: 'org-1',
+    field: 'writers',
+    target: 'asset-b'
+  })
+  requests[1].resolve(['writer'])
+  requests[0].resolve(['reader'])
+  await Promise.all([source, target])
+  assert.equal(vm.fieldsMeta.param_reader.el.multiple, false)
+  assert.equal(vm.fieldsMeta.param_writers.el.multipleLimit, 2)
+  assert.deepEqual(vm.fieldsMeta.param_reader.el.options, [{ value: 'reader', label: 'reader' }])
+  assert.deepEqual(vm.fieldsMeta.param_writers.el.options, [{ value: 'writer', label: 'writer' }])
+  const stale = vm.fieldsMeta.param_source.on.change(['asset-c'], update)
+  await vm.fieldsMeta.org_id.on.change(['org-2'], update)
+  requests[2].resolve(['stale'])
+  await stale
+  assert.deepEqual(vm.fieldsMeta.param_reader.el.options, [])
+  assert.deepEqual(vm.fieldsMeta.param_writers.el.options, [])
+  assert.equal(values.param_reader, '')
+  assert.deepEqual(values.param_writers, [])
+})
+
+test('a plugin requiring an unavailable custom form never exposes a partial generic form', async () => {
+  const vm = await createAccountForm(async () => [])
+  vm.plugins.push({ type: 'example', custom_form: true, fields: [] })
+  vm.selectedType = 'example'
+  await vm.configure()
+  assert.equal(vm.formReady, false)
+  assert.equal(vm.plugin.form, undefined)
+})
 
 test('plugin submission includes only declared parameters and preserves literal file paths', () => {
   const payload = buildRequestPayload(
@@ -52,7 +132,8 @@ async function createAccountForm(get) {
     'Select2',
     'Required',
     'RequiredChange',
-    'AssetRequest',
+    'getTicketPlugin',
+    'configurePluginField',
     'getTicketTypeLabel',
     'buildRequestPayload',
     'toSafeLocalDateStr',
@@ -65,18 +146,19 @@ async function createAccountForm(get) {
     {},
     {},
     {},
-    {},
+    getTicketPlugin,
+    configurePluginField,
     () => '',
     buildRequestPayload,
     (value) => `local:${value}`
   )
-  const vm = {
+  const vm = reactive({
     ...component.data(),
     $t: (key) => key,
     $axios: { get },
     currentOrg: { id: 'org-1' },
     organizations: [{ id: 'org-1', name: 'Default' }]
-  }
+  })
   Object.assign(
     vm,
     Object.fromEntries(
@@ -92,7 +174,13 @@ async function createAccountForm(get) {
       type: 'change_secret',
       fields: [
         { name: 'asset', resource: 'asset', type: 'string', required: true },
-        { name: 'accounts', resource: 'account', type: 'list', required: true },
+        {
+          name: 'accounts',
+          resource: 'account',
+          depends_on: 'asset',
+          type: 'list',
+          required: true
+        },
         { name: 'paths', type: 'list' }
       ]
     }
@@ -128,7 +216,11 @@ test('account picker resets with asset/organization and ignores obsolete request
   )
   assert.equal(accounts.el.disabled, false)
   assert.equal(accounts.helpTextFormatter(), '')
-  assert.deepEqual(requests[1].config.params, { org_id: 'org-1', asset: 'asset-2' })
+  assert.deepEqual(requests[1].config.params, {
+    org_id: 'org-1',
+    field: 'accounts',
+    asset: 'asset-2'
+  })
   form.param_accounts = ['name,with,commas']
   assert.deepEqual(vm.cleanFormValue(form).request_data.accounts, ['name,with,commas'])
   const pending = vm.fieldsMeta.param_asset.on.change(['asset-3'], update)
@@ -150,16 +242,16 @@ test('empty or failed account loads cannot retain old selections and can be retr
   })
   const form = { ...vm.initial, param_accounts: ['old-account'] }
   const update = (value) => Object.assign(form, value)
-  await vm.loadAccountOptions('asset', update)
+  await vm.loadAccountOptions(vm.accountFields[0], 'asset', update)
   assert.deepEqual(form.param_accounts, [])
-  assert.equal(vm.accountsFailed, true)
+  assert.equal(vm.accountStates.accounts.failed, true)
   assert.equal(vm.fieldsMeta.param_accounts.el.disabled, false)
   assert.equal(vm.fieldsMeta.param_accounts.helpTextFormatter(), 'TicketAccountsLoadFailed')
   fail = false
-  await vm.loadAccountOptions('asset', update)
-  assert.equal(vm.accountsFailed, false)
+  await vm.loadAccountOptions(vm.accountFields[0], 'asset', update)
+  assert.equal(vm.accountStates.accounts.failed, false)
   assert.equal(vm.fieldsMeta.param_accounts.helpTextFormatter(), 'TicketNoAssetAccounts')
-  await vm.loadAccountOptions('', update)
+  await vm.loadAccountOptions(vm.accountFields[0], '', update)
   assert.equal(vm.fieldsMeta.param_accounts.el.disabled, true)
 })
 
@@ -216,7 +308,7 @@ test('session picker labels recordings but submits only the UUID and resets acro
   assert.equal(picker.helpText, 'TicketSelectSessionHelp')
   assert.equal(
     picker.el.ajax.url,
-    '/api/v1/tickets/ticket-types/download_replay/options/?org_id=org-1'
+    '/api/v1/tickets/ticket-types/download_replay/options/?org_id=org-1&field=session'
   )
   const session = {
     id: 'f8ad3549-932f-46d7-8d52-c1943487b733',
@@ -245,11 +337,49 @@ test('session picker labels recordings but submits only the UUID and resets acro
   assert.equal(vm.selectedOrgId, 'org-2')
   assert.equal(
     picker.el.ajax.url,
-    '/api/v1/tickets/ticket-types/download_replay/options/?org_id=org-2'
+    '/api/v1/tickets/ticket-types/download_replay/options/?org_id=org-2&field=session'
   )
   form.param_session = 'bbf72d94-f00e-4134-af64-2c7349d0e687'
   assert.deepEqual(vm.cleanFormValue(form).request_data, { session: form.param_session })
   await vm.fieldsMeta.org_id.on.change([''], update)
   assert.equal(form.param_session, '')
   assert.equal(picker.el.disabled, true)
+})
+
+test('file transfer form explains its scope and uses direction labels without changing payloads', async () => {
+  const vm = await createAccountForm(async () => [])
+  vm.plugins.push({
+    type: 'file_transfer',
+    execution_mode: 'automatic',
+    fields: [
+      {
+        name: 'direction',
+        type: 'choice',
+        required: true,
+        choices: [
+          { value: 'upload', label: 'Server upload' },
+          { value: 'download', label: 'Server download' }
+        ]
+      },
+      { name: 'paths', type: 'list', required: true },
+      { name: 'duration', type: 'integer', min: 60, max: 86400, default: 3600 }
+    ]
+  })
+  vm.selectedType = 'file_transfer'
+  await vm.configure()
+  assert.equal(vm.fieldsMeta.param_paths.label, 'TicketTransferPaths')
+  assert.equal(vm.fieldsMeta.param_paths.helpText, 'TicketTransferPathsHelp')
+  assert.equal(vm.fieldsMeta.param_duration.helpText, 'TicketTransferDurationHelp')
+  assert.deepEqual(vm.fieldsMeta.param_direction.el.options, [
+    { value: 'upload', label: 'Upload' },
+    { value: 'download', label: 'Download' }
+  ])
+  const payload = vm.cleanFormValue({
+    ...vm.initial,
+    param_direction: 'download',
+    param_paths: '/var/log/a'
+  })
+  assert.equal(payload.request_data.direction, 'download')
+  assert.deepEqual(payload.request_data.paths, ['/var/log/a'])
+  assert.equal(payload.request_data.duration, 3600)
 })

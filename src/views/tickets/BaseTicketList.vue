@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { getTicketDetailRoute } from './plugins/registry'
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
@@ -123,8 +124,7 @@ export default {
           'request_data',
           'request_items',
           'execution_mode',
-          'available_actions',
-          'secret_access_status',
+          'result',
           'approval_step'
         ],
         columnsShow: {
@@ -145,13 +145,6 @@ export default {
               drawer: true,
               getRoute: ({ row }) => {
                 const type = row.type.value
-                const routeMap = {
-                  apply_asset: 'AssetsTicketDetail',
-                  login_asset_confirm: 'LoginAssetTicketDetail',
-                  login_confirm: 'LoginTicketDetail',
-                  command_confirm: 'CommandConfirmDetail'
-                }
-
                 this.$store.dispatch('common/setDrawerActionMeta', {
                   action: 'detail',
                   row: {},
@@ -160,7 +153,7 @@ export default {
                 })
 
                 return {
-                  name: routeMap[type] || 'TicketDetail',
+                  name: getTicketDetailRoute(type),
                   params: { id: row.id }
                 }
               }

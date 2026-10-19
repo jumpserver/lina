@@ -1,4 +1,5 @@
 {
+  "TicketUnsupportedForm": "此工單類型需要專用表單，目前前端尚未安裝。",
   "TemplateCredentialOverrideConfirm": "此帳號正在跟隨範本憑證。是否解除跟隨並繼續修改或清除憑證？此操作不會修改範本。",
   "TemplateCredentialOverride": "解除跟隨並繼續",
   "Credentials": "憑據",
@@ -2806,5 +2807,21 @@
   "WFBranchHint": "根據條件選擇後續路徑",
   "WFAdvancedSettings": "逾時與審批操作",
   "WFConditionMode": "條件組合",
-  "WFOperator": "判斷方式"
+  "WFOperator": "判斷方式",
+  "TicketTransferApplyHelp": "需要已有資產和帳號存取權限；審批通過後僅追加申請的傳輸方向。",
+  "TicketTransferPaths": "申請路徑（僅作說明）",
+  "TicketTransferPathsHelp": "每行填寫一個路徑。路徑僅說明用途，實際授權按所選資產和帳號生效，不限制這些路徑。",
+  "TicketTransferDirection": "傳輸方向",
+  "TicketTransferDurationHelp": "從最終審批通過開始計時。到期後新建連線不能使用此授權；已有工作階段沿用現有策略。",
+  "TicketTransferStatus": "授權狀態",
+  "TicketTransferStartsAt": "生效時間",
+  "TicketTransferExpiresAt": "到期時間",
+  "TicketTransferScopeHelp": "路徑不受限制；到期僅影響新建連線，已有工作階段可能繼續使用。",
+  "TicketTransferPending": "等待審批",
+  "TicketTransferAvailable": "檔案傳輸已授權",
+  "TicketTransferExpired": "檔案傳輸授權已過期",
+  "TicketTransferUnavailable": "檔案傳輸授權不可用",
+  "TicketTransferUnavailableHelp": "審批未通過、傳輸授權或基礎資產帳號權限不可用，請檢查權限或重新申請。",
+  "TicketTransferLegacy": "歷史工單：僅審批",
+  "TicketTransferReconnectHelp": "請使用申請人帳號，在現有檔案管理入口重新建立連線後使用此授權。"
 }

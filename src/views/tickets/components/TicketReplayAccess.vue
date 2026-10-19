@@ -41,15 +41,15 @@ export default {
       return `${this.object.org_id || ''}:${this.object.id || ''}`
     },
     action() {
-      return (this.object.available_actions || []).find(
+      return (this.object.result?.actions || []).find(
         (item) => item.type === 'download_replay' && item.session_id
       )
     },
     expiresAt() {
-      return this.action?.expires_at || this.object.replay_access_status?.expires_at
+      return this.action?.expires_at || this.object.result?.expires_at
     },
     accessState() {
-      const state = this.object.replay_access_status?.state
+      const state = this.object.result?.state
       if (state && state !== 'available') return state
       const ticketState = this.object.state?.value || this.object.state
       if (ticketState === 'pending') return 'pending'
@@ -72,7 +72,7 @@ export default {
     },
     downloadUrl() {
       if (this.accessState !== 'available' || !this.object.id || !this.object.org_id) return ''
-      return `/api/v1/tickets/tickets/${encodeURIComponent(this.object.id)}/replay/download/?oid=${encodeURIComponent(this.object.org_id)}`
+      return `/api/v1/tickets/tickets/${encodeURIComponent(this.object.id)}/actions/download_replay/?oid=${encodeURIComponent(this.object.org_id)}`
     }
   },
   watch: {

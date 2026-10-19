@@ -100,13 +100,13 @@ export default {
       return `${this.object.org_id || ''}:${this.object.id || ''}`
     },
     actions() {
-      return (this.object.available_actions || []).filter((item) => item.type === 'view_secret')
+      return (this.object.result?.actions || []).filter((item) => item.type === 'view_secret')
     },
     activeActions() {
       return this.actions.filter((action) => Date.parse(action.expires_at) > this.now)
     },
     accessState() {
-      const state = this.object.secret_access_status?.state
+      const state = this.object.result?.state
       if (state && state !== 'available') return state
       if (this.actions.length) return this.activeActions.length ? 'available' : 'expired'
       const ticketState = this.object.state?.value || this.object.state
@@ -119,7 +119,7 @@ export default {
         const latest = Math.max(...this.actions.map((action) => Date.parse(action.expires_at)))
         if (Number.isFinite(latest)) return new Date(latest).toISOString()
       }
-      return this.object.secret_access_status?.expires_at
+      return this.object.result?.expires_at
     },
     statusMessage() {
       return (
@@ -192,8 +192,8 @@ export default {
       this.loadingId = action.account_id
       try {
         const result = await this.$axios.post(
-          `/api/v1/accounts/accounts/${action.account_id}/reveal-by-ticket/`,
-          { ticket_id: this.object.id },
+          `/api/v1/tickets/tickets/${this.object.id}/actions/view_secret/`,
+          { account_id: action.account_id },
           { params: { oid: this.object.org_id } }
         )
         this.now = Date.now()

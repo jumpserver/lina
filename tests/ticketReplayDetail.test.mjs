@@ -1,3 +1,4 @@
+import { getTicketPlugin } from '../src/views/tickets/plugins/registry.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
@@ -20,15 +21,18 @@ test('ticket request details translate session fields and format dates while pre
     return value == null ? '-' : '2026-10-05 16:30:00'
   }
   // eslint-disable-next-line no-new-func -- Execute the local SFC script in this isolated test harness.
-  const component = new Function('GenericTicketDetail', 'toSafeLocalDateStr', script)(
-    {},
-    formatDate
-  )
+  const component = new Function(
+    'GenericTicketDetail',
+    'toSafeLocalDateStr',
+    'getTicketPlugin',
+    script
+  )({}, formatDate, getTicketPlugin)
   const accounts = ['root', 'operator']
   const date = '2026-10-05T08:30:00Z'
   const vm = {
     $t: (key) => translations[key],
     object: {
+      type: { value: 'download_replay' },
       request_items: [
         { name: 'duration', label: 'Validity (seconds)', value: 3600 },
         { name: 'session_asset', label: 'Session asset', value: 'Database server' },

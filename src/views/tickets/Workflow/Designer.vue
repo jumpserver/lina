@@ -240,7 +240,7 @@
                     />
                   </el-form-item>
                 </template>
-                <el-form-item v-if="selected.type === 'cc'" :label="$t('CcUsers')" required>
+                <el-form-item v-if="selected.type === 'cc'" :label="$t('CcUsers')">
                   <Select2
                     v-model="selected.config.users"
                     multiple

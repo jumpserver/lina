@@ -1,4 +1,5 @@
 {
+  "TicketUnsupportedForm": "This ticket type requires a form that is not installed in this frontend.",
   "NotExecuted": "Not executed",
   "CommandRejectedByACL": "Command blocked by ACL",
   "TemplateCredentialOverrideConfirm": "This account follows template credentials. Stop following and continue modifying or clearing credentials? The template will not be changed.",
@@ -2815,5 +2816,21 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "TicketTransferApplyHelp": "Requires existing access to the asset and accounts. Approval adds only the requested transfer direction.",
+  "TicketTransferPaths": "Requested paths (description only)",
+  "TicketTransferPathsHelp": "One path per line. Paths describe the request; authorization covers the selected asset and accounts, not these paths.",
+  "TicketTransferDirection": "Transfer direction",
+  "TicketTransferDurationHelp": "Starts at final approval. After expiry, new connections cannot use this grant; existing sessions follow their current policy.",
+  "TicketTransferStatus": "Authorization status",
+  "TicketTransferStartsAt": "Effective from",
+  "TicketTransferExpiresAt": "Expires at",
+  "TicketTransferScopeHelp": "Paths are unrestricted. Expiry affects new connections; existing sessions may continue.",
+  "TicketTransferPending": "Waiting for approval",
+  "TicketTransferAvailable": "File transfer authorized",
+  "TicketTransferExpired": "File transfer authorization expired",
+  "TicketTransferUnavailable": "File transfer authorization unavailable",
+  "TicketTransferUnavailableHelp": "Approval, the transfer grant or existing asset/account access is unavailable. Check permissions or submit a new request.",
+  "TicketTransferLegacy": "Historical ticket: approval only",
+  "TicketTransferReconnectHelp": "As the applicant, open a new connection in the existing file manager to use this grant."
 }

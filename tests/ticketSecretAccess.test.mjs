@@ -46,17 +46,20 @@ function approvedTicket(expiresAt) {
     id: 'ticket-a',
     org_id: 'org-a',
     state: { value: 'approved' },
-    secret_access_status: { state: 'available', expires_at: expiresAt },
-    available_actions: [
-      { type: 'view_secret', account_id: 'account-a', name: 'root', expires_at: expiresAt }
-    ]
+    result: {
+      state: 'available',
+      expires_at: expiresAt,
+      actions: [
+        { type: 'view_secret', account_id: 'account-a', name: 'root', expires_at: expiresAt }
+      ]
+    }
   }
 }
 
 test('password access maps server states and never assumes approval is sufficient', async (t) => {
   t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 1000 })
   const vm = mountState(t, approvedTicket(new Date(3000).toISOString()))
-  vm.object.available_actions.push({ type: 'download', account_id: 'other' })
+  vm.object.result.actions.push({ type: 'download', account_id: 'other' })
   assert.equal(vm.actions.length, 1)
   assert.equal(vm.activeActions.length, 1)
   assert.equal(vm.accessState, 'available')
@@ -68,27 +71,23 @@ test('password access maps server states and never assumes approval is sufficien
     disabled: 'TicketSecretDisabled',
     unavailable: 'TicketSecretUnavailable'
   })) {
-    vm.object.secret_access_status.state = state
+    vm.object.result.state = state
     assert.equal(vm.accessState, state)
     assert.equal(vm.statusMessage, message)
     await vm.reveal(vm.actions[0])
   }
-  delete vm.object.secret_access_status
-  assert.equal(
-    vm.accessState,
-    'available',
-    'older backends still provide explicit authorized actions'
-  )
-  vm.object.available_actions[0].expires_at = new Date(500).toISOString()
+  delete vm.object.result.state
+  assert.equal(vm.accessState, 'available', 'only explicit authorized actions can enable access')
+  vm.object.result.actions[0].expires_at = new Date(500).toISOString()
   assert.equal(vm.accessState, 'expired')
-  vm.object.available_actions = []
+  vm.object.result.actions = []
   vm.object.state = { value: 'pending' }
   assert.equal(vm.accessState, 'pending')
   vm.object.state = { value: 'rejected' }
   assert.equal(vm.accessState, 'unapproved')
   vm.object.state = { value: 'approved' }
   assert.equal(vm.accessState, 'unavailable')
-  vm.object.secret_access_status = { state: 'expired', expires_at: new Date(500).toISOString() }
+  vm.object.result = { state: 'expired', expires_at: new Date(500).toISOString() }
   assert.equal(vm.expiresAt, new Date(500).toISOString())
 })
 
@@ -99,7 +98,7 @@ test('each open password expires even while another account remains available', 
     calls.push(args)
     return { name: 'root', secret: 'fake-secret' }
   })
-  vm.object.available_actions.push({
+  vm.object.result.actions.push({
     type: 'view_secret',
     account_id: 'account-b',
     name: 'operator',
@@ -110,8 +109,8 @@ test('each open password expires even while another account remains available', 
   assert.equal(vm.visible, true)
   assert.equal(vm.secret, 'fake-secret')
   assert.deepEqual(calls[0], [
-    '/api/v1/accounts/accounts/account-a/reveal-by-ticket/',
-    { ticket_id: 'ticket-a' },
+    '/api/v1/tickets/tickets/ticket-a/actions/view_secret/',
+    { account_id: 'account-a' },
     { params: { oid: 'org-a' } }
   ])
   t.mock.timers.tick(999)
@@ -150,7 +149,8 @@ test('late password responses are discarded after changing tickets or reaching e
   assert.equal(vm.loadingId, '')
 
   const expiresDuringRequest = vm.reveal(vm.actions[0])
-  assert.deepEqual(requests[1].args[1], { ticket_id: 'ticket-b' })
+  assert.equal(requests[1].args[0], '/api/v1/tickets/tickets/ticket-b/actions/view_secret/')
+  assert.deepEqual(requests[1].args[1], { account_id: 'account-a' })
   assert.deepEqual(requests[1].args[2], { params: { oid: 'org-b' } })
   t.mock.timers.tick(2100)
   await nextTick()

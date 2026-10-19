@@ -6,9 +6,18 @@
         <span v-if="selectedPlugin?.execution_mode === 'approval_only'" class="ticket-type-hint">
           {{ $t('TicketApprovalOnlyHint') }}
         </span>
+        <span v-else-if="plugin.summary" class="ticket-type-hint">
+          {{ $t(plugin.summary) }}
+        </span>
       </div>
     </IBox>
-    <AssetRequest v-if="selectedType === 'apply_asset'" ref="form" />
+    <component :is="plugin.form" v-if="plugin.form" ref="form" />
+    <el-alert
+      v-else-if="selectedPlugin?.custom_form"
+      :title="$t('TicketUnsupportedForm')"
+      type="error"
+      :closable="false"
+    />
     <GenericCreateUpdatePage
       v-else-if="formReady"
       :key="selectedType"
@@ -32,13 +41,13 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import IBox from '@/components/Common/IBox'
 import Select2 from '@/components/Form/FormFields/Select2'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
-import AssetRequest from '../RequestAssetPerm/CreateUpdate'
+import { getTicketPlugin, configurePluginField } from './registry'
 import { getTicketTypeLabel } from '../const'
 import { buildRequestPayload } from './form'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
-  components: { IBox, GenericCreateUpdatePage, AssetRequest },
+  components: { IBox, GenericCreateUpdatePage },
   data() {
     return {
       loading: true,
@@ -46,11 +55,8 @@ export default {
       plugins: [],
       selectedType: 'apply_asset',
       flowRequest: 0,
-      accountRequest: 0,
       selectedOrgId: '',
-      selectedAssetId: '',
-      accountsFailed: false,
-      accountHint: '',
+      accountStates: {},
       fields: [],
       fieldsMeta: {},
       initial: {}
@@ -59,8 +65,11 @@ export default {
   computed: {
     ...mapGetters(['currentOrg']),
     ...mapState({ organizations: (state) => state.users.noRootWorkbenchOrgs }),
-    accountField() {
-      return this.selectedPlugin?.fields.find((field) => field.resource === 'account')
+    plugin() {
+      return getTicketPlugin(this.selectedType)
+    },
+    accountFields() {
+      return this.selectedPlugin?.fields.filter((field) => field.resource === 'account') || []
     },
     selectedPlugin() {
       return this.plugins.find((plugin) => plugin.type === this.selectedType)
@@ -87,7 +96,8 @@ export default {
     async configure() {
       this.formReady = false
       ++this.flowRequest
-      if (!this.selectedPlugin || this.selectedType === 'apply_asset') return
+      this.accountStates = {}
+      if (!this.selectedPlugin || this.selectedPlugin.custom_form || this.plugin.form) return
       const orgId =
         this.organizations.find((org) => org.id === this.currentOrg.id)?.id ||
         this.organizations[0]?.id ||
@@ -107,7 +117,7 @@ export default {
           on: {
             change: async ([value], updateForm) => {
               this.selectedOrgId = value
-              this.loadAccountOptions('', updateForm)
+              for (const field of this.accountFields) this.loadAccountOptions(field, '', updateForm)
               const cleared = { workflow_id: '' }
               for (const field of this.selectedPlugin.fields) {
                 cleared[`param_${field.name}`] = this.defaultValue(field)
@@ -136,7 +146,14 @@ export default {
           helpText: field.help_text,
           el: {},
           rules: field.required
-            ? [{ ...(field.resource || field.type === 'choice' ? RequiredChange : Required) }]
+            ? [
+                {
+                  ...(field.resource ||
+                  ['choice', 'multiple_choice', 'boolean'].includes(field.type)
+                    ? RequiredChange
+                    : Required)
+                }
+              ]
             : []
         }
         if (field.resource === 'asset') {
@@ -152,7 +169,12 @@ export default {
             }
           }
           meta.on = {
-            change: ([assetId], updateForm) => this.loadAccountOptions(assetId, updateForm)
+            change: ([assetId], updateForm) =>
+              Promise.all(
+                this.accountFields
+                  .filter((account) => account.depends_on === field.name)
+                  .map((account) => this.loadAccountOptions(account, assetId, updateForm))
+              )
           }
         } else if (field.resource === 'session') {
           meta.component = Select2
@@ -179,25 +201,28 @@ export default {
         } else if (field.resource === 'account') {
           meta.component = Select2
           meta.helpText = ''
-          this.accountHint = this.$t('TicketSelectAssetFirst')
-          meta.helpTextFormatter = () => this.accountHint
+          this.accountStates[field.name] = { hint: this.$t('TicketSelectAssetFirst') }
+          meta.helpTextFormatter = () => this.accountStates[field.name]?.hint || ''
           meta.el = {
-            multiple: true,
-            multipleLimit: 100,
+            multiple: field.type === 'list',
+            multipleLimit: field.max_length || 100,
             options: [],
             disabled: true,
             noDataText: this.$t('TicketNoAssetAccounts')
           }
           meta.on = {
             'visible-change': ([visible], updateForm) => {
-              if (visible && this.accountsFailed) {
-                this.loadAccountOptions(this.selectedAssetId, updateForm)
+              const state = this.accountStates[field.name]
+              if (visible && state?.failed) {
+                this.loadAccountOptions(field, state.assetId, updateForm)
               }
             }
           }
-        } else if (field.type === 'choice') {
+        } else if (['choice', 'multiple_choice'].includes(field.type)) {
           meta.component = Select2
-          meta.el = { multiple: false, options: field.choices }
+          meta.el = { multiple: field.type === 'multiple_choice', options: field.choices }
+        } else if (field.type === 'boolean') {
+          meta.type = 'switch'
         } else if (field.type === 'integer') {
           meta.type = 'input-number'
           meta.el = { min: field.min, max: field.max, precision: 0 }
@@ -208,17 +233,7 @@ export default {
           meta.el = { type: 'textarea', rows: 3 }
           meta.helpText = this.$t('TicketOneItemPerLine')
         }
-        if (field.name === 'duration') {
-          meta.label = this.$t('WFFieldValidity')
-          if (this.selectedType === 'view_secret') {
-            meta.label = this.$t('TicketSecretDuration')
-            meta.helpText = this.$t('TicketSecretDurationHelp')
-          } else if (this.selectedType === 'download_replay') {
-            meta.helpText = this.$t('TicketReplayDurationHelp')
-          } else if (this.selectedPlugin.execution_mode === 'approval_only') {
-            meta.helpText = this.$t('TicketApprovalDurationHelp')
-          }
-        }
+        configurePluginField(this.selectedPlugin, field, meta, this.$t)
         this.fieldsMeta[name] = meta
       }
       this.fields = [
@@ -232,36 +247,44 @@ export default {
       this.formReady = true
     },
     defaultValue(field) {
-      if (field.resource === 'account') return []
-      return field.default ?? (field.type === 'integer' ? field.min : '')
+      if (field.default !== undefined) return field.default
+      if (
+        field.type === 'multiple_choice' ||
+        (field.resource === 'account' && field.type === 'list')
+      ) {
+        return []
+      }
+      if (field.type === 'boolean') return false
+      return field.type === 'integer' ? field.min : ''
     },
-    async loadAccountOptions(assetId, updateForm) {
-      const requestId = ++this.accountRequest
-      this.selectedAssetId = assetId
-      this.accountsFailed = false
-      if (!this.accountField) return
-      const name = `param_${this.accountField.name}`
+    async loadAccountOptions(field, assetId, updateForm) {
+      this.accountStates[field.name] = {
+        assetId,
+        failed: false,
+        hint: this.$t('TicketSelectAssetFirst')
+      }
+      const state = this.accountStates[field.name]
+      const name = `param_${field.name}`
       const meta = this.fieldsMeta[name]
-      updateForm({ [name]: [] })
+      updateForm({ [name]: this.defaultValue(field) })
       meta.el.options = []
       meta.el.disabled = true
-      this.accountHint = this.$t('TicketSelectAssetFirst')
       if (!assetId || !this.selectedOrgId) return
-      this.accountHint = this.$t('Loading')
+      state.hint = this.$t('Loading')
       try {
         const accounts = await this.$axios.get(
           `/api/v1/tickets/ticket-types/${this.selectedType}/options/`,
-          { params: { org_id: this.selectedOrgId, asset: assetId } }
+          { params: { org_id: this.selectedOrgId, field: field.name, [field.depends_on]: assetId } }
         )
-        if (requestId !== this.accountRequest) return
+        if (this.accountStates[field.name] !== state) return
         meta.el.options = accounts.map((username) => ({ value: username, label: username }))
-        this.accountHint = accounts.length ? '' : this.$t('TicketNoAssetAccounts')
+        state.hint = accounts.length ? '' : this.$t('TicketNoAssetAccounts')
       } catch {
-        if (requestId !== this.accountRequest) return
-        this.accountsFailed = true
-        this.accountHint = this.$t('TicketAccountsLoadFailed')
+        if (this.accountStates[field.name] !== state) return
+        state.failed = true
+        state.hint = this.$t('TicketAccountsLoadFailed')
       } finally {
-        if (requestId === this.accountRequest) meta.el.disabled = false
+        if (this.accountStates[field.name] === state) meta.el.disabled = false
       }
     },
     async loadFlows(orgId) {
@@ -278,7 +301,7 @@ export default {
           const meta = this.fieldsMeta[`param_${field.name}`]
           meta.el.disabled = !orgId
           meta.el.ajax.url = orgId
-            ? `/api/v1/tickets/ticket-types/${type}/options/?org_id=${orgId}`
+            ? `/api/v1/tickets/ticket-types/${type}/options/?org_id=${encodeURIComponent(orgId)}&field=${encodeURIComponent(field.name)}`
             : ''
         }
       }

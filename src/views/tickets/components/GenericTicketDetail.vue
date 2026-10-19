@@ -1,12 +1,21 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="24">
-      <p v-if="object.execution_mode === 'approval_only'" class="ticket-approval-hint">
+      <p
+        v-if="object.execution_mode === 'approval_only' && !plugin.requestComponent"
+        class="ticket-approval-hint"
+      >
         {{ $t('TicketApprovalOnlyHint') }}
       </p>
       <Details :detail-card-items="iDetailCardItems" :title="$tc('BasicInfo')" />
+      <component
+        :is="plugin.requestComponent"
+        v-if="plugin.requestComponent"
+        :object="object"
+        :request-items="specialCardItems"
+      />
       <Details
-        v-if="specialCardItems.length > 0"
+        v-else-if="specialCardItems.length > 0"
         :detail-card-items="specialCardItems"
         :title="$tc('ApplyInfo')"
       />
@@ -15,8 +24,7 @@
         :detail-card-items="assignedCardItems"
         :title="$tc('AssignedInfo')"
       />
-      <TicketSecretAccess v-if="object.type?.value === 'view_secret'" :object="object" />
-      <TicketReplayAccess v-if="object.type?.value === 'download_replay'" :object="object" />
+      <component :is="plugin.resultComponent" v-if="plugin.resultComponent" :object="object" />
       <slot id="MoreDetails" />
       <WorkflowPanel :object="object" />
       <Comments v-bind="$attrs" :object="object" />
@@ -28,13 +36,12 @@
 </template>
 
 <script lang="jsx">
+import { getTicketPlugin } from '../plugins/registry'
 import Comments from './Comments'
 import CcUsers from './CcUsers'
 import Details from './Details'
 import Session from './Session'
 import WorkflowPanel from './WorkflowPanel'
-import TicketSecretAccess from './TicketSecretAccess'
-import TicketReplayAccess from './TicketReplayAccess'
 import { getTicketFlowLabel, getTicketStateLabel, getTicketTypeLabel } from '../const'
 export default {
   name: 'GenericTicketDetail',
@@ -43,9 +50,7 @@ export default {
     CcUsers,
     Comments,
     Details,
-    Session,
-    TicketSecretAccess,
-    TicketReplayAccess
+    Session
   },
   props: {
     object: {
@@ -77,6 +82,9 @@ export default {
     }
   },
   computed: {
+    plugin() {
+      return getTicketPlugin(this.object.type?.value)
+    },
     iDetailCardItems() {
       if (this.detailCardItems) {
         return this.detailCardItems

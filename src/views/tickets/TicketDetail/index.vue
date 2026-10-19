@@ -12,6 +12,7 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import TicketDetail from './TicketDetail'
+import { getTicketDetailRoute } from '../plugins/registry'
 import TicketActivity from '../components/TicketActivity'
 
 export default {
@@ -54,14 +55,8 @@ export default {
       return this.ticket.title
     },
     afterGetTicket(ticket) {
-      const ticketRouteMapper = {
-        apply_asset: 'AssetsTicketDetail',
-        login_confirm: 'LoginTicketDetail',
-        login_asset_confirm: 'LoginAssetTicketDetail',
-        command_confirm: 'CommandConfirmDetail'
-      }
-      const routeName = ticketRouteMapper[ticket.type.value]
-      if (!routeName) return
+      const routeName = getTicketDetailRoute(ticket.type.value)
+      if (routeName === 'TicketDetail') return
       setTimeout(() => {
         this.$router.push({
           name: routeName,

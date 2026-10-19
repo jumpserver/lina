@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { getTicketCreateRoute } from './plugins/registry'
 import { mapGetters } from 'vuex'
 import BaseTicketList from './BaseTicketList'
 import TicketTypeDrawer from './components/TicketTypeDrawer'
@@ -72,11 +73,7 @@ export default {
   methods: {
     selectTicketType(plugin) {
       this.showTicketTypes = false
-      this.$router.push(
-        plugin.type === 'apply_asset'
-          ? { name: 'RequestAssetPermTicketCreateUpdate' }
-          : { name: 'PluginTicketCreate', query: { type: plugin.type } }
-      )
+      this.$router.push(getTicketCreateRoute(plugin.type))
     }
   }
 }

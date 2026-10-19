@@ -53,6 +53,7 @@
           </div>
         </el-col>
       </el-row>
+      <slot />
     </div>
   </IBox>
 </template>

@@ -272,9 +272,9 @@ test('workflow refreshes and submitted decisions cannot overwrite a newer ticket
 test('polling refreshes approved access actions and other terminal ticket states', async (t) => {
   t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 1000 })
   const panel = await workflowPanel()
-  for (const [name, type, field] of [
-    ['TicketSecretAccess', 'view_secret', 'secret_access_status'],
-    ['TicketReplayAccess', 'download_replay', 'replay_access_status']
+  for (const [name, type] of [
+    ['TicketSecretAccess', 'view_secret'],
+    ['TicketReplayAccess', 'download_replay']
   ]) {
     const access = await component(name, { IBox: {}, Dialog: {}, copy() {}, useDateTime() {} })
     const object = {
@@ -283,8 +283,7 @@ test('polling refreshes approved access actions and other terminal ticket states
       workflow_instance: 'workflow',
       state: { value: 'pending' },
       status: { value: 'open' },
-      available_actions: [],
-      [field]: { state: 'pending' }
+      result: { state: 'pending', actions: [] }
     }
     const accessVm = { ...access.data(), object }
     for (const [key, getter] of Object.entries(access.computed)) {
@@ -305,21 +304,21 @@ test('polling refreshes approved access actions and other terminal ticket states
               value: state === 'running' ? 'pending' : state === 'cancelled' ? 'closed' : state
             },
             status: { value: state === 'running' ? 'open' : 'closed' },
-            [field]: {
+            result: {
               state:
-                state === 'approved' ? 'available' : state === 'running' ? 'pending' : 'unapproved'
-            },
-            available_actions:
-              state === 'approved'
-                ? [
-                    {
-                      type,
-                      account_id: 'account',
-                      session_id: 'session',
-                      expires_at: new Date(61000).toISOString()
-                    }
-                  ]
-                : []
+                state === 'approved' ? 'available' : state === 'running' ? 'pending' : 'unapproved',
+              actions:
+                state === 'approved'
+                  ? [
+                      {
+                        type,
+                        account_id: 'account',
+                        session_id: 'session',
+                        expires_at: new Date(61000).toISOString()
+                      }
+                    ]
+                  : []
+            }
           }
         }
       }
@@ -339,7 +338,8 @@ test('polling refreshes approved access actions and other terminal ticket states
       assert.equal(object.state.value, 'approved')
       assert.equal(object.status.value, 'closed')
       assert.equal(accessVm.accessState, 'available')
-      if (type === 'download_replay') assert.match(accessVm.downloadUrl, /ticket\/replay\/download/)
+      if (type === 'download_replay')
+        assert.match(accessVm.downloadUrl, /ticket\/actions\/download_replay/)
       else assert.equal(accessVm.activeActions[0].account_id, 'account')
       const completedRequests = requests.length
       t.mock.timers.tick(15000)
@@ -349,7 +349,7 @@ test('polling refreshes approved access actions and other terminal ticket states
         await vm.load()
         assert.equal(object.state.value, state === 'cancelled' ? 'closed' : state)
         assert.equal(accessVm.accessState, 'unapproved')
-        assert.deepEqual(object.available_actions, [])
+        assert.deepEqual(object.result.actions, [])
       }
       for (const { config } of requests) assert.deepEqual(config, { params: { oid: 'org' } })
     } finally {
@@ -369,13 +369,13 @@ test('a failed terminal ticket refresh retries before stopping polling', async (
       id: 'ticket',
       workflow_instance: 'workflow',
       state: 'pending',
-      available_actions: []
+      result: { actions: [] }
     },
     $axios: {
       async get(url) {
         if (url.includes('/workflow-instances/')) return { state: 'approved' }
         if (++attempts === 1) throw new Error('Temporary network error')
-        return { state: 'approved', available_actions: [{ type: 'download_replay' }] }
+        return { state: 'approved', result: { actions: [{ type: 'download_replay' }] } }
       }
     }
   })
@@ -386,7 +386,7 @@ test('a failed terminal ticket refresh retries before stopping polling', async (
     await new Promise(setImmediate)
     assert.equal(attempts, 2)
     assert.equal(vm.object.state, 'approved')
-    assert.equal(vm.object.available_actions.length, 1)
+    assert.equal(vm.object.result.actions.length, 1)
     t.mock.timers.tick(15000)
     await new Promise(setImmediate)
     assert.equal(attempts, 2)
@@ -424,22 +424,22 @@ test('stale ticket detail responses cannot overwrite a newer poll, organization 
       if (change === 'poll') {
         const latest = vm.load(true)
         await new Promise(setImmediate)
-        details[1]({ state: 'approved', available_actions: ['current'] })
+        details[1]({ state: 'approved', result: { actions: ['current'] } })
         await latest
       } else if (change === 'organization') {
         vm.object = { ...object, org_id: 'another' }
         panel.watch.workflowKey.handler.call(vm)
         await new Promise(setImmediate)
-        details[1]({ state: 'approved', available_actions: ['current'] })
+        details[1]({ state: 'approved', result: { actions: ['current'] } })
         await new Promise(setImmediate)
       } else {
         panel.beforeUnmount.call(vm)
       }
-      details[0]({ state: 'rejected', available_actions: ['stale'] })
+      details[0]({ state: 'rejected', result: { actions: ['stale'] } })
       await old
       assert.notEqual(object.state, 'rejected')
       assert.notEqual(vm.object.state, 'rejected')
-      if (change !== 'unmount') assert.deepEqual(vm.object.available_actions, ['current'])
+      if (change !== 'unmount') assert.deepEqual(vm.object.result.actions, ['current'])
     } finally {
       panel.beforeUnmount.call(vm)
     }

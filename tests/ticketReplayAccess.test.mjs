@@ -42,8 +42,11 @@ function approvedTicket(expires = 3000) {
     id: 'ticket-a',
     org_id: 'org-a',
     state: { value: 'approved' },
-    replay_access_status: { state: 'available', expires_at: expiresAt },
-    available_actions: [{ type: 'download_replay', session_id: 'session-a', expires_at: expiresAt }]
+    result: {
+      state: 'available',
+      expires_at: expiresAt,
+      actions: [{ type: 'download_replay', session_id: 'session-a', expires_at: expiresAt }]
+    }
   }
 }
 
@@ -51,7 +54,10 @@ test('replay downloads require approval and an explicit unexpired server action'
   t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 1000 })
   const vm = mountState(t, approvedTicket())
   assert.equal(vm.accessState, 'available')
-  assert.equal(vm.downloadUrl, '/api/v1/tickets/tickets/ticket-a/replay/download/?oid=org-a')
+  assert.equal(
+    vm.downloadUrl,
+    '/api/v1/tickets/tickets/ticket-a/actions/download_replay/?oid=org-a'
+  )
   for (const [state, key] of Object.entries({
     expired: 'Expired',
     pending: 'Pending',
@@ -59,25 +65,24 @@ test('replay downloads require approval and an explicit unexpired server action'
     not_applicant: 'ApplicantOnly',
     unavailable: 'Unavailable'
   })) {
-    vm.object.replay_access_status.state = state
+    vm.object.result.state = state
     assert.equal(vm.statusMessage, `TicketReplay${key}`)
     assert.equal(vm.downloadUrl, '')
   }
-  vm.object.replay_access_status.state = 'available'
+  vm.object.result.state = 'available'
   vm.object.state = 'pending'
   assert.equal(vm.accessState, 'pending')
   assert.equal(vm.downloadUrl, '')
   vm.object.state = 'rejected'
   assert.equal(vm.accessState, 'unapproved')
   vm.object.state = 'approved'
-  vm.object.available_actions[0].expires_at = 'invalid'
+  vm.object.result.actions[0].expires_at = 'invalid'
   assert.equal(vm.downloadUrl, '')
-  vm.object.available_actions[0].expires_at = new Date(500).toISOString()
+  vm.object.result.actions[0].expires_at = new Date(500).toISOString()
   assert.equal(vm.accessState, 'expired')
-  vm.object.available_actions = [{ type: 'view_secret', expires_at: new Date(3000).toISOString() }]
+  vm.object.result.actions = [{ type: 'view_secret', expires_at: new Date(3000).toISOString() }]
   assert.equal(vm.downloadUrl, '')
-  delete vm.object.replay_access_status
-  delete vm.object.available_actions
+  delete vm.object.result
   assert.equal(
     vm.accessState,
     'unavailable',
@@ -95,7 +100,7 @@ test('download links and expiry timers follow the current ticket and organizatio
   await nextTick()
   assert.equal(
     vm.downloadUrl,
-    '/api/v1/tickets/tickets/ticket-b/replay/download/?oid=org%20%26%20b'
+    '/api/v1/tickets/tickets/ticket-b/actions/download_replay/?oid=org%20%26%20b'
   )
   t.mock.timers.tick(500)
   await nextTick()
