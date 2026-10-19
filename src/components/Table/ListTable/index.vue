@@ -130,7 +130,12 @@ export default {
   },
   data() {
     const order = this.$route?.params?.order
+    const filterQuery = (this.quickFilters || [])
+      .flatMap((category) => category.options)
+      .filter((option) => option.active)
+      .reduce((query, option) => ({ ...query, ...option.filter }), {})
     let extraQuery = {
+      ...filterQuery,
       ...(order && { order })
     }
     if (this.headerActions.hasDatePicker) {
@@ -158,13 +163,13 @@ export default {
       activationPending: false,
       extraQuery: extraQuery,
       actionInit: this.headerActions.has === false,
-      initQuery: {},
+      initQuery: { ...filterQuery },
       tablePath: new URL(this.tableConfig.url || '', 'http://127.0.0.1').pathname,
       objStorage: new ObjectLocalStorage('filterExpand'),
       iFilterExpand: null,
       reloadTable: _.debounce(this._reloadTable, 300),
       searchQuery: {},
-      filterQuery: {},
+      filterQuery,
       lastEmittedQuery: null,
       metadataRequestUrl: '',
       metadataRequest: null
