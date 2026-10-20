@@ -5,7 +5,8 @@ const plugins = {
   apply_asset: {
     form: defineAsyncComponent(() => import('../RequestAssetPerm/CreateUpdate.vue')),
     createRoute: 'RequestAssetPermTicketCreateUpdate',
-    detailRoute: 'AssetsTicketDetail'
+    detailRoute: 'AssetsTicketDetail',
+    fields: { apply_actions: { label: 'Actions', helpText: 'ActionsTips' } }
   },
   login_confirm: { detailRoute: 'LoginTicketDetail' },
   login_asset_confirm: { detailRoute: 'LoginAssetTicketDetail' },

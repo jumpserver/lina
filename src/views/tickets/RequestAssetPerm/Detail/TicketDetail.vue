@@ -11,6 +11,7 @@ export default {
         ...(object.request_items || [])
           .filter((item) => item.name !== 'apply_expire_soon_notice_minutes')
           .map((item) => ({
+            name: item.name,
             key: item.name === 'apply_users' ? this.$t('TicketAuthorizedUsers') : item.label,
             value: item.value ?? '-'
           })),

@@ -14,10 +14,16 @@
         :object="object"
         :request-items="specialCardItems"
       />
-      <Details
+      <TicketRequestInfo
         v-else-if="specialCardItems.length > 0"
-        :detail-card-items="specialCardItems"
-        :title="$tc('ApplyInfo')"
+        :key="ticketKey"
+        :object="object"
+        :items="specialCardItems"
+        :instance="workflow"
+        :busy="workflowBusy"
+        @editing="editingRequest = $event"
+        @saving="savingRequest = $event"
+        @refresh="$refs.workflow.load(true)"
       />
       <Details
         v-if="object.state.value === 'approved' && assignedCardItems.length > 0"
@@ -26,7 +32,14 @@
       />
       <component :is="plugin.resultComponent" v-if="plugin.resultComponent" :object="object" />
       <slot id="MoreDetails" />
-      <WorkflowPanel :object="object" />
+      <WorkflowPanel
+        ref="workflow"
+        :object="object"
+        :editing-request="editingRequest"
+        :saving-request="savingRequest"
+        @loaded="workflow = $event"
+        @busy="workflowBusy = $event"
+      />
       <Comments v-bind="$attrs" :object="object" />
     </el-col>
     <el-col :span="24">
@@ -42,11 +55,13 @@ import CcUsers from './CcUsers'
 import Details from './Details'
 import Session from './Session'
 import WorkflowPanel from './WorkflowPanel'
+import TicketRequestInfo from './TicketRequestInfo'
 import { getTicketFlowLabel, getTicketStateLabel, getTicketTypeLabel } from '../const'
 export default {
   name: 'GenericTicketDetail',
   components: {
     WorkflowPanel,
+    TicketRequestInfo,
     CcUsers,
     Comments,
     Details,
@@ -72,6 +87,10 @@ export default {
   },
   data() {
     return {
+      workflow: null,
+      workflowBusy: false,
+      editingRequest: false,
+      savingRequest: false,
       statusMap: {
         pending: 'warning',
         approved: 'success',
@@ -82,6 +101,9 @@ export default {
     }
   },
   computed: {
+    ticketKey() {
+      return `${this.object.org_id || ''}:${this.object.id || ''}`
+    },
     plugin() {
       return getTicketPlugin(this.object.type?.value)
     },
@@ -137,6 +159,14 @@ export default {
           value: object.comment
         }
       ]
+    }
+  },
+  watch: {
+    ticketKey() {
+      this.workflow = null
+      this.workflowBusy = false
+      this.editingRequest = false
+      this.savingRequest = false
     }
   }
 }

@@ -2832,5 +2832,17 @@
   "TicketTransferUnavailable": "File transfer authorization unavailable",
   "TicketTransferUnavailableHelp": "Approval, the transfer grant or existing asset/account access is unavailable. Check permissions or submit a new request.",
   "TicketTransferLegacy": "Historical ticket: approval only",
-  "TicketTransferReconnectHelp": "As the applicant, open a new connection in the existing file manager to use this grant."
+  "TicketTransferReconnectHelp": "As the applicant, open a new connection in the existing file manager to use this grant.",
+  "TicketResourceDescription": "Purpose and resource description",
+  "TicketResourceDescriptionHelp": "Describe the assets, accounts and purpose. A reviewer with resource permissions must complete the request before approving.",
+  "TicketResourceLoadFailed": "Resources could not be loaded. Retry before submitting.",
+  "TicketAdjustResourcesHelp": "Saving updates the request without approving it. Existing approvals require the workflow to restart.",
+  "TicketSaveAdjustment": "Save changes",
+  "TicketAdjustmentReason": "Reason for adjustment",
+  "TicketAdjustmentSaved": "Request updated. Review the resources before approving separately.",
+  "TicketAdjustmentChanged": "The request or approval task changed. Review it again.",
+  "TicketResourcesPending": "Resources are incomplete. An assigned reviewer with resource query permissions can edit and save the application information here before approving.",
+  "TicketApprovalRestarted": "Resources changed. Earlier votes remain in the history; the amended request restarts the original workflow.",
+  "TicketAdjustmentDiff": "View changes",
+  "TicketRequiredResource": "This field is required."
 }

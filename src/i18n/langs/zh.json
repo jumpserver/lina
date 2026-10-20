@@ -2826,5 +2826,17 @@
   "TicketTransferUnavailable": "文件传输授权不可用",
   "TicketTransferUnavailableHelp": "审批未通过、传输授权或基础资产账号权限不可用，请检查权限或重新申请。",
   "TicketTransferLegacy": "历史工单：仅审批",
-  "TicketTransferReconnectHelp": "请使用申请人账号，在现有文件管理入口重新建立连接后使用此授权。"
+  "TicketTransferReconnectHelp": "请使用申请人账号，在现有文件管理入口重新建立连接后使用此授权。",
+  "TicketResourceDescription": "申请用途／资源说明",
+  "TicketResourceDescriptionHelp": "没有可选资源时，请描述希望访问的资产、账号及用途。有资源权限的审批人会补齐后再审批。",
+  "TicketResourceLoadFailed": "资源加载未完成，请重试后再提交。",
+  "TicketAdjustResourcesHelp": "保存仅更新申请，不会通过审批。如果已有审批意见，将重新走原审批流程。",
+  "TicketSaveAdjustment": "保存修改",
+  "TicketAdjustmentReason": "调整原因",
+  "TicketAdjustmentSaved": "申请已更新，请核对资源后单独审批。",
+  "TicketAdjustmentChanged": "申请或当前审批任务已变更，请重新核对。",
+  "TicketResourcesPending": "资源尚未补齐。有资源查询权限的当前审批人可在此编辑申请信息，保存后再审批。",
+  "TicketApprovalRestarted": "资源已调整，原审批意见保留在记录中；新申请范围重新走原审批流程。",
+  "TicketAdjustmentDiff": "查看调整前后内容",
+  "TicketRequiredResource": "此字段为必填项"
 }

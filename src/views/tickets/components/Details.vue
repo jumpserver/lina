@@ -4,6 +4,7 @@
       <div class="clearfix ibox-title"><i /> {{ title }}</div>
     </template>
     <div class="content">
+      <slot name="actions" />
       <el-row :gutter="10">
         <el-col
           v-for="item in detailCardItems"

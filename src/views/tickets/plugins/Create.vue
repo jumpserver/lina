@@ -32,6 +32,12 @@
       :has-save-continue="false"
       url="/api/v1/tickets/tickets/open/"
     />
+    <el-alert v-if="availabilityFailed" type="error" :closable="false">
+      {{ $t('TicketResourceLoadFailed') }}
+      <el-button link type="primary" @click="retryResourceAvailability">{{
+        $t('Retry')
+      }}</el-button>
+    </el-alert>
   </div>
 </template>
 
@@ -40,13 +46,16 @@ import { mapGetters, mapState } from 'vuex'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import IBox from '@/components/Common/IBox'
 import Select2 from '@/components/Form/FormFields/Select2'
+import BasicTree from '@/components/Form/FormFields/BasicTree.vue'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import { getTicketPlugin, configurePluginField } from './registry'
 import { getTicketTypeLabel } from '../const'
 import { buildRequestPayload } from './form'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import resourceAvailability from './resourceAvailability'
 
 export default {
+  mixins: [resourceAvailability],
   components: { IBox, GenericCreateUpdatePage },
   data() {
     return {
@@ -219,8 +228,10 @@ export default {
             }
           }
         } else if (['choice', 'multiple_choice'].includes(field.type)) {
-          meta.component = Select2
-          meta.el = { multiple: field.type === 'multiple_choice', options: field.choices }
+          meta.component = field.tree ? BasicTree : Select2
+          meta.el = field.tree
+            ? { tree: field.tree }
+            : { multiple: field.type === 'multiple_choice', options: field.choices }
         } else if (field.type === 'boolean') {
           meta.type = 'switch'
         } else if (field.type === 'integer') {
@@ -232,6 +243,29 @@ export default {
         } else if (field.type === 'list') {
           meta.el = { type: 'textarea', rows: 3 }
           meta.helpText = this.$t('TicketOneItemPerLine')
+        }
+        if (this.selectedPlugin.resource_adjustment) {
+          if (field.name === 'resource_description') {
+            meta.hidden = () => !this.resourceAvailability?.description_allowed
+            meta.label = this.$t('TicketResourceDescription')
+            meta.helpText = this.$t('TicketResourceDescriptionHelp')
+            meta.el = { type: 'textarea', rows: 3, maxlength: 4096 }
+            meta.rules = [Required]
+          } else if (['asset', 'account'].includes(field.resource)) {
+            meta.rules = [
+              {
+                trigger: 'change',
+                validator: (rule, value, done) => {
+                  const empty = !value || (Array.isArray(value) && !value.length)
+                  done(
+                    empty && !this.resourceAvailability?.description_allowed
+                      ? new Error(this.$t('TicketRequiredResource'))
+                      : undefined
+                  )
+                }
+              }
+            ]
+          }
         }
         configurePluginField(this.selectedPlugin, field, meta, this.$t)
         this.fieldsMeta[name] = meta
@@ -269,7 +303,17 @@ export default {
       updateForm({ [name]: this.defaultValue(field) })
       meta.el.options = []
       meta.el.disabled = true
-      if (!assetId || !this.selectedOrgId) return
+      if (!assetId || !this.selectedOrgId) {
+        if (this.selectedPlugin.resource_adjustment) {
+          await this.loadResourceAvailability(this.selectedType, this.selectedOrgId)
+        }
+        return
+      }
+      if (this.selectedPlugin.resource_adjustment) {
+        ++this.availabilityRequest
+        this.resourceAvailability = null
+        this.availabilityLoading = true
+      }
       state.hint = this.$t('Loading')
       try {
         const accounts = await this.$axios.get(
@@ -279,10 +323,19 @@ export default {
         if (this.accountStates[field.name] !== state) return
         meta.el.options = accounts.map((username) => ({ value: username, label: username }))
         state.hint = accounts.length ? '' : this.$t('TicketNoAssetAccounts')
+        if (this.selectedPlugin.resource_adjustment) {
+          await this.loadResourceAvailability(this.selectedType, this.selectedOrgId, {
+            asset: assetId
+          })
+        }
       } catch {
         if (this.accountStates[field.name] !== state) return
         state.failed = true
         state.hint = this.$t('TicketAccountsLoadFailed')
+        if (this.selectedPlugin.resource_adjustment) {
+          this.availabilityFailed = true
+          this.availabilityLoading = false
+        }
       } finally {
         if (this.accountStates[field.name] === state) meta.el.disabled = false
       }
@@ -306,6 +359,9 @@ export default {
         }
       }
       if (!orgId) return null
+      if (this.selectedPlugin.resource_adjustment) {
+        await this.loadResourceAvailability(type, orgId)
+      }
       const flows = await this.$axios.get('/api/v1/tickets/workflows/options/', {
         params: { type, org_id: orgId }
       })
@@ -315,7 +371,12 @@ export default {
       return flows[0] || null
     },
     cleanFormValue(value) {
-      return buildRequestPayload(this.selectedPlugin, value)
+      if (this.selectedPlugin.resource_adjustment) this.validateAvailability()
+      const payload = buildRequestPayload(this.selectedPlugin, value)
+      if (!this.resourceAvailability?.description_allowed) {
+        delete payload.request_data.resource_description
+      }
+      return payload
     },
     performSubmit(value) {
       return this.$axios.post('/api/v1/tickets/tickets/open/', value).catch((error) => {

@@ -28,6 +28,17 @@
           >
         </div>
         <div v-if="event.data.comment" class="event-comment">{{ event.data.comment }}</div>
+        <template v-if="event.type === 'resources.adjusted'">
+          <p>{{ event.data.reason }}</p>
+          <p v-if="event.data.restarted">{{ $t('TicketApprovalRestarted') }}</p>
+          <el-collapse>
+            <el-collapse-item :title="$t('TicketAdjustmentDiff')" :name="event.id">
+              <pre>{{
+                JSON.stringify({ before: event.data.before, after: event.data.after }, null, 2)
+              }}</pre>
+            </el-collapse-item>
+          </el-collapse>
+        </template>
         <div v-if="event.data.target">→ {{ formatUser(event.data.target) }}</div>
         <div v-if="event.type === 'cc.added'">
           <CcUsers :users="event.data.recipients || []" />

@@ -11,6 +11,7 @@ export default {
       const plugin = getTicketPlugin(this.object.type?.value)
       const labels = { duration: 'WFFieldValidity', ...plugin.requestLabels }
       return (this.object.request_items || []).map((item) => ({
+        name: item.name,
         key: labels[item.name] ? this.$t(labels[item.name]) : item.label,
         value: plugin.dateFields?.includes(item.name)
           ? toSafeLocalDateStr(item.value)

@@ -17,6 +17,7 @@ export const stateLabels = {
   transferred: 'WFTransferred'
 }
 export const eventLabels = {
+  'resources.adjusted': 'TicketAdjustRequest',
   'workflow.started': 'WFStarted',
   'node.entered': 'WFNodeEntered',
   'node.completed': 'WFNodeCompleted',

@@ -1,10 +1,18 @@
 <template>
-  <GenericCreateUpdatePage
-    v-bind="$data"
-    v-if="!loading"
-    :create-success-next-route="createSuccessNextRoute"
-    :perform-submit="performSubmit"
-  />
+  <div>
+    <GenericCreateUpdatePage
+      v-bind="$data"
+      v-if="!loading"
+      :create-success-next-route="createSuccessNextRoute"
+      :perform-submit="performSubmit"
+    />
+    <el-alert v-if="availabilityFailed" type="error" :closable="false">
+      {{ $t('TicketResourceLoadFailed') }}
+      <el-button link type="primary" @click="retryResourceAvailability">{{
+        $t('Retry')
+      }}</el-button>
+    </el-alert>
+  </div>
 </template>
 
 <script>
@@ -23,8 +31,10 @@ import {
 } from '@/views/perms/AssetPermission/expireSoonNotice'
 import { getTicketFlowLabel } from '@/views/tickets/const'
 import { mapGetters, mapState } from 'vuex'
+import resourceAvailability from '../plugins/resourceAvailability'
 
 export default {
+  mixins: [resourceAvailability],
   components: {
     GenericCreateUpdatePage
   },
@@ -50,6 +60,7 @@ export default {
         apply_expire_soon_notice_switch: false,
         apply_expire_soon_notice_minutes: null,
         apply_assets: [],
+        resource_description: '',
         apply_users: store.getters.currentUser.id,
         org_id: '',
         workflow_id: '',
@@ -59,7 +70,14 @@ export default {
         [this.$t('Basic'), ['title', 'org_id', 'workflow_id']],
         [
           this.$t('RequestPerm'),
-          ['apply_users', 'apply_nodes', 'apply_assets', 'apply_accounts', 'apply_actions']
+          [
+            'apply_users',
+            'apply_nodes',
+            'apply_assets',
+            'apply_accounts',
+            'resource_description',
+            'apply_actions'
+          ]
         ],
         [
           this.$t('ValidityPeriod'),
@@ -74,6 +92,13 @@ export default {
         [this.$t('Other'), ['comment']]
       ],
       fieldsMeta: {
+        resource_description: {
+          label: this.$t('TicketResourceDescription'),
+          helpText: this.$t('TicketResourceDescriptionHelp'),
+          el: { type: 'textarea', rows: 3, maxlength: 4096 },
+          hidden: () => !this.resourceAvailability?.description_allowed,
+          rules: [{ required: true, message: this.$t('TicketRequiredResource'), trigger: 'blur' }]
+        },
         apply_users: {
           label: this.$t('TicketAuthorizedUser'),
           component: Select2,
@@ -119,6 +144,7 @@ export default {
         apply_nodes: {
           label: this.$t('Node'),
           component: Select2,
+          on: { change: ([value]) => this.resourceSelectionChanged('apply_nodes', value) },
           el: {
             value: [],
             ajax: {
@@ -134,6 +160,7 @@ export default {
           type: 'assetSelect',
           label: this.$t('Asset'),
           component: Select2,
+          on: { change: ([value]) => this.resourceSelectionChanged('apply_assets', value) },
           el: {
             value: [],
             ajax: {
@@ -146,6 +173,18 @@ export default {
         },
         apply_accounts: {
           component: AccountFormatter,
+          rules: [
+            {
+              trigger: 'change',
+              validator: (rule, value, done) => {
+                done(
+                  !value?.length && !this.resourceAvailability?.description_allowed
+                    ? new Error(this.$t('TicketRequiredResource'))
+                    : undefined
+                )
+              }
+            }
+          ],
           el: {
             nodes: [],
             assets: [],
@@ -212,6 +251,7 @@ export default {
           on: {
             change: async ([event], updateForm) => {
               this.selectedOrgId = event
+              this.loadResourceAvailability('apply_asset', event)
               updateForm({
                 workflow_id: '',
                 apply_nodes: [],
@@ -239,14 +279,16 @@ export default {
       afterGetFormValue(value) {
         return hydrateExpireNoticeFormValue(value, 'apply_')
       },
-      cleanFormValue(value) {
+      cleanFormValue: (value) => {
+        this.validateAvailability()
+        if (!this.resourceAvailability?.description_allowed) delete value.resource_description
         value.apply_actions = (value.apply_actions || []).map((item) =>
           item === this.$t('All') ? 'all' : item
         )
 
         Object.keys(value).forEach((item, index, arr) => {
           if (['apply_accounts', 'apply_assets', 'apply_nodes'].includes(item)) {
-            if (value[item].length < 1) {
+            if (!value[item]?.length) {
               delete value[item]
             }
           }
@@ -283,6 +325,7 @@ export default {
       this.initial.org_id = userAllOrgIds[0]
     }
     this.selectedOrgId = this.initial.org_id
+    await this.loadResourceAvailability('apply_asset', this.selectedOrgId)
 
     const flow = await this.loadFlowOptions(this.initial.org_id, store.getters.currentUser.id)
     this.initial.workflow_id = flow?.id || ''
@@ -290,6 +333,13 @@ export default {
     this.loading = false
   },
   methods: {
+    resourceSelectionChanged(field, values) {
+      const selection = {
+        ...this.availabilityParams.selection,
+        [field]: (values || []).map((value) => value.id || value).join(',')
+      }
+      return this.loadResourceAvailability('apply_asset', this.selectedOrgId, selection)
+    },
     async loadFlowOptions(orgId, beneficiary) {
       const requestId = ++this.flowRequest
       this.flowOptions = []
@@ -311,13 +361,16 @@ export default {
         this.fieldsMeta.workflow_id.el.disabled = flows.length <= 1
         return flows[0] || null
       } catch (error) {
+        if (requestId !== this.flowRequest) return undefined
         return null
       }
     },
     performSubmit(validValues) {
       const { title, org_id, workflow_id, comment } = validValues
       const request_data = Object.fromEntries(
-        Object.entries(validValues).filter(([key]) => key.startsWith('apply_'))
+        Object.entries(validValues).filter(
+          ([key]) => key.startsWith('apply_') || key === 'resource_description'
+        )
       )
       return this.$axios.post('/api/v1/tickets/tickets/open/', {
         type: 'apply_asset',

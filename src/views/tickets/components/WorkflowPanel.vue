@@ -40,28 +40,36 @@
         />
         <div class="buttons">
           <template v-if="myTask">
-            <el-button type="primary" :disabled="busy" @click="decide('approve')">{{
-              $t('Accept')
-            }}</el-button>
-            <el-button type="danger" :disabled="busy" @click="decide('reject')">{{
+            <el-button
+              type="primary"
+              :disabled="
+                busy || savingRequest || editingRequest || instance.resource_adjustment?.pending
+              "
+              @click="decide('approve')"
+              >{{ $t('Accept') }}</el-button
+            >
+            <el-button type="danger" :disabled="busy || savingRequest" @click="decide('reject')">{{
               $t('Reject')
             }}</el-button>
             <el-button
               v-if="currentNode.config.allow_transfer"
-              :disabled="busy"
+              :disabled="busy || savingRequest"
               @click="openReassign('transfer')"
               >{{ $t('WFTransfer') }}</el-button
             >
             <el-button
               v-if="currentNode.config.allow_add_approver"
-              :disabled="busy"
+              :disabled="busy || savingRequest"
               @click="openReassign('add-approver')"
               >{{ $t('WFAddApprover') }}</el-button
             >
           </template>
-          <el-button v-if="canWithdraw" :disabled="busy" @click="decide('cancel')">{{
-            $t('WFWithdraw')
-          }}</el-button>
+          <el-button
+            v-if="canWithdraw"
+            :disabled="busy || savingRequest"
+            @click="decide('cancel')"
+            >{{ $t('WFWithdraw') }}</el-button
+          >
         </div>
       </div>
       <el-timeline class="approval-timeline" :aria-label="$t('WFProgress')">
@@ -268,8 +276,19 @@ import TicketValueList from './TicketValueList'
 import { useDateTime } from '@/composables/useDateTime'
 import { stateLabels, nodeLabels } from '../Workflow/graph'
 export default {
-  components: { IBox, Dialog, WorkflowMemberSelect, CcUsers, TicketValueList },
-  props: { object: { type: Object, required: true } },
+  components: {
+    IBox,
+    Dialog,
+    WorkflowMemberSelect,
+    CcUsers,
+    TicketValueList
+  },
+  props: {
+    object: { type: Object, required: true },
+    editingRequest: { type: Boolean, default: false },
+    savingRequest: { type: Boolean, default: false }
+  },
+  emits: ['loaded', 'busy'],
   data: () => ({
     instance: null,
     loading: false,
@@ -330,6 +349,12 @@ export default {
     }
   },
   watch: {
+    instance(value) {
+      this.$emit('loaded', value)
+    },
+    busy(value) {
+      this.$emit('busy', value)
+    },
     workflowKey: {
       immediate: true,
       handler() {
@@ -391,7 +416,11 @@ export default {
         if (requestId !== this.requestId || workflowKey !== this.workflowKey || this.disposed) {
           return
         }
-        if (force || instance.state !== this.instance?.state) {
+        if (
+          force ||
+          instance.state !== this.instance?.state ||
+          instance.resource_adjustment?.revision !== this.instance?.resource_adjustment?.revision
+        ) {
           const updatedTicket = await this.$axios.get(
             `/api/v1/tickets/tickets/${ticket.id}/`,
             requestConfig
@@ -415,7 +444,7 @@ export default {
       }
     },
     openReassign(operation) {
-      if (this.busy || !this.myTask) return
+      if (this.busy || this.savingRequest || !this.myTask) return
       this.reassignTaskId = this.myTask.id
       this.operation = operation
       this.target = null
@@ -423,7 +452,13 @@ export default {
       this.reassignVisible = true
     },
     async decide(operation) {
-      if (this.busy) return
+      if (this.busy || this.savingRequest) return
+      if (
+        operation === 'approve' &&
+        (this.editingRequest || this.instance?.resource_adjustment?.pending)
+      ) {
+        return
+      }
       const taskId = this.myTask?.id
       const reassign = ['transfer', 'add-approver'].includes(operation)
       if (operation !== 'cancel' && !taskId) return
@@ -440,6 +475,9 @@ export default {
           url,
           {
             comment: reassign ? this.reassignComment : this.comment,
+            ...(operation === 'approve' && this.instance?.resource_adjustment
+              ? { expected_revision: this.instance.resource_adjustment.revision }
+              : {}),
             ...(reassign ? { target: this.target } : {})
           },
           requestConfig
