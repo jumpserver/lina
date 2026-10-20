@@ -71,6 +71,10 @@ export default {
             )
           }
         },
+        {
+          key: this.$t('AutoPushSameName'),
+          value: this.object.auto_push_same_name ? this.$t('Enabled') : this.$t('Disabled')
+        },
         'date_start',
         'date_expired',
         {

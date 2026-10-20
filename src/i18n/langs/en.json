@@ -1,4 +1,6 @@
 {
+  "AutoPushSameName": "Automatically create same-name account on first connection",
+  "AutoPushSameNameHelpText": "For same-name accounts: create and push a missing account on first connection, then continue login. Existing accounts are reused.",
   "NotExecuted": "Not executed",
   "CommandRejectedByACL": "Command blocked by ACL",
   "TemplateCredentialOverrideConfirm": "This account follows template credentials. Stop following and continue modifying or clearing credentials? The template will not be changed.",
