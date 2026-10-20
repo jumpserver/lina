@@ -348,7 +348,7 @@ export default {
           value: this.object.phone,
           key: this.$t('Phone'),
           formatter: (item, val) => {
-            if (val) {
+            if (val?.phone) {
               return (
                 <span>
                   {val.code} {val.phone}
@@ -447,7 +447,9 @@ export default {
       }
       this.$axios
         .patch(url, data)
-        .then(() => {
+        .then((profile) => {
+          this.object.phone = profile.phone
+          this.profilePhone = null
           this.$message.success(this.$tc('UpdateSuccessMsg'))
         })
         .catch((err) => {
