@@ -136,7 +136,7 @@ export default {
     },
     passAttrs() {
       // 只把非事件监听的属性透传给内部端口输入框，过滤掉 onXxx 事件，
-      // 协议字段的值只经由本组件的 $emit('input', items) 上报。
+      // 协议字段的值只经由本组件事件上报。
       const out = {}
       for (const key of Object.keys(this.$attrs)) {
         if (/^on[A-Z]/.test(key)) continue
@@ -193,6 +193,7 @@ export default {
             return { name: i.name, port: i.port }
           })
         }
+        this.$emit('update:modelValue', value)
         this.$emit('input', value)
       },
       deep: true
