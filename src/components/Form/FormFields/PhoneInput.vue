@@ -2,6 +2,7 @@
   <div :class="{ 'phone-input--number-focused': numberFocused }" class="compound-field phone-input">
     <el-select
       v-model="rawValue.code"
+      :disabled="disabled"
       :placeholder="$tc('Select')"
       class="phone-input__code"
       @change="onChange"
@@ -18,6 +19,7 @@
     </el-select>
     <el-input
       v-model="rawValue.phone"
+      :disabled="disabled"
       :placeholder="$tc('InputPhone')"
       class="phone-input__number jms-input-spacing"
       required
@@ -33,6 +35,10 @@ export default {
   name: 'PhoneInput',
   emits: ['input', 'change'],
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: [Object, String],
       default: null
@@ -112,6 +118,20 @@ export default {
  */
 .phone-input {
   position: relative;
+
+  > .phone-input__code.el-select,
+  > .phone-input__number.el-input {
+    --el-input-height: 28px;
+
+    min-height: 28px;
+    height: 28px;
+    align-self: center;
+  }
+
+  > .phone-input__number :deep(.el-input__wrapper) {
+    min-height: 28px;
+    height: 28px;
+  }
 }
 
 .phone-input--number-focused {
@@ -165,17 +185,6 @@ export default {
 
   flex: 1 1 auto;
   min-width: 0;
-
-  // 覆盖 EP 的高度变量，避免内部再按默认高度撑出额外尺寸
-  :deep(.el-input) {
-    --el-input-height: 28px;
-    height: 28px;
-  }
-
-  :deep(.el-input__wrapper) {
-    min-height: 28px;
-    height: 28px;
-  }
 
   :deep(.el-input__inner) {
     height: 28px;
