@@ -32,7 +32,7 @@
 import Icon from '@/components/Widgets/Icon'
 import $ from '@/utils/jquery-vendor'
 import { APP_ENV, withBaseApi } from '@/utils/env'
-import { getShowCurrentAssetValue } from '@/utils/common/index'
+import { getErrorResponseMsg, getShowCurrentAssetValue } from '@/utils/common/index'
 import { omitVueListeners, pickVueListeners } from '@/utils/vue'
 import { mapGetters } from 'vuex'
 import DataZTree from '../DataZTree/index.vue'
@@ -370,7 +370,7 @@ export default {
           this.$message.success(this.$tc('UpdateSuccessMsg'))
         })
         .catch((error) => {
-          this.$message.error(this.$tc('UpdateErrorMsg' + ' ' + error))
+          this.$message.error(`${this.$tc('UpdateErrorMsg')} ${getErrorResponseMsg(error)}`)
         })
         .finally()
     },
