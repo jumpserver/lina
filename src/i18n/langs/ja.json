@@ -1,4 +1,6 @@
 {
+  "AutoPushSameName": "自動プッシュ",
+  "AutoPushSameNameHelpText": "初回接続時に、同じユーザー名のアカウントを自動作成してプッシュします。既存のアカウントはそのまま使用します。",
   "TemplateCredentialOverrideConfirm": "このアカウントはテンプレートの認証情報を使用しています。追従を解除して認証情報の変更または削除を続行しますか？テンプレートは変更されません。",
   "TemplateCredentialOverride": "追従を解除して続行",
   "Credentials": "認証情報",

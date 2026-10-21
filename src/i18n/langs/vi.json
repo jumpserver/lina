@@ -1,4 +1,6 @@
 {
+  "AutoPushSameName": "Đẩy tự động",
+  "AutoPushSameNameHelpText": "Tự động tạo và cấu hình tài khoản cùng tên người dùng khi kết nối lần đầu. Tài khoản đã có sẽ được sử dụng lại.",
   "TemplateCredentialOverrideConfirm": "Tài khoản này đang theo thông tin xác thực của mẫu. Ngừng theo mẫu và tiếp tục sửa hoặc xóa thông tin xác thực? Mẫu sẽ không thay đổi.",
   "TemplateCredentialOverride": "Ngừng theo mẫu và tiếp tục",
   "Credentials": "Thông tin xác thực",

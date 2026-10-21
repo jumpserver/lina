@@ -1,4 +1,6 @@
 {
+  "AutoPushSameName": "자동 푸시",
+  "AutoPushSameNameHelpText": "첫 연결 시 동일한 사용자 이름의 계정을 자동으로 생성하고 푸시합니다. 기존 계정은 그대로 사용합니다.",
   "TemplateCredentialOverrideConfirm": "이 계정은 템플릿 자격 증명을 따릅니다. 따르기를 해제하고 자격 증명 변경 또는 삭제를 계속하시겠습니까? 템플릿은 변경되지 않습니다.",
   "TemplateCredentialOverride": "따르기 해제 후 계속",
   "Credentials": "자격 증명",
