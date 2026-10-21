@@ -126,9 +126,8 @@ export default {
           component: AssetSelect,
           label: this.$t('Asset'),
           el: {
+            userAssets: true,
             baseUrl: '/api/v1/perms/users/self/assets/',
-            baseNodeUrl: '/api/v1/perms/users/self/nodes/',
-            typeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/category/tree',
             value: []
           }
         },
