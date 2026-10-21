@@ -1,6 +1,6 @@
 {
-  "AutoPushSameName": "首次连接时自动创建同名账号",
-  "AutoPushSameNameHelpText": "选择同名账号后可开启。首次连接没有同名账号时自动创建并推送，成功后继续登录；已有账号直接复用。",
+  "AutoPushSameName": "自动推送",
+  "AutoPushSameNameHelpText": "首次连接时自动创建并推送同名账号，已有账号直接复用。",
   "NotExecuted": "未执行",
   "CommandRejectedByACL": "命令被 ACL 拦截",
   "TemplateCredentialOverrideConfirm": "该账号正在跟随模板凭据。是否解除跟随并继续修改或清除凭据？此操作不会修改模板。",

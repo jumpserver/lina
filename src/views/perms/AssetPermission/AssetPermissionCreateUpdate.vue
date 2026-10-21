@@ -178,7 +178,7 @@ export default {
         auto_push_same_name: {
           type: 'switch',
           label: this.$t('AutoPushSameName'),
-          helpText: this.$t('AutoPushSameNameHelpText'),
+          helpTip: this.$t('AutoPushSameNameHelpText'),
           hidden: (formValue) => !formValue.accounts?.includes('@USER')
         },
         actions: {
