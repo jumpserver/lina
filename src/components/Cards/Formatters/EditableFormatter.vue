@@ -1,34 +1,38 @@
 <template>
-  <div v-if="item.editor" class="detail-card-editable">
+  <div class="editable-formatter">
     <template v-if="editing">
       <div
         ref="editorHost"
-        class="detail-card-editor jms-form-controls"
+        class="editable-formatter-input jms-form-controls"
         @keydown.enter="onEnter"
         @keydown.esc="onEscape"
       >
-        <component
-          :is="editor.component || 'el-input'"
-          ref="input"
-          v-bind="inputProps"
-          v-on="inputEvents"
-        />
-        <div v-if="error" class="detail-card-editor-error" role="alert">{{ error }}</div>
+        <component :is="inputComponent" ref="input" v-bind="controlProps" v-on="controlEvents" />
+        <div v-if="error" class="editable-formatter-input-error" role="alert">{{ error }}</div>
       </div>
-      <div class="detail-card-editor-actions">
-        <el-button :loading="saving" :disabled="!canEdit" type="primary" @click="save">
+      <div class="editable-formatter-input-actions">
+        <el-button :loading="saving" :disabled="!canEdit" type="primary" @click="submit">
           {{ $t('Save') }}
         </el-button>
         <el-button :disabled="saving" @click="cancel">{{ $t('Cancel') }}</el-button>
       </div>
     </template>
     <template v-else>
-      <slot :value="displayValue" />
+      <slot :value="displayValue" :item="item" :edit="startEditing">
+        <component
+          :is="displayComponent"
+          v-if="displayComponent"
+          v-bind="displayProps"
+          :item="item"
+          :value="displayValue"
+        />
+        <ItemValue v-else :item="item" :formatter="formatter" :value="displayValue" />
+      </slot>
       <button
         v-if="canEdit"
-        :aria-label="$t('Edit') + ' ' + item.key"
-        :title="$t('Edit') + ' ' + item.key"
-        class="detail-card-edit-button"
+        :aria-label="$t('Edit') + ' ' + accessibleLabel"
+        :title="$t('Edit') + ' ' + accessibleLabel"
+        class="editable-formatter-edit-button"
         type="button"
         @click="startEditing"
       >
@@ -36,19 +40,34 @@
       </button>
     </template>
   </div>
-  <slot v-else :value="item.value" />
 </template>
 
 <script>
 import { cloneDeep } from 'lodash'
 import { getErrorResponseMsg } from '@/utils/common'
+import ItemValue from '../DetailCard/ItemValue.vue'
 
 export default {
-  name: 'EditableDetailItem',
+  name: 'EditableFormatter',
+  components: { ItemValue },
   props: {
-    item: { type: Object, required: true },
+    value: { default: undefined },
+    item: { type: Object, default: () => ({}) },
+    field: { type: String, required: true },
+    label: { type: String, default: '' },
     object: { type: Object, default: () => ({}) },
-    url: { type: String, default: '' }
+    url: { type: String, default: '' },
+    formatter: { type: Function, default: null },
+    displayComponent: { type: [String, Object, Function], default: null },
+    displayProps: { type: Object, default: () => ({}) },
+    inputComponent: { type: [String, Object, Function], default: 'el-input' },
+    inputProps: { type: Object, default: () => ({}) },
+    valueProp: { type: String, default: 'modelValue' },
+    changeEvent: { type: String, default: 'update:modelValue' },
+    disabled: { type: Boolean, default: false },
+    permission: { type: String, default: '' },
+    validate: { type: Function, default: null },
+    save: { type: Function, default: null }
   },
   emits: ['updated'],
   data() {
@@ -62,43 +81,39 @@ export default {
     }
   },
   computed: {
-    editor() {
-      return this.item.editor === true ? {} : this.item.editor || {}
-    },
-    field() {
-      return this.item.field
+    accessibleLabel() {
+      return this.label || this.item.key || this.field
     },
     canEdit() {
       return !!(
-        this.item.editor &&
         this.field &&
-        !this.editor.disabled &&
-        (!this.editor.permission || this.$hasPerm(this.editor.permission)) &&
-        (this.editor.save || this.editor.url || this.url)
+        !this.disabled &&
+        (!this.permission || this.$hasPerm(this.permission)) &&
+        (this.save || this.url)
       )
     },
     displayValue() {
-      return this.hasSavedValue ? this.savedValue : this.item.value
+      return this.hasSavedValue ? this.savedValue : this.value
     },
     sourceValue() {
       return Object.prototype.hasOwnProperty.call(this.object, this.field)
         ? this.object[this.field]
         : this.displayValue
     },
-    inputProps() {
+    controlProps() {
       return {
-        ...this.editor.props,
-        [this.editor.valueProp || 'modelValue']: this.draft,
+        ...this.inputProps,
+        [this.valueProp]: this.draft,
         disabled: this.saving || !this.canEdit,
-        'aria-label': this.item.key
+        'aria-label': this.accessibleLabel
       }
     },
-    inputEvents() {
-      return { [this.editor.changeEvent || 'update:modelValue']: this.updateDraft }
+    controlEvents() {
+      return { [this.changeEvent]: this.updateDraft }
     }
   },
   watch: {
-    'item.value': {
+    value: {
       deep: true,
       handler() {
         this.hasSavedValue = false
@@ -134,32 +149,32 @@ export default {
       if (event.defaultPrevented || event.isComposing || event.target?.tagName !== 'INPUT') return
       event.preventDefault()
       if (event.target?.closest('.el-select, .el-cascader, .el-date-editor')) return
-      this.save()
+      this.submit()
     },
     onEscape(event) {
       if (event.defaultPrevented) return
       event.preventDefault()
       this.cancel()
     },
-    async save() {
+    async submit() {
       if (!this.editing || this.saving || !this.canEdit) return
       this.saving = true
       this.error = ''
       const value = cloneDeep(this.draft)
       const context = { field: this.field, item: this.item, object: this.object }
       try {
-        if (this.editor.validate) {
-          const error = await this.editor.validate(value, context)
+        if (this.validate) {
+          const error = await this.validate(value, context)
           if (error) {
             this.error = error
             return
           }
         }
         if (!this.canEdit) return
-        const response = this.editor.save
-          ? await this.editor.save(value, context)
+        const response = this.save
+          ? await this.save(value, context)
           : await this.$axios.patch(
-              this.editor.url || this.url,
+              this.url,
               { [this.field]: value },
               { disableFlashErrorMsg: true }
             )
@@ -183,7 +198,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.detail-card-editable {
+.editable-formatter {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -192,7 +207,7 @@ export default {
   min-width: 0;
 }
 
-.detail-card-edit-button {
+.editable-formatter-edit-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -213,19 +228,19 @@ export default {
   }
 }
 
-.detail-card-editor {
+.editable-formatter-input {
   flex: 1 1 180px;
   min-width: 0;
 }
 
-.detail-card-editor-error {
+.editable-formatter-input-error {
   color: var(--el-color-danger);
   font-size: 12px;
   line-height: 18px;
   overflow-wrap: anywhere;
 }
 
-.detail-card-editor-actions {
+.editable-formatter-input-actions {
   display: flex;
   gap: 8px;
 
