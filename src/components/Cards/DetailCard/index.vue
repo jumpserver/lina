@@ -1,6 +1,11 @@
 <template>
   <IBox :fa="fa" :title="title">
-    <el-form :label-width="labelWidth" class="content detail-card" label-position="left">
+    <el-form
+      :label-width="labelWidth"
+      class="content detail-card"
+      label-position="left"
+      @submit.prevent
+    >
       <template v-for="item in items">
         <div
           v-if="item.has !== false"
@@ -11,8 +16,24 @@
         >
           <span class="el-form-item__label"> {{ formateLabel(item.key) }}</span>
           <span class="item-value el-form-item__content">
-            <component v-bind="{ ...item }" :is="item.component" v-if="item.component" />
-            <ItemValue v-bind="item" v-else :value="item.value" />
+            <EditableItem
+              :item="item"
+              :object="object"
+              :url="url"
+              @updated="$emit('updated', $event)"
+            >
+              <template #default="{ value }">
+                <slot :name="item.slot || 'value'" :item="item" :value="value">
+                  <component
+                    v-bind="{ ...item }"
+                    :is="item.component"
+                    v-if="item.component"
+                    :value="value"
+                  />
+                  <ItemValue v-bind="item" v-else :item="item" :value="value" />
+                </slot>
+              </template>
+            </EditableItem>
           </span>
         </div>
       </template>
@@ -23,11 +44,20 @@
 <script>
 import IBox from '@/components/Common/IBox/index.vue'
 import ItemValue from './ItemValue.vue'
+import EditableItem from './EditableItem.vue'
 
 export default {
   name: 'DetailCard',
-  components: { IBox, ItemValue },
+  components: { IBox, ItemValue, EditableItem },
   props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    },
+    url: {
+      type: String,
+      default: ''
+    },
     title: {
       type: String,
       default() {
@@ -51,6 +81,7 @@ export default {
       default: '120px'
     }
   },
+  emits: ['updated'],
   data() {
     return {
       iItems: this.items.filter((item) => {

@@ -6,6 +6,8 @@
       v-if="hasObject && items.length > 0"
       :items="validItems"
       :loading="loading"
+      :object="iObject"
+      :url="url"
     />
   </div>
 </template>
