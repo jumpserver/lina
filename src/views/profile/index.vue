@@ -1,13 +1,7 @@
 <template>
   <Page v-bind="$attrs">
     <TwoCol class="profile-cards">
-      <DetailCard
-        :items="detailCardItems"
-        :object="object"
-        :url="url"
-        class="profile-details"
-        @updated="onProfileUpdated"
-      />
+      <DetailCard :items="detailCardItems" class="profile-details" />
       <template #right>
         <QuickActions :actions="authQuickActions" :title="$tc('AuthSettings')" type="primary" />
         <QuickActions
@@ -28,6 +22,7 @@ import { QuickActions } from '@/components'
 import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/Cards/DetailCard'
+import EditableFormatter from '@/components/Cards/Formatters/EditableFormatter.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import store from '@/store'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -317,26 +312,31 @@ export default {
           key: this.$t('Email')
         },
         {
+          component: markRaw(EditableFormatter),
           field: 'phone',
+          url: this.url,
+          object: this.object,
+          onUpdated: this.onProfileUpdated,
           key: this.$t('Phone'),
           value: this.object.phone,
           formatter: (item, value) => {
             if (typeof value === 'string') return value || this.$t('NotSet')
             return value?.phone ? `${value.code} ${value.phone}` : this.$t('NotSet')
           },
-          editor: {
-            component: markRaw(PhoneInput),
-            valueProp: 'value',
-            changeEvent: 'change'
-          },
+          inputComponent: markRaw(PhoneInput),
+          valueProp: 'value',
+          changeEvent: 'change',
           has: !store.getters.publicSettings['PRIVACY_MODE']
         },
         {
+          component: markRaw(EditableFormatter),
           field: 'wechat',
+          url: this.url,
+          object: this.object,
+          onUpdated: this.onProfileUpdated,
           key: this.$t('WeChat'),
           value: this.object.wechat,
           formatter: (item, value) => value || this.$t('NotSet'),
-          editor: true,
           has: !store.getters.publicSettings['PRIVACY_MODE']
         },
         {
