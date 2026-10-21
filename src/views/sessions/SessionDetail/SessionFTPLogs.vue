@@ -11,8 +11,14 @@ export default {
   components: {
     ListTable
   },
+  props: {
+    object: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
-    const sessionId = this.$context.get('id')
+    const sessionId = this.object.id
     return {
       tableConfig: {
         hasSelection: false,
