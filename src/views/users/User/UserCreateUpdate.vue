@@ -67,7 +67,7 @@ export default {
         },
         password_strategy: {
           hidden: (formValue) => {
-            return this.$context.get('id') || formValue.source !== 'local'
+            return this.submitMethod() === 'put' || formValue.source !== 'local'
           }
         },
         mfa_level: {
@@ -200,11 +200,11 @@ export default {
         }
       },
       submitMethod: () => {
-        if (this.$context.get('id')) {
-          return 'put'
-        } else {
+        // 复制上下文的 id 是源用户，提交仍按创建处理。
+        if (['create', 'clone'].includes(this.$context.get('action'))) {
           return 'post'
         }
+        return this.$context.get('id') ? 'put' : 'post'
       },
       afterGetFormValue(obj) {
         if (obj?.id) {
@@ -249,7 +249,7 @@ export default {
   methods: {
     afterGetUser(user) {
       this.user = user
-      if (this.user.id === this.currentUser.id) {
+      if (this.submitMethod() === 'put' && this.user.id === this.currentUser.id) {
         const fieldsToUpdate = ['system_roles', 'org_roles', 'is_active']
         fieldsToUpdate.forEach((field) => {
           const msg = this.$t('disallowSelfUpdateFields', {
