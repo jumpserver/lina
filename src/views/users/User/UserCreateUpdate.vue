@@ -17,6 +17,7 @@ import { Select2 } from '@/components'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { PhoneInput, ResourceSelect, UserPassword } from '@/components/Form/FormFields'
 import rules from '@/components/Form/DataForm/rules'
+import { getUpdateObjURL } from '@/utils/common/index'
 import { MFALevel, MFASystemSetting } from '../const'
 export default {
   components: {
@@ -205,6 +206,11 @@ export default {
           return 'post'
         }
         return this.$context.get('id') ? 'put' : 'post'
+      },
+      getUrl: () => {
+        return this.submitMethod() === 'put'
+          ? getUpdateObjURL(this.url, this.$context.get('id'))
+          : this.url
       },
       afterGetFormValue(obj) {
         if (obj?.id) {
