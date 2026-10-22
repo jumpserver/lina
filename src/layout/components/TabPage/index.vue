@@ -124,7 +124,9 @@ export default {
       loading: false,
       helpAlertVisible: true,
       toSentenceCase: toSentenceCase,
-      activeTab: this.activeMenu
+      activeTab: this.activeMenu,
+      navigationActive: true,
+      ownerPath: this.$route.path
     }
   },
   computed: {
@@ -191,7 +193,7 @@ export default {
       this.syncActiveTab()
     },
     iActiveMenu(newValue) {
-      if (!newValue) {
+      if (!newValue || !this.navigationActive || this.$route.path !== this.ownerPath) {
         return
       }
       if (!this.shouldSyncTabState) {
@@ -219,6 +221,13 @@ export default {
   created() {
     this.syncActiveTab()
     this.loading = false
+  },
+  activated() {
+    this.navigationActive = true
+    this.syncActiveTab()
+  },
+  deactivated() {
+    this.navigationActive = false
   },
   methods: {
     handleTabClick(tab) {
@@ -257,6 +266,8 @@ export default {
       return activeTab
     },
     syncActiveTab() {
+      // Cached pages still observe route changes, even before deactivation.
+      if (!this.navigationActive || this.$route.path !== this.ownerPath) return
       const activeTab = this.getPropActiveTab()
       if (!activeTab) {
         return
