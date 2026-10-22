@@ -61,7 +61,6 @@ export default {
   data() {
     return {
       variable: {},
-      initial: false,
       addVariableDialogVisible: false
     }
   },
@@ -80,15 +79,10 @@ export default {
     variables: {
       handler(newVal, oldVal) {
         if (oldVal === undefined) return
-        if (newVal.length > 0 || !this.initial) {
-          newVal.map((item) => {
-            item.default_value = item.text_default_value || item.select_default_value || undefined
-          })
-          this.$emit('input', newVal)
-        }
-        if (newVal) {
-          this.initial = true
-        }
+        newVal.map((item) => {
+          item.default_value = item.text_default_value || item.select_default_value || undefined
+        })
+        this.$emit('input', newVal)
       },
       immediate: true,
       deep: true
