@@ -89,7 +89,7 @@ export default {
           'PolicyDocsRevokedAction'
         ],
         [
-          'configuration.updated',
+          'application.scope.updated',
           'PolicyDocsConfigurationTrigger',
           'PolicyDocsConfigurationAction'
         ],

@@ -15,7 +15,8 @@ export default {
   name: 'ApplicationCredentialCreateUpdate',
   components: { GenericCreateUpdatePage },
   props: {
-    credential: { type: Object, default: null }
+    credential: { type: Object, default: null },
+    mode: { type: String, default: 'subscription' }
   },
   emits: ['cancel', 'saved'],
   data() {
@@ -31,6 +32,7 @@ export default {
         el: { type: 'text', placeholder: this.$t('CredentialNamePlaceholder') }
       },
       mode: {
+        hidden: true,
         label: this.$t('CredentialPolicyMode'),
         type: 'radio-group',
         rules: [rules.RequiredChange],
@@ -136,7 +138,7 @@ export default {
         label: this.$t('SubscribedAccounts'),
         component: Select2,
         rules: [rules.RequiredChange],
-        hidden: (form) => isRotation(form),
+        hidden: (form) => isRotation(form) || form.subscription_all_authorized,
         helpTextFormatter: () => this.$t('SubscribedAccountsHelp'),
         el: {
           multiple: true,
@@ -150,6 +152,13 @@ export default {
           placeholder: this.$t('SelectSubscribedAccounts')
         }
       },
+      subscription_all_authorized: {
+        label: this.$t('AllApplicationAccounts'),
+        type: 'checkbox',
+        hidden: (form) => isRotation(form),
+        helpText: this.$t('AllApplicationAccountsHelp'),
+        on: { change: ([value]) => (this.allAccounts = value) }
+      },
       application_ids: {
         label: this.$t('Applications'),
         component: Select2,
@@ -157,7 +166,9 @@ export default {
         helpTextFormatter: () =>
           this.$t(
             this.currentMode === 'subscription'
-              ? 'CredentialSubscriptionApplicationsHelp'
+              ? this.allAccounts
+                ? 'AllApplicationAccountsHelp'
+                : 'CredentialSubscriptionApplicationsHelp'
               : 'CredentialPolicyApplicationsHelp'
           ),
         el: {
@@ -170,7 +181,8 @@ export default {
       comment: { label: this.$t('Comment'), el: { type: 'textarea', rows: 3 } }
     }
     return {
-      currentMode: item?.mode || 'subscription',
+      currentMode: item?.mode || this.mode,
+      allAccounts: item?.subscription_all_authorized ?? false,
       formConfig: {
         url: credentialUrl,
         getUrl: () => credentialUrl,
@@ -181,7 +193,7 @@ export default {
         submitBtnText: this.$t('Save'),
         initial: {
           name: item?.name || '',
-          mode: item?.mode || 'subscription',
+          mode: item?.mode || this.mode,
           asset_id: assetId,
           account_id: item?.account?.id || '',
           alternate_account_id: item?.alternate_account?.id || '',
@@ -190,6 +202,7 @@ export default {
           subscription_account_ids: (item?.subscription_accounts || []).map(
             (account) => account.id
           ),
+          subscription_all_authorized: item?.subscription_all_authorized ?? false,
           application_ids: (item?.applications || []).map((application) => application.id),
           is_active: item?.is_active ?? true,
           comment: item?.comment || ''
@@ -203,6 +216,7 @@ export default {
               'account_id',
               'alternate_account_id',
               'source_no_traffic_days',
+              'subscription_all_authorized',
               'subscription_account_ids'
             ]
           ],

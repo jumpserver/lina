@@ -9,9 +9,14 @@
         })
       }}</span>
     </div>
-    <p class="context-help">
-      {{ $t(showWizard ? 'ApplicationAccessHelp' : 'ApplicationConnectionsHelp') }}
-    </p>
+    <div class="context-help">
+      <el-alert
+        :title="$t(showWizard ? 'ApplicationAccessHelp' : 'ApplicationConnectionsHelp')"
+        type="info"
+        :closable="false"
+        show-icon
+      />
+    </div>
     <ListTable
       ref="table"
       :header-actions="headerActions"
@@ -75,7 +80,6 @@ export default {
         extraQuery: this.instanceQuery,
         hasSelection: false,
         hasPagination: true,
-        columnsMeta: { actions: { has: false } },
         columns: [
           { prop: 'instance_id', label: this.$t('InstanceID'), minWidth: 160 },
           {
@@ -94,8 +98,18 @@ export default {
             prop: 'online',
             label: this.$t('ClientStatus'),
             width: 110,
-            formatter: (row) =>
-              this.$t(!row.is_active ? 'Disabled' : row.online ? 'Online' : 'Offline')
+            formatter: (row) => (
+              <div>
+                <div>
+                  {this.$t(!row.is_active ? 'Disabled' : row.online ? 'Online' : 'Offline')}
+                </div>
+                {row.application_status?.status && (
+                  <div class="usage-detail">
+                    {this.applicationStatusLabel(row.application_status.status)}
+                  </div>
+                )}
+              </div>
+            )
           },
           {
             prop: 'date_last_seen',
@@ -105,18 +119,12 @@ export default {
           },
           {
             prop: 'credential_statuses',
-            label: this.$t('ApplicationConnectionProgress'),
+            label: this.$t('ApplicationAccountUsage'),
             minWidth: 240,
-            formatter: (row) =>
-              row.credential_statuses
-                ?.map(
-                  (status) =>
-                    `${status.credential?.name}: ${status.fetched_revision} / ${status.credential?.mode === 'subscription' ? '-' : status.applied_revision}`
-                )
-                .join(', ') || '-'
+            formatter: (row) => this.formatAccountUsage(row)
           },
           {
-            prop: 'control',
+            prop: 'actions',
             label: this.$t('Actions'),
             width: 100,
             formatter: (row) =>
@@ -161,6 +169,59 @@ export default {
     '$route.query.wizard': 'openRequestedWizard'
   },
   methods: {
+    applicationStatusLabel(status) {
+      const labels = {
+        starting: 'ApplicationUsageStarting',
+        running: 'Running',
+        degraded: 'ApplicationUsageDegraded',
+        stopping: 'ApplicationUsageStopping',
+        stopped: 'ApplicationUsageStopped',
+        error: 'Error'
+      }
+      return this.$t(labels[status] || 'Unknown')
+    },
+    formatAccountUsage(row) {
+      const report =
+        row.application_status?.status && Array.isArray(row.application_status.account_ids)
+          ? row.application_status
+          : null
+      const accounts = new Map(
+        (row.reported_accounts || []).map((account) => [account.id, account])
+      )
+      const used = (report?.account_ids || []).map((id) => {
+        const account = accounts.get(id)
+        if (!account) return id
+        const name = account.username || account.name
+        return account.asset?.name ? `${name} @ ${account.asset.name}` : name
+      })
+      const progress = row.credential_statuses
+        ?.map(
+          (status) =>
+            `${status.credential?.name}: ${status.fetched_revision} / ${status.credential?.mode === 'subscription' ? '-' : status.applied_revision}`
+        )
+        .join(', ')
+      return (
+        <div class="account-usage-cell">
+          <div class="usage-accounts" title={used.join(', ')}>
+            {report
+              ? used.join(', ') || this.$t('ApplicationNoAccountsInUse')
+              : this.$t('ApplicationUsageNotReported')}
+          </div>
+          {row.date_status_reported && (
+            <div class="usage-detail" title={toSafeLocalDateStr(row.date_status_reported)}>
+              {this.$t(row.online ? 'ApplicationUsageReportedAt' : 'ApplicationUsageLastKnownAt', {
+                date: toSafeLocalDateStr(row.date_status_reported)
+              })}
+            </div>
+          )}
+          {progress && (
+            <div class="usage-detail" title={progress}>
+              {this.$t('ApplicationConnectionProgress')}: {progress}
+            </div>
+          )}
+        </div>
+      )
+    },
     openRequestedWizard() {
       if (
         this.showWizard &&
@@ -235,7 +296,7 @@ export default {
 
 <style lang="scss" scoped>
 .application-connections {
-  padding: 16px 0;
+  min-width: 0;
 }
 .access-summary {
   display: flex;
@@ -245,7 +306,19 @@ export default {
   flex-wrap: wrap;
 }
 .context-help {
-  color: var(--el-text-color-secondary);
   margin: 0 0 12px;
+}
+.application-connections :deep(.account-usage-cell) {
+  min-width: 0;
+}
+.application-connections :deep(.usage-accounts),
+.application-connections :deep(.usage-detail) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.application-connections :deep(.usage-detail) {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
 }
 </style>

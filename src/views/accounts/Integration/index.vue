@@ -1,9 +1,21 @@
 <template>
-  <TabPage v-model:active-menu="activeMenu" :submenu="tab.submenu" />
+  <TabPage
+    v-model:active-menu="activeMenu"
+    :submenu="tab.submenu"
+    :help-message="
+      ['notifications', 'rotations'].includes(activeMenu)
+        ? $t(
+            activeMenu === 'notifications'
+              ? 'CredentialUpdateSubscriptionHelp'
+              : 'AlternatingAccountRotationHelp'
+          )
+        : ''
+    "
+  />
 </template>
 
 <script>
-import { TabPage } from '@/layout/components'
+import TabPage from '@/layout/components/TabPage'
 
 export default {
   name: 'Integration',
@@ -22,10 +34,16 @@ export default {
             component: () => import('@/views/accounts/Integration/ApplicationList.vue')
           },
           {
-            name: 'rotations',
-            title: this.$t('CredentialPolicies'),
+            name: 'notifications',
+            title: this.$t('CredentialUpdateSubscription'),
             hidden: !this.$hasPerm('accounts.view_applicationcredential'),
-            component: () => import('@/views/accounts/Integration/AccountRotationPrototype.vue')
+            component: () => import('@/views/accounts/Integration/SubscriptionList.vue')
+          },
+          {
+            name: 'rotations',
+            title: this.$t('AlternatingAccountRotation'),
+            hidden: !this.$hasPerm('accounts.view_applicationcredential'),
+            component: () => import('@/views/accounts/Integration/RotationList.vue')
           },
           {
             name: 'records',

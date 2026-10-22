@@ -21,7 +21,7 @@ export default [
         component: () => import('@/views/accounts/Integration/index.vue'),
         name: 'IntegrationApplicationList',
         meta: {
-          title: i18n.t('Applications'),
+          title: i18n.t('ApplicationIntegration'),
           permissions: ['accounts.view_integrationapplication']
         }
       },

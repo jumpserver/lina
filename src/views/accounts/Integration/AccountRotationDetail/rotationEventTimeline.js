@@ -9,7 +9,7 @@ export const eventLabels = {
   'rotation.preparation.cancelled': 'RotationPreparationCancelledEvent',
   'credential.updated': 'AppAuditCredentialPublished',
   'credential.revoked': 'AppAuditAuthorizationRevoked',
-  'configuration.updated': 'AppAuditConfigurationUpdated',
+  'application.scope.updated': 'AppAuditApplicationScopeUpdated',
   'rotation.started': 'AppAuditRotationStarted',
   'rotation.waiting_for_application': 'RotationEventWaitingForSwitch',
   'rotation.source.waiting': 'RotationSourceWaitingEvent',

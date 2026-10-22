@@ -160,7 +160,7 @@ export default {
           {
             key: this.$t('SubscribedAccounts'),
             value: this.object.subscription_all_authorized
-              ? this.$t('LegacyAllAuthorizedAccounts')
+              ? this.$t('AllApplicationAccounts')
               : this.object.subscription_accounts?.map(subscribedAccountLabel) || [],
             formatter: (_item, value) =>
               Array.isArray(value) ? (

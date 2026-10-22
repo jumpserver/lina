@@ -51,7 +51,11 @@ export async function saveApplicationCredential(form) {
     ...(form.mode === 'alternating_rotation'
       ? { source_no_traffic_days: Number(form.source_no_traffic_days ?? 7) }
       : {}),
-    subscription_accounts: form.mode === 'subscription' ? form.subscription_account_ids : [],
+    subscription_accounts:
+      form.mode === 'subscription' && !form.subscription_all_authorized
+        ? form.subscription_account_ids
+        : [],
+    subscription_all_authorized: form.mode === 'subscription' && !!form.subscription_all_authorized,
     applications: form.application_ids,
     is_active: form.is_active,
     comment: form.comment

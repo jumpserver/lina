@@ -1,12 +1,4 @@
 <template>
-  <!--
-    THESIS: One operational list makes update subscriptions and alternating rotations easy to scan and act on.
-    OWN-WORLD: Lina's neutral working surface, compact tables, primary actions, restrained status tags, resizable drawers, and existing card hierarchy.
-    STORY: Administrators scan policy mode and account state, open one detail, then create, edit, or manually rotate without leaving PAM application management.
-    FIRST VIEWPORT: Lina's shared list toolbar places Create on the left and the standard search on the right.
-    FORM: Existing Lina tabbed-resource extension; one mode-controlled drawer for create, edit, and detail.
-    FINISH: The build ends with a closed independent review and runnable checks; it adds no new visual system or raster assets.
-  -->
   <div class="application-credential-list">
     <ListTable ref="credentialTable" :header-actions="headerActions" :table-config="tableConfig" />
 
@@ -19,6 +11,7 @@
       <AccountRotationCreateUpdate
         v-if="drawerMode === 'form'"
         :credential="editingCredential"
+        :mode="mode"
         @cancel="drawerVisible = false"
         @saved="handleSaved"
       />
@@ -33,7 +26,7 @@
 </template>
 
 <script lang="jsx">
-import { ListTable } from '@/components'
+import ListTable from '@/components/Table/ListTable'
 import { ActionsFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import Drawer from '@/components/Drawer/index.vue'
 import {
@@ -55,6 +48,9 @@ export default {
     Drawer,
     ListTable
   },
+  props: {
+    mode: { type: String, required: true }
+  },
   data() {
     return {
       drawerMode: 'detail',
@@ -63,8 +59,14 @@ export default {
       listRefreshPending: false,
       selectedCredential: null,
       tableConfig: {
+        name: this.mode === 'alternating_rotation' ? 'PAMAccountRotationList' : undefined,
         url: credentialUrl,
-        request: requestCredentialTable,
+        request: (url, config) =>
+          requestCredentialTable(url, {
+            ...config,
+            params: { ...config?.params, mode: this.mode }
+          }),
+        extraQuery: { mode: this.mode },
         hasSelection: true,
         hasPagination: true,
         columns: [
@@ -76,12 +78,6 @@ export default {
             formatterArgs: {
               onClick: ({ row }) => this.openDetail(row)
             }
-          },
-          {
-            prop: 'mode',
-            label: this.$t('CredentialPolicyMode'),
-            minWidth: '180px',
-            formatter: (row) => this.modeLabel(row)
           },
           {
             prop: 'status',
@@ -101,17 +97,53 @@ export default {
                     whiteSpace: 'normal'
                   }}
                 >
-                  {credentialStatusLabel(row, this.$t)}
+                  {this.mode === 'subscription'
+                    ? this.$t(row.is_active ? 'Enabled' : 'Disabled')
+                    : credentialStatusLabel(row, this.$t)}
                 </el-tag>
               </el-tooltip>
             )
           },
-          {
-            prop: 'account_scope',
-            label: this.$t('CredentialPolicyAccountScope'),
-            minWidth: '300px',
-            formatter: (row) => this.renderAccountScope(row)
-          },
+          ...(this.mode === 'subscription'
+            ? [
+                {
+                  prop: 'account_scope',
+                  label: this.$t('CredentialPolicyAccountScope'),
+                  minWidth: '300px',
+                  formatter: (row) => this.renderSubscriptionAccounts(row)
+                }
+              ]
+            : [
+                {
+                  prop: 'asset',
+                  label: this.$t('Asset'),
+                  minWidth: '180px',
+                  formatter: (row) =>
+                    this.renderRotationValue(
+                      row,
+                      row.asset?.name || row.asset?.address || '-',
+                      credentialAssetLabels(row).join(', ') || '-'
+                    )
+                },
+                {
+                  prop: 'active_account',
+                  label: this.$t('CurrentAccount'),
+                  minWidth: '180px',
+                  formatter: (row) => this.renderRotationAccount(row, row.active_account)
+                },
+                {
+                  prop: 'next_account',
+                  label: this.$t('PendingRotationAccount'),
+                  minWidth: '180px',
+                  formatter: (row) =>
+                    this.renderRotationAccount(
+                      row,
+                      row.active_account?.id === row.account?.id
+                        ? row.alternate_account
+                        : row.account
+                    )
+                }
+              ]),
           {
             prop: 'actions',
             label: this.$t('Actions'),
@@ -151,9 +183,11 @@ export default {
       if (this.drawerMode === 'detail') {
         return this.selectedCredential?.name || this.$t('ApplicationCredential')
       }
-      return this.editingCredential
-        ? this.$t('EditApplicationCredential')
-        : this.$t('NewApplicationCredential')
+      const action = this.$t(this.editingCredential ? 'Update' : 'Create')
+      const type = this.$t(
+        this.mode === 'subscription' ? 'CredentialUpdateSubscription' : 'AlternatingAccountRotation'
+      )
+      return `${action} · ${type}`
     }
   },
   deactivated() {
@@ -163,70 +197,36 @@ export default {
     '$route.query.credential_id': {
       immediate: true,
       handler(id) {
-        if (id && this.$route.query.tab === 'rotations') this.openDetail({ id })
+        const tab = this.mode === 'subscription' ? 'notifications' : 'rotations'
+        if (id && this.$route.query.tab === tab) this.openDetail({ id })
       }
     }
   },
   methods: {
-    renderAccountScope(row) {
+    renderSubscriptionAccounts(row) {
       const accountName = (account) => account?.username || account?.name || '-'
-      if (row.mode === 'subscription') {
-        const accounts = row.subscription_accounts_preview || []
-        const remaining = Math.max(0, (row.subscription_accounts_amount ?? 0) - accounts.length)
-        const summary = row.subscription_all_authorized
-          ? this.$t('LegacyAllAuthorizedAccounts')
-          : accounts.map(accountName).join(', ') || '-'
-        return (
-          <el-tooltip
-            placement="top"
-            trigger={['hover', 'focus']}
-            disabled={row.subscription_all_authorized}
-            v-slots={{
-              content: () => (
-                <div>
-                  {accounts.map((account) => (
-                    <div key={account.id}>{subscribedAccountLabel(account)}</div>
-                  ))}
-                  <div>
-                    {this.$t('CredentialPolicyScopeSummary', {
-                      accounts: row.subscription_accounts_amount ?? 0,
-                      assets: row.subscription_assets_amount ?? 0
-                    })}
-                  </div>
-                </div>
-              )
-            }}
-          >
-            <button
-              type="button"
-              class="credential-account-summary truncate-content"
-              onClick={() => this.openDetail(row)}
-            >
-              <span class="credential-account-names">{summary}</span>
-              {!row.subscription_all_authorized && remaining > 0 && (
-                <span class="credential-account-more">+{remaining}</span>
-              )}
-            </button>
-          </el-tooltip>
-        )
-      }
-      const nextAccount =
-        row.active_account?.id === row.account?.id ? row.alternate_account : row.account
-      const summary = `${accountName(row.active_account)} → ${accountName(nextAccount)} · ${row.asset?.address || row.asset?.name || '-'}`
+      const accounts = row.subscription_accounts_preview || []
+      const remaining = Math.max(0, (row.subscription_accounts_amount ?? 0) - accounts.length)
+      const summary = row.subscription_all_authorized
+        ? this.$t('AllApplicationAccounts')
+        : accounts.map(accountName).join(', ') || '-'
       return (
         <el-tooltip
           placement="top"
           trigger={['hover', 'focus']}
+          disabled={row.subscription_all_authorized}
           v-slots={{
             content: () => (
               <div>
+                {accounts.map((account) => (
+                  <div key={account.id}>{subscribedAccountLabel(account)}</div>
+                ))}
                 <div>
-                  {this.$t('CurrentAccount')}: {subscribedAccountLabel(row.active_account)}
+                  {this.$t('CredentialPolicyScopeSummary', {
+                    accounts: row.subscription_accounts_amount ?? 0,
+                    assets: row.subscription_assets_amount ?? 0
+                  })}
                 </div>
-                <div>
-                  {this.$t('NextAccount')}: {subscribedAccountLabel(nextAccount)}
-                </div>
-                <div>{credentialAssetLabels(row).join(', ') || '-'}</div>
               </div>
             )
           }}
@@ -237,15 +237,31 @@ export default {
             onClick={() => this.openDetail(row)}
           >
             <span class="credential-account-names">{summary}</span>
+            {!row.subscription_all_authorized && remaining > 0 && (
+              <span class="credential-account-more">+{remaining}</span>
+            )}
           </button>
         </el-tooltip>
       )
     },
-    modeLabel(row) {
-      return this.$t(
-        row.mode === 'alternating_rotation'
-          ? 'AlternatingAccountRotation'
-          : 'CredentialUpdateSubscription'
+    renderRotationAccount(row, account) {
+      return this.renderRotationValue(
+        row,
+        account?.username || account?.name || '-',
+        subscribedAccountLabel(account)
+      )
+    },
+    renderRotationValue(row, label, tooltip) {
+      return (
+        <el-tooltip placement="top" trigger={['hover', 'focus']} content={tooltip}>
+          <button
+            type="button"
+            class="credential-account-summary truncate-content"
+            onClick={() => this.openDetail(row)}
+          >
+            <span class="credential-account-names">{label}</span>
+          </button>
+        </el-tooltip>
       )
     },
     async loadRows() {
@@ -266,7 +282,16 @@ export default {
       this.drawerVisible = true
     },
     async openDetail(row) {
-      this.selectedCredential = await getApplicationCredential(row.id)
+      const credential = await getApplicationCredential(row.id)
+      if (credential.mode !== this.mode) {
+        return this.$router.replace({
+          query: {
+            ...this.$route.query,
+            tab: credential.mode === 'subscription' ? 'notifications' : 'rotations'
+          }
+        })
+      }
+      this.selectedCredential = credential
       this.drawerMode = 'detail'
       this.drawerVisible = true
     },

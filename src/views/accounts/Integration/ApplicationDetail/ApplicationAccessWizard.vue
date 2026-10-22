@@ -39,6 +39,13 @@
             <p class="context-help">{{ $t('AccessSDKHelp') }}</p>
           </template>
           <template v-else>
+            <el-form-item :label="$t('AgentSetupGoal')">
+              <el-select v-model="form.agent_setup">
+                <el-option :label="$t('AgentSetupDelivery')" value="delivery" />
+                <el-option :label="$t('AgentSetupConfigUpdate')" value="config_update" />
+                <el-option :label="$t('AlternatingAccountRotation')" value="rotation" />
+              </el-select>
+            </el-form-item>
             <el-form-item
               :label="$t('ApplicationRunUser')"
               prop="app_user"
@@ -55,14 +62,97 @@
             >
               <el-input v-model="form.install_path" maxlength="256" />
             </el-form-item>
-            <el-form-item :label="$t('CredentialDeliveryMode')">
+            <el-form-item
+              v-if="form.agent_setup === 'delivery'"
+              :label="$t('CredentialDeliveryMode')"
+            >
               <el-select v-model="form.delivery_mode">
                 <el-option :label="$t('DeliveryJSON')" value="json" />
                 <el-option :label="$t('DeliveryEnvironment')" value="environment" />
                 <el-option :label="$t('DeliverySocket')" value="socket" />
               </el-select>
             </el-form-item>
-            <template v-if="form.delivery_mode === 'environment'">
+            <template v-if="form.agent_setup !== 'delivery'">
+              <el-form-item
+                :label="$t('Account')"
+                prop="account_id"
+                :error="errors.account_id"
+                :rules="[{ required: true, message: $t('Required'), trigger: 'change' }]"
+              >
+                <Select2
+                  v-model="form.account_id"
+                  :multiple="false"
+                  :url="`/api/v1/accounts/accounts/?integrationapplication=${object.id}&fields=id,name,username,asset`"
+                  :ajax="{ transformOption: accountOption }"
+                />
+              </el-form-item>
+              <el-form-item
+                :label="$t('AgentBusinessConfigFile')"
+                prop="config_file"
+                :error="errors.config_file"
+                :rules="[{ required: true, message: $t('Required'), trigger: 'blur' }]"
+              >
+                <el-input v-model="form.config_file" placeholder="/etc/app/config.yml" />
+              </el-form-item>
+              <el-form-item
+                :label="$t('AgentUsernameField')"
+                prop="username_field"
+                :error="errors.username_field"
+              >
+                <el-input v-model="form.username_field" placeholder="DB_USER" />
+              </el-form-item>
+              <el-form-item :label="$t('AgentConfigFormat')">
+                <el-select v-model="form.config_format">
+                  <el-option :label="$t('AutoDetect')" value="auto" />
+                  <el-option label="KEY=value" value="env" />
+                  <el-option label="YAML" value="yaml" />
+                </el-select>
+              </el-form-item>
+              <el-form-item
+                :label="$t('AgentSecretField')"
+                prop="secret_field"
+                :error="errors.secret_field"
+              >
+                <el-input v-model="form.secret_field" placeholder="DB_PASSWORD" />
+                <p class="field-help">{{ $t('AgentConfigFieldsHelp') }}</p>
+              </el-form-item>
+              <el-form-item :label="$t('Actions')">
+                <el-select v-model="form.service_action_type">
+                  <el-option :label="$t('AgentActionSystemd')" value="systemd" />
+                  <el-option :label="$t('AgentActionScript')" value="script" />
+                  <el-option :label="$t('AgentActionNone')" value="none" />
+                </el-select>
+              </el-form-item>
+              <el-form-item
+                v-if="form.service_action_type === 'script'"
+                :label="$t('AgentServiceScript')"
+                prop="service_script"
+                :error="errors.service_script"
+                :rules="[{ required: true, message: $t('Required'), trigger: 'blur' }]"
+              >
+                <el-input
+                  v-model="form.service_script"
+                  placeholder="/usr/local/libexec/reload-app"
+                />
+              </el-form-item>
+              <el-form-item
+                :label="$t('AgentApplicationCheck')"
+                prop="application_check"
+                :error="errors.application_check"
+                :rules="
+                  form.agent_setup === 'rotation'
+                    ? [{ required: true, message: $t('Required'), trigger: 'blur' }]
+                    : []
+                "
+              >
+                <el-input
+                  v-model="form.application_check"
+                  placeholder="/usr/local/libexec/check-app-db"
+                />
+                <p class="field-help">{{ $t('AgentApplicationCheckHelp') }}</p>
+              </el-form-item>
+            </template>
+            <template v-if="needsSystemd">
               <el-form-item
                 :label="$t('SystemdUnit')"
                 prop="systemd_unit"
@@ -110,6 +200,9 @@
               )
             }}
           </p>
+          <p v-if="form.type === 'agent'" class="context-help">
+            {{ $t('AccessAgentConfigUpdateHelp') }}
+          </p>
           <template v-if="materials.instance_id">
             <div class="material-header">
               <strong>{{ $t('InstanceID') }}</strong>
@@ -155,7 +248,13 @@
             <pre>{{ materials.foreground_windows_command }}</pre>
           </template>
           <p v-else-if="form.type === 'agent'" class="context-help">
-            {{ $t('AccessAgentLinuxOnlyDeliveryHelp') }}
+            {{
+              $t(
+                form.agent_setup === 'delivery'
+                  ? 'AccessAgentLinuxOnlyDeliveryHelp'
+                  : 'AgentRulesLinuxHelp'
+              )
+            }}
           </p>
           <template v-if="materials.code">
             <div class="material-header">
@@ -222,13 +321,14 @@
 <script>
 import IBox from '@/components/Common/IBox'
 import Page from '@/layout/components/Page'
+import Select2 from '@/components/Form/FormFields/Select2.vue'
 import { generateApplicationAccessMaterials } from '@/api/applicationCredential'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { copy } from '@/utils/common/index'
 
 export default {
   name: 'ApplicationAccessWizard',
-  components: { Page, IBox },
+  components: { Page, IBox, Select2 },
   props: {
     object: { type: Object, required: true }
   },
@@ -251,6 +351,15 @@ export default {
         install_path: '/opt/jumpserver-pam',
         delivery_mode: 'json',
         sdk_language: 'python',
+        agent_setup: 'delivery',
+        account_id: '',
+        config_file: '',
+        config_format: 'auto',
+        username_field: 'DB_USER',
+        secret_field: 'DB_PASSWORD',
+        service_action_type: 'systemd',
+        service_script: '',
+        application_check: '',
         systemd_unit: '',
         systemd_action: 'restart'
       },
@@ -263,6 +372,11 @@ export default {
     }
   },
   computed: {
+    needsSystemd() {
+      return this.form.agent_setup === 'delivery'
+        ? this.form.delivery_mode === 'environment'
+        : this.form.service_action_type === 'systemd'
+    },
     documentationRoute() {
       return {
         name: 'IntegrationApplicationList',
@@ -277,6 +391,12 @@ export default {
     this.loadSDKLanguages()
   },
   methods: {
+    accountOption(account) {
+      return {
+        label: `${account.username || account.name} (${account.asset?.name || account.asset?.address || account.id})`,
+        value: account.id
+      }
+    },
     localDate: toSafeLocalDateStr,
     copyText: copy,
     async loadSDKLanguages() {
@@ -310,10 +430,18 @@ export default {
       this.generating = true
       this.$emit('busy', true)
       try {
-        this.materials = await generateApplicationAccessMaterials(this.object.id, {
-          ...this.form,
-          systemd_unit: this.form.delivery_mode === 'environment' ? this.form.systemd_unit : ''
-        })
+        const payload =
+          this.form.type === 'sdk'
+            ? {
+                type: 'sdk',
+                sdk_language: this.form.sdk_language
+              }
+            : {
+                ...this.form,
+                ...(this.form.account_id ? {} : { account_id: undefined }),
+                systemd_unit: this.needsSystemd ? this.form.systemd_unit : ''
+              }
+        this.materials = await generateApplicationAccessMaterials(this.object.id, payload)
         this.step = 1
       } catch (error) {
         const data = error.response?.data

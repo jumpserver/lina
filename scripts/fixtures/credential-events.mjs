@@ -14,7 +14,7 @@ export function createCredentialEventFixture(mode = 'rotation', count = 300) {
           'credential.change.started',
           'credential.change.completed',
           'credential.updated',
-          'configuration.updated',
+          'application.scope.updated',
           'credential.change.started',
           'credential.change.failed',
           'credential.change.started',

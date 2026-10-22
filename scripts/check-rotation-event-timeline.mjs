@@ -267,7 +267,7 @@ await browserComponent.methods.loadClients.call(
   preferredClient
 )
 assert.equal(historyClient.id, preferredClient.id) // Never jump to a different client with the same display name.
-assert.ok(helperSource.includes("'configuration.updated': 'AppAuditConfigurationUpdated'"))
+assert.ok(helperSource.includes("'application.scope.updated': 'AppAuditApplicationScopeUpdated'"))
 assert.ok(!timeline.includes('setTimeout') && !timeline.includes('setInterval'))
 const { createCredentialEventFixture, fixtureHistory, fixtureRotation } =
   await import('./fixtures/credential-events.mjs')
