@@ -23,7 +23,7 @@ import { withBaseApi } from '@/utils/env'
 import TreeTable from '@/components/Table/TreeTable/index.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { getDayEnd, getDaysAgo } from '@/utils/common/time'
-import { OutputExpandFormatter } from '../formatters'
+import { CommandSourceFormatter, OutputExpandFormatter } from '../formatters'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import * as queryUtil from '@/components/Table/DataTable/compenents/el-data-table/utils/query'
 import { createSourceIdCache } from '@/api/common'
@@ -99,6 +99,7 @@ export default {
           'expandCol',
           ...(this.assetId ? ['index', 'id'] : []),
           'input',
+          'source',
           'risk_level',
           'user',
           'asset',
@@ -112,6 +113,7 @@ export default {
             'output',
             ...(this.assetId ? ['index'] : []),
             'input',
+            'source',
             'risk_level',
             'user',
             'asset',
@@ -131,6 +133,10 @@ export default {
           index: {
             type: 'index',
             label: this.$t('RowNumber')
+          },
+          source: {
+            label: this.$t('Source'),
+            formatter: CommandSourceFormatter
           },
           risk_level: {
             formatter: (row, col, cellValue) => {
@@ -176,7 +182,7 @@ export default {
         hasExport: this.$hasPerm('terminal.view_command'),
         hasDatePicker: true,
         searchConfig: {
-          singleChoiceFields: ['risk_level']
+          singleChoiceFields: ['risk_level', 'source']
         },
         datePicker: {
           dateStart: dateFrom,

@@ -4,7 +4,7 @@
 
 <script>
 import ListTable from '@/components/Table/ListTable'
-import { OutputExpandFormatter } from '../formatters'
+import { CommandSourceFormatter, OutputExpandFormatter } from '../formatters'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
@@ -24,10 +24,10 @@ export default {
       tableConfig: {
         hasSelection: false,
         url: `/api/v1/terminal/commands/?session_id=${sessionId}`,
-        columns: ['expandCol', 'index', 'input', 'timestamp'],
+        columns: ['expandCol', 'index', 'input', 'source', 'timestamp'],
         columnsShow: {
           min: ['expandCol', 'index'],
-          default: ['expandCol', 'index', 'input', 'timestamp']
+          default: ['expandCol', 'index', 'input', 'source', 'timestamp']
         },
         columnsMeta: {
           expandCol: {
@@ -41,6 +41,10 @@ export default {
           input: {
             label: this.$t('Command'),
             sortable: 'custom'
+          },
+          source: {
+            label: this.$t('Source'),
+            formatter: CommandSourceFormatter
           },
           timestamp: {
             width: '160px',

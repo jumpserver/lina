@@ -1770,6 +1770,7 @@
   "Slack": "Slack",
   "SlackOAuth": "Slack OAuth",
   "Source": "Source",
+  "Unknown": "Unknown",
   "SourceIP": "Source address",
   "SourcePort": "Source port",
   "Spec": "Specific",
