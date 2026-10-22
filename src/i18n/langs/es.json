@@ -1931,6 +1931,7 @@
   "Slack": "Slack",
   "SlackOAuth": "Autenticación de Slack",
   "Source": "Fuente",
+  "Unknown": "Desconocido",
   "SourceIP": "Dirección de origen",
   "SourcePort": "Puerto de origen",
   "Spec": "Especificar",

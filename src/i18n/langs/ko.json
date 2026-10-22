@@ -1931,6 +1931,7 @@
   "Slack": "Slack",
   "SlackOAuth": "Slack 인증",
   "Source": "출처",
+  "Unknown": "알 수 없음",
   "SourceIP": "출발지 주소",
   "SourcePort": "소스 포트",
   "Spec": "지정",

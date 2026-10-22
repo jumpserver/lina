@@ -1894,6 +1894,7 @@
   "Slack": "Slack",
   "SlackOAuth": "Slack認証",
   "Source": "源泉",
+  "Unknown": "不明",
   "SourceIP": "ソースアドレス",
   "SourcePort": "Source Port",
   "Spec": "指定",

@@ -1931,6 +1931,7 @@
   "Slack": "Slack",
   "SlackOAuth": "Slack OAuth",
   "Source": "Источник",
+  "Unknown": "Неизвестно",
   "SourceIP": "Исходный адрес",
   "SourcePort": "Исходный порт",
   "Spec": "Указать",

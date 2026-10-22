@@ -1757,6 +1757,7 @@
   "Slack": "Slack",
   "SlackOAuth": "Slack 认证",
   "Source": "来源",
+  "Unknown": "未知",
   "SourceIP": "源地址",
   "SourcePort": "源端口",
   "Spec": "指定",

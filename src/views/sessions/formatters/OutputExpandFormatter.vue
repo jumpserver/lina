@@ -7,6 +7,8 @@
       word-wrap: break-word;
       padding: 10px 20px;
     ">
+{{ $t('Source') }}: <CommandSourceFormatter :row="row" />
+<br>
 {{ '$ '+ row.input }}
 <br>
 {{ row.output }}
@@ -15,9 +17,11 @@
 
 <script>
 import BaseFormatter from '@/components/Table/TableFormatters/base'
+import CommandSourceFormatter from './CommandSourceFormatter.vue'
 
 export default {
   name: 'OutputExpandFormatter',
+  components: { CommandSourceFormatter },
   extends: BaseFormatter
 }
 </script>

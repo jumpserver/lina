@@ -1999,6 +1999,7 @@
   "Slack": "Slack",
   "SlackOAuth": "OAuth Slack",
   "Source": "Source",
+  "Unknown": "Inconnu",
   "SourceIP": "Adresse source",
   "SourcePort": "Port source",
   "Spec": "Spécifique",
