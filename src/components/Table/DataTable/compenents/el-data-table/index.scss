@@ -216,10 +216,10 @@
   //padding: 4px 0;
 }
 
-// Header and body cells already draw their own separators. Remove Element
-// Plus's extra top and bottom lines.
-.el-data-table :deep(.el-table__inner-wrapper::before),
-.el-data-table :deep(.el-table__inner-wrapper::after) {
+// Full-height lists draw their outer border on the surface. Embedded tables
+// still need Element Plus's top and bottom lines to complete their border.
+.el-data-table--fill-height :deep(.el-table__inner-wrapper::before),
+.el-data-table--fill-height :deep(.el-table__inner-wrapper::after) {
   display: none;
 }
 
