@@ -15,6 +15,12 @@ const plugins = {
     resultComponent: defineAsyncComponent(() => import('../components/TicketSecretAccess.vue')),
     fields: { duration: { label: 'TicketSecretDuration', helpText: 'TicketSecretDurationHelp' } }
   },
+  change_secret: {
+    resultComponent: defineAsyncComponent(
+      () => import('../components/TicketChangeSecretResult.vue')
+    ),
+    summary: 'TicketChangeSecretApplyHelp'
+  },
   download_replay: {
     resultComponent: defineAsyncComponent(() => import('../components/TicketReplayAccess.vue')),
     fields: { duration: { helpText: 'TicketReplayDurationHelp' } },

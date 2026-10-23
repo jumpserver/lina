@@ -445,3 +445,49 @@ test('stale ticket detail responses cannot overwrite a newer poll, organization 
     }
   }
 })
+
+test('approved workflows keep refreshing while the business task is processing', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  const panel = await workflowPanel()
+  const object = {
+    id: 'ticket',
+    org_id: 'org',
+    workflow_instance: 'workflow',
+    state: 'approved',
+    result: { state: 'queued', processing: true }
+  }
+  let nextResult = { state: 'running', processing: true }
+  let reads = 0
+  const vm = bindMethods(panel, {
+    ...panel.data(),
+    object,
+    instance: { state: 'approved' },
+    $axios: {
+      async get(url, config) {
+        reads++
+        assert.deepEqual(config, { params: { oid: 'org' } })
+        return url.includes('/workflow-instances/')
+          ? { state: 'approved' }
+          : { state: 'approved', result: nextResult }
+      }
+    }
+  })
+  for (const key of ['workflowKey', 'requestConfig']) {
+    Object.defineProperty(vm, key, { get: () => panel.computed[key].call(vm) })
+  }
+  try {
+    await vm.load()
+    assert.equal(object.result.state, 'running')
+    assert.equal(reads, 2)
+    nextResult = { state: 'success', processing: false }
+    t.mock.timers.tick(15000)
+    await new Promise(setImmediate)
+    assert.equal(object.result.state, 'success')
+    assert.equal(reads, 4)
+    t.mock.timers.tick(30000)
+    await new Promise(setImmediate)
+    assert.equal(reads, 4, 'completed execution must stop polling')
+  } finally {
+    panel.beforeUnmount.call(vm)
+  }
+})

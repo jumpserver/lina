@@ -35,6 +35,7 @@ export const eventLabels = {
   'workflow.cancelled': 'WFCancelled',
   'workflow.expired': 'WFExpired',
   'workflow.error': 'WFError',
+  'action.submitted': 'WFActionSubmitted',
   'action.executed': 'WFActionExecuted',
   'secret.viewed': 'ViewSecret',
   'replay.downloaded': 'DownloadReplay',

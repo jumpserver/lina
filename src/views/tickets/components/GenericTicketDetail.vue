@@ -30,7 +30,12 @@
         :detail-card-items="assignedCardItems"
         :title="$tc('AssignedInfo')"
       />
-      <component :is="plugin.resultComponent" v-if="plugin.resultComponent" :object="object" />
+      <component
+        :is="plugin.resultComponent"
+        v-if="plugin.resultComponent"
+        :object="object"
+        @refresh="$refs.workflow.load(true)"
+      />
       <slot id="MoreDetails" />
       <WorkflowPanel
         ref="workflow"

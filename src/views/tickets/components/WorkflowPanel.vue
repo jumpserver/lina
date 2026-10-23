@@ -418,6 +418,7 @@ export default {
         }
         if (
           force ||
+          ticket.result?.processing ||
           instance.state !== this.instance?.state ||
           instance.resource_adjustment?.revision !== this.instance?.resource_adjustment?.revision
         ) {
@@ -431,7 +432,7 @@ export default {
           Object.assign(ticket, updatedTicket)
         }
         this.instance = instance
-        retry = instance.state === 'running'
+        retry = instance.state === 'running' || Boolean(ticket.result?.processing)
       } catch {
         // Axios reports errors; retry until ticket details and access actions are refreshed.
       } finally {
