@@ -1,6 +1,6 @@
 <template>
   <el-tree
-    :data="iTree"
+    :data="tree"
     :default-checked-keys="iValue"
     :default-expand-all="expandAll"
     :default-expanded-keys="iDefaultExpanded"
@@ -18,7 +18,6 @@ import { ElTooltip } from 'element-plus'
 
 export default {
   inheritAttrs: false,
-  emits: ['input', 'update:modelValue'],
   props: {
     value: {
       type: [Array, String],
@@ -36,6 +35,10 @@ export default {
       type: Boolean,
       default: false
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     expandAll: {
       type: Boolean,
       default: false
@@ -50,7 +53,8 @@ export default {
     return {
       defaultProps: {
         children: 'children',
-        label: 'label'
+        label: 'label',
+        disabled: (node) => this.disabled || this.readonly || node.disabled
       }
     }
   },
@@ -67,19 +71,12 @@ export default {
         return item
       })
     },
-    iTree() {
-      if (!this.readonly) {
-        return this.tree
-      } else {
-        return this.setTreeReadonly(this.tree)
-      }
-    },
     // 默认展开一层:根节点 value 与外部传入的 defaultExpanded 合并。
     // el-tree 只在初始化时读取 default-expanded-keys,必须在首次渲染前就备好
     // (原先在 mounted 里 push 太晚,且改动了 prop,故从不生效)
     iDefaultExpanded() {
       const keys = [...this.defaultExpanded]
-      const rootValue = this.iTree?.[0]?.value
+      const rootValue = this.tree?.[0]?.value
       if (rootValue !== undefined && !keys.includes(rootValue)) {
         keys.push(rootValue)
       }
@@ -88,20 +85,12 @@ export default {
   },
   methods: {
     handleCheckChange(node, { checkedNodes }) {
+      if (this.disabled || this.readonly) return
       const checkedKeys = checkedNodes.filter((item) => !item.children).map((node) => node.value)
       this.$emit('input', checkedKeys)
       this.$emit('update:modelValue', checkedKeys)
       this.$emit('update:model-value', checkedKeys)
       this.$emit('change', checkedKeys)
-    },
-    setTreeReadonly(tree) {
-      return tree.map((item) => {
-        item.disabled = true
-        if (item.children) {
-          item.children = this.setTreeReadonly(item.children)
-        }
-        return item
-      })
     },
     renderContent(h, { node }) {
       let label = node.label

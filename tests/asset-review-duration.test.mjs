@@ -6,15 +6,17 @@ import { parse } from '@vue/compiler-sfc'
 const source = await readFile(new URL('../src/views/acls/AssetLoginACL/AssetLoginAclCreateUpdate.vue', import.meta.url), 'utf8')
 const { descriptor } = parse(source)
 const component = new Function(
-  'rules', 'ResourceSelect', 'TagInput', 'WeekCronSelect', 'GenericCreateUpdatePage',
+  'Select2', 'rules', 'ResourceSelect', 'TagInput', 'WeekCronSelect', 'GenericCreateUpdatePage',
   'InputWithUnit', 'assetJSONSelectMeta', 'AccountFormatter', 'userJSONSelectMeta',
   descriptor.script.content.replace(/^import .*$/gm, '').replace('export default', 'return')
-)({}, {}, {}, {}, {}, {}, () => ({}), {}, () => ({}))
+)({}, {}, {}, {}, {}, {}, {}, () => ({}), {}, () => ({}))
 
 test('review duration validates whole hours and submits zero for other actions', () => {
-  const config = component.data.call({ $t: (key) => key })
+  const config = component.data.call({ $t: (key) => key, $store: { getters: { currentOrg: { id: 'org-id' } } } })
   const field = config.fieldsMeta.review_duration
   assert.equal(config.initial.review_duration, 0)
+  assert.equal(config.fieldsMeta.workflow.hidden({ action: 'review' }), false)
+  assert.equal(config.fieldsMeta.reviewers.hidden({ action: 'review', workflow: 'workflow-id' }), true)
   assert.equal(field.hidden({ action: 'review' }), false)
   assert.equal(field.hidden({ action: 'accept' }), true)
   for (const [value, valid] of [[0, true], ['2', true], [-1, false], ['1.5', false], ['', false], [null, false], ['abc', false]]) {

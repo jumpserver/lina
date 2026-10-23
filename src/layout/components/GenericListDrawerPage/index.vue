@@ -1,5 +1,6 @@
 <template>
   <Page v-bind="pageAttrs">
+    <slot name="tableBefore" />
     <DrawerListTable
       v-bind="$attrs"
       ref="ListTable"
