@@ -1,4 +1,6 @@
 {
+  "AutoPushSameName": "自動推送",
+  "AutoPushSameNameHelpText": "首次連線時自動建立並推送同名帳號，已有帳號直接使用。",
   "TemplateCredentialOverrideConfirm": "此帳號正在跟隨範本憑證。是否解除跟隨並繼續修改或清除憑證？此操作不會修改範本。",
   "TemplateCredentialOverride": "解除跟隨並繼續",
   "Credentials": "憑據",

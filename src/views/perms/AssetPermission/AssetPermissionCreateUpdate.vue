@@ -57,6 +57,7 @@ export default {
         nodes: nodesInitial,
         assets: assetsInitial,
         accounts: [AllAccount],
+        auto_push_same_name: false,
         expire_notice_policy: '',
         expire_soon_notice_switch: false,
         expire_soon_notice_minutes: null
@@ -66,7 +67,7 @@ export default {
         // [this.$t('Resource'), ['users', 'user_groups']],
         [this.$t('User'), ['users', 'user_groups']],
         [this.$t('Asset'), ['assets', 'nodes']],
-        [this.$t('Account'), ['accounts']],
+        [this.$t('Account'), ['accounts', 'auto_push_same_name']],
         [this.$t('Protocol'), ['protocols']],
         [this.$t('Action'), ['actions']],
         [
@@ -174,6 +175,12 @@ export default {
             this.fieldsMeta.accounts.el.nodes = formValue.nodes
           }
         },
+        auto_push_same_name: {
+          type: 'switch',
+          label: this.$t('AutoPushSameName'),
+          helpTip: this.$t('AutoPushSameNameHelpText'),
+          hidden: (formValue) => !formValue.accounts?.includes('@USER')
+        },
         actions: {
           label: this.$t('Action'),
           helpText: this.$t('ActionsTips'),
@@ -233,6 +240,7 @@ export default {
         if (!Array.isArray(value.accounts)) {
           value.accounts = value.accounts ? value.accounts.split(',') : []
         }
+        if (!value.accounts.includes('@USER')) value.auto_push_same_name = false
         return normalizeExpireNoticePayload(value)
       }
     }

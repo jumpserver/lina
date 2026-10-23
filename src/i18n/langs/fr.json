@@ -1,4 +1,6 @@
 {
+  "AutoPushSameName": "Envoi auto.",
+  "AutoPushSameNameHelpText": "Lors de la première connexion, un compte portant le même nom d’utilisateur est créé et configuré automatiquement. Les comptes existants sont réutilisés.",
   "TemplateCredentialOverrideConfirm": "Ce compte suit les identifiants du modèle. Cesser de le suivre et continuer la modification ou la suppression des identifiants ? Le modèle restera inchangé.",
   "TemplateCredentialOverride": "Cesser de suivre et continuer",
   "Credentials": "Identifiants",

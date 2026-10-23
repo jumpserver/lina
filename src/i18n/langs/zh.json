@@ -1,4 +1,6 @@
 {
+  "AutoPushSameName": "自动推送",
+  "AutoPushSameNameHelpText": "首次连接时自动创建并推送同名账号，已有账号直接复用。",
   "NotExecuted": "未执行",
   "CommandRejectedByACL": "命令被 ACL 拦截",
   "TemplateCredentialOverrideConfirm": "该账号正在跟随模板凭据。是否解除跟随并继续修改或清除凭据？此操作不会修改模板。",
