@@ -64,10 +64,11 @@ export default {
   },
   data() {
     const vm = this
+    const ids = this.value.map(item => item && typeof item === 'object' ? item.id : item)
     return {
       isLoaded: false,
       dialogVisible: false,
-      rowSelected: _.cloneDeep(this.value) || [],
+      rowSelected: [...new Set(ids.filter(id => id !== undefined && id !== null && id !== ''))],
       rowsAdd: [],
       tableConfig: {
         url: this.baseUrl,
@@ -107,7 +108,7 @@ export default {
           }
         },
         theRowDefaultIsSelected: (row) => {
-          return this.value.indexOf(row.id) > -1
+          return this.rowSelected.indexOf(row.id) > -1
         }
       },
       headerActions: {

@@ -15,7 +15,7 @@
       :base-url="baseUrl"
       :tree-setting="treeSetting"
       :tree-url-query="treeUrlQuery"
-      :value="value"
+      :value="select2Config.value"
       :visible.sync="dialogVisible"
       v-bind="$attrs"
       @cancel="handleCancel"
@@ -55,14 +55,7 @@ export default {
     }
   },
   data() {
-    const iValue = []
-    for (const item of this.value) {
-      if (typeof item === 'object') {
-        iValue.push(item.id)
-      } else {
-        iValue.push(item)
-      }
-    }
+    const iValue = this.normalizeValue(this.value)
     return {
       dialogVisible: false,
       initialValue: _.cloneDeep(iValue),
@@ -79,7 +72,19 @@ export default {
       }
     }
   },
+  watch: {
+    value: {
+      deep: true,
+      handler(value) {
+        this.select2Config.value = this.normalizeValue(value)
+      }
+    }
+  },
   methods: {
+    normalizeValue(value) {
+      const ids = value.map(item => item && typeof item === 'object' ? item.id : item)
+      return [...new Set(ids.filter(id => id !== undefined && id !== null && id !== ''))]
+    },
     handleFocus() {
       this.$refs.select2.selectRef.blur()
       this.dialogVisible = true
