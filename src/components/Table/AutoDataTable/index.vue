@@ -405,6 +405,17 @@ export default {
       // Default columns are ordered by the generator. Saved user order must
       // also apply to ID/name instead of moving those columns back to the front.
       const columns = source.filter((item) => item !== undefined && item !== null)
+      if (this.config.columnOrder === 'configured') {
+        const order = new Map(
+          this.config.columns.map((column, index) => [
+            typeof column === 'object' ? column.prop : column,
+            index
+          ])
+        )
+        const position = (column) =>
+          order.get(typeof column === 'object' ? column.prop : column) ?? Infinity
+        columns.sort((left, right) => position(left) - position(right))
+      }
       return orderActionColumn(columns, this.config.actionsColumnPosition)
     },
     destroyColumnDraggable() {
@@ -413,6 +424,10 @@ export default {
     },
     setColumnDraggable() {
       if (this.isDeactivated || !this.$el?.isConnected) {
+        return
+      }
+      if (this.config.columnOrder === 'configured') {
+        this.destroyColumnDraggable()
         return
       }
       const el = this.$el.querySelector(
@@ -477,6 +492,9 @@ export default {
     generateTotalColumns() {
       const generator = new TableColumnsGenerator(this.config, this.meta, this)
       this.totalColumns = generator.generateColumns()
+      if (this.config.columnOrder === 'configured') {
+        this.totalColumns = this.totalColumns.map((column) => ({ ...column, draggable: false }))
+      }
       this.iConfig = {
         ...this.config,
         columns: [...this.totalColumns],

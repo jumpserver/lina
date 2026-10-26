@@ -2,9 +2,12 @@
   <el-form-item
     v-bind="data.attrs"
     v-if="_show"
+    v-show="!collapsed"
     :class="[
       classes,
       {
+        'form-item--dependent': data.dependentLayout,
+        'is-no-asterisk': data.required,
         'checkbox-inline-help':
           rawComponent === 'el-checkbox' && (helpText || data.helpTextFormatter)
       }
@@ -141,6 +144,7 @@ export default {
     }
   },
   props: {
+    collapsed: Boolean,
     // eslint-disable-next-line vue/require-default-prop
     data: Object,
     serverErrors: {
@@ -446,6 +450,10 @@ export default {
 }
 
 .help-block {
+  > span {
+    white-space: pre-line;
+  }
+
   :deep(.el-alert__icon) {
     font-size: 16px;
   }

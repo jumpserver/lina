@@ -12,12 +12,16 @@
       @cancel="onCancel"
       @confirm="onConfirm"
     >
-      <div v-for="d in ticketData" :key="d.id">
+      <div v-for="d in ticketData" :key="d.id" class="approval-ticket">
         <AutoDetailCard
           :fields="getDetailFields(d)"
           :object="d"
           :title="`${d.title}(${ticketTypeLabel(d.type)})`"
           :url="detailUrl"
+        />
+        <LoginAssetConnections
+          v-if="d.login_asset_connections?.length"
+          :connections="d.login_asset_connections"
         />
       </div>
     </Dialog>
@@ -29,6 +33,7 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import Dialog from '@/components/Dialog'
 import { mapGetters } from 'vuex'
 import BaseTicketList from './BaseTicketList'
+import LoginAssetConnections from './components/LoginAssetConnections.vue'
 import { getTicketTypeLabel } from './const'
 
 export default {
@@ -36,7 +41,8 @@ export default {
   components: {
     Dialog,
     AutoDetailCard,
-    BaseTicketList
+    BaseTicketList,
+    LoginAssetConnections
   },
   data() {
     return {
@@ -162,19 +168,28 @@ export default {
           }
         ])
       } else if (ticketType === 'login_asset_confirm') {
-        detailFields = detailFields.concat([
-          {
+        if (!item.login_asset_connections?.length) {
+          detailFields.push({
             key: this.$t('ApplyLoginAsset'),
             value: item?.rel_snapshot?.apply_login_asset
-          },
-          {
-            key: this.$t('ApplyLoginUser'),
-            value: item?.rel_snapshot?.apply_login_user
+          })
+          if (item.comment) {
+            detailFields.push({ key: this.$t('Comment'), value: item.comment })
           }
-        ])
+        }
+        detailFields.push({
+          key: this.$t('ApplyLoginUser'),
+          value: item?.rel_snapshot?.apply_login_user
+        })
       }
       return detailFields
     }
   }
 }
 </script>
+
+<style scoped>
+.approval-ticket + .approval-ticket {
+  margin-top: 20px;
+}
+</style>

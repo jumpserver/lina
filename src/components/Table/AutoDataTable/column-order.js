@@ -1,6 +1,7 @@
 export function isColumnDraggable(column) {
   return (
     !!column.prop &&
+    column.draggable !== false &&
     !column.fixed &&
     !column.pinOriginalFixed &&
     column.prop !== 'actions' &&

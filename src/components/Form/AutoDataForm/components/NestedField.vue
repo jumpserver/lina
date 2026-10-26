@@ -125,6 +125,11 @@ export default {
   margin-bottom: 0;
 }
 
+.sub-form :deep(.form-fields.el-form) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 /*
  * 子表单复用与外层一致的 label 宽度（attrs meta 传入的 labelWidth），
  * label-wrap 为 flex: 0 0 var(--label-width)，输入框自然从 label-width + gap 处开始，
