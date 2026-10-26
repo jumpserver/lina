@@ -13,6 +13,7 @@
         v-if="plugin.requestComponent"
         :object="object"
         :request-items="specialCardItems"
+        @refresh="$refs.workflow.load(true)"
       />
       <TicketRequestInfo
         v-else-if="specialCardItems.length > 0"

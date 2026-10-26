@@ -53,6 +53,7 @@ import { getTicketTypeLabel } from '../const'
 import { buildRequestPayload } from './form'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import resourceAvailability from './resourceAvailability'
+import TicketTransferFiles from '../components/TicketTransferFiles.vue'
 
 export default {
   mixins: [resourceAvailability],
@@ -66,6 +67,8 @@ export default {
       flowRequest: 0,
       selectedOrgId: '',
       accountStates: {},
+      transferDirection: 'upload',
+      transferUploading: false,
       fields: [],
       fieldsMeta: {},
       initial: {}
@@ -126,6 +129,8 @@ export default {
           on: {
             change: async ([value], updateForm) => {
               this.selectedOrgId = value
+              this.transferDirection = 'upload'
+              this.transferUploading = false
               for (const field of this.accountFields) this.loadAccountOptions(field, '', updateForm)
               const cleared = { workflow_id: '' }
               for (const field of this.selectedPlugin.fields) {
@@ -267,6 +272,44 @@ export default {
             ]
           }
         }
+        if (this.selectedType === 'file_transfer') {
+          if (field.name === 'direction') {
+            this.initial[name] = 'upload'
+            meta.on = {
+              change: ([direction], updateForm) => {
+                this.transferDirection = direction
+                this.transferUploading = false
+                updateForm({ param_files: [], param_paths: [], param_target_directory: '' })
+              }
+            }
+          }
+          if (['files', 'target_directory'].includes(field.name)) {
+            meta.hidden = () => this.transferDirection !== 'upload'
+          }
+          if (field.name === 'paths') meta.hidden = () => this.transferDirection !== 'download'
+          if (['files', 'target_directory', 'paths'].includes(field.name)) {
+            meta.rules = [
+              {
+                validator: (_rule, value, done) => {
+                  const required =
+                    (field.name === 'paths') === (this.transferDirection === 'download')
+                  const empty = !value || (Array.isArray(value) ? !value.length : !value.trim())
+                  done(required && empty ? new Error(Required.message) : undefined)
+                }
+              }
+            ]
+          }
+          if (field.name === 'files') {
+            meta.component = TicketTransferFiles
+            meta.el = { orgId: this.selectedOrgId }
+            meta.on = {
+              busy: ([busy]) => {
+                this.transferUploading = busy
+              }
+            }
+            this.initial[name] = []
+          }
+        }
         configurePluginField(this.selectedPlugin, field, meta, this.$t)
         this.fieldsMeta[name] = meta
       }
@@ -281,6 +324,8 @@ export default {
       this.formReady = true
     },
     defaultValue(field) {
+      if (this.selectedType === 'file_transfer' && field.name === 'direction') return 'upload'
+      if (field.name === 'files') return []
       if (field.default !== undefined) return field.default
       if (
         field.type === 'multiple_choice' ||
@@ -341,6 +386,9 @@ export default {
       }
     },
     async loadFlows(orgId) {
+      if (this.selectedType === 'file_transfer' && this.fieldsMeta.param_files) {
+        this.fieldsMeta.param_files.el.orgId = orgId
+      }
       const requestId = ++this.flowRequest
       const type = this.selectedType
       const workflowField = this.fieldsMeta.workflow_id
@@ -371,6 +419,7 @@ export default {
       return flows[0] || null
     },
     cleanFormValue(value) {
+      if (this.transferUploading) throw new Error(this.$t('TicketTransferWaitUpload'))
       if (this.selectedPlugin.resource_adjustment) this.validateAvailability()
       const payload = buildRequestPayload(this.selectedPlugin, value)
       if (!this.resourceAvailability?.description_allowed) {

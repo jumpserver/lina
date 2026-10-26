@@ -2,6 +2,7 @@
   <div>
     <GenericListPage
       ref="ListPage"
+      activation-refresh="always"
       :get-drawer-title="getDrawerTitle"
       :detail-drawer="detailDrawer"
       :header-actions="iTicketAction"

@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { getTicketPlugin, configurePluginField } from '../src/views/tickets/plugins/registry.js'
 import { reactive } from 'vue'
+import resourceAvailability from '../src/views/tickets/plugins/resourceAvailability.js'
 import { buildRequestPayload } from '../src/views/tickets/plugins/form.js'
 
 test('boolean and multiple-choice fields keep their types through the generic form', async () => {
@@ -137,6 +138,9 @@ async function createAccountForm(get) {
     'getTicketTypeLabel',
     'buildRequestPayload',
     'toSafeLocalDateStr',
+    'resourceAvailability',
+    'BasicTree',
+    'TicketTransferFiles',
     script
   )(
     () => ({}),
@@ -150,9 +154,13 @@ async function createAccountForm(get) {
     configurePluginField,
     () => '',
     buildRequestPayload,
-    (value) => `local:${value}`
+    (value) => `local:${value}`,
+    resourceAvailability,
+    {},
+    {}
   )
   const vm = reactive({
+    ...resourceAvailability.data(),
     ...component.data(),
     $t: (key) => key,
     $axios: { get },
@@ -162,7 +170,9 @@ async function createAccountForm(get) {
   Object.assign(
     vm,
     Object.fromEntries(
-      Object.entries(component.methods).map(([key, method]) => [key, method.bind(vm)])
+      Object.entries({ ...resourceAvailability.methods, ...component.methods }).map(
+        ([key, method]) => [key, method.bind(vm)]
+      )
     )
   )
   for (const [key, getter] of Object.entries(component.computed)) {
@@ -367,9 +377,9 @@ test('file transfer form explains its scope and uses direction labels without ch
   })
   vm.selectedType = 'file_transfer'
   await vm.configure()
-  assert.equal(vm.fieldsMeta.param_paths.label, 'TicketTransferPaths')
-  assert.equal(vm.fieldsMeta.param_paths.helpText, 'TicketTransferPathsHelp')
-  assert.equal(vm.fieldsMeta.param_duration.helpText, 'TicketTransferDurationHelp')
+  assert.equal(vm.fieldsMeta.param_paths.label, 'TicketTransferFilePath')
+  assert.equal(vm.fieldsMeta.param_paths.helpText, 'TicketTransferExactPathsHelp')
+  assert.equal(vm.fieldsMeta.param_duration.helpText, 'TicketTransferExecutionDurationHelp')
   assert.deepEqual(vm.fieldsMeta.param_direction.el.options, [
     { value: 'upload', label: 'Upload' },
     { value: 'download', label: 'Download' }
@@ -382,4 +392,52 @@ test('file transfer form explains its scope and uses direction labels without ch
   assert.equal(payload.request_data.direction, 'download')
   assert.deepEqual(payload.request_data.paths, ['/var/log/a'])
   assert.equal(payload.request_data.duration, 3600)
+})
+
+test('file transfer form separates directions, resets files on organization changes and blocks submission during upload', async () => {
+  const vm = await createAccountForm(async () => [])
+  vm.plugins.push({
+    type: 'file_transfer',
+    execution_mode: 'external',
+    fields: [
+      {
+        name: 'direction',
+        type: 'choice',
+        required: true,
+        choices: [{ value: 'upload' }, { value: 'download' }]
+      },
+      { name: 'files', type: 'list' },
+      { name: 'paths', type: 'list' },
+      { name: 'target_directory', type: 'string' }
+    ]
+  })
+  vm.selectedType = 'file_transfer'
+  await vm.configure()
+  const values = { ...vm.initial }
+  const update = (patch) => Object.assign(values, patch)
+  assert.equal(values.param_direction, 'upload')
+  assert.equal(vm.fieldsMeta.param_files.hidden(), false)
+  assert.equal(vm.fieldsMeta.param_paths.hidden(), true)
+  vm.transferUploading = true
+  vm.fieldsMeta.param_direction.on.change(['download'], update)
+  assert.equal(vm.transferUploading, false)
+  assert.equal(vm.fieldsMeta.param_files.hidden(), true)
+  assert.equal(vm.fieldsMeta.param_paths.hidden(), false)
+  assert.deepEqual(values.param_files, [])
+  vm.transferUploading = true
+  assert.throws(() => vm.cleanFormValue(values), /TicketTransferWaitUpload/)
+  await vm.fieldsMeta.org_id.on.change(['org-2'], update)
+  assert.equal(vm.fieldsMeta.param_files.el.orgId, 'org-2')
+  assert.equal(vm.transferDirection, 'upload')
+  assert.equal(vm.transferUploading, false)
+  const validate = (field, value) => {
+    let error
+    vm.fieldsMeta[field].rules[0].validator(null, value, (result) => {
+      error = result
+    })
+    return error
+  }
+  assert.ok(validate('param_files', []))
+  assert.ok(validate('param_target_directory', ''))
+  assert.equal(validate('param_paths', ''), undefined)
 })

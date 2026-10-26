@@ -34,18 +34,27 @@ const plugins = {
   },
   file_transfer: {
     requestComponent: defineAsyncComponent(
-      () => import('../components/TicketFileTransferAccess.vue')
+      () => import('../components/TicketFileTransferResult.vue')
     ),
     summary: 'TicketTransferApplyHelp',
     fields: {
-      paths: { label: 'TicketTransferPaths', helpText: 'TicketTransferPathsHelp' },
+      paths: { label: 'TicketTransferFilePath', helpText: 'TicketTransferExactPathsHelp' },
+      target_directory: {
+        label: 'TicketTransferTargetDirectory',
+        helpText: 'TicketTransferTargetHelp'
+      },
+      files: { label: 'TicketTransferFiles' },
       direction: {
         label: 'TicketTransferDirection',
         choices: { upload: 'Upload', download: 'Download' }
       },
-      duration: { helpText: 'TicketTransferDurationHelp' }
+      duration: { helpText: 'TicketTransferExecutionDurationHelp' }
     },
-    requestLabels: { paths: 'TicketTransferPaths', direction: 'TicketTransferDirection' },
+    requestLabels: {
+      paths: 'TicketTransferFilePath',
+      direction: 'TicketTransferDirection',
+      target_directory: 'TicketTransferTargetDirectory'
+    },
     requestChoices: { direction: { upload: 'Upload', download: 'Download' } }
   }
 }
