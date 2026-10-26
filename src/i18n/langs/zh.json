@@ -2905,5 +2905,9 @@
   "TicketTransferError_interrupted": "任务中断，请核对远端文件后再申请",
   "TicketTransferError_commit_uncertain": "未收到上传完成确认，请核对目标文件后再申请。",
   "TicketTransferFileName": "文件名",
-  "TicketTransferFilePath": "文件路径"
+  "TicketTransferFilePath": "文件路径",
+  "TicketApprovalStatus": "审批状态",
+  "TicketPendingApproval": "待审批",
+  "TicketApprovalApproved": "已通过",
+  "TicketApprovalFinished": "已结束"
 }

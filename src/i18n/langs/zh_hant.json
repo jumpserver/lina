@@ -2890,5 +2890,9 @@
   "TicketTransferError_interrupted": "任務中斷，請核對遠端檔案後再申請",
   "TicketTransferError_commit_uncertain": "未收到上傳完成確認，請核對目標檔案後再申請。",
   "TicketTransferFileName": "檔案名稱",
-  "TicketTransferFilePath": "檔案路徑"
+  "TicketTransferFilePath": "檔案路徑",
+  "TicketApprovalStatus": "審批狀態",
+  "TicketPendingApproval": "待審批",
+  "TicketApprovalApproved": "已通過",
+  "TicketApprovalFinished": "已結束"
 }

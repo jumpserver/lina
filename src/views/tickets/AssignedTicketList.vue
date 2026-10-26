@@ -4,6 +4,7 @@
       v-bind="$data"
       ref="BaseTicketList"
       :url="url"
+      :pending-only="tab === 'pending'"
       :extra-ticket-action="tab === 'pending' ? extraTicketAction : { hasCreate: false }"
     >
       <template #tableBefore>

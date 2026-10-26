@@ -2911,5 +2911,9 @@
   "TicketTransferError_interrupted": "Task interrupted; verify the remote file before retrying",
   "TicketTransferError_commit_uncertain": "Upload confirmation was lost; verify the destination file before a new request.",
   "TicketTransferFileName": "File name",
-  "TicketTransferFilePath": "File path"
+  "TicketTransferFilePath": "File path",
+  "TicketApprovalStatus": "Approval status",
+  "TicketPendingApproval": "Awaiting approval",
+  "TicketApprovalApproved": "Approved",
+  "TicketApprovalFinished": "Approval completed"
 }

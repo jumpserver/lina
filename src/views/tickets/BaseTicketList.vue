@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ticket-list-page">
     <GenericListPage
       ref="ListPage"
       activation-refresh="always"
@@ -21,7 +21,15 @@ import { getTicketDetailRoute } from './plugins/registry'
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
-import { APPROVE, CLOSED, OPEN, REJECT, getTicketStateLabel, getTicketTypeLabel } from './const'
+import {
+  APPROVE,
+  CLOSED,
+  OPEN,
+  REJECT,
+  TICKET_TYPE_I18N_KEYS,
+  getTicketStateLabel,
+  getTicketTypeLabel
+} from './const'
 
 export default {
   name: 'TicketListTable',
@@ -29,6 +37,7 @@ export default {
     GenericListPage
   },
   props: {
+    pendingOnly: { type: Boolean, default: false },
     url: {
       type: String,
       default: '/api/v1/tickets/tickets/'
@@ -46,72 +55,10 @@ export default {
     const vm = this
     return {
       getDrawerTitle: () => ' ',
-      quickFilters: [
-        {
-          label: this.$t('Type'),
-          options: [
-            {
-              label: this.$t('ApplyAsset'),
-              filter: {
-                type: 'apply_asset'
-              }
-            },
-            {
-              label: this.$t('LoginConfirm'),
-              filter: {
-                type: 'login_confirm'
-              }
-            },
-            {
-              label: this.$t('CommandConfirm'),
-              filter: {
-                type: 'command_confirm'
-              }
-            },
-            {
-              label: this.$t('LoginAssetConfirm'),
-              filter: {
-                type: 'login_asset_confirm'
-              }
-            }
-          ]
-        },
-        {
-          label: this.$t('State'),
-          options: [
-            {
-              label: this.$t('All'),
-              filter: {
-                state: 'all'
-              }
-            },
-            {
-              label: this.$t('Open'),
-              filter: {
-                state: 'pending'
-              }
-            },
-            {
-              label: this.$t('Cancel'),
-              filter: {
-                state: 'closed'
-              }
-            },
-            {
-              label: this.$t('Approved'),
-              filter: {
-                state: 'approved'
-              }
-            },
-            {
-              label: this.$t('Rejected'),
-              filter: {
-                state: 'rejected'
-              }
-            }
-          ]
-        }
-      ],
+      ticketTypes: Object.keys(TICKET_TYPE_I18N_KEYS).map((type) => ({
+        label: getTicketTypeLabel({ value: type }, this.$t),
+        filter: { type }
+      })),
       detailDrawer: null,
       ticketTableConfig: {
         url: this.url,
@@ -189,7 +136,7 @@ export default {
             }
           },
           state: {
-            label: this.$t('State'),
+            label: this.$t('TicketApprovalStatus'),
             align: 'center',
             formatter: TagChoicesFormatter,
             formatterArgs: {
@@ -203,7 +150,9 @@ export default {
                 return mapper[row.state.value] || 'warning'
               },
               getTagLabel({ row }) {
-                return getTicketStateLabel(row.state, vm.$t) || vm.$t('Pending')
+                if (row.state.value === 'pending') return vm.$t('TicketPendingApproval')
+                if (row.state.value === 'approved') return vm.$t('TicketApprovalApproved')
+                return getTicketStateLabel(row.state, vm.$t)
               }
             }
           },
@@ -217,6 +166,7 @@ export default {
         }
       },
       defaultTicketActions: {
+        searchConfig: { excludeFields: ['type', 'state', 'status'] },
         hasImport: false,
         hasReportExport: true,
         hasMoreActions: false,
@@ -228,6 +178,36 @@ export default {
     }
   },
   computed: {
+    quickFilters() {
+      const filters = [
+        {
+          label: this.$t('Type'),
+          options: [
+            { label: this.$t('All'), filter: { type: '' }, active: true },
+            ...this.ticketTypes
+          ]
+        }
+      ]
+      if (!this.pendingOnly) {
+        filters.push({
+          label: this.$t('TicketApprovalStatus'),
+          options: [
+            { label: this.$t('All'), filter: { state: 'all', status: '' }, active: true },
+            { label: this.$t('TicketPendingApproval'), filter: { state: 'pending', status: '' } },
+            {
+              label: this.$t('TicketApprovalFinished'),
+              filter: { state: 'all', status: 'closed' }
+            },
+            { label: this.$t('TicketApprovalApproved'), filter: { state: 'approved', status: '' } },
+            { label: this.$t('Rejected'), filter: { state: 'rejected', status: '' } },
+            { label: this.$t('StateClosed'), filter: { state: 'closed', status: '' } },
+            { label: this.$t('WFExpired'), filter: { state: 'expired', status: '' } },
+            { label: this.$t('WFError'), filter: { state: 'error', status: '' } }
+          ]
+        })
+      }
+      return filters
+    },
     iTicketAction() {
       return Object.assign({}, this.defaultTicketActions, this.extraTicketAction)
     }
@@ -239,17 +219,43 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('/api/v1/tickets/ticket-types/').then((types) => {
-      this.quickFilters[0].options = types.map((type) => ({
-        label: getTicketTypeLabel({ value: type.type, label: type.label }, this.$t),
-        filter: { type: type.type }
-      }))
-    })
+    this.loadTypes()
   },
   methods: {
+    async loadTypes() {
+      try {
+        const types = await this.$axios.get('/api/v1/tickets/ticket-types/')
+        this.ticketTypes = types.map((type) => ({
+          label: getTicketTypeLabel({ value: type.type, label: type.label }, this.$t),
+          filter: { type: type.type }
+        }))
+      } catch {
+        // The request layer reports errors; keep the built-in types available.
+      }
+    },
     reloadTable() {
       this.$refs.ListPage.$refs.ListTable.$refs.ListTable.reloadTable()
     }
   }
 }
 </script>
+
+<style scoped lang="scss">
+.ticket-list-page :deep(.quick-filter .quick-filter-wrap .quick-filter-zone .item) {
+  min-height: 26px;
+  margin-right: 6px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  line-height: 22px;
+
+  &::after {
+    display: none;
+  }
+
+  &.active {
+    color: var(--el-color-primary);
+    background-color: var(--el-color-primary-light-9);
+    text-decoration: none;
+  }
+}
+</style>

@@ -12,11 +12,6 @@
             <el-tab-pane name="beneficiary" :label="$t('TicketRequestedForMe')" />
             <el-tab-pane name="all" :label="$t('TicketAllRequests')" />
           </el-tabs>
-          <el-radio-group v-if="tab !== 'all'" v-model="status" size="small">
-            <el-radio-button value="open">{{ $t('TicketInProgress') }}</el-radio-button>
-            <el-radio-button value="closed">{{ $t('TicketFinished') }}</el-radio-button>
-            <el-radio-button value="all">{{ $t('All') }}</el-radio-button>
-          </el-radio-group>
         </div>
       </template>
     </BaseTicketList>
@@ -49,7 +44,6 @@ export default {
   data() {
     return {
       tab: 'manual',
-      status: 'open',
       showTicketTypes: false,
       extraTicketAction: {
         onCreate: () => {
@@ -65,7 +59,6 @@ export default {
           ? { beneficiary: this.currentUser.id }
           : { applicant: this.currentUser.id, ...TAB_FILTERS[this.tab] }
       const params = new URLSearchParams(filters)
-      if (this.tab !== 'all' && this.status !== 'all') params.set('status', this.status)
       return `/api/v1/tickets/tickets/?${params.toString()}`
     },
     ...mapGetters(['currentUser'])
