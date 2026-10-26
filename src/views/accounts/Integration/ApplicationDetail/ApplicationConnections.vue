@@ -1,6 +1,13 @@
 <template>
-  <div class="application-connections">
-    <div v-if="summary" class="access-summary">
+  <div class="application-connections" :class="{ 'is-embedded': embedded }">
+    <el-alert
+      v-if="!embedded"
+      :title="$t(showWizard ? 'ApplicationAccessHelp' : 'ApplicationConnectionsHelp')"
+      type="info"
+      :closable="false"
+      show-icon
+    />
+    <div v-if="!embedded && summary" class="access-summary">
       <strong>{{ object.name }}</strong>
       <span>{{
         $t('ConnectedInstancesSummary', {
@@ -9,19 +16,14 @@
         })
       }}</span>
     </div>
-    <div class="context-help">
-      <el-alert
-        :title="$t(showWizard ? 'ApplicationAccessHelp' : 'ApplicationConnectionsHelp')"
-        type="info"
-        :closable="false"
-        show-icon
-      />
+    <div v-if="embedded" class="instances-header">
+      {{ $t('AccessAndConnections') }}
     </div>
     <ListTable
       ref="table"
       :header-actions="headerActions"
       :table-config="tableConfig"
-      @loaded="loadSummary"
+      @loaded="!embedded && loadSummary()"
     />
     <Drawer
       v-model:visible="wizardVisible"
@@ -43,6 +45,7 @@
 <script lang="jsx">
 import { ListTable } from '@/components'
 import Drawer from '@/components/Drawer'
+import CopyableFormatter from '@/components/Table/TableFormatters/CopyableFormatter.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import {
   choiceValue,
@@ -57,7 +60,8 @@ export default {
   props: {
     object: { type: Object, required: true },
     credentialId: { type: String, default: '' },
-    showWizard: { type: Boolean, default: true }
+    showWizard: { type: Boolean, default: true },
+    embedded: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -65,6 +69,7 @@ export default {
       wizardBusy: false,
       summary: this.object.access_readiness || null,
       headerActions: {
+        has: !this.embedded,
         hasCreate: this.showWizard && this.canGenerate,
         canCreate: () => this.canGenerate,
         createTitle: this.$t('AccessWizard'),
@@ -73,6 +78,7 @@ export default {
         hasMoreActions: false,
         hasImport: false,
         hasExport: false,
+        hasSearch: !this.embedded,
         searchConfig: { getUrlQuery: false }
       },
       tableConfig: {
@@ -80,19 +86,21 @@ export default {
         extraQuery: this.instanceQuery,
         hasSelection: false,
         hasPagination: true,
+        columnsShow: { min: ['instance_id', 'remote_addr'] },
         columns: [
           { prop: 'instance_id', label: this.$t('InstanceID'), minWidth: 160 },
+          {
+            prop: 'remote_addr',
+            label: this.$t('ClientAccessIP'),
+            minWidth: 150,
+            formatter: (row) =>
+              row.remote_addr ? <CopyableFormatter cellValue={row.remote_addr} /> : '-'
+          },
           {
             prop: 'type',
             label: this.$t('ClientType'),
             width: 100,
             formatter: (row) => (choiceValue(row.type) === 'sdk' ? 'SDK' : 'Agent')
-          },
-          {
-            prop: 'credentials',
-            label: this.$t('CredentialPolicies'),
-            minWidth: 180,
-            formatter: (row) => row.credentials?.map((item) => item.name).join(', ') || '-'
           },
           {
             prop: 'online',
@@ -129,7 +137,12 @@ export default {
             width: 100,
             formatter: (row) =>
               this.$hasPerm('accounts.change_credentialclientinstance') ? (
-                <el-button link type="primary" onClick={() => this.toggleInstance(row)}>
+                <el-button
+                  plain
+                  size="small"
+                  type={row.is_active ? 'danger' : 'primary'}
+                  onClick={() => this.toggleInstance(row)}
+                >
                   {this.$t(row.is_active ? 'Disable' : 'Enable')}
                 </el-button>
               ) : (
@@ -296,17 +309,24 @@ export default {
 
 <style lang="scss" scoped>
 .application-connections {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   min-width: 0;
+}
+.application-connections.is-embedded {
+  gap: 8px;
+}
+.instances-header {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  line-height: 20px;
 }
 .access-summary {
   display: flex;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 12px;
+  gap: 8px 20px;
   flex-wrap: wrap;
-}
-.context-help {
-  margin: 0 0 12px;
 }
 .application-connections :deep(.account-usage-cell) {
   min-width: 0;

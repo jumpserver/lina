@@ -31,7 +31,7 @@ export default [
         name: 'IntegrationApplicationCreate',
         hidden: true,
         meta: {
-          title: i18n.t('IntegrationApplicationCreate'),
+          title: i18n.t('ApplicationCreate'),
           permissions: ['accounts.add_integrationapplication']
         }
       },

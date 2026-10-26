@@ -17,12 +17,18 @@ export default {
     return {
       logo_file: null,
       url: '/api/v1/accounts/integration-applications/',
+      initial: {
+        accounts: { type: 'ids', ids: [] }
+      },
       fields: [
         [this.$t('Basic'), ['name', 'logo']],
-        [this.$t('AccountPolicy'), ['accounts', 'ip_group']],
+        [this.$t('AuthorizationPolicy'), ['accounts', 'ip_group']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        ip_group: {
+          helpText: this.$t('IpGroupHelpText')
+        },
         accounts: {
           component: JSONManyToManySelect,
           el: {

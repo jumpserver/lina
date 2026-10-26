@@ -26,50 +26,7 @@
       class="load-error"
     />
     <IBox class="event-table">
-      <el-table v-loading="loading" :data="rows" row-key="key">
-        <el-table-column :label="$t('RotationEventPublishedAt')" min-width="135">
-          <template #default="{ row }">
-            <div>{{ formatDate(row.published_at) }}</div>
-            <div v-if="row.operator" class="secondary-text">{{ row.operator }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('Source')" min-width="80">
-          <template #default="{ row }">
-            {{
-              $t(row.source === 'manual' ? 'ApplicationManualEvents' : 'ApplicationPolicyEvents')
-            }}
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('AppAuditEvent')" min-width="155">
-          <template #default="{ row }">
-            <div>{{ $t(eventLabels[row.event] || 'AppAuditEvent') }}</div>
-            <div v-if="row.credential || row.account || row.rotation_id" class="secondary-text">
-              {{
-                [row.credential, row.account, row.rotation_id?.slice(-8)]
-                  .filter(Boolean)
-                  .join(' · ')
-              }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('InstanceID')" min-width="110" show-overflow-tooltip>
-          <template #default="{ row }">{{ row.instance_id || '-' }}</template>
-        </el-table-column>
-        <el-table-column :label="$t('Status')" min-width="90">
-          <template #default="{ row }">
-            <el-tag :type="row.statusType">{{ $t(row.statusLabel || 'Unknown') }}</el-tag>
-            <div v-if="row.error_code" class="secondary-text">
-              {{ $t(errorLabels[row.error_code] || 'ApplicationCommandExecutionFailed') }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('RotationEventReceivedAt')" min-width="135">
-          <template #default="{ row }">{{ formatDate(row.received_at) }}</template>
-        </el-table-column>
-        <el-table-column :label="$t('ApplicationCommandFinishedAt')" min-width="135">
-          <template #default="{ row }">{{ formatDate(row.finished_at) }}</template>
-        </el-table-column>
-      </el-table>
+      <DataTable v-loading="loading" :config="tableConfig" />
       <el-pagination
         v-if="page > 1 || hasNext"
         :current-page="page"
@@ -83,9 +40,11 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
+import { ElTag } from 'element-plus'
 import IBox from '@/components/Common/IBox'
 import DataActions from '@/components/Common/DataActions'
+import DataTable from '@/components/Table/DataTable'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { eventLabels } from '../AccountRotationDetail/rotationEventTimeline'
 import ApplicationEventSendDialog from '../components/ApplicationEventSendDialog.vue'
@@ -93,7 +52,7 @@ import { createApplicationEventHistory } from './applicationEventHistory'
 
 export default {
   name: 'ApplicationEventProcessing',
-  components: { IBox, DataActions, ApplicationEventSendDialog },
+  components: { IBox, DataActions, DataTable, ApplicationEventSendDialog },
   props: {
     object: { type: Object, required: true }
   },
@@ -107,6 +66,81 @@ export default {
       hasNext: false,
       history: null,
       requestId: 0,
+      columns: [
+        {
+          prop: 'published_at',
+          label: this.$t('RotationEventPublishedAt'),
+          minWidth: 135,
+          formatter: (row) => (
+            <div>
+              <div>{this.formatDate(row.published_at)}</div>
+              {row.operator && <div class="secondary-text">{row.operator}</div>}
+            </div>
+          )
+        },
+        {
+          prop: 'source',
+          label: this.$t('Source'),
+          minWidth: 80,
+          formatter: (row) =>
+            this.$t(row.source === 'manual' ? 'ApplicationManualEvents' : 'ApplicationPolicyEvents')
+        },
+        {
+          prop: 'event',
+          label: this.$t('AppAuditEvent'),
+          minWidth: 155,
+          formatter: (row) => {
+            const label = this.$t(this.eventLabels[row.event] || 'AppAuditEvent')
+            const context = [row.credential, row.account].filter(Boolean).join(' · ')
+            return (
+              <div>
+                <div class="event-text" title={label}>
+                  {label}
+                </div>
+                {context && (
+                  <div class="secondary-text event-text" title={context}>
+                    {context}
+                  </div>
+                )}
+              </div>
+            )
+          }
+        },
+        {
+          prop: 'instance_id',
+          label: this.$t('InstanceID'),
+          minWidth: 110,
+          showOverflowTooltip: true,
+          formatter: (row) => row.instance_id || '-'
+        },
+        {
+          prop: 'status',
+          label: this.$t('Status'),
+          minWidth: 90,
+          formatter: (row) => (
+            <div>
+              <ElTag type={row.statusType}>{this.$t(row.statusLabel || 'Unknown')}</ElTag>
+              {row.error_code && (
+                <div class="secondary-text">
+                  {this.$t(this.errorLabels[row.error_code] || 'ApplicationCommandExecutionFailed')}
+                </div>
+              )}
+            </div>
+          )
+        },
+        {
+          prop: 'received_at',
+          label: this.$t('RotationEventReceivedAt'),
+          minWidth: 135,
+          formatter: (row) => this.formatDate(row.received_at)
+        },
+        {
+          prop: 'finished_at',
+          label: this.$t('ApplicationCommandFinishedAt'),
+          minWidth: 135,
+          formatter: (row) => this.formatDate(row.finished_at)
+        }
+      ],
       eventLabels: {
         ...eventLabels,
         'credential.switch.requested': 'ApplicationAccountSwitchRequest',
@@ -119,6 +153,18 @@ export default {
     }
   },
   computed: {
+    tableConfig() {
+      return {
+        totalData: this.rows,
+        columns: this.columns,
+        hasSelection: false,
+        hasPagination: false,
+        hasOperation: false,
+        hasEdit: false,
+        hasDelete: false,
+        tableAttrs: { border: true, rowKey: 'key' }
+      }
+    },
     sendActions() {
       return [
         {
@@ -213,11 +259,17 @@ export default {
   margin: 0 0 12px;
 }
 
-.secondary-text {
+.event-table :deep(.secondary-text) {
   color: var(--el-text-color-secondary);
   font-size: 12px;
   margin-top: 2px;
   overflow-wrap: anywhere;
+}
+
+.event-table :deep(.event-text) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .application-events :deep(.el-pagination) {

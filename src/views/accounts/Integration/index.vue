@@ -35,7 +35,7 @@ export default {
           },
           {
             name: 'notifications',
-            title: this.$t('CredentialUpdateSubscription'),
+            title: this.$t('PasswordChangeNotifications'),
             hidden: !this.$hasPerm('accounts.view_applicationcredential'),
             component: () => import('@/views/accounts/Integration/SubscriptionList.vue')
           },

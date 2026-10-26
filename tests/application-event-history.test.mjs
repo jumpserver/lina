@@ -109,7 +109,10 @@ test('failed loading can be retried without consuming or losing rows', async () 
 test('a receipt keeps the received state separate from successful command execution', () => {
   const received = applicationEventRows([event(1, 'manual')], 'manual')[0]
   assert.equal(received.statusLabel, 'RotationEventReceived')
-  assert.equal(received.statusType, 'info')
+  assert.equal(received.statusType, 'success')
+  const policyReceived = applicationEventRows([event(1, 'policy')], 'policy')[0]
+  assert.equal(policyReceived.statusLabel, 'RotationEventReceived')
+  assert.equal(policyReceived.statusType, 'success')
   const succeeded = event(2, 'manual')
   succeeded.recipients[0].status = 'success'
   assert.equal(applicationEventRows([succeeded], 'manual')[0].statusLabel, 'Success')

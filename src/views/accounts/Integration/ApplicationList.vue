@@ -4,6 +4,7 @@
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
     :header-actions="headerActions"
+    :resource="$t('Application')"
     :table-config="tableConfig"
   />
   <SecretDialog

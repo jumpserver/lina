@@ -280,19 +280,7 @@
             type="error"
             :closable="false"
           />
-          <el-table :data="instances">
-            <el-table-column prop="instance_id" :label="$t('InstanceID')" min-width="180" />
-            <el-table-column :label="$t('ClientStatus')" width="110">
-              <template #default="{ row }">{{
-                $t(!row.is_active ? 'Disabled' : row.online ? 'Online' : 'Offline')
-              }}</template>
-            </el-table-column>
-            <el-table-column :label="$t('LastReportedAt')" min-width="170">
-              <template #default="{ row }">{{
-                row.date_last_seen ? localDate(row.date_last_seen) : '-'
-              }}</template>
-            </el-table-column>
-          </el-table>
+          <DataTable :config="instanceTableConfig" />
           <el-pagination
             v-if="instancesAmount > 10"
             v-model:current-page="page"
@@ -322,13 +310,14 @@
 import IBox from '@/components/Common/IBox'
 import Page from '@/layout/components/Page'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
+import DataTable from '@/components/Table/DataTable'
 import { generateApplicationAccessMaterials } from '@/api/applicationCredential'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { copy } from '@/utils/common/index'
 
 export default {
   name: 'ApplicationAccessWizard',
-  components: { Page, IBox, Select2 },
+  components: { Page, IBox, Select2, DataTable },
   props: {
     object: { type: Object, required: true }
   },
@@ -345,6 +334,28 @@ export default {
       instancesAmount: 0,
       onlineAmount: 0,
       page: 1,
+      instanceColumns: [
+        { prop: 'instance_id', label: this.$t('InstanceID'), minWidth: 180 },
+        {
+          prop: 'remote_addr',
+          label: this.$t('ClientAccessIP'),
+          minWidth: 150,
+          formatter: (row) => row.remote_addr || '-'
+        },
+        {
+          prop: 'online',
+          label: this.$t('ClientStatus'),
+          width: 110,
+          formatter: (row) =>
+            this.$t(!row.is_active ? 'Disabled' : row.online ? 'Online' : 'Offline')
+        },
+        {
+          prop: 'date_last_seen',
+          label: this.$t('LastReportedAt'),
+          minWidth: 170,
+          formatter: (row) => (row.date_last_seen ? toSafeLocalDateStr(row.date_last_seen) : '-')
+        }
+      ],
       form: {
         type: 'sdk',
         app_user: '',
@@ -372,6 +383,18 @@ export default {
     }
   },
   computed: {
+    instanceTableConfig() {
+      return {
+        totalData: this.instances,
+        columns: this.instanceColumns,
+        hasSelection: false,
+        hasPagination: false,
+        hasOperation: false,
+        hasEdit: false,
+        hasDelete: false,
+        tableAttrs: { border: true, rowKey: 'id' }
+      }
+    },
     needsSystemd() {
       return this.form.agent_setup === 'delivery'
         ? this.form.delivery_mode === 'environment'
@@ -397,7 +420,6 @@ export default {
         value: account.id
       }
     },
-    localDate: toSafeLocalDateStr,
     copyText: copy,
     async loadSDKLanguages() {
       try {

@@ -1,44 +1,78 @@
 <template>
-  <el-table :data="rows">
-    <el-table-column :label="$t('RotationEventPublishedAt')" min-width="155">
-      <template #default="{ row }">
-        <div>{{ formatDate(row.occurred_at) }}</div>
-        <div class="command-secondary">{{ row.operator }}</div>
-      </template>
-    </el-table-column>
-    <el-table-column :label="$t('AppAuditEvent')" min-width="170">
-      <template #default="{ row }">
-        <div>{{ $t(eventLabels[row.event]) }}</div>
-        <div v-if="row.credential || row.account" class="command-secondary">
-          {{ [row.credential, row.account].filter(Boolean).join(' · ') }}
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column :label="$t('InstanceID')" prop="instance_id" min-width="140" />
-    <el-table-column :label="$t('Status')" min-width="100">
-      <template #default="{ row }">
-        <el-tag :type="tagTypes[row.status]">{{ $t(statusLabels[row.status]) }}</el-tag>
-        <div v-if="row.error_code" class="command-secondary">
-          {{ $t(errorLabels[row.error_code] || 'ApplicationCommandExecutionFailed') }}
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column :label="$t('RotationEventReceivedAt')" min-width="155">
-      <template #default="{ row }">{{ formatDate(row.received_at) }}</template>
-    </el-table-column>
-    <el-table-column :label="$t('ApplicationCommandFinishedAt')" min-width="155">
-      <template #default="{ row }">{{ formatDate(row.finished_at) }}</template>
-    </el-table-column>
-  </el-table>
+  <DataTable class="command-results" :config="tableConfig" />
 </template>
 
-<script>
+<script lang="jsx">
+import { ElTag } from 'element-plus'
+import DataTable from '@/components/Table/DataTable'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
+  components: { DataTable },
   props: { commands: { type: Array, default: () => [] } },
   data() {
     return {
+      columns: [
+        {
+          prop: 'occurred_at',
+          label: this.$t('RotationEventPublishedAt'),
+          minWidth: 155,
+          formatter: (row) => (
+            <div>
+              <div>{this.formatDate(row.occurred_at)}</div>
+              {row.operator && <div class="command-secondary">{row.operator}</div>}
+            </div>
+          )
+        },
+        {
+          prop: 'event',
+          label: this.$t('AppAuditEvent'),
+          minWidth: 170,
+          formatter: (row) => {
+            const context = [row.credential, row.account].filter(Boolean).join(' · ')
+            return (
+              <div>
+                <div>{this.$t(this.eventLabels[row.event])}</div>
+                {context && (
+                  <div class="command-secondary" title={context}>
+                    {context}
+                  </div>
+                )}
+              </div>
+            )
+          }
+        },
+        { prop: 'instance_id', label: this.$t('InstanceID'), minWidth: 140 },
+        {
+          prop: 'status',
+          label: this.$t('Status'),
+          minWidth: 100,
+          formatter: (row) => (
+            <div>
+              <ElTag type={this.tagTypes[row.status]}>
+                {this.$t(this.statusLabels[row.status])}
+              </ElTag>
+              {row.error_code && (
+                <div class="command-secondary">
+                  {this.$t(this.errorLabels[row.error_code] || 'ApplicationCommandExecutionFailed')}
+                </div>
+              )}
+            </div>
+          )
+        },
+        {
+          prop: 'received_at',
+          label: this.$t('RotationEventReceivedAt'),
+          minWidth: 155,
+          formatter: (row) => this.formatDate(row.received_at)
+        },
+        {
+          prop: 'finished_at',
+          label: this.$t('ApplicationCommandFinishedAt'),
+          minWidth: 155,
+          formatter: (row) => this.formatDate(row.finished_at)
+        }
+      ],
       eventLabels: {
         'credential.switch.requested': 'ApplicationAccountSwitchRequest',
         'application.restart.requested': 'ApplicationRestartRequest'
@@ -53,7 +87,7 @@ export default {
       },
       tagTypes: {
         pending: 'info',
-        received: 'info',
+        received: 'success',
         running: 'warning',
         success: 'success',
         failed: 'danger',
@@ -66,6 +100,18 @@ export default {
     }
   },
   computed: {
+    tableConfig() {
+      return {
+        totalData: this.rows,
+        columns: this.columns,
+        hasSelection: false,
+        hasPagination: false,
+        hasOperation: false,
+        hasEdit: false,
+        hasDelete: false,
+        tableAttrs: { border: true }
+      }
+    },
     rows() {
       return this.commands.flatMap((command) =>
         command.recipients.map((recipient) => ({ ...command, ...recipient }))
@@ -81,7 +127,7 @@ export default {
 </script>
 
 <style scoped>
-.command-secondary {
+.command-results :deep(.command-secondary) {
   margin-top: 4px;
   font-size: 12px;
   color: var(--el-text-color-secondary);

@@ -5,7 +5,6 @@
     title="null"
     navigation-scope="local"
     class="application-credential-detail"
-    @tab-click="refreshEvents"
   >
     <AccountRotationInfo
       ref="rotationInfo"
@@ -23,12 +22,14 @@
       :object="object"
     />
     <CredentialEventBrowser
-      v-if="activeTab === 'events'"
+      v-if="['latest', 'events'].includes(activeTab)"
       ref="eventBrowser"
-      :key="eventsKey"
+      :key="`${eventsKey}:${activeTab}`"
+      :latest="activeTab === 'latest'"
       :credential-id="object.id"
       :subscription="object.mode === 'subscription'"
-      :initial-cycle-id="startedCycleId"
+      :initial-cycle-id="activeTab === 'latest' ? startedCycleId : ''"
+      @cycle-opened="startedCycleId = ''"
     >
       <template #actions="{ cycle }">
         <el-button
@@ -36,7 +37,7 @@
           :type="pendingRotationAction.attrs.type"
           :loading="pendingRotationAction.attrs.loading"
           :disabled="pendingRotationAction.attrs.disabled"
-          @click="advanceRotationFromEvents"
+          @click="advanceRotationFromEvents(cycle.id)"
           >{{ pendingRotationAction.attrs.label }}</el-button
         >
         <el-tooltip
@@ -114,19 +115,20 @@ export default {
           name: 'access',
           hidden: !this.$hasPerm('accounts.view_integrationapplication')
         },
-        { title: this.$t('CredentialPolicyRunRecords'), name: 'events' },
+        { title: this.$t('CredentialPolicyLatestRun'), name: 'latest' },
+        { title: this.$t('CredentialPolicyRunHistory'), name: 'events' },
         { title: this.$t('Documentation'), name: 'docs' }
       ]
     }
   },
   methods: {
-    async advanceRotationFromEvents() {
+    async advanceRotationFromEvents(cycleId) {
       const action = this.pendingRotationAction
       if (
         !action ||
         action.attrs.disabled ||
         action.attrs.loading ||
-        this.eventBrowser?.cycleId !== this.object.rotation?.id
+        cycleId !== this.object.rotation?.id
       ) {
         return
       }
@@ -155,15 +157,11 @@ export default {
         this.$emit('updated', credential)
         this.startedCycleId = cycle_id
         this.eventsKey += 1
-        this.activeTab = 'events'
+        this.activeTab = 'latest'
         this.$message.success(this.$t('PolicyCycleStarted'))
       } finally {
         this.cycleStarting = false
       }
-    },
-    refreshEvents(tab) {
-      if (tab.paneName !== 'events') return
-      this.eventsKey += 1
     }
   }
 }

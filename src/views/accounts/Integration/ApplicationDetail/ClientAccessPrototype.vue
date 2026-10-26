@@ -1,5 +1,11 @@
 <template>
   <div v-loading="loading" class="credential-applications">
+    <el-alert
+      :title="$t('CredentialApplicationsAccessHelp')"
+      type="info"
+      :closable="false"
+      show-icon
+    />
     <div class="access-summary">
       <strong>{{ $t('BoundApplicationsCount', { count: summary.applications_amount }) }}</strong>
       <span>{{
@@ -10,71 +16,22 @@
       }}</span>
       <el-button @click="loadApplications">{{ $t('Refresh') }}</el-button>
     </div>
-    <p class="context-help">{{ $t('CredentialApplicationsAccessHelp') }}</p>
     <el-alert v-if="failed" :title="$t('SelectLoadFailed')" type="error" :closable="false" />
-    <el-table :data="applications">
-      <el-table-column :label="$t('Application')" min-width="180">
-        <template #default="{ row }">
-          <el-link underline="never" @click="openApplication(row)">{{ row.name }}</el-link>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('Active')" width="100">
-        <template #default="{ row }">{{ $t(row.is_active ? 'Yes' : 'No') }}</template>
-      </el-table-column>
-      <el-table-column :label="$t('ConnectionInstances')" min-width="150">
-        <template #default="{ row }">
-          <el-link
-            v-if="$hasPerm('accounts.view_credentialclientinstance')"
-            underline="never"
-            @click="showInstances(row)"
-          >
-            {{ row.online_instances_amount }} / {{ row.instances_amount }}
-          </el-link>
-          <span v-else>{{ row.online_instances_amount }} / {{ row.instances_amount }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('LastReportedAt')" width="180">
-        <template #default="{ row }">{{
-          row.last_reported ? localDate(row.last_reported) : '-'
-        }}</template>
-      </el-table-column>
-      <el-table-column :label="$t('Actions')" width="140">
-        <template #default="{ row }">
-          <el-button
-            link
-            type="primary"
-            :disabled="
-              !row.is_active ||
-              !$hasPerm('accounts.change_integrationapplication') ||
-              !$hasPerm('accounts.view_credentialclientinstance')
-            "
-            @click="openApplication(row, true)"
-          >
-            {{ $t('AccessWizard') }}
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <Drawer v-model:visible="instancesVisible" :title="selectedApplication?.name || ''">
-      <ApplicationConnections
-        v-if="instancesVisible && selectedApplication"
-        :object="selectedApplication"
-        :credential-id="object.id"
-        :show-wizard="false"
-      />
-    </Drawer>
+    <DataTable :config="tableConfig" />
   </div>
 </template>
 
-<script>
-import Drawer from '@/components/Drawer'
+<script lang="jsx">
+import { ElButton, ElLink } from 'element-plus'
+import { markRaw } from 'vue'
+import DataTable from '@/components/Table/DataTable'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { getCredentialAccessApplications } from '@/api/applicationCredential'
-import ApplicationConnections from './ApplicationConnections.vue'
+import ApplicationInstancesExpand from './ApplicationInstancesExpand.vue'
 
 export default {
   name: 'CredentialAccessApplications',
-  components: { Drawer, ApplicationConnections },
+  components: { DataTable },
   props: { object: { type: Object, required: true } },
   data() {
     return {
@@ -82,15 +39,108 @@ export default {
       failed: false,
       applications: [],
       summary: { applications_amount: 0, instances_amount: 0, online_instances_amount: 0 },
-      instancesVisible: false,
-      selectedApplication: null
+      expandedApplicationIds: [],
+      columns: [
+        {
+          prop: 'name',
+          label: this.$t('Application'),
+          minWidth: 180,
+          formatter: (row) => (
+            <ElLink underline="never" onClick={() => this.openApplication(row)}>
+              {row.name}
+            </ElLink>
+          )
+        },
+        {
+          prop: 'is_active',
+          label: this.$t('Active'),
+          width: 100,
+          formatter: (row) => this.$t(row.is_active ? 'Yes' : 'No')
+        },
+        {
+          prop: 'instances_amount',
+          label: this.$t('ConnectionInstances'),
+          minWidth: 150,
+          formatter: (row) => {
+            const count = `${row.online_instances_amount} / ${row.instances_amount}`
+            return this.$hasPerm('accounts.view_credentialclientinstance') ? (
+              <ElLink
+                underline="never"
+                aria-expanded={this.expandedApplicationIds.includes(row.id)}
+                onClick={() => this.showInstances(row)}
+              >
+                {count}
+              </ElLink>
+            ) : (
+              count
+            )
+          }
+        },
+        {
+          prop: 'last_reported',
+          label: this.$t('LastReportedAt'),
+          width: 180,
+          formatter: (row) => (row.last_reported ? toSafeLocalDateStr(row.last_reported) : '-')
+        },
+        {
+          prop: 'actions',
+          label: this.$t('Actions'),
+          width: 140,
+          formatter: (row) => (
+            <ElButton
+              plain
+              size="small"
+              type="primary"
+              disabled={
+                !row.is_active ||
+                !this.$hasPerm('accounts.change_integrationapplication') ||
+                !this.$hasPerm('accounts.view_credentialclientinstance')
+              }
+              onClick={() => this.openApplication(row, true)}
+            >
+              {this.$t('AccessWizard')}
+            </ElButton>
+          )
+        }
+      ]
+    }
+  },
+  computed: {
+    tableConfig() {
+      return {
+        totalData: this.applications,
+        columns: [
+          ...(this.$hasPerm('accounts.view_credentialclientinstance')
+            ? [
+                {
+                  prop: 'instances',
+                  type: 'expand',
+                  width: 48,
+                  formatter: markRaw(ApplicationInstancesExpand),
+                  formatterArgs: { credentialId: this.object.id }
+                }
+              ]
+            : []),
+          ...this.columns
+        ],
+        hasSelection: false,
+        hasPagination: false,
+        hasOperation: false,
+        hasEdit: false,
+        hasDelete: false,
+        tableAttrs: {
+          border: true,
+          rowKey: 'id',
+          expandRowKeys: this.expandedApplicationIds,
+          onExpandChange: this.handleExpandChange
+        }
+      }
     }
   },
   watch: {
     'object.id': { immediate: true, handler: 'loadApplications' }
   },
   methods: {
-    localDate: toSafeLocalDateStr,
     async loadApplications() {
       const id = this.object.id
       if (!id) return
@@ -101,6 +151,9 @@ export default {
         if (this.object.id !== id) return
         this.applications = data.results
         this.summary = data
+        this.expandedApplicationIds = this.expandedApplicationIds.filter((id) =>
+          data.results.some((application) => application.id === id)
+        )
       } catch {
         this.failed = true
       } finally {
@@ -108,8 +161,14 @@ export default {
       }
     },
     showInstances(application) {
-      this.selectedApplication = application
-      this.instancesVisible = true
+      this.expandedApplicationIds = this.expandedApplicationIds.includes(application.id)
+        ? []
+        : [application.id]
+    },
+    handleExpandChange(application, expandedRows) {
+      this.expandedApplicationIds = expandedRows.some((row) => row.id === application.id)
+        ? [application.id]
+        : []
     },
     openApplication(application, wizard = false) {
       this.$router.push({
@@ -127,20 +186,20 @@ export default {
 
 <style lang="scss" scoped>
 .credential-applications {
-  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .access-summary {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 8px 20px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
 }
 .access-summary .el-button {
   margin-left: auto;
 }
-.context-help {
-  color: var(--el-text-color-secondary);
-  margin-bottom: 16px;
+.credential-applications :deep(.el-table__expanded-cell) {
+  padding: 0;
 }
 </style>

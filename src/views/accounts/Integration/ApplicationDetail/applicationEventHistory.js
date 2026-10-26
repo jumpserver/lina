@@ -9,9 +9,9 @@ const commandStatusLabels = {
   timeout: 'Timeout'
 }
 
-const commandStatusTypes = {
+const statusTypes = {
   pending: 'info',
-  received: 'info',
+  received: 'success',
   running: 'warning',
   success: 'success',
   failed: 'danger',
@@ -31,8 +31,7 @@ export function applicationEventRows(events, source) {
         source,
         published_at: source === 'manual' ? event.occurred_at : event.published_at,
         statusLabel: (source === 'manual' ? commandStatusLabels : statusLabels)[status],
-        statusType:
-          source === 'manual' ? commandStatusTypes[status] : status === 'failed' ? 'danger' : 'info'
+        statusType: statusTypes[status] || 'info'
       }
     })
   })
