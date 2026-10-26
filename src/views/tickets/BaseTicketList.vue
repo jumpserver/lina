@@ -19,7 +19,11 @@
 <script>
 import { getTicketDetailRoute } from './plugins/registry'
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
+import {
+  ActionsFormatter,
+  DetailFormatter,
+  TagChoicesFormatter
+} from '@/components/Table/TableFormatters'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import {
   APPROVE,
@@ -73,11 +77,13 @@ export default {
           'request_items',
           'execution_mode',
           'result',
+          'source_ticket',
+          'reapply_action',
           'approval_step'
         ],
         columnsShow: {
-          min: ['title', 'serial_num', 'type', 'state', 'date_created'],
-          default: ['title', 'serial_num', 'type', 'org_name', 'state', 'date_created']
+          min: ['title', 'serial_num', 'type', 'state', 'date_created', 'actions'],
+          default: ['title', 'serial_num', 'type', 'org_name', 'state', 'date_created', 'actions']
         },
         columnsMeta: {
           org_name: {
@@ -161,7 +167,33 @@ export default {
             formatter: (row) => toSafeLocalDateStr(row.date_created)
           },
           actions: {
-            has: this.$route.name !== 'AuditTicketList'
+            has: this.$route.name !== 'AuditTicketList',
+            width: '80px',
+            align: 'center',
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'reapply',
+                  icon: 'fa-solid fa-rotate',
+                  type: 'primary',
+                  has: true,
+                  can: ({ row }) => ['renew', 'reapply'].includes(row.reapply_action),
+                  title: ({ row }) =>
+                    this.$t(
+                      row.reapply_action === 'renew' ? 'TicketApplyRenewal' : 'TicketReapply'
+                    ),
+                  callback: ({ row }) =>
+                    this.$router.push({
+                      name: 'RequestAssetPermTicketCreateUpdate',
+                      query: { source_ticket: row.id, oid: row.org_id }
+                    })
+                }
+              ]
+            }
           }
         }
       },

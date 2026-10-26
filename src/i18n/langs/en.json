@@ -2915,5 +2915,18 @@
   "TicketApprovalStatus": "Approval status",
   "TicketPendingApproval": "Awaiting approval",
   "TicketApprovalApproved": "Approved",
-  "TicketApprovalFinished": "Approval completed"
+  "TicketApprovalFinished": "Approval completed",
+  "TicketReapply": "Reapply",
+  "TicketApplyRenewal": "Apply for renewal",
+  "TicketSource": "Source ticket",
+  "TicketRenewalTitle": "Renew access from ticket",
+  "TicketReapplyTitle": "Reapply from ticket",
+  "TicketReapplyHelp": "Review the resources and validity period before submitting. A new ticket will use the currently published workflow and require approval.",
+  "TicketReapplyLoadFailed": "Unable to prepare this request. Check that the source ticket is eligible and you still have access, then retry.",
+  "TicketReapplyInvalidAssets": "{count} original assets are no longer available for application and were removed. Review the selection.",
+  "TicketReapplyInvalidAccounts": "These account selections are no longer available and were removed: {accounts}. Select accounts again.",
+  "TicketReapplyNodes": "The original nodes have no reliable asset snapshot. Select the specific assets to request again.",
+  "TicketReapplyBeneficiary": "The original authorized user is unavailable or you no longer have permission to apply for them. Select an authorized user.",
+  "TicketReapplyWorkflow": "The original workflow is unavailable. Confirm the currently available workflow before submitting.",
+  "TicketReapplyNoWorkflow": "No enabled, published workflow is available. Contact an administrator to configure one before submitting."
 }

@@ -1,5 +1,6 @@
 <template><GenericTicketDetail :object="object" :special-card-items="specialCardItems" /></template>
 <script>
+import { h } from 'vue'
 import GenericTicketDetail from '../../components/GenericTicketDetail'
 export default {
   components: { GenericTicketDetail },
@@ -7,7 +8,32 @@ export default {
   computed: {
     specialCardItems() {
       const { object } = this
+      const source = object.source_ticket
       return [
+        ...(source
+          ? [
+              {
+                key: this.$t('TicketSource'),
+                value: source.serial_num,
+                formatter: (_item, value) =>
+                  source.can_view
+                    ? h(
+                        'a',
+                        {
+                          href: this.$router.resolve({
+                            name: 'AssetsTicketDetail',
+                            params: { id: source.id },
+                            query: { oid: source.org_id }
+                          }).href,
+                          target: '_blank',
+                          rel: 'noopener'
+                        },
+                        value
+                      )
+                    : value
+              }
+            ]
+          : []),
         ...(object.request_items || [])
           .filter((item) => item.name !== 'apply_expire_soon_notice_minutes')
           .map((item) => ({

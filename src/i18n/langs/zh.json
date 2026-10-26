@@ -2909,5 +2909,18 @@
   "TicketApprovalStatus": "审批状态",
   "TicketPendingApproval": "待审批",
   "TicketApprovalApproved": "已通过",
-  "TicketApprovalFinished": "已结束"
+  "TicketApprovalFinished": "已结束",
+  "TicketReapply": "重新申请",
+  "TicketApplyRenewal": "申请续期",
+  "TicketSource": "来源工单",
+  "TicketRenewalTitle": "基于原工单申请续期",
+  "TicketReapplyTitle": "基于原工单重新申请",
+  "TicketReapplyHelp": "请核对资源和有效期后提交。系统将创建新工单，使用当前发布的流程重新审批。",
+  "TicketReapplyLoadFailed": "无法加载原申请。请确认工单状态允许重新申请、你仍有访问权限后重试。",
+  "TicketReapplyInvalidAssets": "原申请中有 {count} 项资产已失效或不在当前可申请范围，已移除，请重新核对选择。",
+  "TicketReapplyInvalidAccounts": "以下账号选择已失效并移除，请重新选择：{accounts}。",
+  "TicketReapplyNodes": "原节点缺少可靠的资产快照，请重新选择需要申请的具体资产。",
+  "TicketReapplyBeneficiary": "原授权用户已失效，或你已无代申请权限，请重新选择授权用户。",
+  "TicketReapplyWorkflow": "原审批流程已不可用，请确认当前可选流程后提交。",
+  "TicketReapplyNoWorkflow": "暂无可用的已发布审批流程，请联系管理员配置后再提交。"
 }

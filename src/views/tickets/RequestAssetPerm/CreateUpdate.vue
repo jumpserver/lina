@@ -1,11 +1,44 @@
 <template>
   <div>
+    <el-alert v-if="loadError" type="error" :closable="false" show-icon class="reapply-notice">
+      {{ $t('TicketReapplyLoadFailed') }}
+      <el-button link type="primary" @click="initialize">{{ $t('Retry') }}</el-button>
+    </el-alert>
     <GenericCreateUpdatePage
       v-bind="$data"
-      v-if="!loading"
+      v-if="!loading && !loadError"
+      ref="form"
       :create-success-next-route="createSuccessNextRoute"
       :perform-submit="performSubmit"
-    />
+      :has-save-continue="sourceTicket ? false : null"
+    >
+      <template #form-header>
+        <el-alert
+          v-if="sourceTicket"
+          type="info"
+          :closable="false"
+          show-icon
+          class="reapply-notice"
+        >
+          <template #title>
+            {{ $t(isRenewal ? 'TicketRenewalTitle' : 'TicketReapplyTitle') }}
+            <el-link :href="sourceTicketUrl" target="_blank" rel="noopener" type="primary">
+              {{ sourceTicket.serial_num }}
+            </el-link>
+          </template>
+          <p>{{ $t('TicketReapplyHelp') }}</p>
+        </el-alert>
+        <el-alert
+          v-if="warningMessages.length"
+          type="warning"
+          :closable="false"
+          show-icon
+          class="reapply-notice"
+        >
+          <p v-for="message in warningMessages" :key="message">{{ message }}</p>
+        </el-alert>
+      </template>
+    </GenericCreateUpdatePage>
     <el-alert v-if="availabilityFailed" type="error" :closable="false">
       {{ $t('TicketResourceLoadFailed') }}
       <el-button link type="primary" @click="retryResourceAvailability">{{
@@ -49,6 +82,10 @@ export default {
       // 工单创建 隐藏提示信息中的跳转连接
       hasDetailInMsg: false,
       loading: true,
+      loadError: false,
+      sourceTicket: null,
+      prefillWarnings: {},
+      submitted: false,
       flowOptions: [],
       flowRequest: 0,
       selectedOrgId: '',
@@ -306,33 +343,106 @@ export default {
     }
   },
   computed: {
+    isRenewal() {
+      return this.sourceTicket?.kind === 'renew' && this.selectedOrgId === this.sourceTicket.org_id
+    },
+    sourceTicketUrl() {
+      if (!this.sourceTicket) return ''
+      return this.$router.resolve({
+        name: 'AssetsTicketDetail',
+        params: { id: this.sourceTicket.id },
+        query: { oid: this.sourceTicket.org_id }
+      }).href
+    },
+    warningMessages() {
+      const keys = {
+        assets: 'TicketReapplyInvalidAssets',
+        accounts: 'TicketReapplyInvalidAccounts',
+        nodes: 'TicketReapplyNodes',
+        beneficiary: 'TicketReapplyBeneficiary',
+        workflow: 'TicketReapplyWorkflow',
+        no_workflow: 'TicketReapplyNoWorkflow'
+      }
+      return Object.keys(this.prefillWarnings)
+        .filter((key) => keys[key])
+        .map((key) =>
+          this.$t(keys[key], {
+            count: this.prefillWarnings[key],
+            accounts: Array.isArray(this.prefillWarnings[key])
+              ? this.prefillWarnings[key].join(', ')
+              : ''
+          })
+        )
+    },
     ...mapState({
       workbenchOrgs: (state) => state.users.noRootWorkbenchOrgs
     }),
     ...mapGetters(['currentOrg'])
   },
   async mounted() {
-    this.fieldsMeta.org_id.el.options = this.workbenchOrgs.map((item) => ({
-      label: item.name,
-      value: item.id
-    }))
-
-    const currentOrgId = this.currentOrg.id || ''
-    const userAllOrgIds = this.workbenchOrgs.map((i) => i.id) || []
-    if (userAllOrgIds.includes(currentOrgId)) {
-      this.initial.org_id = currentOrgId
-    } else {
-      this.initial.org_id = userAllOrgIds[0]
-    }
-    this.selectedOrgId = this.initial.org_id
-    await this.loadResourceAvailability('apply_asset', this.selectedOrgId)
-
-    const flow = await this.loadFlowOptions(this.initial.org_id, store.getters.currentUser.id)
-    this.initial.workflow_id = flow?.id || ''
-
-    this.loading = false
+    await this.initialize()
+  },
+  activated() {
+    if (this.submitted) this.initialize()
   },
   methods: {
+    async initialize() {
+      this.loading = true
+      this.loadError = false
+      this.submitted = false
+      this.sourceTicket = null
+      this.prefillWarnings = {}
+      this.fieldsMeta.org_id.el.options = this.workbenchOrgs.map((item) => ({
+        label: item.name,
+        value: item.id
+      }))
+      try {
+        const orgId =
+          this.workbenchOrgs.find((org) => org.id === this.currentOrg.id)?.id ||
+          this.workbenchOrgs[0]?.id ||
+          ''
+        let data = null
+        if (this.$route.query.source_ticket) {
+          data = await this.$axios.get(
+            `/api/v1/tickets/tickets/${encodeURIComponent(this.$route.query.source_ticket)}/actions/reapply_asset/`,
+            { params: { oid: this.$route.query.oid || orgId } }
+          )
+          this.sourceTicket = data.source_ticket
+          this.prefillWarnings = data.warnings || {}
+          this.initial = {
+            ...this.initial,
+            resource_description: '',
+            ...data.request_data,
+            title: data.title,
+            comment: data.comment,
+            org_id: data.org_id,
+            apply_users: data.request_data.apply_users[0] || ''
+          }
+          this.fieldsMeta.apply_users.el.options = data.users.map((user) => ({
+            value: user.id,
+            label: `${user.name} (${user.username})`
+          }))
+        } else {
+          this.initial.org_id = orgId
+        }
+        this.selectedOrgId = this.initial.org_id
+        await this.loadResourceAvailability('apply_asset', this.selectedOrgId, {
+          apply_assets: (this.initial.apply_assets || []).join(','),
+          apply_nodes: (this.initial.apply_nodes || []).join(',')
+        })
+        const flow = await this.loadFlowOptions(this.selectedOrgId, this.initial.apply_users)
+        const original = data && this.flowOptions.find((item) => item.id === data.workflow_id)
+        this.initial.workflow_id = original?.id || flow?.id || ''
+        if (data?.workflow_id && !original) this.prefillWarnings.workflow = true
+      } catch {
+        this.loadError = true
+      } finally {
+        this.loading = false
+      }
+    },
+    hasUnsavedChanges() {
+      return this.$refs.form?.hasUnsavedChanges() || false
+    },
     resourceSelectionChanged(field, values) {
       const selection = {
         ...this.availabilityParams.selection,
@@ -354,6 +464,10 @@ export default {
         })
         if (requestId !== this.flowRequest) return undefined
         this.flowOptions = flows
+        if (this.sourceTicket) {
+          if (flows.length) delete this.prefillWarnings.no_workflow
+          else this.prefillWarnings.no_workflow = true
+        }
         this.fieldsMeta.workflow_id.el.options = flows.map((flow) => ({
           label: getTicketFlowLabel(flow, this.$t),
           value: flow.id
@@ -372,17 +486,35 @@ export default {
           ([key]) => key.startsWith('apply_') || key === 'resource_description'
         )
       )
-      return this.$axios.post('/api/v1/tickets/tickets/open/', {
-        type: 'apply_asset',
-        title,
-        org_id,
-        workflow_id,
-        comment,
-        request_data
-      })
+      return this.$axios
+        .post('/api/v1/tickets/tickets/open/', {
+          type: 'apply_asset',
+          title,
+          org_id,
+          workflow_id,
+          comment,
+          request_data,
+          ...(this.sourceTicket ? { source_ticket_id: this.sourceTicket.id } : {})
+        })
+        .then((ticket) => {
+          this.submitted = true
+          return ticket
+        })
     }
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.reapply-notice {
+  margin: 16px 0;
+
+  p {
+    margin: 4px 0;
+  }
+  .el-link {
+    margin-left: 6px;
+    vertical-align: baseline;
+  }
+}
+</style>
