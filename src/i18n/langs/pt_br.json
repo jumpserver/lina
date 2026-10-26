@@ -2410,5 +2410,19 @@
   "MFASystemPolicyHelp": "Você pode configurar métodos antecipadamente. Somente recursos ativados entram em vigor.",
   "MFAStoredInactiveHelp": "As seleções inativas são mantidas e entrarão em vigor quando seus requisitos forem atendidos.",
   "MFANoEffectiveMethod": "Nenhum método MFA efetivo. Verifique a política e os recursos antes de exigir MFA.",
-  "MFACapabilitiesUnavailable": "Não foi possível carregar os recursos MFA. Atualize antes de editar."
+  "MFACapabilitiesUnavailable": "Não foi possível carregar os recursos MFA. Atualize antes de editar.",
+  "AclBeforeConnection": "Antes da conexão",
+  "AclDuringSession": "Durante a conexão",
+  "AclAfterSession": "Após a conexão",
+  "AclMatchConditions": "Condições de correspondência",
+  "AclExecutionAction": "Ação de execução",
+  "AclOtherSettings": "Outras configurações",
+  "SelectRecipients": "Selecionar destinatários",
+  "SelectApprovers": "Selecionar aprovadores",
+  "ConnectionDetails": "Detalhes da conexão",
+  "ConnectionReason": "Motivo da conexão",
+  "ExpandReason": "Expandir",
+  "CollapseReason": "Recolher",
+  "ReviewExemptionDurationHours": "{hours} h",
+  "ReviewExemptionDurationInvalid": "Insira um número inteiro de horas entre 0 e 2147483647."
 }

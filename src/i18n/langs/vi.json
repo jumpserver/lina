@@ -2410,5 +2410,19 @@
   "MFASystemPolicyHelp": "Có thể cấu hình trước các phương thức. Chỉ tính năng đã bật mới có hiệu lực.",
   "MFAStoredInactiveHelp": "Các lựa chọn chưa có hiệu lực được giữ lại và sẽ áp dụng khi đáp ứng điều kiện.",
   "MFANoEffectiveMethod": "Không có phương thức MFA có hiệu lực. Kiểm tra chính sách và tính năng trước khi bắt buộc MFA.",
-  "MFACapabilitiesUnavailable": "Không thể tải trạng thái MFA. Hãy tải lại trang trước khi chỉnh sửa."
+  "MFACapabilitiesUnavailable": "Không thể tải trạng thái MFA. Hãy tải lại trang trước khi chỉnh sửa.",
+  "AclBeforeConnection": "Trước khi kết nối",
+  "AclDuringSession": "Trong khi kết nối",
+  "AclAfterSession": "Sau khi kết nối",
+  "AclMatchConditions": "Điều kiện khớp",
+  "AclExecutionAction": "Hành động thực thi",
+  "AclOtherSettings": "Cài đặt khác",
+  "SelectRecipients": "Chọn người nhận",
+  "SelectApprovers": "Chọn người phê duyệt",
+  "ConnectionDetails": "Chi tiết kết nối",
+  "ConnectionReason": "Lý do kết nối",
+  "ExpandReason": "Mở rộng",
+  "CollapseReason": "Thu gọn",
+  "ReviewExemptionDurationHours": "{hours} giờ",
+  "ReviewExemptionDurationInvalid": "Nhập số giờ nguyên từ 0 đến 2147483647."
 }

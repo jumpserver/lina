@@ -2605,5 +2605,19 @@
   "PlatformPackage": "平台套件",
   "LeakPassword": "密碼外洩",
   "NoCloudImportCandidates": "雲端資產發現完成，沒有需要匯入的候選資產。",
-  "DiscoveryFinishedWithIssues": "雲端資產發現已結束，部分區域或資源存在異常。"
+  "DiscoveryFinishedWithIssues": "雲端資產發現已結束，部分區域或資源存在異常。",
+  "AclBeforeConnection": "連線前",
+  "AclDuringSession": "連線中",
+  "AclAfterSession": "連線後",
+  "AclMatchConditions": "符合條件",
+  "AclExecutionAction": "執行動作",
+  "AclOtherSettings": "其他設定",
+  "SelectRecipients": "選擇接收人",
+  "SelectApprovers": "選擇審批人",
+  "ConnectionDetails": "連線明細",
+  "ConnectionReason": "連線原因",
+  "ExpandReason": "展開",
+  "CollapseReason": "收合",
+  "ReviewExemptionDurationHours": "{hours} 小時",
+  "ReviewExemptionDurationInvalid": "請輸入 0 到 2147483647 之間的整數小時數。"
 }

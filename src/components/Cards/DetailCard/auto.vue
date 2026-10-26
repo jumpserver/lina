@@ -47,6 +47,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    fieldsMeta: {
+      type: Object,
+      default: () => ({})
+    },
     nested: {
       type: String,
       default: null
@@ -70,7 +74,22 @@ export default {
       return Object.keys(this.iObject).length > 0
     },
     validItems() {
-      return this.items.filter((item) => this.isHidden(item))
+      const groups = []
+      let parent
+      for (const item of this.items) {
+        if (!this.isHidden(item)) {
+          parent = null
+          continue
+        }
+        const dependsOn = this.fieldsMeta[item.name]?.dependsOn
+        if (dependsOn && parent?.name === dependsOn) {
+          parent.children = [...(parent.children || []), item]
+        } else {
+          parent = { ...item }
+          groups.push(parent)
+        }
+      }
+      return groups
     }
   },
   async mounted() {
@@ -132,13 +151,14 @@ export default {
       }
       return null
     },
-    parseArrayValue(value, excludes, label) {
+    parseArrayValue(value, excludes, label, name) {
       if (Array.isArray(value)) {
         const tp = typeof value[0]
         let object = {}
 
         if (value.length === 0) {
           object = {
+            name,
             key: label,
             value: '-'
           }
@@ -181,6 +201,7 @@ export default {
           if (index !== value.length - 1) {
             object['class'] = 'array-item'
           }
+          object.name = name
           this.items.push(object)
         }
       }
@@ -197,13 +218,18 @@ export default {
       const excludes = (this.excludes || []).concat(defaultExcludes)
       fields = fields.filter((item) => !excludes.includes(item))
       const defaultFormatter = this.defaultFormatter(fields)
+      this.items = []
 
       for (const name of fields) {
         if (typeof name === 'object') {
           this.items.push(name)
           continue
         }
-        const fieldMeta = remoteMeta[name]
+        const path = name.split('.')
+        const fieldMeta = path.reduce(
+          (meta, key, index) => (index === 0 ? meta?.[key] : meta?.children?.[key]),
+          remoteMeta
+        )
         if (!fieldMeta) {
           continue
         }
@@ -211,12 +237,13 @@ export default {
           continue
         }
 
-        let value = this.iObject[name]
+        let value = path.reduce((object, key) => object?.[key], this.iObject)
         const label = fieldMeta.label
 
         const component = this.getComponentByName(name)
         if (component) {
           this.items.push({
+            name,
             key: label,
             value: value,
             component: markRaw(component)
@@ -227,6 +254,7 @@ export default {
         const formatter = this.formatters[name]
         if (formatter) {
           this.items.push({
+            name,
             key: label,
             value: value,
             formatter: typeof formatter === 'object' ? markRaw(formatter) : formatter
@@ -235,7 +263,7 @@ export default {
         }
 
         if (Array.isArray(value)) {
-          this.parseArrayValue(value, excludes, label)
+          this.parseArrayValue(value, excludes, label, name)
           continue
         }
         value = this.parseValue(value, fieldMeta.type)
@@ -249,6 +277,7 @@ export default {
         }
 
         const item = {
+          name,
           key: label,
           value: value,
           formatter: defaultFormatter[name]
