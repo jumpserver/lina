@@ -1,6 +1,11 @@
 <template>
   <IBox :fa="fa" :title="title">
-    <el-form :label-width="labelWidth" class="content detail-card" label-position="left">
+    <el-form
+      :label-width="labelWidth"
+      class="content detail-card"
+      label-position="left"
+      @submit.prevent
+    >
       <template v-for="item in items">
         <div
           v-if="item.has !== false"
@@ -11,8 +16,13 @@
         >
           <span class="el-form-item__label"> {{ formateLabel(item.key) }}</span>
           <div class="item-value el-form-item__content">
-            <component v-bind="{ ...item }" :is="item.component" v-if="item.component" />
-            <ItemValue v-bind="item" v-else :value="item.value" />
+            <component
+              v-bind="{ ...item }"
+              :is="item.component"
+              v-if="item.component"
+              :item="item"
+            />
+            <ItemValue v-bind="item" v-else :item="item" :value="item.value" />
             <div v-if="item.children?.length" class="detail-children">
               <div
                 v-for="child in item.children"
@@ -21,8 +31,13 @@
               >
                 <span class="detail-child-label">{{ formateLabel(child.key) }}</span>
                 <div class="detail-child-value">
-                  <component v-bind="child" :is="child.component" v-if="child.component" />
-                  <ItemValue v-bind="child" v-else :value="child.value" />
+                  <component
+                    v-bind="child"
+                    :is="child.component"
+                    v-if="child.component"
+                    :item="child"
+                  />
+                  <ItemValue v-bind="child" v-else :item="child" :value="child.value" />
                 </div>
               </div>
             </div>
