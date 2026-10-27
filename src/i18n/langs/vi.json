@@ -2542,5 +2542,19 @@
   "AuditReportSourceUnavailable": "Lỗi đọc dữ liệu",
   "AuditReportNeedDataChapter": "Chọn ít nhất một chương chứa dữ liệu, chẳng hạn như tổng quan hoặc phân tích hoạt động.",
   "AuditReportExportStep": "Xuất báo cáo",
-  "AuditReportUnsupportedCharacter": "Báo cáo chứa ký tự mà phông chữ không hỗ trợ ({character}). Kiểm tra nội dung rồi thử lại."
+  "AuditReportUnsupportedCharacter": "Báo cáo chứa ký tự mà phông chữ không hỗ trợ ({character}). Kiểm tra nội dung rồi thử lại.",
+  "AclBeforeConnection": "Trước khi kết nối",
+  "AclDuringSession": "Trong khi kết nối",
+  "AclAfterSession": "Sau khi kết nối",
+  "AclMatchConditions": "Điều kiện khớp",
+  "AclExecutionAction": "Hành động thực thi",
+  "AclOtherSettings": "Cài đặt khác",
+  "SelectRecipients": "Chọn người nhận",
+  "SelectApprovers": "Chọn người phê duyệt",
+  "ConnectionDetails": "Chi tiết kết nối",
+  "ConnectionReason": "Lý do kết nối",
+  "ExpandReason": "Mở rộng",
+  "CollapseReason": "Thu gọn",
+  "ReviewExemptionDurationHours": "{hours} giờ",
+  "ReviewExemptionDurationInvalid": "Nhập số giờ nguyên từ 0 đến 2147483647."
 }

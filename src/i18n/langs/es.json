@@ -2542,5 +2542,19 @@
   "AuditReportSourceUnavailable": "Error de lectura",
   "AuditReportNeedDataChapter": "Seleccione al menos un capítulo que contiene datos, como la revisión o el análisis de operaciones.",
   "AuditReportExportStep": "Exportar informe",
-  "AuditReportUnsupportedCharacter": "El informe contiene un carácter no compatible con sus fuentes ({character}). Revise el texto e inténtelo de nuevo."
+  "AuditReportUnsupportedCharacter": "El informe contiene un carácter no compatible con sus fuentes ({character}). Revise el texto e inténtelo de nuevo.",
+  "AclBeforeConnection": "Antes de la conexión",
+  "AclDuringSession": "Durante la conexión",
+  "AclAfterSession": "Después de la conexión",
+  "AclMatchConditions": "Condiciones de coincidencia",
+  "AclExecutionAction": "Acción de ejecución",
+  "AclOtherSettings": "Otros ajustes",
+  "SelectRecipients": "Seleccionar destinatarios",
+  "SelectApprovers": "Seleccionar aprobadores",
+  "ConnectionDetails": "Detalles de la conexión",
+  "ConnectionReason": "Motivo de la conexión",
+  "ExpandReason": "Expandir",
+  "CollapseReason": "Contraer",
+  "ReviewExemptionDurationHours": "{hours} h",
+  "ReviewExemptionDurationInvalid": "Introduzca un número entero de horas entre 0 y 2147483647."
 }

@@ -2542,5 +2542,19 @@
   "AuditReportSourceUnavailable": "읽기 실패",
   "AuditReportNeedDataChapter": "주요 개요 또는 운영 활동 분석처럼 데이터가 포함된 장을 하나 이상 선택하세요.",
   "AuditReportExportStep": "보고서 내보내기",
-  "AuditReportUnsupportedCharacter": "보고서에 글꼴이 지원하지 않는 문자({character})가 포함되어 있습니다. 내용을 확인하고 다시 시도하세요."
+  "AuditReportUnsupportedCharacter": "보고서에 글꼴이 지원하지 않는 문자({character})가 포함되어 있습니다. 내용을 확인하고 다시 시도하세요.",
+  "AclBeforeConnection": "연결 전",
+  "AclDuringSession": "연결 중",
+  "AclAfterSession": "연결 후",
+  "AclMatchConditions": "일치 조건",
+  "AclExecutionAction": "실행 동작",
+  "AclOtherSettings": "기타 설정",
+  "SelectRecipients": "수신자 선택",
+  "SelectApprovers": "승인자 선택",
+  "ConnectionDetails": "연결 세부 정보",
+  "ConnectionReason": "연결 사유",
+  "ExpandReason": "펼치기",
+  "CollapseReason": "접기",
+  "ReviewExemptionDurationHours": "{hours}시간",
+  "ReviewExemptionDurationInvalid": "0에서 2147483647 사이의 정수로 시간을 입력하세요."
 }

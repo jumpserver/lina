@@ -2713,5 +2713,19 @@
   "AuditReportSourceUnavailable": "Échec de lecture",
   "AuditReportNeedDataChapter": "Sélectionnez au moins un chapitre contenant des données, telles que l'analyse de l'ensemble ou des opérations.",
   "AuditReportExportStep": "Exporter le rapport",
-  "AuditReportUnsupportedCharacter": "Le rapport contient un caractère non pris en charge par ses polices ({character}). Vérifiez le texte et réessayez."
+  "AuditReportUnsupportedCharacter": "Le rapport contient un caractère non pris en charge par ses polices ({character}). Vérifiez le texte et réessayez.",
+  "AclBeforeConnection": "Avant la connexion",
+  "AclDuringSession": "Pendant la connexion",
+  "AclAfterSession": "Après la connexion",
+  "AclMatchConditions": "Conditions de correspondance",
+  "AclExecutionAction": "Action à exécuter",
+  "AclOtherSettings": "Autres paramètres",
+  "SelectRecipients": "Sélectionner les destinataires",
+  "SelectApprovers": "Sélectionner les approbateurs",
+  "ConnectionDetails": "Détails de la connexion",
+  "ConnectionReason": "Motif de la connexion",
+  "ExpandReason": "Développer",
+  "CollapseReason": "Réduire",
+  "ReviewExemptionDurationHours": "{hours} h",
+  "ReviewExemptionDurationInvalid": "Saisissez un nombre entier d’heures compris entre 0 et 2147483647."
 }

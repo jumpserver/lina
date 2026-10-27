@@ -2722,5 +2722,19 @@
   "AuditReportSourceUnavailable": "取得失敗",
   "AuditReportNeedDataChapter": "概要や運用活動分析など、データを含む章を少なくとも 1 つ選択してください。",
   "AuditReportExportStep": "レポートをエクスポート",
-  "AuditReportUnsupportedCharacter": "レポートにフォントが対応していない文字（{character}）が含まれています。内容を確認して再試行してください。"
+  "AuditReportUnsupportedCharacter": "レポートにフォントが対応していない文字（{character}）が含まれています。内容を確認して再試行してください。",
+  "AclBeforeConnection": "接続前",
+  "AclDuringSession": "接続中",
+  "AclAfterSession": "接続後",
+  "AclMatchConditions": "一致条件",
+  "AclExecutionAction": "実行アクション",
+  "AclOtherSettings": "その他の設定",
+  "SelectRecipients": "通知先を選択",
+  "SelectApprovers": "承認者を選択",
+  "ConnectionDetails": "接続の詳細",
+  "ConnectionReason": "接続理由",
+  "ExpandReason": "展開",
+  "CollapseReason": "折りたたむ",
+  "ReviewExemptionDurationHours": "{hours} 時間",
+  "ReviewExemptionDurationInvalid": "0 から 2147483647 までの整数で時間を入力してください。"
 }

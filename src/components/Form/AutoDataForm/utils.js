@@ -171,7 +171,7 @@ export class FormFieldGenerator {
 
   setHelpText(field, remoteFieldMeta) {
     const remoteHelpText = remoteFieldMeta['help_text']
-    let helpText = typeof remoteHelpText === 'string' ? toSentenceCase(remoteHelpText) : ''
+    let helpText = typeof remoteHelpText === 'string' ? remoteHelpText : ''
 
     if (!helpText) {
       return field
@@ -278,11 +278,15 @@ export class FormFieldGenerator {
   }
 
   generateFieldGroup(field, fieldsMeta, remoteFieldsMeta) {
-    const [groupTitle, fields] = field
+    // 第三项可指定 subgroup，统一使用字段区域内的二级标题；sectionTitle 为其主分组标题。
+    const [groupTitle, fields, groupOptions = {}] = field
     const _fields = this.generateFields(fields, fieldsMeta, remoteFieldsMeta)
+    if (_fields.length) _fields[0].groupStart = true
     const group = {
       id: groupTitle,
       title: groupTitle,
+      sectionTitle: groupOptions.sectionTitle,
+      subgroup: groupOptions.subgroup,
       fields: _fields,
       name: _fields[0]?.id
     }

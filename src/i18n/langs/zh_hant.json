@@ -2737,5 +2737,19 @@
   "AuditReportSourceUnavailable": "讀取失敗",
   "AuditReportNeedDataChapter": "請至少選擇一個包含統計數據的章節，例如“關鍵概況”或“運維活動分析”。",
   "AuditReportExportStep": "匯出報告",
-  "AuditReportUnsupportedCharacter": "報告包含字型暫不支援的字元（{character}），請核對報告文字後重試。"
+  "AuditReportUnsupportedCharacter": "報告包含字型暫不支援的字元（{character}），請核對報告文字後重試。",
+  "AclBeforeConnection": "連線前",
+  "AclDuringSession": "連線中",
+  "AclAfterSession": "連線後",
+  "AclMatchConditions": "符合條件",
+  "AclExecutionAction": "執行動作",
+  "AclOtherSettings": "其他設定",
+  "SelectRecipients": "選擇接收人",
+  "SelectApprovers": "選擇審批人",
+  "ConnectionDetails": "連線明細",
+  "ConnectionReason": "連線原因",
+  "ExpandReason": "展開",
+  "CollapseReason": "收合",
+  "ReviewExemptionDurationHours": "{hours} 小時",
+  "ReviewExemptionDurationInvalid": "請輸入 0 到 2147483647 之間的整數小時數。"
 }
