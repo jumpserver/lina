@@ -274,6 +274,7 @@ import WorkflowMemberSelect from './WorkflowMemberSelect'
 import CcUsers from './CcUsers'
 import TicketValueList from './TicketValueList'
 import { useDateTime } from '@/composables/useDateTime'
+import { eventBus } from '@/utils/vue/eventbus'
 import { stateLabels, nodeLabels } from '../Workflow/graph'
 export default {
   components: {
@@ -484,6 +485,7 @@ export default {
           requestConfig
         )
         if (workflowKey !== this.workflowKey || this.disposed) return
+        eventBus.emit('drawer-resource-change', { path: this.$route.path })
         this.reassignVisible = false
         this.comment = ''
         this.reassignComment = ''

@@ -3,7 +3,17 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { parse } from '@vue/compiler-sfc'
 
+const commonSource = await readFile(
+  new URL('../src/utils/common/index.js', import.meta.url),
+  'utf8'
+)
+const formatSource = commonSource.match(/export function formatFileSize\(bytes\) \{[\s\S]*?\n\}/)[0]
+const formatFileSize = new Function(
+  formatSource.replace('export ', '') + '\nreturn formatFileSize'
+)()
+
 async function load(name, bindings = {}) {
+  bindings = { formatFileSize, ...bindings }
   const source = await readFile(
     new URL(`../src/views/tickets/components/${name}.vue`, import.meta.url),
     'utf8'
@@ -75,7 +85,10 @@ test('downloads and review links require the corresponding server-approved file 
 })
 test('an upload response from the previous organization cannot attach files to the new request', async () => {
   const uploader = await load('TicketTransferFiles')
-  assert.ok(uploader.emits.includes('change'), 'native file changes must not fall through to DataForm')
+  assert.ok(
+    uploader.emits.includes('change'),
+    'native file changes must not fall through to DataForm'
+  )
   let resolve
   const emitted = []
   const vm = {
@@ -102,4 +115,23 @@ test('an upload response from the previous organization cannot attach files to t
     emitted.some(([event, value]) => event === 'update:modelValue' && value.includes('old-file')),
     false
   )
+})
+
+test('upload selection and transfer results automatically format byte sizes', async () => {
+  const uploader = await load('TicketTransferFiles')
+  const sizes = [
+    [0, '0 Bytes'],
+    [512, '512 Bytes'],
+    [1024, '1 KB'],
+    [1536, '1.5 KB'],
+    [1024 ** 2, '1 MB'],
+    [1.25 * 1024 ** 2, '1.25 MB'],
+    [1024 ** 3, '1 GB'],
+    [1.5 * 1024 ** 3, '1.5 GB']
+  ]
+  for (const view of [uploader, component]) {
+    for (const [bytes, expected] of sizes) {
+      assert.equal(view.methods.formatFileSize(bytes), expected)
+    }
+  }
 })

@@ -8,7 +8,7 @@
     <ul v-if="files.length" class="ticket-upload-list">
       <li v-for="file in files" :key="file.id">
         <span
-          >{{ file.name }} <small>{{ formatSize(file.size) }}</small></span
+          >{{ file.name }} <small>{{ formatFileSize(file.size) }}</small></span
         >
         <el-button link type="danger" :disabled="busy" @click="remove(file.id)">{{
           $t('Remove')
@@ -18,6 +18,8 @@
   </div>
 </template>
 <script>
+import { formatFileSize } from '@/utils/common'
+
 export default {
   props: {
     modelValue: { type: Array, default: () => [] },
@@ -39,9 +41,7 @@ export default {
     this.reset()
   },
   methods: {
-    formatSize(size) {
-      return `${(size / 1024).toFixed(1)} KB`
-    },
+    formatFileSize,
     emitFiles() {
       const ids = this.files.map((file) => file.id)
       this.$emit('update:modelValue', ids)

@@ -28,9 +28,9 @@
       <el-table-column :label="$t('TicketTransferFileName')" min-width="180">
         <template #default="{ row }">
           <span>{{ row.name }}</span>
-          <small v-if="row.size !== undefined" class="file-size"
-            >{{ (row.size / 1024).toFixed(1) }} KB</small
-          >
+          <small v-if="row.size !== undefined" class="file-size">{{
+            formatFileSize(row.size)
+          }}</small>
         </template>
       </el-table-column>
       <el-table-column prop="path" :label="$t('TicketTransferFilePath')" min-width="220" />
@@ -70,6 +70,7 @@
 import Details from './Details'
 import TicketFileTransferAccess from './TicketFileTransferAccess.vue'
 import { useDateTime } from '@/composables/useDateTime'
+import { formatFileSize } from '@/utils/common'
 export default {
   components: { Details, TicketFileTransferAccess },
   props: {
@@ -113,6 +114,7 @@ export default {
     clearTimeout(this.timer)
   },
   methods: {
+    formatFileSize,
     scheduleExpiry() {
       clearTimeout(this.timer)
       this.now = Date.now()

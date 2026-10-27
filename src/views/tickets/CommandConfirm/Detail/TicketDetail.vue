@@ -52,6 +52,7 @@ export default {
         ...(item.name === 'apply_from_session'
           ? {
               formatter: (_item, value) => {
+                if (!value) return '-'
                 if (!this.$hasPerm('terminal.view_session')) {
                   return <span>{this.$t('Session')}</span>
                 }

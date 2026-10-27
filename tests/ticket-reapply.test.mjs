@@ -169,7 +169,6 @@ const listScript = parse(listSource)
   .descriptor.script.content.replace(/^import[\s\S]*?from ['"][^'"]+['"]\n/gm, '')
   .replace('export default', 'return')
 const listDependencies = {
-  ActionsFormatter: {},
   GenericListPage: {},
   DetailFormatter: {},
   TagChoicesFormatter: {},
@@ -185,38 +184,17 @@ const listComponent = new Function(...Object.keys(listDependencies), listScript)
   ...Object.values(listDependencies)
 )
 
-test('row icon remains visible, uses server eligibility, and navigates with the source organization', () => {
-  const routes = []
-  const vm = {
-    $t: (key) => key,
-    $route: { name: 'MyTicketList' },
-    $hasPerm: () => true,
-    $router: { push: (route) => routes.push(route) }
+test('ticket lists omit the actions column on every entry point', () => {
+  for (const name of ['MyTicketList', 'AssignedTicketList', 'AuditTicketList']) {
+    const config = listComponent.data.call({
+      $t: (key) => key,
+      $route: { name },
+      $hasPerm: () => true
+    }).ticketTableConfig
+    assert.equal(config.columnsMeta.actions.has, false)
+    assert.equal(config.columnsShow.min.includes('actions'), false)
+    assert.equal(config.columnsShow.default.includes('actions'), false)
   }
-  const config = listComponent.data.call(vm).ticketTableConfig
-  assert.ok(config.columnsShow.default.includes('actions'))
-  assert.equal(config.columnsMeta.actions.formatter, listDependencies.ActionsFormatter)
-  const action = config.columnsMeta.actions.formatterArgs.extraActions[0]
-  for (const [kind, label] of [
-    ['reapply', 'TicketReapply'],
-    ['renew', 'TicketApplyRenewal']
-  ]) {
-    const context = { row: { id: 'source', org_id: 'source-org', reapply_action: kind } }
-    assert.equal(action.has, true)
-    assert.equal(action.can(context), true)
-    assert.equal(action.icon, 'fa-solid fa-rotate')
-    assert.equal(action.title(context), label)
-    action.callback(context)
-    assert.deepEqual(routes.at(-1), {
-      name: 'RequestAssetPermTicketCreateUpdate',
-      query: { source_ticket: 'source', oid: 'source-org' }
-    })
-  }
-  assert.equal(action.has, true)
-  assert.equal(action.can({ row: { reapply_action: null } }), false)
-  assert.equal(action.can({ row: { reapply_action: 'unknown' } }), false)
-  vm.$route.name = 'AuditTicketList'
-  assert.equal(listComponent.data.call(vm).ticketTableConfig.columnsMeta.actions.has, false)
 })
 
 test('a single standard action stays inline and disabled actions cannot invoke their callback', async () => {

@@ -53,6 +53,7 @@ import TicketValueList from './components/TicketValueList'
 import BaseTicketList from './BaseTicketList'
 import LoginAssetConnections from './components/LoginAssetConnections.vue'
 import { getTicketTypeLabel } from './const'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 
 export default {
   name: 'AssignedTicketList',
@@ -141,7 +142,10 @@ export default {
           )
           .map((field) => ({
             key: field.label,
-            value: field.value ?? '-',
+            value:
+              field.name === 'apply_login_datetime'
+                ? toSafeLocalDateStr(field.value)
+                : (field.value ?? '-'),
             formatter: Array.isArray(field.value)
               ? (_item, value) => h(TicketValueList, { items: value, label: field.label })
               : undefined
