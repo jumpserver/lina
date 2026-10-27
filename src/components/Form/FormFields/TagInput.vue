@@ -171,6 +171,7 @@ export default {
 
   .search-input {
     flex: 1;
+    min-width: 150px;
     &>>> .el-input__inner {
       max-width: 100%;
       border: none;
