@@ -89,6 +89,10 @@ export default {
     assignedCardItems: {
       type: Array,
       default: () => []
+    },
+    showComment: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -118,7 +122,7 @@ export default {
         return this.detailCardItems
       }
       const { object } = this
-      return [
+      const items = [
         {
           key: this.$tc('Number'),
           value: object['serial_num']
@@ -159,12 +163,12 @@ export default {
         {
           key: this.$tc('DateCreated'),
           value: object.date_created
-        },
-        {
-          key: this.$tc('Comment'),
-          value: object.comment
         }
       ]
+      if (this.showComment) {
+        items.push({ key: this.$tc('Comment'), value: object.comment })
+      }
+      return items
     }
   },
   watch: {

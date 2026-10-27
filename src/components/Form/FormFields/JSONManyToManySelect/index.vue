@@ -353,7 +353,12 @@ export default {
   width: 100%;
 }
 
-.attr-list {
-  width: 99%;
+.json-m2m-select .attr-list {
+  width: 100%;
+
+  :deep(.el-table__inner-wrapper::before),
+  :deep(.el-table__inner-wrapper::after) {
+    display: block;
+  }
 }
 </style>

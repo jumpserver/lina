@@ -28,12 +28,16 @@
       @cancel="onCancel"
       @confirm="onConfirm"
     >
-      <div v-for="d in ticketData" :key="d.id">
+      <div v-for="d in ticketData" :key="d.id" class="approval-ticket">
         <AutoDetailCard
           :fields="getDetailFields(d)"
           :object="d"
           :title="`${d.title}(${ticketTypeLabel(d.type)})`"
           :url="detailUrl"
+        />
+        <LoginAssetConnections
+          v-if="d.login_asset_connections?.length"
+          :connections="d.login_asset_connections"
         />
       </div>
     </Dialog>
@@ -47,6 +51,7 @@ import { mapGetters } from 'vuex'
 import { h } from 'vue'
 import TicketValueList from './components/TicketValueList'
 import BaseTicketList from './BaseTicketList'
+import LoginAssetConnections from './components/LoginAssetConnections.vue'
 import { getTicketTypeLabel } from './const'
 
 export default {
@@ -54,7 +59,8 @@ export default {
   components: {
     Dialog,
     AutoDetailCard,
-    BaseTicketList
+    BaseTicketList,
+    LoginAssetConnections
   },
   data() {
     return {
@@ -127,13 +133,19 @@ export default {
           key: this.$t('Applicant'),
           value: item?.applicant?.name
         },
-        ...(item.request_items || []).map((field) => ({
-          key: field.label,
-          value: field.value ?? '-',
-          formatter: Array.isArray(field.value)
-            ? (_item, value) => h(TicketValueList, { items: value, label: field.label })
-            : undefined
-        }))
+        ...(item.request_items || [])
+          .filter(
+            (field) =>
+              !item.login_asset_connections?.length ||
+              !['apply_login_asset', 'apply_login_account'].includes(field.name)
+          )
+          .map((field) => ({
+            key: field.label,
+            value: field.value ?? '-',
+            formatter: Array.isArray(field.value)
+              ? (_item, value) => h(TicketValueList, { items: value, label: field.label })
+              : undefined
+          }))
       ]
     }
   }
@@ -141,3 +153,8 @@ export default {
 </script>
 
 <style src="./ticket-list-tabs.css" scoped></style>
+<style scoped>
+.approval-ticket + .approval-ticket {
+  margin-top: 20px;
+}
+</style>

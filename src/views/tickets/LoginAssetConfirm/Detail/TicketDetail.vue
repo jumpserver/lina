@@ -1,16 +1,36 @@
 <template>
-  <GenericTicketDetail :object="object" :special-card-items="specialCardItems" />
+  <GenericTicketDetail
+    :object="object"
+    :special-card-items="specialCardItems"
+    :show-comment="!connections.length"
+  >
+    <IBox v-if="connections.length" title="ApplyInfo" class="connection-info">
+      <p class="connection-user">
+        {{ $t('ApplyLoginUser') }}:
+        {{
+          object.request_items?.find((item) => item.name === 'apply_login_user')?.value ||
+          object.rel_snapshot?.apply_login_user ||
+          '-'
+        }}
+      </p>
+      <LoginAssetConnections :connections="connections" />
+    </IBox>
+  </GenericTicketDetail>
 </template>
 
 <script>
 import { STATUS_MAP } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
+import LoginAssetConnections from '@/views/tickets/components/LoginAssetConnections.vue'
+import IBox from '@/components/Common/IBox'
 import { getAssetUrl } from '@/utils/assets'
 
 export default {
   name: 'AssetTicketDetail',
   components: {
-    GenericTicketDetail
+    GenericTicketDetail,
+    LoginAssetConnections,
+    IBox
   },
   props: {
     object: {
@@ -32,7 +52,11 @@ export default {
     }
   },
   computed: {
+    connections() {
+      return this.object.login_asset_connections || []
+    },
     specialCardItems() {
+      if (this.connections.length) return []
       return (this.object.request_items || []).map((item) => ({
         key: item.label,
         value: item.value
@@ -43,4 +67,13 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.connection-info {
+  margin-bottom: 15px;
+}
+
+.connection-user {
+  margin: 0 0 12px;
+  font-size: 13px;
+}
+</style>

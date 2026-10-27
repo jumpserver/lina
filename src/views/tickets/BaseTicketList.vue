@@ -70,6 +70,7 @@ export default {
         columnsExclude: [
           'process_map',
           'rel_snapshot',
+          'login_asset_connections',
           'cc_users',
           'my_tasks',
           'workflow_instance',
