@@ -1,5 +1,5 @@
 <template>
-  <div class="application-connections" :class="{ 'is-embedded': embedded }">
+  <div class="application-connections">
     <el-alert
       v-if="!embedded"
       :title="$t(showWizard ? 'ApplicationAccessHelp' : 'ApplicationConnectionsHelp')"
@@ -7,24 +7,21 @@
       :closable="false"
       show-icon
     />
-    <div v-if="!embedded && summary" class="access-summary">
-      <strong>{{ object.name }}</strong>
-      <span>{{
-        $t('ConnectedInstancesSummary', {
-          online: summary.online_instances_amount,
-          total: summary.instances_amount
-        })
-      }}</span>
-    </div>
-    <div v-if="embedded" class="instances-header">
-      {{ $t('AccessAndConnections') }}
-    </div>
     <ListTable
       ref="table"
       :header-actions="headerActions"
       :table-config="tableConfig"
       @loaded="!embedded && loadSummary()"
-    />
+    >
+      <template v-if="!embedded && summary" #search-before>
+        <span class="access-summary">{{
+          $t('ConnectedInstancesSummary', {
+            online: summary.online_instances_amount,
+            total: summary.instances_amount
+          })
+        }}</span>
+      </template>
+    </ListTable>
     <Drawer
       v-model:visible="wizardVisible"
       :title="$t('AccessWizard')"
@@ -314,19 +311,15 @@ export default {
   gap: 12px;
   min-width: 0;
 }
-.application-connections.is-embedded {
-  gap: 8px;
-}
-.instances-header {
+.access-summary {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-height: 30px;
+  margin-right: 12px;
   color: var(--el-text-color-secondary);
   font-size: 12px;
-  line-height: 20px;
-}
-.access-summary {
-  display: flex;
-  align-items: center;
-  gap: 8px 20px;
-  flex-wrap: wrap;
+  white-space: nowrap;
 }
 .application-connections :deep(.account-usage-cell) {
   min-width: 0;

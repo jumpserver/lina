@@ -56,9 +56,12 @@ export default {
             prop: 'asset',
             label: this.$t('Actions'),
             align: 'center',
-            width: 150,
+            width: 100,
             objects: assets,
             formatter: DeleteActionFormatter,
+            formatterArgs: {
+              compact: true
+            },
             onDelete: function (col, row, cellValue, reload) {
               const url = `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.object.id}&asset=${cellValue}`
               this.$axios

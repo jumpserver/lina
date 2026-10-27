@@ -14,10 +14,11 @@
         </span>
       </slot>
     </template>
-    <div v-if="!loading">
+    <!-- Keep slot roots directly under TabPage so its section spacing reaches tab content. -->
+    <template v-if="!loading">
       <el-result v-if="loadError" icon="warning" :title="loadError" />
       <slot v-else />
-    </div>
+    </template>
   </TabPage>
 </template>
 

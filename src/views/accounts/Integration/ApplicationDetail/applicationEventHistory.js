@@ -45,9 +45,9 @@ export function createApplicationEventHistory(request, pageSize = 30) {
     exhausted: false
   }))
 
-  async function fill(source, rowCount) {
+  async function fill(source, rowCount, options) {
     while (source.rows.length < rowCount && !source.exhausted) {
-      const data = await request(source.source, { limit: pageSize, offset: source.offset })
+      const data = await request(source.source, { limit: pageSize, offset: source.offset }, options)
       if (!data.results.length && source.offset < data.count) {
         throw new Error('Event history returned an incomplete page')
       }
@@ -58,17 +58,18 @@ export function createApplicationEventHistory(request, pageSize = 30) {
   }
 
   return {
-    async getPage(page) {
-      const end = page * pageSize
+    async getPage(page, size = pageSize, options = {}) {
+      const end = page * size
       // Each source must provide its first end + 1 instance rows, or be exhausted,
       // before the merged page and the presence of a next page can be determined.
       const nextSources = sources.map((source) => ({ ...source }))
-      await Promise.all(nextSources.map((source) => fill(source, end + 1)))
+      await Promise.all(nextSources.map((source) => fill(source, end + 1, options)))
       const rows = nextSources
         .flatMap((source) => source.rows)
         .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
+      options.signal?.throwIfAborted()
       sources = nextSources
-      return { rows: rows.slice(end - pageSize, end), hasNext: rows.length > end }
+      return { rows: rows.slice(end - size, end), hasNext: rows.length > end }
     }
   }
 }

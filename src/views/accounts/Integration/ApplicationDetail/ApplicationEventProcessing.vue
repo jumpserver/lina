@@ -8,15 +8,6 @@
         show-icon
       />
     </div>
-    <div class="event-toolbar">
-      <DataActions
-        v-if="$hasPerm('accounts.change_integrationapplication')"
-        :actions="sendActions"
-        size="small"
-        class="header-action"
-      />
-      <el-button :loading="loading" @click="load">{{ $t('Refresh') }}</el-button>
-    </div>
     <ApplicationEventSendDialog v-model:visible="sendVisible" :application="object" @sent="load" />
     <el-alert
       v-if="loadFailed"
@@ -25,26 +16,21 @@
       :closable="false"
       class="load-error"
     />
-    <IBox class="event-table">
-      <DataTable v-loading="loading" :config="tableConfig" />
-      <el-pagination
-        v-if="page > 1 || hasNext"
-        :current-page="page"
-        :page-size="30"
-        :total="page * 30 + (hasNext ? 1 : 0)"
-        :disabled="loading"
-        layout="prev, next"
-        @current-change="loadPage"
-      />
-    </IBox>
+    <ListTable
+      v-if="object.id"
+      ref="eventTable"
+      :key="object.id"
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+      :table-metadata-provider="getEventMetadata"
+      activation-refresh="never"
+    />
   </div>
 </template>
 
 <script lang="jsx">
 import { ElTag } from 'element-plus'
-import IBox from '@/components/Common/IBox'
-import DataActions from '@/components/Common/DataActions'
-import DataTable from '@/components/Table/DataTable'
+import ListTable from '@/components/Table/ListTable'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { eventLabels } from '../AccountRotationDetail/rotationEventTimeline'
 import ApplicationEventSendDialog from '../components/ApplicationEventSendDialog.vue'
@@ -52,20 +38,15 @@ import { createApplicationEventHistory } from './applicationEventHistory'
 
 export default {
   name: 'ApplicationEventProcessing',
-  components: { IBox, DataActions, DataTable, ApplicationEventSendDialog },
+  components: { ListTable, ApplicationEventSendDialog },
   props: {
     object: { type: Object, required: true }
   },
   data() {
     return {
       sendVisible: false,
-      rows: [],
-      loading: false,
       loadFailed: false,
-      page: 1,
-      hasNext: false,
       history: null,
-      requestId: 0,
       columns: [
         {
           prop: 'published_at',
@@ -155,69 +136,90 @@ export default {
   computed: {
     tableConfig() {
       return {
-        totalData: this.rows,
+        name: 'ApplicationEventProcessing',
+        url: `/api/v1/accounts/integration-applications/${this.object.id}/manual-events/`,
+        request: this.requestEvents,
+        permissions: { view: 'accounts.view_integrationapplication' },
         columns: this.columns,
+        columnsMeta: { actions: { has: false } },
         hasSelection: false,
-        hasPagination: false,
+        hasPagination: true,
+        // The APIs count events, while the table shows one row per recipient.
+        // Only the next page is known until both event streams are exhausted.
+        paginationLayout: 'sizes, prev, next',
         hasOperation: false,
         hasEdit: false,
         hasDelete: false,
-        tableAttrs: { border: true, rowKey: 'key' }
+        tableAttrs: { rowKey: 'key' }
       }
     },
-    sendActions() {
-      return [
-        {
-          name: 'sendApplicationEvent',
-          title: this.$t('SendApplicationEvent'),
-          type: 'primary',
-          can: !!this.object.is_active,
-          callback: () => (this.sendVisible = true)
-        }
-      ]
+    headerActions() {
+      return {
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasMoreActions: false,
+        hasImport: false,
+        hasExport: false,
+        hasSearch: false,
+        handleRefreshClick: () => this.load(),
+        extraActions: [
+          {
+            name: 'sendApplicationEvent',
+            title: this.$t('SendApplicationEvent'),
+            type: 'primary',
+            has: this.$hasPerm('accounts.change_integrationapplication'),
+            can: !!this.object.is_active,
+            callback: () => (this.sendVisible = true)
+          }
+        ]
+      }
     }
   },
   watch: {
-    'object.id': { immediate: true, handler: 'load' }
-  },
-  beforeUnmount() {
-    this.requestId++
+    'object.id'() {
+      this.history = null
+      this.loadFailed = false
+    }
   },
   methods: {
     formatDate(value) {
       return value ? toSafeLocalDateStr(value) : '-'
     },
-    load() {
-      const id = this.object.id
-      this.requestId++
-      this.rows = []
-      this.page = 1
-      this.hasNext = false
-      this.loadFailed = false
-      this.loading = false
-      if (!id) return
-      this.history = createApplicationEventHistory((source, params) => {
-        const endpoint = source === 'manual' ? 'manual-events' : 'credential-events'
-        return this.$axios.get(`/api/v1/accounts/integration-applications/${id}/${endpoint}/`, {
-          params
-        })
-      })
-      return this.loadPage(1)
+    getEventMetadata() {
+      return Promise.resolve({ actions: { GET: {} }, filters: {}, ordering: { fields: [] } })
     },
-    async loadPage(page) {
-      const requestId = ++this.requestId
-      this.loading = true
+    load() {
+      this.history = null
       this.loadFailed = false
+      return this.$refs.eventTable?.dataTable?.search({}, true)
+    },
+    async requestEvents(url, config) {
+      const params = new URL(url, window.location.origin).searchParams
+      const size = Number(params.get('limit')) || 15
+      const offset = Number(params.get('offset')) || 0
+      const id = this.object.id
+      const { signal } = config
+      this.loadFailed = false
+      if (!this.history) {
+        this.history = createApplicationEventHistory((source, query, options) => {
+          const endpoint = source === 'manual' ? 'manual-events' : 'credential-events'
+          return this.$axios.get(`/api/v1/accounts/integration-applications/${id}/${endpoint}/`, {
+            ...options,
+            params: query
+          })
+        })
+      }
       try {
-        const data = await this.history.getPage(page)
-        if (requestId !== this.requestId) return
-        this.rows = data.rows
-        this.hasNext = data.hasNext
-        this.page = page
-      } catch (_error) {
-        if (requestId === this.requestId) this.loadFailed = true
-      } finally {
-        if (requestId === this.requestId) this.loading = false
+        const data = await this.history.getPage(offset / size + 1, size, { signal })
+        return {
+          data: {
+            results: data.rows,
+            count: offset + data.rows.length + (data.hasNext ? 1 : 0)
+          }
+        }
+      } catch (error) {
+        if (!signal?.aborted && id === this.object.id) this.loadFailed = true
+        throw error
       }
     }
   }
@@ -229,52 +231,21 @@ export default {
   min-width: 0;
 }
 
-.event-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 10px 4px;
-  margin-bottom: 8px;
-}
-
-.event-toolbar > .el-button {
-  margin-left: auto;
-  min-height: 30px;
-}
-
-.event-toolbar :deep(.el-button:not(.is-circle)) {
-  border-radius: var(--list-corner-radius, 4px);
-}
-
-.event-table {
-  overflow: hidden;
-}
-
-.event-table :deep(.el-card__body) {
-  padding: 0;
-}
-
 .context-help {
   margin: 0 0 12px;
 }
 
-.event-table :deep(.secondary-text) {
+.application-events :deep(.secondary-text) {
   color: var(--el-text-color-secondary);
   font-size: 12px;
   margin-top: 2px;
   overflow-wrap: anywhere;
 }
 
-.event-table :deep(.event-text) {
+.application-events :deep(.event-text) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.application-events :deep(.el-pagination) {
-  padding: 12px;
-  justify-content: flex-end;
 }
 
 .load-error {

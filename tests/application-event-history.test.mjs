@@ -124,3 +124,49 @@ test('an unexpectedly empty API page reports failure instead of silently hiding 
   const pager = createApplicationEventHistory(async () => ({ count: 10, results: [] }))
   await assert.rejects(pager.getPage(1), /incomplete page/)
 })
+
+test('changing the page size preserves the merged order and cached instance rows', async () => {
+  const records = {
+    manual: [event(6, 'manual', 20), event(3, 'manual', 20)],
+    policy: [event(5, 'policy', 20), event(2, 'policy', 20)]
+  }
+  const expected = [
+    ...applicationEventRows(records.manual, 'manual'),
+    ...applicationEventRows(records.policy, 'policy')
+  ].sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
+  const { pager, requests } = history(records)
+  assert.deepEqual((await pager.getPage(2, 15)).rows, expected.slice(15, 30))
+  const requestCount = requests.length
+  assert.deepEqual((await pager.getPage(1, 50)).rows, expected.slice(0, 50))
+  const last = await pager.getPage(2, 50)
+  assert.deepEqual(last.rows, expected.slice(50))
+  assert.equal(last.hasNext, false)
+  assert.equal(requests.length, requestCount)
+})
+
+test('an aborted request cannot overwrite the cache used by a later page request', async () => {
+  const controller = new AbortController()
+  const records = [event(2, 'manual'), event(1, 'manual')]
+  let oldResponse
+  let first = true
+  const pager = createApplicationEventHistory(async (source, params, options) => {
+    if (source === 'policy') return { count: 0, results: [] }
+    if (first) {
+      first = false
+      assert.equal(options.signal, controller.signal)
+      return new Promise((resolve) => {
+        oldResponse = resolve
+      })
+    }
+    return {
+      count: records.length,
+      results: records.slice(params.offset, params.offset + params.limit)
+    }
+  })
+  const obsolete = pager.getPage(1, 15, { signal: controller.signal })
+  controller.abort()
+  const current = await pager.getPage(1, 15)
+  oldResponse({ count: 0, results: [] })
+  await assert.rejects(obsolete, { name: 'AbortError' })
+  assert.deepEqual((await pager.getPage(1, 15)).rows, current.rows)
+})

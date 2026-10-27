@@ -541,7 +541,9 @@ export default {
 
     &.has-tab-navigation > .tab-page-submenu {
       position: relative;
+      z-index: 1;
       border-bottom: 0;
+      box-shadow: 0 2px 3px -2px rgb(0 0 0 / 8%);
     }
   }
 

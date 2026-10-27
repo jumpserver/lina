@@ -14,7 +14,13 @@
           total: summary.instances_amount
         })
       }}</span>
-      <el-button @click="loadApplications">{{ $t('Refresh') }}</el-button>
+      <TableRightSide
+        class="refresh-applications"
+        :has-column-setting="false"
+        :has-import="false"
+        :has-export="false"
+        :reload-table="loadApplications"
+      />
     </div>
     <el-alert v-if="failed" :title="$t('SelectLoadFailed')" type="error" :closable="false" />
     <DataTable :config="tableConfig" />
@@ -25,13 +31,14 @@
 import { ElButton, ElLink } from 'element-plus'
 import { markRaw } from 'vue'
 import DataTable from '@/components/Table/DataTable'
+import TableRightSide from '@/components/Table/ListTable/TableAction/RightSide.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { getCredentialAccessApplications } from '@/api/applicationCredential'
 import ApplicationInstancesExpand from './ApplicationInstancesExpand.vue'
 
 export default {
   name: 'CredentialAccessApplications',
-  components: { DataTable },
+  components: { DataTable, TableRightSide },
   props: { object: { type: Object, required: true } },
   data() {
     return {
@@ -196,7 +203,7 @@ export default {
   gap: 8px 20px;
   flex-wrap: wrap;
 }
-.access-summary .el-button {
+.refresh-applications {
   margin-left: auto;
 }
 .credential-applications :deep(.el-table__expanded-cell) {
