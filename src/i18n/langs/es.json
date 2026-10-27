@@ -2414,7 +2414,7 @@
   "ConnectedInstancesSummary": "{online} online / {total} instances",
   "CredentialApplicationsAccessHelp": "Set up access in the application. This list counts instances subscribed to the current policy; click the count to see them.",
   "ApplicationAccessHelp": "Applications authenticate to the API and WebSocket with their own AK/SK. Use the wizard to get SDK examples or Agent installation materials. Connected instances appear below automatically.",
-  "ApplicationAccessWizardHelp": "Use this application’s AK/SK to receive all active policies bound to the application. Instances are registered automatically when they connect.",
+  "ApplicationAccessWizardHelp": "Use AK/SK de la aplicación. La autorización define el acceso y las políticas aportan notificaciones. Las instancias se registran al conectar.",
   "AccessChooseMethod": "Choose access method",
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
@@ -2673,5 +2673,18 @@
   "AgentApplicationCheckHelp": "Verifica que la aplicación use la nueva conexión de base de datos. Obligatorio para rotación A/B; el éxito confirma el evento. Los scripts deben existir en el host.",
   "AutoDetect": "Automático",
   "AgentRulesLinuxHelp": "Esta configuración es para servicios Linux. Instala los scripts en el host y ejecuta check-config antes de iniciar el Agent.",
-  "AgentConfigFormat": "Formato de configuración"
+  "AgentConfigFormat": "Formato de configuración",
+  "AgentStoreScope": "Ámbito de almacenamiento de credenciales",
+  "AgentStoreNone": "No crear archivos estándar",
+  "AgentStoreAll": "Todas las cuentas autorizadas de la aplicación",
+  "AgentStoreSelected": "Cuentas autorizadas seleccionadas",
+  "AgentStoreScopeHelp": "El almacenamiento y el uso de negocio son independientes. Las suscripciones aportan notificaciones.",
+  "AgentStoreFormat": "Formato del archivo de credenciales",
+  "AgentServiceName": "Nombre del servicio de negocio",
+  "AgentFollowAccountSwitch": "Seguir las cuentas activas A/B",
+  "AgentUpdateOnNotification": "Actualizar al recibir una notificación",
+  "AgentUpdateOnNotificationHelp": "Si se desactiva, actualizar en la próxima sincronización (300 segundos por defecto). Las revocaciones siguen activas.",
+  "AgentAccountAlias": "Alias de cuenta",
+  "AgentAccountAliasHelp": "Use un nombre estable como database o cache. Varias cuentas necesitan alias únicos.",
+  "AgentAddAccount": "Añadir cuenta de negocio"
 }

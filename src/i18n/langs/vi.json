@@ -2414,7 +2414,7 @@
   "ConnectedInstancesSummary": "{online} online / {total} instances",
   "CredentialApplicationsAccessHelp": "Set up access in the application. This list counts instances subscribed to the current policy; click the count to see them.",
   "ApplicationAccessHelp": "Applications authenticate to the API and WebSocket with their own AK/SK. Use the wizard to get SDK examples or Agent installation materials. Connected instances appear below automatically.",
-  "ApplicationAccessWizardHelp": "Use this application’s AK/SK to receive all active policies bound to the application. Instances are registered automatically when they connect.",
+  "ApplicationAccessWizardHelp": "Dùng AK/SK của ứng dụng. Quyền xác định phạm vi truy cập, chính sách cung cấp thông báo. Phiên bản được đăng ký khi kết nối.",
   "AccessChooseMethod": "Choose access method",
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
@@ -2673,5 +2673,18 @@
   "AgentApplicationCheckHelp": "Kiểm tra ứng dụng đang dùng kết nối cơ sở dữ liệu mới. Bắt buộc khi luân phiên A/B; kiểm tra thành công xác nhận sự kiện. Tập lệnh phải có sẵn trên máy chủ ứng dụng.",
   "AutoDetect": "Tự động",
   "AgentRulesLinuxHelp": "Cấu hình này dành cho dịch vụ Linux. Triển khai tập lệnh trên máy chủ ứng dụng rồi chạy check-config trước khi khởi động Agent.",
-  "AgentConfigFormat": "Định dạng cấu hình"
+  "AgentConfigFormat": "Định dạng cấu hình",
+  "AgentStoreScope": "Phạm vi lưu thông tin xác thực",
+  "AgentStoreNone": "Không tạo tệp xác thực chuẩn",
+  "AgentStoreAll": "Mọi tài khoản ứng dụng được cấp quyền",
+  "AgentStoreSelected": "Các tài khoản được cấp quyền đã chọn",
+  "AgentStoreScopeHelp": "Lưu trữ và sử dụng nghiệp vụ độc lập. Đăng ký cung cấp thông báo thay đổi.",
+  "AgentStoreFormat": "Định dạng tệp xác thực",
+  "AgentServiceName": "Tên dịch vụ nghiệp vụ",
+  "AgentFollowAccountSwitch": "Theo tài khoản A/B hiện hành",
+  "AgentUpdateOnNotification": "Cập nhật ngay khi nhận thông báo",
+  "AgentUpdateOnNotificationHelp": "Nếu tắt, cập nhật ở lần đồng bộ định kỳ tiếp theo (mặc định 300 giây). Thu hồi quyền vẫn có hiệu lực.",
+  "AgentAccountAlias": "Bí danh tài khoản",
+  "AgentAccountAliasHelp": "Dùng tên vai trò ổn định như database hoặc cache. Nhiều tài khoản cần bí danh duy nhất.",
+  "AgentAddAccount": "Thêm tài khoản nghiệp vụ"
 }

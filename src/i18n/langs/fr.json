@@ -2585,7 +2585,7 @@
   "ConnectedInstancesSummary": "{online} online / {total} instances",
   "CredentialApplicationsAccessHelp": "Set up access in the application. This list counts instances subscribed to the current policy; click the count to see them.",
   "ApplicationAccessHelp": "Applications authenticate to the API and WebSocket with their own AK/SK. Use the wizard to get SDK examples or Agent installation materials. Connected instances appear below automatically.",
-  "ApplicationAccessWizardHelp": "Use this application’s AK/SK to receive all active policies bound to the application. Instances are registered automatically when they connect.",
+  "ApplicationAccessWizardHelp": "Utilisez AK/SK de l’application. Les droits définissent l’accès, les politiques les notifications. Les instances s’enregistrent à la connexion.",
   "AccessChooseMethod": "Choose access method",
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
@@ -2844,5 +2844,18 @@
   "AgentApplicationCheckHelp": "Vérifie que l’application utilise la nouvelle connexion à la base. Obligatoire pour la rotation A/B ; la réussite confirme l’événement. Les scripts doivent être présents sur l’hôte.",
   "AutoDetect": "Automatique",
   "AgentRulesLinuxHelp": "Cette configuration cible un service Linux. Installez les scripts sur l’hôte puis lancez check-config avant de démarrer l’Agent.",
-  "AgentConfigFormat": "Format de configuration"
+  "AgentConfigFormat": "Format de configuration",
+  "AgentStoreScope": "Périmètre de stockage des identifiants",
+  "AgentStoreNone": "Ne pas créer de fichiers standard",
+  "AgentStoreAll": "Tous les comptes autorisés pour l’application",
+  "AgentStoreSelected": "Comptes autorisés sélectionnés",
+  "AgentStoreScopeHelp": "Stockage et usage métier sont indépendants. Les abonnements fournissent les notifications.",
+  "AgentStoreFormat": "Format des fichiers d’identifiants",
+  "AgentServiceName": "Nom du service métier",
+  "AgentFollowAccountSwitch": "Suivre les comptes actifs A/B",
+  "AgentUpdateOnNotification": "Mettre à jour dès notification",
+  "AgentUpdateOnNotificationHelp": "Sinon, appliquer à la prochaine synchronisation (300 secondes par défaut). Les révocations restent actives.",
+  "AgentAccountAlias": "Alias du compte",
+  "AgentAccountAliasHelp": "Utilisez un rôle stable, comme database ou cache. Plusieurs comptes exigent des alias uniques.",
+  "AgentAddAccount": "Ajouter un compte métier"
 }

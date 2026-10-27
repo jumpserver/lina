@@ -2510,7 +2510,7 @@
   "ConnectedInstancesSummary": "{online} online / {total} instances",
   "CredentialApplicationsAccessHelp": "Set up access in the application. This list counts instances subscribed to the current policy; click the count to see them.",
   "ApplicationAccessHelp": "Applications authenticate to the API and WebSocket with their own AK/SK. Use the wizard to get SDK examples or Agent installation materials. Connected instances appear below automatically.",
-  "ApplicationAccessWizardHelp": "Use this application’s AK/SK to receive all active policies bound to the application. Instances are registered automatically when they connect.",
+  "ApplicationAccessWizardHelp": "アプリの AK/SK を使用します。権限で取得範囲を決め、ポリシーで通知します。接続時にインスタンスを登録します。",
   "AccessChooseMethod": "Choose access method",
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
@@ -2783,5 +2783,18 @@
   "PolicyCycleLatestStage": "最新の段階",
   "CredentialPolicyLatestRun": "最新の実行",
   "CredentialPolicyRunHistory": "実行履歴",
-  "ClientAccessIP": "接続元 IP"
+  "ClientAccessIP": "接続元 IP",
+  "AgentStoreScope": "認証情報の保存範囲",
+  "AgentStoreNone": "標準認証情報ファイルを作成しない",
+  "AgentStoreAll": "アプリに許可された全アカウント",
+  "AgentStoreSelected": "指定した許可済みアカウント",
+  "AgentStoreScopeHelp": "保存と業務での使用は独立しています。購読は変更通知用です。",
+  "AgentStoreFormat": "認証情報ファイル形式",
+  "AgentServiceName": "業務サービス名",
+  "AgentFollowAccountSwitch": "A/B の現在のアカウントに追従",
+  "AgentUpdateOnNotification": "通知時に業務を直ちに更新",
+  "AgentUpdateOnNotificationHelp": "無効時は次回の定期同期で更新します（既定 300 秒）。権限取消は引き続き適用します。",
+  "AgentAccountAlias": "アカウント別名",
+  "AgentAccountAliasHelp": "database、cache など安定した用途名を指定します。複数アカウントでは別名を一意にしてください。",
+  "AgentAddAccount": "業務アカウントを追加"
 }

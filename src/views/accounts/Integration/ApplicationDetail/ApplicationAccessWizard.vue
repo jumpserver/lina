@@ -63,29 +63,104 @@
               <el-input v-model="form.install_path" maxlength="256" />
             </el-form-item>
             <el-form-item
-              v-if="form.agent_setup === 'delivery'"
-              :label="$t('CredentialDeliveryMode')"
+              :label="$t('AgentStoreScope')"
+              prop="store_scope"
+              :error="errors.store_scope"
             >
-              <el-select v-model="form.delivery_mode">
+              <el-select v-model="form.store_scope">
+                <el-option :label="$t('AgentStoreNone')" value="none" />
+                <el-option :label="$t('AgentStoreAll')" value="all" />
+                <el-option :label="$t('AgentStoreSelected')" value="selected" />
+              </el-select>
+              <p class="field-help">{{ $t('AgentStoreScopeHelp') }}</p>
+            </el-form-item>
+            <el-form-item
+              v-if="form.store_scope === 'selected'"
+              :label="$t('Accounts')"
+              prop="store_accounts"
+              :error="errors.store_accounts"
+            >
+              <Select2
+                v-model="form.store_accounts"
+                :multiple="true"
+                :url="`/api/v1/accounts/accounts/?integrationapplication=${object.id}&fields=id,name,username,asset`"
+                :ajax="{ transformOption: accountOption }"
+              />
+            </el-form-item>
+            <el-form-item v-if="form.store_scope !== 'none'" :label="$t('AgentStoreFormat')">
+              <el-select v-model="form.store_format">
                 <el-option :label="$t('DeliveryJSON')" value="json" />
                 <el-option :label="$t('DeliveryEnvironment')" value="environment" />
-                <el-option :label="$t('DeliverySocket')" value="socket" />
               </el-select>
             </el-form-item>
             <template v-if="form.agent_setup !== 'delivery'">
               <el-form-item
-                :label="$t('Account')"
-                prop="account_id"
-                :error="errors.account_id"
-                :rules="[{ required: true, message: $t('Required'), trigger: 'change' }]"
+                :label="$t('AgentServiceName')"
+                prop="service_name"
+                :error="errors.service_name"
               >
-                <Select2
-                  v-model="form.account_id"
-                  :multiple="false"
-                  :url="`/api/v1/accounts/accounts/?integrationapplication=${object.id}&fields=id,name,username,asset`"
-                  :ajax="{ transformOption: accountOption }"
+                <el-input v-model="form.service_name" placeholder="sample-app" maxlength="128" />
+              </el-form-item>
+              <el-form-item :label="$t('AgentFollowAccountSwitch')">
+                <el-switch
+                  v-model="form.allow_account_switch"
+                  :disabled="form.agent_setup === 'rotation'"
                 />
               </el-form-item>
+              <el-form-item :label="$t('AgentUpdateOnNotification')">
+                <el-switch v-model="form.update_on_notification" />
+                <p class="field-help">{{ $t('AgentUpdateOnNotificationHelp') }}</p>
+              </el-form-item>
+              <p v-if="errors.service_accounts" class="field-help">{{ errors.service_accounts }}</p>
+              <div
+                v-for="(account, index) in form.service_accounts"
+                :key="index"
+                class="service-account"
+              >
+                <el-form-item
+                  :label="$t('Account')"
+                  :prop="`service_accounts.${index}.account_id`"
+                  :rules="[{ required: true, message: $t('Required'), trigger: 'change' }]"
+                >
+                  <Select2
+                    v-model="account.account_id"
+                    :multiple="false"
+                    :url="`/api/v1/accounts/accounts/?integrationapplication=${object.id}&fields=id,name,username,asset`"
+                    :ajax="{ transformOption: accountOption }"
+                  />
+                </el-form-item>
+                <el-form-item
+                  :label="$t('AgentAccountAlias')"
+                  :prop="`service_accounts.${index}.alias`"
+                  :rules="
+                    form.service_accounts.length > 1
+                      ? [{ required: true, message: $t('Required'), trigger: 'blur' }]
+                      : []
+                  "
+                >
+                  <el-input
+                    v-model="account.alias"
+                    :placeholder="index === 0 ? 'database' : 'cache'"
+                  />
+                  <p class="field-help">{{ $t('AgentAccountAliasHelp') }}</p>
+                </el-form-item>
+                <el-form-item :label="$t('AgentUsernameField')">
+                  <el-input v-model="account.username_field" placeholder="DB_USER" />
+                </el-form-item>
+                <el-form-item :label="$t('AgentSecretField')">
+                  <el-input v-model="account.secret_field" placeholder="DB_PASSWORD" />
+                </el-form-item>
+                <el-button
+                  v-if="form.service_accounts.length > 1"
+                  @click="form.service_accounts.splice(index, 1)"
+                  >{{ $t('Remove') }}</el-button
+                >
+              </div>
+              <el-button
+                :disabled="form.service_accounts.length >= 20"
+                @click="addServiceAccount"
+                >{{ $t('AgentAddAccount') }}</el-button
+              >
               <el-form-item
                 :label="$t('AgentBusinessConfigFile')"
                 prop="config_file"
@@ -94,27 +169,12 @@
               >
                 <el-input v-model="form.config_file" placeholder="/etc/app/config.yml" />
               </el-form-item>
-              <el-form-item
-                :label="$t('AgentUsernameField')"
-                prop="username_field"
-                :error="errors.username_field"
-              >
-                <el-input v-model="form.username_field" placeholder="DB_USER" />
-              </el-form-item>
               <el-form-item :label="$t('AgentConfigFormat')">
                 <el-select v-model="form.config_format">
                   <el-option :label="$t('AutoDetect')" value="auto" />
                   <el-option label="KEY=value" value="env" />
                   <el-option label="YAML" value="yaml" />
                 </el-select>
-              </el-form-item>
-              <el-form-item
-                :label="$t('AgentSecretField')"
-                prop="secret_field"
-                :error="errors.secret_field"
-              >
-                <el-input v-model="form.secret_field" placeholder="DB_PASSWORD" />
-                <p class="field-help">{{ $t('AgentConfigFieldsHelp') }}</p>
               </el-form-item>
               <el-form-item :label="$t('Actions')">
                 <el-select v-model="form.service_action_type">
@@ -360,14 +420,24 @@ export default {
         type: 'sdk',
         app_user: '',
         install_path: '/opt/jumpserver-pam',
-        delivery_mode: 'json',
+        store_scope: 'all',
+        store_format: 'json',
+        store_accounts: [],
+        service_name: 'sample-app',
+        allow_account_switch: false,
+        update_on_notification: true,
+        service_accounts: [
+          {
+            account_id: '',
+            alias: 'database',
+            username_field: 'DB_USER',
+            secret_field: 'DB_PASSWORD'
+          }
+        ],
         sdk_language: 'python',
         agent_setup: 'delivery',
-        account_id: '',
         config_file: '',
         config_format: 'auto',
-        username_field: 'DB_USER',
-        secret_field: 'DB_PASSWORD',
         service_action_type: 'systemd',
         service_script: '',
         application_check: '',
@@ -396,9 +466,7 @@ export default {
       }
     },
     needsSystemd() {
-      return this.form.agent_setup === 'delivery'
-        ? this.form.delivery_mode === 'environment'
-        : this.form.service_action_type === 'systemd'
+      return this.form.agent_setup !== 'delivery' && this.form.service_action_type === 'systemd'
     },
     documentationRoute() {
       return {
@@ -410,10 +478,49 @@ export default {
       }
     }
   },
+  watch: {
+    'form.agent_setup'(value) {
+      if (value === 'rotation') this.form.allow_account_switch = true
+    }
+  },
   mounted() {
     this.loadSDKLanguages()
   },
   methods: {
+    formatFieldErrors(value) {
+      if (Array.isArray(value)) {
+        return value
+          .map((item) => this.formatFieldErrors(item))
+          .filter(Boolean)
+          .join(' ')
+      }
+      if (value && typeof value === 'object') {
+        return Object.values(value)
+          .map((item) => this.formatFieldErrors(item))
+          .filter(Boolean)
+          .join(' ')
+      }
+      return value == null ? '' : String(value)
+    },
+    addServiceAccount() {
+      let suffix = this.form.service_accounts.length + 1
+      while (
+        this.form.service_accounts.some(
+          (account) =>
+            account.alias === `account${suffix}` ||
+            account.username_field === `ACCOUNT${suffix}_USER` ||
+            account.secret_field === `ACCOUNT${suffix}_PASSWORD`
+        )
+      ) {
+        suffix += 1
+      }
+      this.form.service_accounts.push({
+        account_id: '',
+        alias: `account${suffix}`,
+        username_field: `ACCOUNT${suffix}_USER`,
+        secret_field: `ACCOUNT${suffix}_PASSWORD`
+      })
+    },
     accountOption(account) {
       return {
         label: `${account.username || account.name} (${account.asset?.name || account.asset?.address || account.id})`,
@@ -460,7 +567,10 @@ export default {
               }
             : {
                 ...this.form,
-                ...(this.form.account_id ? {} : { account_id: undefined }),
+                service_accounts:
+                  this.form.agent_setup === 'delivery' ? undefined : this.form.service_accounts,
+                allow_account_switch:
+                  this.form.agent_setup === 'rotation' || this.form.allow_account_switch,
                 systemd_unit: this.needsSystemd ? this.form.systemd_unit : ''
               }
         this.materials = await generateApplicationAccessMaterials(this.object.id, payload)
@@ -470,7 +580,7 @@ export default {
         if (data && typeof data === 'object') {
           for (const [key, value] of Object.entries(data)) {
             this.errors[key === 'non_field_errors' || key === 'detail' ? 'general' : key] =
-              Array.isArray(value) ? value.join(' ') : String(value)
+              this.formatFieldErrors(value)
           }
         }
       } finally {
@@ -531,6 +641,24 @@ export default {
 }
 .context-help {
   margin: 16px 0;
+}
+.service-account {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+  margin: 12px 0;
+  padding: 16px;
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 4px;
+}
+.service-account > .el-button {
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+@media (max-width: 640px) {
+  .service-account {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 .material-header {
   display: flex;

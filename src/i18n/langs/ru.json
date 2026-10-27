@@ -2414,7 +2414,7 @@
   "ConnectedInstancesSummary": "{online} online / {total} instances",
   "CredentialApplicationsAccessHelp": "Set up access in the application. This list counts instances subscribed to the current policy; click the count to see them.",
   "ApplicationAccessHelp": "Applications authenticate to the API and WebSocket with their own AK/SK. Use the wizard to get SDK examples or Agent installation materials. Connected instances appear below automatically.",
-  "ApplicationAccessWizardHelp": "Use this application’s AK/SK to receive all active policies bound to the application. Instances are registered automatically when they connect.",
+  "ApplicationAccessWizardHelp": "Используйте AK/SK приложения. Права определяют доступ, политики — уведомления. Экземпляры регистрируются при подключении.",
   "AccessChooseMethod": "Choose access method",
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
@@ -2673,5 +2673,18 @@
   "AgentApplicationCheckHelp": "Проверяет, что приложение использует новое подключение к БД. Обязателен для ротации A/B; успешная проверка подтверждает событие. Скрипты должны быть на хосте приложения.",
   "AutoDetect": "Автоопределение",
   "AgentRulesLinuxHelp": "Конфигурация предназначена для службы Linux. Разместите скрипты на хосте приложения и выполните check-config перед запуском Agent.",
-  "AgentConfigFormat": "Формат конфигурации"
+  "AgentConfigFormat": "Формат конфигурации",
+  "AgentStoreScope": "Область хранения учётных данных",
+  "AgentStoreNone": "Не создавать стандартные файлы",
+  "AgentStoreAll": "Все разрешённые приложению записи",
+  "AgentStoreSelected": "Выбранные разрешённые записи",
+  "AgentStoreScopeHelp": "Хранение и использование приложением независимы. Подписки обеспечивают уведомления.",
+  "AgentStoreFormat": "Формат файла учётных данных",
+  "AgentServiceName": "Название сервиса приложения",
+  "AgentFollowAccountSwitch": "Следовать активным записям A/B",
+  "AgentUpdateOnNotification": "Обновлять сразу по уведомлению",
+  "AgentUpdateOnNotificationHelp": "Иначе обновлять при следующей сверке (по умолчанию 300 секунд). Отзыв прав продолжает действовать.",
+  "AgentAccountAlias": "Псевдоним записи",
+  "AgentAccountAliasHelp": "Используйте стабильную роль, например database или cache. Для нескольких записей псевдонимы должны быть уникальны.",
+  "AgentAddAccount": "Добавить учётную запись"
 }

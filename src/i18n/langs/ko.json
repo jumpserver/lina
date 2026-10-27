@@ -2414,7 +2414,7 @@
   "ConnectedInstancesSummary": "{online} online / {total} instances",
   "CredentialApplicationsAccessHelp": "Set up access in the application. This list counts instances subscribed to the current policy; click the count to see them.",
   "ApplicationAccessHelp": "Applications authenticate to the API and WebSocket with their own AK/SK. Use the wizard to get SDK examples or Agent installation materials. Connected instances appear below automatically.",
-  "ApplicationAccessWizardHelp": "Use this application’s AK/SK to receive all active policies bound to the application. Instances are registered automatically when they connect.",
+  "ApplicationAccessWizardHelp": "앱 AK/SK로 접속합니다. 권한이 조회 범위를 정하고 정책이 알림을 제공합니다. 연결 시 인스턴스를 등록합니다.",
   "AccessChooseMethod": "Choose access method",
   "AccessGetMaterials": "Get access materials",
   "AccessVerifyConnection": "Verify connection",
@@ -2673,5 +2673,18 @@
   "AgentApplicationCheckHelp": "실행 중인 애플리케이션이 새 DB 연결을 사용하는지 검증합니다. A/B 순환에 필수이며 성공하면 이벤트를 확인합니다. 스크립트는 애플리케이션 호스트에 미리 배포하세요.",
   "AutoDetect": "자동 감지",
   "AgentRulesLinuxHelp": "이 구성은 Linux 서비스용입니다. 애플리케이션 호스트에 스크립트를 배포한 뒤 시작 전에 check-config를 실행하세요.",
-  "AgentConfigFormat": "설정 형식"
+  "AgentConfigFormat": "설정 형식",
+  "AgentStoreScope": "자격 증명 저장 범위",
+  "AgentStoreNone": "표준 자격 증명 파일 생성 안 함",
+  "AgentStoreAll": "애플리케이션에 허가된 모든 계정",
+  "AgentStoreSelected": "지정한 허가 계정",
+  "AgentStoreScopeHelp": "저장과 업무 사용은 독립적입니다. 구독은 변경 알림만 제공합니다.",
+  "AgentStoreFormat": "자격 증명 파일 형식",
+  "AgentServiceName": "업무 서비스 이름",
+  "AgentFollowAccountSwitch": "A/B 현재 계정 따르기",
+  "AgentUpdateOnNotification": "알림 수신 시 즉시 업무 갱신",
+  "AgentUpdateOnNotificationHelp": "끄면 다음 정기 동기화에 갱신합니다(기본 300초). 권한 취소는 계속 적용됩니다.",
+  "AgentAccountAlias": "계정 별칭",
+  "AgentAccountAliasHelp": "database, cache 같은 안정적인 용도 이름을 사용합니다. 여러 계정의 별칭은 고유해야 합니다.",
+  "AgentAddAccount": "업무 계정 추가"
 }
