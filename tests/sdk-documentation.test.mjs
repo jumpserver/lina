@@ -27,6 +27,7 @@ function documentationView() {
       }
     },
     $refs: {},
+    $nextTick: (callback) => callback(),
     $axios: {
       get(url, options) {
         const pending = Promise.withResolvers()
@@ -102,4 +103,29 @@ test('switching Python tabs reuses the guide and unmount ignores pending results
   requests[1].resolve({ readme: 'stale' })
   await pendingRequest
   assert.equal(view.activeDocument, 'sdk')
+})
+
+test('reactivating a cached document follows the route instead of restoring its previous tab', async () => {
+  const { view, requests } = documentationView()
+  const initialRequest = view.loadDocumentation()
+  requests[0].resolve(document('python'))
+  await initialRequest
+  view.selectDocumentation('sdk')
+  // Returning to the route without sdk_language reuses the cached base page.
+  view.$route.query = {}
+  component.activated.call(view)
+  assert.equal(view.documentationTab, 'agent')
+  assert.equal(view.activeDocument, 'agent')
+  assert.equal(requests.length, 1)
+
+  view.$route.query = { sdk_language: 'java' }
+  component.activated.call(view)
+  assert.equal(view.documentationTab, 'sdk')
+  assert.equal(view.sdkLanguage, 'java')
+  assert.equal(requests[1].language, 'java')
+  requests[1].resolve(document('java'))
+  await setImmediate()
+  assert.equal(view.activeDocument, 'sdk')
+  component.deactivated.call(view)
+  assert.equal(view.headingObserver, null)
 })

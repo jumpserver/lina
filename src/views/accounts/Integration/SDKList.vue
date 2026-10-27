@@ -49,8 +49,8 @@
           <p>{{ $t(documentationDescription) }}</p>
           <div class="documentation-meta">
             <template v-if="documentationTab === 'agent'">
-              <el-tag effect="plain" size="small">Linux</el-tag>
-              <el-tag effect="plain" size="small" type="info">systemd</el-tag>
+              <el-tag effect="plain" size="small">Linux / macOS / Windows</el-tag>
+              <el-tag effect="plain" size="small" type="info">Linux systemd</el-tag>
             </template>
             <template v-else>
               <el-tag effect="plain" size="small">{{ sdkRuntime }}</el-tag>
@@ -178,11 +178,33 @@ export default {
   mounted() {
     this.loadDocumentation()
   },
+  activated() {
+    this.syncDocumentationFromRoute()
+    this.$nextTick(this.observeHeadings)
+  },
+  deactivated() {
+    this.disconnectHeadingObserver()
+  },
   beforeUnmount() {
     this.documentationRequestId += 1
     this.disconnectHeadingObserver()
   },
   methods: {
+    syncDocumentationFromRoute() {
+      const language = this.$route.query.sdk_language
+      const tab = sdkLanguageValues.includes(language) ? 'sdk' : 'agent'
+      if (this.documentationTab === tab && (tab === 'agent' || this.sdkLanguage === language)) {
+        return
+      }
+      const previousLanguage = this.activeLanguage
+      this.disconnectHeadingObserver()
+      this.documentationTab = tab
+      if (tab === 'sdk') this.sdkLanguage = language
+      this.headings = []
+      this.activeHeading = ''
+      this.$refs.docsMain?.scrollTo({ top: 0 })
+      if (previousLanguage !== this.activeLanguage) this.loadDocumentation()
+    },
     async loadDocumentation() {
       const requestId = ++this.documentationRequestId
       const language = this.activeLanguage
@@ -467,6 +489,16 @@ export default {
 
 .outline-link--level-3 {
   padding-left: 20px;
+}
+
+.outline-link--level-2 {
+  margin-top: 8px;
+  color: var(--el-text-color-primary);
+  font-weight: 600;
+}
+
+.outline-link--level-2:first-of-type {
+  margin-top: 0;
 }
 
 .outline-link:hover,
