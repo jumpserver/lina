@@ -15,7 +15,7 @@ const legacy = (group, routes) =>
     ...route,
     path: `legacy/${group}/${route.path}`,
     hidden: true,
-    meta: { ...route.meta, activeMenu: '/audit/reports/templates' }
+    meta: { ...route.meta, activeMenu: '/audit/reports/overview' }
   }))
 
 export default [
@@ -23,15 +23,13 @@ export default [
     path: 'overview',
     name: 'AuditReportOverview',
     component: () => import('@/views/reports/center/index.vue'),
-    props: { mode: 'overview' },
-    meta: reportMeta('AuditReportOverview')
+    meta: { ...reportMeta('AuditReportOverview'), icon: 'file' }
   },
   {
     path: 'templates',
-    name: 'AuditReportTemplates',
-    component: () => import('@/views/reports/center/index.vue'),
-    props: { mode: 'templates' },
-    meta: reportMeta('AuditReportTemplates')
+    redirect: '/audit/reports/overview',
+    hidden: true,
+    meta: { permissions: [] }
   },
   {
     path: 'editor',
@@ -49,7 +47,7 @@ export default [
     component: () => import(`@/views/reports/${group}/index.vue`),
     props: { nav: false },
     hidden: true,
-    meta: { ...reportMeta('AuditReportLegacyTemplates'), activeMenu: '/audit/reports/templates' }
+    meta: { ...reportMeta('AuditReportLegacyTemplates'), activeMenu: '/audit/reports/overview' }
   })),
   ...['users', 'assets', 'accounts'].map((group) => ({
     path: group,

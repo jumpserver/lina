@@ -7,7 +7,12 @@
         <el-radio-button value="year">{{ $t('AuditReportYear') }}</el-radio-button>
         <el-radio-button value="custom">{{ $t('AuditReportCustomRange') }}</el-radio-button>
       </el-radio-group>
-      <div :class="['period-values', { 'quarter-values': kind === 'quarter' }]">
+      <div
+        :class="[
+          'period-values',
+          { 'quarter-values': kind === 'quarter', 'range-values': kind === 'custom' }
+        ]"
+      >
         <el-date-picker
           v-if="kind === 'month'"
           v-model="month"
@@ -242,6 +247,31 @@ export default {
 .range-error {
   color: var(--color-danger);
 }
+.report-period:not(.is-compact) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+
+  .period-controls {
+    flex: 0 1 auto;
+    max-width: 100%;
+  }
+  .period-values :deep(.el-date-editor--month) {
+    width: 92px;
+  }
+  .period-values :deep(.el-date-editor--year) {
+    width: 100px;
+  }
+  .range-help {
+    flex: 1 1 360px;
+    margin: 0;
+  }
+  .range-error {
+    flex-basis: 100%;
+    margin: 0;
+  }
+}
 .is-compact {
   .period-controls,
   .period-values {
@@ -277,7 +307,7 @@ export default {
   }
 }
 @media (max-width: 600px) {
-  .period-values {
+  .period-values.range-values {
     width: 100%;
   }
   .period-values :deep(.el-date-editor--daterange) {

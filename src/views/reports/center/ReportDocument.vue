@@ -71,9 +71,6 @@
               </div>
             </dl>
           </div>
-          <p v-if="incomplete" data-report-block class="rd-status rd-status-warning">
-            {{ $t('AuditReportDocIncomplete') }}
-          </p>
           <template v-for="(section, index) in sections" :key="section.key">
             <h2 data-report-block data-keep-next>{{ index + 1 }}. {{ section.title }}</h2>
             <template v-if="section.key === 'conclusion'">
@@ -87,20 +84,6 @@
               </p>
             </template>
             <template v-else>
-              <p
-                v-if="section.status === 'unavailable' || section.status === 'permission_denied'"
-                data-report-block
-                class="rd-status rd-status-error"
-              >
-                {{ $t('AuditReportDocUnavailable') }}
-              </p>
-              <p
-                v-else-if="section.status === 'partial'"
-                data-report-block
-                class="rd-status rd-status-warning"
-              >
-                {{ $t('AuditReportDocPartial') }}
-              </p>
               <div
                 v-for="(metrics, metricIndex) in metricGroups(section.metrics)"
                 :key="`metrics-${metricIndex}`"
@@ -109,21 +92,70 @@
               >
                 <div v-for="metric in metrics" :key="metric.key" class="rd-metric">
                   <div class="rd-metric-label">{{ metric.label }}</div>
-                  <div class="rd-metric-value">
-                    {{ metricValue(metric.value)
+                  <div
+                    class="rd-metric-value"
+                    :class="{ 'rd-metric-status': metric.value == null }"
+                  >
+                    {{ metricDisplay(metric)
                     }}<small v-if="metric.value != null">{{ metric.unit }}</small>
                   </div>
                 </div>
               </div>
-              <p
-                v-if="(section.metrics || []).some((metric) => metric.value == null)"
-                data-report-block
-                class="rd-note"
-              >
-                {{ $t('AuditReportDocValueUnavailable') }}
-              </p>
               <div
-                v-for="table in section.tables || []"
+                v-for="trend in sectionTrends(section)"
+                :key="trend.key"
+                data-report-block
+                class="rd-trend-block"
+              >
+                <h3>{{ trend.title }}</h3>
+                <div class="rd-trend-summary">
+                  <div>
+                    <span>{{ $t('AuditReportTrendTotal') }}</span
+                    ><strong>{{ metricValue(trend.total) }}</strong>
+                  </div>
+                  <div>
+                    <span>{{ $t('AuditReportTrendActivePeriods') }}</span
+                    ><strong>{{ trend.active }} / {{ trend.periods }}</strong>
+                  </div>
+                  <div>
+                    <span>{{ $t('AuditReportTrendPeak') }}</span
+                    ><strong>{{ metricValue(trend.peak) }}</strong
+                    ><small v-if="trend.peakDates">{{ trend.peakDates }}</small>
+                  </div>
+                </div>
+                <!-- Plain borders and fills are exported as native PDF lines and rectangles. -->
+                <div class="rd-trend-chart" :aria-label="trend.title">
+                  <div class="rd-trend-plot">
+                    <div
+                      v-for="tick in trend.ticks"
+                      :key="tick"
+                      class="rd-trend-grid"
+                      :style="{ bottom: `${(tick / trend.maximum) * 100}%` }"
+                    >
+                      <span>{{ metricValue(tick) }}</span>
+                    </div>
+                    <div class="rd-trend-columns">
+                      <div
+                        v-for="(row, rowIndex) in trend.rows"
+                        :key="rowIndex"
+                        class="rd-trend-column"
+                      >
+                        <div
+                          class="rd-trend-bar"
+                          :style="{ height: `${(row.count / trend.maximum) * 100}%` }"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rd-trend-axis">
+                    <span v-for="(label, labelIndex) in trend.labels" :key="labelIndex">{{
+                      label
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+              <div
+                v-for="table in detailTables(section)"
                 :key="table.key"
                 data-report-block="table"
                 class="rd-table-block"
@@ -132,40 +164,57 @@
                   <h3>{{ table.title }}</h3>
                 </div>
                 <table>
+                  <colgroup
+                    v-if="
+                      table.columns.some((column) =>
+                        ['next_step', 'issue', 'source', 'risk'].includes(column.key)
+                      )
+                    "
+                  >
+                    <col
+                      v-for="column in tableColumnWidths(table.columns)"
+                      :key="column.key"
+                      :style="{ width: column.width }"
+                    />
+                  </colgroup>
                   <thead>
                     <tr>
-                      <th v-for="column in table.columns" :key="column.key">{{ column.label }}</th>
+                      <th
+                        v-for="column in table.columns"
+                        :key="column.key"
+                        :class="{ 'rd-numeric': isCountColumn(column.key) }"
+                      >
+                        {{ column.label }}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(row, rowIndex) in table.rows || []" :key="rowIndex">
-                      <td v-for="column in table.columns" :key="column.key">
+                      <td
+                        v-for="column in table.columns"
+                        :key="column.key"
+                        :class="{ 'rd-numeric': isCountColumn(column.key) }"
+                      >
                         <a
                           v-if="evidenceLink(row[column.key])"
                           :href="evidenceLink(row[column.key])"
                           target="_blank"
                           rel="noopener noreferrer"
-                          >{{ cellValue(row[column.key]) }}</a
+                          >{{ cellValue(row[column.key], table.key === 'assessment_sources') }}</a
                         >
-                        <template v-else>{{ cellValue(row[column.key]) }}</template>
-                      </td>
-                    </tr>
-                    <tr v-if="!table.rows?.length">
-                      <td :colspan="Math.max(1, table.columns?.length || 1)" class="rd-no-rows">
-                        {{ $t('AuditReportDocNoRows') }}
+                        <template v-else>{{
+                          cellValue(row[column.key], table.key === 'assessment_sources')
+                        }}</template>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-                <p class="rd-table-total rd-note">{{ tableSummary(table) }}</p>
+                <p v-if="table.total != null" class="rd-table-total rd-note">
+                  {{ tableSummary(table) }}
+                </p>
               </div>
-              <p
-                v-for="(note, noteIndex) in section.notes || []"
-                :key="`note-${noteIndex}`"
-                data-report-block
-                class="rd-note rd-coverage-note"
-              >
-                {{ note }}
+              <p v-if="section.emptyResultKey" data-report-block class="rd-empty-result">
+                {{ $t(section.emptyResultKey) }}
               </p>
             </template>
           </template>
@@ -179,6 +228,13 @@
 import { mapGetters } from 'vuex'
 import defaultLogo from '@/assets/img/logo_text_green.png'
 import { isDefaultInterfaceLogo } from '@/utils/interfaceLogo'
+import { reportEvidenceLink } from './api'
+import {
+  isEmptyReportTable,
+  reportEmptySectionKey,
+  reportTrend,
+  isReportCountColumn
+} from './reportContent'
 import {
   createReportWatermark,
   loadReportFont,
@@ -263,67 +319,41 @@ export default {
       if (order.includes('conclusion') && !items.some((item) => item.key === 'conclusion')) {
         items.push({ key: 'conclusion', title: this.$t('AuditReportDocConclusion') })
       }
-      const selected = order.map((key) => items.find((item) => item.key === key)).filter(Boolean)
-      const notes = [
-        ...new Set([
-          ...this.coverageNotes,
-          ...selected
-            .filter((item) => item.key !== 'conclusion')
-            .flatMap((item) => item.notes || [])
-        ])
-      ]
+      const selected = order
+        .filter((key) => !['scope', 'coverage'].includes(key))
+        .map((key) => items.find((item) => item.key === key))
+        .filter(Boolean)
+      const overviewKeys = new Set(
+        (selected.find((item) => item.key === 'overview')?.metrics || []).map(
+          (metric) => metric.key
+        )
+      )
       const seen = new Set()
       const result = selected.map((item) => {
-        if (item.key === 'scope') {
-          return {
-            ...item,
-            title: this.$t('AuditReportDocCoverage'),
-            description: '',
-            tables: [],
-            metrics: [],
-            notes
-          }
-        }
         const metrics = (item.metrics || []).filter((metric) => {
+          if (item.key !== 'overview' && overviewKeys.has(metric.key)) return false
           if (seen.has(metric.key)) return false
           seen.add(metric.key)
           return true
         })
-        return { ...item, metrics, notes: [] }
+        return { ...item, metrics, emptyResultKey: reportEmptySectionKey(item) }
       })
-      if (!result.some((item) => item.key === 'scope') && notes.length) {
-        result.push({ key: 'coverage', title: this.$t('AuditReportDocCoverage'), notes })
-      }
-      return result
+      return result.filter((item) => {
+        if (item.key === 'conclusion') return this.conclusions.length
+        return (
+          item.metrics?.length ||
+          item.emptyResultKey ||
+          this.detailTables(item).length ||
+          this.sectionTrends(item).length
+        )
+      })
     },
     conclusions() {
       const manual = this.config.conclusion?.trim()
       const paragraphs = manual
         ? manual.split(/\n+/).filter(Boolean)
         : this.snapshot?.conclusions || []
-      return paragraphs.length ? paragraphs : [this.$t('AuditReportDocNoConclusion')]
-    },
-    coverageNotes() {
-      const coverage = this.snapshot?.coverage || {}
-      const notes = []
-      for (const source of coverage.sources || []) {
-        // Keep source-specific access and retention warnings when data is incomplete.
-        if (source.status === 'available' && !source.retention_warning) continue
-        for (const note of source.notes || []) {
-          notes.push(`${source.label || source.key}：${note}`)
-        }
-        if (!source.notes?.length) {
-          const message = ['unavailable', 'permission_denied'].includes(source.status)
-            ? 'AuditReportDocUnavailable'
-            : 'AuditReportDocPartial'
-          notes.push(`${source.label || source.key}：${this.$t(message)}`)
-        }
-      }
-      return [...new Set(notes.filter(Boolean))]
-    },
-    incomplete() {
-      const status = this.snapshot?.coverage?.status
-      return status && !['available', 'complete'].includes(status)
+      return paragraphs
     }
   },
   watch: {
@@ -343,6 +373,26 @@ export default {
     this.resizeObserver?.disconnect()
   },
   methods: {
+    metricDisplay(metric) {
+      if (metric.state === 'not_applicable') return this.$t('AuditReportNotApplicable')
+      return metric.value == null
+        ? this.$t('AuditReportDataUnavailable')
+        : this.metricValue(metric.value)
+    },
+    detailTables(section) {
+      return (section.tables || []).filter(
+        (table) => table.rows?.length && !isEmptyReportTable(table, section) && !reportTrend(table)
+      )
+    },
+    sectionTrends(section) {
+      return (section.tables || [])
+        .map((table) => {
+          const trend = reportTrend(table)
+          return trend?.total > 0 ? { key: table.key, title: table.title, ...trend } : null
+        })
+        .filter(Boolean)
+    },
+    isCountColumn: isReportCountColumn,
     metricValue(value) {
       return value == null
         ? '—'
@@ -355,33 +405,49 @@ export default {
         metrics.slice(index * 3, index * 3 + 3)
       )
     },
-    evidenceLink(value) {
-      if (
-        !value ||
-        typeof value !== 'object' ||
-        !value.path ||
-        !/^[a-f0-9-]{36}$/i.test(value.id || '')
-      ) {
-        return ''
-      }
-      const paths = [
-        '/audit/sessions/sessions/',
-        '/tickets/tickets/command-confirm/',
-        '/pam/account-change-secret/executions/',
-        '/pam/account-backup/executions/',
-        '/pam/account-push/executions/',
-        '/pam/account-discovery/executions/',
-        '/pam/check/executions/'
-      ]
-      if (!paths.some((prefix) => value.path === prefix + value.id)) return ''
-      const query = value.org_id ? `?oid=${encodeURIComponent(value.org_id)}` : ''
-      return `${location.origin}${import.meta.env.BASE_URL}#${value.path}${query}`
+    tableColumnWidths(columns) {
+      const keys = new Set(columns.map((column) => column.key))
+      const proportions = keys.has('available_evidence')
+        ? { control: 1.1, reference: 1.3, available_evidence: 2, status: 0.8, next_step: 2 }
+        : keys.has('retention_days')
+          ? { source: 1.3, retention_days: 0.75, window_start: 0.95, status: 1.4, next_step: 2.1 }
+          : keys.has('sample_count')
+            ? { source: 1.3, status: 1.3, records: 0.7, sample_count: 0.7, evidence: 2.1 }
+            : keys.has('risk')
+              ? {
+                  risk: 1.4,
+                  record_count: 0.65,
+                  account_count: 0.65,
+                  asset_count: 0.65,
+                  next_step: 2.5,
+                  evidence: 0.85
+                }
+              : { next_step: 2, issue: 1.5 }
+      const weights = columns.map((column) => proportions[column.key] || 1)
+      const total = weights.reduce((sum, weight) => sum + weight, 0)
+      return columns.map((column, index) => ({
+        key: column.key,
+        width: `${(weights[index] / total) * 100}%`
+      }))
     },
-    cellValue(value) {
+    evidenceLink(value) {
+      return reportEvidenceLink(value)
+    },
+    cellValue(value, fullIdentifier = false) {
       if (value == null) return '—'
       if (typeof value === 'boolean') return this.$t(value ? 'Yes' : 'No')
-      if (Array.isArray(value)) return value.map(this.cellValue).join(', ')
-      if (typeof value === 'object') return value.label || value.name || JSON.stringify(value)
+      if (Array.isArray(value)) {
+        return value.map((item) => this.cellValue(item, fullIdentifier)).join(', ')
+      }
+      if (typeof value === 'object') {
+        return (
+          (fullIdentifier && value.id) ||
+          value.label ||
+          value.name ||
+          value.id ||
+          JSON.stringify(value)
+        )
+      }
       return String(value)
     },
     formatDateTime(value) {
@@ -483,6 +549,17 @@ export default {
       }
       const fits = () => body.scrollHeight <= body.clientHeight + 1
       const hasContent = () => body.childElementCount > 0
+      const fitsOnNewPage = (nodes) => {
+        const probe = template.cloneNode(true)
+        const probeBody = probe.querySelector('.rd-page-body')
+        nodes.filter(Boolean).forEach((node) => probeBody.appendChild(node.cloneNode(true)))
+        stage.appendChild(probe)
+        try {
+          return probeBody.scrollHeight <= probeBody.clientHeight + 1
+        } finally {
+          probe.remove()
+        }
+      }
       const append = (node) => {
         body.appendChild(node)
         if (fits()) return true
@@ -537,6 +614,24 @@ export default {
           }
           body.appendChild(fragment)
         }
+        const moveTableToNewPage = () => {
+          const previousRows = tbody.childElementCount
+          const previous = fragment.previousElementSibling
+          const heading =
+            !previousRows && previous?.hasAttribute('data-keep-next') ? previous : null
+          const otherContent = [...body.children].some(
+            (node) => node !== fragment && node !== heading
+          )
+          if (!previousRows && !otherContent) return false
+          if (!previousRows) {
+            fragment.remove()
+            heading?.remove()
+          } else tableContinued = true
+          newPage()
+          if (heading) body.appendChild(heading)
+          startFragment(tableContinued)
+          return true
+        }
         startFragment(false)
         for (const [rowIndex, originalRow] of rows.entries()) {
           let row = originalRow.cloneNode(true)
@@ -555,36 +650,70 @@ export default {
           pairedRow?.remove()
           finalNote?.remove()
           if (rowFits) continue
+          const singleRowFits = fits()
           row.remove()
-          const previousRows = tbody.childElementCount
-          if (!previousRows) fragment.remove()
-          if (previousRows) tableContinued = true
-          if (hasContent()) newPage()
-          startFragment(tableContinued)
-          tbody.appendChild(row)
-          if (fits()) continue
-          // A single unusually long command or resource name may exceed a page.
+          const previous = fragment.previousElementSibling
+          const heading =
+            !tbody.childElementCount && previous?.hasAttribute('data-keep-next') ? previous : null
+          const rowFragment = fragment.cloneNode(true)
+          rowFragment.querySelector('tbody').replaceChildren(row.cloneNode(true))
+          if (singleRowFits) {
+            const group = rowFragment.cloneNode(true)
+            if (pairedRow) group.querySelector('tbody').appendChild(pairedRow.cloneNode(true))
+            if (finalNote) group.appendChild(finalNote.cloneNode(true))
+            // Do not move a row to keep a pair that cannot fit even on a fresh page.
+            if (!fitsOnNewPage([heading, group])) {
+              tbody.appendChild(row)
+              continue
+            }
+          }
+          if (fitsOnNewPage([heading, rowFragment])) {
+            moveTableToNewPage()
+            tbody.appendChild(row)
+            if (fits()) continue
+            row.remove()
+          }
+          // Oversized rows use the available space, retaining their section heading.
           // Split cell text into continuation rows without discarding any characters.
-          row.remove()
           const cells = [...originalRow.children]
-          const remaining = cells.map((cell) => Array.from(cell.textContent))
+          const lengths = cells.map((cell) => Array.from(cell.textContent).length)
+          const offsets = cells.map(() => 0)
+          const makeRow = (count) => {
+            const nextRow = originalRow.cloneNode(false)
+            cells.forEach((cell, index) => {
+              const offset = offsets[index]
+              const next = cell.cloneNode(true)
+              if (offset >= lengths[index]) {
+                if (continuation && index === 0 && lengths[index] > 0 && lengths[index] <= 80) {
+                  next.appendChild(
+                    document.createTextNode(` ${this.$t('AuditReportDocContinued')}`)
+                  )
+                } else next.replaceChildren()
+              } else if (offset || count < lengths[index]) {
+                // Slice text nodes without removing links or other cell markup.
+                const walker = document.createTreeWalker(next, NodeFilter.SHOW_TEXT)
+                let textNode
+                let position = 0
+                while ((textNode = walker.nextNode())) {
+                  const characters = Array.from(textNode.textContent)
+                  const start = Math.max(0, offset - position)
+                  const end = Math.max(0, Math.min(characters.length, offset + count - position))
+                  textNode.textContent = characters.slice(start, end).join('')
+                  position += characters.length
+                }
+              }
+              nextRow.appendChild(next)
+            })
+            return nextRow
+          }
           let continuation = false
-          while (remaining.some((value) => value.length)) {
+          while (offsets.some((offset, index) => offset < lengths[index])) {
             let low = 1
-            let high = Math.max(...remaining.map((value) => value.length))
+            let high = Math.max(...lengths.map((length, index) => length - offsets[index]))
             let best = 0
             while (low <= high) {
               const count = Math.floor((low + high) / 2)
-              row = originalRow.cloneNode(false)
-              cells.forEach((cell, index) => {
-                const next = cell.cloneNode(false)
-                next.textContent =
-                  remaining[index].slice(0, count).join('') ||
-                  (continuation && index === 0 && cell.textContent.length <= 80
-                    ? `${cell.textContent} ${this.$t('AuditReportDocContinued')}`
-                    : '')
-                row.appendChild(next)
-              })
+              row = makeRow(count)
               tbody.appendChild(row)
               const valid = fits()
               row.remove()
@@ -593,21 +722,18 @@ export default {
                 low = count + 1
               } else high = count - 1
             }
-            if (!best) throw new Error('A report table row cannot fit on a page')
-            row = originalRow.cloneNode(false)
-            cells.forEach((cell, index) => {
-              const next = cell.cloneNode(false)
-              next.textContent =
-                remaining[index].splice(0, best).join('') ||
-                (continuation && index === 0 && cell.textContent.length <= 80
-                  ? `${cell.textContent} ${this.$t('AuditReportDocContinued')}`
-                  : '')
-              row.appendChild(next)
+            if (!best) {
+              if (moveTableToNewPage()) continue
+              throw new Error('A report table row cannot fit on a page')
+            }
+            row = makeRow(best)
+            offsets.forEach((offset, index) => {
+              offsets[index] = Math.min(lengths[index], offset + best)
             })
             row.setAttribute('title', this.$t('AuditReportDocLongRow'))
             if (continuation) row.setAttribute('data-report-row-continued', '')
             tbody.appendChild(row)
-            if (remaining.some((value) => value.length)) {
+            if (offsets.some((offset, index) => offset < lengths[index])) {
               newPage()
               startFragment(true)
               continuation = true
@@ -630,6 +756,21 @@ export default {
           const node = original.cloneNode(true)
           if (original.hasAttribute('data-keep-next') && hasContent()) {
             const next = blocks[index + 1]?.cloneNode(true)
+            if (next?.getAttribute('data-report-block') === 'table') {
+              const rows = [...next.querySelector('tbody').children]
+              rows.slice(2).forEach((row) => row.remove())
+              if (rows.length > 2) next.querySelector('.rd-table-total')?.remove()
+              if (!fitsOnNewPage([node, next])) {
+                next.querySelector('.rd-table-total')?.remove()
+                rows.slice(1).forEach((row) => row.remove())
+                if (!fitsOnNewPage([node, next])) {
+                  // A multi-page first row only needs room for its initial fragment.
+                  for (const cell of rows[0]?.children || []) {
+                    cell.textContent = Array.from(cell.textContent).slice(0, 1).join('')
+                  }
+                }
+              }
+            }
             body.appendChild(node)
             if (next) body.appendChild(next)
             const valid =
@@ -862,24 +1003,6 @@ export default {
   line-height: 1.65;
   color: #697483;
 }
-.rd-page .rd-coverage-note,
-.rd-source-blocks .rd-coverage-note {
-  margin-bottom: 4px;
-  line-height: 1.5;
-}
-.rd-status {
-  border-radius: 3px;
-  padding: 8px 10px;
-  font-size: 11px;
-}
-.rd-status-warning {
-  background: #fff7e6;
-  color: #945d0d;
-}
-.rd-status-error {
-  background: #fff0ee;
-  color: #b94940;
-}
 .rd-metrics {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -908,6 +1031,112 @@ export default {
   font-size: 10px;
   font-weight: 400;
   margin-left: 5px;
+}
+.rd-metric-value.rd-metric-status {
+  font-size: 12px;
+  line-height: 35px;
+  color: #66717f;
+}
+.rd-trend-block {
+  margin: 12px 0;
+}
+.rd-trend-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 8px 0 12px;
+}
+.rd-trend-summary > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.rd-trend-summary span,
+.rd-trend-summary small {
+  font-size: 10px;
+  color: #697483;
+  overflow-wrap: anywhere;
+}
+.rd-trend-summary strong {
+  font-size: 18px;
+  font-weight: 600;
+}
+.rd-trend-chart {
+  position: relative;
+  height: 164px;
+  font-size: 9px;
+  color: #697483;
+}
+.rd-trend-plot {
+  position: absolute;
+  top: 8px;
+  bottom: 36px;
+  left: 36px;
+  right: 4px;
+}
+.rd-trend-grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e5e9ee;
+}
+.rd-trend-grid span {
+  position: absolute;
+  top: -8px;
+  left: -36px;
+  width: 30px;
+  text-align: right;
+}
+.rd-trend-columns {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+.rd-trend-column {
+  flex: 1 1 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.rd-trend-bar {
+  width: 100%;
+  max-width: 16px;
+  background: #35b497;
+}
+.rd-trend-axis {
+  position: absolute;
+  top: 135px;
+  left: 36px;
+  right: 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rd-trend-axis span {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+.rd-trend-axis span:first-child {
+  text-align: left;
+}
+.rd-trend-axis span:last-child {
+  text-align: right;
+}
+.rd-empty-result {
+  margin: 10px 0 !important;
+  padding: 8px 10px;
+  border: 1px solid #e0e5eb;
+  color: #697483;
+  font-size: 11px;
+}
+.rd-page .rd-numeric,
+.rd-source-blocks .rd-numeric {
+  text-align: right;
 }
 .rd-table-block {
   margin: 12px 0 10px;
@@ -945,11 +1174,6 @@ export default {
 }
 .rd-table-total {
   margin-top: 6px !important;
-}
-.rd-no-rows {
-  color: #78828e;
-  text-align: center !important;
-  padding: 15px !important;
 }
 .rd-conclusion {
   font-size: 12px;

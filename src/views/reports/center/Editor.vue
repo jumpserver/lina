@@ -1,5 +1,26 @@
 <template>
   <Page :title="$t('AuditReportConfigure')" class="audit-report-editor">
+    <template #headingRightSide>
+      <div v-if="catalog && form.theme" class="editor-actions">
+        <el-button
+          class="editor-action-button"
+          size="default"
+          :loading="previewLoading"
+          :disabled="busy || !canPreview"
+          @click="refreshPreview"
+          >{{ snapshot ? $t('AuditReportRefreshPreview') : $t('AuditReportPreview') }}</el-button
+        >
+        <el-button
+          class="editor-action-button"
+          size="default"
+          type="primary"
+          :loading="exporting"
+          :disabled="busy || !snapshot || !canPreview"
+          @click="exportPdf"
+          >{{ $t('AuditReportExportPdf') }}</el-button
+        >
+      </div>
+    </template>
     <div class="editor-workspace" v-loading="loading">
       <el-alert v-if="error" :title="error" type="error" :closable="false" show-icon>
         <el-button v-if="!catalog" text type="primary" @click="load">{{
@@ -7,48 +28,6 @@
         }}</el-button>
       </el-alert>
       <template v-if="catalog && form.theme">
-        <el-alert
-          v-if="!catalog.can_save_template"
-          :title="$t('AuditReportChooseOrg')"
-          type="info"
-          :closable="false"
-          show-icon
-        />
-        <div class="editor-toolbar">
-          <el-steps :active="snapshot ? 1 : 0" simple class="workflow">
-            <el-step :title="$t('AuditReportConfigureStep')" />
-            <el-step :title="$t('AuditReportPreviewStep')" />
-            <el-step :title="$t('AuditReportExportStep')" />
-          </el-steps>
-          <div class="toolbar-actions">
-            <el-button
-              class="editor-action-button"
-              size="default"
-              :disabled="busy || !canSaveTemplate"
-              @click="openSaveTemplate"
-              >{{ $t('AuditReportSaveTemplate') }}</el-button
-            >
-            <el-button
-              class="editor-action-button"
-              size="default"
-              :loading="previewLoading"
-              :disabled="busy || !canPreview"
-              @click="refreshPreview"
-              >{{
-                snapshot ? $t('AuditReportRefreshPreview') : $t('AuditReportPreview')
-              }}</el-button
-            >
-            <el-button
-              class="editor-action-button"
-              size="default"
-              type="primary"
-              :loading="exporting"
-              :disabled="busy || !snapshot || !canPreview"
-              @click="exportPdf"
-              >{{ $t('AuditReportExportPdf') }}</el-button
-            >
-          </div>
-        </div>
         <div class="editor-layout">
           <IBox class="config-panel">
             <el-tabs v-model="configTab">
@@ -128,7 +107,6 @@
                       show-word-limit
                       :placeholder="$t('AuditReportConclusionPlaceholder')"
                     />
-                    <p class="config-help help-block">{{ $t('AuditReportConclusionHelp') }}</p>
                     <el-button
                       v-if="form.conclusion"
                       text
@@ -140,7 +118,8 @@
                       v-else-if="snapshot?.conclusions?.length"
                       text
                       type="primary"
-                      @click="form.conclusion = snapshot.conclusions.join('\n\n')"
+                      :disabled="busy || !previewFresh"
+                      @click="editSuggestedConclusion"
                       >{{ $t('AuditReportEditSuggestedConclusion') }}</el-button
                     >
                   </el-form-item>
@@ -222,40 +201,6 @@
       </template>
       <el-empty v-else-if="!loading && !error" :description="$t('AuditReportNoPermission')" />
     </div>
-    <el-dialog
-      v-model="templateDialog"
-      :title="$t('AuditReportSaveTemplate')"
-      width="min(480px, 94vw)"
-      :close-on-click-modal="false"
-      :close-on-press-escape="!savingTemplate"
-      :show-close="!savingTemplate"
-    >
-      <el-form class="report-config-form" label-position="top" @submit.prevent="saveTemplate">
-        <el-form-item :label="$t('AuditReportTemplateName')" required
-          ><el-input
-            v-model="templateName"
-            maxlength="128"
-            show-word-limit
-            :disabled="savingTemplate"
-        /></el-form-item>
-        <p class="config-help help-block">{{ $t('AuditReportTemplateSaveHelp') }}</p>
-        <el-alert v-if="templateError" :title="templateError" type="error" :closable="false" />
-      </el-form>
-      <template #footer
-        ><el-button :disabled="savingTemplate" @click="templateDialog = false">{{
-          $t('Cancel')
-        }}</el-button
-        ><el-button
-          type="primary"
-          :loading="savingTemplate"
-          :disabled="!templateName.trim()"
-          @click="saveTemplate"
-          >{{
-            $t(templateToUpdate ? 'AuditReportUpdateTemplate' : 'AuditReportSaveTemplate')
-          }}</el-button
-        ></template
-      >
-    </el-dialog>
   </Page>
 </template>
 <script>
@@ -285,18 +230,18 @@ export default {
       configTab: 'content',
       chapterOrder: [],
       chapterSortable: null,
-      templateDialog: false,
-      templateName: '',
-      templateError: '',
-      savingTemplate: false,
-      loadedTemplate: null,
       requestId: 0,
+      loadedContextKey: '',
       autoTitle: ''
     }
   },
   computed: {
     organizationId() {
       return this.$store.getters.currentOrg?.id
+    },
+    reportContextKey() {
+      const { theme = '', start = '', end = '' } = this.$route.query
+      return JSON.stringify([this.organizationId, this.$route.path, theme, start, end])
     },
     themes() {
       return this.catalog?.themes || []
@@ -305,21 +250,25 @@ export default {
       return this.themes.find((theme) => theme.key === this.form.theme)
     },
     busy() {
-      return this.loading || this.previewLoading || this.exporting || this.savingTemplate
+      return this.loading || this.previewLoading || this.exporting
     },
     hasDataChapter() {
       return this.form.chapters.some((key) =>
-        ['overview', 'activity', 'security', 'inventory', 'account'].includes(key)
+        [
+          'overview',
+          'activity',
+          'security',
+          'inventory',
+          'account',
+          'account_health',
+          'remediation',
+          'assessment'
+        ].includes(key)
       )
     },
     canPreview() {
       return (
         this.currentTheme?.can_generate && this.hasDataChapter && this.form.title.trim().length > 0
-      )
-    },
-    canSaveTemplate() {
-      return (
-        this.canPreview && this.catalog?.can_save_template && this.currentTheme?.can_save_template
       )
     },
     range: {
@@ -340,92 +289,87 @@ export default {
     },
     documentConfig() {
       return this.previewConfig || this.form
-    },
-    templateToUpdate() {
-      return this.loadedTemplate && this.loadedTemplate.name === this.templateName.trim()
-        ? this.loadedTemplate.id
-        : null
     }
   },
   watch: {
     busy(value) {
       this.chapterSortable?.option('disabled', value)
     },
-    organizationId() {
-      if (this.active) this.load()
+    reportContextKey: {
+      flush: 'post',
+      handler() {
+        if (
+          this.active &&
+          this.$route.name === 'AuditReportEditor' &&
+          this.loadedContextKey !== this.reportContextKey
+        ) {
+          this.load()
+        }
+      }
     }
   },
   mounted() {
     this.load()
   },
-  activated() {
-    if (!this.active) {
-      this.active = true
-      this.load()
+  async activated() {
+    if (this.active) return
+    this.active = true
+    if (!this.catalog || this.loadedContextKey !== this.reportContextKey) {
+      await this.load()
+    } else {
+      await this.$nextTick()
+      this.setChapterDraggable()
     }
   },
   deactivated() {
     this.active = false
-    this.requestId++
+    this.invalidateRequests()
     this.destroyChapterDraggable()
   },
   beforeUnmount() {
-    this.requestId++
+    this.active = false
+    this.invalidateRequests()
     this.destroyChapterDraggable()
   },
   methods: {
+    invalidateRequests() {
+      this.requestId++
+      this.loading = false
+      this.previewLoading = false
+      this.exporting = false
+    },
     async load() {
       this.destroyChapterDraggable()
       const id = ++this.requestId
+      const contextKey = this.reportContextKey
+      const query = { ...this.$route.query }
+      this.loadedContextKey = contextKey
       this.loading = true
       this.previewLoading = false
       this.exporting = false
-      this.savingTemplate = false
       this.error = ''
       this.catalog = null
       this.snapshot = null
       this.previewConfig = null
       this.previewFingerprint = ''
-      this.loadedTemplate = null
-      this.templateDialog = false
       this.form = makeConfig('', [])
       this.chapterOrder = []
       this.autoTitle = ''
       try {
         const catalog = await reportApi.catalog()
-        if (id !== this.requestId) return
+        if (id !== this.requestId || contextKey !== this.reportContextKey || !this.active) return
         this.catalog = catalog
-        const query = this.$route.query
         const range =
           /^\d{4}-\d{2}-\d{2}$/.test(query.start || '') &&
           /^\d{4}-\d{2}-\d{2}$/.test(query.end || '')
             ? { start: query.start, end: query.end }
             : defaultRange()
-        if (query.template_id) {
-          const template = await reportApi.template(query.template_id)
-          if (id !== this.requestId) return
-          this.loadedTemplate = template
-          const saved = template.config || {}
-          this.autoTitle = this.$t('AuditReportDefaultTitle', {
-            theme: this.themes.find((item) => item.key === template.theme)?.title || '',
-            start: saved.start,
-            end: saved.end
-          }).slice(0, 128)
-          this.form = configPayload({
-            ...makeConfig(template.theme, []),
-            ...saved,
-            ...range,
-            theme: template.theme
-          })
-          this.refreshAutoTitle()
-        } else {
-          const theme =
-            this.themes.find((item) => item.key === query.theme && item.can_generate) ||
-            this.themes.find((item) => item.can_generate)
-          if (!theme) return
-          this.form = makeConfig(theme.key, theme.chapters || [], range)
-          this.refreshAutoTitle()
-        }
+        const theme =
+          this.themes.find((item) => item.key === query.theme && item.can_generate) ||
+          this.themes.find((item) => item.can_generate)
+        if (!theme) return
+        this.form = makeConfig(theme.key, theme.chapters || [], range)
+        this.refreshAutoTitle()
         this.buildChapterOrder()
       } catch (error) {
         if (id === this.requestId) this.error = reportError(error, this.$t('AuditReportLoadFailed'))
@@ -462,7 +406,6 @@ export default {
     },
     changeTheme() {
       this.form.chapters = [...(this.currentTheme?.chapters || [])]
-      this.loadedTemplate = null
       this.snapshot = null
       this.previewConfig = null
       this.previewFingerprint = ''
@@ -546,6 +489,10 @@ export default {
         row?.querySelector('.chapter-drag-handle')?.focus()
       })
     },
+    editSuggestedConclusion() {
+      if (this.busy || !this.previewFresh || !this.snapshot?.conclusions?.length) return
+      this.form.conclusion = this.snapshot.conclusions.join('\n\n')
+    },
     async refreshPreview() {
       if (!this.canPreview) return false
       const id = this.requestId
@@ -592,37 +539,6 @@ export default {
       } finally {
         if (id === this.requestId) this.exporting = false
       }
-    },
-    openSaveTemplate() {
-      this.templateName = this.loadedTemplate?.name || this.form.title
-      this.templateError = ''
-      this.templateDialog = true
-    },
-    async saveTemplate() {
-      if (!this.templateName.trim() || this.savingTemplate || !this.canSaveTemplate) return
-      this.savingTemplate = true
-      this.templateError = ''
-      const id = this.requestId
-      try {
-        const template = await reportApi.saveTemplate(
-          {
-            name: this.templateName.trim(),
-            theme: this.form.theme,
-            config: configPayload(this.form)
-          },
-          this.templateToUpdate
-        )
-        if (id !== this.requestId) return
-        this.loadedTemplate = template
-        this.templateDialog = false
-        this.$message.success(this.$t('AuditReportTemplateSaved'))
-      } catch (error) {
-        if (id === this.requestId) {
-          this.templateError = reportError(error, this.$t('AuditReportActionFailed'))
-        }
-      } finally {
-        if (id === this.requestId) this.savingTemplate = false
-      }
     }
   }
 }
@@ -634,21 +550,20 @@ export default {
   gap: var(--page-section-gap, 8px);
   min-width: 0;
 }
-.editor-toolbar {
+.audit-report-editor :deep(.page-heading-left) {
+  flex: 1 1 0;
+  max-width: none;
+}
+.audit-report-editor :deep(.page-heading-right) {
+  flex: 0 0 auto;
+  max-width: none;
+}
+.editor-actions {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px 20px;
-  flex-wrap: wrap;
-}
-.toolbar-actions {
-  display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap;
   gap: 8px;
-  margin-left: auto;
 }
-.toolbar-actions .el-button + .el-button {
+.editor-actions .el-button + .el-button {
   margin-left: 0;
 }
 .editor-action-button.el-button {
@@ -657,22 +572,6 @@ export default {
   padding: 0 12px;
   font-size: 13px;
   line-height: 20px;
-}
-.workflow {
-  flex: 0 1 350px;
-  min-width: 280px;
-  padding: 10px 0;
-  background: transparent;
-}
-.workflow :deep(.el-step__title) {
-  font-size: 12px;
-  white-space: nowrap;
-}
-.workflow :deep(.el-step.is-simple .el-step__head) {
-  padding-right: 6px;
-}
-.workflow :deep(.el-step.is-simple .el-step__arrow) {
-  min-width: 20px;
 }
 .editor-layout {
   display: grid;
@@ -823,14 +722,6 @@ export default {
 .chapter-row-dragging .chapter-drag-handle {
   cursor: grabbing;
 }
-.report-config-form :deep(.config-help.help-block) {
-  display: block;
-  width: 100%;
-  margin: 6px 0 0;
-  font-size: 12px;
-  line-height: 18px;
-  overflow-wrap: anywhere;
-}
 .brand-info,
 .brand-note {
   display: flex;
@@ -923,24 +814,9 @@ export default {
   line-height: 18px;
   margin-bottom: 16px;
 }
-@media (max-width: 1200px) {
-  .editor-toolbar .toolbar-actions {
-    flex: 1 0 100%;
-  }
-}
 @media (max-width: 1000px) {
   .editor-layout {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-@media (max-width: 500px) {
-  .workflow {
-    min-width: 0;
-    flex-basis: 100%;
-  }
-  .toolbar-actions {
-    justify-content: flex-start;
-    margin-left: 0;
   }
 }
 </style>

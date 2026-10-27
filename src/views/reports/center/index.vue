@@ -1,14 +1,6 @@
 <template>
   <Page :title="pageTitle" class="audit-report-center">
     <div class="report-workspace" v-loading="loading">
-      <p v-if="mode !== 'overview'" class="page-intro">{{ pageDescription }}</p>
-      <el-alert
-        v-if="catalog && !catalog.can_save_template"
-        :title="$t('AuditReportChooseOrg')"
-        type="info"
-        :closable="false"
-        show-icon
-      />
       <el-alert v-if="error" :title="error" type="error" :closable="false" show-icon>
         <el-button text type="primary" @click="load">{{ $t('AuditReportRetry') }}</el-button>
       </el-alert>
@@ -16,7 +8,7 @@
         v-if="!loading && !error && !themes.length"
         :description="$t('AuditReportNoPermission')"
       />
-      <template v-if="mode === 'overview' && themes.length">
+      <template v-if="themes.length">
         <IBox>
           <div class="report-theme-header">
             <div class="report-theme-toolbar">
@@ -56,15 +48,7 @@
               }}</el-button>
             </el-alert>
             <template v-else-if="snapshot">
-              <el-alert
-                v-if="snapshot.coverage?.status === 'partial'"
-                :title="$t('AuditReportPartialCoverage')"
-                type="warning"
-                :closable="false"
-                show-icon
-                class="coverage-warning"
-              />
-              <el-tabs v-model="selectedSection" class="section-tabs">
+              <el-tabs v-if="visibleSections.length" v-model="selectedSection" class="section-tabs">
                 <el-tab-pane
                   v-for="section in visibleSections"
                   :key="section.key"
@@ -76,8 +60,11 @@
                       <div class="metric-label">
                         <span>{{ metric.label }}</span>
                       </div>
-                      <div class="metric-value">
-                        <span>{{ formatValue(metric.value) }}</span>
+                      <div
+                        class="metric-value"
+                        :class="{ 'metric-value-status': metric.value == null }"
+                      >
+                        <span>{{ metricValue(metric) }}</span>
                         <small v-if="metric.unit && metric.value != null">{{ metric.unit }}</small>
                       </div>
                     </div>
@@ -92,6 +79,21 @@
                     <div v-if="trendTable" class="report-chart">
                       <div class="chart-heading">
                         <h3>{{ trendTable.title }}</h3>
+                      </div>
+                      <div class="trend-summary">
+                        <div>
+                          <span>{{ $t('AuditReportTrendTotal') }}</span
+                          ><strong>{{ formatValue(trendSummary.total) }}</strong>
+                        </div>
+                        <div>
+                          <span>{{ $t('AuditReportTrendActivePeriods') }}</span
+                          ><strong>{{ trendSummary.active }} / {{ trendSummary.periods }}</strong>
+                        </div>
+                        <div>
+                          <span>{{ $t('AuditReportTrendPeak') }}</span
+                          ><strong>{{ formatValue(trendSummary.peak) }}</strong
+                          ><small v-if="trendSummary.peakDates">{{ trendSummary.peakDates }}</small>
+                        </div>
                       </div>
                       <Echart :options="trendOptions" :autoresize="true" />
                     </div>
@@ -109,39 +111,39 @@
                         /></el-select>
                       </div>
                       <Echart :options="distributionOptions" :autoresize="true" />
-                      <p class="table-note">
-                        {{
-                          $t('AuditReportTopGroups', {
-                            count: Math.min(distributionTable?.rows?.length || 0, 10)
-                          })
-                        }}
-                      </p>
                     </div>
                   </div>
                   <div
-                    v-for="table in section.tables || []"
+                    v-for="table in detailTables(section)"
                     :key="table.key"
                     class="table-section el-data-table"
                   >
                     <h3>{{ table.title }}</h3>
-                    <el-table
-                      :data="table.rows || []"
-                      border
-                      :empty-text="
-                        section.status === 'unavailable'
-                          ? $t('AuditReportDataUnavailable')
-                          : $t('AuditReportNoRecords')
-                      "
-                    >
+                    <el-table :data="table.rows || []" border>
                       <el-table-column
                         v-for="column in table.columns"
                         :key="column.key"
                         :prop="column.key"
                         :label="column.label"
-                        min-width="130"
-                        show-overflow-tooltip
+                        :min-width="columnWidth(column.key)"
+                        :align="isCountColumn(column.key) ? 'right' : 'left'"
+                        :show-overflow-tooltip="!wrapColumn(column.key)"
                       >
-                        <template #default="{ row }">{{ cellValue(row[column.key]) }}</template>
+                        <template #default="{ row }">
+                          <el-link
+                            v-if="evidenceLink(row[column.key])"
+                            :href="evidenceLink(row[column.key])"
+                            :class="{ 'action-guidance': wrapColumn(column.key) }"
+                            type="primary"
+                            underline="hover"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >{{ cellValue(row[column.key]) }}</el-link
+                          >
+                          <span v-else :class="{ 'action-guidance': wrapColumn(column.key) }">{{
+                            cellValue(row[column.key])
+                          }}</span>
+                        </template>
                       </el-table-column>
                     </el-table>
                     <p v-if="table.truncated" class="table-note">
@@ -153,60 +155,19 @@
                       }}
                     </p>
                   </div>
-                  <ul v-if="section.notes?.length" class="section-notes">
-                    <li v-for="(note, index) in section.notes" :key="index">{{ note }}</li>
-                  </ul>
-                  <p
-                    v-if="
-                      !section.metrics?.length && !section.tables?.length && !section.notes?.length
-                    "
-                    class="section-description"
-                  >
-                    {{ $t('AuditReportNoSectionData') }}
+                  <p v-if="emptySectionKey(section)" class="empty-result">
+                    {{ $t(emptySectionKey(section)) }}
                   </p>
                 </el-tab-pane>
               </el-tabs>
+              <el-empty v-else :description="$t('AuditReportDataUnavailable')" />
               <IBox
                 v-if="snapshot.conclusions?.length"
                 :title="$t('AuditReportSuggestedConclusion')"
                 class="conclusion-box"
               >
                 <p v-for="(line, index) in snapshot.conclusions" :key="index">{{ line }}</p>
-                <small>{{ $t('AuditReportConclusionHelp') }}</small>
               </IBox>
-              <el-collapse
-                v-if="snapshot.coverage?.sources?.length"
-                class="source-coverage el-data-table"
-              >
-                <el-collapse-item :title="$t('AuditReportDataSources')" name="sources">
-                  <el-table :data="snapshot.coverage.sources" border>
-                    <el-table-column
-                      prop="label"
-                      :label="$t('AuditReportSource')"
-                      min-width="120"
-                    />
-                    <el-table-column :label="$t('AuditReportSourceStatus')" width="150"
-                      ><template #default="{ row }"
-                        ><el-tag
-                          :type="row.status === 'available' ? 'success' : 'warning'"
-                          size="small"
-                          >{{ sourceStatus(row.status) }}</el-tag
-                        ></template
-                      ></el-table-column
-                    >
-                    <el-table-column :label="$t('AuditReportSourceNotes')" min-width="300"
-                      ><template #default="{ row }"
-                        ><span>{{
-                          (row.notes || []).join('；') || $t('AuditReportNoSourceNote')
-                        }}</span
-                        ><span v-if="row.retention_days">
-                          {{ $t('AuditReportRetentionDays', { days: row.retention_days }) }}</span
-                        ></template
-                      ></el-table-column
-                    >
-                  </el-table>
-                </el-collapse-item>
-              </el-collapse>
               <div class="data-footer">
                 <span
                   >{{ $t('AuditReportCollectedAt') }} {{ dateTime(snapshot.generated_at) }}</span
@@ -219,65 +180,6 @@
           </div>
         </IBox>
       </template>
-      <template v-if="mode === 'templates' && themes.length">
-        <h2 class="group-title">{{ $t('AuditReportBuiltInTemplates') }}</h2>
-        <div class="template-grid">
-          <IBox v-for="theme in themes" :key="theme.key" class="template-card">
-            <div class="template-title">
-              <el-icon><component :is="themeIcons[theme.key] || 'Document'" /></el-icon>
-              <h3>{{ theme.title }}</h3>
-              <el-tag type="info" size="small">{{ $t('AuditReportBuiltIn') }}</el-tag>
-            </div>
-            <p v-if="theme.description" class="template-description">{{ theme.description }}</p>
-            <el-button :disabled="!theme.can_generate" @click="openEditor(theme.key)">{{
-              $t('AuditReportUseTemplate')
-            }}</el-button>
-          </IBox>
-        </div>
-
-        <h2 class="group-title">{{ $t('AuditReportSavedTemplates') }}</h2>
-        <IBox class="el-data-table">
-          <el-table border :data="items" :empty-text="$t('AuditReportNoTemplates')">
-            <el-table-column
-              prop="name"
-              :label="$t('AuditReportTemplateName')"
-              min-width="180"
-              show-overflow-tooltip
-            />
-            <el-table-column :label="$t('AuditReportTheme')" min-width="140"
-              ><template #default="{ row }">{{ themeTitle(row.theme) }}</template></el-table-column
-            >
-            <el-table-column :label="$t('AuditReportUpdatedAt')" min-width="160"
-              ><template #default="{ row }">{{
-                dateTime(row.date_updated || row.date_created)
-              }}</template></el-table-column
-            >
-            <el-table-column :label="$t('Actions')" width="210"
-              ><template #default="{ row }">
-                <el-button text type="primary" @click="useTemplate(row)">{{
-                  $t('AuditReportUseTemplate')
-                }}</el-button>
-                <el-button
-                  v-if="canDeleteTemplate(row)"
-                  text
-                  type="danger"
-                  @click="deleteTemplate(row)"
-                  >{{ $t('Delete') }}</el-button
-                >
-              </template></el-table-column
-            >
-          </el-table>
-          <el-pagination
-            background
-            v-if="total > pageSize"
-            v-model:current-page="page"
-            :page-size="pageSize"
-            :total="total"
-            layout="total, prev, pager, next"
-            @current-change="loadList"
-          />
-        </IBox>
-      </template>
     </div>
   </Page>
 </template>
@@ -287,16 +189,20 @@ import IBox from '@/components/Common/IBox/index.vue'
 import PeriodPicker from './PeriodPicker.vue'
 import Echart from '@/components/Dashboard/Echart.vue'
 import defaultTheme from '@/styles/default-theme'
-import { reportApi, listData, reportError, defaultRange, makeConfig } from './api'
+import { reportApi, reportError, defaultRange, makeConfig, reportEvidenceLink } from './api'
+import {
+  isEmptyReportTable,
+  reportEmptySectionKey,
+  reportTrend,
+  isReportCountColumn
+} from './reportContent'
 
 export default {
   name: 'AuditReportCenter',
   components: { Page, IBox, PeriodPicker, Echart },
-  props: { mode: { type: String, default: 'overview' } },
   data() {
     return {
       active: true,
-      listId: 0,
       catalog: null,
       loading: false,
       dataLoading: false,
@@ -307,10 +213,6 @@ export default {
       distributionKey: '',
       range: defaultRange(),
       snapshot: null,
-      items: [],
-      total: 0,
-      page: 1,
-      pageSize: 20,
       requestId: 0,
       previewId: 0,
       themeIcons: {
@@ -336,25 +238,24 @@ export default {
       return this.themes.find((theme) => theme.key === this.selectedTheme)
     },
     pageTitle() {
-      return this.$t(
-        {
-          overview: 'AuditReportOverview',
-          templates: 'AuditReportTemplates'
-        }[this.mode]
-      )
-    },
-    pageDescription() {
-      return this.$t(
-        {
-          overview: 'AuditReportOverviewHelp',
-          templates: 'AuditReportTemplatesHelp'
-        }[this.mode]
-      )
+      return this.$t('AuditReportOverview')
     },
     visibleSections() {
-      return (this.snapshot?.sections || []).filter(
-        (section) => !['scope', 'conclusion'].includes(section.key)
+      const sections = this.snapshot?.sections || []
+      const overviewHasCharts = sections.some((section) =>
+        (section.tables || []).some(this.hasChartData)
       )
+      return sections.filter((section) => {
+        if (['scope', 'conclusion', 'assessment'].includes(section.key)) return false
+        return (
+          section.metrics?.length ||
+          this.detailTables(section).length ||
+          this.emptySectionKey(section) ||
+          (section.key === 'overview'
+            ? overviewHasCharts
+            : (section.tables || []).some(this.hasChartData))
+        )
+      })
     },
     allTables() {
       const sections = (this.snapshot?.sections || []).filter(
@@ -364,7 +265,10 @@ export default {
       return Array.from(new Map(tables.map((table) => [table.key, table])).values())
     },
     trendTable() {
-      return this.allTables.find((table) => table.key === 'session_trend' && table.rows?.length)
+      return this.allTables.find((table) => reportTrend(table)?.total > 0)
+    },
+    trendSummary() {
+      return this.trendTable ? reportTrend(this.trendTable) : null
     },
     distributionTables() {
       return this.allTables.filter(
@@ -379,6 +283,21 @@ export default {
         this.distributionTables.find((table) => table.key === this.distributionKey) ||
         this.distributionTables[0]
       )
+    },
+    distributionRows() {
+      const table = this.distributionTable
+      const hasStatus = table?.columns?.some((column) => column.key === 'status')
+      return (table?.rows || [])
+        .map((row) => ({
+          ...row,
+          label: [row.name || '—', hasStatus ? row.status : null]
+            .filter((value) => value != null && value !== '')
+            .map(this.cellValue)
+            .join(' · ')
+        }))
+        .sort((a, b) => Number(b.count) - Number(a.count))
+        .slice(0, 10)
+        .reverse()
     },
     chartTheme() {
       const theme = this.$store.state.settings.themeColors || {}
@@ -429,7 +348,15 @@ export default {
       }
     },
     distributionOptions() {
-      const rows = (this.distributionTable?.rows || []).slice(0, 10).reverse()
+      const rows = this.distributionRows
+      const multiDimension = this.distributionTable?.columns?.some(
+        (column) => column.key === 'status'
+      )
+      const axisWidth = multiDimension ? 150 : 95
+      const labelSpace = Math.max(
+        36,
+        ...rows.map((row) => this.formatValue(row.count).length * 8 + 12)
+      )
       return {
         color: [this.chartTheme.primary],
         textStyle: {
@@ -437,8 +364,8 @@ export default {
           fontSize: 12,
           fontFamily: this.chartTheme.fontFamily
         },
-        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-        grid: { left: 110, right: 36, top: 15, bottom: 25 },
+        tooltip: { trigger: 'axis', confine: true, axisPointer: { type: 'shadow' } },
+        grid: { left: axisWidth + 15, right: labelSpace, top: 15, bottom: 25 },
         xAxis: {
           type: 'value',
           minInterval: 1,
@@ -447,8 +374,13 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: rows.map((row) => String(row.name || '—')),
-          axisLabel: { width: 95, overflow: 'truncate', color: this.chartTheme.secondary },
+          data: rows.map((row) => row.label),
+          tooltip: {
+            show: true,
+            confine: true,
+            extraCssText: 'max-width: 320px; white-space: normal; overflow-wrap: anywhere;'
+          },
+          axisLabel: { width: axisWidth, overflow: 'truncate', color: this.chartTheme.secondary },
           axisLine: { lineStyle: { color: this.chartTheme.border } }
         },
         series: [
@@ -456,7 +388,13 @@ export default {
             type: 'bar',
             name: this.distributionTable?.title,
             data: rows.map((row) => row.count),
-            barMaxWidth: 22
+            barMaxWidth: 22,
+            label: {
+              show: true,
+              position: 'right',
+              color: this.chartTheme.secondary,
+              formatter: ({ value }) => this.formatValue(value)
+            }
           }
         ]
       }
@@ -480,18 +418,10 @@ export default {
         this.distributionKey = this.distributionTables[0]?.key || ''
       }
     },
-    mode() {
-      if (this.active) {
-        this.page = 1
-        this.load()
-      }
-    },
     organizationId() {
       if (!this.active) return
       this.catalog = null
       this.snapshot = null
-      this.items = []
-      this.page = 1
       this.load()
     }
   },
@@ -508,12 +438,10 @@ export default {
     this.active = false
     this.requestId++
     this.previewId++
-    this.listId++
   },
   beforeUnmount() {
     this.requestId++
     this.previewId++
-    this.listId++
   },
   methods: {
     async load() {
@@ -523,7 +451,6 @@ export default {
       this.dataError = ''
       this.loading = true
       this.snapshot = null
-      this.items = []
       try {
         const catalog = await reportApi.catalog()
         if (id !== this.requestId) return
@@ -531,8 +458,7 @@ export default {
         if (!this.themes.some((theme) => theme.key === this.selectedTheme)) {
           this.selectedTheme = this.firstTheme?.key || ''
         }
-        if (this.mode === 'overview' && this.currentTheme) await this.loadPreview()
-        else if (this.mode === 'templates') await this.loadList()
+        if (this.currentTheme) await this.loadPreview()
       } catch (error) {
         if (id === this.requestId) this.error = reportError(error, this.$t('AuditReportLoadFailed'))
       } finally {
@@ -552,7 +478,11 @@ export default {
       this.snapshot = null
       try {
         const data = await reportApi.preview(
-          makeConfig(this.selectedTheme, this.currentTheme.chapters || [], this.range)
+          makeConfig(
+            this.selectedTheme,
+            (this.currentTheme.chapters || []).filter((key) => key !== 'assessment'),
+            this.range
+          )
         )
         if (id !== this.previewId) return
         this.snapshot = data
@@ -574,90 +504,30 @@ export default {
         if (id === this.previewId) this.dataLoading = false
       }
     },
-    async loadList() {
-      if (this.mode !== 'templates') return
-      const listId = ++this.listId
-      const organizationId = this.organizationId
-      const mode = this.mode
-      this.loading = true
-      this.error = ''
-      try {
-        const params = {
-          limit: this.pageSize,
-          offset: (this.page - 1) * this.pageSize
-        }
-        const response = await reportApi.templates(params)
-        if (
-          listId !== this.listId ||
-          organizationId !== this.organizationId ||
-          mode !== this.mode
-        ) {
-          return
-        }
-        const data = listData(response)
-        this.items = data.results
-        this.total = data.count
-      } catch (error) {
-        if (
-          listId === this.listId &&
-          organizationId === this.organizationId &&
-          mode === this.mode
-        ) {
-          this.error = reportError(error, this.$t('AuditReportLoadFailed'))
-        }
-      } finally {
-        if (
-          listId === this.listId &&
-          organizationId === this.organizationId &&
-          mode === this.mode
-        ) {
-          this.loading = false
-        }
-      }
-    },
     openEditor(theme) {
       this.$router.push({ path: '/audit/reports/editor', query: { theme, ...this.range } })
     },
-    useTemplate(template) {
-      this.$router.push({ path: '/audit/reports/editor', query: { template_id: template.id } })
+    metricValue(metric) {
+      if (metric.state === 'not_applicable') return this.$t('AuditReportNotApplicable')
+      return metric.value == null
+        ? this.$t('AuditReportDataUnavailable')
+        : this.formatValue(metric.value)
     },
-    themeTitle(key) {
-      return this.themes.find((theme) => theme.key === key)?.title || key
-    },
-    canDeleteTemplate(template) {
+    emptySectionKey: reportEmptySectionKey,
+    hasChartData(table) {
       return (
-        template.can_delete === true ||
-        (Array.isArray(template.actions) && template.actions.includes('delete'))
+        reportTrend(table)?.total > 0 ||
+        (table.rows?.length &&
+          table.columns?.some((column) => column.key === 'name') &&
+          table.columns?.some((column) => column.key === 'count'))
       )
     },
-    async deleteTemplate(template) {
-      try {
-        await this.$confirm(
-          this.$t('AuditReportDeleteTemplateConfirm', { name: template.name }),
-          this.$t('Tip'),
-          { type: 'warning' }
-        )
-      } catch {
-        return
-      }
-      try {
-        await reportApi.deleteTemplate(template.id)
-        this.$message.success(this.$t('DeleteSuccessMsg'))
-        await this.loadList()
-      } catch (error) {
-        this.error = reportError(error, this.$t('AuditReportActionFailed'))
-      }
-    },
-    sourceStatus(status) {
-      return this.$t(
-        {
-          available: 'AuditReportSourceAvailable',
-          partial: 'AuditReportSourcePartial',
-          permission_denied: 'AuditReportSourceDenied',
-          unavailable: 'AuditReportSourceUnavailable'
-        }[status] || 'AuditReportSourceUnavailable'
+    detailTables(section) {
+      return (section.tables || []).filter(
+        (table) => table.rows?.length && !isEmptyReportTable(table, section) && !reportTrend(table)
       )
     },
+    isCountColumn: isReportCountColumn,
     formatValue(value) {
       return value == null
         ? '—'
@@ -665,10 +535,46 @@ export default {
           ? value.toLocaleString()
           : String(value)
     },
+    evidenceLink: reportEvidenceLink,
+    columnWidth(key) {
+      return (
+        {
+          next_step: 260,
+          issue: 200,
+          risk: 180,
+          record_count: 100,
+          account_count: 120,
+          asset_count: 120,
+          time: 160,
+          updated: 160,
+          evidence: 105,
+          control: 160,
+          reference: 190,
+          available_evidence: 240,
+          source: 170,
+          status: 140,
+          records: 100,
+          sample_count: 110,
+          retention_days: 110
+        }[key] || 130
+      )
+    },
+    wrapColumn(key) {
+      return [
+        'next_step',
+        'issue',
+        'risk',
+        'control',
+        'reference',
+        'available_evidence',
+        'status'
+      ].includes(key)
+    },
     cellValue(value) {
       if (value == null || value === '') return '—'
       if (typeof value === 'boolean') return this.$t(value ? 'Yes' : 'No')
-      if (typeof value === 'object') return JSON.stringify(value)
+      if (Array.isArray(value)) return value.map(this.cellValue).join(', ')
+      if (typeof value === 'object') return value.label || value.name || JSON.stringify(value)
       return String(value)
     },
     dateTime(value) {
@@ -688,19 +594,13 @@ export default {
   min-width: 0;
   color: var(--color-text-primary);
 }
-.page-intro {
-  margin: 0;
-  color: var(--color-help-text);
-  font-size: 12px;
-  line-height: 1.5;
-}
 .report-theme-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 16px 20px;
+  gap: 8px 20px;
   min-width: 0;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 .report-theme-toolbar {
   grid-column: 1 / -1;
@@ -750,8 +650,7 @@ h3 {
   font-size: 13px;
   font-weight: 600;
 }
-.theme-description,
-.section-description {
+.theme-description {
   color: var(--color-text-secondary);
   line-height: 1.6;
   font-size: 12px;
@@ -760,15 +659,9 @@ h3 {
   grid-column: 1 / -1;
   margin: 0;
 }
-.section-description {
-  margin: 0 0 16px;
-}
-.coverage-warning {
-  margin-bottom: 16px;
-}
 .data-area {
   min-height: 160px;
-  padding-top: 16px;
+  padding-top: 8px;
 }
 .section-tabs {
   margin-top: 0;
@@ -812,6 +705,43 @@ h3 {
   font-size: 12px;
   font-weight: 400;
 }
+.metric-value-status {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+.trend-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 8px;
+}
+.trend-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.trend-summary span,
+.trend-summary small {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+.trend-summary strong {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+.empty-result {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--el-border-radius-base, 4px);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
 .chart-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -841,24 +771,23 @@ h3 {
   width: 180px;
   max-width: 60%;
 }
-.source-coverage {
-  margin-top: 20px;
-}
 .table-section {
   margin: 20px 0;
 }
 .table-section h3 {
   margin-bottom: 12px;
 }
-.table-note,
-.section-notes,
-.conclusion-box small {
+.table-section :deep(.el-table .cell .action-guidance) {
+  display: block;
+  overflow: visible;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+.table-note {
   font-size: 12px;
   color: var(--color-help-text);
   line-height: 1.5;
-}
-.section-notes {
-  padding-left: 18px;
 }
 .data-footer {
   display: flex;
@@ -877,58 +806,6 @@ h3 {
   line-height: 1.5;
   font-size: 13px;
 }
-.template-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-}
-.template-card :deep(.el-card__body) {
-  height: 100%;
-  box-sizing: border-box;
-}
-.template-card .el-button {
-  align-self: flex-start;
-  margin-top: auto;
-}
-.template-title {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.template-title h3 {
-  flex: 1;
-}
-.template-title .el-icon {
-  color: var(--color-icon-primary);
-  font-size: 16px;
-}
-.template-description {
-  flex: 1;
-  min-height: 38px;
-  margin: 12px 0 20px;
-  line-height: 1.6;
-  color: var(--color-text-secondary);
-  font-size: 12px;
-}
-.group-title {
-  margin: 8px 0 4px;
-}
-.el-data-table :deep(.el-table__empty-block) {
-  min-height: 100px;
-}
-.el-data-table :deep(.el-table__empty-text) {
-  width: 100%;
-  max-width: 440px;
-  padding: 24px 16px;
-  box-sizing: border-box;
-  line-height: 20px;
-  font-size: 12px;
-  color: var(--color-help-text);
-}
-.el-pagination {
-  margin-top: 16px;
-  justify-content: flex-end;
-}
 @media (max-width: 1000px) {
   .chart-grid {
     grid-template-columns: 1fr;
@@ -939,7 +816,7 @@ h3 {
     display: contents;
   }
   .report-theme-header {
-    gap: 12px;
+    gap: 8px;
   }
   .theme-tabs {
     grid-column: 1 / -1;
@@ -954,9 +831,6 @@ h3 {
   }
 }
 @media (max-width: 600px) {
-  .template-grid {
-    grid-template-columns: 1fr;
-  }
   .metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
