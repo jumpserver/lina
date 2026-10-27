@@ -1,4 +1,4 @@
-const assetModules = import.meta.glob('../assets/**/*', {
+const assetModules = import.meta.glob(['../assets/**/*', '!../assets/fonts/audit-report/**'], {
   eager: true,
   import: 'default'
 })
