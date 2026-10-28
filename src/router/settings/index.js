@@ -620,6 +620,17 @@ export default {
           }
         },
         {
+          path: 'monitor',
+          name: 'TaskMonitor',
+          component: () => import('@/views/settings/Task/TaskMonitor.vue'),
+          hidden: true,
+          meta: {
+            title: i18n.t('TaskMonitor'),
+            permissions: ['ops.view_taskmonitor'],
+            activeMenu: '/settings/tasks'
+          }
+        },
+        {
           path: ':id',
           component: () => import('@/views/settings/Task/TaskDetail'),
           name: 'TaskDetail',
