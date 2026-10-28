@@ -60,7 +60,5 @@ export function reportTrend(table) {
 }
 
 export function isReportCountColumn(key) {
-  return (
-    ['count', 'records', 'sample_count', 'retention_days'].includes(key) || key.endsWith('_count')
-  )
+  return key === 'count' || key.endsWith('_count')
 }

@@ -478,11 +478,7 @@ export default {
       this.snapshot = null
       try {
         const data = await reportApi.preview(
-          makeConfig(
-            this.selectedTheme,
-            (this.currentTheme.chapters || []).filter((key) => key !== 'assessment'),
-            this.range
-          )
+          makeConfig(this.selectedTheme, this.currentTheme.chapters || [], this.range)
         )
         if (id !== this.previewId) return
         this.snapshot = data
@@ -548,27 +544,12 @@ export default {
           time: 160,
           updated: 160,
           evidence: 105,
-          control: 160,
-          reference: 190,
-          available_evidence: 240,
-          source: 170,
-          status: 140,
-          records: 100,
-          sample_count: 110,
-          retention_days: 110
+          status: 140
         }[key] || 130
       )
     },
     wrapColumn(key) {
-      return [
-        'next_step',
-        'issue',
-        'risk',
-        'control',
-        'reference',
-        'available_evidence',
-        'status'
-      ].includes(key)
+      return ['next_step', 'issue', 'risk', 'status'].includes(key)
     },
     cellValue(value) {
       if (value == null || value === '') return '—'
