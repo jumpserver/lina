@@ -111,7 +111,7 @@ export default {
       this.accountStates = {}
       if (!this.selectedPlugin || this.selectedPlugin.custom_form || this.plugin.form) return
       const orgId =
-        this.organizations.find((org) => org.id === this.currentOrg.id)?.id ||
+        this.organizations.find((org) => org.id === this.currentOrg?.id)?.id ||
         this.organizations[0]?.id ||
         ''
       this.selectedOrgId = orgId

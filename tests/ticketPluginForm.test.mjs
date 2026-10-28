@@ -5,6 +5,15 @@ import { reactive } from 'vue'
 import resourceAvailability from '../src/views/tickets/plugins/resourceAvailability.js'
 import { buildRequestPayload } from '../src/views/tickets/plugins/form.js'
 
+test('direct entry falls back to an available organization before current organization is set', async () => {
+  const vm = await createAccountForm(async () => [])
+  vm.currentOrg = null
+  await vm.configure()
+  assert.equal(vm.initial.org_id, 'org-1')
+  assert.equal(vm.selectedOrgId, 'org-1')
+  assert.equal(vm.formReady, true)
+})
+
 test('boolean and multiple-choice fields keep their types through the generic form', async () => {
   const vm = await createAccountForm(async () => [])
   vm.plugins.push({
