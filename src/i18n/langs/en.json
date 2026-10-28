@@ -177,7 +177,7 @@
   "ApplicationConnectionsHelp": "Each SDK or Agent replica has its own instance. Versions show fetched / confirmed. Subscriptions do not require confirmation.",
   "ApplicationConnectionProgress": "Policy revisions (fetched / confirmed)",
   "ApplicationEventProcessing": "Event processing",
-  "ApplicationEventProcessingHelp": "View events sent to this application. Manual events show each instance’s execution result; policy events show delivery receipts.",
+  "ApplicationEventProcessingHelp": "View credential changes, authorization changes and manual events for this application. Expand events for instance receipts, fetches, deliveries and processing results. Events remain visible when notifications are disabled or no instances exist. Receipt or delivery alone does not prove business success.",
   "SubscriptionScope": "Applications to notify",
   "ApplicationAuthorizedAccounts": "Application-authorized accounts",
   "InitialAccount": "Initial account",
@@ -3253,5 +3253,13 @@
   "AgentUpdateOnNotificationHelp": "When disabled, apply changes during the next scheduled reconciliation (300 seconds by default). Authorization revocations still take effect.",
   "AgentAccountAlias": "Account alias",
   "AgentAccountAliasHelp": "Use a stable alias such as database or cache. Multiple accounts require unique aliases for field mappings.",
-  "AgentAddAccount": "Add business account"
+  "AgentAddAccount": "Add business account",
+  "AccountCredentialNotifications": "Account credential change notifications",
+  "AccountCredentialNotificationsHelp": "Notify Agent/SDK clients when any authorized account credential changes. Local client configuration controls account selection and business updates. Disabling notifications preserves on-demand access, scheduled synchronization and authorization revocation.",
+  "ApplicationNotificationsDisabled": "Notifications disabled",
+  "ApplicationEventNoRecipients": "No recipient instances",
+  "ApplicationAutomaticEvents": "Automatic event",
+  "ApplicationEventProgress": "{total} instances, {received} received, {success} processed successfully",
+  "ApplicationCredentialFetchedAt": "Fetched at",
+  "ApplicationCredentialDeliveredAt": "Delivered at"
 }

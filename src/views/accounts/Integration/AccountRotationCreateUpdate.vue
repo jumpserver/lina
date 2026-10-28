@@ -16,7 +16,7 @@ export default {
   components: { GenericCreateUpdatePage },
   props: {
     credential: { type: Object, default: null },
-    mode: { type: String, default: 'subscription' }
+    mode: { type: String, default: 'alternating_rotation' }
   },
   emits: ['cancel', 'saved'],
   data() {
@@ -36,10 +36,7 @@ export default {
         label: this.$t('CredentialPolicyMode'),
         type: 'radio-group',
         rules: [rules.RequiredChange],
-        options: [
-          { label: this.$t('CredentialUpdateSubscription'), value: 'subscription' },
-          { label: this.$t('AlternatingAccountRotation'), value: 'alternating_rotation' }
-        ],
+        options: [{ label: this.$t('AlternatingAccountRotation'), value: 'alternating_rotation' }],
         helpTextFormatter: () =>
           this.$t(
             this.currentMode === 'subscription'

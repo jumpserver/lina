@@ -177,7 +177,7 @@
   "ApplicationConnectionsHelp": "同一应用的每个 SDK 或 Agent 副本各有一个实例；版本列依次为已拉取 / 已确认版本。订阅不需要确认。",
   "ApplicationConnectionProgress": "策略版本（拉取 / 确认）",
   "ApplicationEventProcessing": "事件处理",
-  "ApplicationEventProcessingHelp": "查看发送给当前应用的事件。手动发送显示各实例的执行结果；策略事件显示发布与接收回执。",
+  "ApplicationEventProcessingHelp": "查看当前应用的凭据变更、授权变化和手动事件，展开查看各实例的接收、取密、交付和处理结果。通知关闭或没有接收实例时仍保留事件；已接收或已交付不代表业务已生效。",
   "SubscriptionScope": "通知应用",
   "ApplicationAuthorizedAccounts": "应用授权账号",
   "InitialAccount": "初始账号",
@@ -3247,5 +3247,13 @@
   "AgentUpdateOnNotificationHelp": "关闭后等下一次定时同步再更新，默认周期为 300 秒；授权撤销仍会及时处理。",
   "AgentAccountAlias": "账号别名",
   "AgentAccountAliasHelp": "使用 database、cache 等稳定用途名；多账号字段映射需填写不同别名。",
-  "AgentAddAccount": "添加业务账号"
+  "AgentAddAccount": "添加业务账号",
+  "AccountCredentialNotifications": "账号凭据变更通知",
+  "AccountCredentialNotificationsHelp": "开启后，应用全部授权账号的凭据变更都会通知 Agent/SDK。客户端本地配置决定使用哪些账号及如何更新业务；关闭后仍可按需获取和定时同步，授权撤销始终生效。",
+  "ApplicationNotificationsDisabled": "未启用通知",
+  "ApplicationEventNoRecipients": "无接收实例",
+  "ApplicationAutomaticEvents": "自动事件",
+  "ApplicationEventProgress": "{total} 个实例，{received} 个已接收，{success} 个处理成功",
+  "ApplicationCredentialFetchedAt": "取密时间",
+  "ApplicationCredentialDeliveredAt": "交付时间"
 }

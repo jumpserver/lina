@@ -48,6 +48,9 @@ export default {
         url: '/api/v1/accounts/integration-applications/',
         columnsExclude: ['accounts'],
         columnsMeta: {
+          credential_notifications_enabled: {
+            label: this.$t('AccountCredentialNotifications')
+          },
           id: {
             width: '300px',
             formatter: CopyableFormatter

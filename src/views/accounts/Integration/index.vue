@@ -2,15 +2,7 @@
   <TabPage
     v-model:active-menu="activeMenu"
     :submenu="tab.submenu"
-    :help-message="
-      ['notifications', 'rotations'].includes(activeMenu)
-        ? $t(
-            activeMenu === 'notifications'
-              ? 'CredentialUpdateSubscriptionHelp'
-              : 'AlternatingAccountRotationHelp'
-          )
-        : ''
-    "
+    :help-message="activeMenu === 'rotations' ? $t('AlternatingAccountRotationHelp') : ''"
   />
 </template>
 
@@ -32,12 +24,6 @@ export default {
             title: this.$t('Applications'),
             hidden: !this.$hasPerm('accounts.view_integrationapplication'),
             component: () => import('@/views/accounts/Integration/ApplicationList.vue')
-          },
-          {
-            name: 'notifications',
-            title: this.$t('PasswordChangeNotifications'),
-            hidden: !this.$hasPerm('accounts.view_applicationcredential'),
-            component: () => import('@/views/accounts/Integration/SubscriptionList.vue')
           },
           {
             name: 'rotations',

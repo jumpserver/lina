@@ -30,6 +30,8 @@
 
 <script lang="jsx">
 import { ElTag } from 'element-plus'
+import { markRaw } from 'vue'
+import ApplicationEventRecipients from './ApplicationEventRecipients.vue'
 import ListTable from '@/components/Table/ListTable'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { eventLabels } from '../AccountRotationDetail/rotationEventTimeline'
@@ -49,77 +51,58 @@ export default {
       history: null,
       columns: [
         {
+          prop: 'recipients',
+          type: 'expand',
+          width: 48,
+          formatter: markRaw(ApplicationEventRecipients)
+        },
+        {
           prop: 'published_at',
           label: this.$t('RotationEventPublishedAt'),
-          minWidth: 135,
-          formatter: (row) => (
-            <div>
-              <div>{this.formatDate(row.published_at)}</div>
-              {row.operator && <div class="secondary-text">{row.operator}</div>}
-            </div>
-          )
+          minWidth: 150,
+          formatter: (row) => this.formatDate(row.published_at)
         },
         {
           prop: 'source',
           label: this.$t('Source'),
-          minWidth: 80,
+          minWidth: 100,
           formatter: (row) =>
-            this.$t(row.source === 'manual' ? 'ApplicationManualEvents' : 'ApplicationPolicyEvents')
+            this.$t(
+              row.source === 'manual' ? 'ApplicationManualEvents' : 'ApplicationAutomaticEvents'
+            )
         },
         {
           prop: 'event',
           label: this.$t('AppAuditEvent'),
-          minWidth: 155,
-          formatter: (row) => {
-            const label = this.$t(this.eventLabels[row.event] || 'AppAuditEvent')
-            const context = [row.credential, row.account].filter(Boolean).join(' · ')
-            return (
-              <div>
-                <div class="event-text" title={label}>
-                  {label}
-                </div>
-                {context && (
-                  <div class="secondary-text event-text" title={context}>
-                    {context}
-                  </div>
-                )}
+          minWidth: 200,
+          formatter: (row) => (
+            <div>
+              <div>{this.$t(this.eventLabels[row.event] || 'AppAuditEvent')}</div>
+              <div class="secondary-text">
+                {[row.account, row.credential].filter(Boolean).join(' · ')}
               </div>
-            )
-          }
+            </div>
+          )
         },
-        {
-          prop: 'instance_id',
-          label: this.$t('InstanceID'),
-          minWidth: 110,
-          showOverflowTooltip: true,
-          formatter: (row) => row.instance_id || '-'
-        },
+        { prop: 'revision', label: this.$t('Revision'), minWidth: 70 },
         {
           prop: 'status',
           label: this.$t('Status'),
-          minWidth: 90,
+          minWidth: 170,
           formatter: (row) => (
             <div>
-              <ElTag type={row.statusType}>{this.$t(row.statusLabel || 'Unknown')}</ElTag>
-              {row.error_code && (
+              <ElTag type={row.statusType}>{this.$t(row.statusLabel)}</ElTag>
+              {!!row.recipientRows.length && (
                 <div class="secondary-text">
-                  {this.$t(this.errorLabels[row.error_code] || 'ApplicationCommandExecutionFailed')}
+                  {this.$t('ApplicationEventProgress', {
+                    total: row.recipientRows.length,
+                    received: row.receivedCount,
+                    success: row.successCount
+                  })}
                 </div>
               )}
             </div>
           )
-        },
-        {
-          prop: 'received_at',
-          label: this.$t('RotationEventReceivedAt'),
-          minWidth: 135,
-          formatter: (row) => this.formatDate(row.received_at)
-        },
-        {
-          prop: 'finished_at',
-          label: this.$t('ApplicationCommandFinishedAt'),
-          minWidth: 135,
-          formatter: (row) => this.formatDate(row.finished_at)
         }
       ],
       eventLabels: {
@@ -144,8 +127,7 @@ export default {
         columnsMeta: { actions: { has: false } },
         hasSelection: false,
         hasPagination: true,
-        // The APIs count events, while the table shows one row per recipient.
-        // Only the next page is known until both event streams are exhausted.
+        // Merge both event streams before deciding whether another page exists.
         paginationLayout: 'sizes, prev, next',
         hasOperation: false,
         hasEdit: false,
@@ -201,13 +183,17 @@ export default {
       const { signal } = config
       this.loadFailed = false
       if (!this.history) {
-        this.history = createApplicationEventHistory((source, query, options) => {
-          const endpoint = source === 'manual' ? 'manual-events' : 'credential-events'
-          return this.$axios.get(`/api/v1/accounts/integration-applications/${id}/${endpoint}/`, {
-            ...options,
-            params: query
-          })
-        })
+        this.history = createApplicationEventHistory(
+          (source, query, options) => {
+            const endpoint = source === 'manual' ? 'manual-events' : 'credential-events'
+            return this.$axios.get(`/api/v1/accounts/integration-applications/${id}/${endpoint}/`, {
+              ...options,
+              params: query
+            })
+          },
+          30,
+          true
+        )
       }
       try {
         const data = await this.history.getPage(offset / size + 1, size, { signal })

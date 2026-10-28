@@ -2697,7 +2697,7 @@
   "ApplicationManualEvents": "Manual events",
   "ApplicationPolicyEvents": "Policy events",
   "ApplicationManualEventsHelp": "Each manual request records the result of every selected instance. A receipt does not mean execution succeeded.",
-  "ApplicationEventProcessingHelp": "View events sent to this application. Manual events show each instance’s execution result; policy events show delivery receipts.",
+  "ApplicationEventProcessingHelp": "View credential changes, authorization changes and manual events for this application. Expand events for instance receipts, fetches, deliveries and processing results. Events remain visible when notifications are disabled or no instances exist. Receipt or delivery alone does not prove business success.",
   "StartNewPolicyCycle": "Start new cycle",
   "StartSubscriptionNotificationCycleConfirm": "Notify enabled, authorized applications to fetch the current subscription credentials again. Passwords and credential versions stay unchanged. Continue?",
   "PolicyCycleStarted": "New cycle started",
@@ -2796,5 +2796,13 @@
   "AgentUpdateOnNotificationHelp": "無効時は次回の定期同期で更新します（既定 300 秒）。権限取消は引き続き適用します。",
   "AgentAccountAlias": "アカウント別名",
   "AgentAccountAliasHelp": "database、cache など安定した用途名を指定します。複数アカウントでは別名を一意にしてください。",
-  "AgentAddAccount": "業務アカウントを追加"
+  "AgentAddAccount": "業務アカウントを追加",
+  "AccountCredentialNotifications": "Account credential change notifications",
+  "AccountCredentialNotificationsHelp": "Notify Agent/SDK clients when any authorized account credential changes. Local client configuration controls account selection and business updates. Disabling notifications preserves on-demand access, scheduled synchronization and authorization revocation.",
+  "ApplicationNotificationsDisabled": "Notifications disabled",
+  "ApplicationEventNoRecipients": "No recipient instances",
+  "ApplicationAutomaticEvents": "Automatic event",
+  "ApplicationEventProgress": "{total} instances, {received} received, {success} processed successfully",
+  "ApplicationCredentialFetchedAt": "Fetched at",
+  "ApplicationCredentialDeliveredAt": "Delivered at"
 }

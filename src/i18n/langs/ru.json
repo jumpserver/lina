@@ -2601,7 +2601,7 @@
   "ApplicationManualEvents": "Manual events",
   "ApplicationPolicyEvents": "Policy events",
   "ApplicationManualEventsHelp": "Each manual request records the result of every selected instance. A receipt does not mean execution succeeded.",
-  "ApplicationEventProcessingHelp": "View events sent to this application. Manual events show each instance’s execution result; policy events show delivery receipts.",
+  "ApplicationEventProcessingHelp": "View credential changes, authorization changes and manual events for this application. Expand events for instance receipts, fetches, deliveries and processing results. Events remain visible when notifications are disabled or no instances exist. Receipt or delivery alone does not prove business success.",
   "StartNewPolicyCycle": "Start new cycle",
   "StartSubscriptionNotificationCycleConfirm": "Notify enabled, authorized applications to fetch the current subscription credentials again. Passwords and credential versions stay unchanged. Continue?",
   "PolicyCycleStarted": "New cycle started",
@@ -2686,5 +2686,13 @@
   "AgentUpdateOnNotificationHelp": "Иначе обновлять при следующей сверке (по умолчанию 300 секунд). Отзыв прав продолжает действовать.",
   "AgentAccountAlias": "Псевдоним записи",
   "AgentAccountAliasHelp": "Используйте стабильную роль, например database или cache. Для нескольких записей псевдонимы должны быть уникальны.",
-  "AgentAddAccount": "Добавить учётную запись"
+  "AgentAddAccount": "Добавить учётную запись",
+  "AccountCredentialNotifications": "Account credential change notifications",
+  "AccountCredentialNotificationsHelp": "Notify Agent/SDK clients when any authorized account credential changes. Local client configuration controls account selection and business updates. Disabling notifications preserves on-demand access, scheduled synchronization and authorization revocation.",
+  "ApplicationNotificationsDisabled": "Notifications disabled",
+  "ApplicationEventNoRecipients": "No recipient instances",
+  "ApplicationAutomaticEvents": "Automatic event",
+  "ApplicationEventProgress": "{total} instances, {received} received, {success} processed successfully",
+  "ApplicationCredentialFetchedAt": "Fetched at",
+  "ApplicationCredentialDeliveredAt": "Delivered at"
 }

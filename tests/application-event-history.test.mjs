@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import {
   applicationEventRows,
+  applicationEventGroups,
   createApplicationEventHistory
 } from '../src/views/accounts/Integration/ApplicationDetail/applicationEventHistory.js'
 
@@ -169,4 +170,34 @@ test('an aborted request cannot overwrite the cache used by a later page request
   oldResponse({ count: 0, results: [] })
   await assert.rejects(obsolete, { name: 'AbortError' })
   assert.deepEqual((await pager.getPage(1, 15)).rows, current.rows)
+})
+
+test('grouped history keeps one event per row and all recipient execution results', async () => {
+  const record = event(1, 'policy', 61)
+  record.recipients[0].status = 'success'
+  record.recipients[0].finished_at = '2026-10-28T01:00:00Z'
+  const pager = createApplicationEventHistory(
+    async (source) => ({
+      count: source === 'policy' ? 1 : 0,
+      results: source === 'policy' ? [record] : []
+    }),
+    30,
+    true
+  )
+  const page = await pager.getPage(1)
+  assert.equal(page.rows.length, 1)
+  assert.equal(page.hasNext, false)
+  assert.equal(page.rows[0].recipientRows.length, 61)
+  assert.equal(page.rows[0].successCount, 1)
+  assert.equal(page.rows[0].recipientRows[0].statusLabel, 'Success')
+  assert.equal(page.rows[0].recipientRows[1].statusLabel, 'RotationEventReceived')
+})
+
+test('disabled notifications and missing recipients remain distinct in grouped history', () => {
+  const disabled = { ...event(1, 'policy', 0), notification_enabled: false }
+  const untargeted = event(2, 'policy', 0)
+  const rows = applicationEventGroups([disabled, untargeted], 'policy')
+  assert.equal(rows[0].statusLabel, 'ApplicationNotificationsDisabled')
+  assert.equal(rows[1].statusLabel, 'ApplicationEventNoRecipients')
+  assert.equal(rows[0].recipientRows.length, 0)
 })

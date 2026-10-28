@@ -24,20 +24,62 @@ export function applicationEventRows(events, source) {
     return recipients.map((recipient, index) => {
       const row = { ...event, ...recipient }
       const status =
-        source === 'manual' ? row.status : receiptStatus(event.recipients.length ? recipient : null)
+        source === 'manual' || ['success', 'failed'].includes(row.status)
+          ? row.status
+          : receiptStatus(event.recipients.length ? recipient : null)
       return {
         ...row,
         key: `${source}:${event.id || event.command_id}:${index}`,
         source,
         published_at: source === 'manual' ? event.occurred_at : event.published_at,
-        statusLabel: (source === 'manual' ? commandStatusLabels : statusLabels)[status],
+        statusLabel: (source === 'manual' || ['success', 'failed'].includes(row.status)
+          ? commandStatusLabels
+          : statusLabels)[status],
         statusType: statusTypes[status] || 'info'
       }
     })
   })
 }
 
-export function createApplicationEventHistory(request, pageSize = 30) {
+export function applicationEventGroups(events, source) {
+  return events.map((event) => {
+    const recipients = applicationEventRows([event], source).filter(() => event.recipients.length)
+    const failed = recipients.filter(
+      (row) => row.status === 'failed' || row.publish_result === 'failed'
+    ).length
+    const received = recipients.filter((row) => row.received_at).length
+    const succeeded = recipients.filter((row) => row.status === 'success').length
+    const label =
+      event.notification_enabled === false
+        ? 'ApplicationNotificationsDisabled'
+        : !recipients.length
+          ? 'ApplicationEventNoRecipients'
+          : failed
+            ? 'Failed'
+            : succeeded === recipients.length
+              ? 'Success'
+              : received === recipients.length
+                ? 'RotationEventReceived'
+                : 'ApplicationCommandPending'
+    return {
+      ...event,
+      source,
+      key: `${source}:${event.id || event.command_id}`,
+      published_at: source === 'manual' ? event.occurred_at : event.published_at,
+      recipientRows: recipients,
+      receivedCount: received,
+      successCount: succeeded,
+      statusLabel: label,
+      statusType: failed
+        ? 'danger'
+        : succeeded === recipients.length && recipients.length
+          ? 'success'
+          : 'info'
+    }
+  })
+}
+
+export function createApplicationEventHistory(request, pageSize = 30, groupEvents = false) {
   let sources = ['manual', 'policy'].map((source) => ({
     source,
     offset: 0,
@@ -52,7 +94,9 @@ export function createApplicationEventHistory(request, pageSize = 30) {
         throw new Error('Event history returned an incomplete page')
       }
       source.offset += data.results.length
-      source.rows = source.rows.concat(applicationEventRows(data.results, source.source))
+      source.rows = source.rows.concat(
+        (groupEvents ? applicationEventGroups : applicationEventRows)(data.results, source.source)
+      )
       source.exhausted = source.offset >= data.count
     }
   }

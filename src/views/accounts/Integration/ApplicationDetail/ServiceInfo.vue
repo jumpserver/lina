@@ -59,7 +59,19 @@ export default {
         }
       ],
       url: `/api/v1/accounts/integration-applications/${this.object.id}`,
-      detailFields: ['id', 'name', 'date_created', 'date_updated', 'comment', 'is_active']
+      detailFields: [
+        'id',
+        'name',
+        {
+          key: this.$t('AccountCredentialNotifications'),
+          value: this.$t(this.object.credential_notifications_enabled ? 'Enabled' : 'Disabled')
+        },
+        { key: this.$t('SubscriptionScope'), value: this.$t('AllApplicationAccounts') },
+        'date_created',
+        'date_updated',
+        'comment',
+        'is_active'
+      ]
     }
   }
 }

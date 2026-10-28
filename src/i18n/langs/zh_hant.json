@@ -2726,7 +2726,7 @@
   "ApplicationManualEvents": "手動傳送",
   "ApplicationPolicyEvents": "策略事件",
   "ApplicationManualEventsHelp": "每次手動傳送均記錄所選實例的執行結果，收到事件不代表執行成功。",
-  "ApplicationEventProcessingHelp": "檢視傳送給目前應用的事件。手動傳送顯示各實例的執行結果；策略事件顯示發布與接收回執。",
+  "ApplicationEventProcessingHelp": "View credential changes, authorization changes and manual events for this application. Expand events for instance receipts, fetches, deliveries and processing results. Events remain visible when notifications are disabled or no instances exist. Receipt or delivery alone does not prove business success.",
   "StartNewPolicyCycle": "發起新週期",
   "StartSubscriptionNotificationCycleConfirm": "將重新通知已啟用且有帳號授權的應用取得目前訂閱憑據，密碼和憑據版本保持不變。是否繼續？",
   "PolicyCycleStarted": "新週期已發起",
@@ -2817,5 +2817,13 @@
   "AgentUpdateOnNotificationHelp": "關閉後等下一次定時同步再更新，預設週期為 300 秒；授權撤銷仍會及時處理。",
   "AgentAccountAlias": "帳號別名",
   "AgentAccountAliasHelp": "使用 database、cache 等穩定用途名；多帳號欄位對應需填寫不同別名。",
-  "AgentAddAccount": "新增業務帳號"
+  "AgentAddAccount": "新增業務帳號",
+  "AccountCredentialNotifications": "Account credential change notifications",
+  "AccountCredentialNotificationsHelp": "Notify Agent/SDK clients when any authorized account credential changes. Local client configuration controls account selection and business updates. Disabling notifications preserves on-demand access, scheduled synchronization and authorization revocation.",
+  "ApplicationNotificationsDisabled": "Notifications disabled",
+  "ApplicationEventNoRecipients": "No recipient instances",
+  "ApplicationAutomaticEvents": "Automatic event",
+  "ApplicationEventProgress": "{total} instances, {received} received, {success} processed successfully",
+  "ApplicationCredentialFetchedAt": "Fetched at",
+  "ApplicationCredentialDeliveredAt": "Delivered at"
 }

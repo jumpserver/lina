@@ -18,14 +18,21 @@ export default {
       logo_file: null,
       url: '/api/v1/accounts/integration-applications/',
       initial: {
-        accounts: { type: 'ids', ids: [] }
+        accounts: { type: 'ids', ids: [] },
+        credential_notifications_enabled: false
       },
       fields: [
         [this.$t('Basic'), ['name', 'logo']],
         [this.$t('AuthorizationPolicy'), ['accounts', 'ip_group']],
+        [this.$t('AccountCredentialNotifications'), ['credential_notifications_enabled']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        credential_notifications_enabled: {
+          label: this.$t('AccountCredentialNotifications'),
+          type: 'switch',
+          helpText: this.$t('AccountCredentialNotificationsHelp')
+        },
         ip_group: {
           helpText: this.$t('IpGroupHelpText')
         },
