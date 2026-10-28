@@ -5,7 +5,6 @@
 <script>
 import BaseSMS from './Base.vue'
 import { PhoneInput, UpdateToken } from '@/components/Form/FormFields'
-import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'SMSAlibaba',
@@ -16,6 +15,7 @@ export default {
     const vm = this
     return {
       url: `/api/v1/settings/setting/?category=alibaba`,
+      encryptedFields: ['ALIBABA_ACCESS_KEY_SECRET'],
       hasDetailInMsg: false,
       visible: false,
       moreButtons: [
@@ -23,16 +23,7 @@ export default {
           title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
-            btn.loading = true
-            vm.$axios.post(
-              `/api/v1/settings/sms/alibaba/testing/`,
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch((error) => {
-              vm.$log.error('err occur')
-              vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => { btn.loading = false })
+            return vm.$refs.baseSms.testSettings(value, form, btn, 'alibaba')
           }
         }
       ],
@@ -65,7 +56,6 @@ export default {
           component: UpdateToken
         },
         SMS_TEST_PHONE: {
-          rules: [Required],
           component: PhoneInput
         }
       },

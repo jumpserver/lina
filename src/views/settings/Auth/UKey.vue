@@ -119,7 +119,7 @@ export default {
           return res
         },
         moreButtons: [{
-          title: this.$t('UKeyTestConnection'),
+          title: this.$t('Test'),
           loading: false,
           hidden: () => !vm.activeProvider.supports_connection_test,
           callback: this.testConnection
@@ -142,11 +142,6 @@ export default {
     },
     secretFields() {
       return [...new Set(this.providers.flatMap(provider => provider.secret_fields || []))]
-    }
-  },
-  watch: {
-    draftProvider(value) {
-      this.settings.moreButtons[0].title = this.$t(value === 'xjca' ? 'UKeyTestFishermanConnection' : 'UKeyTestConnection')
     }
   },
   methods: {

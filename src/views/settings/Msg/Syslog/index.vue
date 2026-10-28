@@ -100,7 +100,7 @@ export default {
       },
       moreButtons: [
         {
-          title: this.$t('SyslogTest'),
+          title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
             form.validate(valid => {

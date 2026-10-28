@@ -1,5 +1,6 @@
 <template>
   <IBox>
+    <el-alert v-if="helpText" :closable="false" :title="helpText" type="info" />
     <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" @reset="$emit('reset')" />
   </IBox>
 </template>
@@ -15,6 +16,10 @@ export default {
     GenericCreateUpdateForm
   },
   props: {
+    helpText: {
+      type: String,
+      default: ''
+    },
     config: {
       type: Object,
       default: () => ({})

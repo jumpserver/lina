@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { runSettingsTest } from '@/views/settings/testSettings'
 import { IBox, DrawerListTable as ListTable } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import AddressInput from '@/components/Form/FormFields/AddressInput'
@@ -154,23 +155,13 @@ export default {
       },
       moreButtons: [
         {
-          title: this.$t('NasTest'),
+          title: this.$t('Test'),
           loading: false,
           callback: (value, form, btn) => {
-            form.validate(valid => {
-              if (!valid) return
-              btn.loading = true
-              testNasSetting(value)
-                .then(res => {
-                  this.$message.success(res['msg'])
-                })
-                .catch(error => {
-                  const message = error?.response?.data?.error || error?.message || 'NAS connection test failed'
-                  this.$message.error(message)
-                })
-                .finally(() => {
-                  btn.loading = false
-                })
+            return runSettingsTest(this, {
+              value, form, button: btn,
+              encryptedFields: this.encryptedFields,
+              request: testNasSetting
             })
           }
         }

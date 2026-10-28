@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { runSettingsTest, normalizeEmailSettings } from '@/views/settings/testSettings'
 import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { testEmailSetting } from '@/api/settings'
@@ -94,50 +95,25 @@ export default {
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {
-          title: this.$t('EmailTest'),
+          title: this.$t('Test'),
           loading: false,
-          callback: function (value, form, btn) {
-            const testValue = {}
-            testValue['EMAIL_FROM'] = value['EMAIL_FROM']
-            testValue['EMAIL_RECIPIENT'] = value['EMAIL_RECIPIENT']
-            btn.loading = true
-            testEmailSetting(value)
-              .then(res => {
-                vm.$message.success(res['msg'])
-              })
-              .catch(res => {
-                vm.$message.error(res['response']['data']['error'])
-              })
-              .finally(() => {
-                btn.loading = false
-              })
+          callback: function(value, form, btn) {
+            return runSettingsTest(vm, {
+              value, form, button: btn,
+              encryptedFields: vm.encryptedFields,
+              normalize: normalizeEmailSettings,
+              request: testEmailSetting
+            })
           }
         }
       ],
       cleanFormValue(data) {
-        Object.keys(data).forEach(function (key) {
-          if (data[key] === null) {
-            delete data[key]
-          }
-          if (!data['EMAIL_HOST_PASSWORD']) {
-            delete data['EMAIL_HOST_PASSWORD']
-          }
-          switch (data['EMAIL_SECURITY_PROTOCOL']) {
-            case 'ssl':
-              data['EMAIL_USE_SSL'] = true
-              data['EMAIL_USE_TLS'] = false
-              break
-            case 'tls':
-              data['EMAIL_USE_SSL'] = false
-              data['EMAIL_USE_TLS'] = true
-              break
-            default:
-              data['EMAIL_USE_SSL'] = false
-              data['EMAIL_USE_TLS'] = false
-              break
-          }
+        const values = normalizeEmailSettings(data)
+        Object.keys(values).forEach(key => {
+          if (values[key] === null) delete values[key]
         })
-        return data
+        if (!values.EMAIL_HOST_PASSWORD) delete values.EMAIL_HOST_PASSWORD
+        return values
       },
       submitMethod() {
         return 'patch'

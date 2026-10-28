@@ -1,6 +1,7 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm class="form" v-bind="$data" />
+    <el-alert :closable="false" :title="$t('SettingsTestHelpText')" type="info" />
+    <GenericCreateUpdateForm ref="form" class="form" v-bind="$data" />
   </IBox>
 </template>
 
@@ -19,6 +20,14 @@ export default {
   components: {
     GenericCreateUpdateForm,
     IBox
+  },
+  provide() {
+    return {
+      getSMSTestSettings: () => {
+        const value = this.$refs.form?.$refs.form?.$refs.dataForm?.getFormValue() || {}
+        return value.SMS_CODE_LENGTH === undefined ? {} : { SMS_CODE_LENGTH: value.SMS_CODE_LENGTH }
+      }
+    }
   },
   data() {
     return {

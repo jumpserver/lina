@@ -1,5 +1,6 @@
 <template>
   <IBox>
+    <el-alert :closable="false" :title="$t('LdapTestHelpText')" type="info" />
     <GenericCreateUpdateForm v-bind="$data" />
     <ImportDialog v-if="dialogLdapUserImport" :category="category" :visible.sync="dialogLdapUserImport" />
     <TestLoginDialog :visible.sync="dialogTest" :category="category" />
@@ -79,7 +80,7 @@ export default {
       hasDetailInMsg: false,
       moreButtons: [
         {
-          title: this.$t('LdapConnectTest'),
+          title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
             if (value['AUTH_LDAP_BIND_PASSWORD'] === undefined) {

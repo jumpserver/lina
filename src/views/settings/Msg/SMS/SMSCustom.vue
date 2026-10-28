@@ -5,7 +5,6 @@
 <script>
 import BaseSMS from './Base.vue'
 import { JsonEditor, PhoneInput } from '@/components/Form/FormFields'
-import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'SMSCustom',
@@ -16,6 +15,7 @@ export default {
     const vm = this
     return {
       url: `/api/v1/settings/setting/?category=custom`,
+      encryptedFields: [],
       hasDetailInMsg: false,
       visible: false,
       moreButtons: [
@@ -23,16 +23,7 @@ export default {
           title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
-            btn.loading = true
-            vm.$axios.post(
-              `/api/v1/settings/sms/custom/testing/`,
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch((error) => {
-              vm.$log.error('err occur')
-              vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => { btn.loading = false })
+            return vm.$refs.baseSms.testSettings(value, form, btn, 'custom')
           }
         }
       ],
@@ -57,7 +48,6 @@ export default {
           helpText: this.$t('CustomParams')
         },
         SMS_TEST_PHONE: {
-          rules: [Required],
           component: PhoneInput
         }
       },

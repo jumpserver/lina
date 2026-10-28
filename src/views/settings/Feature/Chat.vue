@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-alert :closable="false" :title="$t('SettingsTestHelpText')" type="info" />
     <IBox>
       <GenericCreateUpdateForm v-bind="$data" @submitSuccess="submitSuccess" />
     </IBox>
@@ -7,6 +8,7 @@
 </template>
 
 <script>
+import { runSettingsTest } from '@/views/settings/testSettings'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import IBox from '@/components/Common/IBox/index.vue'
 import { mapGetters } from 'vuex'
@@ -21,26 +23,22 @@ export default {
     return {
       url: '/api/v1/settings/setting/?category=chat',
       hasReset: false,
+      draftMethod: 'api',
       moreButtons: [
         {
           title: this.$t('Test'),
           loading: false,
+          hidden: () => vm.draftMethod !== 'api',
           callback: function(value, form, btn) {
-            btn.loading = true
-            vm.$axios.post(
-              '/api/v1/settings/chatai/testing/',
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch(() => {
-              vm.$log.error('err occur')
-            }).finally(() => {
-              btn.loading = false
+            return runSettingsTest(vm, {
+              value, form, button: btn,
+              encryptedFields: vm.encryptedFields,
+              request: data => vm.$axios.post('/api/v1/settings/chatai/testing/', data)
             })
           }
         }
       ],
-      encryptedFields: ['VAULT_HCP_TOKEN'],
+      encryptedFields: ['GPT_API_KEY', 'DEEPSEEK_API_KEY'],
       fields: [
         'CHAT_AI_ENABLED',
         'CHAT_AI_METHOD',
@@ -57,7 +55,14 @@ export default {
         'CUSTOM_GPT_MODEL',
         'CUSTOM_DEEPSEEK_MODEL'
       ],
+      afterGetFormValue(value) {
+        vm.draftMethod = value.CHAT_AI_METHOD
+        return value
+      },
       fieldsMeta: {
+        CHAT_AI_METHOD: {
+          on: { change: ([value]) => { vm.draftMethod = value } }
+        },
         CHAT_AI_TYPE: {
           hidden: (formValue) => {
             return formValue.CHAT_AI_METHOD !== 'api'
