@@ -8,10 +8,12 @@ export const reportApi = {
     const catalog = await request.get(`${base}audit-reports/catalog/`, options)
     return {
       ...catalog,
-      chapters: catalog.chapters.filter((chapter) => chapter.key !== 'scope'),
+      chapters: catalog.chapters.filter(
+        (chapter) => !['scope', 'assessment'].includes(chapter.key)
+      ),
       themes: catalog.themes.map((theme) => ({
         ...theme,
-        chapters: theme.chapters.filter((key) => key !== 'scope')
+        chapters: theme.chapters.filter((key) => !['scope', 'assessment'].includes(key))
       }))
     }
   },
@@ -48,7 +50,7 @@ export function makeConfig(theme, chapters, range = defaultRange()) {
   return {
     theme,
     ...range,
-    chapters: chapters.filter((key) => key !== 'scope'),
+    chapters: chapters.filter((key) => !['scope', 'assessment'].includes(key)),
     title: '',
     header: '',
     conclusion: '',
@@ -61,7 +63,7 @@ export function configPayload(config) {
     theme: config.theme,
     start: config.start,
     end: config.end,
-    chapters: (config.chapters || []).filter((key) => key !== 'scope'),
+    chapters: (config.chapters || []).filter((key) => !['scope', 'assessment'].includes(key)),
     title: config.title || '',
     header: config.header || '',
     conclusion: config.conclusion || '',

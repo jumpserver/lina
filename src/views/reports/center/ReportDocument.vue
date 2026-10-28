@@ -200,11 +200,9 @@
                           :href="evidenceLink(row[column.key])"
                           target="_blank"
                           rel="noopener noreferrer"
-                          >{{ cellValue(row[column.key], table.key === 'assessment_sources') }}</a
+                          >{{ cellValue(row[column.key]) }}</a
                         >
-                        <template v-else>{{
-                          cellValue(row[column.key], table.key === 'assessment_sources')
-                        }}</template>
+                        <template v-else>{{ cellValue(row[column.key]) }}</template>
                       </td>
                     </tr>
                   </tbody>
@@ -320,7 +318,7 @@ export default {
         items.push({ key: 'conclusion', title: this.$t('AuditReportDocConclusion') })
       }
       const selected = order
-        .filter((key) => !['scope', 'coverage'].includes(key))
+        .filter((key) => !['scope', 'coverage', 'assessment'].includes(key))
         .map((key) => items.find((item) => item.key === key))
         .filter(Boolean)
       const overviewKeys = new Set(
@@ -407,22 +405,16 @@ export default {
     },
     tableColumnWidths(columns) {
       const keys = new Set(columns.map((column) => column.key))
-      const proportions = keys.has('available_evidence')
-        ? { control: 1.1, reference: 1.3, available_evidence: 2, status: 0.8, next_step: 2 }
-        : keys.has('retention_days')
-          ? { source: 1.3, retention_days: 0.75, window_start: 0.95, status: 1.4, next_step: 2.1 }
-          : keys.has('sample_count')
-            ? { source: 1.3, status: 1.3, records: 0.7, sample_count: 0.7, evidence: 2.1 }
-            : keys.has('risk')
-              ? {
-                  risk: 1.4,
-                  record_count: 0.65,
-                  account_count: 0.65,
-                  asset_count: 0.65,
-                  next_step: 2.5,
-                  evidence: 0.85
-                }
-              : { next_step: 2, issue: 1.5 }
+      const proportions = keys.has('risk')
+        ? {
+            risk: 1.4,
+            record_count: 0.65,
+            account_count: 0.65,
+            asset_count: 0.65,
+            next_step: 2.5,
+            evidence: 0.85
+          }
+        : { next_step: 2, issue: 1.5 }
       const weights = columns.map((column) => proportions[column.key] || 1)
       const total = weights.reduce((sum, weight) => sum + weight, 0)
       return columns.map((column, index) => ({
@@ -433,20 +425,14 @@ export default {
     evidenceLink(value) {
       return reportEvidenceLink(value)
     },
-    cellValue(value, fullIdentifier = false) {
+    cellValue(value) {
       if (value == null) return '—'
       if (typeof value === 'boolean') return this.$t(value ? 'Yes' : 'No')
       if (Array.isArray(value)) {
-        return value.map((item) => this.cellValue(item, fullIdentifier)).join(', ')
+        return value.map((item) => this.cellValue(item)).join(', ')
       }
       if (typeof value === 'object') {
-        return (
-          (fullIdentifier && value.id) ||
-          value.label ||
-          value.name ||
-          value.id ||
-          JSON.stringify(value)
-        )
+        return value.label || value.name || value.id || JSON.stringify(value)
       }
       return String(value)
     },

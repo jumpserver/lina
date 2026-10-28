@@ -261,8 +261,7 @@ export default {
           'inventory',
           'account',
           'account_health',
-          'remediation',
-          'assessment'
+          'remediation'
         ].includes(key)
       )
     },
