@@ -26,6 +26,13 @@
             <el-radio-button value="agent">{{ $t('AgentAccess') }}</el-radio-button>
             <el-radio-button value="sdk">{{ $t('SDKAccess') }}</el-radio-button>
           </el-radio-group>
+          <el-button
+            :disabled="documentationLoading || documentationError || !activeDocument"
+            :loading="exportLoading"
+            @click="exportPdf"
+          >
+            {{ $t('ExportAsPDF') }}
+          </el-button>
         </div>
       </div>
     </template>
@@ -115,6 +122,7 @@
 <script>
 import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer/index.vue'
 import IBox from '@/components/Common/IBox/index.vue'
+import { printDocumentation } from './documentationPrint'
 
 const sdkLanguageValues = ['python', 'go', 'java', 'node']
 
@@ -130,6 +138,7 @@ export default {
       documentationError: false,
       documentationLoading: false,
       documentationRequestId: 0,
+      exportLoading: false,
       documentationTab: sdkLanguageValues.includes(this.$route.query.sdk_language)
         ? 'sdk'
         : 'agent',
@@ -190,6 +199,32 @@ export default {
     this.disconnectHeadingObserver()
   },
   methods: {
+    async exportPdf() {
+      if (
+        this.exportLoading ||
+        this.documentationLoading ||
+        this.documentationError ||
+        !this.activeDocument
+      ) {
+        return
+      }
+      this.exportLoading = true
+      const label =
+        this.documentationTab === 'agent'
+          ? this.$t('AgentAccess')
+          : `${this.sdkLanguages.find(({ value }) => value === this.sdkLanguage)?.label || this.sdkLanguage} SDK`
+      try {
+        await this.$nextTick()
+        await printDocumentation(this.$refs.docsMain, {
+          title: `JumpServer PAM - ${label}`,
+          language: this.$i18n.locale
+        })
+      } catch {
+        this.$message.error(this.$t('Failed'))
+      } finally {
+        this.exportLoading = false
+      }
+    },
     syncDocumentationFromRoute() {
       const language = this.$route.query.sdk_language
       const tab = sdkLanguageValues.includes(language) ? 'sdk' : 'agent'
@@ -535,7 +570,7 @@ export default {
   margin: 28px 0 12px;
   padding-top: 20px;
   border-top: 1px solid var(--el-border-color-lighter);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
 }
 
@@ -547,7 +582,7 @@ export default {
 
 .readme-content :deep(h3) {
   margin: 20px 0 10px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
 }
 

@@ -1,5 +1,13 @@
 <template>
   <IBox :title="$t('PolicyDocsTitle')" class="policy-documentation">
+    <template #header>
+      <div class="policy-documentation-toolbar">
+        <h5>{{ $t('PolicyDocsTitle') }}</h5>
+        <el-button :loading="exportLoading" @click="exportPdf">
+          {{ $t('ExportAsPDF') }}
+        </el-button>
+      </div>
+    </template>
     <article ref="document" class="policy-documentation-body">
       <header class="policy-documentation-introduction">
         <div class="policy-documentation-meta">
@@ -43,6 +51,7 @@
 <script>
 import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer/index.vue'
 import IBox from '@/components/Common/IBox/index.vue'
+import { printDocumentation } from '../documentationPrint'
 
 const codeBlock = (language, value) => `\n\n\`\`\`${language}\n${value}\n\`\`\`\n\n`
 const jsonBlock = (value) => codeBlock('json', JSON.stringify(value, null, 2))
@@ -55,6 +64,9 @@ export default {
       type: Object,
       required: true
     }
+  },
+  data() {
+    return { exportLoading: false }
   },
   computed: {
     subscription() {
@@ -265,6 +277,21 @@ export default {
     }
   },
   methods: {
+    async exportPdf() {
+      if (this.exportLoading) return
+      this.exportLoading = true
+      try {
+        await this.$nextTick()
+        await printDocumentation(this.$refs.document, {
+          title: `JumpServer PAM - ${this.modeLabel} - ${this.object.name || this.object.key}`,
+          language: this.$i18n.locale
+        })
+      } catch {
+        this.$message.error(this.$t('Failed'))
+      } finally {
+        this.exportLoading = false
+      }
+    },
     scrollToSection(id) {
       const section = this.$refs.document?.querySelector(`[data-section="${id}"]`)
       if (!section) return
@@ -276,6 +303,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.policy-documentation-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  h5 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
 .policy-documentation {
   color: var(--el-text-color-primary);
   font-size: 13px;
