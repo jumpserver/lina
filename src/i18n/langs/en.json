@@ -2861,7 +2861,7 @@
   "TicketChangeSecretExecution": "Password change execution",
   "TicketChangeSecretApplyHelp": "After approval, PAM generates a random password for each selected account and verifies the change. Only active password accounts with password changes enabled are supported. Passwords are not shown in the ticket.",
   "TicketChangeSecretFailureHelp": "Contact a PAM administrator to inspect the execution records.",
-  "TicketChangeSecretPending": "Awaiting approval",
+  "TicketChangeSecretPending": "Passwords will change automatically after approval",
   "TicketChangeSecretQueued": "Waiting for execution",
   "TicketChangeSecretRunning": "Changing passwords",
   "TicketChangeSecretSuccess": "Passwords changed and verified",

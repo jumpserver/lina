@@ -23,7 +23,9 @@
       <p v-if="accessState === 'expired' && expiresAt" class="access-expiry">
         {{ $t('DateExpired') }}: {{ toSafeLocalDateStr(expiresAt) }}
       </p>
-      <p>{{ $t(statusMessage + 'Help') }}</p>
+      <p v-if="!['pending', 'unapproved', 'not_applicant'].includes(accessState)">
+        {{ $t(statusMessage + 'Help') }}
+      </p>
     </div>
     <Dialog
       v-model:visible="visible"

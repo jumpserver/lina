@@ -9,7 +9,9 @@
         >
           {{ $t('DateExpired') }}: {{ toSafeLocalDateStr(expiresAt) }}
         </span>
-        <p v-if="accessState !== 'available'">{{ $t(statusMessage + 'Help') }}</p>
+        <p v-if="!['available', 'pending', 'unapproved', 'not_applicant'].includes(accessState)">
+          {{ $t(statusMessage + 'Help') }}
+        </p>
       </div>
       <el-button
         type="primary"

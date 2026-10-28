@@ -106,12 +106,7 @@ export default {
           ? 'TicketChangeSecretLogHelp'
           : 'TicketChangeSecretFailureHelp'
       }
-      return {
-        pending: 'TicketChangeSecretPendingHelp',
-        queued: 'TicketChangeSecretQueuedHelp',
-        running: 'TicketChangeSecretRunningHelp',
-        unavailable: 'TicketChangeSecretUnavailableHelp'
-      }[this.state]
+      return this.state === 'unavailable' ? 'TicketChangeSecretUnavailableHelp' : ''
     },
     resultCounts() {
       const counts = this.result.counts

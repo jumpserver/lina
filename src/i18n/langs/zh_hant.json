@@ -2842,7 +2842,7 @@
   "TicketChangeSecretExecution": "改密執行結果",
   "TicketChangeSecretApplyHelp": "審批通過後，PAM 為所選帳號分別產生隨機密碼並驗證改密結果。僅支援已啟用改密的有效密碼帳號，工單中不顯示密碼。",
   "TicketChangeSecretFailureHelp": "請聯絡 PAM 管理員核對執行記錄。",
-  "TicketChangeSecretPending": "等待審批",
+  "TicketChangeSecretPending": "審批通過後自動改密",
   "TicketChangeSecretQueued": "等待執行",
   "TicketChangeSecretRunning": "正在改密",
   "TicketChangeSecretSuccess": "改密成功並已驗證",

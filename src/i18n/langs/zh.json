@@ -2855,7 +2855,7 @@
   "TicketChangeSecretExecution": "改密执行结果",
   "TicketChangeSecretApplyHelp": "审批通过后，PAM 为所选账号分别生成随机密码并验证改密结果。仅支持已启用改密的活动密码账号，工单中不展示密码。",
   "TicketChangeSecretFailureHelp": "请联系 PAM 管理员核对执行记录。",
-  "TicketChangeSecretPending": "等待审批",
+  "TicketChangeSecretPending": "审批通过后自动改密",
   "TicketChangeSecretQueued": "等待执行",
   "TicketChangeSecretRunning": "正在改密",
   "TicketChangeSecretSuccess": "改密成功并已验证",
