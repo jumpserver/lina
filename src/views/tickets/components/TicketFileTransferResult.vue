@@ -4,11 +4,11 @@
     :object="object"
     :request-items="requestItems"
   />
-  <Details v-else :detail-card-items="requestItems" :title="$t('ApplyInfo')">
+  <Details v-else :detail-card-items="detailItems" :title="$t('ApplyInfo')">
     <div class="transfer-summary">
       <div role="status" aria-live="polite">
         <strong>{{ $t('TicketTransferState_' + result.state) }}</strong>
-        <p>{{ $t('TicketTransferExecutionHelp') }}</p>
+        <p v-if="canExecute">{{ $t('TicketTransferExecutionHelp') }}</p>
         <p v-if="result.expires_at">
           {{ $t('DateExpired') }}: {{ toSafeLocalDateStr(result.expires_at)
           }}<span v-if="expired"> · {{ $t('TicketTransferState_expired') }}</span>
@@ -83,6 +83,11 @@ export default {
   computed: {
     result() {
       return this.object.result || {}
+    },
+    detailItems() {
+      return this.result.files?.length
+        ? this.requestItems.filter((item) => item.name !== 'paths')
+        : this.requestItems
     },
     ticketKey() {
       return `${this.object.org_id}:${this.object.id}`

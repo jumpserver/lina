@@ -67,7 +67,6 @@
           <div class="section-heading editor-title">
             <el-icon class="section-icon"><Share /></el-icon>
             <h3>{{ $t('WFCanvas') }}</h3>
-            <span class="canvas-hint">{{ $t('WFCanvasHint') }}</span>
           </div>
           <div v-if="versions.length" class="version-controls">
             <el-select
@@ -162,24 +161,8 @@
                     >{{ $t(`WFResolver_${node.config.approvers.type}`) }} ·
                     {{ $t(`WFStrategy_${node.config.strategy}`) }}</small
                   >
-                  <small v-else-if="node.type === 'cc'">{{ $t('WFCCNodeHint') }}</small>
-                  <small v-else>{{
-                    $t(
-                      node.type === 'start'
-                        ? 'WFStartHint'
-                        : node.type === 'end'
-                          ? 'WFEndHint'
-                          : 'WFBranchHint'
-                    )
-                  }}</small>
                 </button>
               </div>
-            </div>
-            <div class="canvas-legend">
-              <span><i class="legend-dot approval" />{{ $t('WFApproval') }}</span>
-              <span><i class="legend-dot cc" />{{ $t('WFCC') }}</span>
-              <span><i class="legend-dot condition" />{{ $t('WFCondition') }}</span>
-              <span><i class="legend-dot endpoint" />{{ $t('WFStart') }} / {{ $t('WFEnd') }}</span>
             </div>
           </div>
           <aside v-if="selected" class="inspector" :aria-label="$t('WFNodeSettings')">
@@ -756,7 +739,6 @@ h3 {
   color: var(--el-color-primary);
   font-size: 16px;
 }
-.canvas-hint,
 .node-count {
   color: var(--el-text-color-secondary);
   font-size: 12px;
@@ -890,35 +872,6 @@ h3 {
   stroke-width: 4px;
   paint-order: stroke;
 }
-.canvas-legend {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 22px;
-  padding: 16px;
-  font-size: 11px;
-  color: var(--el-text-color-secondary);
-}
-.canvas-legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.legend-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--el-text-color-secondary);
-}
-.legend-dot.approval {
-  background: var(--el-color-primary);
-}
-.legend-dot.condition {
-  background: var(--el-color-warning);
-}
-.legend-dot.cc {
-  background: var(--el-color-success);
-}
 .inspector {
   min-width: 0;
   border-left: 1px solid var(--el-border-color-light);
@@ -1010,9 +963,6 @@ h3 {
   }
 }
 @media (max-width: 1100px) {
-  .canvas-hint {
-    display: none;
-  }
   .metadata {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

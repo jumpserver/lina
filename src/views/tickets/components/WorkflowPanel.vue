@@ -117,8 +117,11 @@
             </div>
             <template v-if="node.type === 'approval'">
               <div class="step-description hint">
-                {{ $t(`WFStrategy_${node.config.strategy}`) }} ·
-                {{ $t('WFRequiredCount', { count: node.required }) }}
+                {{
+                  node.config.strategy === 'quorum'
+                    ? $t('WFRequiredCount', { count: node.required })
+                    : $t(`WFStrategy_${node.config.strategy}`)
+                }}
               </div>
               <div v-if="node.state === 'running' && node.deadline" class="step-deadline hint">
                 <el-icon><Clock /></el-icon>

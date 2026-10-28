@@ -36,12 +36,16 @@ const plugins = {
     requestComponent: defineAsyncComponent(
       () => import('../components/TicketFileTransferResult.vue')
     ),
-    summary: 'TicketTransferApplyHelp',
     fields: {
-      paths: { label: 'TicketTransferFilePath', helpText: 'TicketTransferExactPathsHelp' },
+      paths: {
+        label: 'TicketTransferFilePath',
+        helpTip: 'TicketTransferExactPathsHelp',
+        placeholder: 'TicketTransferPathExample'
+      },
       target_directory: {
         label: 'TicketTransferTargetDirectory',
-        helpText: 'TicketTransferTargetHelp'
+        helpTip: 'TicketTransferTargetHelp',
+        placeholder: 'TicketTransferDirectoryExample'
       },
       files: { label: 'TicketTransferFiles' },
       direction: {
@@ -80,6 +84,11 @@ export function configurePluginField(plugin, field, meta, t) {
   const config = getTicketPlugin(plugin.type).fields?.[field.name]
   if (!config) return
   if (config.label) meta.label = t(config.label)
+  if (config.placeholder) meta.el.placeholder = t(config.placeholder)
+  if (config.helpTip) {
+    meta.helpText = ''
+    meta.helpTip = t(config.helpTip)
+  }
   if (
     config.helpText &&
     !(field.name === 'duration' && plugin.execution_mode === 'approval_only')

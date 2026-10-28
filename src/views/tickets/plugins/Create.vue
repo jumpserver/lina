@@ -1,16 +1,5 @@
 <template>
   <div v-loading="loading">
-    <IBox>
-      <div class="ticket-type-summary">
-        {{ $t('Type') }}: <strong>{{ typeLabel(selectedPlugin) }}</strong>
-        <span v-if="selectedPlugin?.execution_mode === 'approval_only'" class="ticket-type-hint">
-          {{ $t('TicketApprovalOnlyHint') }}
-        </span>
-        <span v-else-if="plugin.summary" class="ticket-type-hint">
-          {{ $t(plugin.summary) }}
-        </span>
-      </div>
-    </IBox>
     <component :is="plugin.form" v-if="plugin.form" ref="form" />
     <el-alert
       v-else-if="selectedPlugin?.custom_form"
@@ -22,6 +11,7 @@
       v-else-if="formReady"
       :key="selectedType"
       ref="form"
+      :title="$t('TicketApplyTitle', { type: typeLabel(selectedPlugin) })"
       :initial="initial"
       :fields="fields"
       :fields-meta="fieldsMeta"
@@ -31,7 +21,14 @@
       :has-detail-in-msg="false"
       :has-save-continue="false"
       url="/api/v1/tickets/tickets/open/"
-    />
+    >
+      <template #form-header>
+        <p v-if="selectedPlugin?.execution_mode === 'approval_only'" class="ticket-form-notice">
+          {{ $t('TicketApprovalOnlyHint') }}
+        </p>
+        <p v-else-if="plugin.summary" class="ticket-form-notice">{{ $t(plugin.summary) }}</p>
+      </template>
+    </GenericCreateUpdatePage>
     <el-alert v-if="availabilityFailed" type="error" :closable="false">
       {{ $t('TicketResourceLoadFailed') }}
       <el-button link type="primary" @click="retryResourceAvailability">{{
@@ -44,7 +41,6 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { GenericCreateUpdatePage } from '@/layout/components'
-import IBox from '@/components/Common/IBox'
 import Select2 from '@/components/Form/FormFields/Select2'
 import BasicTree from '@/components/Form/FormFields/BasicTree.vue'
 import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
@@ -57,7 +53,7 @@ import TicketTransferFiles from '../components/TicketTransferFiles.vue'
 
 export default {
   mixins: [resourceAvailability],
-  components: { IBox, GenericCreateUpdatePage },
+  components: { GenericCreateUpdatePage },
   data() {
     return {
       loading: true,
@@ -215,11 +211,12 @@ export default {
         } else if (field.resource === 'account') {
           meta.component = Select2
           meta.helpText = ''
-          this.accountStates[field.name] = { hint: this.$t('TicketSelectAssetFirst') }
+          this.accountStates[field.name] = { hint: '' }
           meta.helpTextFormatter = () => this.accountStates[field.name]?.hint || ''
           meta.el = {
             multiple: field.type === 'list',
             multipleLimit: field.max_length || 100,
+            placeholder: this.$t('TicketSelectAssetFirst'),
             options: [],
             disabled: true,
             noDataText: this.$t('TicketNoAssetAccounts')
@@ -301,6 +298,7 @@ export default {
           }
           if (field.name === 'files') {
             meta.component = TicketTransferFiles
+            meta.helpText = ''
             meta.el = { orgId: this.selectedOrgId }
             meta.on = {
               busy: ([busy]) => {
@@ -340,7 +338,7 @@ export default {
       this.accountStates[field.name] = {
         assetId,
         failed: false,
-        hint: this.$t('TicketSelectAssetFirst')
+        hint: ''
       }
       const state = this.accountStates[field.name]
       const name = `param_${field.name}`
@@ -348,6 +346,8 @@ export default {
       updateForm({ [name]: this.defaultValue(field) })
       meta.el.options = []
       meta.el.disabled = true
+      meta.el.placeholder =
+        assetId && this.selectedOrgId ? meta.label : this.$t('TicketSelectAssetFirst')
       if (!assetId || !this.selectedOrgId) {
         if (this.selectedPlugin.resource_adjustment) {
           await this.loadResourceAvailability(this.selectedType, this.selectedOrgId)
@@ -451,9 +451,8 @@ export default {
 </script>
 
 <style scoped>
-.ticket-type-hint {
-  display: block;
-  margin-top: 4px;
+.ticket-form-notice {
+  margin: 16px 0;
   color: var(--color-text-secondary);
 }
 </style>

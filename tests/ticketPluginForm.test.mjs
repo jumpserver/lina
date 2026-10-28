@@ -221,7 +221,8 @@ test('account picker resets with asset/organization and ignores obsolete request
   assert.equal(accounts.el.disabled, true)
   assert.equal(vm.fieldsMeta.param_paths.el.type, 'textarea')
   assert.equal(vm.fieldsMeta.param_paths.helpText, 'TicketOneItemPerLine')
-  assert.equal(accounts.helpTextFormatter(), 'TicketSelectAssetFirst')
+  assert.equal(accounts.helpTextFormatter(), '')
+  assert.equal(accounts.el.placeholder, 'TicketSelectAssetFirst')
   const first = vm.fieldsMeta.param_asset.on.change(['asset-1'], update)
   assert.equal(accounts.el.disabled, true)
   const second = vm.fieldsMeta.param_asset.on.change(['asset-2'], update)
@@ -234,6 +235,7 @@ test('account picker resets with asset/organization and ignores obsolete request
     ['root', 'name,with,commas']
   )
   assert.equal(accounts.el.disabled, false)
+  assert.equal(accounts.el.placeholder, accounts.label)
   assert.equal(accounts.helpTextFormatter(), '')
   assert.deepEqual(requests[1].config.params, {
     org_id: 'org-1',
@@ -250,6 +252,8 @@ test('account picker resets with asset/organization and ignores obsolete request
   assert.deepEqual(form.param_accounts, [])
   assert.equal(accounts.el.disabled, true)
   assert.equal(vm.selectedOrgId, 'org-2')
+  assert.equal(accounts.el.placeholder, 'TicketSelectAssetFirst')
+  assert.equal(accounts.helpTextFormatter(), '')
 })
 
 test('empty or failed account loads cannot retain old selections and can be retried', async () => {
@@ -365,7 +369,7 @@ test('session picker labels recordings but submits only the UUID and resets acro
   assert.equal(picker.el.disabled, true)
 })
 
-test('file transfer form explains its scope and uses direction labels without changing payloads', async () => {
+test('file transfer form keeps path guidance on demand and preserves request payloads', async () => {
   const vm = await createAccountForm(async () => [])
   vm.plugins.push({
     type: 'file_transfer',
@@ -387,7 +391,10 @@ test('file transfer form explains its scope and uses direction labels without ch
   vm.selectedType = 'file_transfer'
   await vm.configure()
   assert.equal(vm.fieldsMeta.param_paths.label, 'TicketTransferFilePath')
-  assert.equal(vm.fieldsMeta.param_paths.helpText, 'TicketTransferExactPathsHelp')
+  assert.equal(vm.plugin.summary, undefined)
+  assert.equal(vm.fieldsMeta.param_paths.helpText, '')
+  assert.equal(vm.fieldsMeta.param_paths.helpTip, 'TicketTransferExactPathsHelp')
+  assert.equal(vm.fieldsMeta.param_paths.el.placeholder, 'TicketTransferPathExample')
   assert.equal(vm.fieldsMeta.param_duration.helpText, 'TicketTransferExecutionDurationHelp')
   assert.deepEqual(vm.fieldsMeta.param_direction.el.options, [
     { value: 'upload', label: 'Upload' },
@@ -426,6 +433,13 @@ test('file transfer form separates directions, resets files on organization chan
   const update = (patch) => Object.assign(values, patch)
   assert.equal(values.param_direction, 'upload')
   assert.equal(vm.fieldsMeta.param_files.hidden(), false)
+  assert.equal(vm.fieldsMeta.param_files.helpText, '')
+  assert.equal(vm.fieldsMeta.param_target_directory.helpText, '')
+  assert.equal(vm.fieldsMeta.param_target_directory.helpTip, 'TicketTransferTargetHelp')
+  assert.equal(
+    vm.fieldsMeta.param_target_directory.el.placeholder,
+    'TicketTransferDirectoryExample'
+  )
   assert.equal(vm.fieldsMeta.param_paths.hidden(), true)
   vm.transferUploading = true
   vm.fieldsMeta.param_direction.on.change(['download'], update)

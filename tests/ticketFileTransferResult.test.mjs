@@ -2,6 +2,9 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { parse } from '@vue/compiler-sfc'
+import { compile } from '@vue/compiler-dom'
+import * as Vue from 'vue'
+import { renderToString } from '@vue/server-renderer'
 
 const commonSource = await readFile(
   new URL('../src/utils/common/index.js', import.meta.url),
@@ -29,7 +32,7 @@ const component = await load('TicketFileTransferResult', {
   useDateTime: () => ({})
 })
 function mount(object) {
-  const vm = { ...component.data(), object, $emit: () => {} }
+  const vm = { ...component.data(), object, requestItems: [], $emit: () => {} }
   for (const [key, method] of Object.entries(component.methods)) vm[key] = method.bind(vm)
   for (const [key, getter] of Object.entries(component.computed))
     Object.defineProperty(vm, key, { get: getter.bind(vm) })
@@ -134,4 +137,59 @@ test('upload selection and transfer results automatically format byte sizes', as
       assert.equal(view.methods.formatFileSize(bytes), expected)
     }
   }
+})
+
+test('transfer reminders disappear after execution or expiry and require applicant execution access', async () => {
+  const source = await readFile(
+    new URL('../src/views/tickets/components/TicketFileTransferResult.vue', import.meta.url),
+    'utf8'
+  )
+  const paragraph = parse(source).descriptor.template.content.match(
+    /<p[^>]*>\{\{ \$t\('TicketTransferExecutionHelp'\) \}\}<\/p>/
+  )[0]
+  const render = new Function(
+    'Vue',
+    compile(paragraph, { mode: 'function', prefixIdentifiers: true }).code
+  )(Vue)
+  const vm = mount(ticket())
+  for (const [state, allowed] of [
+    ['ready', true],
+    ['pending', false],
+    ['queued', false],
+    ['running', false],
+    ['success', false],
+    ['failed', false],
+    ['unverified', false],
+    ['expired', false]
+  ]) {
+    vm.object.result.state = state
+    const app = Vue.createSSRApp({ render, setup: () => ({ canExecute: vm.canExecute }) })
+    app.config.globalProperties.$t = (key) => key
+    const html = await renderToString(app)
+    assert.equal(html.includes('TicketTransferExecutionHelp'), allowed, state)
+  }
+  vm.object.result.state = 'ready'
+  vm.object.result.actions = []
+  assert.equal(vm.canExecute, false)
+  vm.object.result.actions = [{ type: 'execute_transfer' }]
+  vm.object.result.expires_at = new Date(0).toISOString()
+  assert.equal(vm.canExecute, false)
+})
+
+test('file paths appear once when the file table is populated and remain available without a table', () => {
+  const vm = mount(ticket())
+  vm.requestItems = [
+    { name: 'asset', value: 'server' },
+    { name: 'paths', value: ['C:\\Logs\\report.txt'] },
+    { name: 'duration', value: 3600 }
+  ]
+  assert.deepEqual(vm.detailItems, vm.requestItems)
+  vm.object.result.files = [{ name: 'report.txt', path: 'C:\\Logs\\report.txt' }]
+  assert.deepEqual(
+    vm.detailItems.map((item) => item.name),
+    ['asset', 'duration']
+  )
+  assert.equal(vm.requestItems.length, 3)
+  vm.object.result.files = []
+  assert.deepEqual(vm.detailItems, vm.requestItems)
 })
