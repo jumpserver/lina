@@ -1,138 +1,95 @@
 <template>
-  <Page :title="t(kind === 'sessions' ? 'AgentSessions' : 'AgentActions')">
-    <div class="agent-audit">
-      <div class="audit-toolbar">
-        <router-link :to="routeTo('sessions')">{{ t('AgentSessions') }}</router-link>
-        <router-link :to="routeTo('actions')">{{ t('AgentActions') }}</router-link>
-        <el-button :loading="loading" @click="load(offset)">{{ t('Refresh') }}</el-button>
-      </div>
+  <template v-if="active && ownsRoute()">
+    <GenericListPage
+      v-if="!detailId"
+      :key="pageKey"
+      :title="t(kind === 'sessions' ? 'AgentSessions' : 'AgentActions')"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+      :table-metadata-provider="tableMetadata"
+    />
+    <TabPage
+      v-else
+      :key="pageKey"
+      v-model:active-menu="activeMenu"
+      :title="item?.id || t('AgentAuditDetail')"
+      :submenu="detailTabs"
+      :go-back="() => router.push(routeTo(kind))"
+    >
+      <template #headingRightSide>
+        <el-button icon="refresh" :loading="loading" @click="load()">{{ t('Refresh') }}</el-button>
+      </template>
       <el-alert v-if="error" :title="error" type="error" :closable="false" />
-      <IBox v-if="item" :title="'AgentAuditDetail'">
-        <el-descriptions :column="2" border>
-          <el-descriptions-item label="ID">{{ item.id }}</el-descriptions-item>
-          <el-descriptions-item :label="t('Status')">{{ item.status }}</el-descriptions-item>
-          <el-descriptions-item v-if="item.kind" :label="t('Operation')">{{
-            item.kind
-          }}</el-descriptions-item>
-          <el-descriptions-item :label="t('User')">{{
-            item.user_display || session?.user_display || session?.user_id || '—'
-          }}</el-descriptions-item>
-          <el-descriptions-item :label="t('DateCreated')">{{
-            date(item.date_created)
-          }}</el-descriptions-item>
-          <el-descriptions-item v-if="session" :label="t('Asset')">{{
-            session.asset_id
-          }}</el-descriptions-item>
-          <el-descriptions-item v-if="session" :label="t('Account')">{{
-            session.account
-          }}</el-descriptions-item>
-          <el-descriptions-item v-if="session" :label="t('Protocol')">{{
-            session.protocol
-          }}</el-descriptions-item>
-          <el-descriptions-item v-if="session" :label="t('MCPClientID')">{{
-            session.client_id
-          }}</el-descriptions-item>
-          <el-descriptions-item v-if="item.session_id" :label="t('AgentSessions')">
-            <router-link :to="routeTo('sessions', item.session_id)">{{
-              item.session_id
-            }}</router-link>
-          </el-descriptions-item>
-          <el-descriptions-item :label="t('AgentTerminalSession')">
-            <router-link
-              v-if="session?.terminal_session_id && router.hasRoute('SessionDetail')"
-              :to="terminalRoute(session.terminal_session_id)"
-            >
-              {{ session.terminal_session_id }}
-            </router-link>
-            <span v-else>{{ session?.terminal_session_id || '—' }}</span>
-          </el-descriptions-item>
-          <el-descriptions-item v-if="item.date_started" :label="t('DateStart')">{{
-            date(item.date_started)
-          }}</el-descriptions-item>
-          <el-descriptions-item v-if="item.date_finished" :label="t('DateEnd')">{{
-            date(item.date_finished)
-          }}</el-descriptions-item>
-        </el-descriptions>
-        <template v-if="kind === 'actions'">
-          <h4>{{ t('AgentRequest') }}</h4>
-          <pre>{{ json(item.request) }}</pre>
-          <h4>{{ t('Result') }}</h4>
-          <pre>{{ json(item.result) }}</pre>
-          <p v-if="item.approval_url">
-            <el-link :href="item.approval_url" target="_blank" rel="noopener noreferrer">{{
-              t('AgentApproval')
-            }}</el-link>
-          </p>
-        </template>
-      </IBox>
-      <IBox v-if="detailId && kind === 'actions' && item" :title="'Output'">
-        <el-empty v-if="!outputs.length" :description="t('NoData')" :image-size="60" />
-        <section v-for="stream in outputs" :key="stream.name">
-          <h4>{{ stream.name }}</h4>
-          <pre>{{ stream.text }}</pre>
-        </section>
-        <el-collapse>
-          <el-collapse-item :title="t('AgentEvents')">
-            <article v-for="event in events" :key="event.event_id">
-              <p>
-                #{{ event.sequence }} · {{ event.state }} ·
-                {{ date(event.occurred_at || event.date_received) }}
+      <el-skeleton v-if="loading && !item" :rows="8" animated />
+      <template v-else-if="item">
+        <TwoCol v-if="activeMenu === 'Basic'">
+          <DetailCard :items="detailItems" />
+          <template v-if="kind === 'actions'" #right>
+            <IBox title="AgentRequest">
+              <pre>{{ json(item.request) }}</pre>
+              <h4>{{ t('Result') }}</h4>
+              <pre>{{ json(item.result) }}</pre>
+              <p v-if="item.approval_url">
+                <el-link :href="item.approval_url" target="_blank" rel="noopener noreferrer">{{
+                  t('AgentApproval')
+                }}</el-link>
               </p>
-              <pre>{{ json(event.payload) }}</pre>
-            </article>
-          </el-collapse-item>
-        </el-collapse>
-        <el-button v-if="nextOffset !== null" :loading="loading" @click="loadEvents">{{
-          t('AgentMoreEvents')
-        }}</el-button>
-      </IBox>
-      <IBox v-else v-loading="loading">
-        <el-table :data="rows" row-key="id" :empty-text="t('NoData')">
-          <el-table-column :label="t('Operation')" min-width="270">
-            <template #default="{ row }">
-              <router-link :to="routeTo(row.kind ? 'actions' : 'sessions', row.id, row)">{{
-                row.kind || row.id
-              }}</router-link>
-            </template>
-          </el-table-column>
-          <el-table-column prop="user_display" :label="t('User')" min-width="130" />
-          <el-table-column prop="status" :label="t('Status')" min-width="130" />
-          <el-table-column
-            v-if="kind === 'sessions' && !detailId"
-            prop="asset_id"
-            :label="t('Asset')"
-            min-width="240"
-          />
-          <el-table-column
-            v-if="kind === 'sessions' && !detailId"
-            prop="protocol"
-            :label="t('Protocol')"
-            width="100"
-          />
-          <el-table-column :label="t('DateCreated')" min-width="180">
-            <template #default="{ row }">{{ date(row.date_created) }}</template>
-          </el-table-column>
-        </el-table>
-        <div class="audit-pagination">
-          <el-button :disabled="loading || offset === 0" @click="load(Math.max(0, offset - 100))">{{
-            t('AgentPreviousPage')
+            </IBox>
+          </template>
+        </TwoCol>
+        <GenericListTable
+          v-else-if="kind === 'sessions' && activeMenu === 'AgentActions'"
+          :header-actions="headerActions"
+          :table-config="tableConfig"
+          :table-metadata-provider="tableMetadata"
+        />
+        <IBox v-else-if="kind === 'actions' && activeMenu === 'Output'" title="Output">
+          <el-empty v-if="!outputs.length" :description="t('NoData')" :image-size="60" />
+          <section v-for="stream in outputs" :key="stream.name">
+            <h4>{{ stream.name }}</h4>
+            <pre>{{ stream.text }}</pre>
+          </section>
+          <el-collapse>
+            <el-collapse-item :title="t('AgentEvents')">
+              <article v-for="event in events" :key="event.event_id">
+                <p>
+                  #{{ event.sequence }} · {{ event.state }} ·
+                  {{ date(event.occurred_at || event.date_received) }}
+                </p>
+                <pre>{{ json(event.payload) }}</pre>
+              </article>
+            </el-collapse-item>
+          </el-collapse>
+          <el-button v-if="nextOffset !== null" :loading="loading" @click="loadEvents">{{
+            t('AgentMoreEvents')
           }}</el-button>
-          <el-button :disabled="loading || nextOffset === null" @click="load(nextOffset)">{{
-            t('AgentNextPage')
-          }}</el-button>
-        </div>
-      </IBox>
-    </div>
-  </Page>
+        </IBox>
+      </template>
+    </TabPage>
+  </template>
 </template>
 
 <script setup>
-import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import {
+  computed,
+  h,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch
+} from 'vue'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import Page from '@/layout/components/Page'
+import GenericListPage from '@/layout/components/GenericListPage'
+import GenericListTable from '@/layout/components/GenericListTable'
+import TabPage from '@/layout/components/TabPage'
+import TwoCol from '@/layout/components/Page/TwoColPage.vue'
+import DetailCard from '@/components/Cards/DetailCard'
 import IBox from '@/components/Common/IBox'
+import { DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import request from '@/utils/request'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { evidenceOutput } from './output'
@@ -145,14 +102,107 @@ const store = useStore()
 const detailId = computed(() => route.params.id)
 const item = ref(null)
 const session = ref(null)
-const rows = ref([])
 const events = ref([])
-const offset = ref(0)
 const nextOffset = ref(null)
 const loading = ref(false)
 const error = ref('')
 const active = ref(false)
+const activeMenu = ref('Basic')
 const outputs = computed(() => evidenceOutput(events.value, nextOffset.value === null))
+const pageKey = computed(
+  () => `${props.kind}:${detailId.value || ''}:${route.query.oid || store.getters.currentOrg?.id}`
+)
+const detailTabs = computed(() => [
+  { title: t('Basic'), name: 'Basic' },
+  props.kind === 'sessions'
+    ? { title: t('AgentActions'), name: 'AgentActions' }
+    : { title: t('Output'), name: 'Output' }
+])
+const headerActions = {
+  hasLeftActions: false,
+  hasImport: false,
+  hasExport: false,
+  hasDatePicker: false,
+  hasSearch: false
+}
+const columnsMeta = computed(() => ({
+  operation: {
+    label: t(props.kind === 'sessions' && !detailId.value ? 'AgentSessions' : 'Operation'),
+    minWidth: '270px',
+    formatter: DetailFormatter,
+    formatterArgs: {
+      can: true,
+      getTitle: ({ row }) => row.kind || row.id,
+      getRoute: ({ row }) => routeTo(row.kind ? 'actions' : 'sessions', row.id, row)
+    }
+  },
+  user_display: { label: t('User'), minWidth: '130px' },
+  status: { label: t('Status'), minWidth: '130px' },
+  ...(props.kind === 'sessions' && !detailId.value
+    ? {
+        asset_id: { label: t('Asset'), minWidth: '240px' },
+        protocol: { label: t('Protocol'), width: '100px' }
+      }
+    : {}),
+  date_created: { label: t('DateCreated'), minWidth: '180px', formatter: DateFormatter }
+}))
+const tableConfig = computed(() => ({
+  url: endpoint(),
+  request: loadTable,
+  hasSelection: false,
+  // The audit API returns fixed pages of 100 and a next cursor, without a total.
+  paginationSize: 100,
+  paginationSizes: [100],
+  paginationLayout: 'prev, next',
+  savePageSize: false,
+  columns: Object.keys(columnsMeta.value),
+  columnsShow: { min: ['operation'], default: Object.keys(columnsMeta.value) },
+  columnsMeta: { ...columnsMeta.value, actions: { has: false } }
+}))
+const tableMetadata = () =>
+  Promise.resolve({
+    actions: {
+      GET: Object.fromEntries(
+        Object.entries(columnsMeta.value).map(([name, meta]) => [
+          name,
+          { type: 'string', label: meta.label }
+        ])
+      )
+    }
+  })
+const detailItems = computed(() => {
+  if (!item.value) return []
+  const data = item.value
+  const parent = session.value
+  const linkedItem = (key, value, to) => ({
+    key: t(key),
+    value,
+    formatter: () => h(RouterLink, { to }, () => value)
+  })
+  return [
+    { key: 'ID', value: data.id },
+    { key: t('Status'), value: data.status },
+    { key: t('Operation'), value: data.kind, has: !!data.kind },
+    { key: t('User'), value: data.user_display || parent?.user_display || parent?.user_id },
+    { key: t('DateCreated'), value: date(data.date_created) },
+    { key: t('Asset'), value: parent?.asset_id },
+    { key: t('Account'), value: parent?.account },
+    { key: t('Protocol'), value: parent?.protocol },
+    { key: t('MCPClientID'), value: parent?.client_id },
+    ...(data.session_id
+      ? [linkedItem('AgentSessions', data.session_id, routeTo('sessions', data.session_id))]
+      : []),
+    parent?.terminal_session_id && router.hasRoute('SessionDetail')
+      ? linkedItem(
+          'AgentTerminalSession',
+          parent.terminal_session_id,
+          terminalRoute(parent.terminal_session_id)
+        )
+      : { key: t('AgentTerminalSession'), value: parent?.terminal_session_id },
+    { key: t('DateStart'), value: date(data.date_started), has: !!data.date_started },
+    { key: t('DateEnd'), value: date(data.date_finished), has: !!data.date_finished }
+  ]
+})
 let controller
 const json = (value) => JSON.stringify(value, null, 2)
 const date = (value) => (value ? toSafeLocalDateStr(value) : '—')
@@ -185,26 +235,46 @@ function terminalRoute(id) {
   }
 }
 
-async function load(pageOffset = 0) {
-  if (!active.value || !ownsRoute()) return
+async function loadTable(url, config) {
+  const response = await request.get(url, {
+    ...config,
+    raw: 1,
+    headers: { ...config.headers, ...orgHeaders() }
+  })
+  const data = response.data
+  const rows = data.actions || data.results || []
+  const offset = Number(new URL(url, location.origin).searchParams.get('offset') || 0)
+  return {
+    ...response,
+    data: {
+      results: rows.map((row) => ({
+        ...row,
+        user_display: row.user_display || data.user_display || row.user || row.user_id || ''
+      })),
+      count: offset + rows.length + (data.next_offset != null ? 1 : 0)
+    }
+  }
+}
+
+async function load() {
+  if (!active.value || !ownsRoute() || !detailId.value) return
   controller?.abort()
   const current = new AbortController()
   controller = current
   loading.value = true
   error.value = ''
   item.value = session.value = null
-  rows.value = events.value = []
+  events.value = []
   nextOffset.value = null
   const headers = orgHeaders()
   try {
     const data = await request({
       url: endpoint(),
-      params: { offset: pageOffset },
       headers,
       signal: current.signal
     })
     let parent = null
-    if (detailId.value && props.kind === 'actions') {
+    if (props.kind === 'actions') {
       parent = await request({
         url: `/api/v1/terminal/agent/audit/sessions/${data.session_id}/`,
         headers,
@@ -212,22 +282,10 @@ async function load(pageOffset = 0) {
       })
     }
     if (current.signal.aborted) return
-    offset.value = pageOffset
+    item.value = data
+    session.value = props.kind === 'sessions' ? data : parent
+    events.value = data.events || []
     nextOffset.value = data.next_offset ?? null
-    if (detailId.value) {
-      item.value = data
-      session.value = props.kind === 'sessions' ? data : parent
-      rows.value = (data.actions || []).map((row) => ({
-        ...row,
-        user_display: row.user_display || data.user_display || data.user || data.user_id || ''
-      }))
-      events.value = data.events || []
-    } else {
-      rows.value = (data.results || []).map((row) => ({
-        ...row,
-        user_display: row.user_display || row.user || row.user_id || ''
-      }))
-    }
   } catch (e) {
     if (!current.signal.aborted) error.value = e.response?.data?.detail || e.message || t('Error')
   } finally {
@@ -272,21 +330,19 @@ watch(
   () => [props.kind, route.params.id, route.query.oid, store.getters.currentOrg?.id],
   () => {
     if (!active.value || !ownsRoute()) return
-    offset.value = 0
     load()
-  },
-  { immediate: true }
+  }
 )
 function activate() {
   if (active.value) return
   active.value = true
-  load(offset.value)
+  load()
 }
 function deactivate() {
   active.value = false
   controller?.abort()
   item.value = session.value = null
-  rows.value = events.value = []
+  events.value = []
 }
 onMounted(activate)
 onActivated(activate)
@@ -295,21 +351,6 @@ onBeforeUnmount(deactivate)
 </script>
 
 <style scoped>
-.agent-audit {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.audit-toolbar,
-.audit-pagination {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.audit-pagination {
-  justify-content: flex-end;
-  margin-top: 16px;
-}
 pre {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
