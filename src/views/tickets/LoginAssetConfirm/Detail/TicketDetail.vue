@@ -2,9 +2,9 @@
   <GenericTicketDetail
     :object="object"
     :special-card-items="specialCardItems"
-    :show-comment="!connections.length"
+    :show-comment="connections.length <= 1"
   >
-    <IBox v-if="connections.length" title="ApplyInfo" class="connection-info">
+    <IBox v-if="connections.length > 1" title="ApplyInfo" class="connection-info">
       <p class="connection-user">
         {{ $t('ApplyLoginUser') }}:
         {{
@@ -56,7 +56,7 @@ export default {
       return this.object.login_asset_connections || []
     },
     specialCardItems() {
-      if (this.connections.length) return []
+      if (this.connections.length > 1) return []
       return (this.object.request_items || []).map((item) => ({
         key: item.label,
         value: item.value
