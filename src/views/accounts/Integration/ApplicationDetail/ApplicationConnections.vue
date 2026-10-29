@@ -96,8 +96,8 @@ export default {
           {
             prop: 'type',
             label: this.$t('ClientType'),
-            width: 100,
-            formatter: (row) => (choiceValue(row.type) === 'sdk' ? 'SDK' : 'Agent')
+            width: 120,
+            formatter: (row) => (choiceValue(row.type) === 'sdk' ? 'SDK' : this.$t('PAMAgent'))
           },
           {
             prop: 'online',

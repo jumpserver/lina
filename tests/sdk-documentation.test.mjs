@@ -15,9 +15,9 @@ const component = new Function(
   descriptor.script.content.replace(/^import .*\n/gm, '').replace('export default', 'return')
 )(null, null)
 
-function documentationView() {
+function documentationView(query = {}) {
   const requests = []
-  const route = { query: {} }
+  const route = { name: 'IntegrationApplicationList', query }
   const view = {
     ...component.data.call({ $route: route }),
     $route: route,
@@ -45,7 +45,7 @@ function documentationView() {
 
 function document(language) {
   return {
-    readme: `${language}\n<!-- agent-doc:start -->agent<!-- agent-doc:end -->\n<!-- sdk-doc:start -->sdk<!-- sdk-doc:end -->`,
+    readme: `${language}\n<!-- overview-doc:start -->overview<!-- overview-doc:end -->\n<!-- protocol-doc:start -->protocol<!-- protocol-doc:end -->\n<!-- socket-doc:start -->socket<!-- socket-doc:end -->\n<!-- agent-doc:start -->agent<!-- agent-doc:end -->\n<!-- sdk-doc:start -->sdk<!-- sdk-doc:end -->`,
     runtime: language,
     credential_policies: true
   }
@@ -86,7 +86,7 @@ test('switching UI locale reloads documentation and ignores a previous failure',
   requests[0].reject(new Error('previous locale request failed'))
   await oldRequest
   assert.equal(view.documentationError, false)
-  assert.equal(view.activeDocument, 'agent')
+  assert.equal(view.activeDocument, 'overview')
   assert.equal(view.documentationLoading, false)
 })
 
@@ -114,8 +114,8 @@ test('reactivating a cached document follows the route instead of restoring its 
   // Returning to the route without sdk_language reuses the cached base page.
   view.$route.query = {}
   component.activated.call(view)
-  assert.equal(view.documentationTab, 'agent')
-  assert.equal(view.activeDocument, 'agent')
+  assert.equal(view.documentationTab, 'overview')
+  assert.equal(view.activeDocument, 'overview')
   assert.equal(requests.length, 1)
 
   view.$route.query = { sdk_language: 'java' }
@@ -128,4 +128,68 @@ test('reactivating a cached document follows the route instead of restoring its 
   assert.equal(view.activeDocument, 'sdk')
   component.deactivated.call(view)
   assert.equal(view.headingObserver, null)
+})
+
+test('overview is the default and explicit guide links select the intended document', () => {
+  assert.equal(documentationView().view.documentationTab, 'overview')
+  for (const tab of ['overview', 'agent', 'socket', 'sdk', 'protocol']) {
+    const { view } = documentationView({ documentation: tab })
+    view.readme = document('python').readme
+    assert.equal(view.documentationTab, tab)
+    assert.equal(view.activeDocument, tab)
+    assert.equal(view.activeLanguage, 'python')
+  }
+  const { view } = documentationView({ sdk_language: 'go' })
+  assert.equal(view.documentationTab, 'sdk')
+  assert.equal(view.activeLanguage, 'go')
+})
+
+test('guide selection is shareable and common guides clear the SDK language', () => {
+  const { view } = documentationView()
+  view.readme = document('python').readme
+  view.selectDocumentation('sdk')
+  assert.deepEqual(view.$route.query, { documentation: 'sdk', sdk_language: 'python' })
+  view.selectDocumentation('protocol')
+  assert.deepEqual(view.$route.query, { documentation: 'protocol' })
+  assert.equal(view.activeDocument, 'protocol')
+  view.selectDocumentation('agent')
+  assert.deepEqual(view.$route.query, { documentation: 'agent' })
+  assert.equal(view.activeDocument, 'agent')
+})
+
+test('leaving a different SDK for shared reference ignores its late response', async () => {
+  const { view, requests } = documentationView({ documentation: 'sdk', sdk_language: 'go' })
+  const oldRequest = view.loadDocumentation()
+  view.selectDocumentation('protocol')
+  assert.deepEqual(
+    requests.map(({ language }) => language),
+    ['go', 'python']
+  )
+  requests[1].resolve(document('python'))
+  await setImmediate()
+  requests[0].resolve(document('go'))
+  await oldRequest
+  assert.equal(view.documentationTab, 'protocol')
+  assert.equal(view.activeDocument, 'protocol')
+  assert.equal(view.sdkRuntime, 'python')
+  view.selectDocumentation('overview')
+  assert.equal(requests.length, 2)
+  assert.equal(view.activeDocument, 'overview')
+})
+
+
+test('Socket access has an independent shareable guide and reuses the common locale document', async () => {
+  const { view, requests } = documentationView({ documentation: 'socket' })
+  const initial = view.loadDocumentation()
+  requests[0].resolve(document('python'))
+  await initial
+  assert.equal(view.activeDocument, 'socket')
+  assert.equal(view.documentationTitle, 'SocketAPIAccess')
+  assert.equal(view.documentationDescription, 'SocketAPIDescription')
+  view.selectDocumentation('sdk')
+  view.selectDocumentation('socket')
+  assert.deepEqual(view.$route.query, { documentation: 'socket' })
+  assert.equal(requests.length, 1)
+  view.readme = '<!-- agent-doc:start -->agent<!-- agent-doc:end -->'
+  assert.equal(view.activeDocument, '')
 })

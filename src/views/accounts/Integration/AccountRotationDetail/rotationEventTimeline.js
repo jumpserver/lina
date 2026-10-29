@@ -1,7 +1,8 @@
 export const eventLabels = {
-  'rotation.verification.started': 'RotationVerificationStartedEvent',
-  'rotation.verification.failed': 'RotationVerificationFailedEvent',
-  'rotation.verification.cancelled': 'RotationVerificationCancelledEvent',
+  'rotation.verify.started': 'RotationVerificationStartedEvent',
+  'rotation.verify.skipped': 'RotationVerificationSkippedEvent',
+  'rotation.verify.failed': 'RotationVerificationFailedEvent',
+  'rotation.verify.cancelled': 'RotationVerificationCancelledEvent',
   'rotation.preparation.started': 'RotationPreparationStartedEvent',
   'rotation.accounts.aligned': 'RotationAccountsAlignedEvent',
   'rotation.standby.waiting': 'RotationStandbyWaitingEvent',
@@ -9,9 +10,9 @@ export const eventLabels = {
   'rotation.preparation.cancelled': 'RotationPreparationCancelledEvent',
   'credential.updated': 'AppAuditCredentialPublished',
   'credential.revoked': 'AppAuditAuthorizationRevoked',
-  'application.scope.updated': 'AppAuditApplicationScopeUpdated',
+  'app.scope.updated': 'AppAuditApplicationScopeUpdated',
   'rotation.started': 'AppAuditRotationStarted',
-  'rotation.waiting_for_application': 'RotationEventWaitingForSwitch',
+  'rotation.waiting_for_app': 'RotationEventWaitingForSwitch',
   'rotation.source.waiting': 'RotationSourceWaitingEvent',
   'rotation.source.ready': 'RotationSourceReadyEvent',
   'rotation.force_stopped': 'ForceStopRotation',
@@ -21,6 +22,29 @@ export const eventLabels = {
   'credential.change.completed': 'AppAuditSecretChangeCompleted',
   'credential.change.failed': 'AppAuditSecretChangeFailed'
 }
+
+export function canonicalEventName(value) {
+  const aliases = {
+    'rotation.verification.skipped': 'rotation.verify.skipped',
+    'rotation.verification.started': 'rotation.verify.started',
+    'rotation.verification.failed': 'rotation.verify.failed',
+    'rotation.verification.cancelled': 'rotation.verify.cancelled',
+    'application.scope.updated': 'app.scope.updated',
+    'application.restart.requested': 'app.restart.requested',
+    'rotation.waiting_for_application': 'rotation.waiting_for_app',
+    'configuration.updated': 'app.scope.updated'
+  }
+  return Object.hasOwn(aliases, value) ? aliases[value] : value
+}
+
+eventLabels['rotation.verification.started'] = eventLabels['rotation.verify.started']
+eventLabels['rotation.verification.failed'] = eventLabels['rotation.verify.failed']
+eventLabels['rotation.verification.cancelled'] = eventLabels['rotation.verify.cancelled']
+eventLabels['application.scope.updated'] = eventLabels['app.scope.updated']
+eventLabels['rotation.waiting_for_application'] = eventLabels['rotation.waiting_for_app']
+eventLabels['configuration.updated'] = eventLabels['app.scope.updated']
+
+eventLabels['rotation.verification.skipped'] = eventLabels['rotation.verify.skipped']
 
 export const statusLabels = {
   received: 'RotationEventReceived',

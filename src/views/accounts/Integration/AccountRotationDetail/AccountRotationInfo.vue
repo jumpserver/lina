@@ -149,6 +149,10 @@ export default {
           { key: this.$t('CurrentAccount'), value: accountName(this.object.active_account) },
           { key: this.$t('NextAccount'), value: accountName(nextAccount) },
           {
+            key: this.$t('VerifyBeforeSwitch'),
+            value: this.object.verify_before_switch === false ? this.$t('No') : this.$t('Yes')
+          },
+          {
             key: this.$t('SourceNoTrafficDays'),
             value: this.$t('StandbyNoTrafficDaysValue', {
               days: this.object.source_no_traffic_days ?? this.object.standby_no_traffic_days ?? 7
@@ -293,8 +297,8 @@ export default {
             this.cycleStarting ||
             !this.object.is_active ||
             this.object.precheck?.status === 'checking' ||
-            (this.object.status === 'idle' && !this.$hasPerm('accounts.verify_account')) ||
-            (this.object.status === 'ready_to_switch' &&
+            (['idle', 'ready_to_switch'].includes(this.object.status) &&
+              this.object.verify_before_switch !== false &&
               !this.$hasPerm('accounts.verify_account')) ||
             (this.object.status === 'ready_for_change' &&
               !this.$hasPerm(

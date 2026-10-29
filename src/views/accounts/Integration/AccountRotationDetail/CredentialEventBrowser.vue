@@ -156,7 +156,9 @@
               detail.kind === 'rotation' &&
               !detail.preparation &&
               !detail.source_traffic &&
-              !detail.events.some((event) => event.event.startsWith('rotation.verification.'))
+              !detail.events.some((event) =>
+                canonicalEventName(event.event).startsWith('rotation.verify.')
+              )
             "
             :title="$t('RotationLegacyPreparationMissing')"
             type="info"
@@ -431,7 +433,7 @@
                       <div class="recipient-heading">
                         <strong>{{ client.instance_id }}</strong
                         ><el-tag size="small" effect="plain">{{
-                          client.type === 'agent' ? 'Agent' : 'SDK'
+                          client.type === 'agent' ? $t('PAMAgent') : 'SDK'
                         }}</el-tag>
                       </div>
                       <p>{{ client.application.name }} · {{ stateLabel(client) }}</p>
@@ -497,7 +499,12 @@ import request from '@/utils/request'
 import { credentialUrl, getCredentialEventCycles } from '@/api/applicationCredential'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { subscribedAccountLabel } from '../components/subscriptionAccount'
-import { eventLabels, statusLabels, receiptStatus } from './rotationEventTimeline'
+import {
+  eventLabels,
+  statusLabels,
+  receiptStatus,
+  canonicalEventName
+} from './rotationEventTimeline'
 
 const cycleKinds = {
   rotation: 'PolicyRotationCycle',
@@ -521,9 +528,9 @@ const subscriptionStages = [
   ['PolicyStageCredentialPublished', ['credential.updated']]
 ]
 const rotationStages = [
-  ['RotationVerificationStartedEvent', ['rotation.verification.started']],
+  ['RotationVerificationStartedEvent', ['rotation.verify.started', 'rotation.verify.skipped']],
   ['PolicyStageAccountPublished', ['rotation.started']],
-  ['PolicyStageWaitingForApplication', ['rotation.waiting_for_application']],
+  ['PolicyStageWaitingForApplication', ['rotation.waiting_for_app']],
   ['RotationSourceWaitingEvent', ['rotation.source.waiting']],
   ['RotationSourceReadyEvent', ['rotation.source.ready']],
   ['PolicyStageChangeStarted', ['credential.change.started']],
@@ -742,9 +749,12 @@ export default {
             ]
           : []
       return [...preparationStages, ...definitions].map(([label, codes]) => {
-        const event = this.detail.events.findLast((event) => codes.includes(event.event))
+        const event = this.detail.events.findLast((event) =>
+          codes.includes(canonicalEventName(event.event))
+        )
         return {
-          label,
+          label:
+            event?.event === 'rotation.verify.skipped' ? 'RotationVerificationSkippedEvent' : label,
           event,
           current:
             (this.detail.status === 'running' &&
@@ -838,6 +848,7 @@ export default {
     this.latestRequest++
   },
   methods: {
+    canonicalEventName,
     receiptStatus,
     accountLabel: subscribedAccountLabel,
     cycleAccounts(cycle) {

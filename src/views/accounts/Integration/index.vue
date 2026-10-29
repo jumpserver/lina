@@ -1,9 +1,5 @@
 <template>
-  <TabPage
-    v-model:active-menu="activeMenu"
-    :submenu="tab.submenu"
-    :help-message="activeMenu === 'rotations' ? $t('AlternatingAccountRotationHelp') : ''"
-  />
+  <TabPage v-model:active-menu="activeMenu" :submenu="tab.submenu" :help-message="helpMessage" />
 </template>
 
 <script>
@@ -33,7 +29,14 @@ export default {
           },
           {
             name: 'records',
-            title: this.$t('AppAuditLogs'),
+            title: this.$t('ApplicationCallLogs'),
+            hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
+            component: () =>
+              import('@/views/accounts/Integration/components/ApplicationCallLog.vue')
+          },
+          {
+            name: 'events',
+            title: this.$t('ApplicationEventLogs'),
             hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
             component: () => import('@/views/accounts/Integration/components/ApplicationAudit.vue')
           },
@@ -45,6 +48,17 @@ export default {
           }
         ]
       }
+    }
+  },
+  computed: {
+    helpMessage() {
+      if (this.activeMenu === 'application') {
+        return this.$t('IntegrationApplicationsHelp')
+      }
+      if (this.activeMenu === 'rotations') {
+        return this.$t('AlternatingAccountRotationHelp')
+      }
+      return ''
     }
   }
 }

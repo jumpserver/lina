@@ -18,6 +18,20 @@
         <p>{{ $t('PolicyDocsIntroduction') }}</p>
         <el-alert :title="modeSummary" type="info" :closable="false" show-icon />
       </header>
+      <el-descriptions :column="2" border>
+        <el-descriptions-item :label="$t('CurrentAccount')">
+          {{ object.active_account?.username || object.active_account?.name || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item :label="$t('PolicyDocsObservationWindow')">
+          {{ $t('PolicyDocsObservationDays', { days: object.source_no_traffic_days ?? 7 }) }}
+        </el-descriptions-item>
+      </el-descriptions>
+      <nav class="policy-documentation-links" :aria-label="$t('IntegrationDocsLinks')">
+        <span>{{ $t('IntegrationDocsLinks') }}</span>
+        <router-link v-for="link in documentationLinks" :key="link.label" :to="link.to">
+          {{ $t(link.label) }}
+        </router-link>
+      </nav>
       <nav class="policy-documentation-nav" :aria-label="$t('OnThisPage')">
         <span>{{ $t('OnThisPage') }}</span>
         <button
@@ -53,9 +67,6 @@ import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer/index.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import { printDocumentation } from '../documentationPrint'
 
-const codeBlock = (language, value) => `\n\n\`\`\`${language}\n${value}\n\`\`\`\n\n`
-const jsonBlock = (value) => codeBlock('json', JSON.stringify(value, null, 2))
-
 export default {
   name: 'CredentialPolicyDocumentation',
   components: { IBox, MarkdownRenderer },
@@ -69,209 +80,71 @@ export default {
     return { exportLoading: false }
   },
   computed: {
-    subscription() {
-      return this.object.mode === 'subscription'
-    },
     modeLabel() {
-      return this.$t(
-        this.subscription ? 'CredentialUpdateSubscription' : 'AlternatingAccountRotation'
-      )
+      return this.$t('AlternatingAccountRotation')
     },
     modeSummary() {
       return this.$t(
-        this.subscription ? 'PolicyDocsSubscriptionSummary' : 'PolicyDocsRotationSummaryV2'
+        this.object.verify_before_switch === false
+          ? 'PolicyDocsRotationSummaryWithoutVerification'
+          : 'PolicyDocsRotationSummaryV2'
       )
     },
-    exampleKey() {
-      if (!this.subscription) return this.object.key
-      const accountId = this.object.subscription_accounts?.[0]?.id || '<account-id>'
-      return `account:${accountId}`
-    },
-    policyEvents() {
-      const suffix = this.subscription ? 'Subscription' : 'Rotation'
-      const events = [
-        [
-          'credential.updated',
-          `PolicyDocsUpdatedTrigger${suffix}`,
-          `PolicyDocsUpdatedAction${suffix}`
-        ],
-        [
-          'credential.revoked',
-          this.subscription ? 'PolicyDocsRevokedTriggerSubscription' : 'PolicyDocsRevokedTrigger',
-          'PolicyDocsRevokedAction'
-        ],
-        [
-          'application.scope.updated',
-          'PolicyDocsConfigurationTrigger',
-          'PolicyDocsConfigurationAction'
-        ],
-        [
-          'credential.change.started',
-          `PolicyDocsChangeStartedTrigger${suffix}`,
-          'PolicyDocsChangeStartedAction'
-        ],
-        [
-          'credential.change.completed',
-          `PolicyDocsChangeCompletedTrigger${suffix}`,
-          `PolicyDocsChangeCompletedAction${suffix}`
-        ],
-        [
-          'credential.change.failed',
-          'PolicyDocsChangeFailedTrigger',
-          'PolicyDocsChangeFailedAction'
-        ]
-      ]
-      if (!this.subscription) {
-        events.push(
-          ...[
-            'rotation.verification.started',
-            'rotation.verification.failed',
-            'rotation.verification.cancelled'
-          ].map((event) => [
-            event,
-            'PolicyDocsVerificationTrigger',
-            'PolicyDocsVerificationAction'
-          ]),
-          [
-            'rotation.started',
-            'PolicyDocsRotationStartedTrigger',
-            'PolicyDocsRotationStartedAction'
-          ],
-          [
-            'rotation.waiting_for_application',
-            'PolicyDocsRotationWaitingTrigger',
-            'PolicyDocsRotationWaitingAction'
-          ],
-          ...['rotation.source.waiting', 'rotation.source.ready'].map((event) => [
-            event,
-            'PolicyDocsSourceObservationTrigger',
-            'PolicyDocsSourceObservationAction'
-          ]),
-          [
-            'rotation.completed',
-            'PolicyDocsRotationCompletedTrigger',
-            'PolicyDocsRotationCompletedAction'
-          ],
-          ['rotation.failed', 'PolicyDocsRotationFailedTrigger', 'PolicyDocsChangeFailedAction'],
-          ['rotation.force_stopped', 'ForceStopRotation', 'PolicyDocsForceStop']
-        )
-      }
-      return events
+    documentationLinks() {
+      return [
+        ['overview', 'IntegrationDocsOverview'],
+        ['agent', 'AgentAccess'],
+        ['sdk', 'SDKAccess'],
+        ['protocol', 'IntegrationDocsProtocol']
+      ].map(([tab, label]) => ({
+        label,
+        to: {
+          name: 'IntegrationApplicationList',
+          query: {
+            tab: 'docs',
+            documentation: tab,
+            ...(tab === 'sdk' ? { sdk_language: 'python' } : {})
+          }
+        }
+      }))
     },
     documentationSections() {
-      const heading = (key) => `\n\n### ${this.$t(key)}\n\n`
-      const paragraph = (key) => `${this.$t(key)}\n\n`
-      const eventRows = this.policyEvents.map(
-        ([event, trigger, action]) => `| \`${event}\` | ${this.$t(trigger)} | ${this.$t(action)} |`
-      )
-      const exampleEvent = {
-        event_id: '00000000-0000-0000-0000-000000000001',
-        event: 'credential.updated',
-        occurred_at: '2026-01-01T00:00:00+00:00',
-        credential_mode: this.object.mode,
-        credential_key: this.exampleKey,
-        revision: 1,
-        account_revision: 1,
-        account_id: this.subscription
-          ? this.object.subscription_accounts?.[0]?.id || '<account-id>'
-          : this.object.active_account?.id || '<active-account-id>',
-        operation_id: '00000000-0000-0000-0000-000000000002',
-        result: 'success'
-      }
-      const snapshotItem = {
-        event_id: exampleEvent.event_id,
-        key: this.exampleKey,
-        credential_mode: this.object.mode,
-        revision: 1,
-        account_revision: 1
-      }
-      snapshotItem.account_id = exampleEvent.account_id
-      if (!this.subscription) {
-        const ids = [this.object.account?.id, this.object.alternate_account?.id].filter(Boolean)
-        exampleEvent.account_switch = { account_ids: ids }
-        snapshotItem.account_switch = exampleEvent.account_switch
-      }
-
-      const fields = [
-        ['event_id', 'PolicyDocsFieldEventId'],
-        ['event / occurred_at', 'PolicyDocsFieldEvent'],
-        ['credential_mode', 'PolicyDocsFieldMode'],
-        ['credential_key / revision', 'PolicyDocsLegacyMetadata'],
-        ['account_id', 'PolicyDocsFieldAccount'],
-        ['account_revision', 'PolicyDocsAccountRevision'],
-        ['operation_id / result', 'PolicyDocsFieldOperation']
-      ]
-      const sdkExample =
-        `def on_credential_updated(client, event):\n` +
-        `    try:\n` +
-        `        account = client.get_account(\n` +
-        `            account_id=event["account_id"], allow_local_fallback=False,\n` +
-        `        )\n` +
-        `        if account.revision != event["account_revision"]:\n` +
-        `            raise RuntimeError("Event account version is superseded")\n` +
-        `        # ${this.$t('PolicyDocsApplyComment')}\n` +
-        `        apply_account(account)\n` +
-        `    except Exception:\n` +
-        `        client.confirm_event(event_id=event["event_id"], status="failed", error_code="application_failed")\n` +
-        `        raise\n` +
-        `    client.confirm_event(event_id=event["event_id"])\n`
-
-      const lifecycle = [
-        ...(this.subscription
-          ? []
-          : [
-              heading('PolicyDocsSourceObservationTitle'),
-              paragraph('PolicyDocsSourceObservationFlow')
-            ]),
-        heading('StartNewPolicyCycle'),
-        paragraph(
-          this.subscription
-            ? 'PolicyDocsManualSubscriptionCycle'
-            : 'PolicyDocsManualRotationCycleV2'
-        )
-      ].join('')
-      const protocol = [
-        heading('PolicyDocsEvents'),
-        `| ${this.$t('PolicyDocsEvent')} | ${this.$t('PolicyDocsTrigger')} | ${this.$t('PolicyDocsResponse')} |\n| --- | --- | --- |\n`,
-        eventRows.join('\n'),
-        heading('PolicyDocsPayload'),
-        paragraph('PolicyDocsPayloadIntroduction'),
-        jsonBlock(exampleEvent),
-        `| ${this.$t('PolicyDocsField')} | ${this.$t('Description')} |\n| --- | --- |\n`,
-        fields
-          .map(([field, description]) => `| \`${field}\` | ${this.$t(description)} |`)
-          .join('\n'),
-        heading('PolicyDocsSnapshot'),
-        paragraph('PolicyDocsSnapshotDescription'),
-        jsonBlock({ event: 'snapshot', credentials: [snapshotItem] }),
-        paragraph('PolicyDocsHeartbeat'),
-        heading('PolicyDocsReceipt'),
-        paragraph('PolicyDocsReceiptDescription'),
-        jsonBlock({ event: 'received', event_id: exampleEvent.event_id })
-      ].join('')
-      const integration = [
-        heading('PolicyDocsSDK'),
-        paragraph('PolicyDocsSDKSteps'),
-        paragraph('PolicyDocsSDKExample'),
-        codeBlock('python', sdkExample),
-        heading('PolicyDocsAgent'),
-        paragraph('PolicyDocsAgentDescription'),
-        paragraph('PolicyDocsAgentEventResult'),
-        codeBlock(
-          'http',
-          `POST /v1/confirm\nContent-Type: application/json\n\n${JSON.stringify({ event_id: exampleEvent.event_id })}`
-        )
-      ].join('')
+      const paragraph = (key, params) => `${this.$t(key, params)}\n\n`
       return [
-        { id: 'lifecycle', title: 'PolicyDocsLifecycle', content: lifecycle },
-        { id: 'protocol', title: 'PolicyDocsProtocol', content: protocol },
-        { id: 'integration', title: 'PolicyDocsIntegration', content: integration },
+        {
+          id: 'lifecycle',
+          title: 'PolicyDocsLifecycle',
+          content: paragraph('PolicyDocsCycleSteps', {
+            verification: this.$t(
+              this.object.verify_before_switch === false
+                ? 'PolicyDocsVerificationSkipped'
+                : 'PolicyDocsVerificationRequired'
+            ),
+            days: this.object.source_no_traffic_days ?? 7
+          })
+        },
+        {
+          id: 'requirements',
+          title: 'PolicyDocsRequirements',
+          content: paragraph('PolicyDocsSDKRequirement') + paragraph('PolicyDocsAgentRequirement')
+        },
+        {
+          id: 'blockers',
+          title: 'PolicyDocsBlockers',
+          content: paragraph('PolicyDocsBlockerGuide')
+        },
         {
           id: 'recovery',
           title: 'PolicyDocsRecoveryGuide',
           content:
-            paragraph('PolicyDocsRecoveryDescription') +
-            (this.subscription ? '' : paragraph('PolicyDocsForceStop'))
+            paragraph('PolicyDocsCancellation') +
+            paragraph('PolicyDocsUncertainChange') +
+            paragraph('PolicyDocsForceStop')
+        },
+        {
+          id: 'events',
+          title: 'PolicyDocsProtocol',
+          content: paragraph('PolicyDocsRotationEventFlow')
         }
       ]
     }
@@ -352,6 +225,14 @@ export default {
     color: var(--el-text-color-regular);
   }
 }
+.policy-documentation-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 16px;
+  font-size: 12px;
+}
+
 .policy-documentation-nav {
   display: flex;
   align-items: center;

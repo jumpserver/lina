@@ -75,7 +75,7 @@ export default {
       ],
       eventLabels: {
         'credential.switch.requested': 'ApplicationAccountSwitchRequest',
-        'application.restart.requested': 'ApplicationRestartRequest'
+        'app.restart.requested': 'ApplicationRestartRequest'
       },
       statusLabels: {
         pending: 'ApplicationCommandPending',

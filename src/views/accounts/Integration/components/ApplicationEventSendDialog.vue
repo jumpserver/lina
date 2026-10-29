@@ -17,10 +17,7 @@
               value="credential.switch.requested"
               :disabled="!canSwitch"
             />
-            <el-option
-              :label="$t('ApplicationRestartRequest')"
-              value="application.restart.requested"
-            />
+            <el-option :label="$t('ApplicationRestartRequest')" value="app.restart.requested" />
           </el-select>
         </el-form-item>
         <p v-if="pendingEntries.length" class="event-help">
@@ -87,7 +84,7 @@
                     :key="client.id"
                     :value="client.id"
                     :disabled="!eligible(entry, client)"
-                    :label="`${client.instance_id} · ${client.type === 'sdk' ? 'SDK' : 'Agent'} · ${$t(client.online ? 'Online' : 'Offline')}`"
+                    :label="`${client.instance_id} · ${client.type === 'sdk' ? 'SDK' : $t('PAMAgent')} · ${$t(client.online ? 'Online' : 'Offline')}`"
                   />
                 </el-select>
               </el-form-item>
@@ -283,7 +280,7 @@ export default {
       this.event =
         this.canSwitch && this.entries.every((entry) => entry.credentialId)
           ? 'credential.switch.requested'
-          : 'application.restart.requested'
+          : 'app.restart.requested'
       this.entries.filter((entry) => !entry.loadFailed).forEach(this.selectEligible)
       this.loading = false
     },

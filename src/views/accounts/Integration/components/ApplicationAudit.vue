@@ -47,6 +47,7 @@ export default {
         name: 'ApplicationAudit',
         url: '/api/v1/accounts/application-audits/',
         extraQuery: {
+          exclude_event: 'credential_fetched',
           ...(this.object.id ? { application: this.object.id } : {}),
           ...(this.credential.id ? { credential_id: this.credential.id } : {})
         },
@@ -63,6 +64,7 @@ export default {
         },
         columnsMeta: { actions: { has: false } },
         columns: [
+          { prop: 'id', label: this.$t('AppAuditRecordID'), minWidth: 260 },
           {
             prop: 'event_display',
             label: this.$t('AppAuditEvent'),
@@ -77,7 +79,9 @@ export default {
             }
           },
           { prop: 'service', label: this.$t('RelevantApp'), minWidth: 170 },
+          { prop: 'service_id', label: this.$t('ApplicationID'), minWidth: 260 },
           { prop: 'credential', label: this.$t('ApplicationCredential'), minWidth: 170 },
+          { prop: 'account', label: this.$t('Account'), minWidth: 170 },
           { prop: 'instance_id', label: this.$t('InstanceID'), minWidth: 170 },
           { prop: 'operator', label: this.$t('AppAuditActor'), minWidth: 130 },
           {
@@ -103,17 +107,25 @@ export default {
     }
   },
   methods: {
-    async getMetadata() {
+    async getMetadata(url) {
+      const metadata = await this.$store.dispatch('common/getUrlMeta', { url })
       const choice = (label, values) => ({
         label,
         type: 'choice',
         multiple: false,
+        operators: ['exact', 'in'],
         choices: Object.entries(values).map(([value, key]) => ({ value, label: this.$t(key) }))
       })
       return {
-        actions: { GET: {} },
+        ...metadata,
         filters: {
-          event: choice(this.$t('AppAuditEvent'), auditEvents),
+          ...metadata.filters,
+          event: choice(
+            this.$t('AppAuditEvent'),
+            Object.fromEntries(
+              Object.entries(auditEvents).filter(([event]) => event !== 'credential_fetched')
+            )
+          ),
           result: choice(this.$t('Result'), auditResults),
           source: choice(this.$t('AppAuditSource'), {
             SDK: 'SDKAccess',
@@ -121,14 +133,6 @@ export default {
             Administrator: 'AppAuditAdministrator',
             JumpServer: 'ChatAIResultSource'
           })
-        },
-        search: {
-          fields: ['service', 'credential', 'operator', 'summary'],
-          operators: ['icontains']
-        },
-        ordering: {
-          fields: [{ name: 'date_created', label: this.$t('Date') }],
-          default: ['-date_created']
         }
       }
     }

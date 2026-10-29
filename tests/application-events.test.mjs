@@ -152,7 +152,7 @@ test('detail sending stays available and policy permission does not grant restar
   })
   await view.load()
   assert.equal(view.entries.length, 1)
-  assert.equal(view.event, 'application.restart.requested')
+  assert.equal(view.event, 'app.restart.requested')
   assert.deepEqual(view.entries[0].clientIds, ['detail-sdk'])
   await view.send()
   assert.equal(requests.length, 1)

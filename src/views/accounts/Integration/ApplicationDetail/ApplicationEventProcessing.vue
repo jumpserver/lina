@@ -108,7 +108,7 @@ export default {
       eventLabels: {
         ...eventLabels,
         'credential.switch.requested': 'ApplicationAccountSwitchRequest',
-        'application.restart.requested': 'ApplicationRestartRequest'
+        'app.restart.requested': 'ApplicationRestartRequest'
       },
       errorLabels: {
         superseded: 'ApplicationCommandSuperseded',

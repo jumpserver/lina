@@ -113,6 +113,12 @@ export default {
           placeholder: this.$t('SelectAlternateAccount')
         }
       },
+      verify_before_switch: {
+        label: this.$t('VerifyBeforeSwitch'),
+        type: 'checkbox',
+        hidden: (form) => !isRotation(form),
+        helpText: this.$t('VerifyBeforeSwitchHelp')
+      },
       source_no_traffic_days: {
         label: this.$t('SourceNoTrafficDays'),
         hidden: (form) => !isRotation(form),
@@ -194,6 +200,7 @@ export default {
           asset_id: assetId,
           account_id: item?.account?.id || '',
           alternate_account_id: item?.alternate_account?.id || '',
+          verify_before_switch: item?.verify_before_switch ?? true,
           source_no_traffic_days:
             item?.source_no_traffic_days ?? item?.standby_no_traffic_days ?? 7,
           subscription_account_ids: (item?.subscription_accounts || []).map(
@@ -212,6 +219,7 @@ export default {
               'asset_id',
               'account_id',
               'alternate_account_id',
+              'verify_before_switch',
               'source_no_traffic_days',
               'subscription_all_authorized',
               'subscription_account_ids'

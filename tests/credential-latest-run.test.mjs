@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
+import { canonicalEventName } from '../src/views/accounts/Integration/AccountRotationDetail/rotationEventTimeline.js'
 
 const source = await readFile(
   new URL(
@@ -42,6 +43,7 @@ function viewFor(api, initialCycleId = '') {
     'eventLabels',
     'statusLabels',
     'receiptStatus',
+    'canonicalEventName',
     script
   )(
     null,
@@ -57,7 +59,8 @@ function viewFor(api, initialCycleId = '') {
     (v) => v,
     {},
     {},
-    () => ''
+    () => '',
+    canonicalEventName
   )
   const emitted = []
   const view = {
@@ -71,8 +74,25 @@ function viewFor(api, initialCycleId = '') {
   Object.assign(view, component.data.call(view))
   for (const [name, method] of Object.entries(component.methods)) view[name] = method.bind(view)
   view.scheduleObservationRefresh = () => {}
-  return { view, emitted, unmount: () => component.beforeUnmount.call(view) }
+  return {
+    view,
+    emitted,
+    stages: () => component.computed.stages.call(view),
+    unmount: () => component.beforeUnmount.call(view)
+  }
 }
+
+test('skipped verification is shown explicitly in the rotation stages', () => {
+  const { view, stages } = viewFor(async () => ({}))
+  view.detail = {
+    kind: 'rotation',
+    status: 'running',
+    events: [{ id: 'skip', event: 'rotation.verify.skipped' }]
+  }
+  assert.equal(stages()[0].label, 'RotationVerificationSkippedEvent')
+  assert.equal(stages()[0].event.id, 'skip')
+  assert.equal(stages()[0].skipped, false)
+})
 
 function deferred() {
   let resolve

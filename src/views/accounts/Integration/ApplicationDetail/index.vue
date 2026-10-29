@@ -15,6 +15,7 @@ import { GenericDetailPage } from '@/layout/components'
 import IntegrationApplicationAccount from '../components/AccountList.vue'
 import IntegrationApplicationInfo from './ServiceInfo.vue'
 import ApplicationAudit from '../components/ApplicationAudit.vue'
+import ApplicationCallLog from '../components/ApplicationCallLog.vue'
 import ApplicationConnections from './ApplicationConnections.vue'
 import ApplicationEventProcessing from './ApplicationEventProcessing.vue'
 
@@ -24,6 +25,7 @@ export default {
     IntegrationApplicationInfo,
     IntegrationApplicationAccount,
     ApplicationAudit,
+    ApplicationCallLog,
     ApplicationConnections,
     ApplicationEventProcessing
   },
@@ -59,7 +61,12 @@ export default {
             hidden: () => !this.$hasPerm('accounts.view_integrationapplication')
           },
           {
-            title: this.$t('AppAuditLogs'),
+            title: this.$t('ApplicationCallLogs'),
+            name: 'ApplicationCallLog',
+            hidden: () => !this.$hasPerm('audits.view_integrationapplicationlog')
+          },
+          {
+            title: this.$t('ApplicationEventLogs'),
             name: 'ApplicationAudit',
             hidden: () => !this.$hasPerm('audits.view_integrationapplicationlog')
           }

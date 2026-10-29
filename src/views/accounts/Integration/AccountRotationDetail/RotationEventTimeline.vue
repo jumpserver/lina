@@ -64,7 +64,7 @@
             :aria-label="$t('EventClientType')"
           >
             <el-option :label="$t('EventAllTypes')" value="" />
-            <el-option label="SDK" value="sdk" /><el-option label="Agent" value="agent" />
+            <el-option label="SDK" value="sdk" /><el-option :label="$t('PAMAgent')" value="agent" />
           </el-select>
           <span>{{ $t('RotationReceiptPriority') }}</span>
         </div>
@@ -107,7 +107,8 @@
               </button>
               <strong v-else>{{ client.instance_id }}</strong>
               <span
-                >{{ client.type === 'agent' ? 'Agent' : 'SDK' }} · {{ clientState(client) }}</span
+                >{{ client.type === 'agent' ? $t('PAMAgent') : 'SDK' }} ·
+                {{ clientState(client) }}</span
               >
               <span>{{ client.application.name }}</span>
               <span>{{

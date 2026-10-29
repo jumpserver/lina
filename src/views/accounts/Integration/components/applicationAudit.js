@@ -61,7 +61,7 @@ const fieldLabels = {
 }
 const summaries = {
   'credential.switch.requested': 'ApplicationAccountSwitchRequest',
-  'application.restart.requested': 'ApplicationRestartRequest',
+  'app.restart.requested': 'ApplicationRestartRequest',
   execution_failed: 'ApplicationCommandExecutionFailed',
   superseded: 'ApplicationCommandSuperseded',
   'Notification failed; waiting for retry.': 'AppAuditRetrySummary',

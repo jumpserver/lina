@@ -23,8 +23,11 @@
             :aria-label="$t('SDKCenter')"
             @update:model-value="selectDocumentation"
           >
+            <el-radio-button value="overview">{{ $t('IntegrationDocsOverview') }}</el-radio-button>
             <el-radio-button value="agent">{{ $t('AgentAccess') }}</el-radio-button>
+            <el-radio-button value="socket">{{ $t('SocketAPIAccess') }}</el-radio-button>
             <el-radio-button value="sdk">{{ $t('SDKAccess') }}</el-radio-button>
+            <el-radio-button value="protocol">{{ $t('IntegrationDocsProtocol') }}</el-radio-button>
           </el-radio-group>
           <el-button
             :disabled="documentationLoading || documentationError || !activeDocument"
@@ -52,19 +55,36 @@
 
       <template v-else>
         <header class="documentation-header">
-          <h1>{{ $t(documentationTab === 'agent' ? 'AgentAccess' : 'SDKAccess') }}</h1>
+          <h1>{{ $t(documentationTitle) }}</h1>
           <p>{{ $t(documentationDescription) }}</p>
           <div class="documentation-meta">
             <template v-if="documentationTab === 'agent'">
               <el-tag effect="plain" size="small">Linux / macOS / Windows</el-tag>
               <el-tag effect="plain" size="small" type="info">Linux systemd</el-tag>
             </template>
-            <template v-else>
+            <template v-else-if="documentationTab === 'socket'">
+              <el-tag effect="plain" size="small">Unix Domain Socket</el-tag>
+              <el-tag effect="plain" size="small" type="info">HTTP / WebSocket</el-tag>
+            </template>
+            <template v-else-if="documentationTab === 'sdk'">
               <el-tag effect="plain" size="small">{{ sdkRuntime }}</el-tag>
               <el-tag effect="plain" size="small" type="info">
                 {{ $t(credentialPolicies ? 'ApplicationCredential' : 'SDKLegacyExample') }}
               </el-tag>
             </template>
+          </div>
+          <div class="documentation-links">
+            <template v-if="documentationTab === 'overview'">
+              <el-button @click="selectDocumentation('agent')">{{ $t('AgentAccess') }}</el-button>
+              <el-button @click="selectDocumentation('socket')">{{
+                $t('SocketAPIAccess')
+              }}</el-button>
+              <el-button @click="selectDocumentation('sdk')">{{ $t('SDKAccess') }}</el-button>
+            </template>
+            <router-link
+              :to="{ name: 'IntegrationApplicationList', query: { tab: 'rotations' } }"
+              >{{ $t('IntegrationDocsRotationLink') }}</router-link
+            >
           </div>
         </header>
 
@@ -139,9 +159,13 @@ export default {
       documentationLoading: false,
       documentationRequestId: 0,
       exportLoading: false,
-      documentationTab: sdkLanguageValues.includes(this.$route.query.sdk_language)
-        ? 'sdk'
-        : 'agent',
+      documentationTab: ['overview', 'agent', 'socket', 'sdk', 'protocol'].includes(
+        this.$route.query.documentation
+      )
+        ? this.$route.query.documentation
+        : sdkLanguageValues.includes(this.$route.query.sdk_language)
+          ? 'sdk'
+          : 'overview',
       credentialPolicies: true,
       headingObserver: null,
       headings: [],
@@ -160,10 +184,22 @@ export default {
   },
   computed: {
     activeLanguage() {
-      return this.documentationTab === 'agent' ? 'python' : this.sdkLanguage
+      return this.documentationTab === 'sdk' ? this.sdkLanguage : 'python'
+    },
+    documentationTitle() {
+      return {
+        overview: 'IntegrationDocsOverview',
+        agent: 'AgentAccess',
+        socket: 'SocketAPIAccess',
+        sdk: 'SDKAccess',
+        protocol: 'IntegrationDocsProtocol'
+      }[this.documentationTab]
     },
     documentationDescription() {
       if (this.documentationTab === 'agent') return 'AgentDescription'
+      if (this.documentationTab === 'socket') return 'SocketAPIDescription'
+      if (this.documentationTab === 'overview') return 'IntegrationDocsOverviewDescription'
+      if (this.documentationTab === 'protocol') return 'IntegrationDocsProtocolDescription'
       return this.credentialPolicies ? 'SDKDescription' : 'SDKLegacyDescription'
     },
     activeDocument() {
@@ -172,7 +208,9 @@ export default {
       const endMarker = `<!-- ${marker}:end -->`
       const start = this.readme.indexOf(startMarker)
       const end = this.readme.indexOf(endMarker)
-      if (start === -1 || end === -1 || end <= start) return this.readme
+      if (start === -1 || end === -1 || end <= start) {
+        return ['overview', 'protocol', 'socket'].includes(this.documentationTab) ? '' : this.readme
+      }
       return this.readme.slice(start + startMarker.length, end).trim()
     },
     hasDocumentation() {
@@ -182,6 +220,16 @@ export default {
   watch: {
     '$i18n.locale'() {
       this.loadDocumentation()
+    },
+    '$route.query.documentation'() {
+      if (this.$route.name === 'IntegrationApplicationList' && this.$route.query.tab === 'docs') {
+        this.syncDocumentationFromRoute()
+      }
+    },
+    '$route.query.sdk_language'() {
+      if (this.$route.name === 'IntegrationApplicationList' && this.$route.query.tab === 'docs') {
+        this.syncDocumentationFromRoute()
+      }
     }
   },
   mounted() {
@@ -212,7 +260,9 @@ export default {
       const label =
         this.documentationTab === 'agent'
           ? this.$t('AgentAccess')
-          : `${this.sdkLanguages.find(({ value }) => value === this.sdkLanguage)?.label || this.sdkLanguage} SDK`
+          : this.documentationTab === 'sdk'
+            ? `${this.sdkLanguages.find(({ value }) => value === this.sdkLanguage)?.label || this.sdkLanguage} SDK`
+            : this.$t(this.documentationTitle)
       try {
         await this.$nextTick()
         await printDocumentation(this.$refs.docsMain, {
@@ -227,14 +277,20 @@ export default {
     },
     syncDocumentationFromRoute() {
       const language = this.$route.query.sdk_language
-      const tab = sdkLanguageValues.includes(language) ? 'sdk' : 'agent'
-      if (this.documentationTab === tab && (tab === 'agent' || this.sdkLanguage === language)) {
+      const requestedTab = this.$route.query.documentation
+      const tab = ['overview', 'agent', 'socket', 'sdk', 'protocol'].includes(requestedTab)
+        ? requestedTab
+        : sdkLanguageValues.includes(language)
+          ? 'sdk'
+          : 'overview'
+      const sdkLanguage = sdkLanguageValues.includes(language) ? language : 'python'
+      if (this.documentationTab === tab && (tab !== 'sdk' || this.sdkLanguage === sdkLanguage)) {
         return
       }
       const previousLanguage = this.activeLanguage
       this.disconnectHeadingObserver()
       this.documentationTab = tab
-      if (tab === 'sdk') this.sdkLanguage = language
+      if (tab === 'sdk') this.sdkLanguage = sdkLanguage
       this.headings = []
       this.activeHeading = ''
       this.$refs.docsMain?.scrollTo({ top: 0 })
@@ -271,7 +327,12 @@ export default {
       this.$nextTick(this.observeHeadings)
     },
     selectDocumentation(tab) {
-      if (this.documentationTab === tab) return
+      if (
+        !['overview', 'agent', 'socket', 'sdk', 'protocol'].includes(tab) ||
+        this.documentationTab === tab
+      ) {
+        return
+      }
       const previousLanguage = this.activeLanguage
       this.disconnectHeadingObserver()
       this.documentationTab = tab
@@ -290,8 +351,14 @@ export default {
     },
     syncLanguageQuery() {
       const language = this.documentationTab === 'sdk' ? this.sdkLanguage : undefined
-      if (this.$route.query.sdk_language === language) return
+      if (
+        this.$route.query.sdk_language === language &&
+        this.$route.query.documentation === this.documentationTab
+      ) {
+        return
+      }
       const query = { ...this.$route.query }
+      query.documentation = this.documentationTab
       if (language) query.sdk_language = language
       else delete query.sdk_language
       this.$router.replace({ path: this.$route.path, query, hash: this.$route.hash })
@@ -424,6 +491,15 @@ export default {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
+}
+
+.documentation-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 12px;
 }
 
 .documentation-state {
