@@ -1239,6 +1239,7 @@
   "LicenseFile": "Tệp giấy phép",
   "LicenseForTest": "Chứng chỉ sử dụng thử nghiệm, chứng chỉ này chỉ dùng cho thử nghiệm (PoC) và trình diễn",
   "LicenseMaintenanceExpired": "Dịch vụ bảo trì giấy phép đã hết hạn",
+  "LicenseNotImported": "Chưa nhập giấy phép. Vui lòng nhập giấy phép",
   "LicenseReachedAssetAmountLimit": "Số lượng tài sản đã vượt quá giới hạn số lượng giấy phép",
   "LicenseWillBe": "Giấy phép sắp hết hạn",
   "LicenseWillExpire": "Giấy phép sắp hết hạn",

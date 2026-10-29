@@ -1202,6 +1202,7 @@
   "LicenseFile": "ライセンスファイル",
   "LicenseForTest": "テスト用ライセンス。このライセンスはテスト(PoC)とデモンストレーションにのみ使用されます",
   "LicenseMaintenanceExpired": "ライセンスサービスの有効期限が切れました",
+  "LicenseNotImported": "ライセンスがインポートされていません。ライセンスをインポートしてください",
   "LicenseReachedAssetAmountLimit": "資産の数量がライセンスの数量制限を超えています",
   "LicenseWillBe": "ライセンスは間もなく ",
   "LicenseWillExpire": "ライセンスはまもなく期限切れです",
