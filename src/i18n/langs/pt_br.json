@@ -1239,6 +1239,7 @@
   "LicenseFile": "Arquivo de licença",
   "LicenseForTest": "Licença para fins de teste, esta licença é apenas para Teste (PoC) e Demonstração",
   "LicenseMaintenanceExpired": "O prazo de serviço da licença expirou",
+  "LicenseNotImported": "Nenhuma licença foi importada. Importe uma licença",
   "LicenseReachedAssetAmountLimit": "A quantidade de ativos excedeu o limite de licença",
   "LicenseWillBe": "A licença está prestes a ser ",
   "LicenseWillExpire": "A licença está prestes a expirar",

@@ -1194,6 +1194,7 @@
   "LicenseFile": "許可證文件",
   "LicenseForTest": "測試用途許可證， 本許可證僅用於 測試（PoC）和示範",
   "LicenseMaintenanceExpired": "授權服務時間已到期",
+  "LicenseNotImported": "尚未匯入授權許可證，請先匯入",
   "LicenseReachedAssetAmountLimit": "資產數量已經超過許可證數量限制",
   "LicenseWillBe": "許可證即將在 ",
   "LicenseWillExpire": "許可證即將過期",

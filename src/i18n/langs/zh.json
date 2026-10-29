@@ -983,6 +983,7 @@
   "LicenseFile": "许可证文件",
   "LicenseForTest": "测试用途许可证， 本许可证仅用于 测试（PoC）和演示",
   "LicenseMaintenanceExpired": "许可证服务时间已到期",
+  "LicenseNotImported": "尚未导入许可证，请先导入",
   "LicenseReachedAssetAmountLimit": "资产数量已经超过许可证数量限制",
   "LicenseWillBe": "许可证即将在 ",
   "LicenseWillExpire": "许可证即将过期",

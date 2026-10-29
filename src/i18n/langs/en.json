@@ -995,6 +995,7 @@
   "LicenseFile": "License file",
   "LicenseForTest": "Test purpose license, this license is only for testing (poc) and demonstration",
   "LicenseMaintenanceExpired": "The license service has expired",
+  "LicenseNotImported": "No license has been imported. Please import a license",
   "LicenseReachedAssetAmountLimit": "The assets has exceeded the license limit",
   "LicenseWillBe": "License expiring soon",
   "LicenseWillExpire": "The license will expire soon",
