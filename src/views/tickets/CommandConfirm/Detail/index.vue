@@ -1,9 +1,10 @@
 <template>
   <GenericDetailPage
     v-bind="config"
+    class="ticket-detail-page"
     v-model:active-menu="config.activeMenu"
     v-model:object="ticket"
-    :title="ticket.title"
+    :title="ticket.title || $t('TicketDetail')"
   >
     <component :is="config.activeMenu" :object="ticket" />
   </GenericDetailPage>
@@ -56,3 +57,5 @@ export default {
   }
 }
 </script>
+
+<style scoped src="@/views/tickets/ticket-detail.css"></style>

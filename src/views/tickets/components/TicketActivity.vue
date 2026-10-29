@@ -17,6 +17,12 @@
       >
         <div class="event-heading">
           <strong>{{ $t(eventLabels[event.type] || 'WFEvent') }}</strong>
+          <el-tag
+            v-if="event.type === 'condition.evaluated' && typeof event.data.result === 'boolean'"
+            :type="event.data.result ? 'primary' : 'info'"
+            size="small"
+            >{{ $t(event.data.result ? 'WFTrueBranch' : 'WFFalseBranch') }}</el-tag
+          >
           <span v-if="event.actor_snapshot?.name || event.actor_snapshot?.username">
             {{ formatUser(event.actor_snapshot) }}
           </span>
@@ -33,9 +39,11 @@
           <p v-if="event.data.restarted">{{ $t('TicketApprovalRestarted') }}</p>
           <el-collapse>
             <el-collapse-item :title="$t('TicketAdjustmentDiff')" :name="event.id">
-              <pre>{{
-                JSON.stringify({ before: event.data.before, after: event.data.after }, null, 2)
-              }}</pre>
+              <TicketAdjustmentDiff
+                :change="event.data"
+                :items="object.request_items || []"
+                :snapshot="instance?.context || {}"
+              />
             </el-collapse-item>
           </el-collapse>
         </template>
@@ -61,9 +69,12 @@
           <span v-else>{{ resource.name || resource.id }}</span>
         </div>
         <div v-if="event.data.detail" class="event-error">{{ event.data.detail }}</div>
-        <pre v-if="event.type === 'condition.evaluated'">{{
-          JSON.stringify(event.data, null, 2)
-        }}</pre>
+        <TicketCondition
+          v-if="event.type === 'condition.evaluated'"
+          :condition="event.data.condition"
+          :items="object.request_items || []"
+          :snapshot="instance?.context || {}"
+        />
       </el-timeline-item>
     </el-timeline>
     <el-empty v-else-if="!loading && !failed" :description="$t('NoData')" :image-size="80" />
@@ -83,11 +94,13 @@
 import IBox from '@/components/Common/IBox'
 import { useDateTime } from '@/composables/useDateTime'
 import CcUsers from './CcUsers'
+import TicketAdjustmentDiff from './TicketAdjustmentDiff'
+import TicketCondition from './TicketCondition'
 import { eventLabels, nodeLabels } from '../Workflow/graph'
 
 export default {
   name: 'TicketActivity',
-  components: { IBox, CcUsers },
+  components: { IBox, CcUsers, TicketAdjustmentDiff, TicketCondition },
   props: { object: { type: Object, required: true } },
   setup: useDateTime,
   data: () => ({

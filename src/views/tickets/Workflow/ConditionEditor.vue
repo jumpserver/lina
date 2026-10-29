@@ -117,7 +117,7 @@
   </div>
 </template>
 <script>
-import { newCondition } from './graph'
+import { newCondition, conditionFieldLabels } from './graph'
 export default {
   name: 'ConditionEditor',
   props: {
@@ -129,18 +129,7 @@ export default {
   emits: ['update:modelValue'],
   data: () => ({
     operators: ['eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'in', 'not_in', 'contains', 'exists'],
-    fields: {
-      'asset.labels.env': 'WFFieldAssetEnvironment',
-      'asset.platform.type': 'WFFieldAssetPlatformType',
-      'asset.platform.category': 'WFFieldAssetPlatformCategory',
-      'asset.owner.id': 'WFFieldAssetOwnerId',
-      'account.username': 'WFFieldAccountUsername',
-      duration: 'WFFieldDuration',
-      'request.command': 'ApplyRunCommand',
-      'request.ip': 'WFFieldRequestIP',
-      'applicant.username': 'WFFieldApplicantUsername',
-      actions: 'Actions'
-    }
+    fields: conditionFieldLabels
   }),
   computed: {
     availableFields() {

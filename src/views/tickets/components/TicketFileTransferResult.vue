@@ -7,7 +7,8 @@
   <Details v-else :detail-card-items="detailItems" :title="$t('ApplyInfo')">
     <div class="transfer-summary">
       <div role="status" aria-live="polite">
-        <strong>{{ $t('TicketTransferState_' + result.state) }}</strong>
+        <strong>{{ resultSummary }}</strong>
+        <p v-if="resultHelp">{{ resultHelp }}</p>
         <p v-if="canExecute">{{ $t('TicketTransferExecutionHelp') }}</p>
         <p v-if="result.expires_at">
           {{ $t('DateExpired') }}: {{ toSafeLocalDateStr(result.expires_at)
@@ -58,9 +59,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <p v-if="['failed', 'unverified'].includes(result.state)" class="transfer-result-help">
-      {{ $t('TicketTransferFailedHelp') }}
-    </p>
     <p v-if="result.date_finished" class="transfer-result-help">
       {{ $t('DateFinished') }}: {{ toSafeLocalDateStr(result.date_finished) }}
     </p>
@@ -83,6 +81,44 @@ export default {
   computed: {
     result() {
       return this.object.result || {}
+    },
+    fileCounts() {
+      const counts = { success: 0, failed: 0, unverified: 0, pending: 0, running: 0 }
+      for (const file of this.result.files || []) {
+        const state = file.state || 'pending'
+        if (Object.hasOwn(counts, state)) counts[state]++
+      }
+      return counts
+    },
+    resultSummary() {
+      const state = this.$t('TicketTransferState_' + this.result.state)
+      if (!['failed', 'unverified'].includes(this.result.state)) return state
+      const counts = Object.entries(this.fileCounts)
+        .filter(([, count]) => count > 0)
+        .map(([state, count]) => this.$t('TicketTransferCount_' + state, { count }))
+      if (!counts.length) return state
+      const needsVerification = this.result.state === 'unverified' || this.fileCounts.unverified > 0
+      const partial =
+        this.fileCounts.success > 0 && this.fileCounts.success < this.result.files.length
+      return this.$t('TicketTransferResultSummary', {
+        state: needsVerification
+          ? this.$t('TicketTransferState_unverified')
+          : partial
+            ? this.$t('TicketTransferPartialSuccess')
+            : state,
+        counts: counts.join(this.$t('TicketTransferCountSeparator'))
+      })
+    },
+    resultHelp() {
+      if (!['failed', 'unverified'].includes(this.result.state)) return ''
+      const needsVerification = this.result.state === 'unverified' || this.fileCounts.unverified > 0
+      const help = this.$t(
+        needsVerification ? 'TicketTransferUnverifiedHelp' : 'TicketTransferFailedHelp'
+      )
+      const downloadable =
+        this.result.direction === 'download' &&
+        this.result.files?.some((file) => file.state === 'success' && this.fileUrl(file))
+      return downloadable ? `${this.$t('TicketTransferSuccessfulDownloadHelp')} ${help}` : help
     },
     detailItems() {
       return this.result.files?.length

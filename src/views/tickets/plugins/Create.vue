@@ -20,6 +20,7 @@
       :create-success-next-route="{ name: 'MyTicketList' }"
       :has-detail-in-msg="false"
       :has-save-continue="false"
+      :can-submit="workflowReady"
       url="/api/v1/tickets/tickets/open/"
     >
       <template #form-header>
@@ -50,6 +51,7 @@ import { buildRequestPayload } from './form'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import resourceAvailability from './resourceAvailability'
 import TicketTransferFiles from '../components/TicketTransferFiles.vue'
+import TicketWorkflowSelect from '../components/TicketWorkflowSelect.vue'
 
 export default {
   mixins: [resourceAvailability],
@@ -71,6 +73,10 @@ export default {
     }
   },
   computed: {
+    workflowReady() {
+      const field = this.fieldsMeta.workflow_id?.el
+      return Boolean(field?.options.length) && !field.loading && !field.failed
+    },
     ...mapGetters(['currentOrg']),
     ...mapState({ organizations: (state) => state.users.noRootWorkbenchOrgs }),
     plugin() {
@@ -105,6 +111,8 @@ export default {
       this.formReady = false
       ++this.flowRequest
       this.accountStates = {}
+      this.transferDirection = 'upload'
+      this.transferUploading = false
       if (!this.selectedPlugin || this.selectedPlugin.custom_form || this.plugin.form) return
       const orgId =
         this.organizations.find((org) => org.id === this.currentOrg?.id)?.id ||
@@ -127,6 +135,7 @@ export default {
               this.selectedOrgId = value
               this.transferDirection = 'upload'
               this.transferUploading = false
+              if (this.fieldsMeta.param_files) this.fieldsMeta.param_files.el.uploadedFiles = []
               for (const field of this.accountFields) this.loadAccountOptions(field, '', updateForm)
               const cleared = { workflow_id: '' }
               for (const field of this.selectedPlugin.fields) {
@@ -140,9 +149,16 @@ export default {
         },
         workflow_id: {
           label: this.$t('TicketFlow'),
-          component: Select2,
+          component: TicketWorkflowSelect,
           required: true,
-          el: { multiple: false, options: [], disabled: true }
+          rules: [Required],
+          on: {
+            retry: async (_, updateForm) => {
+              const flow = await this.loadFlows(this.selectedOrgId)
+              if (flow !== undefined) updateForm({ workflow_id: flow?.id || '' })
+            }
+          },
+          el: { options: [], disabled: true, loading: false, failed: false }
         },
         comment: { label: this.$t('Comment'), type: 'input', el: { type: 'textarea', rows: 3 } }
       }
@@ -272,11 +288,15 @@ export default {
         if (this.selectedType === 'file_transfer') {
           if (field.name === 'direction') {
             this.initial[name] = 'upload'
+            meta.helpTextFormatter = () =>
+              this.transferUploading ? this.$t('TicketTransferWaitDirection') : ''
             meta.on = {
               change: ([direction], updateForm) => {
+                if (this.transferUploading) {
+                  updateForm({ param_direction: this.transferDirection })
+                  return
+                }
                 this.transferDirection = direction
-                this.transferUploading = false
-                updateForm({ param_files: [], param_paths: [], param_target_directory: '' })
               }
             }
           }
@@ -299,16 +319,35 @@ export default {
           if (field.name === 'files') {
             meta.component = TicketTransferFiles
             meta.helpText = ''
-            meta.el = { orgId: this.selectedOrgId }
+            meta.el = { orgId: this.selectedOrgId, uploadedFiles: [] }
             meta.on = {
+              'files-change': ([files]) => {
+                this.fieldsMeta.param_files.el.uploadedFiles = files
+              },
               busy: ([busy]) => {
                 this.transferUploading = busy
+                this.fieldsMeta.param_direction.el.disabled = busy
               }
             }
             this.initial[name] = []
           }
         }
         configurePluginField(this.selectedPlugin, field, meta, this.$t)
+        if (
+          this.selectedType === 'file_transfer' &&
+          this.selectedPlugin.execution_mode === 'external' &&
+          field.name === 'duration'
+        ) {
+          meta.helpText = ''
+          meta.helpTextFormatter = () =>
+            this.$t('TicketTransferExecutionNextStep', {
+              action: this.$t(
+                this.transferDirection === 'upload'
+                  ? 'TicketTransferExecuteUpload'
+                  : 'TicketTransferFetchFiles'
+              )
+            })
+        }
         this.fieldsMeta[name] = meta
       }
       this.fields = [
@@ -392,8 +431,12 @@ export default {
       const requestId = ++this.flowRequest
       const type = this.selectedType
       const workflowField = this.fieldsMeta.workflow_id
-      workflowField.el.options = []
-      workflowField.el.disabled = true
+      Object.assign(workflowField.el, {
+        options: [],
+        disabled: true,
+        loading: Boolean(orgId),
+        failed: false
+      })
       for (const field of this.selectedPlugin.fields) {
         if (field.resource === 'asset') {
           this.fieldsMeta[`param_${field.name}`].el.ajax.url =
@@ -410,18 +453,32 @@ export default {
       if (this.selectedPlugin.resource_adjustment) {
         await this.loadResourceAvailability(type, orgId)
       }
-      const flows = await this.$axios.get('/api/v1/tickets/workflows/options/', {
-        params: { type, org_id: orgId }
-      })
-      if (requestId !== this.flowRequest) return undefined
-      workflowField.el.options = flows.map((flow) => ({ value: flow.id, label: flow.name }))
-      workflowField.el.disabled = flows.length <= 1
-      return flows[0] || null
+      try {
+        const flows = await this.$axios.get('/api/v1/tickets/workflows/options/', {
+          params: { type, org_id: orgId },
+          disableFlashErrorMsg: true
+        })
+        if (requestId !== this.flowRequest) return undefined
+        workflowField.el.options = flows.map((flow) => ({ value: flow.id, label: flow.name }))
+        workflowField.el.disabled = flows.length <= 1
+        return flows[0] || null
+      } catch {
+        if (requestId !== this.flowRequest) return undefined
+        workflowField.el.failed = true
+        return null
+      } finally {
+        if (requestId === this.flowRequest) workflowField.el.loading = false
+      }
     },
     cleanFormValue(value) {
       if (this.transferUploading) throw new Error(this.$t('TicketTransferWaitUpload'))
       if (this.selectedPlugin.resource_adjustment) this.validateAvailability()
       const payload = buildRequestPayload(this.selectedPlugin, value)
+      if (this.selectedType === 'file_transfer') {
+        const inactive =
+          payload.request_data.direction === 'upload' ? ['paths'] : ['files', 'target_directory']
+        for (const field of inactive) delete payload.request_data[field]
+      }
       if (!this.resourceAvailability?.description_allowed) {
         delete payload.request_data.resource_description
       }

@@ -97,7 +97,9 @@ export default {
             reload: this.reloadTable,
             loaded: (object) => {
               if (this.openedRouteKey !== key || this.action !== 'detail') return
-              this.drawerTitle = `${this.$t(location.meta.title || 'Detail')}: ${object.name || object.display_name || object.username || object.id || location.params.id}`
+              this.drawerTitle =
+                object.title ||
+                `${this.$t(location.meta.title || 'Detail')}: ${object.name || object.display_name || object.username || object.id || location.params.id}`
             }
           }
         }

@@ -7,27 +7,34 @@
           $t('WFDraft')
         }}</el-tag>
         <el-tag v-else :type="workflow.enabled ? 'success' : 'info'" effect="plain">{{
-          $t(workflow.enabled ? 'Enabled' : 'Disabled')
+          $t(workflow.enabled ? 'Enabled' : 'WFPublishedDisabled')
         }}</el-tag>
         <el-button
-          v-if="canEdit && workflow.active_version"
-          :disabled="saving"
-          @click="toggleEnabled"
-          >{{ $t(workflow.enabled ? 'Disable' : 'Enable') }}</el-button
-        >
-        <el-button
           v-if="canEdit"
-          type="primary"
+          :type="enablePrimary ? 'default' : 'primary'"
           :loading="saving"
           :disabled="loading"
           @click="publish"
         >
           {{ $t(workflow.active_version ? 'WFPublish' : 'WFPublishFirst') }}
         </el-button>
+        <el-button
+          v-if="canEdit && workflow.active_version"
+          :type="enablePrimary ? 'primary' : 'default'"
+          :disabled="saving"
+          @click="toggleEnabled"
+          >{{ $t(workflow.enabled ? 'Disable' : 'WFEnableFlow') }}</el-button
+        >
       </div>
     </template>
     <div v-loading="loading" class="workflow-designer">
-      <el-alert v-if="error" :title="error" type="error" show-icon :closable="false" />
+      <el-alert
+        v-if="approverError || error"
+        :title="approverError || error"
+        type="error"
+        show-icon
+        :closable="false"
+      />
       <IBox class="metadata-box">
         <div class="section-heading">
           <h3>{{ $t('BasicInfo') }}</h3>
@@ -192,11 +199,19 @@
                       />
                     </el-select>
                   </el-form-item>
-                  <el-form-item v-if="resourceResolver" :label="$t('WFSelectApprovers')">
+                  <el-form-item
+                    v-if="resourceResolver"
+                    ref="approverField"
+                    :label="$t('WFSelectApprovers')"
+                    :error="approverValidationNode?.id === selected.id ? approverError : ''"
+                    :show-message="false"
+                    required
+                  >
                     <Select2
                       :key="`${selected.id}-${selected.config.approvers.type}`"
                       v-model="selected.config.approvers.value"
                       :ajax="approverAjax"
+                      :placeholder="$t(`WFApproversPlaceholder_${selected.config.approvers.type}`)"
                       multiple
                     />
                   </el-form-item>
@@ -356,6 +371,7 @@ export default {
       loading: false,
       saving: false,
       error: '',
+      approverValidationId: null,
       advancedOpen: [],
       savedDefinition: null,
       savedMetadata: null,
@@ -405,6 +421,15 @@ export default {
         (this.savedMetadata !== null && JSON.stringify(this.metadata) !== this.savedMetadata)
       )
     },
+    enablePrimary() {
+      return (
+        !!this.workflow.active_version &&
+        this.selectedVersion === this.workflow.active_version &&
+        !this.workflow.enabled &&
+        !this.dirty &&
+        !this.loading
+      )
+    },
     canEdit() {
       return this.$hasPerm(this.workflow.id ? 'tickets.change_workflow' : 'tickets.add_workflow')
     },
@@ -432,6 +457,19 @@ export default {
     },
     nextNodes() {
       return this.definition.nodes.filter((n) => n.id !== this.selectedId && n.type !== 'start')
+    },
+    approverValidationNode() {
+      return this.definition.nodes.find(
+        (node) => node.id === this.approverValidationId && this.missingApprovers(node)
+      )
+    },
+    approverError() {
+      const node = this.approverValidationNode
+      return node
+        ? this.$t(`WFApproversRequired_${node.config.approvers.type}`, {
+            node: node.name || this.$t('WFApproval')
+          })
+        : ''
     },
     resourceResolver() {
       return ['user', 'user_group', 'role'].includes(this.selected?.config?.approvers?.type)
@@ -477,6 +515,7 @@ export default {
       this.moreVersions = false
       this.selectedId = 'approval_1'
       this.error = ''
+      this.approverValidationId = null
       this.captureBaseline()
     }
   },
@@ -534,6 +573,7 @@ export default {
           return
         }
       }
+      this.approverValidationId = null
       this.selectedVersion = id
       this.definition = JSON.parse(JSON.stringify(version.definition))
       this.selectedId = this.definition.nodes.find((n) => n.type === 'start')?.id
@@ -581,14 +621,33 @@ export default {
       )
       this.selectedId = edge.target
     },
+    missingApprovers(node) {
+      const approvers = node.config?.approvers
+      return (
+        node.type === 'approval' &&
+        ['user', 'user_group', 'role'].includes(approvers?.type) &&
+        !approvers.value?.length
+      )
+    },
     async publish() {
       if (this.saving) return
+      this.approverValidationId = null
+      this.error = ''
       if (!this.workflow.name.trim()) {
         this.error = this.$t('WFNameRequired')
         return
       }
+      const missing = this.definition.nodes.find(this.missingApprovers)
+      if (missing) {
+        this.approverValidationId = missing.id
+        this.selectedId = missing.id
+        await this.$nextTick()
+        const field = this.$refs.approverField?.$el
+        field?.scrollIntoView({ block: 'nearest' })
+        field?.querySelector('[role="combobox"]')?.focus({ preventScroll: true })
+        return
+      }
       this.saving = true
-      this.error = ''
       try {
         const metadata = this.metadata
         const expected = this.workflow.active_version_number || 0
@@ -608,7 +667,11 @@ export default {
         this.versions.unshift(version)
         this.selectedVersion = version.id
         this.captureBaseline()
-        this.$message.success(this.$t('WFPublished'))
+        this.$message.success(
+          this.$t(this.workflow.enabled ? 'WFPublished' : 'WFPublishedDisabledHelp', {
+            number: version.number
+          })
+        )
         // Navigate only after publication; the detail page mounts and fetches here.
         if (this.$route.name === 'WorkflowCreate') {
           await this.$router.replace({ name: 'WorkflowDetail', params: { id: this.workflow.id } })

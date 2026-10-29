@@ -54,7 +54,7 @@ export default {
   data() {
     const vm = this
     return {
-      getDrawerTitle: () => ' ',
+      getDrawerTitle: ({ row }) => row.title || this.$t('TicketDetail'),
       ticketTypes: Object.keys(TICKET_TYPE_I18N_KEYS).map((type) => ({
         label: getTicketTypeLabel({ value: type }, this.$t),
         filter: { type }

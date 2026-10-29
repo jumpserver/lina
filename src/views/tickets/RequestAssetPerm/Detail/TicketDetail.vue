@@ -2,6 +2,7 @@
 <script>
 import { h } from 'vue'
 import GenericTicketDetail from '../../components/GenericTicketDetail'
+import { toSafeLocalDateStr } from '@/composables/useDateTime'
 export default {
   components: { GenericTicketDetail },
   props: { object: { type: Object, required: true } },
@@ -39,7 +40,9 @@ export default {
           .map((item) => ({
             name: item.name,
             key: item.name === 'apply_users' ? this.$t('TicketAuthorizedUsers') : item.label,
-            value: item.value ?? '-'
+            value: ['apply_date_start', 'apply_date_expired'].includes(item.name)
+              ? toSafeLocalDateStr(item.value)
+              : (item.value ?? '-')
           })),
         {
           key: this.$t('SystemExpireNotice'),

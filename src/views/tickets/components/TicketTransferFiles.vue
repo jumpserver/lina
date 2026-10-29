@@ -23,11 +23,18 @@ import { formatFileSize } from '@/utils/common'
 export default {
   props: {
     modelValue: { type: Array, default: () => [] },
+    uploadedFiles: { type: Array, default: () => [] },
     orgId: { type: String, default: '' }
   },
   // Keep the native file-input change event out of DataForm's value listener.
-  emits: ['update:modelValue', 'input', 'change', 'busy'],
-  data: () => ({ files: [], busy: false, generation: 0 }),
+  emits: ['update:modelValue', 'input', 'change', 'busy', 'files-change'],
+  data() {
+    return {
+      files: this.uploadedFiles.filter((file) => this.modelValue.includes(file.id)),
+      busy: false,
+      generation: 0
+    }
+  },
   watch: {
     orgId() {
       this.reset()
@@ -43,6 +50,7 @@ export default {
   methods: {
     formatFileSize,
     emitFiles() {
+      this.$emit('files-change', [...this.files])
       const ids = this.files.map((file) => file.id)
       this.$emit('update:modelValue', ids)
       this.$emit('input', ids)

@@ -150,6 +150,7 @@ async function createAccountForm(get) {
     'resourceAvailability',
     'BasicTree',
     'TicketTransferFiles',
+    'TicketWorkflowSelect',
     script
   )(
     () => ({}),
@@ -165,6 +166,7 @@ async function createAccountForm(get) {
     buildRequestPayload,
     (value) => `local:${value}`,
     resourceAvailability,
+    {},
     {},
     {}
   )
@@ -410,8 +412,9 @@ test('file transfer form keeps path guidance on demand and preserves request pay
   assert.equal(payload.request_data.duration, 3600)
 })
 
-test('file transfer form separates directions, resets files on organization changes and blocks submission during upload', async () => {
+test('file transfer preserves each direction draft, submits only active fields and resets on organization changes', async () => {
   const vm = await createAccountForm(async () => [])
+  vm.$t = (key, params) => (params ? `${key}:${params.action}` : key)
   vm.plugins.push({
     type: 'file_transfer',
     execution_mode: 'external',
@@ -423,12 +426,16 @@ test('file transfer form separates directions, resets files on organization chan
         choices: [{ value: 'upload' }, { value: 'download' }]
       },
       { name: 'files', type: 'list' },
-      { name: 'paths', type: 'list' },
-      { name: 'target_directory', type: 'string' }
+      { name: 'paths', type: 'list', default: [] },
+      { name: 'target_directory', type: 'string' },
+      { name: 'duration', type: 'integer', min: 60, max: 86400, default: 3600 }
     ]
   })
   vm.selectedType = 'file_transfer'
   await vm.configure()
+  const durationHelp = () => vm.fieldsMeta.param_duration.helpTextFormatter()
+  assert.equal(vm.fieldsMeta.param_duration.helpText, '')
+  assert.equal(durationHelp(), 'TicketTransferExecutionNextStep:TicketTransferExecuteUpload')
   const values = { ...vm.initial }
   const update = (patch) => Object.assign(values, patch)
   assert.equal(values.param_direction, 'upload')
@@ -441,18 +448,54 @@ test('file transfer form separates directions, resets files on organization chan
     'TicketTransferDirectoryExample'
   )
   assert.equal(vm.fieldsMeta.param_paths.hidden(), true)
-  vm.transferUploading = true
+  const file = { id: 'file-a', name: 'report.txt', size: 12 }
+  values.param_files = [file.id]
+  values.param_target_directory = '/tmp/reports'
+  values.param_paths = '/var/log/app.log'
+  vm.fieldsMeta.param_files.on['files-change']([[file]])
+  const uploadDraft = structuredClone(values)
+  vm.fieldsMeta.param_files.on.busy([true])
+  assert.equal(vm.fieldsMeta.param_direction.el.disabled, true)
+  assert.equal(vm.fieldsMeta.param_direction.helpTextFormatter(), 'TicketTransferWaitDirection')
+  values.param_direction = 'download'
   vm.fieldsMeta.param_direction.on.change(['download'], update)
-  assert.equal(vm.transferUploading, false)
+  assert.equal(values.param_direction, 'upload')
+  assert.equal(vm.transferDirection, 'upload')
+  assert.equal(vm.transferUploading, true)
+  assert.throws(() => vm.cleanFormValue(values), /TicketTransferWaitUpload/)
+  vm.fieldsMeta.param_files.on.busy([false])
+  assert.equal(vm.fieldsMeta.param_direction.el.disabled, false)
+  assert.equal(vm.fieldsMeta.param_direction.helpTextFormatter(), '')
+  values.param_direction = 'download'
+  vm.fieldsMeta.param_direction.on.change(['download'], update)
+  assert.equal(durationHelp(), 'TicketTransferExecutionNextStep:TicketTransferFetchFiles')
   assert.equal(vm.fieldsMeta.param_files.hidden(), true)
   assert.equal(vm.fieldsMeta.param_paths.hidden(), false)
-  assert.deepEqual(values.param_files, [])
-  vm.transferUploading = true
-  assert.throws(() => vm.cleanFormValue(values), /TicketTransferWaitUpload/)
+  assert.deepEqual(values, { ...uploadDraft, param_direction: 'download' })
+  const download = vm.cleanFormValue(values).request_data
+  assert.deepEqual(download.paths, ['/var/log/app.log'])
+  assert.equal('files' in download, false)
+  assert.equal('target_directory' in download, false)
+  values.param_direction = 'upload'
+  vm.fieldsMeta.param_direction.on.change(['upload'], update)
+  assert.equal(vm.fieldsMeta.param_files.hidden(), false)
+  assert.equal(vm.fieldsMeta.param_paths.hidden(), true)
+  assert.deepEqual(values, uploadDraft)
+  assert.deepEqual(vm.fieldsMeta.param_files.el.uploadedFiles, [file])
+  const upload = vm.cleanFormValue(values).request_data
+  assert.deepEqual(upload.files, ['file-a'])
+  assert.equal(upload.target_directory, '/tmp/reports')
+  assert.equal('paths' in upload, false)
+  assert.deepEqual(values, uploadDraft, 'submitting must not erase the other direction draft')
   await vm.fieldsMeta.org_id.on.change(['org-2'], update)
   assert.equal(vm.fieldsMeta.param_files.el.orgId, 'org-2')
   assert.equal(vm.transferDirection, 'upload')
+  assert.equal(durationHelp(), 'TicketTransferExecutionNextStep:TicketTransferExecuteUpload')
   assert.equal(vm.transferUploading, false)
+  assert.deepEqual(values.param_files, [])
+  assert.deepEqual(values.param_paths, [])
+  assert.equal(values.param_target_directory, '')
+  assert.deepEqual(vm.fieldsMeta.param_files.el.uploadedFiles, [])
   const validate = (field, value) => {
     let error
     vm.fieldsMeta[field].rules[0].validator(null, value, (result) => {
@@ -463,4 +506,49 @@ test('file transfer form separates directions, resets files on organization chan
   assert.ok(validate('param_files', []))
   assert.ok(validate('param_target_directory', ''))
   assert.equal(validate('param_paths', ''), undefined)
+})
+
+test('failed workflow loads keep generic forms usable and retry changes only the workflow', async () => {
+  const vm = await createAccountForm(async () => {
+    throw new Error('offline')
+  })
+  assert.equal(vm.formReady, true)
+  assert.equal(vm.workflowReady, false)
+  assert.equal(vm.fieldsMeta.workflow_id.el.failed, true)
+  const draft = {
+    ...vm.initial,
+    title: 'Keep this title',
+    param_asset: 'asset-a',
+    param_accounts: ['root']
+  }
+  const original = structuredClone(draft)
+  let resolve
+  vm.$axios.get = () =>
+    new Promise((done) => {
+      resolve = done
+    })
+  const retry = vm.fieldsMeta.workflow_id.on.retry([], (patch) => Object.assign(draft, patch))
+  assert.equal(vm.fieldsMeta.workflow_id.el.loading, true)
+  assert.equal(vm.workflowReady, false)
+  resolve([
+    { id: 'flow-a', name: 'A' },
+    { id: 'flow-b', name: 'B' }
+  ])
+  await retry
+  assert.equal(vm.workflowReady, true)
+  assert.equal(vm.fieldsMeta.workflow_id.el.disabled, false)
+  assert.deepEqual(draft, { ...original, workflow_id: 'flow-a' })
+
+  const pending = []
+  vm.$axios.get = () => new Promise((resolve, reject) => pending.push({ resolve, reject }))
+  const old = vm.loadFlows('old-org')
+  const current = vm.loadFlows('current-org')
+  pending[0].reject(new Error('offline'))
+  assert.equal(await old, undefined)
+  assert.equal(vm.fieldsMeta.workflow_id.el.loading, true)
+  assert.equal(vm.fieldsMeta.workflow_id.el.failed, false)
+  pending[1].resolve([])
+  assert.equal(await current, null)
+  assert.equal(vm.workflowReady, false)
+  assert.equal(vm.fieldsMeta.workflow_id.el.loading, false)
 })

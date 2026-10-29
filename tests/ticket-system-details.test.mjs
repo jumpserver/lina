@@ -70,3 +70,43 @@ test('login details and batch approval format login dates and preserve the other
     }
   }
 })
+
+const asset = await component('RequestAssetPerm/Detail/TicketDetail.vue', {
+  GenericTicketDetail: {},
+  toSafeLocalDateStr
+})
+test('asset detail and batch approval format both validity dates without changing request data', () => {
+  for (const value of [
+    '2026-10-15T07:31:55.893000+00:00',
+    '2026-10-15T15:31:55.893+08:00',
+    null,
+    undefined,
+    ''
+  ]) {
+    const ticket = {
+      request_items: [
+        { name: 'apply_assets', label: 'Assets', value: 'server-1' },
+        { name: 'apply_date_start', label: 'Start', value },
+        { name: 'apply_date_expired', label: 'Expiry', value },
+        { name: 'description', label: 'Description', value: '2026-10-15T07:31:55Z' }
+      ]
+    }
+    const original = structuredClone(ticket)
+    const detail = asset.computed.specialCardItems
+      .call({
+        object: ticket,
+        $t: (key) => key,
+        getSystemExpireNoticeDescription: () => 'System reminder',
+        getExpireNoticeDescription: () => 'Disabled'
+      })
+      .slice(0, 4)
+    const batch = assigned.methods.getDetailFields.call({ $t: (key) => key }, ticket).slice(1)
+    for (const fields of [detail, batch]) {
+      assert.deepEqual(
+        fields.map((field) => field.value),
+        ['server-1', toSafeLocalDateStr(value), toSafeLocalDateStr(value), '2026-10-15T07:31:55Z']
+      )
+    }
+    assert.deepEqual(ticket, original)
+  }
+})

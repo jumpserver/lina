@@ -1,3 +1,16 @@
+export const conditionFieldLabels = {
+  'asset.labels.env': 'WFFieldAssetEnvironment',
+  'asset.platform.type': 'WFFieldAssetPlatformType',
+  'asset.platform.category': 'WFFieldAssetPlatformCategory',
+  'asset.owner.id': 'WFFieldAssetOwnerId',
+  'account.username': 'WFFieldAccountUsername',
+  duration: 'WFFieldDuration',
+  'request.command': 'ApplyRunCommand',
+  'request.ip': 'WFFieldRequestIP',
+  'applicant.username': 'WFFieldApplicantUsername',
+  actions: 'Actions'
+}
+
 export const nodeLabels = {
   start: 'WFStart',
   approval: 'WFApproval',

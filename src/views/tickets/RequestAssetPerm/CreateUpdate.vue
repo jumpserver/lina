@@ -10,7 +10,8 @@
       ref="form"
       :create-success-next-route="createSuccessNextRoute"
       :perform-submit="performSubmit"
-      :has-save-continue="sourceTicket ? false : null"
+      :can-submit="workflowReady"
+      :has-save-continue="sourceTicket || !workflowReady ? false : null"
     >
       <template #form-header>
         <el-alert
@@ -50,6 +51,7 @@
 
 <script>
 import Select2 from '@/components/Form/FormFields/Select2'
+import TicketWorkflowSelect from '../components/TicketWorkflowSelect.vue'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import store from '@/store'
 import { getDaysFuture } from '@/utils/common/time'
@@ -88,6 +90,7 @@ export default {
       submitted: false,
       flowOptions: [],
       flowRequest: 0,
+      flowBeneficiary: '',
       selectedOrgId: '',
       initial: {
         ips_or_not: true,
@@ -197,6 +200,20 @@ export default {
           type: 'assetSelect',
           label: this.$t('Asset'),
           component: Select2,
+          rules: [
+            {
+              trigger: 'change',
+              validator: (rule, value, done) => {
+                done(
+                  !value?.length &&
+                    !this.availabilityParams.selection?.apply_nodes &&
+                    !this.resourceAvailability?.description_allowed
+                    ? new Error(this.$t('RequiredAssetOrNode'))
+                    : undefined
+                )
+              }
+            }
+          ],
           on: { change: ([value]) => this.resourceSelectionChanged('apply_assets', value) },
           el: {
             value: [],
@@ -303,9 +320,19 @@ export default {
           }
         },
         workflow_id: {
-          component: Select2,
+          component: TicketWorkflowSelect,
+          required: true,
+          rules: [{ required: true, message: this.$t('FieldRequiredError'), trigger: 'blur' }],
           label: this.$t('TicketFlow'),
+          on: {
+            retry: async (_, updateForm) => {
+              const flow = await this.loadFlowOptions(this.selectedOrgId, this.flowBeneficiary)
+              if (flow !== undefined) updateForm({ workflow_id: flow?.id || '' })
+            }
+          },
           el: {
+            loading: false,
+            failed: false,
             multiple: false,
             clearable: false,
             disabled: true,
@@ -343,6 +370,10 @@ export default {
     }
   },
   computed: {
+    workflowReady() {
+      const field = this.fieldsMeta.workflow_id.el
+      return field.options.length > 0 && !field.loading && !field.failed
+    },
     isRenewal() {
       return this.sourceTicket?.kind === 'renew' && this.selectedOrgId === this.sourceTicket.org_id
     },
@@ -360,8 +391,7 @@ export default {
         accounts: 'TicketReapplyInvalidAccounts',
         nodes: 'TicketReapplyNodes',
         beneficiary: 'TicketReapplyBeneficiary',
-        workflow: 'TicketReapplyWorkflow',
-        no_workflow: 'TicketReapplyNoWorkflow'
+        workflow: 'TicketReapplyWorkflow'
       }
       return Object.keys(this.prefillWarnings)
         .filter((key) => keys[key])
@@ -443,24 +473,27 @@ export default {
     hasUnsavedChanges() {
       return this.$refs.form?.hasUnsavedChanges() || false
     },
-    resourceSelectionChanged(field, values) {
+    async resourceSelectionChanged(field, values) {
       const selection = {
         ...this.availabilityParams.selection,
         [field]: (values || []).map((value) => value.id || value).join(',')
       }
-      return this.loadResourceAvailability('apply_asset', this.selectedOrgId, selection)
+      await this.loadResourceAvailability('apply_asset', this.selectedOrgId, selection)
+      this.$refs.form?.$refs.createUpdateForm?.validateField('apply_assets', () => {})
     },
     async loadFlowOptions(orgId, beneficiary) {
       const requestId = ++this.flowRequest
       this.flowOptions = []
-      this.fieldsMeta.workflow_id.el.options = []
-      this.fieldsMeta.workflow_id.el.disabled = true
+      this.flowBeneficiary = beneficiary
+      const field = this.fieldsMeta.workflow_id.el
+      Object.assign(field, { options: [], disabled: true, loading: Boolean(orgId), failed: false })
       if (!orgId) {
         return null
       }
       try {
         const flows = await this.$axios.get('/api/v1/tickets/workflows/options/', {
-          params: { type: 'apply_asset', org_id: orgId, beneficiary }
+          params: { type: 'apply_asset', org_id: orgId, beneficiary },
+          disableFlashErrorMsg: true
         })
         if (requestId !== this.flowRequest) return undefined
         this.flowOptions = flows
@@ -468,15 +501,18 @@ export default {
           if (flows.length) delete this.prefillWarnings.no_workflow
           else this.prefillWarnings.no_workflow = true
         }
-        this.fieldsMeta.workflow_id.el.options = flows.map((flow) => ({
+        field.options = flows.map((flow) => ({
           label: getTicketFlowLabel(flow, this.$t),
           value: flow.id
         }))
-        this.fieldsMeta.workflow_id.el.disabled = flows.length <= 1
+        field.disabled = flows.length <= 1
         return flows[0] || null
-      } catch (error) {
+      } catch {
         if (requestId !== this.flowRequest) return undefined
+        field.failed = true
         return null
+      } finally {
+        if (requestId === this.flowRequest) field.loading = false
       }
     },
     performSubmit(validValues) {

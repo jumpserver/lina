@@ -5,6 +5,19 @@ import { parse } from '@vue/compiler-sfc'
 import { compile } from '@vue/compiler-dom'
 import * as Vue from 'vue'
 import { renderToString } from '@vue/server-renderer'
+import { createI18n } from 'vue-i18n'
+
+const messages = Object.fromEntries(
+  await Promise.all(
+    ['zh', 'zh_hant', 'en'].map(async (locale) => [
+      locale,
+      JSON.parse(
+        await readFile(new URL(`../src/i18n/langs/${locale}.json`, import.meta.url), 'utf8')
+      )
+    ])
+  )
+)
+const i18n = createI18n({ legacy: false, locale: 'zh', messages })
 
 const commonSource = await readFile(
   new URL('../src/utils/common/index.js', import.meta.url),
@@ -32,7 +45,7 @@ const component = await load('TicketFileTransferResult', {
   useDateTime: () => ({})
 })
 function mount(object) {
-  const vm = { ...component.data(), object, requestItems: [], $emit: () => {} }
+  const vm = { ...component.data(), object, requestItems: [], $emit: () => {}, $t: i18n.global.t }
   for (const [key, method] of Object.entries(component.methods)) vm[key] = method.bind(vm)
   for (const [key, getter] of Object.entries(component.computed))
     Object.defineProperty(vm, key, { get: getter.bind(vm) })
@@ -95,7 +108,7 @@ test('an upload response from the previous organization cannot attach files to t
   let resolve
   const emitted = []
   const vm = {
-    ...uploader.data(),
+    ...uploader.data.call({ modelValue: [], uploadedFiles: [] }),
     orgId: 'one',
     $emit: (...args) => emitted.push(args),
     $axios: {
@@ -192,4 +205,147 @@ test('file paths appear once when the file table is populated and remain availab
   assert.equal(vm.requestItems.length, 3)
   vm.object.result.files = []
   assert.deepEqual(vm.detailItems, vm.requestItems)
+})
+
+test('uploaded files retain names and sizes across direction remounts, including partial uploads', async () => {
+  const uploader = await load('TicketTransferFiles')
+  let ids = []
+  let uploadedFiles = []
+  const messages = []
+  const file = { id: 'uploaded-a', name: 'report.txt', size: 12 }
+  const mountUploader = () => {
+    const props = { modelValue: ids, uploadedFiles, orgId: 'org-a' }
+    const vm = {
+      ...props,
+      ...uploader.data.call(props),
+      $t: (key) => key,
+      $message: { error: (message) => messages.push(message) },
+      $emit(event, value) {
+        if (event === 'update:modelValue') ids = value
+        if (event === 'files-change') uploadedFiles = value
+      }
+    }
+    for (const [key, method] of Object.entries(uploader.methods)) vm[key] = method.bind(vm)
+    return vm
+  }
+  let vm = mountUploader()
+  let calls = 0
+  vm.$axios = {
+    async post() {
+      if (++calls === 1) return file
+      throw new Error('offline')
+    }
+  }
+  await assert.rejects(
+    vm.selectFiles({
+      target: { files: [new File(['ok'], 'report.txt'), new File(['no'], 'other.txt')], value: '' }
+    }),
+    /offline/
+  )
+  assert.deepEqual(ids, ['uploaded-a'])
+  assert.deepEqual(uploadedFiles, [file])
+  assert.equal(vm.busy, false)
+  uploader.beforeUnmount.call(vm)
+  vm = mountUploader()
+  assert.deepEqual(vm.files, [file])
+  await vm.selectFiles({ target: { files: [new File(['duplicate'], 'report.txt')], value: '' } })
+  assert.deepEqual(messages, ['TicketTransferFileSelectionError'])
+  assert.deepEqual(vm.files, [file])
+  vm.remove('uploaded-a')
+  assert.deepEqual(ids, [])
+  assert.deepEqual(uploadedFiles, [])
+  uploader.beforeUnmount.call(vm)
+  assert.deepEqual(mountUploader().files, [])
+})
+
+function completedTransfer(state, fileStates) {
+  const object = ticket()
+  object.result.state = state
+  object.result.files = fileStates.map((state, index) => ({
+    id: `file-${index}`,
+    name: `file-${index}.log`,
+    state
+  }))
+  object.result.actions = object.result.files
+    .filter((file) => file.state === 'success')
+    .map((file) => ({ type: 'download_transfer_file', file_id: file.id }))
+  return mount(object)
+}
+
+test('partial success counts successful and failed files separately and keeps successful downloads', () => {
+  const vm = completedTransfer('failed', ['success', 'success', 'failed'])
+  assert.equal(vm.resultSummary, '部分成功：2 个成功，1 个失败')
+  assert.equal(vm.resultHelp, '成功文件可下载。 请核对失败原因后重新申请，本次任务不会重试。')
+  assert.equal(vm.canExecute, false)
+  assert.match(vm.fileUrl(vm.result.files[0]), /download_transfer_file/)
+  assert.equal(vm.fileUrl(vm.result.files[2]), '')
+})
+
+test('unverified results take precedence over partial success and are never counted as failures', () => {
+  for (const [states, expected] of [
+    [['success', 'success', 'unverified'], '传输结果待核验：2 个成功，1 个待核验'],
+    [['success', 'failed', 'unverified'], '传输结果待核验：1 个成功，1 个失败，1 个待核验'],
+    [['unverified', 'unverified'], '传输结果待核验：2 个待核验']
+  ]) {
+    const vm = completedTransfer('unverified', states)
+    assert.equal(vm.resultSummary, expected)
+    assert.equal(vm.fileCounts.failed, states.filter((state) => state === 'failed').length)
+    assert.match(vm.resultHelp, /请先核对待核验文件的实际结果，再决定是否重新申请/)
+    assert.equal(vm.canExecute, false)
+    for (const file of vm.result.files.filter((file) => file.state === 'unverified'))
+      assert.equal(vm.fileUrl(file), '')
+  }
+})
+
+test('download guidance follows actual availability, expiry and transfer direction', () => {
+  const vm = completedTransfer('failed', ['success', 'failed'])
+  vm.object.result.expired = true
+  assert.equal(vm.resultHelp.includes('成功文件可下载'), false)
+  assert.equal(vm.fileUrl(vm.result.files[0]), '')
+  vm.object.result.expired = false
+  vm.object.result.actions = []
+  assert.equal(vm.resultHelp.includes('成功文件可下载'), false)
+  vm.object.result.direction = 'upload'
+  vm.object.result.reviewable_files = ['file-0']
+  assert.match(vm.fileUrl(vm.result.files[0]), /review_transfer_file/)
+  assert.equal(vm.resultHelp.includes('成功文件可下载'), false)
+})
+
+test('all failures, missing file results and active transfers retain truthful summaries', () => {
+  assert.equal(
+    completedTransfer('failed', ['failed', 'failed']).resultSummary,
+    '传输未完成：2 个失败'
+  )
+  assert.equal(completedTransfer('failed', []).resultSummary, '传输未完成')
+  assert.equal(completedTransfer('unverified', []).resultSummary, '传输结果待核验')
+  for (const state of [
+    'pending',
+    'ready',
+    'queued',
+    'running',
+    'success',
+    'expired',
+    'unavailable'
+  ]) {
+    const vm = completedTransfer(state, ['success', 'pending'])
+    assert.equal(vm.resultSummary, messages.zh['TicketTransferState_' + state])
+    assert.equal(vm.resultHelp, '')
+  }
+})
+
+test('summary and recovery messages render with no missing translations in all supported discussion locales', () => {
+  for (const [locale, expected] of [
+    ['zh', '部分成功：2 个成功，1 个失败'],
+    ['zh_hant', '部分成功：2 個成功，1 個失敗'],
+    ['en', 'Partially successful: 2 succeeded, 1 failed']
+  ]) {
+    const localized = createI18n({ legacy: false, locale, messages }).global
+    const vm = completedTransfer('failed', ['success', 'success', 'failed'])
+    vm.$t = localized.t
+    assert.equal(vm.resultSummary, expected)
+    vm.object.result.state = 'unverified'
+    vm.object.result.files[2].state = 'unverified'
+    assert.equal(vm.resultSummary.includes('TicketTransfer'), false)
+    assert.equal(vm.resultHelp.includes('TicketTransfer'), false)
+  }
 })

@@ -13,10 +13,11 @@ const helpersSource = await readFile(
 const { normalizeExpireNoticePayload } = await import(
   `data:text/javascript;base64,${Buffer.from(helpersSource).toString('base64')}`
 )
-const method = source.match(/cleanFormValue\(value\) \{[\s\S]*?\n      \},/)[0].replace(/,$/, '')
-const clean = new Function('normalizeExpireNoticePayload', `return ({ ${method} }).cleanFormValue`)(
+const body = source.match(/cleanFormValue: \(value\) => \{([\s\S]*?)\n      \},/)[1]
+const clean = new Function('normalizeExpireNoticePayload', 'value', body).bind(
+  { $t: (key) => (key === 'All' ? '全部' : key), validateAvailability() {} },
   normalizeExpireNoticePayload
-).bind({ $t: (key) => (key === 'All' ? '全部' : key) })
+)
 
 function values(actions) {
   return {
@@ -40,11 +41,7 @@ test('normalizing all actions does not mutate the array shared with the live for
   assert.equal(payload.title, 'Keep this title')
   assert.deepEqual(payload.apply_accounts, ['@ALL'])
   assert.equal(payload.apply_expire_soon_notice_minutes, null)
-  for (const key of [
-    'apply_assets',
-    'apply_nodes',
-    'apply_expire_soon_notice_switch'
-  ]) {
+  for (const key of ['apply_assets', 'apply_nodes', 'apply_expire_soon_notice_switch']) {
     assert.equal(Object.hasOwn(payload, key), false)
   }
 })

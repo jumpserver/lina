@@ -2,6 +2,9 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
+import * as Vue from 'vue'
+import { compile } from '@vue/compiler-dom'
+import { renderToString } from '@vue/server-renderer'
 
 const source = await readFile(
   new URL('../src/views/tickets/RequestAssetPerm/CreateUpdate.vue', import.meta.url),
@@ -13,6 +16,7 @@ const script = descriptor.script.content
   .replace('export default', 'return')
 const dependencies = {
   Select2: {},
+  TicketWorkflowSelect: {},
   GenericCreateUpdatePage: {},
   AccountFormatter: {},
   ExpireNoticePolicy: {},
@@ -218,4 +222,202 @@ test('a single standard action stays inline and disabled actions cannot invoke t
   action.disabled = false
   formatter.methods.handleActionClick(action)
   assert.equal(called, 1)
+})
+
+test('asset requests require an asset or node even when all accounts are selected', () => {
+  const { vm } = vmFor(prefill())
+  vm.resourceAvailability = { description_allowed: false }
+  vm.availabilityParams = { selection: { apply_nodes: '' } }
+  const validate = (assets) => {
+    let error
+    vm.fieldsMeta.apply_assets.rules[0].validator({}, assets, (result) => {
+      error = result
+    })
+    return error
+  }
+  assert.equal(validate([]).message, 'RequiredAssetOrNode')
+  assert.equal(validate(['asset-a']), undefined)
+  vm.availabilityParams.selection.apply_nodes = 'node-a'
+  assert.equal(validate([]), undefined)
+  vm.availabilityParams.selection.apply_nodes = ''
+  assert.equal(validate([]).message, 'RequiredAssetOrNode')
+  vm.resourceAvailability = { description_allowed: true }
+  assert.equal(validate([]), undefined)
+  assert.equal(vm.fieldsMeta.resource_description.hidden(), false)
+  assert.equal(vm.fieldsMeta.resource_description.rules[0].required, true)
+})
+
+test('changing a node refreshes availability before revalidating the asset error', async () => {
+  const { vm } = vmFor(prefill())
+  const checks = []
+  vm.availabilityParams = { selection: { apply_assets: 'asset-a' } }
+  vm.loadResourceAvailability = async (type, org, selection) => {
+    vm.availabilityParams.selection = selection
+    vm.resourceAvailability = { description_allowed: false }
+  }
+  vm.$refs = {
+    form: {
+      $refs: {
+        createUpdateForm: {
+          validateField(field, callback) {
+            checks.push({ field, nodes: vm.availabilityParams.selection.apply_nodes })
+            callback()
+          }
+        }
+      }
+    }
+  }
+  await vm.resourceSelectionChanged('apply_nodes', [{ id: 'node-a' }])
+  await vm.resourceSelectionChanged('apply_nodes', [])
+  assert.deepEqual(checks, [
+    { field: 'apply_assets', nodes: 'node-a' },
+    { field: 'apply_assets', nodes: '' }
+  ])
+  assert.equal(vm.availabilityParams.selection.apply_assets, 'asset-a')
+})
+
+test('workflow failures stay in the asset form and retry preserves the recipient and draft', async () => {
+  const { vm } = vmFor(prefill())
+  await vm.initialize()
+  const draft = structuredClone(vm.initial)
+  const original = structuredClone(draft)
+  let resolve
+  const calls = []
+  vm.$axios.get = async (url, options) => {
+    calls.push(options)
+    throw new Error('offline')
+  }
+  await vm.fieldsMeta.workflow_id.on.retry([], (patch) => Object.assign(draft, patch))
+  const field = vm.fieldsMeta.workflow_id.el
+  assert.equal(field.failed, true)
+  assert.equal(field.loading, false)
+  assert.equal(component.computed.workflowReady.call(vm), false)
+  assert.equal(vm.loadError, false)
+  vm.$axios.get = (url, options) => {
+    calls.push(options)
+    return new Promise((done) => {
+      resolve = done
+    })
+  }
+  const retry = vm.fieldsMeta.workflow_id.on.retry([], (patch) => Object.assign(draft, patch))
+  assert.equal(field.loading, true)
+  assert.equal(field.failed, false)
+  assert.equal(component.computed.workflowReady.call(vm), false)
+  resolve([{ id: 'recovered-flow', name: 'Recovered' }])
+  await retry
+  assert.deepEqual(draft, { ...original, workflow_id: 'recovered-flow' })
+  assert.equal(component.computed.workflowReady.call(vm), true)
+  assert.equal(field.disabled, true)
+  assert.equal(calls[1].params.beneficiary, 'beneficiary')
+  assert.equal(calls[1].params.org_id, 'org-a')
+  assert.equal(calls[1].disableFlashErrorMsg, true)
+  vm.$axios.get = async () => []
+  await vm.fieldsMeta.workflow_id.on.retry([], (patch) => Object.assign(draft, patch))
+  assert.equal(component.computed.workflowReady.call(vm), false)
+  assert.equal(field.failed, false)
+  assert.deepEqual(draft, { ...original, workflow_id: '' })
+})
+
+const detailSource = await readFile(
+  new URL('../src/views/tickets/RequestAssetPerm/Detail/index.vue', import.meta.url),
+  'utf8'
+)
+const detailScript = parse(detailSource)
+  .descriptor.script.content.replace(/^import .*$/gm, '')
+  .replace('export default', 'return')
+const detail = new Function(
+  'GenericDetailPage',
+  'TabPage',
+  'TicketDetail',
+  'TicketActivity',
+  detailScript
+)({}, {}, {}, {})
+
+test('only eligible rejected asset requests offer reapply and retain the source organization', () => {
+  const pushed = []
+  const vm = {
+    ticket: {
+      id: 'old-ticket',
+      org_id: 'org-a',
+      state: { value: 'rejected' },
+      reapply_action: 'reapply'
+    },
+    $router: { push: (location) => pushed.push(location) }
+  }
+  Object.defineProperty(vm, 'canReapply', { get: () => detail.computed.canReapply.call(vm) })
+  assert.equal(vm.canReapply, true)
+  detail.methods.reapply.call(vm)
+  assert.deepEqual(pushed, [
+    {
+      name: 'RequestAssetPermTicketCreateUpdate',
+      query: { source_ticket: 'old-ticket', oid: 'org-a' }
+    }
+  ])
+  const eligible = vm.ticket
+  for (const patch of [
+    { reapply_action: null },
+    { reapply_action: 'renew' },
+    ...['pending', 'approved', 'closed', 'expired', 'error'].map((value) => ({ state: { value } })),
+    { id: '' },
+    { org_id: '' },
+    { state: undefined }
+  ]) {
+    vm.ticket = { ...eligible, ...patch }
+    assert.equal(vm.canReapply, false)
+    detail.methods.reapply.call(vm)
+  }
+  assert.equal(pushed.length, 1)
+})
+
+test('detail page forwards custom header actions only after a successful load, preserving default actions', async () => {
+  const source = await readFile(
+    new URL('../src/layout/components/GenericDetailPage/index.vue', import.meta.url),
+    'utf8'
+  )
+  const render = new Function(
+    'Vue',
+    compile(parse(source).descriptor.template.content, {
+      mode: 'function',
+      prefixIdentifiers: true
+    }).code
+  )(Vue)
+  for (const [loading, loadError, hasRightSide, custom, expected] of [
+    [false, '', false, true, 'Reapply'],
+    [false, '', true, false, 'Default actions'],
+    [false, '', false, false, ''],
+    [true, '', true, true, ''],
+    [false, 'Forbidden', true, true, '']
+  ]) {
+    const page = {
+      render,
+      components: {
+        TabPage: {
+          setup:
+            (_, { slots }) =>
+            () =>
+              Vue.h('header', slots.headingRightSide?.())
+        },
+        ActionsGroup: { render: () => Vue.h('button', 'Default actions') },
+        ElResult: { render: () => Vue.h('div') }
+      },
+      setup: () => ({
+        iActiveMenu: 'TicketDetail',
+        iSubmenu: [],
+        detailTitle: 'Ticket',
+        drawer: true,
+        handleTabClick: () => {},
+        loading,
+        loadError,
+        hasRightSide,
+        pageActions: []
+      })
+    }
+    const app = Vue.createSSRApp({
+      render: () =>
+        Vue.h(page, {}, custom ? { headingRightSide: () => Vue.h('button', 'Reapply') } : {})
+    })
+    const html = await renderToString(app)
+    assert.equal(html.includes('Reapply'), expected === 'Reapply')
+    assert.equal(html.includes('Default actions'), expected === 'Default actions')
+  }
 })
