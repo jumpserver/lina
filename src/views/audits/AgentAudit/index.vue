@@ -118,15 +118,22 @@ const detailTabs = computed(() => [
     ? { title: t('AgentActions'), name: 'AgentActions' }
     : { title: t('Output'), name: 'Output' }
 ])
-const headerActions = {
+const headerActions = computed(() => ({
   hasLeftActions: false,
   hasImport: false,
   hasExport: false,
-  hasDatePicker: false,
-  hasSearch: false
-}
+  hasDatePicker: true,
+  hasSearch: true,
+  ...(props.kind === 'sessions' && detailId.value && item.value
+    ? { datePicker: { dateStart: item.value.date_created, dateEnd: item.value.date_expires } }
+    : {}),
+  searchConfig: { getUrlQuery: true, excludeFields: detailId.value ? ['session_id'] : [] }
+}))
+const primaryColumn = computed(() =>
+  props.kind === 'sessions' && !detailId.value ? 'operation' : 'kind'
+)
 const columnsMeta = computed(() => ({
-  operation: {
+  [primaryColumn.value]: {
     label: t(props.kind === 'sessions' && !detailId.value ? 'AgentSessions' : 'Operation'),
     minWidth: '270px',
     formatter: DetailFormatter,
@@ -147,29 +154,17 @@ const columnsMeta = computed(() => ({
   date_created: { label: t('DateCreated'), minWidth: '180px', formatter: DateFormatter }
 }))
 const tableConfig = computed(() => ({
-  url: endpoint(),
-  request: loadTable,
+  url: detailId.value ? '/api/v1/terminal/agent/audit/actions/' : endpoint(),
+  axiosConfig: { raw: 1, headers: orgHeaders() },
+  extraQuery: detailId.value ? { session_id: detailId.value } : {},
   hasSelection: false,
-  // The audit API returns fixed pages of 100 and a next cursor, without a total.
-  paginationSize: 100,
-  paginationSizes: [100],
-  paginationLayout: 'prev, next',
-  savePageSize: false,
-  columns: Object.keys(columnsMeta.value),
-  columnsShow: { min: ['operation'], default: Object.keys(columnsMeta.value) },
+  columns: [
+    ...new Set([...Object.keys(columnsMeta.value), 'account', 'client_id', 'asset_id', 'protocol'])
+  ],
+  columnsShow: { min: [primaryColumn.value], default: Object.keys(columnsMeta.value) },
   columnsMeta: { ...columnsMeta.value, actions: { has: false } }
 }))
-const tableMetadata = () =>
-  Promise.resolve({
-    actions: {
-      GET: Object.fromEntries(
-        Object.entries(columnsMeta.value).map(([name, meta]) => [
-          name,
-          { type: 'string', label: meta.label }
-        ])
-      )
-    }
-  })
+const tableMetadata = (url) => request({ url, method: 'options', headers: orgHeaders() })
 const detailItems = computed(() => {
   if (!item.value) return []
   const data = item.value
@@ -232,27 +227,6 @@ function terminalRoute(id) {
     name: 'SessionDetail',
     params: { id },
     query: session.value?.org_id ? { oid: session.value.org_id } : {}
-  }
-}
-
-async function loadTable(url, config) {
-  const response = await request.get(url, {
-    ...config,
-    raw: 1,
-    headers: { ...config.headers, ...orgHeaders() }
-  })
-  const data = response.data
-  const rows = data.actions || data.results || []
-  const offset = Number(new URL(url, location.origin).searchParams.get('offset') || 0)
-  return {
-    ...response,
-    data: {
-      results: rows.map((row) => ({
-        ...row,
-        user_display: row.user_display || data.user_display || row.user || row.user_id || ''
-      })),
-      count: offset + rows.length + (data.next_offset != null ? 1 : 0)
-    }
   }
 }
 
