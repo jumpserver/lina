@@ -2761,5 +2761,7 @@
   "TaskMonitorQueueFailed": "无法读取队列积压数量。",
   "TaskMonitorNoWorkers": "本次采样没有收到任务进程的响应。",
   "TaskMonitorRefreshing": "正在采集新数据，暂时显示上一次采样。",
-  "TaskMonitorPartialData": "部分监控数据暂不可用。"
+  "TaskMonitorPartialData": "部分监控数据暂不可用。",
+  "ClientSecurity": "客户端安全",
+  "ClientLoginPolicyChangeHelp": "修改这三项配置中的任意一项（包括关闭限制），已登录客户端都需重新认证；重新认证前，不可以创建新的资产连接，但已建立的资产连接不会因此断开。"
 }

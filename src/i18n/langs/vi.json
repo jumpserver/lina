@@ -2567,5 +2567,7 @@
   "TaskMonitorQueueFailed": "Queue backlog could not be read.",
   "TaskMonitorNoWorkers": "No workers responded to this sample.",
   "TaskMonitorRefreshing": "A new sample is being collected. Showing the last available sample.",
-  "TaskMonitorPartialData": "Some monitoring data is unavailable."
+  "TaskMonitorPartialData": "Some monitoring data is unavailable.",
+  "ClientSecurity": "Bảo mật ứng dụng khách",
+  "ClientLoginPolicyChangeHelp": "Thay đổi bất kỳ cài đặt nào trong ba cài đặt này, kể cả tắt giới hạn, sẽ yêu cầu các ứng dụng khách đã đăng nhập xác thực lại. Trước khi xác thực lại, không thể tạo kết nối tài sản mới, nhưng các kết nối đã thiết lập sẽ không bị ngắt vì thay đổi này."
 }
