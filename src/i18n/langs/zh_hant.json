@@ -1,4 +1,9 @@
 {
+  "AgentMCP": "Agent / MCP",
+  "MCPAllowRegistration": "允許用戶端自動註冊",
+  "MCPRegistrationHelp": "使用者只需設定 MCP 位址，即可登入 JumpServer 並授權。關閉後僅停止新用戶端登記，不撤銷既有授權。",
+  "MCPPublicURL": "MCP 存取位址",
+  "MCPPublicURLHelp": "填寫使用者可存取的完整 HTTP 或 HTTPS MCP 位址，不含結尾斜線、查詢參數或片段。由 Core 統一設定，Koko 每 60 秒同步。清空後停止接收新 MCP 請求。",
   "TemplateCredentialOverrideConfirm": "此帳號正在跟隨範本憑證。是否解除跟隨並繼續修改或清除憑證？此操作不會修改範本。",
   "TemplateCredentialOverride": "解除跟隨並繼續",
   "Credentials": "憑據",

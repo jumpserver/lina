@@ -1,4 +1,9 @@
 {
+  "AgentMCP": "Agent / MCP",
+  "MCPAllowRegistration": "Permitir registro automático de clientes",
+  "MCPRegistrationHelp": "Os usuários configuram apenas a URL MCP e depois entram no JumpServer para autorizar o acesso. Desativar esta opção impede novos registros sem revogar autorizações existentes.",
+  "MCPPublicURL": "URL de acesso MCP",
+  "MCPPublicURLHelp": "Informe a URL MCP externa completa em HTTP ou HTTPS, sem barra final, parâmetros de consulta ou fragmento. O Core gerencia esta configuração e o Koko a sincroniza a cada 60 segundos. Esvaziá-la interrompe novas solicitações MCP.",
   "TemplateCredentialOverrideConfirm": "Esta conta segue as credenciais do modelo. Parar de seguir e continuar alterando ou limpando as credenciais? O modelo não será alterado.",
   "TemplateCredentialOverride": "Parar de seguir e continuar",
   "Credentials": "Credenciais",

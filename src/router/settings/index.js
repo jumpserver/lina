@@ -238,7 +238,7 @@ export default {
         icon: 'feature',
         permissions: [
           'settings.change_ticket | settings.change_ops | settings.change_vault | ' +
-            'settings.change_virtualapp'
+            'settings.change_virtualapp | settings.change_auth'
         ]
       }
     },

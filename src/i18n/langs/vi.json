@@ -1,4 +1,9 @@
 {
+  "AgentMCP": "Agent / MCP",
+  "MCPAllowRegistration": "Cho phép tự động đăng ký ứng dụng khách",
+  "MCPRegistrationHelp": "Người dùng chỉ cần cấu hình URL MCP, sau đó đăng nhập JumpServer và cấp quyền truy cập. Tắt tùy chọn này chỉ dừng đăng ký ứng dụng khách mới, không thu hồi quyền đã cấp.",
+  "MCPPublicURL": "URL truy cập MCP",
+  "MCPPublicURLHelp": "Nhập URL MCP HTTP hoặc HTTPS bên ngoài đầy đủ, không có dấu gạch chéo cuối, tham số truy vấn hoặc phần fragment. Core quản lý cấu hình này; Koko đồng bộ mỗi 60 giây. Xóa giá trị sẽ ngừng nhận yêu cầu MCP mới.",
   "TemplateCredentialOverrideConfirm": "Tài khoản này đang theo thông tin xác thực của mẫu. Ngừng theo mẫu và tiếp tục sửa hoặc xóa thông tin xác thực? Mẫu sẽ không thay đổi.",
   "TemplateCredentialOverride": "Ngừng theo mẫu và tiếp tục",
   "Credentials": "Thông tin xác thực",

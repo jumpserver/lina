@@ -1,4 +1,9 @@
 {
+  "AgentMCP": "Agent / MCP",
+  "MCPAllowRegistration": "Allow automatic client registration",
+  "MCPRegistrationHelp": "Users can configure only the MCP URL, then sign in to JumpServer and authorize access. Disabling this stops new client registration; it does not revoke existing authorizations.",
+  "MCPPublicURL": "MCP access URL",
+  "MCPPublicURLHelp": "Enter the complete external HTTP or HTTPS MCP URL without a trailing slash, query or fragment. Core manages this setting; Koko syncs it every 60 seconds. Clearing it stops new MCP requests.",
   "NotExecuted": "Not executed",
   "CommandRejectedByACL": "Command blocked by ACL",
   "TemplateCredentialOverrideConfirm": "This account follows template credentials. Stop following and continue modifying or clearing credentials? The template will not be changed.",
