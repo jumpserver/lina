@@ -1,4 +1,11 @@
 {
+  "MCPClients": "Clientes MCP",
+  "MCPClientID": "ID do cliente",
+  "MCPClientAuthorizedAt": "Primeira autorização",
+  "MCPClientCleanup": "Limpar clientes não utilizados",
+  "MCPClientDisableConfirm": "Desativar o cliente “{name}”? O acesso de todos os usuários deste cliente será revogado. O histórico será mantido.",
+  "MCPClientCleanupConfirm": "Verificar até 100 clientes registrados há mais de 7 dias que nunca foram autorizados. Apenas clientes sem referências históricas serão excluídos. Continuar?",
+  "MCPClientCleanupResult": "Verificados: {scanned}, excluídos: {deleted}, ignorados: {skipped}.",
   "AgentMCP": "Agent / MCP",
   "MCPEnabled": "Ativar MCP",
   "MCPEnabledHelp": "O Koko sincroniza estas configurações a cada 60 segundos. Desativar o MCP interrompe novas solicitações, enquanto as tarefas aceitas são finalizadas e os registros de auditoria são enviados.",

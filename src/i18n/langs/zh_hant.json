@@ -1,4 +1,11 @@
 {
+  "MCPClients": "MCP 用戶端",
+  "MCPClientID": "用戶端 ID",
+  "MCPClientAuthorizedAt": "首次授權時間",
+  "MCPClientCleanup": "清理未使用用戶端",
+  "MCPClientDisableConfirm": "確定停用用戶端「{name}」嗎？該用戶端所有使用者的授權都將失效，歷史記錄會保留。",
+  "MCPClientCleanupConfirm": "每次檢查最多 100 個註冊已超過 7 天且從未授權的用戶端，僅刪除沒有歷史關聯的記錄。確定清理嗎？",
+  "MCPClientCleanupResult": "已檢查 {scanned} 個，刪除 {deleted} 個，略過 {skipped} 個。",
   "AgentMCP": "Agent / MCP",
   "MCPEnabled": "啟用 MCP",
   "MCPEnabledHelp": "Koko 每 60 秒同步設定。關閉後停止接收新請求，已受理工作繼續收尾並交付稽核記錄。",

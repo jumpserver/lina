@@ -1,4 +1,11 @@
 {
+  "MCPClients": "MCP clients",
+  "MCPClientID": "Client ID",
+  "MCPClientAuthorizedAt": "First authorized",
+  "MCPClientCleanup": "Clean up unused clients",
+  "MCPClientDisableConfirm": "Disable client “{name}”? This revokes access for all users of this client. Historical records are retained.",
+  "MCPClientCleanupConfirm": "Check up to 100 clients registered more than 7 days ago that have never been authorized. Only clients without historical references will be deleted. Continue?",
+  "MCPClientCleanupResult": "Checked {scanned}, deleted {deleted}, skipped {skipped}.",
   "AgentMCP": "Agent / MCP",
   "MCPEnabled": "Enable MCP",
   "MCPEnabledHelp": "Koko syncs these settings every 60 seconds. Disabling MCP stops new requests while accepted tasks finish and audit records are delivered.",

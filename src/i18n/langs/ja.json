@@ -1,4 +1,11 @@
 {
+  "MCPClients": "MCP クライアント",
+  "MCPClientID": "クライアント ID",
+  "MCPClientAuthorizedAt": "初回認可日時",
+  "MCPClientCleanup": "未使用クライアントを削除",
+  "MCPClientDisableConfirm": "クライアント「{name}」を無効にしますか？このクライアントを使用するすべてのユーザーの認可が失効します。履歴は保持されます。",
+  "MCPClientCleanupConfirm": "登録から 7 日を超え、一度も認可されていないクライアントを最大 100 件確認します。履歴との関連がないクライアントのみ削除します。続行しますか？",
+  "MCPClientCleanupResult": "確認: {scanned} 件、削除: {deleted} 件、スキップ: {skipped} 件。",
   "AgentMCP": "Agent / MCP",
   "MCPEnabled": "MCP を有効にする",
   "MCPEnabledHelp": "Koko は設定を 60 秒ごとに同期します。無効にすると新しいリクエストの受付を停止し、受付済みタスクの終了処理と監査記録の送信は継続します。",
