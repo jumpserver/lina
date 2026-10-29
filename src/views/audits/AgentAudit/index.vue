@@ -157,7 +157,6 @@ const tableConfig = computed(() => ({
   url: detailId.value ? '/api/v1/terminal/agent/audit/actions/' : endpoint(),
   axiosConfig: { raw: 1, headers: orgHeaders() },
   extraQuery: detailId.value ? { session_id: detailId.value } : {},
-  hasSelection: false,
   columns: [
     ...new Set([...Object.keys(columnsMeta.value), 'account', 'client_id', 'asset_id', 'protocol'])
   ],
