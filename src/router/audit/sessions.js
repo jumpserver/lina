@@ -2,6 +2,43 @@ import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 
 export default [
+  ...['sessions', 'actions'].map((kind) => {
+    const resource = kind === 'sessions' ? 'AgentSession' : 'AgentAction'
+    const title = kind === 'sessions' ? 'AgentSessions' : 'AgentActions'
+    return {
+      path: `agent-${kind}`,
+      component: empty,
+      redirect: { name: `${resource}List` },
+      meta: {
+        title: i18n.t(title),
+        app: 'terminal',
+        resource: resource.toLowerCase(),
+        icon: 'audit',
+        permissions: []
+      },
+      children: [
+        {
+          path: '',
+          name: `${resource}List`,
+          component: () => import('@/views/audits/AgentAudit/index.vue'),
+          props: { kind },
+          meta: { title: i18n.t(title), permissions: [] }
+        },
+        {
+          path: ':id',
+          name: `${resource}Detail`,
+          component: () => import('@/views/audits/AgentAudit/index.vue'),
+          props: { kind },
+          hidden: true,
+          meta: {
+            title: i18n.t(title),
+            permissions: [],
+            activeMenu: `/audit/sessions/agent-${kind}`
+          }
+        }
+      ]
+    }
+  }),
   {
     path: 'sessions',
     redirect: {
