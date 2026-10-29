@@ -2553,5 +2553,7 @@
   "TaskMonitorQueueFailed": "Queue backlog could not be read.",
   "TaskMonitorNoWorkers": "No workers responded to this sample.",
   "TaskMonitorRefreshing": "A new sample is being collected. Showing the last available sample.",
-  "TaskMonitorPartialData": "Some monitoring data is unavailable."
+  "TaskMonitorPartialData": "Some monitoring data is unavailable.",
+  "ClientSecurity": "Segurança do cliente",
+  "ClientLoginPolicyChangeHelp": "Alterar qualquer uma destas três configurações, inclusive desativar um limite, exige nova autenticação dos clientes já conectados. Até a nova autenticação, não é possível criar novas conexões com ativos, mas as conexões já estabelecidas não são interrompidas."
 }

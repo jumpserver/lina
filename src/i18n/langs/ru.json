@@ -2553,5 +2553,7 @@
   "TaskMonitorQueueFailed": "Queue backlog could not be read.",
   "TaskMonitorNoWorkers": "No workers responded to this sample.",
   "TaskMonitorRefreshing": "A new sample is being collected. Showing the last available sample.",
-  "TaskMonitorPartialData": "Some monitoring data is unavailable."
+  "TaskMonitorPartialData": "Some monitoring data is unavailable.",
+  "ClientSecurity": "Безопасность клиента",
+  "ClientLoginPolicyChangeHelp": "При изменении любого из этих трёх параметров, включая отключение ограничения, уже вошедшим в клиент пользователям потребуется повторная аутентификация. До её завершения нельзя создавать новые подключения к активам, но уже установленные подключения не будут разорваны из-за этого."
 }
