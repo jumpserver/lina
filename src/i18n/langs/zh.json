@@ -4,6 +4,7 @@
   "MCPClientAuthorizedAt": "首次授权时间",
   "MCPClientCleanup": "清理未使用客户端",
   "MCPClientDisableConfirm": "确定禁用客户端“{name}”吗？该客户端所有用户的授权都将失效，历史记录会保留。",
+  "MCPClientDeleteConfirm": "确定删除客户端“{name}”吗？该客户端所有用户的授权都将撤销，重新连接需要重新注册并授权。历史会话和操作审计记录会保留。",
   "MCPClientCleanupConfirm": "每次检查最多 100 个注册已超过 7 天且从未授权的客户端，仅删除没有历史关联的记录。确定清理吗？",
   "MCPClientCleanupResult": "已检查 {scanned} 个，删除 {deleted} 个，跳过 {skipped} 个。",
   "AgentMCP": "Agent / MCP",

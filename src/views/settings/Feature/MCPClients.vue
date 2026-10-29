@@ -57,6 +57,13 @@ export default {
                   can: ({ row }) =>
                     row.is_active && !this.submitting && this.$hasPerm('settings.change_auth'),
                   callback: ({ row }) => this.disableClient(row)
+                },
+                {
+                  name: 'delete',
+                  title: this.$t('Delete'),
+                  type: 'danger',
+                  can: () => !this.submitting && this.$hasPerm('settings.change_auth'),
+                  callback: ({ row }) => this.deleteClient(row)
                 }
               ]
             }
@@ -66,6 +73,16 @@ export default {
     }
   },
   methods: {
+    deleteClient(row) {
+      return this.confirmAction(
+        this.$t('MCPClientDeleteConfirm', { name: row.name }),
+        this.$t('Delete'),
+        async () => {
+          await this.$axios.delete(`${clientsURL}${row.id}/`)
+          this.$message.success(this.$t('DeleteSuccessMsg'))
+        }
+      )
+    },
     disableClient(row) {
       return this.confirmAction(
         this.$t('MCPClientDisableConfirm', { name: row.name }),
