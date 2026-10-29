@@ -7,6 +7,9 @@
     :title="ticket.title || $t('TicketDetail')"
     @get-object-done="afterGetTicket"
   >
+    <template #headingRightSide>
+      <TicketReapplyButton :ticket="ticket" />
+    </template>
     <component :is="config.activeMenu" :object="ticket" />
   </GenericDetailPage>
 </template>
@@ -16,9 +19,11 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import TicketDetail from './TicketDetail'
 import { getTicketDetailRoute } from '../plugins/registry'
 import TicketActivity from '../components/TicketActivity'
+import TicketReapplyButton from '../components/TicketReapplyButton.vue'
 
 export default {
   components: {
+    TicketReapplyButton,
     GenericDetailPage,
     TicketDetail,
     TicketActivity,

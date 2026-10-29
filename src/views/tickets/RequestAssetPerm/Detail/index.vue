@@ -7,9 +7,7 @@
     :title="ticket.title || $t('TicketDetail')"
   >
     <template #headingRightSide>
-      <el-button v-if="canReapply" type="primary" @click="reapply">
-        {{ $t('TicketReapply') }}
-      </el-button>
+      <TicketReapplyButton :ticket="ticket" />
     </template>
     <component :is="config.activeMenu" :object="ticket" />
   </GenericDetailPage>
@@ -19,9 +17,11 @@
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import TicketDetail from './TicketDetail'
 import TicketActivity from '../../components/TicketActivity'
+import TicketReapplyButton from '../../components/TicketReapplyButton.vue'
 
 export default {
   components: {
+    TicketReapplyButton,
     GenericDetailPage,
     TicketDetail,
     TicketActivity,
@@ -59,24 +59,7 @@ export default {
       }
     }
   },
-  computed: {
-    canReapply() {
-      return Boolean(
-        this.ticket.id &&
-        this.ticket.org_id &&
-        this.ticket.state?.value === 'rejected' &&
-        this.ticket.reapply_action === 'reapply'
-      )
-    }
-  },
   methods: {
-    reapply() {
-      if (!this.canReapply) return
-      this.$router.push({
-        name: 'RequestAssetPermTicketCreateUpdate',
-        query: { source_ticket: this.ticket.id, oid: this.ticket.org_id }
-      })
-    },
     getObjectName() {
       return this.ticket.title
     }

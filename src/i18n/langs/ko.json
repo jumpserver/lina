@@ -1,4 +1,5 @@
 {
+  "TicketReapplyInvalidResources": "일부 리소스를 사용할 수 없습니다. 다시 선택하세요.",
   "TemplateCredentialOverrideConfirm": "이 계정은 템플릿 자격 증명을 따릅니다. 따르기를 해제하고 자격 증명 변경 또는 삭제를 계속하시겠습니까? 템플릿은 변경되지 않습니다.",
   "TemplateCredentialOverride": "따르기 해제 후 계속",
   "Credentials": "자격 증명",

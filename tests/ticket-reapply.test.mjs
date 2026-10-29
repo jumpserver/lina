@@ -90,6 +90,7 @@ function prefill() {
       apply_date_start: '2030-01-01T00:00:00Z',
       apply_date_expired: '2030-01-02T00:00:00Z'
     },
+    assets: [{ id: 'asset-a', name: 'Server A', address: '192.0.2.1' }],
     warnings: { assets: 1 },
     users: [{ id: 'beneficiary', name: 'Target', username: 'target' }]
   }
@@ -108,6 +109,9 @@ test('renewal prefill preserves recipient and frozen resources, replacing an una
   assert.equal(vm.prefillWarnings.workflow, true)
   assert.equal(vm.prefillWarnings.assets, 1)
   assert.ok(calls.some((call) => call.options?.params?.beneficiary === 'beneficiary'))
+  assert.deepEqual(vm.fieldsMeta.apply_assets.el.options, [
+    { value: 'asset-a', label: 'Server A (192.0.2.1)' }
+  ])
 })
 
 test('an available original workflow stays selected and submission records the source', async () => {
@@ -318,55 +322,49 @@ test('workflow failures stay in the asset form and retry preserves the recipient
   assert.deepEqual(draft, { ...original, workflow_id: '' })
 })
 
-const detailSource = await readFile(
-  new URL('../src/views/tickets/RequestAssetPerm/Detail/index.vue', import.meta.url),
+const buttonSource = await readFile(
+  new URL('../src/views/tickets/components/TicketReapplyButton.vue', import.meta.url),
   'utf8'
 )
-const detailScript = parse(detailSource)
-  .descriptor.script.content.replace(/^import .*$/gm, '')
-  .replace('export default', 'return')
-const detail = new Function(
-  'GenericDetailPage',
-  'TabPage',
-  'TicketDetail',
-  'TicketActivity',
-  detailScript
-)({}, {}, {}, {})
+const buttonScript = parse(buttonSource).descriptor.script.content.replace(
+  'export default',
+  'return'
+)
+const button = new Function(buttonScript)()
 
-test('only eligible rejected asset requests offer reapply and retain the source organization', () => {
-  const pushed = []
-  const vm = {
-    ticket: {
-      id: 'old-ticket',
-      org_id: 'org-a',
-      state: { value: 'rejected' },
-      reapply_action: 'reapply'
-    },
-    $router: { push: (location) => pushed.push(location) }
-  }
-  Object.defineProperty(vm, 'canReapply', { get: () => detail.computed.canReapply.call(vm) })
-  assert.equal(vm.canReapply, true)
-  detail.methods.reapply.call(vm)
-  assert.deepEqual(pushed, [
-    {
-      name: 'RequestAssetPermTicketCreateUpdate',
-      query: { source_ticket: 'old-ticket', oid: 'org-a' }
-    }
-  ])
-  const eligible = vm.ticket
-  for (const patch of [
-    { reapply_action: null },
-    { reapply_action: 'renew' },
-    ...['pending', 'approved', 'closed', 'expired', 'error'].map((value) => ({ state: { value } })),
-    { id: '' },
-    { org_id: '' },
-    { state: undefined }
+test('all manual requests share reapply routing regardless of approval state', () => {
+  for (const type of [
+    'apply_asset',
+    'view_secret',
+    'change_secret',
+    'file_transfer',
+    'download_replay'
   ]) {
-    vm.ticket = { ...eligible, ...patch }
-    assert.equal(vm.canReapply, false)
-    detail.methods.reapply.call(vm)
+    for (const state of ['pending', 'approved', 'rejected', 'closed', 'expired', 'error']) {
+      const pushed = []
+      const vm = {
+        ticket: {
+          id: 'source',
+          org_id: 'org-a',
+          type: { value: type },
+          state: { value: state },
+          reapply_action: 'reapply'
+        },
+        $router: { push: (route) => pushed.push(route) }
+      }
+      button.methods.reapply.call(vm)
+      assert.deepEqual(pushed, [
+        {
+          name:
+            type === 'apply_asset' ? 'RequestAssetPermTicketCreateUpdate' : 'PluginTicketCreate',
+          query: { type, source_ticket: 'source', oid: 'org-a' }
+        }
+      ])
+      vm.ticket.reapply_action = null
+      button.methods.reapply.call(vm)
+      assert.equal(pushed.length, 1)
+    }
   }
-  assert.equal(pushed.length, 1)
 })
 
 test('detail page forwards custom header actions only after a successful load, preserving default actions', async () => {

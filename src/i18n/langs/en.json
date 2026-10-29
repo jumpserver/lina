@@ -2966,6 +2966,7 @@
   "TicketRenewalTitle": "Renew access from ticket",
   "TicketReapplyTitle": "Reapply from ticket",
   "TicketReapplyHelp": "Review the resources and validity period before submitting. A new ticket will use the currently published workflow and require approval.",
+  "TicketReapplyInvalidResources": "Some resources are no longer available. Select them again.",
   "TicketReapplyLoadFailed": "Unable to prepare this request. Check that the source ticket is eligible and you still have access, then retry.",
   "TicketReapplyInvalidAssets": "{count} original assets are no longer available for application and were removed. Review the selection.",
   "TicketReapplyInvalidAccounts": "These account selections are no longer available and were removed: {accounts}. Select accounts again.",

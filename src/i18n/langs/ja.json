@@ -1,4 +1,5 @@
 {
+  "TicketReapplyInvalidResources": "一部のリソースが利用できません。再選択してください。",
   "TemplateCredentialOverrideConfirm": "このアカウントはテンプレートの認証情報を使用しています。追従を解除して認証情報の変更または削除を続行しますか？テンプレートは変更されません。",
   "TemplateCredentialOverride": "追従を解除して続行",
   "Credentials": "認証情報",

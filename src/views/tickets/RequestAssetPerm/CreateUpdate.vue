@@ -422,6 +422,7 @@ export default {
       this.submitted = false
       this.sourceTicket = null
       this.prefillWarnings = {}
+      this.fieldsMeta.apply_assets.el.options = []
       this.fieldsMeta.org_id.el.options = this.workbenchOrgs.map((item) => ({
         label: item.name,
         value: item.id
@@ -434,7 +435,7 @@ export default {
         let data = null
         if (this.$route.query.source_ticket) {
           data = await this.$axios.get(
-            `/api/v1/tickets/tickets/${encodeURIComponent(this.$route.query.source_ticket)}/actions/reapply_asset/`,
+            `/api/v1/tickets/tickets/${encodeURIComponent(this.$route.query.source_ticket)}/actions/reapply/`,
             { params: { oid: this.$route.query.oid || orgId } }
           )
           this.sourceTicket = data.source_ticket
@@ -452,10 +453,15 @@ export default {
             value: user.id,
             label: `${user.name} (${user.username})`
           }))
+          this.fieldsMeta.apply_assets.el.options = (data.assets || []).map((asset) => ({
+            value: asset.id,
+            label: `${asset.name} (${asset.address})`
+          }))
         } else {
           this.initial.org_id = orgId
         }
         this.selectedOrgId = this.initial.org_id
+        this.fieldsMeta.apply_assets.el.ajax.url = `/api/v1/tickets/apply-assets/suggestions/?oid=${this.selectedOrgId}`
         await this.loadResourceAvailability('apply_asset', this.selectedOrgId, {
           apply_assets: (this.initial.apply_assets || []).join(','),
           apply_nodes: (this.initial.apply_nodes || []).join(',')

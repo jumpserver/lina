@@ -2947,6 +2947,7 @@
   "TicketRenewalTitle": "基於原工單申請續期",
   "TicketReapplyTitle": "基於原工單重新申請",
   "TicketReapplyHelp": "請核對資源和有效期後提交。系統將建立新工單，使用目前發布的流程重新審批。",
+  "TicketReapplyInvalidResources": "部分資源已無法使用，請重新選擇。",
   "TicketReapplyLoadFailed": "無法載入原申請。請確認工單狀態允許重新申請、你仍有存取權限後重試。",
   "TicketReapplyInvalidAssets": "原申請中有 {count} 項資產已失效或不在目前可申請範圍，已移除，請重新核對選擇。",
   "TicketReapplyInvalidAccounts": "以下帳號選擇已失效並移除，請重新選擇：{accounts}。",

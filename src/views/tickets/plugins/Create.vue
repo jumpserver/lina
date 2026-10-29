@@ -1,5 +1,9 @@
 <template>
   <div v-loading="loading">
+    <el-alert v-if="loadError" type="error" :closable="false" show-icon>
+      {{ $t('TicketReapplyLoadFailed') }}
+      <el-button link type="primary" @click="configure">{{ $t('Retry') }}</el-button>
+    </el-alert>
     <component :is="plugin.form" v-if="plugin.form" ref="form" />
     <el-alert
       v-else-if="selectedPlugin?.custom_form"
@@ -24,6 +28,9 @@
       url="/api/v1/tickets/tickets/open/"
     >
       <template #form-header>
+        <el-alert v-if="prefillWarnings" type="warning" :closable="false" show-icon>
+          {{ $t('TicketReapplyInvalidResources') }}
+        </el-alert>
         <p v-if="selectedPlugin?.execution_mode === 'approval_only'" class="ticket-form-notice">
           {{ $t('TicketApprovalOnlyHint') }}
         </p>
@@ -60,6 +67,9 @@ export default {
     return {
       loading: true,
       formReady: false,
+      loadError: false,
+      sourceTicket: null,
+      prefillWarnings: false,
       plugins: [],
       selectedType: 'apply_asset',
       flowRequest: 0,
@@ -109,15 +119,34 @@ export default {
     },
     async configure() {
       this.formReady = false
+      this.loadError = false
+      this.sourceTicket = null
+      this.prefillWarnings = false
       ++this.flowRequest
       this.accountStates = {}
       this.transferDirection = 'upload'
       this.transferUploading = false
       if (!this.selectedPlugin || this.selectedPlugin.custom_form || this.plugin.form) return
-      const orgId =
+      let orgId =
         this.organizations.find((org) => org.id === this.currentOrg?.id)?.id ||
         this.organizations[0]?.id ||
         ''
+      let prefill = null
+      if (this.$route?.query.source_ticket) {
+        try {
+          prefill = await this.$axios.get(
+            `/api/v1/tickets/tickets/${encodeURIComponent(this.$route.query.source_ticket)}/actions/reapply/`,
+            { params: { oid: this.$route.query.oid || orgId } }
+          )
+          if (prefill.type !== this.selectedType) throw new Error('Ticket type mismatch')
+          orgId = prefill.org_id
+          this.sourceTicket = prefill.source_ticket
+          this.prefillWarnings = Boolean(prefill.warnings?.length)
+        } catch {
+          this.loadError = true
+          return
+        }
+      }
       this.selectedOrgId = orgId
       this.initial = { title: '', org_id: orgId, workflow_id: '', comment: '' }
       this.fieldsMeta = {
@@ -358,6 +387,39 @@ export default {
       const flow = await this.loadFlows(orgId)
       if (flow === undefined) return
       this.initial.workflow_id = flow?.id || ''
+      if (prefill) {
+        Object.assign(this.initial, { title: prefill.title, comment: prefill.comment })
+        if (
+          this.fieldsMeta.workflow_id.el.options.some(
+            (option) => option.value === prefill.workflow_id
+          )
+        ) {
+          this.initial.workflow_id = prefill.workflow_id
+        }
+        for (const field of this.selectedPlugin.fields) {
+          const value = prefill.request_data[field.name]
+          if (value === undefined || field.name === 'files') continue
+          const name = `param_${field.name}`
+          this.initial[name] = field.type === 'list' && !field.resource ? value.join('\n') : value
+          if (prefill.resources?.[field.name]) {
+            const el = this.fieldsMeta[name].el
+            el.options = prefill.resources[field.name].map(el.ajax.transformOption)
+          }
+        }
+        this.transferDirection = this.initial.param_direction || 'upload'
+        for (const field of this.accountFields) {
+          await this.loadAccountOptions(field, this.initial[`param_${field.depends_on}`], () => {})
+          const options = this.fieldsMeta[`param_${field.name}`].el.options.map(
+            (option) => option.value
+          )
+          const values = this.initial[`param_${field.name}`]
+          this.initial[`param_${field.name}`] = Array.isArray(values)
+            ? values.filter((value) => options.includes(value))
+            : options.includes(values)
+              ? values
+              : ''
+        }
+      }
       this.formReady = true
     },
     defaultValue(field) {
@@ -474,6 +536,7 @@ export default {
       if (this.transferUploading) throw new Error(this.$t('TicketTransferWaitUpload'))
       if (this.selectedPlugin.resource_adjustment) this.validateAvailability()
       const payload = buildRequestPayload(this.selectedPlugin, value)
+      if (this.sourceTicket) payload.source_ticket_id = this.sourceTicket.id
       if (this.selectedType === 'file_transfer') {
         const inactive =
           payload.request_data.direction === 'upload' ? ['paths'] : ['files', 'target_directory']

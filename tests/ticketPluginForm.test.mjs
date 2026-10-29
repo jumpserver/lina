@@ -552,3 +552,78 @@ test('failed workflow loads keep generic forms usable and retry changes only the
   assert.equal(vm.workflowReady, false)
   assert.equal(vm.fieldsMeta.workflow_id.el.loading, false)
 })
+
+test('reapply hydrates resource labels, original workflow and file paths without uploading old files', async () => {
+  const vm = await createAccountForm(async () => [])
+  vm.$route = { query: { source_ticket: 'old', oid: 'org-1' } }
+  const source = {
+    type: 'change_secret',
+    org_id: 'org-1',
+    title: 'Reuse this',
+    comment: 'Purpose',
+    workflow_id: 'flow-old',
+    source_ticket: { id: 'old' },
+    warnings: [],
+    request_data: {
+      asset: 'asset-1',
+      accounts: ['root'],
+      paths: ['/tmp/a,b', 'C:\\reports\\a.txt']
+    },
+    resources: { asset: [{ id: 'asset-1', name: 'Server', address: '127.0.0.1' }] }
+  }
+  vm.$axios.get = async (url) =>
+    url.includes('/actions/')
+      ? source
+      : url.includes('/workflows/')
+        ? [
+            { id: 'first', name: 'First' },
+            { id: 'flow-old', name: 'Original' }
+          ]
+        : ['root']
+  await vm.configure()
+  assert.equal(vm.formReady, true)
+  assert.equal(vm.initial.title, 'Reuse this')
+  assert.equal(vm.initial.workflow_id, 'flow-old')
+  assert.equal(vm.initial.param_paths, '/tmp/a,b\nC:\\reports\\a.txt')
+  assert.deepEqual(vm.initial.param_accounts, ['root'])
+  assert.deepEqual(vm.fieldsMeta.param_asset.el.options, [
+    { value: 'asset-1', label: 'Server (127.0.0.1)' }
+  ])
+  assert.equal(vm.cleanFormValue(vm.initial).source_ticket_id, 'old')
+  source.type = 'file_transfer'
+  vm.plugins.push({
+    type: 'file_transfer',
+    fields: [
+      { name: 'direction', type: 'choice', choices: [{ value: 'upload' }, { value: 'download' }] },
+      { name: 'paths', type: 'list' },
+      { name: 'files', type: 'list' },
+      { name: 'target_directory', type: 'string' }
+    ]
+  })
+  vm.selectedType = 'file_transfer'
+  Object.assign(source.request_data, { direction: 'download', files: ['old-file'] })
+  await vm.configure()
+  assert.equal(vm.transferDirection, 'download')
+  assert.equal(vm.fieldsMeta.param_paths.hidden(), false)
+  assert.equal(vm.fieldsMeta.param_files.hidden(), true)
+  assert.deepEqual(vm.initial.param_files, [])
+  source.request_data.direction = 'upload'
+  await vm.configure()
+  assert.equal(vm.fieldsMeta.param_files.hidden(), false)
+  assert.deepEqual(vm.initial.param_files, [])
+})
+
+test('failed or mismatched reapply cannot silently open a blank submittable form', async () => {
+  const vm = await createAccountForm(async () => [])
+  vm.$route = { query: { source_ticket: 'old' } }
+  vm.$axios.get = async () => {
+    throw new Error('Denied')
+  }
+  await vm.configure()
+  assert.equal(vm.loadError, true)
+  assert.equal(vm.formReady, false)
+  vm.$axios.get = async () => ({ type: 'file_transfer' })
+  await vm.configure()
+  assert.equal(vm.loadError, true)
+  assert.equal(vm.formReady, false)
+})
