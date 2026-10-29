@@ -2748,5 +2748,7 @@
   "TaskMonitorQueueFailed": "無法讀取佇列積壓數量。",
   "TaskMonitorNoWorkers": "本次取樣沒有收到工作程序的回應。",
   "TaskMonitorRefreshing": "正在收集新資料，暫時顯示上一次取樣。",
-  "TaskMonitorPartialData": "部分監控資料暫時無法使用。"
+  "TaskMonitorPartialData": "部分監控資料暫時無法使用。",
+  "ClientSecurity": "用戶端安全",
+  "ClientLoginPolicyChangeHelp": "修改這三項設定中的任意一項（包括關閉限制），已登入用戶端都需重新驗證；重新驗證前，不可以建立新的資產連線，但已建立的資產連線不會因此中斷。"
 }

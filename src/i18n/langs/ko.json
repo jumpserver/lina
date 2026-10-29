@@ -2553,5 +2553,7 @@
   "TaskMonitorQueueFailed": "Queue backlog could not be read.",
   "TaskMonitorNoWorkers": "No workers responded to this sample.",
   "TaskMonitorRefreshing": "A new sample is being collected. Showing the last available sample.",
-  "TaskMonitorPartialData": "Some monitoring data is unavailable."
+  "TaskMonitorPartialData": "Some monitoring data is unavailable.",
+  "ClientSecurity": "클라이언트 보안",
+  "ClientLoginPolicyChangeHelp": "제한 비활성화를 포함하여 이 세 설정 중 하나라도 변경하면 로그인된 클라이언트는 다시 인증해야 합니다. 재인증 전에는 새 자산 연결을 생성할 수 없지만, 이미 연결된 자산 연결은 이로 인해 끊어지지 않습니다."
 }
