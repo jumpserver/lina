@@ -1,9 +1,11 @@
 {
   "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "啟用 MCP",
+  "MCPEnabledHelp": "Koko 每 60 秒同步設定。關閉後停止接收新請求，已受理工作繼續收尾並交付稽核記錄。",
   "MCPAllowRegistration": "允許用戶端自動註冊",
-  "MCPRegistrationHelp": "使用者只需設定 MCP 位址，即可登入 JumpServer 並授權。關閉後僅停止新用戶端登記，不撤銷既有授權。",
+  "MCPRegistrationHelp": "啟用 MCP 後生效。使用者只需設定 MCP 位址，即可登入 JumpServer 並授權。關閉後僅停止新用戶端登記，不撤銷既有授權。",
   "MCPPublicURL": "MCP 存取位址",
-  "MCPPublicURLHelp": "填寫使用者可存取的完整 HTTP 或 HTTPS MCP 位址，不含結尾斜線、查詢參數或片段。由 Core 統一設定，Koko 每 60 秒同步。清空後停止接收新 MCP 請求。",
+  "MCPPublicURLHelp": "啟用 MCP 時必填。填寫使用者可存取的完整 HTTP 或 HTTPS MCP 位址，不含結尾斜線、查詢參數或片段。授權位址沿用基本設定中的網站位址。",
   "TemplateCredentialOverrideConfirm": "此帳號正在跟隨範本憑證。是否解除跟隨並繼續修改或清除憑證？此操作不會修改範本。",
   "TemplateCredentialOverride": "解除跟隨並繼續",
   "Credentials": "憑據",

@@ -1,9 +1,11 @@
 {
   "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "Activar MCP",
+  "MCPEnabledHelp": "Koko sincroniza esta configuración cada 60 segundos. Al desactivar MCP se detienen las nuevas solicitudes, mientras continúa la finalización de las tareas aceptadas y el envío de registros de auditoría.",
   "MCPAllowRegistration": "Permitir el registro automático de clientes",
-  "MCPRegistrationHelp": "Los usuarios solo configuran la URL MCP y luego inician sesión en JumpServer para autorizar el acceso. Al desactivar esta opción se detienen los nuevos registros, sin revocar las autorizaciones existentes.",
+  "MCPRegistrationHelp": "Se aplica cuando MCP está activado. Los usuarios solo configuran la URL MCP y luego inician sesión en JumpServer para autorizar el acceso. Al desactivar esta opción se detienen los nuevos registros, sin revocar las autorizaciones existentes.",
   "MCPPublicURL": "URL de acceso MCP",
-  "MCPPublicURLHelp": "Introduzca la URL MCP externa completa en HTTP o HTTPS, sin barra final, parámetros de consulta ni fragmentos. Core gestiona esta configuración y Koko la sincroniza cada 60 segundos. Al vaciarla se detienen las nuevas solicitudes MCP.",
+  "MCPPublicURLHelp": "Obligatorio cuando MCP está activado. Introduzca la URL MCP externa completa en HTTP o HTTPS, sin barra final, parámetros de consulta ni fragmentos. La dirección de autorización utiliza la URL del sitio de la configuración básica.",
   "TemplateCredentialOverrideConfirm": "Esta cuenta sigue las credenciales de la plantilla. ¿Dejar de seguirla y continuar modificando o borrando las credenciales? La plantilla no cambiará.",
   "TemplateCredentialOverride": "Dejar de seguir y continuar",
   "Credentials": "Credenciales",

@@ -15,8 +15,13 @@ export default {
     return {
       config: {
         url: '/api/v1/settings/setting/?category=mcp',
-        fields: ['MCP_DCR_ENABLED', 'MCP_PUBLIC_URL'],
+        fields: ['MCP_ENABLED', 'MCP_PUBLIC_URL', 'MCP_DCR_ENABLED'],
         fieldsMeta: {
+          MCP_ENABLED: {
+            label: this.$t('MCPEnabled'),
+            helpText: this.$t('MCPEnabledHelp'),
+            helpTextAsTip: false
+          },
           MCP_DCR_ENABLED: {
             label: this.$t('MCPAllowRegistration'),
             helpText: this.$t('MCPRegistrationHelp'),

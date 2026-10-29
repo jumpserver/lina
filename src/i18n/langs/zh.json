@@ -1,9 +1,11 @@
 {
   "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "启用 MCP",
+  "MCPEnabledHelp": "Koko 每 60 秒同步配置。关闭后停止接收新请求，已受理任务继续收尾并交付审计记录。",
   "MCPAllowRegistration": "允许客户端自动注册",
-  "MCPRegistrationHelp": "用户只需配置 MCP 地址，即可登录 JumpServer 并授权。关闭后仅停止新客户端登记，不撤销已有授权。",
+  "MCPRegistrationHelp": "启用 MCP 后生效。用户只需配置 MCP 地址，即可登录 JumpServer 并授权。关闭后仅停止新客户端登记，不撤销已有授权。",
   "MCPPublicURL": "MCP 访问地址",
-  "MCPPublicURLHelp": "填写用户可访问的完整 HTTP 或 HTTPS MCP 地址，不含末尾斜线、查询参数或片段。由 Core 统一配置，Koko 每 60 秒同步。清空后停止接收新 MCP 请求。",
+  "MCPPublicURLHelp": "启用 MCP 时必填。填写用户可访问的完整 HTTP 或 HTTPS MCP 地址，不含末尾斜线、查询参数或片段。授权地址复用基本设置中的网站地址。",
   "NotExecuted": "未执行",
   "CommandRejectedByACL": "命令被 ACL 拦截",
   "TemplateCredentialOverrideConfirm": "该账号正在跟随模板凭据。是否解除跟随并继续修改或清除凭据？此操作不会修改模板。",

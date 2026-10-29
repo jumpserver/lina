@@ -1,9 +1,11 @@
 {
   "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "MCP を有効にする",
+  "MCPEnabledHelp": "Koko は設定を 60 秒ごとに同期します。無効にすると新しいリクエストの受付を停止し、受付済みタスクの終了処理と監査記録の送信は継続します。",
   "MCPAllowRegistration": "クライアントの自動登録を許可",
-  "MCPRegistrationHelp": "ユーザーは MCP URL のみを設定し、JumpServer にログインしてアクセスを承認できます。無効にすると新規クライアント登録のみが停止し、既存の承認は取り消されません。",
+  "MCPRegistrationHelp": "MCP が有効な場合に適用されます。ユーザーは MCP URL のみを設定し、JumpServer にログインしてアクセスを承認できます。無効にすると新規クライアント登録のみが停止し、既存の承認は取り消されません。",
   "MCPPublicURL": "MCP アクセス URL",
-  "MCPPublicURLHelp": "外部からアクセス可能な完全な HTTP または HTTPS の MCP URL を入力してください。末尾のスラッシュ、クエリ、フラグメントは含めないでください。Core で一元管理し、Koko が 60 秒ごとに同期します。空にすると新しい MCP リクエストを受け付けなくなります。",
+  "MCPPublicURLHelp": "MCP を有効にする場合は必須です。外部からアクセス可能な完全な HTTP または HTTPS の MCP URL を、末尾のスラッシュ、クエリ、フラグメントを含めずに入力してください。認可アドレスには基本設定のサイト URL を使用します。",
   "TemplateCredentialOverrideConfirm": "このアカウントはテンプレートの認証情報を使用しています。追従を解除して認証情報の変更または削除を続行しますか？テンプレートは変更されません。",
   "TemplateCredentialOverride": "追従を解除して続行",
   "Credentials": "認証情報",
