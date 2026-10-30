@@ -1528,7 +1528,7 @@
   "PasskeySummary": "Xác thực sinh trắc học không cần mật khẩu",
   "Passphrase": "Mật khẩu khóa",
   "Password": "Mật khẩu",
-  "PasswordAndSSHKey": "Cài đặt xác thực",
+  "PasswordAndSSHKey": "Xác thực đăng nhập",
   "PasswordChangeLog": "Nhật ký thay đổi mật khẩu",
   "PasswordChangeOperatorRank": "Xếp hạng người vận hành đổi mật khẩu",
   "PasswordChangeUserRank": "Xếp hạng người dùng đổi mật khẩu",
@@ -2566,7 +2566,7 @@
   "TaskMonitorStopUnsupportedPool": "Tiến trình này sử dụng nhóm luồng và không thể dừng tác vụ đang chạy.",
   "TaskMonitorStopUnavailable": "Tiến trình chưa xác nhận kết quả. Hãy làm mới và kiểm tra trạng thái tác vụ.",
   "ClientSecurity": "Bảo mật ứng dụng khách",
-  "ClientLoginPolicyChangeHelp": "Khi thay đổi bất kỳ cài đặt nào trong ba cài đặt này, kể cả tắt giới hạn, ứng dụng khách phải đăng nhập lại để yêu cầu thông tin xác thực kết nối mới. Các mã kết nối đã cấp vẫn tuân theo thời hạn và quyền riêng; việc hết hạn đăng nhập không tự động ngắt các kết nối đã thiết lập.",
+  "ClientLoginPolicyChangeHelp": "Sau khi đổi cấu hình, phiên đăng nhập hiện có được giữ tối đa thêm 10 phút. Thời hạn sớm hơn vẫn được giữ. Đăng nhập mới dùng cấu hình mới. Token kết nối giữ thời hạn và quyền riêng.",
   "TicketReapplyInvalidResources": "Một số tài nguyên không còn khả dụng. Vui lòng chọn lại.",
   "AssetOwner": "Người phụ trách tài sản",
   "WFWorkflows": "Approval workflows",
@@ -2689,5 +2689,10 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "ClientCredentialsHelp": "Quản lý riêng mật khẩu khóa và mật khẩu mã hóa tệp hiện có. Để trống để giữ giá trị cũ. Mã hóa và giải mã vẫn dùng mật khẩu tệp.",
+  "ClientLockPassword": "Mật khẩu khóa ứng dụng khách",
+  "FileEncryptionPassword": "Mật khẩu mã hóa tệp",
+  "ClientCredentials": "Thông tin xác thực ứng dụng khách",
+  "ClientCredentialsAccountMismatch": "Tài khoản trình duyệt khác tài khoản ứng dụng khách. Hãy đăng nhập tài khoản được hiển thị trong ứng dụng khách."
 }

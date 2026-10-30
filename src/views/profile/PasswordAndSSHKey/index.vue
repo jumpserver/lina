@@ -11,12 +11,14 @@ import { GenericDetailPage } from '@/layout/components'
 import Password from './Password/Password.vue'
 import SSHKeyList from './SSHKey/SSHKeyList.vue'
 import UKey from './UKey/UKey.vue'
+import ClientCredentials from './ClientCredentials.vue'
 
 export default {
   components: {
     GenericDetailPage,
     Password,
     SSHKeyList,
+    ClientCredentials,
     UKey: UKey
   },
   data() {
@@ -24,7 +26,8 @@ export default {
       user: this.$store.state.users.profile,
       config: {
         title: this.$t('PasswordAndSSHKey'),
-        activeMenu: 'Password',
+        activeMenu:
+          this.$route.query.tab === 'ClientCredentials' ? 'ClientCredentials' : 'Password',
         submenu: this.getSubmenu(),
         hasRightSide: false,
         hasActivity: false,
@@ -45,7 +48,11 @@ export default {
       handler(disabled) {
         this.config.submenu = this.getSubmenu()
         if (disabled && this.config.activeMenu === 'Password') {
-          this.config.activeMenu = 'SSHKeyList'
+          this.config.activeMenu =
+            this.$store.state.users.profile.can_public_key_auth &&
+            this.$hasPerm('authentication.view_sshkey')
+              ? 'SSHKeyList'
+              : 'ClientCredentials'
         }
       }
     }
@@ -61,7 +68,13 @@ export default {
         {
           title: this.$t('LoginSSHKeySetting'),
           name: 'SSHKeyList',
-          disabled: !this.$store.state.users.profile.can_public_key_auth
+          disabled:
+            !this.$store.state.users.profile.can_public_key_auth ||
+            !this.$hasPerm('authentication.view_sshkey')
+        },
+        {
+          title: this.$t('ClientCredentials'),
+          name: 'ClientCredentials'
         },
         {
           title: this.$t('LoginUKeySetting'),

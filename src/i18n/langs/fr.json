@@ -1548,7 +1548,7 @@
   "PasskeySummary": "Authentification biométrique sans mot de passe",
   "Passphrase": "Mot de passe de la clé",
   "Password": "Mot de passe",
-  "PasswordAndSSHKey": "Mot de passe et clé SSH",
+  "PasswordAndSSHKey": "Authentification de connexion",
   "PasswordChangeLog": "Changement de mot de passe",
   "PasswordChangeOperatorRank": "Classement des opérateurs de changement de mot de passe",
   "PasswordChangeUserRank": "Classement des utilisateurs de changement de mot de passe",
@@ -2737,7 +2737,7 @@
   "TaskMonitorStopUnsupportedPool": "Ce processus utilise un pool de threads et ne peut pas arrêter une tâche en cours.",
   "TaskMonitorStopUnavailable": "Le processus n’a pas confirmé le résultat. Actualisez et vérifiez l’état de la tâche.",
   "ClientSecurity": "Sécurité du client",
-  "ClientLoginPolicyChangeHelp": "Toute modification de ces trois paramètres, y compris la désactivation d’une limite, oblige le client à se reconnecter pour demander de nouveaux identifiants de connexion. Les jetons déjà émis restent soumis à leur propre expiration et à leurs permissions ; l’expiration de la session ne ferme pas automatiquement les connexions établies.",
+  "ClientLoginPolicyChangeHelp": "Après modification, les connexions existantes disposent de 10 minutes au maximum. Une expiration antérieure est conservée. Les nouvelles connexions utilisent les nouveaux paramètres. Les jetons de connexion gardent leur propre durée et leurs permissions.",
   "TicketReapplyInvalidResources": "Certaines ressources ne sont plus disponibles. Sélectionnez-les à nouveau.",
   "AssetOwner": "Responsable de l’actif",
   "WFWorkflows": "Approval workflows",
@@ -2860,5 +2860,10 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "ClientCredentialsHelp": "Gérez séparément le mot de passe du client et celui du chiffrement de fichiers existant. Les champs vides conservent les valeurs actuelles. Le chiffrement et le déchiffrement utilisent toujours le mot de passe de fichiers.",
+  "ClientLockPassword": "Mot de passe de verrouillage du client",
+  "FileEncryptionPassword": "Mot de passe de chiffrement des fichiers",
+  "ClientCredentials": "Identifiants du client",
+  "ClientCredentialsAccountMismatch": "Le compte du navigateur diffère de celui du client. Connectez-vous au compte affiché dans le client."
 }

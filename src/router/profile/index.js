@@ -38,7 +38,7 @@ export default {
           component: () => import('@/views/profile/PasswordAndSSHKey/index'),
           name: 'SSHKeyList',
           icon: 'key',
-          meta: { title: i18n.t('PasswordAndSSHKey'), permissions: ['authentication.view_sshkey'] }
+          meta: { title: i18n.t('PasswordAndSSHKey'), permissions: [] }
         },
         {
           path: 'create',

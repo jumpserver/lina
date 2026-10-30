@@ -1528,7 +1528,7 @@
   "PasskeySummary": "Autenticación biométrica sin contraseña",
   "Passphrase": "Contraseña de la clave",
   "Password": "Contraseña",
-  "PasswordAndSSHKey": "Configuración de autenticación",
+  "PasswordAndSSHKey": "Autenticación de inicio de sesión",
   "PasswordChangeLog": "Registro de cambios de contraseña",
   "PasswordChangeOperatorRank": "Ranking de Operadores por Cambio de Contraseña",
   "PasswordChangeUserRank": "Ranking de Usuarios por Cambio de Contraseña",
@@ -2566,7 +2566,7 @@
   "TaskMonitorStopUnsupportedPool": "Este proceso usa un grupo de hilos y no puede detener una tarea en ejecución.",
   "TaskMonitorStopUnavailable": "El proceso no confirmó el resultado. Actualice y compruebe el estado de la tarea.",
   "ClientSecurity": "Seguridad del cliente",
-  "ClientLoginPolicyChangeHelp": "Al cambiar cualquiera de estos tres ajustes, incluida la desactivación de un límite, el cliente debe iniciar sesión de nuevo para solicitar nuevas credenciales de conexión. Los tokens emitidos siguen sujetos a su propia caducidad y permisos; la caducidad del inicio de sesión no desconecta automáticamente las conexiones establecidas.",
+  "ClientLoginPolicyChangeHelp": "Tras cambiar la configuración, las sesiones existentes disponen de hasta 10 minutos. Se conserva cualquier vencimiento anterior. Los nuevos inicios usan la nueva configuración. Los tokens de conexión conservan su propia vigencia y permisos.",
   "TicketReapplyInvalidResources": "Algunos recursos ya no están disponibles. Selecciónelos de nuevo.",
   "AssetOwner": "Responsable del activo",
   "WFWorkflows": "Approval workflows",
@@ -2689,5 +2689,10 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "ClientCredentialsHelp": "Gestiona por separado la contraseña del cliente y la contraseña existente de cifrado de archivos. Los campos vacíos conservan los valores actuales. El cifrado y descifrado siguen usando la contraseña de archivos.",
+  "ClientLockPassword": "Contraseña de bloqueo del cliente",
+  "FileEncryptionPassword": "Contraseña de cifrado de archivos",
+  "ClientCredentials": "Credenciales del cliente",
+  "ClientCredentialsAccountMismatch": "La cuenta del navegador no coincide con la del cliente. Inicia sesión con la cuenta que muestra el cliente."
 }
