@@ -2749,5 +2749,5 @@
   "TaskMonitorRefreshing": "正在采集新数据，暂时显示上一次采样。",
   "TaskMonitorPartialData": "部分监控数据暂不可用。",
   "ClientSecurity": "客户端安全",
-  "ClientLoginPolicyChangeHelp": "修改这三项配置中的任意一项（包括关闭限制），已登录客户端都需重新认证；重新认证前，不可以创建新的资产连接，但已建立的资产连接不会因此断开。"
+  "ClientLoginPolicyChangeHelp": "修改这三项配置中的任意一项（包括关闭限制）后，客户端需重新登录才能申请新的连接凭据；已签发的连接令牌仍按自身有效期和权限使用，已有连接不会因登录失效自动断开。"
 }

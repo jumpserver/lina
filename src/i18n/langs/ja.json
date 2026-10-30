@@ -2735,5 +2735,5 @@
   "TaskMonitorRefreshing": "A new sample is being collected. Showing the last available sample.",
   "TaskMonitorPartialData": "Some monitoring data is unavailable.",
   "ClientSecurity": "クライアントセキュリティ",
-  "ClientLoginPolicyChangeHelp": "制限の無効化を含め、これら 3 つの設定のいずれかを変更すると、ログイン済みのクライアントは再認証が必要です。再認証が完了するまで新しい資産接続は作成できませんが、確立済みの資産接続が切断されることはありません。"
+  "ClientLoginPolicyChangeHelp": "制限の無効化を含め、これら3つの設定のいずれかを変更すると、クライアントで新しい接続認証情報を取得するには再ログインが必要です。発行済みの接続トークンには、それ自体の有効期限と権限が適用されます。ログインが失効しても、確立済みの接続は自動切断されません。"
 }
