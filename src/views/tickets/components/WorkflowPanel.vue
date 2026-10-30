@@ -271,6 +271,7 @@
   </IBox>
 </template>
 <script>
+import { formatTicketUser } from '../const'
 import IBox from '@/components/Common/IBox'
 import Dialog from '@/components/Dialog'
 import WorkflowMemberSelect from './WorkflowMemberSelect'
@@ -400,8 +401,7 @@ export default {
       return 'info'
     },
     formatUser(user) {
-      const name = user?.name || user?.username || '-'
-      return user?.username && name !== user.username ? `${name} (${user.username})` : name
+      return formatTicketUser(user)
     },
     async load(force = false) {
       if ((this.loading && !force) || !this.object.workflow_instance || this.disposed) return

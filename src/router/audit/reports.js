@@ -1,70 +1,58 @@
 import i18n from '@/i18n/i18n'
-import empty from '@/layout/empty'
+import users from '../reports/users'
+import assets from '../reports/assets'
+import accounts from '../reports/accounts'
+
+const reportMeta = (title) => ({
+  title: i18n.t(title),
+  permissions: ['rbac.view_audit'],
+  licenseRequired: true
+})
+
+// Keep saved legacy templates and bookmarks usable, inside the audit console.
+const legacy = (group, routes) =>
+  routes.map((route) => ({
+    ...route,
+    path: `legacy/${group}/${route.path}`,
+    hidden: true,
+    meta: { ...route.meta, activeMenu: '/audit/reports/overview' }
+  }))
 
 export default [
   {
-    path: 'users',
-    name: 'writable',
-    component: empty,
-    meta: {
-      title: i18n.t('UserReport'),
-      icon: 'user-o',
-      permissions: []
-    },
-    children: [
-      {
-        path: '',
-        name: 'UserActivityIndex',
-        component: () => import('@/views/reports/users/index.vue'),
-        meta: {
-          title: i18n.t('UserReport'),
-          permissions: ['rbac.view_userloginreport | rbac.view_userchangepasswordreport']
-        }
-      }
-    ]
+    path: 'overview',
+    name: 'AuditReportOverview',
+    component: () => import('@/views/reports/center/index.vue'),
+    meta: { ...reportMeta('AuditReportOverview'), icon: 'file' }
   },
   {
-    path: 'assets',
-    name: 'assets',
-    component: empty,
-    meta: {
-      icon: 'assets',
-      title: i18n.t('AssetReport'),
-      permissions: []
-    },
-    children: [
-      {
-        path: '',
-        props: () => ({ nav: false }),
-        name: 'AssetActivityIndex',
-        component: () => import('@/views/reports/assets/index.vue'),
-        meta: {
-          title: i18n.t('AssetReport'),
-          permissions: ['rbac.view_assetactivityreport | rbac.view_assetstatisticsreport']
-        }
-      }
-    ]
+    path: 'templates',
+    redirect: '/audit/reports/overview',
+    hidden: true,
+    meta: { permissions: [] }
   },
   {
-    path: 'accounts',
-    name: 'accounts',
-    component: empty,
-    meta: {
-      icon: 'accounts',
-      title: i18n.t('AccountReport'),
-      permissions: []
-    },
-    children: [
-      {
-        path: '',
-        props: () => ({ nav: false }),
-        name: 'AccountActivityIndex',
-        component: () => import('@/views/reports/accounts/index.vue'),
-        meta: {
-          title: i18n.t('AccountReport'),
-          permissions: ['rbac.view_accountstatisticsreport | rbac.view_accountautomationreport']
-        }
-      }
-    ]
-  }
+    path: 'editor',
+    name: 'AuditReportEditor',
+    component: () => import('@/views/reports/center/Editor.vue'),
+    hidden: true,
+    meta: { ...reportMeta('AuditReportConfigure'), activeMenu: '/audit/reports/overview' }
+  },
+  ...legacy('users', users),
+  ...legacy('assets', assets),
+  ...legacy('accounts', accounts),
+  ...['users', 'assets', 'accounts'].map((group) => ({
+    path: `legacy/${group}`,
+    name: `LegacyReportTemplates-${group}`,
+    component: () => import(`@/views/reports/${group}/index.vue`),
+    props: { nav: false },
+    hidden: true,
+    meta: { ...reportMeta('AuditReportLegacyTemplates'), activeMenu: '/audit/reports/overview' }
+  })),
+  ...['users', 'assets', 'accounts'].map((group) => ({
+    path: group,
+    redirect: (to) => ({ path: `/audit/reports/legacy/${group}`, query: to.query }),
+    hidden: true,
+    meta: { permissions: [] }
+  }))
 ]

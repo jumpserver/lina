@@ -48,6 +48,23 @@ function mount(workflow = {}) {
   return vm
 }
 
+test('generated node labels are translated without changing the definition being published', () => {
+  const vm = mount()
+  const node = { id: 'approval_1', type: 'approval', name: 'Approval 1' }
+  vm.versions = [
+    {
+      id: 'version-1',
+      definition: { nodes: [{ ...node }] },
+      node_names: { approval_1: '第 1 级审批' }
+    }
+  ]
+  vm.selectedVersion = 'version-1'
+  assert.equal(vm.nodeName(node), '第 1 级审批')
+  assert.equal(node.name, 'Approval 1')
+  node.name = 'Operations approval'
+  assert.equal(vm.nodeName(node), 'Operations approval')
+})
+
 test('enable is primary only for an unchanged, disabled current published version', () => {
   const vm = mount()
   assert.equal(vm.enablePrimary, false)

@@ -57,6 +57,16 @@ export function getTicketStateLabel(state, t) {
   return key ? translate(t, key) : state.label || ''
 }
 
+export function formatTicketUser(user) {
+  if (user?.display) return user.display
+  const name = user?.name || user?.username || '-'
+  // Earlier imports stored the full legacy display in name.
+  if (!user?.username || name === user.username || name.endsWith(`(${user.username})`)) {
+    return name
+  }
+  return `${name} (${user.username})`
+}
+
 export const STATUS_MAP = {
   [OPEN]: {
     type: 'success',

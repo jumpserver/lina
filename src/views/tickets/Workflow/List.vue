@@ -1,5 +1,9 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage
+    activation-refresh="always"
+    :table-config="tableConfig"
+    :header-actions="headerActions"
+  />
 </template>
 <script>
 import { GenericListPage } from '@/layout/components'
@@ -18,6 +22,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               drawer: false,
+              getTitle: ({ row }) => row.display_name || row.name,
               getRoute: ({ row }) => ({ name: 'WorkflowDetail', params: { id: row.id } })
             }
           },

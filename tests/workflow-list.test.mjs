@@ -32,4 +32,7 @@ test('workflow edit opens the selected designer instead of the default update dr
     })
     assert.deepEqual(routes.at(-1), tableConfig.columnsMeta.name.formatterArgs.getRoute({ row }))
   }
+  const title = tableConfig.columnsMeta.name.formatterArgs.getTitle
+  assert.equal(title({ row: { name: 'Apply for asset', display_name: '申请资产' } }), '申请资产')
+  assert.equal(title({ row: { name: 'Custom approval' } }), 'Custom approval')
 })

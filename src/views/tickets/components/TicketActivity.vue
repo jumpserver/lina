@@ -23,7 +23,13 @@
             size="small"
             >{{ $t(event.data.result ? 'WFTrueBranch' : 'WFFalseBranch') }}</el-tag
           >
-          <span v-if="event.actor_snapshot?.name || event.actor_snapshot?.username">
+          <span
+            v-if="
+              event.actor_snapshot?.display ||
+              event.actor_snapshot?.name ||
+              event.actor_snapshot?.username
+            "
+          >
             {{ formatUser(event.actor_snapshot) }}
           </span>
           <span v-if="event.type === 'approval.created' && event.data.assignee">
@@ -91,6 +97,7 @@
 </template>
 
 <script>
+import { formatTicketUser } from '../const'
 import IBox from '@/components/Common/IBox'
 import { useDateTime } from '@/composables/useDateTime'
 import CcUsers from './CcUsers'
@@ -136,8 +143,7 @@ export default {
   },
   methods: {
     formatUser(user) {
-      const name = user?.name || user?.username || '-'
-      return user?.username && name !== user.username ? `${name} (${user.username})` : name
+      return formatTicketUser(user)
     },
     nodeName(id) {
       const node = this.instance?.nodes.find((node) => node.id === id)

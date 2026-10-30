@@ -48,7 +48,8 @@
           <div class="metadata">
             <el-form-item :label="$t('WFName')" required>
               <el-input
-                v-model="workflow.name"
+                :model-value="workflow.display_name || workflow.name"
+                @update:model-value="renameWorkflow"
                 maxlength="128"
                 :placeholder="$t('WFNamePlaceholder')"
               />
@@ -159,7 +160,7 @@
                           v-else-if="node.type === 'condition'" /><VideoPlay
                           v-else-if="node.type === 'start'" /><CircleCheck v-else /></el-icon
                     ></span>
-                    <strong>{{ node.name || $t(nodeLabels[node.type]) }}</strong>
+                    <strong>{{ nodeName(node) }}</strong>
                     <el-icon v-if="selected?.id === node.id" class="selected-mark"
                       ><EditPen
                     /></el-icon>
@@ -183,7 +184,8 @@
               <section class="config-section">
                 <el-form-item :label="$t('WFNodeName')">
                   <el-input
-                    v-model="selected.name"
+                    :model-value="nodeName(selected)"
+                    @update:model-value="selected.name = $event"
                     maxlength="128"
                     :placeholder="$t(nodeLabels[selected.type])"
                   />
@@ -319,7 +321,7 @@
                         v-for="node in nextNodes"
                         :key="node.id"
                         :value="node.id"
-                        :label="node.name || $t(nodeLabels[node.type])"
+                        :label="nodeName(node)"
                     /></el-select>
                   </el-form-item>
                   <div v-if="canEdit" class="insert-actions">
@@ -529,6 +531,19 @@ export default {
     }
   },
   methods: {
+    renameWorkflow(name) {
+      this.workflow.name = name
+      this.workflow.display_name = ''
+    },
+    nodeName(node) {
+      const version = this.versions.find((v) => v.id === this.selectedVersion)
+      const original = version?.definition.nodes.find((n) => n.id === node.id)
+      return (
+        (original?.name === node.name && version?.node_names?.[node.id]) ||
+        node.name ||
+        this.$t(nodeLabels[node.type])
+      )
+    },
     captureBaseline() {
       this.savedDefinition = JSON.stringify(this.definition)
       this.savedMetadata = JSON.stringify(this.metadata)

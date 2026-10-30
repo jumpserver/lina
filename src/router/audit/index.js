@@ -84,13 +84,14 @@ export default {
     },
     {
       path: '/audit/reports',
+      alwaysShow: true,
       component: empty,
-      redirect: '',
+      redirect: '/audit/reports/overview',
       name: 'AuditsReports',
       meta: {
-        title: i18n.t('Report'),
-        icon: 'report',
-        permissions: [],
+        title: i18n.t('AuditReportCenter'),
+        icon: 'file',
+        permissions: ['rbac.view_audit'],
         licenseRequired: true
       },
       children: ReportsRoutes
