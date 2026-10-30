@@ -14,7 +14,7 @@
   "MCPCodexCheckConnection": "Reopen the Codex session and use /mcp to check the connection and available tools. The CLI and IDE extension share configuration on the same host.",
   "MCPVerifyConnection": "Verify the connection",
   "MCPConnectionVerificationHelp": "Ask the agent to use jumpserver's search_assets to find assets, accounts and protocols you can access. Confirm that the tool call succeeds before connecting to assets or performing operations.",
-  "MCPConnectionAuthorizationHelp": "New authorizations cover all organizations currently available to you. Asset, account and operation permissions are checked on every request. Sign out and authorize again to upgrade an older single-organization authorization. Complete approvals and MFA on the JumpServer page returned by the tool.",
+  "MCPConnectionAuthorizationHelp": "Authorizations cover all organizations currently available to you. Asset, account and operation permissions are checked on every request. Complete approvals and MFA on the JumpServer page returned by the tool.",
   "NotExecuted": "Not executed",
   "CommandRejectedByACL": "Command blocked by ACL",
   "TemplateCredentialOverrideConfirm": "This account follows template credentials. Stop following and continue modifying or clearing credentials? The template will not be changed.",

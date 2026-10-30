@@ -14,7 +14,7 @@
   "MCPCodexCheckConnection": "重新打开 Codex 会话，使用 /mcp 检查连接和可用工具；同一主机的 CLI 与 IDE 扩展共享配置。",
   "MCPVerifyConnection": "验证接入",
   "MCPConnectionVerificationHelp": "让 Agent 使用 jumpserver 的 search_assets 查询本人有权访问的资产、账号和协议。确认工具调用成功后，再连接资产或执行操作。",
-  "MCPConnectionAuthorizationHelp": "新授权默认覆盖本人当前可访问的全部组织，每次请求仍检查资产、账号和操作权限。已有单组织授权可退出并重新授权以使用多组织范围。审批、MFA 等流程请在工具返回的 JumpServer 页面完成。",
+  "MCPConnectionAuthorizationHelp": "授权范围覆盖本人当前可访问的全部组织，每次请求仍检查资产、账号和操作权限。审批、MFA 等流程请在工具返回的 JumpServer 页面完成。",
   "NotExecuted": "未执行",
   "CommandRejectedByACL": "命令被 ACL 拦截",
   "TemplateCredentialOverrideConfirm": "该账号正在跟随模板凭据。是否解除跟随并继续修改或清除凭据？此操作不会修改模板。",

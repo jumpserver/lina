@@ -14,7 +14,7 @@
   "MCPCodexCheckConnection": "重新開啟 Codex 工作階段，使用 /mcp 檢查連線和可用工具；同一主機的 CLI 與 IDE 擴充功能共用設定。",
   "MCPVerifyConnection": "驗證接入",
   "MCPConnectionVerificationHelp": "讓 Agent 使用 jumpserver 的 search_assets 查詢本人有權存取的資產、帳號和協定。確認工具呼叫成功後，再連線資產或執行操作。",
-  "MCPConnectionAuthorizationHelp": "新授權預設涵蓋本人目前可存取的全部組織，每次請求仍檢查資產、帳號和操作權限。既有單一組織授權可登出並重新授權以使用多組織範圍。審批、MFA 等流程請在工具傳回的 JumpServer 頁面完成。",
+  "MCPConnectionAuthorizationHelp": "授權範圍涵蓋本人目前可存取的全部組織，每次請求仍檢查資產、帳號和操作權限。審批、MFA 等流程請在工具傳回的 JumpServer 頁面完成。",
   "TemplateCredentialOverrideConfirm": "此帳號正在跟隨範本憑證。是否解除跟隨並繼續修改或清除憑證？此操作不會修改範本。",
   "TemplateCredentialOverride": "解除跟隨並繼續",
   "Credentials": "憑據",
