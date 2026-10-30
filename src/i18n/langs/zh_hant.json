@@ -2792,7 +2792,7 @@
   "TerminalCommands": "終端命令",
   "MyMCPClients": "我的客戶端",
   "MCPAccessDocumentation": "接入文件",
-  "MCPUserClientHelp": "這裡彙總本人在所有已授權組織中的客戶端。撤銷會移除本人的授權，並自動清理無人使用的客戶端註冊，歷史審計記錄會保留。",
+  "MCPUserClientHelp": "每人最多授權 10 個不同的 MCP 用戶端，所有組織合併計數，同一用戶端重複授權不重複計數。停用或授權過期但未撤銷的用戶端仍佔名額。撤銷後釋放名額，並自動清理無人使用的用戶端註冊，歷史審計記錄會保留。",
   "MCPUserConnectionHelp": "使用以下 MCP 位址設定客戶端，再登入 JumpServer 並確認授權。",
   "MCPUserUnavailable": "MCP 存取目前無法使用，請聯絡管理員。仍可撤銷既有客戶端授權。",
   "MCPUserRegistrationRequired": "客戶端自動註冊已關閉。接入新客戶端請聯絡管理員，已登記客戶端可繼續使用既有授權。",

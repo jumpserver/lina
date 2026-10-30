@@ -2797,7 +2797,7 @@
   "TerminalCommands": "Terminal commands",
   "MyMCPClients": "My clients",
   "MCPAccessDocumentation": "Connection guide",
-  "MCPUserClientHelp": "These clients are authorized by you across all your available organizations. Revoking a client removes your authorizations and automatically cleans up its registration when no one else uses it. Audit records are preserved.",
+  "MCPUserClientHelp": "You can authorize up to 10 different MCP clients across all your organizations. Reauthorizing the same client does not use another slot. Disabled or expired clients still count until revoked. Revoking a client frees a slot and automatically cleans up its registration when no one else uses it. Audit records are preserved.",
   "MCPUserConnectionHelp": "Configure your client with this MCP URL, then sign in to JumpServer and authorize access.",
   "MCPUserUnavailable": "MCP access is currently unavailable. Contact your administrator. You can still revoke existing authorizations.",
   "MCPUserRegistrationRequired": "Automatic client registration is disabled. Contact your administrator to connect a new client. Existing registered clients can continue using their authorizations.",

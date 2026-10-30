@@ -2791,7 +2791,7 @@
   "TerminalCommands": "终端命令",
   "MyMCPClients": "我的客户端",
   "MCPAccessDocumentation": "接入文档",
-  "MCPUserClientHelp": "这里汇总本人在所有已授权组织中的客户端。撤销会移除本人的授权，并自动清理无人使用的客户端注册，历史审计记录会保留。",
+  "MCPUserClientHelp": "每人最多授权 10 个不同的 MCP 客户端，所有组织合并计数，同一客户端重复授权不重复计数。禁用或授权过期但未撤销的客户端仍占名额。撤销后释放名额，并自动清理无人使用的客户端注册，历史审计记录会保留。",
   "MCPUserConnectionHelp": "使用以下 MCP 地址配置客户端，再登录 JumpServer 并确认授权。",
   "MCPUserUnavailable": "MCP 访问当前不可用，请联系管理员。仍可撤销已有客户端授权。",
   "MCPUserRegistrationRequired": "客户端自动注册已关闭。接入新客户端请联系管理员，已登记客户端可继续使用已有授权。",
