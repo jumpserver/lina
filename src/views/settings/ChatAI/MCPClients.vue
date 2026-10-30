@@ -51,12 +51,20 @@ export default {
               hasUpdate: false,
               extraActions: [
                 {
+                  name: 'enable',
+                  title: this.$t('Enable'),
+                  type: 'primary',
+                  has: ({ row }) => !row.is_active,
+                  can: () => !this.submitting && this.$hasPerm('settings.change_auth'),
+                  callback: ({ row }) => this.setClientActive(row, true)
+                },
+                {
                   name: 'disable',
                   title: this.$t('Disable'),
                   type: 'danger',
-                  can: ({ row }) =>
-                    row.is_active && !this.submitting && this.$hasPerm('settings.change_auth'),
-                  callback: ({ row }) => this.disableClient(row)
+                  has: ({ row }) => row.is_active,
+                  can: () => !this.submitting && this.$hasPerm('settings.change_auth'),
+                  callback: ({ row }) => this.setClientActive(row, false)
                 },
                 {
                   name: 'delete',
@@ -83,14 +91,15 @@ export default {
         }
       )
     },
-    disableClient(row) {
+    setClientActive(row, active) {
       return this.confirmAction(
-        this.$t('MCPClientDisableConfirm', { name: row.name }),
-        this.$t('Disable'),
+        this.$t(active ? 'MCPClientEnableConfirm' : 'MCPClientDisableConfirm', { name: row.name }),
+        this.$t(active ? 'Enable' : 'Disable'),
         async () => {
-          await this.$axios.post(`${clientsURL}${row.id}/disable/`, {})
-          this.$message.success(this.$t('DisableSuccessMsg'))
-        }
+          await this.$axios.post(`${clientsURL}${row.id}/${active ? 'enable' : 'disable'}/`, {})
+          this.$message.success(this.$t(active ? 'EnableSuccessMsg' : 'DisableSuccessMsg'))
+        },
+        active ? 'primary' : 'danger'
       )
     },
     cleanupClients() {
@@ -103,13 +112,13 @@ export default {
         }
       )
     },
-    async confirmAction(message, title, action) {
+    async confirmAction(message, title, action, type = 'danger') {
       if (this.submitting || !this.$hasPerm('settings.change_auth')) return
       this.submitting = true
       try {
         await this.$confirm(message, title, {
           type: 'warning',
-          confirmButtonClass: 'el-button--danger',
+          confirmButtonClass: `el-button--${type}`,
           beforeClose: async (result, instance, done) => {
             if (instance.confirmButtonLoading) return
             if (result !== 'confirm') return done()
