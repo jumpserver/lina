@@ -443,6 +443,7 @@
   "ChartReport": "Chart Report",
   "Chat": "Chat",
   "ChatAI": "AI Copilot",
+  "ChatAIConfiguration": "Assistant configuration",
   "ChatAIHideLauncher": "Hide AI assistant",
   "ChatAIPrivateContext": "Conversations are isolated by organization and visible only to you and super administrators",
   "ChatAIShowLauncher": "Show AI assistant",

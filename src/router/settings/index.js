@@ -3,6 +3,7 @@ import empty from '@/layout/empty'
 import store from '@/store'
 import { openJDMC } from '@/utils/jdmc'
 import { getFirstAccessibleChildPath } from '@/utils/vue'
+import { redirectLegacyMCPSettings } from './legacy-mcp'
 
 const Setting = () => import('@/views/settings/index')
 const globalSubmenu = () => import('@/layout/globalOrg.vue')
@@ -214,7 +215,7 @@ export default {
         title: i18n.t('ChatAI'),
         icon: 'short-message',
         disableGoBack: true,
-        permissions: ['settings.change_chatai']
+        permissions: ['settings.change_chatai | settings.change_auth']
       }
     },
     {
@@ -233,12 +234,13 @@ export default {
       path: '/settings/features',
       name: 'Feature',
       component: () => import('@/views/settings/Feature'),
+      beforeEnter: redirectLegacyMCPSettings,
       meta: {
         title: i18n.t('Features'),
         icon: 'feature',
         permissions: [
           'settings.change_ticket | settings.change_ops | settings.change_vault | ' +
-            'settings.change_virtualapp | settings.change_auth'
+            'settings.change_virtualapp | settings.change_announcement'
         ]
       }
     },

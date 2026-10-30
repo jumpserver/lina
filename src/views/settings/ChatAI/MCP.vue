@@ -41,7 +41,7 @@ export default {
         hasDetailInMsg: false,
         submitBtnText: this.$t('Save'),
         submitMethod: 'patch',
-        updateSuccessNextRoute: { name: 'Feature', query: { tab: 'MCP' } }
+        updateSuccessNextRoute: { name: 'ChatAISettings', query: { tab: 'MCP' } }
       }
     }
   }
