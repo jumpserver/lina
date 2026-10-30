@@ -1528,7 +1528,7 @@
   "PasskeySummary": "무비밀번호 생체 인증",
   "Passphrase": "키 비밀번호",
   "Password": "비밀번호",
-  "PasswordAndSSHKey": "로그인 인증",
+  "PasswordAndSSHKey": "사용자 인증",
   "PasswordChangeLog": "비밀번호 변경 로그",
   "PasswordChangeOperatorRank": "비밀번호 변경 운영자 순위",
   "PasswordChangeUserRank": "비밀번호 변경 사용자 순위",
@@ -2690,9 +2690,11 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "클라이언트 잠금 비밀번호와 기존 파일 암호화 비밀번호를 따로 관리합니다. 빈칸은 기존 값을 유지하며 파일 암호화와 복호화에는 파일 비밀번호를 사용합니다.",
+  "ClientCredentialsHelp": "이 사이트와 계정의 클라이언트 잠금을 해제할 비밀번호를 설정합니다. 비워 두면 기존 비밀번호를 유지합니다.",
   "ClientLockPassword": "클라이언트 잠금 비밀번호",
   "FileEncryptionPassword": "파일 암호화 비밀번호",
   "ClientCredentials": "클라이언트 자격 증명",
-  "ClientCredentialsAccountMismatch": "브라우저와 클라이언트 계정이 다릅니다. 클라이언트에 표시된 계정으로 로그인하세요."
+  "ClientCredentialsAccountMismatch": "브라우저와 클라이언트 계정이 다릅니다. 클라이언트에 표시된 계정으로 로그인하세요.",
+  "FileEncryption": "파일 암호화",
+  "FileEncryptionHelp": "시스템 내보내기 파일과 이메일 첨부 파일을 암호화합니다. 비워 두면 기존 비밀번호를 유지합니다."
 }

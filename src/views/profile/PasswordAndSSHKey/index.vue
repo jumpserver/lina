@@ -1,7 +1,13 @@
 <template>
   <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" @update:active-menu="handleUpdate" />
+      <component
+        :is="config.activeMenu"
+        :key="config.activeMenu"
+        :credential-type="config.activeMenu === 'FileEncryption' ? 'file' : 'lock'"
+        :object="user"
+        @update:active-menu="handleUpdate"
+      />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -10,7 +16,6 @@
 import { GenericDetailPage } from '@/layout/components'
 import Password from './Password/Password.vue'
 import SSHKeyList from './SSHKey/SSHKeyList.vue'
-import UKey from './UKey/UKey.vue'
 import ClientCredentials from './ClientCredentials.vue'
 
 export default {
@@ -19,15 +24,16 @@ export default {
     Password,
     SSHKeyList,
     ClientCredentials,
-    UKey: UKey
+    FileEncryption: ClientCredentials
   },
   data() {
     return {
       user: this.$store.state.users.profile,
       config: {
         title: this.$t('PasswordAndSSHKey'),
-        activeMenu:
-          this.$route.query.tab === 'ClientCredentials' ? 'ClientCredentials' : 'Password',
+        activeMenu: ['ClientCredentials', 'FileEncryption'].includes(this.$route.query.tab)
+          ? this.$route.query.tab
+          : 'Password',
         submenu: this.getSubmenu(),
         hasRightSide: false,
         hasActivity: false,
@@ -77,9 +83,8 @@ export default {
           name: 'ClientCredentials'
         },
         {
-          title: this.$t('LoginUKeySetting'),
-          name: 'UKey',
-          hidden: !this.$store.state.users.profile.can_ukey_auth
+          title: this.$t('FileEncryption'),
+          name: 'FileEncryption'
         }
       ]
     },

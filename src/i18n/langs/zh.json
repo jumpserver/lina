@@ -1239,7 +1239,7 @@
   "PasskeySummary": "无密码生物识别认证",
   "Passphrase": "密钥密码",
   "Password": "密码",
-  "PasswordAndSSHKey": "登录认证",
+  "PasswordAndSSHKey": "用户认证",
   "PasswordChangeLog": "改密日志",
   "PasswordChangeOperatorRank": "密码修改操作人排行",
   "PasswordChangeUserRank": "密码修改用户排行",
@@ -3128,9 +3128,11 @@
   "TicketTransferCount_unverified": "{count} 个待核验",
   "TicketTransferCount_pending": "{count} 个未执行",
   "TicketTransferCount_running": "{count} 个传输中",
-  "ClientCredentialsHelp": "统一管理客户端锁屏密码和原有文件加密密码，两者独立使用。留空表示保留现有密码；文件加解密仍使用文件加密密码。",
+  "ClientCredentialsHelp": "设置客户端锁屏密码，用于解锁当前站点账号的客户端。留空保留现有密码。",
   "ClientLockPassword": "客户端锁屏密码",
   "FileEncryptionPassword": "文件加密密码",
   "ClientCredentials": "客户端凭证",
-  "ClientCredentialsAccountMismatch": "浏览器账号与客户端账号不一致，请先登录客户端提示的账号，再设置凭证。"
+  "ClientCredentialsAccountMismatch": "浏览器账号与客户端账号不一致，请先登录客户端提示的账号，再设置凭证。",
+  "FileEncryption": "文件加密",
+  "FileEncryptionHelp": "用于加密系统导出文件及邮件附件。留空保留现有密码。"
 }

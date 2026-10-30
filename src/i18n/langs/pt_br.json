@@ -1528,7 +1528,7 @@
   "PasskeySummary": "Autenticação biométrica sem senha",
   "Passphrase": "Senha da chave",
   "Password": " Senha ",
-  "PasswordAndSSHKey": "Autenticação de login",
+  "PasswordAndSSHKey": "Autenticação do usuário",
   "PasswordChangeLog": "Registro de Mudança de Senha",
   "PasswordChangeOperatorRank": "Ranking de Operadores por Alteração de Senha",
   "PasswordChangeUserRank": "Ranking de Usuários por Alteração de Senha",
@@ -2690,9 +2690,11 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "Gerencie separadamente a senha do cliente e a senha existente de criptografia de arquivos. Campos vazios mantêm os valores atuais. A criptografia e descriptografia continuam usando a senha de arquivos.",
+  "ClientCredentialsHelp": "Defina a senha de bloqueio do cliente para este site e conta. Deixe em branco para manter a senha atual.",
   "ClientLockPassword": "Senha de bloqueio do cliente",
   "FileEncryptionPassword": "Senha de criptografia de arquivos",
   "ClientCredentials": "Credenciais do cliente",
-  "ClientCredentialsAccountMismatch": "A conta do navegador difere da conta do cliente. Entre com a conta exibida no cliente."
+  "ClientCredentialsAccountMismatch": "A conta do navegador difere da conta do cliente. Entre com a conta exibida no cliente.",
+  "FileEncryption": "Criptografia de arquivos",
+  "FileEncryptionHelp": "Criptografa exportações do sistema e anexos de email. Deixe em branco para manter a senha atual."
 }

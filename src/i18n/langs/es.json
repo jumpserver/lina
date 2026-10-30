@@ -1528,7 +1528,7 @@
   "PasskeySummary": "Autenticación biométrica sin contraseña",
   "Passphrase": "Contraseña de la clave",
   "Password": "Contraseña",
-  "PasswordAndSSHKey": "Autenticación de inicio de sesión",
+  "PasswordAndSSHKey": "Autenticación de usuario",
   "PasswordChangeLog": "Registro de cambios de contraseña",
   "PasswordChangeOperatorRank": "Ranking de Operadores por Cambio de Contraseña",
   "PasswordChangeUserRank": "Ranking de Usuarios por Cambio de Contraseña",
@@ -2690,9 +2690,11 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "Gestiona por separado la contraseña del cliente y la contraseña existente de cifrado de archivos. Los campos vacíos conservan los valores actuales. El cifrado y descifrado siguen usando la contraseña de archivos.",
+  "ClientCredentialsHelp": "Configura la contraseña de bloqueo del cliente para este sitio y cuenta. Deja en blanco para conservar la actual.",
   "ClientLockPassword": "Contraseña de bloqueo del cliente",
   "FileEncryptionPassword": "Contraseña de cifrado de archivos",
   "ClientCredentials": "Credenciales del cliente",
-  "ClientCredentialsAccountMismatch": "La cuenta del navegador no coincide con la del cliente. Inicia sesión con la cuenta que muestra el cliente."
+  "ClientCredentialsAccountMismatch": "La cuenta del navegador no coincide con la del cliente. Inicia sesión con la cuenta que muestra el cliente.",
+  "FileEncryption": "Cifrado de archivos",
+  "FileEncryptionHelp": "Cifra las exportaciones del sistema y los archivos adjuntos. Deja en blanco para conservar la contraseña actual."
 }

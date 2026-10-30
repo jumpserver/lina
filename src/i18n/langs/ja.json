@@ -1458,7 +1458,7 @@
   "PasskeySummary": "パスワード不要の生体認証",
   "Passphrase": "キーコード",
   "Password": "パスワード",
-  "PasswordAndSSHKey": "ログイン認証",
+  "PasswordAndSSHKey": "ユーザー認証",
   "PasswordChangeLog": "パスワード変更ログ",
   "PasswordChangeOperatorRank": "パスワード変更オペレーターランキング",
   "PasswordChangeUserRank": "パスワード変更ユーザーランキング",
@@ -2870,9 +2870,11 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "クライアントロックと既存のファイル暗号化のパスワードを個別に管理します。空欄は既存値を維持し、ファイルの暗号化・復号にはファイル用パスワードを使用します。",
+  "ClientCredentialsHelp": "このサイトとアカウントのクライアントを解除するロックパスワードを設定します。空欄なら現在のパスワードを保持します。",
   "ClientLockPassword": "クライアントロックパスワード",
   "FileEncryptionPassword": "ファイル暗号化パスワード",
   "ClientCredentials": "クライアント認証情報",
-  "ClientCredentialsAccountMismatch": "ブラウザーとクライアントのアカウントが異なります。クライアントに表示されたアカウントでログインしてください。"
+  "ClientCredentialsAccountMismatch": "ブラウザーとクライアントのアカウントが異なります。クライアントに表示されたアカウントでログインしてください。",
+  "FileEncryption": "ファイル暗号化",
+  "FileEncryptionHelp": "システムのエクスポートファイルとメール添付を暗号化します。空欄なら現在のパスワードを保持します。"
 }

@@ -1450,7 +1450,7 @@
   "PasskeySummary": "無密碼生物識別認證",
   "Passphrase": "金鑰密碼",
   "Password": "密碼",
-  "PasswordAndSSHKey": "登入驗證",
+  "PasswordAndSSHKey": "使用者驗證",
   "PasswordChangeLog": "改密日誌",
   "PasswordChangeOperatorRank": "密碼修改操作人排行",
   "PasswordChangeUserRank": "密碼修改用戶排行",
@@ -3118,9 +3118,11 @@
   "TicketTransferCount_unverified": "{count} 個待核驗",
   "TicketTransferCount_pending": "{count} 個未執行",
   "TicketTransferCount_running": "{count} 個傳輸中",
-  "ClientCredentialsHelp": "集中管理用戶端鎖定密碼與原有檔案加密密碼，兩者獨立使用。留空保留現有密碼；檔案加解密仍使用檔案加密密碼。",
+  "ClientCredentialsHelp": "設定用戶端鎖定密碼，用於解鎖目前站點帳號的用戶端。留空保留現有密碼。",
   "ClientLockPassword": "用戶端鎖定密碼",
   "FileEncryptionPassword": "檔案加密密碼",
   "ClientCredentials": "用戶端憑證",
-  "ClientCredentialsAccountMismatch": "瀏覽器帳號與用戶端帳號不符，請先登入用戶端顯示的帳號再設定憑證。"
+  "ClientCredentialsAccountMismatch": "瀏覽器帳號與用戶端帳號不符，請先登入用戶端顯示的帳號再設定憑證。",
+  "FileEncryption": "檔案加密",
+  "FileEncryptionHelp": "用於加密系統匯出檔案及郵件附件。留空保留現有密碼。"
 }

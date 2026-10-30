@@ -1548,7 +1548,7 @@
   "PasskeySummary": "Authentification biométrique sans mot de passe",
   "Passphrase": "Mot de passe de la clé",
   "Password": "Mot de passe",
-  "PasswordAndSSHKey": "Authentification de connexion",
+  "PasswordAndSSHKey": "Authentification utilisateur",
   "PasswordChangeLog": "Changement de mot de passe",
   "PasswordChangeOperatorRank": "Classement des opérateurs de changement de mot de passe",
   "PasswordChangeUserRank": "Classement des utilisateurs de changement de mot de passe",
@@ -2861,9 +2861,11 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "Gérez séparément le mot de passe du client et celui du chiffrement de fichiers existant. Les champs vides conservent les valeurs actuelles. Le chiffrement et le déchiffrement utilisent toujours le mot de passe de fichiers.",
+  "ClientCredentialsHelp": "Définissez le mot de passe de verrouillage du client pour ce site et ce compte. Laissez vide pour conserver le mot de passe actuel.",
   "ClientLockPassword": "Mot de passe de verrouillage du client",
   "FileEncryptionPassword": "Mot de passe de chiffrement des fichiers",
   "ClientCredentials": "Identifiants du client",
-  "ClientCredentialsAccountMismatch": "Le compte du navigateur diffère de celui du client. Connectez-vous au compte affiché dans le client."
+  "ClientCredentialsAccountMismatch": "Le compte du navigateur diffère de celui du client. Connectez-vous au compte affiché dans le client.",
+  "FileEncryption": "Chiffrement des fichiers",
+  "FileEncryptionHelp": "Chiffre les exports du système et les pièces jointes. Laissez vide pour conserver le mot de passe actuel."
 }

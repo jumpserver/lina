@@ -1528,7 +1528,7 @@
   "PasskeySummary": "Аутентификация с биометрией без пароля",
   "Passphrase": "Пароль ключа",
   "Password": "Пароль",
-  "PasswordAndSSHKey": "Аутентификация входа",
+  "PasswordAndSSHKey": "Аутентификация пользователя",
   "PasswordChangeLog": "Смена пароля",
   "PasswordChangeOperatorRank": "Рейтинг операторов по смене пароля",
   "PasswordChangeUserRank": "Рейтинг пользователей по смене пароля",
@@ -2690,9 +2690,11 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "Управляйте отдельно паролем клиента и существующим паролем шифрования файлов. Пустые поля сохраняют текущие значения. Шифрование и расшифровка используют пароль файлов.",
+  "ClientCredentialsHelp": "Задайте пароль блокировки клиента для этого сайта и аккаунта. Пустое поле сохраняет текущий пароль.",
   "ClientLockPassword": "Пароль блокировки клиента",
   "FileEncryptionPassword": "Пароль шифрования файлов",
   "ClientCredentials": "Учётные данные клиента",
-  "ClientCredentialsAccountMismatch": "Учётные записи браузера и клиента не совпадают. Войдите в учётную запись, указанную в клиенте."
+  "ClientCredentialsAccountMismatch": "Учётные записи браузера и клиента не совпадают. Войдите в учётную запись, указанную в клиенте.",
+  "FileEncryption": "Шифрование файлов",
+  "FileEncryptionHelp": "Шифрует экспортируемые файлы системы и почтовые вложения. Пустое поле сохраняет текущий пароль."
 }

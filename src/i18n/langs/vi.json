@@ -1528,7 +1528,7 @@
   "PasskeySummary": "Xác thực sinh trắc học không cần mật khẩu",
   "Passphrase": "Mật khẩu khóa",
   "Password": "Mật khẩu",
-  "PasswordAndSSHKey": "Xác thực đăng nhập",
+  "PasswordAndSSHKey": "Xác thực người dùng",
   "PasswordChangeLog": "Nhật ký thay đổi mật khẩu",
   "PasswordChangeOperatorRank": "Xếp hạng người vận hành đổi mật khẩu",
   "PasswordChangeUserRank": "Xếp hạng người dùng đổi mật khẩu",
@@ -2690,9 +2690,11 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "Quản lý riêng mật khẩu khóa và mật khẩu mã hóa tệp hiện có. Để trống để giữ giá trị cũ. Mã hóa và giải mã vẫn dùng mật khẩu tệp.",
+  "ClientCredentialsHelp": "Đặt mật khẩu khóa ứng dụng khách cho trang và tài khoản này. Để trống để giữ mật khẩu hiện tại.",
   "ClientLockPassword": "Mật khẩu khóa ứng dụng khách",
   "FileEncryptionPassword": "Mật khẩu mã hóa tệp",
   "ClientCredentials": "Thông tin xác thực ứng dụng khách",
-  "ClientCredentialsAccountMismatch": "Tài khoản trình duyệt khác tài khoản ứng dụng khách. Hãy đăng nhập tài khoản được hiển thị trong ứng dụng khách."
+  "ClientCredentialsAccountMismatch": "Tài khoản trình duyệt khác tài khoản ứng dụng khách. Hãy đăng nhập tài khoản được hiển thị trong ứng dụng khách.",
+  "FileEncryption": "Mã hóa tệp",
+  "FileEncryptionHelp": "Mã hóa tệp xuất hệ thống và tệp đính kèm email. Để trống để giữ mật khẩu hiện tại."
 }

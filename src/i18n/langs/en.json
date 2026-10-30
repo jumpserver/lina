@@ -1251,7 +1251,7 @@
   "PasskeySummary": "Passwordless biometric authentication",
   "Passphrase": "Key password",
   "Password": "Password",
-  "PasswordAndSSHKey": "Login authentication",
+  "PasswordAndSSHKey": "User authentication",
   "PasswordChangeLog": "Password change",
   "PasswordChangeOperatorRank": "Password Change Operator Rank",
   "PasswordChangeUserRank": "Password Change User Rank",
@@ -3134,9 +3134,11 @@
   "TicketTransferCount_unverified": "{count} awaiting verification",
   "TicketTransferCount_pending": "{count} not executed",
   "TicketTransferCount_running": "{count} transferring",
-  "ClientCredentialsHelp": "Manage the client lock password and the existing file encryption password separately. Blank fields keep the current password. File encryption and decryption continue to use the file encryption password.",
+  "ClientCredentialsHelp": "Set the client lock password to unlock the client for this site and account. Leave blank to keep the existing password.",
   "ClientLockPassword": "Client lock password",
   "FileEncryptionPassword": "File encryption password",
   "ClientCredentials": "Client credentials",
-  "ClientCredentialsAccountMismatch": "The browser account differs from the client account. Sign in to the account shown in the client before configuring credentials."
+  "ClientCredentialsAccountMismatch": "The browser account differs from the client account. Sign in to the account shown in the client before configuring credentials.",
+  "FileEncryption": "File encryption",
+  "FileEncryptionHelp": "Encrypts system exports and email attachments. Leave blank to keep the existing password."
 }
