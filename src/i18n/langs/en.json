@@ -1,6 +1,5 @@
 {
   "MCPClientID": "Client ID",
-  "EnableSuccessMsg": "Successfully enabled",
   "AgentMCP": "Agent / MCP",
   "MCPEnabled": "Enable MCP",
   "MCPEnabledHelp": "Koko syncs these settings every 60 seconds. Disabling MCP stops new requests while accepted tasks finish and audit records are delivered.",
@@ -2782,8 +2781,6 @@
   "AgentApproval": "View approval",
   "AgentEvents": "Execution events",
   "AgentMoreEvents": "Load more events",
-  "AgentPreviousPage": "Previous page",
-  "AgentNextPage": "Next page",
   "SessionRecords": "Session records",
   "CommandRecords": "Command records",
   "TerminalCommands": "Terminal commands",

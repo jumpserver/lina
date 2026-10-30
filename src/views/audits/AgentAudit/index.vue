@@ -153,13 +153,8 @@ const ownsRoute = () =>
   `${props.kind === 'sessions' ? 'AgentSession' : 'AgentAction'}${detailId.value ? 'Detail' : 'List'}`
 const orgHeaders = () => ({ 'X-JMS-ORG': route.query.oid || store.getters.currentOrg?.id })
 
-function routeTo(kind, id, row = {}) {
-  const orgId =
-    row.org_id ||
-    (row.audit_url && new URL(row.audit_url, location.origin).searchParams.get('oid')) ||
-    session.value?.org_id ||
-    route.query.oid
-  return agentAuditRoute(kind, id, orgId)
+function routeTo(kind, id) {
+  return agentAuditRoute(kind, id, session.value?.org_id || route.query.oid)
 }
 
 function terminalRoute(id) {

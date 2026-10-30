@@ -1,6 +1,5 @@
 {
   "MCPClientID": "客户端 ID",
-  "EnableSuccessMsg": "启用成功",
   "AgentMCP": "Agent / MCP",
   "MCPEnabled": "启用 MCP",
   "MCPEnabledHelp": "Koko 每 60 秒同步配置。关闭后停止接收新请求，已受理任务继续收尾并交付审计记录。",
@@ -2776,8 +2775,6 @@
   "AgentApproval": "查看审批",
   "AgentEvents": "执行事件",
   "AgentMoreEvents": "加载更多事件",
-  "AgentPreviousPage": "上一页",
-  "AgentNextPage": "下一页",
   "SessionRecords": "会话记录",
   "CommandRecords": "命令记录",
   "TerminalCommands": "终端命令",
