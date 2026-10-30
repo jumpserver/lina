@@ -39,14 +39,6 @@
       <li>{{ $t('MCPBrowserAuthorization') }}</li>
       <li>{{ $t('MCPCodexCheckConnection') }}</li>
     </ol>
-    <el-link
-      href="https://learn.chatgpt.com/docs/extend/mcp"
-      target="_blank"
-      rel="noopener noreferrer"
-      type="primary"
-    >
-      {{ $t('Documentation') }}
-    </el-link>
     <div class="connection-verification">
       <h5>{{ $t('MCPVerifyConnection') }}</h5>
       <p>{{ $t('MCPConnectionVerificationHelp') }}</p>
