@@ -14,7 +14,7 @@
         show-icon
         class="mcp-status"
       />
-      <MyClients />
+      <MCPUserClients allow-revoke />
     </template>
     <MCPConnectionGuide v-else :settings="settings" />
   </TabPage>
@@ -23,10 +23,10 @@
 <script>
 import TabPage from '@/layout/components/TabPage'
 import MCPConnectionGuide from '@/components/Apps/MCPConnectionGuide'
-import MyClients from './MyClients.vue'
+import MCPUserClients from '@/components/Apps/MCPUserClients'
 
 export default {
-  components: { TabPage, MCPConnectionGuide, MyClients },
+  components: { TabPage, MCPConnectionGuide, MCPUserClients },
   data() {
     return { activeMenu: 'MyMCPClients' }
   },

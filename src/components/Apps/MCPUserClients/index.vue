@@ -9,6 +9,10 @@ const clientsURL = '/api/v1/authentication/user-agent-clients/'
 
 export default {
   components: { GenericListTable },
+  props: {
+    userId: { type: String, default: '' },
+    allowRevoke: { type: Boolean, default: false }
+  },
   data() {
     return {
       submitting: false,
@@ -17,11 +21,26 @@ export default {
         hasImport: false,
         hasExport: false,
         hasRefresh: true
-      },
-      tableConfig: {
-        url: clientsURL,
+      }
+    }
+  },
+  computed: {
+    canRevoke() {
+      return this.allowRevoke && !this.userId
+    },
+    tableConfig() {
+      return {
+        url: this.userId
+          ? `/api/v1/authentication/agent-client-authorizations/?user_id=${this.userId}`
+          : clientsURL,
         hasSelection: false,
-        columns: ['name', 'client_id', 'organizations', 'status', 'actions'],
+        columns: [
+          'name',
+          'client_id',
+          'organizations',
+          'status',
+          ...(this.canRevoke ? ['actions'] : [])
+        ],
         columnsMeta: {
           name: { label: this.$t('Name'), sortable: false, formatter: (row) => row.name },
           client_id: { label: this.$t('MCPClientID'), sortable: false },
@@ -43,6 +62,7 @@ export default {
               )
           },
           actions: {
+            has: this.canRevoke,
             formatterArgs: {
               hasClone: false,
               hasDelete: false,
@@ -64,7 +84,7 @@ export default {
   },
   methods: {
     async revokeClient(row) {
-      if (this.submitting) return
+      if (this.submitting || !this.canRevoke) return
       this.submitting = true
       try {
         await this.$confirm(

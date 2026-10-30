@@ -1,19 +1,8 @@
 <template>
   <div>
     <IBox :title="$t('AgentMCP')" class="mcp-settings">
-      <GenericCreateUpdateForm
-        v-bind="config"
-        @get-object-done="updateSavedSettings"
-        @submit-success="updateSavedSettings"
-      />
+      <GenericCreateUpdateForm v-bind="config" />
     </IBox>
-    <MCPConnectionGuide
-      v-if="savedSettings"
-      :settings="savedSettings"
-      :description="$t('MCPSavedConnectionHelp')"
-      :unavailable-text="$t('MCPSaveBeforeConnect')"
-      :registration-required-text="$t('MCPRegistrationRequired')"
-    />
     <MCPClients v-if="$hasPerm('settings.change_auth')" />
   </div>
 </template>
@@ -22,14 +11,12 @@
 import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import MCPClients from './MCPClients.vue'
-import MCPConnectionGuide from '@/components/Apps/MCPConnectionGuide'
 
 export default {
   name: 'MCP',
-  components: { IBox, GenericCreateUpdateForm, MCPClients, MCPConnectionGuide },
+  components: { IBox, GenericCreateUpdateForm, MCPClients },
   data() {
     return {
-      savedSettings: null,
       config: {
         url: '/api/v1/settings/setting/?category=mcp',
         fields: ['MCP_ENABLED', 'MCP_PUBLIC_URL', 'MCP_DCR_ENABLED'],
@@ -56,11 +43,6 @@ export default {
         submitMethod: 'patch',
         updateSuccessNextRoute: { name: 'Feature', query: { tab: 'MCP' } }
       }
-    }
-  },
-  methods: {
-    updateSavedSettings(settings) {
-      this.savedSettings = { ...this.savedSettings, ...settings }
     }
   }
 }
