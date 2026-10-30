@@ -26,12 +26,6 @@ export default {
         url: '/api/v1/settings/setting/?category=security_session',
         hasDetailInMsg: false,
         fields: clientFields,
-        fieldsMeta: {
-          SECURITY_CLIENT_IDLE_LOCK_TIME: {
-            helpTextAsTip: false,
-            helpTextAsPlaceholder: false
-          }
-        },
         initial: {
           SECURITY_CLIENT_REAUTH_ON_EXIT: false,
           SECURITY_CLIENT_MAX_SESSION_TIME: 0,
