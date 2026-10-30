@@ -2555,5 +2555,5 @@
   "TaskMonitorRefreshing": "A new sample is being collected. Showing the last available sample.",
   "TaskMonitorPartialData": "Some monitoring data is unavailable.",
   "ClientSecurity": "Seguridad del cliente",
-  "ClientLoginPolicyChangeHelp": "Cambiar cualquiera de estos tres ajustes, incluida la desactivación de un límite, requiere que los clientes ya conectados se autentiquen de nuevo. Hasta entonces, no se pueden crear nuevas conexiones a activos, pero las conexiones ya establecidas no se interrumpen."
+  "ClientLoginPolicyChangeHelp": "Al cambiar cualquiera de estos tres ajustes, incluida la desactivación de un límite, el cliente debe iniciar sesión de nuevo para solicitar nuevas credenciales de conexión. Los tokens emitidos siguen sujetos a su propia caducidad y permisos; la caducidad del inicio de sesión no desconecta automáticamente las conexiones establecidas."
 }
