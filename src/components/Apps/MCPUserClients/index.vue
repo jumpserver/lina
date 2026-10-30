@@ -4,18 +4,19 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
+import MCPClientActions, { getMCPClientActions } from '@/components/Apps/MCPClientActions'
 
 const clientsURL = '/api/v1/authentication/user-agent-clients/'
 
 export default {
   components: { GenericListTable },
+  mixins: [MCPClientActions],
   props: {
     userId: { type: String, default: '' },
     allowRevoke: { type: Boolean, default: false }
   },
   data() {
     return {
-      submitting: false,
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
@@ -28,6 +29,9 @@ export default {
     canRevoke() {
       return this.allowRevoke && !this.userId
     },
+    canManage() {
+      return Boolean(this.userId) && this.$hasPerm('settings.change_auth')
+    },
     tableConfig() {
       return {
         url: this.userId
@@ -39,7 +43,7 @@ export default {
           'client_id',
           'organizations',
           'status',
-          ...(this.canRevoke ? ['actions'] : [])
+          ...(this.canRevoke || this.canManage ? ['actions'] : [])
         ],
         columnsMeta: {
           name: { label: this.$t('Name'), sortable: false, formatter: (row) => row.name },
@@ -62,20 +66,22 @@ export default {
               )
           },
           actions: {
-            has: this.canRevoke,
+            has: this.canRevoke || this.canManage,
             formatterArgs: {
               hasClone: false,
               hasDelete: false,
               hasUpdate: false,
-              extraActions: [
-                {
-                  name: 'revoke',
-                  title: this.$t('Revoke'),
-                  type: 'danger',
-                  can: () => !this.submitting,
-                  callback: ({ row }) => this.revokeClient(row)
-                }
-              ]
+              extraActions: this.canManage
+                ? getMCPClientActions(this, 'registration_id')
+                : [
+                    {
+                      name: 'revoke',
+                      title: this.$t('Revoke'),
+                      type: 'danger',
+                      can: () => !this.submitting,
+                      callback: ({ row }) => this.revokeClient(row)
+                    }
+                  ]
             }
           }
         }
