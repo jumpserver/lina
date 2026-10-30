@@ -1528,7 +1528,7 @@
   "PasskeySummary": "무비밀번호 생체 인증",
   "Passphrase": "키 비밀번호",
   "Password": "비밀번호",
-  "PasswordAndSSHKey": "인증 설정",
+  "PasswordAndSSHKey": "사용자 인증",
   "PasswordChangeLog": "비밀번호 변경 로그",
   "PasswordChangeOperatorRank": "비밀번호 변경 운영자 순위",
   "PasswordChangeUserRank": "비밀번호 변경 사용자 순위",
@@ -2566,7 +2566,7 @@
   "TaskMonitorStopUnsupportedPool": "이 워커는 스레드 풀을 사용하므로 실행 중인 작업을 중지할 수 없습니다.",
   "TaskMonitorStopUnavailable": "워커가 결과를 확인하지 못했습니다. 새로고침하여 작업 상태를 확인하세요.",
   "ClientSecurity": "클라이언트 보안",
-  "ClientLoginPolicyChangeHelp": "제한 비활성화를 포함하여 이 세 설정 중 하나라도 변경하면 로그인된 클라이언트는 다시 인증해야 합니다. 재인증 전에는 새 자산 연결을 생성할 수 없지만, 이미 연결된 자산 연결은 이로 인해 끊어지지 않습니다.",
+  "ClientLoginPolicyChangeHelp": "설정 변경 후 기존 클라이언트 로그인은 최대 10분 후 종료됩니다. 원래 만료가 더 빠르면 유지합니다. 새 로그인은 최신 설정을 사용합니다. 발급된 연결 토큰은 자체 유효기간과 권한을 따릅니다.",
   "TicketReapplyInvalidResources": "일부 리소스를 사용할 수 없습니다. 다시 선택하세요.",
   "AssetOwner": "자산 담당자",
   "WFWorkflows": "Approval workflows",
@@ -2689,5 +2689,12 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "ClientCredentialsHelp": "이 사이트와 계정의 클라이언트 잠금을 해제할 비밀번호를 설정합니다. 비워 두면 기존 비밀번호를 유지합니다.",
+  "ClientLockPassword": "클라이언트 잠금 비밀번호",
+  "FileEncryptionPassword": "파일 암호화 비밀번호",
+  "ClientCredentials": "클라이언트 자격 증명",
+  "ClientCredentialsAccountMismatch": "브라우저와 클라이언트 계정이 다릅니다. 클라이언트에 표시된 계정으로 로그인하세요.",
+  "FileEncryption": "파일 암호화",
+  "FileEncryptionHelp": "시스템 내보내기 파일과 이메일 첨부 파일을 암호화합니다. 비워 두면 기존 비밀번호를 유지합니다."
 }

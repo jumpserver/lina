@@ -1239,7 +1239,7 @@
   "PasskeySummary": "无密码生物识别认证",
   "Passphrase": "密钥密码",
   "Password": "密码",
-  "PasswordAndSSHKey": "认证设置",
+  "PasswordAndSSHKey": "用户认证",
   "PasswordChangeLog": "改密日志",
   "PasswordChangeOperatorRank": "密码修改操作人排行",
   "PasswordChangeUserRank": "密码修改用户排行",
@@ -2760,7 +2760,7 @@
   "TaskMonitorStopUnsupportedPool": "该进程使用线程池，不能停止执行中的任务。",
   "TaskMonitorStopUnavailable": "任务进程未确认结果，请刷新检查任务状态。",
   "ClientSecurity": "客户端安全",
-  "ClientLoginPolicyChangeHelp": "修改这三项配置中的任意一项（包括关闭限制），已登录客户端都需重新认证；重新认证前，不可以创建新的资产连接，但已建立的资产连接不会因此断开。",
+  "ClientLoginPolicyChangeHelp": "修改这三项配置后，已有客户端登录最多再保留 10 分钟；原到期时间更早的，仍按原时间退出。新登录使用最新配置。已签发连接 Token 继续按自身有效期和权限控制。",
   "TicketBatchApprovalTitle": "批量审批（{count} 张工单）",
   "TicketBatchResultTitle": "批量审批结果（{count} 张工单）",
   "TicketBatchProgress": "已处理 {done}/{total} 张",
@@ -3127,5 +3127,12 @@
   "TicketTransferCount_failed": "{count} 个失败",
   "TicketTransferCount_unverified": "{count} 个待核验",
   "TicketTransferCount_pending": "{count} 个未执行",
-  "TicketTransferCount_running": "{count} 个传输中"
+  "TicketTransferCount_running": "{count} 个传输中",
+  "ClientCredentialsHelp": "设置客户端锁屏密码，用于解锁当前站点账号的客户端。留空保留现有密码。",
+  "ClientLockPassword": "客户端锁屏密码",
+  "FileEncryptionPassword": "文件加密密码",
+  "ClientCredentials": "客户端凭证",
+  "ClientCredentialsAccountMismatch": "浏览器账号与客户端账号不一致，请先登录客户端提示的账号，再设置凭证。",
+  "FileEncryption": "文件加密",
+  "FileEncryptionHelp": "用于加密系统导出文件及邮件附件。留空保留现有密码。"
 }

@@ -90,6 +90,7 @@ export default {
       const fields = []
       let fieldsMeta = {}
       for (const k in this.remoteMeta) {
+        if (this.fieldsExclude.includes(k)) continue
         const groupMeta = this.remoteMeta[k]
         const groupLabel = groupMeta.label
         const groupFields = Object.keys(groupMeta.children).filter(

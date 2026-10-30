@@ -1458,7 +1458,7 @@
   "PasskeySummary": "パスワード不要の生体認証",
   "Passphrase": "キーコード",
   "Password": "パスワード",
-  "PasswordAndSSHKey": "認証設定",
+  "PasswordAndSSHKey": "ユーザー認証",
   "PasswordChangeLog": "パスワード変更ログ",
   "PasswordChangeOperatorRank": "パスワード変更オペレーターランキング",
   "PasswordChangeUserRank": "パスワード変更ユーザーランキング",
@@ -2746,7 +2746,7 @@
   "TaskMonitorStopUnsupportedPool": "このワーカーはスレッドプールを使用しているため、実行中のタスクを停止できません。",
   "TaskMonitorStopUnavailable": "ワーカーが結果を確認できませんでした。更新してタスクの状態を確認してください。",
   "ClientSecurity": "クライアントセキュリティ",
-  "ClientLoginPolicyChangeHelp": "制限の無効化を含め、これら 3 つの設定のいずれかを変更すると、ログイン済みのクライアントは再認証が必要です。再認証が完了するまで新しい資産接続は作成できませんが、確立済みの資産接続が切断されることはありません。",
+  "ClientLoginPolicyChangeHelp": "設定変更後、既存のクライアントログインは最大10分後に終了します。元の期限が早い場合は維持します。新規ログインには最新設定を適用します。発行済み接続トークンは自身の期限と権限に従います。",
   "TicketReapplyInvalidResources": "一部のリソースが利用できません。再選択してください。",
   "AssetOwner": "資産責任者",
   "WFWorkflows": "Approval workflows",
@@ -2869,5 +2869,12 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "ClientCredentialsHelp": "このサイトとアカウントのクライアントを解除するロックパスワードを設定します。空欄なら現在のパスワードを保持します。",
+  "ClientLockPassword": "クライアントロックパスワード",
+  "FileEncryptionPassword": "ファイル暗号化パスワード",
+  "ClientCredentials": "クライアント認証情報",
+  "ClientCredentialsAccountMismatch": "ブラウザーとクライアントのアカウントが異なります。クライアントに表示されたアカウントでログインしてください。",
+  "FileEncryption": "ファイル暗号化",
+  "FileEncryptionHelp": "システムのエクスポートファイルとメール添付を暗号化します。空欄なら現在のパスワードを保持します。"
 }

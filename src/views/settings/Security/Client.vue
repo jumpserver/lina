@@ -14,7 +14,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 const clientFields = [
   'SECURITY_CLIENT_REAUTH_ON_EXIT',
   'SECURITY_CLIENT_MAX_SESSION_TIME',
-  'SECURITY_CLIENT_MAX_IDLE_TIME'
+  'SECURITY_CLIENT_IDLE_LOCK_TIME'
 ]
 
 export default {
@@ -26,16 +26,10 @@ export default {
         url: '/api/v1/settings/setting/?category=security_session',
         hasDetailInMsg: false,
         fields: clientFields,
-        fieldsMeta: {
-          SECURITY_CLIENT_MAX_IDLE_TIME: {
-            helpTextAsTip: false,
-            helpTextAsPlaceholder: false
-          }
-        },
         initial: {
           SECURITY_CLIENT_REAUTH_ON_EXIT: false,
           SECURITY_CLIENT_MAX_SESSION_TIME: 0,
-          SECURITY_CLIENT_MAX_IDLE_TIME: 0
+          SECURITY_CLIENT_IDLE_LOCK_TIME: 0
         },
         cleanFormValue: (values) =>
           Object.fromEntries(clientFields.map((field) => [field, values[field]])),

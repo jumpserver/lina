@@ -1528,7 +1528,7 @@
   "PasskeySummary": "Xác thực sinh trắc học không cần mật khẩu",
   "Passphrase": "Mật khẩu khóa",
   "Password": "Mật khẩu",
-  "PasswordAndSSHKey": "Cài đặt xác thực",
+  "PasswordAndSSHKey": "Xác thực người dùng",
   "PasswordChangeLog": "Nhật ký thay đổi mật khẩu",
   "PasswordChangeOperatorRank": "Xếp hạng người vận hành đổi mật khẩu",
   "PasswordChangeUserRank": "Xếp hạng người dùng đổi mật khẩu",
@@ -2566,7 +2566,7 @@
   "TaskMonitorStopUnsupportedPool": "Tiến trình này sử dụng nhóm luồng và không thể dừng tác vụ đang chạy.",
   "TaskMonitorStopUnavailable": "Tiến trình chưa xác nhận kết quả. Hãy làm mới và kiểm tra trạng thái tác vụ.",
   "ClientSecurity": "Bảo mật ứng dụng khách",
-  "ClientLoginPolicyChangeHelp": "Thay đổi bất kỳ cài đặt nào trong ba cài đặt này, kể cả tắt giới hạn, sẽ yêu cầu các ứng dụng khách đã đăng nhập xác thực lại. Trước khi xác thực lại, không thể tạo kết nối tài sản mới, nhưng các kết nối đã thiết lập sẽ không bị ngắt vì thay đổi này.",
+  "ClientLoginPolicyChangeHelp": "Sau khi đổi cấu hình, phiên đăng nhập hiện có được giữ tối đa thêm 10 phút. Thời hạn sớm hơn vẫn được giữ. Đăng nhập mới dùng cấu hình mới. Token kết nối giữ thời hạn và quyền riêng.",
   "TicketReapplyInvalidResources": "Một số tài nguyên không còn khả dụng. Vui lòng chọn lại.",
   "AssetOwner": "Người phụ trách tài sản",
   "WFWorkflows": "Approval workflows",
@@ -2689,5 +2689,12 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "ClientCredentialsHelp": "Đặt mật khẩu khóa ứng dụng khách cho trang và tài khoản này. Để trống để giữ mật khẩu hiện tại.",
+  "ClientLockPassword": "Mật khẩu khóa ứng dụng khách",
+  "FileEncryptionPassword": "Mật khẩu mã hóa tệp",
+  "ClientCredentials": "Thông tin xác thực ứng dụng khách",
+  "ClientCredentialsAccountMismatch": "Tài khoản trình duyệt khác tài khoản ứng dụng khách. Hãy đăng nhập tài khoản được hiển thị trong ứng dụng khách.",
+  "FileEncryption": "Mã hóa tệp",
+  "FileEncryptionHelp": "Mã hóa tệp xuất hệ thống và tệp đính kèm email. Để trống để giữ mật khẩu hiện tại."
 }

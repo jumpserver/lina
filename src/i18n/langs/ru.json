@@ -1528,7 +1528,7 @@
   "PasskeySummary": "Аутентификация с биометрией без пароля",
   "Passphrase": "Пароль ключа",
   "Password": "Пароль",
-  "PasswordAndSSHKey": "Пароль и SSH-ключ",
+  "PasswordAndSSHKey": "Аутентификация пользователя",
   "PasswordChangeLog": "Смена пароля",
   "PasswordChangeOperatorRank": "Рейтинг операторов по смене пароля",
   "PasswordChangeUserRank": "Рейтинг пользователей по смене пароля",
@@ -2566,7 +2566,7 @@
   "TaskMonitorStopUnsupportedPool": "Этот рабочий процесс использует пул потоков и не может остановить выполняющуюся задачу.",
   "TaskMonitorStopUnavailable": "Рабочий процесс не подтвердил результат. Обновите страницу и проверьте состояние задачи.",
   "ClientSecurity": "Безопасность клиента",
-  "ClientLoginPolicyChangeHelp": "При изменении любого из этих трёх параметров, включая отключение ограничения, уже вошедшим в клиент пользователям потребуется повторная аутентификация. До её завершения нельзя создавать новые подключения к активам, но уже установленные подключения не будут разорваны из-за этого.",
+  "ClientLoginPolicyChangeHelp": "После изменения настроек существующие сеансы сохраняются не более 10 минут. Более ранний срок остаётся прежним. Новые входы используют актуальные настройки. Токены соединений сохраняют собственные сроки и права.",
   "TicketReapplyInvalidResources": "Некоторые ресурсы больше недоступны. Выберите их заново.",
   "AssetOwner": "Ответственный за актив",
   "WFWorkflows": "Approval workflows",
@@ -2689,5 +2689,12 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "ClientCredentialsHelp": "Задайте пароль блокировки клиента для этого сайта и аккаунта. Пустое поле сохраняет текущий пароль.",
+  "ClientLockPassword": "Пароль блокировки клиента",
+  "FileEncryptionPassword": "Пароль шифрования файлов",
+  "ClientCredentials": "Учётные данные клиента",
+  "ClientCredentialsAccountMismatch": "Учётные записи браузера и клиента не совпадают. Войдите в учётную запись, указанную в клиенте.",
+  "FileEncryption": "Шифрование файлов",
+  "FileEncryptionHelp": "Шифрует экспортируемые файлы системы и почтовые вложения. Пустое поле сохраняет текущий пароль."
 }

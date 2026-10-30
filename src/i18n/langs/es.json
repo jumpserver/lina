@@ -1528,7 +1528,7 @@
   "PasskeySummary": "Autenticación biométrica sin contraseña",
   "Passphrase": "Contraseña de la clave",
   "Password": "Contraseña",
-  "PasswordAndSSHKey": "Configuración de autenticación",
+  "PasswordAndSSHKey": "Autenticación de usuario",
   "PasswordChangeLog": "Registro de cambios de contraseña",
   "PasswordChangeOperatorRank": "Ranking de Operadores por Cambio de Contraseña",
   "PasswordChangeUserRank": "Ranking de Usuarios por Cambio de Contraseña",
@@ -2566,7 +2566,7 @@
   "TaskMonitorStopUnsupportedPool": "Este proceso usa un grupo de hilos y no puede detener una tarea en ejecución.",
   "TaskMonitorStopUnavailable": "El proceso no confirmó el resultado. Actualice y compruebe el estado de la tarea.",
   "ClientSecurity": "Seguridad del cliente",
-  "ClientLoginPolicyChangeHelp": "Cambiar cualquiera de estos tres ajustes, incluida la desactivación de un límite, requiere que los clientes ya conectados se autentiquen de nuevo. Hasta entonces, no se pueden crear nuevas conexiones a activos, pero las conexiones ya establecidas no se interrumpen.",
+  "ClientLoginPolicyChangeHelp": "Tras cambiar la configuración, las sesiones existentes disponen de hasta 10 minutos. Se conserva cualquier vencimiento anterior. Los nuevos inicios usan la nueva configuración. Los tokens de conexión conservan su propia vigencia y permisos.",
   "TicketReapplyInvalidResources": "Algunos recursos ya no están disponibles. Selecciónelos de nuevo.",
   "AssetOwner": "Responsable del activo",
   "WFWorkflows": "Approval workflows",
@@ -2689,5 +2689,12 @@
   "WFBranchHint": "Choose a path based on conditions",
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
-  "WFOperator": "Operator"
+  "WFOperator": "Operator",
+  "ClientCredentialsHelp": "Configura la contraseña de bloqueo del cliente para este sitio y cuenta. Deja en blanco para conservar la actual.",
+  "ClientLockPassword": "Contraseña de bloqueo del cliente",
+  "FileEncryptionPassword": "Contraseña de cifrado de archivos",
+  "ClientCredentials": "Credenciales del cliente",
+  "ClientCredentialsAccountMismatch": "La cuenta del navegador no coincide con la del cliente. Inicia sesión con la cuenta que muestra el cliente.",
+  "FileEncryption": "Cifrado de archivos",
+  "FileEncryptionHelp": "Cifra las exportaciones del sistema y los archivos adjuntos. Deja en blanco para conservar la contraseña actual."
 }
