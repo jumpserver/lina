@@ -2730,7 +2730,7 @@
   "TaskMonitorQueues": "消费队列",
   "TaskMonitorQueueDepth": "队列积压",
   "TaskMonitorWorkerHelp": "未响应表示本次采样未收到回复，不代表已确认进程离线。",
-  "TaskMonitorQueueHelp": "队列积压指仍在消息队列中等待的任务；已预取指进程已接收的任务；等待执行时间指尚未到达指定执行时间的任务。— 表示暂不可获取。",
+  "TaskMonitorQueueHelp": "队列积压指仍在消息队列中等待的任务，暂不支持在此逐条撤销；已预取指进程已接收的任务；等待执行时间指尚未到达指定执行时间的任务。— 表示暂不可获取。",
   "TaskMonitorWorkerTasks": "进程任务",
   "TaskMonitorSelectWorker": "选择任务进程",
   "TaskMonitorTaskLimit": "每个进程的每类任务最多展示 {count} 条。",
@@ -2746,5 +2746,16 @@
   "TaskMonitorQueueFailed": "无法读取队列积压数量。",
   "TaskMonitorNoWorkers": "本次采样没有收到任务进程的响应。",
   "TaskMonitorRefreshing": "正在采集新数据，暂时显示上一次采样。",
-  "TaskMonitorPartialData": "部分监控数据暂不可用。"
+  "TaskMonitorPartialData": "部分监控数据暂不可用。",
+  "TaskMonitorRevoke": "撤销",
+  "TaskMonitorStopConfirm": "确定停止正在执行的任务 {id}？已经执行的操作可能无法撤销，远程操作或子进程可能继续运行。",
+  "TaskMonitorRevokeConfirm": "确定撤销等待中的任务 {id}？",
+  "TaskMonitorRevoked": "任务已撤销。",
+  "TaskMonitorStopRequested": "请求已发送，请刷新确认任务状态。",
+  "TaskMonitorStopAlreadyRunning": "任务已开始执行，请刷新后在执行中列表停止。",
+  "TaskMonitorStopNotRunning": "任务已不在执行中，请刷新查看当前状态。",
+  "TaskMonitorStopNotFound": "任务进程未找到该任务，任务状态可能已变化。",
+  "TaskMonitorStopUnsupportedQueue": "该任务不能在任务监控中停止。",
+  "TaskMonitorStopUnsupportedPool": "该进程使用线程池，不能停止执行中的任务。",
+  "TaskMonitorStopUnavailable": "任务进程未确认结果，请刷新检查任务状态。"
 }

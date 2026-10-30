@@ -2736,7 +2736,7 @@
   "TaskMonitorQueues": "Queues",
   "TaskMonitorQueueDepth": "Queue backlog",
   "TaskMonitorWorkerHelp": "No response means the worker did not reply to this sample; it does not confirm that the worker is offline.",
-  "TaskMonitorQueueHelp": "Queued tasks are waiting in the broker. Reserved tasks are already held by workers; scheduled tasks are waiting for their ETA. — means unavailable.",
+  "TaskMonitorQueueHelp": "Queued tasks are waiting in the broker and cannot be cancelled here. Reserved tasks are held by workers; scheduled tasks are waiting for their ETA. — means unavailable.",
   "TaskMonitorWorkerTasks": "Worker tasks",
   "TaskMonitorSelectWorker": "Select a worker",
   "TaskMonitorTaskLimit": "Up to {count} tasks per state and worker are shown.",
@@ -2752,5 +2752,16 @@
   "TaskMonitorQueueFailed": "Queue backlog could not be read.",
   "TaskMonitorNoWorkers": "No workers responded to this sample.",
   "TaskMonitorRefreshing": "A new sample is being collected. Showing the last available sample.",
-  "TaskMonitorPartialData": "Some monitoring data is unavailable."
+  "TaskMonitorPartialData": "Some monitoring data is unavailable.",
+  "TaskMonitorRevoke": "Revoke",
+  "TaskMonitorStopConfirm": "Stop running task {id}? Actions already performed may not be undone; remote operations or child processes may continue.",
+  "TaskMonitorRevokeConfirm": "Revoke waiting task {id}?",
+  "TaskMonitorRevoked": "The task was revoked.",
+  "TaskMonitorStopRequested": "Request sent. Refresh to confirm the task state.",
+  "TaskMonitorStopAlreadyRunning": "The task has started. Refresh and stop it from the active list.",
+  "TaskMonitorStopNotRunning": "The task is no longer running. Refresh to see its current state.",
+  "TaskMonitorStopNotFound": "The worker did not find the task. Its state may have changed.",
+  "TaskMonitorStopUnsupportedQueue": "This task cannot be stopped from the task monitor.",
+  "TaskMonitorStopUnsupportedPool": "This worker uses a thread pool and cannot stop a running task.",
+  "TaskMonitorStopUnavailable": "The worker did not confirm the result. Refresh and check the task state."
 }
