@@ -1194,6 +1194,7 @@
   "LicenseFile": "許可證文件",
   "LicenseForTest": "測試用途許可證， 本許可證僅用於 測試（PoC）和示範",
   "LicenseMaintenanceExpired": "授權服務時間已到期",
+  "LicenseNotImported": "尚未匯入授權許可證，請先匯入",
   "LicenseReachedAssetAmountLimit": "資產數量已經超過許可證數量限制",
   "LicenseWillBe": "許可證即將在 ",
   "LicenseWillExpire": "許可證即將過期",
@@ -2758,5 +2759,7 @@
   "TaskMonitorStopNotFound": "任務進程找不到該任務，任務狀態可能已變化。",
   "TaskMonitorStopUnsupportedQueue": "此任務無法在任務監控中停止。",
   "TaskMonitorStopUnsupportedPool": "此進程使用執行緒池，無法停止執行中的任務。",
-  "TaskMonitorStopUnavailable": "任務進程未確認結果，請重新整理檢查任務狀態。"
+  "TaskMonitorStopUnavailable": "任務進程未確認結果，請重新整理檢查任務狀態。",
+  "ClientSecurity": "用戶端安全",
+  "ClientLoginPolicyChangeHelp": "修改這三項設定中的任意一項（包括關閉限制），已登入用戶端都需重新驗證；重新驗證前，不可以建立新的資產連線，但已建立的資產連線不會因此中斷。"
 }

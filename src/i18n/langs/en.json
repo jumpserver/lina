@@ -995,6 +995,7 @@
   "LicenseFile": "License file",
   "LicenseForTest": "Test purpose license, this license is only for testing (poc) and demonstration",
   "LicenseMaintenanceExpired": "The license service has expired",
+  "LicenseNotImported": "No license has been imported. Please import a license",
   "LicenseReachedAssetAmountLimit": "The assets has exceeded the license limit",
   "LicenseWillBe": "License expiring soon",
   "LicenseWillExpire": "The license will expire soon",
@@ -2763,5 +2764,7 @@
   "TaskMonitorStopNotFound": "The worker did not find the task. Its state may have changed.",
   "TaskMonitorStopUnsupportedQueue": "This task cannot be stopped from the task monitor.",
   "TaskMonitorStopUnsupportedPool": "This worker uses a thread pool and cannot stop a running task.",
-  "TaskMonitorStopUnavailable": "The worker did not confirm the result. Refresh and check the task state."
+  "TaskMonitorStopUnavailable": "The worker did not confirm the result. Refresh and check the task state.",
+  "ClientSecurity": "Client security",
+  "ClientLoginPolicyChangeHelp": "Changing any of these three settings, including disabling a limit, requires existing desktop logins to authenticate again. Until reauthentication, new asset connections cannot be created, but established asset connections are not disconnected."
 }
