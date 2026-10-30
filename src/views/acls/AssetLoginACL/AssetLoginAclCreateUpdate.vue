@@ -4,6 +4,7 @@
 
 <script>
 import rules from '@/components/Form/DataForm/rules'
+import Select2 from '@/components/Form/FormFields/Select2'
 import { ResourceSelect, TagInput, WeekCronSelect } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import InputWithUnit from '@/components/Form/FormFields/InputWithUnit.vue'
@@ -51,6 +52,7 @@ export default {
             'mfa_enabled',
             'face_verify_enabled',
             'review_enabled',
+            'workflow',
             'reviewers',
             'review_duration',
             'push_account_enabled'
@@ -61,6 +63,20 @@ export default {
         [this.$t('AclOtherSettings'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        workflow: {
+          component: Select2,
+          label: this.$t('WFWorkflows'),
+          helpText: this.$t('WFACLHint'),
+          hidden: (form) => form.action !== 'accept' || !form.review_enabled,
+          el: {
+            multiple: false,
+            clearable: true,
+            ajax: {
+              url: `/api/v1/tickets/workflows/options/?type=login_asset_confirm&org_id=${this.$store.getters.currentOrg.id}`,
+              transformOption: (w) => ({ label: w.name, value: w.id })
+            }
+          }
+        },
         action: {
           type: 'radio-group',
           helpTextAsTip: false
@@ -159,7 +175,7 @@ export default {
           component: ResourceSelect,
           required: true,
           rules: [{ ...rules.RequiredChange, type: 'array', min: 1 }],
-          hidden: (form) => form.action !== 'accept' || !form.review_enabled,
+          hidden: (form) => form.action !== 'accept' || !form.review_enabled || !!form.workflow,
           helpTextAsTip: true,
           helpTextAsPlaceholder: false,
           el: {
@@ -187,6 +203,7 @@ export default {
       },
       url: '/api/v1/acls/login-asset-acls/',
       cleanFormValue(value) {
+        value.workflow = value.workflow || null
         value.review_duration = Number(value.review_duration || 0)
         if (!Array.isArray(value.rules.ip_group)) {
           value.rules.ip_group = value.rules.ip_group ? value.rules.ip_group.split(',') : []

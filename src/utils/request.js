@@ -12,6 +12,7 @@ import { message } from '@/utils/vue/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
 import { getRouter } from '@/router/registry'
+import { getRequestOrgId } from './requestOrg'
 import { BASE_API, LOGIN_PATH, LOGOUT_PATH } from '@/utils/env'
 
 // create an axios instance
@@ -28,9 +29,9 @@ function beforeRequestAddToken(config) {
   }
   const router = getRouter()
   const currentRoute = router?.currentRoute?.value || router?.currentRoute
-  const queryOrgId = currentRoute?.query?.oid
   const storeOrgId = store.getters.currentOrg?.id
-  const orgId = config.headers['X-JMS-ORG'] || queryOrgId || storeOrgId
+  const orgId =
+    config.headers['X-JMS-ORG'] || getRequestOrgId(currentRoute, storeOrgId, window.location.hash)
   if (orgId) {
     config.headers['X-JMS-ORG'] = orgId
   }

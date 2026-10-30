@@ -439,6 +439,21 @@ test('detail to edit keeps the correct action/id and clears everything on succes
   f.app.unmount()
 })
 
+test('detail deep links show ticket titles and preserve the resource-name fallback', async () => {
+  const f = await fixture('/assets?drawer=AssetDetail&drawerId=A')
+  try {
+    const loaded = f.vm.drawerContext.handlers.loaded
+    loaded({ id: 'A', title: '下载应用日志' })
+    assert.equal(f.vm.drawerTitle, '下载应用日志')
+    loaded({ id: 'A', name: 'Production host' })
+    assert.equal(f.vm.drawerTitle, 'AssetDetail: Production host')
+    loaded({ id: 'A', title: '' })
+    assert.equal(f.vm.drawerTitle, 'AssetDetail: A')
+  } finally {
+    f.app.unmount()
+  }
+})
+
 test('changing URL record replaces content and stale responses cannot change the new title', async () => {
   const f = await fixture('/assets?drawer=AssetDetail&drawerId=A')
   const loadedA = f.vm.drawerContext.handlers.loaded

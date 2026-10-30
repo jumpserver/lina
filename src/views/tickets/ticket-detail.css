@@ -1,0 +1,16 @@
+.generic-detail-page.ticket-detail-page.tab-page > :deep(.page-head .page-heading) {
+  height: auto;
+  min-height: 44px;
+  padding-block: 7px;
+}
+
+.ticket-detail-page :deep(.page-title-wrap) {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.ticket-detail-page :deep(.go-back) {
+  flex-shrink: 0;
+}

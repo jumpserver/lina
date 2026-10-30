@@ -9,6 +9,7 @@ const source = await readFile(
 )
 const { descriptor } = parse(source)
 const component = new Function(
+  'Select2',
   'rules',
   'ResourceSelect',
   'TagInput',
@@ -26,13 +27,14 @@ const component = new Function(
   {},
   {},
   {},
+  {},
   () => ({}),
   {},
   () => ({})
 )
 
 test('review fields are visible only for accepting rules with approval enabled', () => {
-  const config = component.data.call({ $t: (key) => key })
+  const config = component.data.call({ $t: (key) => key, $store: { getters: { currentOrg: { id: 'org-id' } } } })
   assert.equal(config.initial.review_enabled, false)
   assert.equal(config.initial.review_duration, 0)
 
@@ -49,7 +51,7 @@ test('review fields are visible only for accepting rules with approval enabled',
 })
 
 test('review duration accepts zero and whole hours within the supported range', () => {
-  const config = component.data.call({ $t: (key) => key })
+  const config = component.data.call({ $t: (key) => key, $store: { getters: { currentOrg: { id: 'org-id' } } } })
   const field = config.fieldsMeta.review_duration
   for (const [value, valid] of [
     [0, true],
@@ -72,7 +74,7 @@ test('review duration accepts zero and whole hours within the supported range', 
 })
 
 test('submission preserves approval configuration when approval is disabled or action is rejected', () => {
-  const config = component.data.call({ $t: (key) => key })
+  const config = component.data.call({ $t: (key) => key, $store: { getters: { currentOrg: { id: 'org-id' } } } })
   for (const action of ['accept', 'reject']) {
     for (const review_enabled of [true, false]) {
       const form = {
@@ -85,13 +87,13 @@ test('submission preserves approval configuration when approval is disabled or a
         rules: { ip_group: ['*'] }
       }
       const result = config.cleanFormValue(structuredClone(form))
-      assert.deepEqual(result, { ...form, review_duration: 2 })
+      assert.deepEqual(result, { ...form, workflow: null, review_duration: 2 })
     }
   }
 })
 
 test('submission normalizes an unset review duration to zero without changing the approval flag', () => {
-  const config = component.data.call({ $t: (key) => key })
+  const config = component.data.call({ $t: (key) => key, $store: { getters: { currentOrg: { id: 'org-id' } } } })
   for (const review_duration of [undefined, null, '', 0]) {
     const result = config.cleanFormValue({
       action: 'accept',
@@ -105,3 +107,13 @@ test('submission normalizes an unset review duration to zero without changing th
     assert.deepEqual(result.reviewers, [])
   }
 })
+
+ test('workflow selection replaces fixed reviewers and is preserved when controls are disabled', () => {
+  const config = component.data.call({ $t: (key) => key, $store: { getters: { currentOrg: { id: 'org-id' } } } })
+  const form = { action: 'accept', review_enabled: true, workflow: 'workflow-id', rules: { ip_group: ['*'] } }
+  assert.equal(config.fieldsMeta.workflow.hidden(form), false)
+  assert.equal(config.fieldsMeta.reviewers.hidden(form), true)
+  assert.equal(config.fieldsMeta.review_duration.hidden(form), false)
+  assert.equal(config.fieldsMeta.workflow.hidden({ ...form, review_enabled: false }), true)
+  assert.equal(config.cleanFormValue({ ...form, action: 'reject' }).workflow, 'workflow-id')
+ })

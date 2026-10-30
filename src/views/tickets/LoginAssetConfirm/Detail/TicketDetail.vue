@@ -2,12 +2,16 @@
   <GenericTicketDetail
     :object="object"
     :special-card-items="specialCardItems"
-    :show-comment="!connections.length"
+    :show-comment="connections.length <= 1"
   >
-    <IBox v-if="connections.length" title="ApplyInfo" class="connection-info">
+    <IBox v-if="connections.length > 1" title="ApplyInfo" class="connection-info">
       <p class="connection-user">
         {{ $t('ApplyLoginUser') }}:
-        {{ object.apply_login_user?.name || object.rel_snapshot?.apply_login_user || '-' }}
+        {{
+          object.request_items?.find((item) => item.name === 'apply_login_user')?.value ||
+          object.rel_snapshot?.apply_login_user ||
+          '-'
+        }}
       </p>
       <LoginAssetConnections :connections="connections" />
     </IBox>
@@ -52,24 +56,11 @@ export default {
       return this.object.login_asset_connections || []
     },
     specialCardItems() {
-      const { object } = this
-      const type = object.type?.value || object.type
-      return type === 'login_confirm' || this.connections.length
-        ? []
-        : [
-            {
-              key: this.$t('ApplyLoginAsset'),
-              value: object.apply_login_asset?.name
-            },
-            {
-              key: this.$t('ApplyLoginAccount'),
-              value: object.apply_login_account
-            },
-            {
-              key: this.$t('ApplyLoginUser'),
-              value: object.apply_login_user?.name
-            }
-          ]
+      if (this.connections.length > 1) return []
+      return (this.object.request_items || []).map((item) => ({
+        key: item.label,
+        value: item.value
+      }))
     }
   },
   methods: {}
