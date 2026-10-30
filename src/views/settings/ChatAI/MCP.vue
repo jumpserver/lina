@@ -3,18 +3,16 @@
     <IBox :title="$t('AgentMCP')" class="mcp-settings">
       <GenericCreateUpdateForm v-bind="config" />
     </IBox>
-    <MCPClients v-if="$hasPerm('settings.change_auth')" />
   </div>
 </template>
 
 <script>
 import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import MCPClients from './MCPClients.vue'
 
 export default {
   name: 'MCP',
-  components: { IBox, GenericCreateUpdateForm, MCPClients },
+  components: { IBox, GenericCreateUpdateForm },
   data() {
     return {
       config: {

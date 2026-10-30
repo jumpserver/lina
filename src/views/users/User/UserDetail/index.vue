@@ -20,13 +20,11 @@ import UserGrantedAssets from './UserGrantedAssets'
 import UserInfo from './UserInfo'
 import UserLoginACL from './UserLoginACL.vue'
 import UserSession from './UserSession.vue'
-import UserMCPClients from './UserMCPClients.vue'
 
 export default {
   components: {
     UserInfo,
     UserSession,
-    UserMCPClients,
     UserLoginACL,
     GenericDetailPage,
     UserGrantedAssets,
@@ -85,11 +83,6 @@ export default {
             title: this.$t('UserSession'),
             name: 'UserSession',
             hidden: () => !vm.$hasPerm('terminal.view_session')
-          },
-          {
-            title: this.$t('MCPClients'),
-            name: 'UserMCPClients',
-            hidden: () => !vm.$hasPerm('settings.change_auth')
           }
         ]
       }

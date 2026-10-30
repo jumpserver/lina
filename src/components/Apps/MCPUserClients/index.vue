@@ -4,19 +4,14 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import MCPClientActions, { getMCPClientActions } from '@/components/Apps/MCPClientActions'
 
 const clientsURL = '/api/v1/authentication/user-agent-clients/'
 
 export default {
   components: { GenericListTable },
-  mixins: [MCPClientActions],
-  props: {
-    userId: { type: String, default: '' },
-    allowRevoke: { type: Boolean, default: false }
-  },
   data() {
     return {
+      submitting: false,
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
@@ -26,25 +21,11 @@ export default {
     }
   },
   computed: {
-    canRevoke() {
-      return this.allowRevoke && !this.userId
-    },
-    canManage() {
-      return Boolean(this.userId) && this.$hasPerm('settings.change_auth')
-    },
     tableConfig() {
       return {
-        url: this.userId
-          ? `/api/v1/authentication/agent-client-authorizations/?user_id=${this.userId}`
-          : clientsURL,
+        url: clientsURL,
         hasSelection: false,
-        columns: [
-          'name',
-          'client_id',
-          'organizations',
-          'status',
-          ...(this.canRevoke || this.canManage ? ['actions'] : [])
-        ],
+        columns: ['name', 'client_id', 'organizations', 'status', 'actions'],
         columnsMeta: {
           name: { label: this.$t('Name'), sortable: false, formatter: (row) => row.name },
           client_id: { label: this.$t('MCPClientID'), sortable: false },
@@ -66,22 +47,19 @@ export default {
               )
           },
           actions: {
-            has: this.canRevoke || this.canManage,
             formatterArgs: {
               hasClone: false,
               hasDelete: false,
               hasUpdate: false,
-              extraActions: this.canManage
-                ? getMCPClientActions(this, 'registration_id')
-                : [
-                    {
-                      name: 'revoke',
-                      title: this.$t('Revoke'),
-                      type: 'danger',
-                      can: () => !this.submitting,
-                      callback: ({ row }) => this.revokeClient(row)
-                    }
-                  ]
+              extraActions: [
+                {
+                  name: 'revoke',
+                  title: this.$t('Revoke'),
+                  type: 'danger',
+                  can: () => !this.submitting,
+                  callback: ({ row }) => this.revokeClient(row)
+                }
+              ]
             }
           }
         }
@@ -90,7 +68,7 @@ export default {
   },
   methods: {
     async revokeClient(row) {
-      if (this.submitting || !this.canRevoke) return
+      if (this.submitting) return
       this.submitting = true
       try {
         await this.$confirm(

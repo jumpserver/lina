@@ -14,7 +14,7 @@
         show-icon
         class="mcp-status"
       />
-      <MCPUserClients allow-revoke />
+      <MCPUserClients />
     </template>
     <MCPConnectionGuide v-else :settings="settings" />
   </TabPage>
