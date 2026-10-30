@@ -1,11 +1,5 @@
 {
-  "MCPClients": "Ứng dụng khách MCP",
   "MCPClientID": "ID ứng dụng khách",
-  "MCPClientAuthorizedAt": "Lần cấp quyền đầu tiên",
-  "MCPClientCleanup": "Dọn ứng dụng khách chưa dùng",
-  "MCPClientDisableConfirm": "Vô hiệu hóa ứng dụng khách “{name}”? Quyền truy cập của tất cả người dùng ứng dụng khách này sẽ bị thu hồi. Lịch sử sẽ được giữ lại.",
-  "MCPClientCleanupConfirm": "Kiểm tra tối đa 100 ứng dụng khách đã đăng ký hơn 7 ngày và chưa từng được cấp quyền. Chỉ xóa những ứng dụng khách không liên kết với lịch sử. Tiếp tục?",
-  "MCPClientCleanupResult": "Đã kiểm tra: {scanned}, đã xóa: {deleted}, đã bỏ qua: {skipped}.",
   "AgentMCP": "Agent / MCP",
   "MCPEnabled": "Bật MCP",
   "MCPEnabledHelp": "Koko đồng bộ cấu hình mỗi 60 giây. Tắt MCP sẽ dừng nhận yêu cầu mới, trong khi các tác vụ đã nhận tiếp tục hoàn tất và gửi bản ghi kiểm toán.",

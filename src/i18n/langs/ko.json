@@ -1,11 +1,5 @@
 {
-  "MCPClients": "MCP 클라이언트",
   "MCPClientID": "클라이언트 ID",
-  "MCPClientAuthorizedAt": "최초 승인 시간",
-  "MCPClientCleanup": "미사용 클라이언트 정리",
-  "MCPClientDisableConfirm": "클라이언트 “{name}”을 비활성화하시겠습니까? 이 클라이언트의 모든 사용자에 대한 승인이 취소됩니다. 기록은 유지됩니다.",
-  "MCPClientCleanupConfirm": "등록 후 7일이 지났으며 승인된 적이 없는 클라이언트를 최대 100개 확인합니다. 과거 기록과 연결되지 않은 클라이언트만 삭제합니다. 계속하시겠습니까?",
-  "MCPClientCleanupResult": "확인: {scanned}개, 삭제: {deleted}개, 건너뜀: {skipped}개.",
   "AgentMCP": "Agent / MCP",
   "MCPEnabled": "MCP 활성화",
   "MCPEnabledHelp": "Koko는 60초마다 설정을 동기화합니다. 비활성화하면 새 요청 접수가 중지되며, 이미 접수한 작업의 마무리와 감사 기록 전송은 계속됩니다.",
