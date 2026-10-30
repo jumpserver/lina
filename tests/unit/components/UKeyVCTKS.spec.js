@@ -22,7 +22,7 @@ const providers = [
     secret_fields: ['AUTH_UKEY_VCTK_S_TLS_CA_CERT', 'AUTH_UKEY_VCTK_S_ISSUING_CA', 'AUTH_UKEY_VCTK_S_PASSWORD'],
     connection_fields: ['AUTH_UKEY_VCTK_S_SVS_URL', 'AUTH_UKEY_VCTK_S_TLS_VERIFY', 'AUTH_UKEY_VCTK_S_TLS_CA_CERT',
       'AUTH_UKEY_VCTK_S_USERNAME', 'AUTH_UKEY_VCTK_S_PASSWORD'],
-    supports_connection_test: true, binding_mode: 'user_sn', expose_default_pin: true, supports_enrollment: false
+    supports_connection_test: true, binding_mode: 'certificate', expose_default_pin: true, supports_enrollment: false
   }
 ]
 

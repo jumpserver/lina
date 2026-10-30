@@ -363,6 +363,10 @@ export default {
     },
 
     async readBinding(config) {
+      if (config.provider === 'vctk_s' && this.mode === 'user' &&
+          config.own_binding?.user_id === this.object?.id) {
+        return config.own_binding
+      }
       if (config.capabilities?.binding_mode !== 'certificate' || this.mode !== 'admin' || !this.object?.id) {
         return { bound: false, binding_version: '', hardware_serial: '' }
       }
@@ -903,6 +907,13 @@ export default {
         throw new Error(`UKey ${this.$t('Method')} "${step.call}" ${this.$t('NotExist')}`)
       }
       const args = this.resolveArgs(step.args || [], ctx)
+      if (this.config.provider === 'vctk_s' && step.digest_certificate) {
+        if (typeof window.VCTKSCertificateDigest !== 'function') {
+          throw new Error(this.$t('UKeyCertificateAlgorithmUnsupported'))
+        }
+        args[0] = window.VCTKSCertificateDigest(this.resolveValue(step.digest_certificate, ctx))
+        if (![1, 4].includes(args[0])) throw new Error(this.$t('UKeyCertificateAlgorithmUnsupported'))
+      }
       return _instance[step.call](...args)
     },
 

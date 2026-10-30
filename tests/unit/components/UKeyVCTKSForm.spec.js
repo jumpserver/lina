@@ -53,7 +53,7 @@ const providers = [
     id: 'vctk_s', label: 'VCTK_S', supported_vendors: ['ji_da'], fields,
     secret_fields: [ISSUING_CA, TLS_CA, AUTH_PASSWORD],
     connection_fields: [SERVER_URL, TLS_VERIFY, TLS_CA, AUTH_USER, AUTH_PASSWORD],
-    supports_connection_test: true, binding_mode: 'user_sn', expose_default_pin: true, supports_enrollment: false
+    supports_connection_test: true, binding_mode: 'certificate', expose_default_pin: true, supports_enrollment: false
   }
 ]
 const stringField = { type: 'string', max_length: 65536, required: false }
