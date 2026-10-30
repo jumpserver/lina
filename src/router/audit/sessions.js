@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import { agentAuditRoute } from '@/views/audits/AgentAudit/routes'
 
 export default [
   ...['sessions', 'actions'].map((kind) => {
@@ -8,6 +9,7 @@ export default [
     return {
       path: `agent-${kind}`,
       component: empty,
+      hidden: true,
       redirect: { name: `${resource}List` },
       meta: {
         title: i18n.t(title),
@@ -20,8 +22,10 @@ export default [
         {
           path: '',
           name: `${resource}List`,
-          component: () => import('@/views/audits/AgentAudit/index.vue'),
-          props: { kind },
+          redirect: (to) => ({
+            ...agentAuditRoute(kind),
+            query: { ...to.query, ...agentAuditRoute(kind).query }
+          }),
           meta: { title: i18n.t(title), permissions: [] }
         },
         {
@@ -33,7 +37,7 @@ export default [
           meta: {
             title: i18n.t(title),
             permissions: [],
-            activeMenu: `/audit/sessions/agent-${kind}`
+            activeMenu: kind === 'sessions' ? '/audit/sessions/sessions' : '/audit/sessions/command'
           }
         }
       ]
@@ -46,21 +50,21 @@ export default [
     },
     component: empty,
     meta: {
-      title: i18n.t('Sessions'),
+      title: i18n.t('SessionRecords'),
       app: 'terminal',
       resource: 'session',
       expanded: true,
       icon: 'session',
-      permissions: ['terminal.view_session']
+      permissions: []
     },
     children: [
       {
         path: '',
         name: 'SessionList',
-        component: () => import('@/views/sessions/SessionList'),
+        component: () => import('@/views/audits/SessionRecords.vue'),
         meta: {
-          title: i18n.t('SessionList'),
-          permissions: ['terminal.view_session']
+          title: i18n.t('SessionRecords'),
+          permissions: []
         }
       },
       {
@@ -68,18 +72,18 @@ export default [
         name: 'SessionDetail',
         component: () => import('@/views/sessions/SessionDetail'),
         hidden: true,
-        meta: { title: i18n.t('SessionDetail') }
+        meta: { title: i18n.t('SessionDetail'), permissions: ['terminal.view_session'] }
       }
     ]
   },
   {
     path: 'command',
     name: 'CommandList',
-    component: () => import('@/views/sessions/CommandList/index'),
+    component: () => import('@/views/audits/CommandRecords.vue'),
     meta: {
-      title: i18n.t('SessionCommands'),
+      title: i18n.t('CommandRecords'),
       icon: 'command',
-      permissions: ['terminal.view_command']
+      permissions: []
     }
   },
   {

@@ -1,15 +1,6 @@
 <template>
   <template v-if="active && ownsRoute()">
-    <GenericListPage
-      v-if="!detailId"
-      :key="pageKey"
-      :title="t(kind === 'sessions' ? 'AgentSessions' : 'AgentActions')"
-      :header-actions="headerActions"
-      :table-config="tableConfig"
-      :table-metadata-provider="tableMetadata"
-    />
     <TabPage
-      v-else
       :key="pageKey"
       v-model:active-menu="activeMenu"
       :title="item?.id || t('AgentAuditDetail')"
@@ -37,11 +28,13 @@
             </IBox>
           </template>
         </TwoCol>
-        <GenericListTable
+        <AgentList
           v-else-if="kind === 'sessions' && activeMenu === 'AgentActions'"
-          :header-actions="headerActions"
-          :table-config="tableConfig"
-          :table-metadata-provider="tableMetadata"
+          kind="actions"
+          :session-id="detailId"
+          :org-id="route.query.oid || store.getters.currentOrg?.id"
+          :date-start="item.date_created"
+          :date-end="item.date_expires"
         />
         <IBox v-else-if="kind === 'actions' && activeMenu === 'Output'" title="Output">
           <el-empty v-if="!outputs.length" :description="t('NoData')" :image-size="60" />
@@ -83,16 +76,15 @@ import {
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import GenericListPage from '@/layout/components/GenericListPage'
-import GenericListTable from '@/layout/components/GenericListTable'
+import AgentList from './List.vue'
 import TabPage from '@/layout/components/TabPage'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import DetailCard from '@/components/Cards/DetailCard'
 import IBox from '@/components/Common/IBox'
-import { DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 import request from '@/utils/request'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { evidenceOutput } from './output'
+import { agentAuditRoute } from './routes'
 
 const props = defineProps({ kind: { type: String, required: true } })
 const { t } = useI18n()
@@ -118,52 +110,6 @@ const detailTabs = computed(() => [
     ? { title: t('AgentActions'), name: 'AgentActions' }
     : { title: t('Output'), name: 'Output' }
 ])
-const headerActions = computed(() => ({
-  hasLeftActions: false,
-  hasImport: false,
-  hasExport: false,
-  hasDatePicker: true,
-  hasSearch: true,
-  ...(props.kind === 'sessions' && detailId.value && item.value
-    ? { datePicker: { dateStart: item.value.date_created, dateEnd: item.value.date_expires } }
-    : {}),
-  searchConfig: { getUrlQuery: true, excludeFields: detailId.value ? ['session_id'] : [] }
-}))
-const primaryColumn = computed(() =>
-  props.kind === 'sessions' && !detailId.value ? 'operation' : 'kind'
-)
-const columnsMeta = computed(() => ({
-  [primaryColumn.value]: {
-    label: t(props.kind === 'sessions' && !detailId.value ? 'AgentSessions' : 'Operation'),
-    minWidth: '270px',
-    formatter: DetailFormatter,
-    formatterArgs: {
-      can: true,
-      getTitle: ({ row }) => row.kind || row.id,
-      getRoute: ({ row }) => routeTo(row.kind ? 'actions' : 'sessions', row.id, row)
-    }
-  },
-  user_display: { label: t('User'), minWidth: '130px' },
-  status: { label: t('Status'), minWidth: '130px' },
-  ...(props.kind === 'sessions' && !detailId.value
-    ? {
-        asset_id: { label: t('Asset'), minWidth: '240px' },
-        protocol: { label: t('Protocol'), width: '100px' }
-      }
-    : {}),
-  date_created: { label: t('DateCreated'), minWidth: '180px', formatter: DateFormatter }
-}))
-const tableConfig = computed(() => ({
-  url: detailId.value ? '/api/v1/terminal/agent/audit/actions/' : endpoint(),
-  axiosConfig: { raw: 1, headers: orgHeaders() },
-  extraQuery: detailId.value ? { session_id: detailId.value } : {},
-  columns: [
-    ...new Set([...Object.keys(columnsMeta.value), 'account', 'client_id', 'asset_id', 'protocol'])
-  ],
-  columnsShow: { min: [primaryColumn.value], default: Object.keys(columnsMeta.value) },
-  columnsMeta: { ...columnsMeta.value, actions: { has: false } }
-}))
-const tableMetadata = (url) => request({ url, method: 'options', headers: orgHeaders() })
 const detailItems = computed(() => {
   if (!item.value) return []
   const data = item.value
@@ -208,17 +154,12 @@ const ownsRoute = () =>
 const orgHeaders = () => ({ 'X-JMS-ORG': route.query.oid || store.getters.currentOrg?.id })
 
 function routeTo(kind, id, row = {}) {
-  const resource = kind === 'sessions' ? 'AgentSession' : 'AgentAction'
   const orgId =
     row.org_id ||
     (row.audit_url && new URL(row.audit_url, location.origin).searchParams.get('oid')) ||
     session.value?.org_id ||
     route.query.oid
-  return {
-    name: `${resource}${id ? 'Detail' : 'List'}`,
-    params: id ? { id } : {},
-    query: orgId ? { oid: orgId } : {}
-  }
+  return agentAuditRoute(kind, id, orgId)
 }
 
 function terminalRoute(id) {

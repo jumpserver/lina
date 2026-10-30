@@ -1,9 +1,9 @@
 <template>
   <IBox :title="$t('MCPConnectionGuide')" class="mcp-connection-guide">
-    <p class="guide-description">{{ $t('MCPSavedConnectionHelp') }}</p>
+    <p class="guide-description">{{ description || $t('MCPUserConnectionHelp') }}</p>
     <el-alert
       v-if="!canConnect"
-      :title="$t('MCPSaveBeforeConnect')"
+      :title="unavailableText || $t('MCPUserUnavailable')"
       type="info"
       :closable="false"
       show-icon
@@ -11,7 +11,7 @@
     />
     <el-alert
       v-else-if="!settings.MCP_DCR_ENABLED"
-      :title="$t('MCPRegistrationRequired')"
+      :title="registrationRequiredText || $t('MCPUserRegistrationRequired')"
       type="warning"
       :closable="false"
       show-icon
@@ -63,6 +63,9 @@ export default {
   name: 'MCPConnectionGuide',
   components: { IBox },
   props: {
+    description: { type: String, default: '' },
+    unavailableText: { type: String, default: '' },
+    registrationRequiredText: { type: String, default: '' },
     settings: {
       type: Object,
       required: true

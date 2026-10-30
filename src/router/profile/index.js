@@ -137,6 +137,16 @@ export default {
       }
     },
     {
+      path: '/profile/mcp',
+      name: 'ProfileMCP',
+      component: () => import('@/views/profile/MCP/index.vue'),
+      meta: {
+        title: i18n.t('AgentMCP'),
+        icon: 'token',
+        permissions: []
+      }
+    },
+    {
       path: '/profile/preferences',
       name: 'Preferences',
       component: () => import('@/views/profile/Preferences/index'),

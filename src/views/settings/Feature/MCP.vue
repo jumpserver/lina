@@ -7,7 +7,13 @@
         @submit-success="updateSavedSettings"
       />
     </IBox>
-    <MCPConnectionGuide v-if="savedSettings" :settings="savedSettings" />
+    <MCPConnectionGuide
+      v-if="savedSettings"
+      :settings="savedSettings"
+      :description="$t('MCPSavedConnectionHelp')"
+      :unavailable-text="$t('MCPSaveBeforeConnect')"
+      :registration-required-text="$t('MCPRegistrationRequired')"
+    />
     <MCPClients v-if="$hasPerm('settings.change_auth')" />
   </div>
 </template>
@@ -16,7 +22,7 @@
 import { IBox } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import MCPClients from './MCPClients.vue'
-import MCPConnectionGuide from './MCPConnectionGuide.vue'
+import MCPConnectionGuide from '@/components/Apps/MCPConnectionGuide'
 
 export default {
   name: 'MCP',
