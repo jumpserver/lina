@@ -2761,7 +2761,7 @@
   "TaskMonitorStopUnsupportedPool": "此進程使用執行緒池，無法停止執行中的任務。",
   "TaskMonitorStopUnavailable": "任務進程未確認結果，請重新整理檢查任務狀態。",
   "ClientSecurity": "用戶端安全",
-  "ClientLoginPolicyChangeHelp": "修改這三項設定中的任意一項（包括關閉限制），已登入用戶端都需重新驗證；重新驗證前，不可以建立新的資產連線，但已建立的資產連線不會因此中斷。",
+  "ClientLoginPolicyChangeHelp": "修改這三項設定中的任意一項（包括關閉限制）後，用戶端需重新登入才能申請新的連線憑證；已簽發的連線權杖仍依自身有效期限和權限使用，既有連線不會因登入失效而自動中斷。",
   "TicketBatchApprovalTitle": "批次審批（{count} 張工單）",
   "TicketBatchResultTitle": "批次審批結果（{count} 張工單）",
   "TicketBatchProgress": "已處理 {done}/{total} 張",

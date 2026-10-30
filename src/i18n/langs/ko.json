@@ -2566,7 +2566,7 @@
   "TaskMonitorStopUnsupportedPool": "이 워커는 스레드 풀을 사용하므로 실행 중인 작업을 중지할 수 없습니다.",
   "TaskMonitorStopUnavailable": "워커가 결과를 확인하지 못했습니다. 새로고침하여 작업 상태를 확인하세요.",
   "ClientSecurity": "클라이언트 보안",
-  "ClientLoginPolicyChangeHelp": "제한 비활성화를 포함하여 이 세 설정 중 하나라도 변경하면 로그인된 클라이언트는 다시 인증해야 합니다. 재인증 전에는 새 자산 연결을 생성할 수 없지만, 이미 연결된 자산 연결은 이로 인해 끊어지지 않습니다.",
+  "ClientLoginPolicyChangeHelp": "제한 비활성화를 포함하여 이 세 설정 중 하나라도 변경하면, 클라이언트에서 새 연결 자격 증명을 요청하려면 다시 로그인해야 합니다. 발급된 연결 토큰에는 자체 유효 기간과 권한이 계속 적용되며, 로그인 만료로 기존 연결이 자동으로 끊어지지는 않습니다.",
   "TicketReapplyInvalidResources": "일부 리소스를 사용할 수 없습니다. 다시 선택하세요.",
   "AssetOwner": "자산 담당자",
   "WFWorkflows": "Approval workflows",

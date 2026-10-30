@@ -2766,7 +2766,7 @@
   "TaskMonitorStopUnsupportedPool": "This worker uses a thread pool and cannot stop a running task.",
   "TaskMonitorStopUnavailable": "The worker did not confirm the result. Refresh and check the task state.",
   "ClientSecurity": "Client security",
-  "ClientLoginPolicyChangeHelp": "Changing any of these three settings, including disabling a limit, requires existing desktop logins to authenticate again. Until reauthentication, new asset connections cannot be created, but established asset connections are not disconnected.",
+  "ClientLoginPolicyChangeHelp": "Changing any of these three settings, including disabling a limit, requires the client to log in again before requesting new connection credentials. Issued connection tokens remain subject to their own expiry and permissions; login expiry does not automatically disconnect established connections.",
   "TicketBatchApprovalTitle": "Batch approval ({count})",
   "TicketBatchResultTitle": "Batch approval results ({count})",
   "TicketBatchProgress": "Processed {done}/{total} tickets",

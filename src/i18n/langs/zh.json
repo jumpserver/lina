@@ -2760,7 +2760,7 @@
   "TaskMonitorStopUnsupportedPool": "该进程使用线程池，不能停止执行中的任务。",
   "TaskMonitorStopUnavailable": "任务进程未确认结果，请刷新检查任务状态。",
   "ClientSecurity": "客户端安全",
-  "ClientLoginPolicyChangeHelp": "修改这三项配置中的任意一项（包括关闭限制），已登录客户端都需重新认证；重新认证前，不可以创建新的资产连接，但已建立的资产连接不会因此断开。",
+  "ClientLoginPolicyChangeHelp": "修改这三项配置中的任意一项（包括关闭限制）后，客户端需重新登录才能申请新的连接凭据；已签发的连接令牌仍按自身有效期和权限使用，已有连接不会因登录失效自动断开。",
   "TicketBatchApprovalTitle": "批量审批（{count} 张工单）",
   "TicketBatchResultTitle": "批量审批结果（{count} 张工单）",
   "TicketBatchProgress": "已处理 {done}/{total} 张",

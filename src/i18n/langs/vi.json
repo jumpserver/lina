@@ -2566,7 +2566,7 @@
   "TaskMonitorStopUnsupportedPool": "Tiến trình này sử dụng nhóm luồng và không thể dừng tác vụ đang chạy.",
   "TaskMonitorStopUnavailable": "Tiến trình chưa xác nhận kết quả. Hãy làm mới và kiểm tra trạng thái tác vụ.",
   "ClientSecurity": "Bảo mật ứng dụng khách",
-  "ClientLoginPolicyChangeHelp": "Thay đổi bất kỳ cài đặt nào trong ba cài đặt này, kể cả tắt giới hạn, sẽ yêu cầu các ứng dụng khách đã đăng nhập xác thực lại. Trước khi xác thực lại, không thể tạo kết nối tài sản mới, nhưng các kết nối đã thiết lập sẽ không bị ngắt vì thay đổi này.",
+  "ClientLoginPolicyChangeHelp": "Khi thay đổi bất kỳ cài đặt nào trong ba cài đặt này, kể cả tắt giới hạn, ứng dụng khách phải đăng nhập lại để yêu cầu thông tin xác thực kết nối mới. Các mã kết nối đã cấp vẫn tuân theo thời hạn và quyền riêng; việc hết hạn đăng nhập không tự động ngắt các kết nối đã thiết lập.",
   "TicketReapplyInvalidResources": "Một số tài nguyên không còn khả dụng. Vui lòng chọn lại.",
   "AssetOwner": "Người phụ trách tài sản",
   "WFWorkflows": "Approval workflows",

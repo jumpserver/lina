@@ -2566,7 +2566,7 @@
   "TaskMonitorStopUnsupportedPool": "Este processo usa um pool de threads e não pode interromper uma tarefa em execução.",
   "TaskMonitorStopUnavailable": "O processo não confirmou o resultado. Atualize e verifique o estado da tarefa.",
   "ClientSecurity": "Segurança do cliente",
-  "ClientLoginPolicyChangeHelp": "Alterar qualquer uma destas três configurações, inclusive desativar um limite, exige nova autenticação dos clientes já conectados. Até a nova autenticação, não é possível criar novas conexões com ativos, mas as conexões já estabelecidas não são interrompidas.",
+  "ClientLoginPolicyChangeHelp": "Ao alterar qualquer uma destas três configurações, inclusive desativar um limite, o cliente deve entrar novamente para solicitar novas credenciais de conexão. Os tokens já emitidos continuam sujeitos à própria validade e às permissões; a expiração do login não desconecta automaticamente as conexões estabelecidas.",
   "TicketReapplyInvalidResources": "Alguns recursos não estão mais disponíveis. Selecione-os novamente.",
   "AssetOwner": "Responsável pelo ativo",
   "WFWorkflows": "Approval workflows",
