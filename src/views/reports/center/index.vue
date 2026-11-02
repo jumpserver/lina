@@ -90,9 +90,13 @@
                           ><strong>{{ trendSummary.active }} / {{ trendSummary.periods }}</strong>
                         </div>
                         <div>
-                          <span>{{ $t('AuditReportTrendPeak') }}</span
-                          ><strong>{{ formatValue(trendSummary.peak) }}</strong
-                          ><small v-if="trendSummary.peakDates">{{ trendSummary.peakDates }}</small>
+                          <span>{{ $t('AuditReportTrendPeak') }}</span>
+                          <div class="trend-peak-value">
+                            <strong>{{ formatValue(trendSummary.peak) }}</strong>
+                            <small v-if="trendSummary.peakDates">{{
+                              trendSummary.peakDates
+                            }}</small>
+                          </div>
                         </div>
                       </div>
                       <Echart :options="trendOptions" :autoresize="true" />
@@ -110,7 +114,23 @@
                             :value="table.key"
                         /></el-select>
                       </div>
-                      <Echart :options="distributionOptions" :autoresize="true" />
+                      <Echart
+                        :key="distributionTable.key"
+                        :options="distributionOptions"
+                        :autoresize="true"
+                        :update-options="{ notMerge: true }"
+                      />
+                      <el-pagination
+                        v-if="distributionRows.length > tablePageSize"
+                        class="report-pagination"
+                        size="small"
+                        layout="total, prev, pager, next, jumper"
+                        :pager-count="5"
+                        :total="distributionRows.length"
+                        :page-size="tablePageSize"
+                        :current-page="tablePage(distributionTable)"
+                        @current-change="(page) => setTablePage(distributionTable, page)"
+                      />
                     </div>
                   </div>
                   <div
@@ -119,7 +139,7 @@
                     class="table-section el-data-table"
                   >
                     <h3>{{ table.title }}</h3>
-                    <el-table :data="table.rows || []" border>
+                    <el-table :data="tablePageRows(table)" border>
                       <el-table-column
                         v-for="column in table.columns"
                         :key="column.key"
@@ -146,6 +166,17 @@
                         </template>
                       </el-table-column>
                     </el-table>
+                    <el-pagination
+                      v-if="tableRows(table).length > tablePageSize"
+                      class="report-pagination"
+                      size="small"
+                      layout="total, prev, pager, next, jumper"
+                      :pager-count="5"
+                      :total="tableRows(table).length"
+                      :page-size="tablePageSize"
+                      :current-page="tablePage(table)"
+                      @current-change="(page) => setTablePage(table, page)"
+                    />
                     <p v-if="table.truncated" class="table-note">
                       {{
                         $t('AuditReportSampleHint', {
@@ -163,7 +194,7 @@
               <el-empty v-else :description="$t('AuditReportDataUnavailable')" />
               <IBox
                 v-if="snapshot.conclusions?.length"
-                :title="$t('AuditReportSuggestedConclusion')"
+                :title="$t('AuditReportDocConclusion')"
                 class="conclusion-box"
               >
                 <p v-for="(line, index) in snapshot.conclusions" :key="index">{{ line }}</p>
@@ -189,6 +220,7 @@ import IBox from '@/components/Common/IBox/index.vue'
 import PeriodPicker from './PeriodPicker.vue'
 import Echart from '@/components/Dashboard/Echart.vue'
 import defaultTheme from '@/styles/default-theme'
+import { randomColorBySeed } from '@/utils/common/color'
 import { reportApi, reportError, defaultRange, makeConfig, reportEvidenceLink } from './api'
 import {
   isEmptyReportTable,
@@ -211,6 +243,8 @@ export default {
       selectedTheme: 'audit',
       selectedSection: '',
       distributionKey: '',
+      tablePages: {},
+      tablePageSize: 10,
       range: defaultRange(),
       snapshot: null,
       requestId: 0,
@@ -270,13 +304,19 @@ export default {
     trendSummary() {
       return this.trendTable ? reportTrend(this.trendTable) : null
     },
-    distributionTables() {
-      return this.allTables.filter(
-        (table) =>
-          table.rows?.length &&
-          table.columns?.some((column) => column.key === 'name') &&
-          table.columns?.some((column) => column.key === 'count')
+    tableRowsByKey() {
+      const tables = (this.snapshot?.sections || []).flatMap((section) => section.tables || [])
+      return new Map(
+        tables.map((table) => [
+          table.key,
+          this.isDistributionTable(table)
+            ? [...(table.rows || [])].sort((a, b) => Number(b.count) - Number(a.count))
+            : table.rows || []
+        ])
       )
+    },
+    distributionTables() {
+      return this.allTables.filter((table) => table.rows?.length && this.isDistributionTable(table))
     },
     distributionTable() {
       return (
@@ -287,17 +327,27 @@ export default {
     distributionRows() {
       const table = this.distributionTable
       const hasStatus = table?.columns?.some((column) => column.key === 'status')
-      return (table?.rows || [])
-        .map((row) => ({
+      const colors = new Set()
+      // Assign distinct colors across all pages, using the existing label-based generator.
+      return this.tableRows(table).map((row) => {
+        const seed = JSON.stringify([table.key, row.name, hasStatus ? row.status : null])
+        let color = randomColorBySeed(seed)
+        let attempt = 0
+        while (colors.has(color)) color = randomColorBySeed(`${seed}:${++attempt}`)
+        colors.add(color)
+        return {
           ...row,
+          color,
           label: [row.name || '—', hasStatus ? row.status : null]
             .filter((value) => value != null && value !== '')
             .map(this.cellValue)
             .join(' · ')
-        }))
-        .sort((a, b) => Number(b.count) - Number(a.count))
-        .slice(0, 10)
-        .reverse()
+        }
+      })
+    },
+    distributionPageRows() {
+      const start = (this.tablePage(this.distributionTable) - 1) * this.tablePageSize
+      return this.distributionRows.slice(start, start + this.tablePageSize).reverse()
     },
     chartTheme() {
       const theme = this.$store.state.settings.themeColors || {}
@@ -348,7 +398,7 @@ export default {
       }
     },
     distributionOptions() {
-      const rows = this.distributionRows
+      const rows = this.distributionPageRows
       const multiDimension = this.distributionTable?.columns?.some(
         (column) => column.key === 'status'
       )
@@ -358,7 +408,7 @@ export default {
         ...rows.map((row) => this.formatValue(row.count).length * 8 + 12)
       )
       return {
-        color: [this.chartTheme.primary],
+        color: this.distributionRows.map((row) => row.color),
         textStyle: {
           color: this.chartTheme.text,
           fontSize: 12,
@@ -380,14 +430,23 @@ export default {
             confine: true,
             extraCssText: 'max-width: 320px; white-space: normal; overflow-wrap: anywhere;'
           },
-          axisLabel: { width: axisWidth, overflow: 'truncate', color: this.chartTheme.secondary },
+          axisLabel: {
+            interval: 0,
+            width: axisWidth,
+            overflow: 'truncate',
+            color: this.chartTheme.secondary
+          },
           axisLine: { lineStyle: { color: this.chartTheme.border } }
         },
         series: [
           {
             type: 'bar',
             name: this.distributionTable?.title,
-            data: rows.map((row) => row.count),
+            colorBy: 'data',
+            data: rows.map((row) => ({
+              value: row.count,
+              itemStyle: { color: row.color }
+            })),
             barMaxWidth: 22,
             label: {
               show: true,
@@ -476,6 +535,7 @@ export default {
       this.dataLoading = true
       this.dataError = ''
       this.snapshot = null
+      this.tablePages = {}
       try {
         const data = await reportApi.preview(
           makeConfig(this.selectedTheme, this.currentTheme.chapters || [], this.range)
@@ -517,6 +577,26 @@ export default {
           table.columns?.some((column) => column.key === 'name') &&
           table.columns?.some((column) => column.key === 'count'))
       )
+    },
+    isDistributionTable(table) {
+      return (
+        table?.columns?.some((column) => column.key === 'name') &&
+        table.columns.some((column) => column.key === 'count')
+      )
+    },
+    tableRows(table) {
+      return this.tableRowsByKey.get(table?.key) || []
+    },
+    tablePage(table) {
+      const lastPage = Math.max(1, Math.ceil(this.tableRows(table).length / this.tablePageSize))
+      return Math.min(this.tablePages[table?.key] || 1, lastPage)
+    },
+    tablePageRows(table) {
+      const start = (this.tablePage(table) - 1) * this.tablePageSize
+      return this.tableRows(table).slice(start, start + this.tablePageSize)
+    },
+    setTablePage(table, page) {
+      this.tablePages[table.key] = page
     },
     detailTables(section) {
       return (section.tables || []).filter(
@@ -714,6 +794,12 @@ h3 {
   font-weight: 500;
   line-height: 24px;
 }
+.trend-peak-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
 .empty-result {
   margin: 16px 0;
   padding: 12px 16px;
@@ -764,6 +850,13 @@ h3 {
   white-space: pre-line;
   overflow-wrap: anywhere;
   line-height: 1.5;
+}
+.report-pagination {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
 }
 .table-note {
   font-size: 12px;

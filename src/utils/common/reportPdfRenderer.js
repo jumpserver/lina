@@ -58,7 +58,7 @@ export function reportWatermarkLayout(settings = {}) {
 }
 
 // This renderer intentionally supports the report's small HTML vocabulary.
-// Text, borders, table fills and links remain native PDF objects. Logos and
+// Text, borders, table fills, trend charts and links remain native PDF objects. Logos and
 // the repeated watermark tile are images. Browser layout and the embedded font are shared with the preview.
 export async function renderReportPdf(elements, options) {
   const [pdfLib, { default: fontkit }, bytes] = await Promise.all([
@@ -192,10 +192,52 @@ export async function renderReportPdf(elements, options) {
         }
       })
     }
+    const drawTrend = (element) => {
+      const b = box(element.getBoundingClientRect())
+      const viewBox = element.viewBox.baseVal
+      const xScale = b.width / viewBox.width
+      const yScale = b.height / viewBox.height
+      clipped(element, () => {
+        for (const shape of element.children) {
+          const style = getComputedStyle(shape)
+          const fill = color(style.fill)
+          const stroke = color(style.stroke)
+          const options = {
+            color: fill.opacity ? fill.color : undefined,
+            opacity: fill.opacity * Number(style.fillOpacity),
+            borderColor: stroke.opacity ? stroke.color : undefined,
+            borderOpacity: stroke.opacity * Number(style.strokeOpacity),
+            borderWidth: stroke.opacity ? parseFloat(style.strokeWidth) * scale : 0
+          }
+          if (shape.tagName === 'circle') {
+            page.drawEllipse({
+              x: b.x + shape.cx.baseVal.value * xScale,
+              y: b.y + b.height - shape.cy.baseVal.value * yScale,
+              xScale: shape.r.baseVal.value * xScale,
+              yScale: shape.r.baseVal.value * yScale,
+              ...options
+            })
+          } else if (['polygon', 'polyline'].includes(shape.tagName)) {
+            const path = Array.from(shape.points)
+              .map((point, index) => `${index ? 'L' : 'M'} ${point.x * xScale} ${point.y * yScale}`)
+              .join(' ')
+            page.drawSvgPath(path + (shape.tagName === 'polygon' ? ' Z' : ''), {
+              x: b.x,
+              y: b.y + b.height,
+              ...options
+            })
+          }
+        }
+      })
+    }
     const walk = async (element) => {
       if (element.hasAttribute('data-report-watermark')) return
       const style = getComputedStyle(element)
       if (style.display === 'none' || style.visibility === 'hidden') return
+      if (element.hasAttribute('data-report-trend')) {
+        drawTrend(element)
+        return
+      }
       const rect = element.getBoundingClientRect()
       const b = box(rect)
       clipped(element, () => {

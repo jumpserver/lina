@@ -122,9 +122,12 @@ export default {
       deep: true,
       handler(value) {
         this.customRange = [value.start, value.end]
-        this.month = value.start.slice(0, 7)
         this.year = value.start.slice(0, 4)
-        this.quarter = Math.floor(Number(value.start.slice(5, 7) - 1) / 3) + 1
+        // Annual ranges start in January; preserve the selected month and quarter.
+        const month =
+          this.kind === 'year' ? `${this.year}-${this.month.slice(5, 7)}` : value.start.slice(0, 7)
+        this.month = month > this.today.slice(0, 7) ? this.today.slice(0, 7) : month
+        this.quarter = Math.floor((Number(this.month.slice(5, 7)) - 1) / 3) + 1
       }
     }
   },

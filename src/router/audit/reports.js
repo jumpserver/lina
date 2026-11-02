@@ -2,12 +2,15 @@ import i18n from '@/i18n/i18n'
 import users from '../reports/users'
 import assets from '../reports/assets'
 import accounts from '../reports/accounts'
+import { anyAuditReportPermission } from '@/views/reports/center/permissions'
 
 const reportMeta = (title) => ({
   title: i18n.t(title),
-  permissions: ['rbac.view_audit'],
+  permissions: ['rbac.view_audit', anyAuditReportPermission],
   licenseRequired: true
 })
+
+const legacyGroups = { users, assets, accounts }
 
 // Keep saved legacy templates and bookmarks usable, inside the audit console.
 const legacy = (group, routes) =>
@@ -47,7 +50,14 @@ export default [
     component: () => import(`@/views/reports/${group}/index.vue`),
     props: { nav: false },
     hidden: true,
-    meta: { ...reportMeta('AuditReportLegacyTemplates'), activeMenu: '/audit/reports/overview' }
+    meta: {
+      ...reportMeta('AuditReportLegacyTemplates'),
+      permissions: [
+        'rbac.view_audit',
+        legacyGroups[group].flatMap((route) => route.meta.permissions).join(' | ')
+      ],
+      activeMenu: '/audit/reports/overview'
+    }
   })),
   ...['users', 'assets', 'accounts'].map((group) => ({
     path: group,

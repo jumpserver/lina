@@ -97,14 +97,16 @@
                   </el-form-item>
                   <el-form-item
                     v-if="form.chapters.includes('conclusion')"
-                    :label="$t('AuditReportConclusion')"
+                    :label="$t('AuditReportDocConclusion')"
                   >
                     <el-input
                       v-model="form.conclusion"
+                      class="conclusion-input"
                       type="textarea"
                       :rows="7"
                       maxlength="5000"
                       show-word-limit
+                      word-limit-position="outside"
                       :placeholder="$t('AuditReportConclusionPlaceholder')"
                     />
                     <el-button
@@ -433,6 +435,7 @@ export default {
           (row) => row !== Sortable.ghost && row !== Sortable.clone && row.dataset.chapterKey
         )
       let originalRows = []
+      let originalAnchor = null
       this.chapterSortable = markRaw(
         Sortable.create(el, {
           animation: 150,
@@ -448,12 +451,15 @@ export default {
           dragClass: 'chapter-row-dragging',
           onStart: () => {
             originalRows = getRows()
+            originalAnchor = originalRows[originalRows.length - 1]?.nextSibling || null
           },
           onEnd: () => {
             const keys = getRows().map((row) => row.dataset.chapterKey)
-            // Restore Vue's DOM order before updating the keyed chapter model.
-            originalRows.forEach((row) => el.appendChild(row))
+            // Keep rows before Vue's v-for end anchor while restoring its DOM order.
+            // Appending after the anchor makes a move to the end render at the start.
+            originalRows.forEach((row) => el.insertBefore(row, originalAnchor))
             originalRows = []
+            originalAnchor = null
             this.applyChapterOrder(keys)
           }
         })
@@ -641,6 +647,13 @@ export default {
   line-height: 20px;
   white-space: normal;
   overflow-wrap: anywhere;
+}
+.conclusion-input :deep(.el-input__count.is-outside) {
+  position: static;
+  display: block;
+  padding: 4px 0 0;
+  line-height: 20px;
+  text-align: right;
 }
 .chapter-error {
   margin: 0 0 8px;

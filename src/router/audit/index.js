@@ -8,6 +8,8 @@ import ReportsRoutes from './reports'
 import TicketRoutes from './tickets'
 import empty from '@/layout/empty'
 import store from '@/store'
+import { hasPermission } from '@/utils/jms/permission'
+import { anyAuditReportPermission } from '@/views/reports/center/permissions'
 
 export default {
   path: '/audit/',
@@ -85,6 +87,7 @@ export default {
     {
       path: '/audit/reports',
       alwaysShow: true,
+      hidden: () => !hasPermission(anyAuditReportPermission),
       component: empty,
       redirect: '/audit/reports/overview',
       name: 'AuditsReports',
