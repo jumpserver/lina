@@ -148,6 +148,21 @@ const CONFIG_API = '/api/v1/authentication/ukey/ukey-sdk-config/'
 
 const SCRIPT_TAG_ID = 'ukey-sdk-script'
 
+const JIDA_CERT_INFO_FIELDS = {
+  1: 'Version',
+  2: 'SN',
+  3: 'StartTime',
+  4: 'EndTime',
+  5: 'PublicKey',
+  6: 'IssuerCN',
+  7: 'IssuerO',
+  8: 'IssuerOU',
+  9: 'SubjectCN',
+  10: 'SubjectO',
+  11: 'SubjectOU',
+  13: 'CertAlgType'
+}
+
 // 模块级单例 — 防止 Vue 响应式代理污染第三方 SDK 对象
 let _instance = null // UKey SDK 实例
 let _ukey = {} // ukey.* 命名空间（sdk.setup.steps register 的变量）
@@ -363,6 +378,10 @@ export default {
     },
 
     async readBinding(config) {
+      if (config.provider === 'vctk_s' && this.mode === 'user' &&
+          config.own_binding?.user_id === this.object?.id) {
+        return config.own_binding
+      }
       if (config.capabilities?.binding_mode !== 'certificate' || this.mode !== 'admin' || !this.object?.id) {
         return { bound: false, binding_version: '', hardware_serial: '' }
       }
@@ -660,10 +679,30 @@ export default {
 
       if (!fields.length) { this.certInfoItems = []; this.hasCert = false; this.certLoading = false; return }
 
+      let readField
+      if (this.mode === 'admin' && this.config.vendor === 'ji_da' && this.config.provider === 'vctk_s') {
+        // Field 14 returns all certificate details in one SDK call; never cache across reads.
+        let details
+        try {
+          const result = this.callUKeyMethod({ call: 'UKey_GetCertInfo', args: ['{{ config.certType }}', 14] }, ctx)
+          details = JSON.parse(result)
+          if (!details || typeof details !== 'object' || Array.isArray(details)) details = {}
+        } catch (_) {
+          details = {}
+        }
+        readField = (field, fieldContext) => {
+          if (field.call !== 'UKey_GetCertInfo') return this.callUKeyMethod(field, fieldContext)
+          const [, infoType] = this.resolveArgs(field.args || [], fieldContext)
+          const key = JIDA_CERT_INFO_FIELDS[infoType]
+          const value = Object.prototype.hasOwnProperty.call(details, key) ? details[key] : null
+          return typeof value === 'string' || typeof value === 'number' ? value : null
+        }
+      }
+
       let hasAny = false
 
       const items = fields.map(field => {
-        const rawVal = this.resolveFieldValue(field, ctx)
+        const rawVal = this.resolveFieldValue(field, ctx, readField)
 
         const item = {
           key: field.key,
@@ -903,6 +942,13 @@ export default {
         throw new Error(`UKey ${this.$t('Method')} "${step.call}" ${this.$t('NotExist')}`)
       }
       const args = this.resolveArgs(step.args || [], ctx)
+      if (this.config.provider === 'vctk_s' && step.digest_certificate) {
+        if (typeof window.VCTKSCertificateDigest !== 'function') {
+          throw new Error(this.$t('UKeyCertificateAlgorithmUnsupported'))
+        }
+        args[0] = window.VCTKSCertificateDigest(this.resolveValue(step.digest_certificate, ctx))
+        if (![1, 4].includes(args[0])) throw new Error(this.$t('UKeyCertificateAlgorithmUnsupported'))
+      }
       return _instance[step.call](...args)
     },
 
@@ -938,11 +984,11 @@ export default {
      * 读取一个 info 字段的值，优先级：call > value（支持模板）
      * 任何错误均静默返回 null
      */
-    resolveFieldValue(field, ctx) {
+    resolveFieldValue(field, ctx, readField = this.callUKeyMethod) {
       if (field.call) {
         let result
         try {
-          result = this.callUKeyMethod(field, ctx)
+          result = readField(field, ctx)
         } catch (_) { return null }
         // 调用成功后对返回值做校验（check 配置），未通过则不显示该字段
         if (field.check !== undefined) {

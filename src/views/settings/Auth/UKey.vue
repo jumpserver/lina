@@ -2,7 +2,7 @@
   <div>
     <el-alert :title="providerHelp" type="info" :closable="false" />
     <el-alert v-if="draftProvider && !vendorCompatible" :title="$t('UKeyVendorIncompatible')" type="warning" :closable="false" />
-    <BaseAuth :config="settings" enable-field="AUTH_UKEY" @reset="resetDraft" v-on="$listeners" />
+    <BaseAuth :config="formSettings" enable-field="AUTH_UKEY" @reset="resetDraft" v-on="$listeners" />
   </div>
 </template>
 
@@ -20,6 +20,13 @@ const ENROLLMENT_FIELDS = [
 ]
 const READONLY_FIELDS = ['AUTH_UKEY_CA_CERT_ALGORITHM']
 const SSL_FIELD = 'AUTH_UKEY_XJCA_USE_SSL'
+const VCTKS_SSL_FIELD = 'AUTH_UKEY_VCTK_S_USE_SSL'
+const VCTKS_AUTH_FIELDS = ['AUTH_UKEY_VCTK_S_USERNAME', 'AUTH_UKEY_VCTK_S_PASSWORD']
+const VCTKS_CONNECTION_FIELDS = [
+  'AUTH_UKEY_VCTK_S_SVS_URL', 'AUTH_UKEY_VCTK_S_TLS_VERIFY', 'AUTH_UKEY_VCTK_S_TLS_CA_CERT',
+  ...VCTKS_AUTH_FIELDS
+]
+const VCTKS_FIELDS = [...VCTKS_CONNECTION_FIELDS, 'AUTH_UKEY_VCTK_S_ISSUING_CA']
 
 export default {
   name: 'UKey',
@@ -33,8 +40,15 @@ export default {
       draftVendor: '',
       draftProvider: '',
       draftServiceURL: '',
-      initialDraft: { provider: '', vendor: '', serviceURL: '' },
+      draftVCTKSServiceURL: '',
+      issuingCAConfigured: null,
+      initialDraft: { provider: '', vendor: '', serviceURL: '', vctksServiceURL: '' },
       providers: [],
+      connectionButton: {
+        title: this.$t('UKeyTestConnection'),
+        loading: false,
+        callback: this.testConnection
+      },
       settings: {
         url: '/api/v1/settings/setting/?category=ukey',
         hasDetailInMsg: false,
@@ -62,6 +76,51 @@ export default {
           AUTH_UKEY_CA_CERT_ALGORITHM: { component: TextReadonly, el: { bolder: false } },
           AUTH_UKEY_CA_KEY_CONTENT: { component: UploadKey, label: this.$t('UKeyCAKey') },
           AUTH_UKEY_CA_KEY_PASS: { label: this.$t('UKeyCAKeyPassword') },
+          AUTH_UKEY_VCTK_S_USERNAME: {
+            label: this.$t('UKeyVCTKSAuthorizationUsername'),
+            helpText: this.$t('UKeyVCTKSAuthorizationHelp'),
+            el: { autocomplete: 'off' }
+          },
+          AUTH_UKEY_VCTK_S_PASSWORD: {
+            label: this.$t('UKeyVCTKSAuthorizationPassword'),
+            helpText: this.$t('UKeyVCTKSAuthorizationPasswordHelp'),
+            el: { type: 'password', showPassword: true, autocomplete: 'new-password' }
+          },
+          AUTH_UKEY_VCTK_S_SVS_URL: {
+            label: this.$t('UKeyVCTKSServerURL'),
+            rules: [Required],
+            el: { placeholder: 'https://vctks.example.com:45680' },
+            helpText: this.$t('UKeyVCTKSServerHelp'),
+            on: {
+              input: ([value], updateForm) => vm.changeVCTKSServiceURL(value, updateForm),
+              change: ([value], updateForm) => vm.changeVCTKSServiceURL(value, updateForm)
+            }
+          },
+          [VCTKS_SSL_FIELD]: {
+            label: this.$t('UKeyUseSSL'),
+            component: 'el-switch',
+            helpTip: this.$t('UKeyUseSSLHelp'),
+            hidden: () => vm.draftProvider !== 'vctk_s',
+            on: { change: ([value], updateForm) => vm.changeVCTKSSSL(value, updateForm) }
+          },
+          AUTH_UKEY_VCTK_S_ISSUING_CA: {
+            component: UploadKey,
+            label: this.$t('UKeyVCTKSIssuingCA'),
+            helpText: this.$t('UKeyVCTKSIssuingCAHelp'),
+            helpTextFormatter: () => vm.$createElement('span', {
+              class: 'ukey-issuing-ca-status'
+            }, vm.issuingCAConfigured === null ? '' : vm.$t(
+              vm.issuingCAConfigured ? 'UKeyVCTKSIssuingCAConfigured' : 'UKeyVCTKSIssuingCANotConfigured'
+            ))
+          },
+          AUTH_UKEY_VCTK_S_TLS_VERIFY: {
+            options: [
+              { value: 'custom', label: this.$t('UKeyTLSCustomCA') },
+              { value: 'insecure', label: this.$t('UKeyTLSInsecure') }
+            ],
+            tips: false
+          },
+          AUTH_UKEY_VCTK_S_TLS_CA_CERT: { component: UploadKey, label: this.$t('CACertificate') },
           AUTH_UKEY_XJCA_SVS_URL: {
             label: this.$t('UKeySVSURL'),
             rules: [Required],
@@ -93,9 +152,13 @@ export default {
           vm.captureSettings(obj)
           vm.initialDraft = {
             provider: obj.AUTH_UKEY_CA_PROVIDER, vendor: obj.AUTH_UKEY_VENDOR,
-            serviceURL: vm.draftServiceURL
+            serviceURL: vm.draftServiceURL, vctksServiceURL: vm.draftVCTKSServiceURL
           }
           obj[SSL_FIELD] = !/^http:\/\//i.test(vm.draftServiceURL)
+          obj[VCTKS_SSL_FIELD] = !/^http:\/\//i.test(vm.draftVCTKSServiceURL)
+          if (!['custom', 'insecure'].includes(obj.AUTH_UKEY_VCTK_S_TLS_VERIFY)) {
+            obj.AUTH_UKEY_VCTK_S_TLS_VERIFY = 'custom'
+          }
           if (!['custom', 'insecure'].includes(obj.AUTH_UKEY_XJCA_TLS_VERIFY)) {
             obj.AUTH_UKEY_XJCA_TLS_VERIFY = 'custom'
           }
@@ -115,21 +178,26 @@ export default {
           vm.captureSettings(res)
           const refreshed = Object.fromEntries(vm.secretFields.map(key => [key, '']))
           for (const key of READONLY_FIELDS) refreshed[key] = res[key]
+          if (res.AUTH_UKEY_CA_PROVIDER === 'vctk_s') {
+            refreshed.AUTH_UKEY_VCTK_S_SVS_URL = vm.draftVCTKSServiceURL
+            refreshed[VCTKS_SSL_FIELD] = !/^http:\/\//i.test(vm.draftVCTKSServiceURL)
+          }
           this.$refs.form?.updateFormFields?.(refreshed)
           return res
-        },
-        moreButtons: [{
-          title: this.$t('UKeyTestConnection'),
-          loading: false,
-          hidden: () => !vm.activeProvider.supports_connection_test,
-          callback: this.testConnection
-        }]
+        }
       }
     }
   },
   computed: {
+    formSettings() {
+      return {
+        ...this.settings,
+        moreButtons: this.activeProvider.supports_connection_test ? [this.connectionButton] : []
+      }
+    },
     providerHelp() {
-      return this.$t(this.draftProvider === 'xjca' ? 'UKeyXJCAHelp' : 'UKeyProviderHelp')
+      const keys = { xjca: 'UKeyXJCAHelp', vctk_s: 'UKeyVCTKSHelp' }
+      return this.$t(keys[this.draftProvider] || 'UKeyProviderHelp')
     },
     availableProviders() {
       return this.providers.filter(provider => this.isVendorCompatible(provider.id, this.draftVendor))
@@ -146,7 +214,7 @@ export default {
   },
   watch: {
     draftProvider(value) {
-      this.settings.moreButtons[0].title = this.$t(value === 'xjca' ? 'UKeyTestFishermanConnection' : 'UKeyTestConnection')
+      this.connectionButton.title = this.$t(value === 'xjca' ? 'UKeyTestFishermanConnection' : 'UKeyTestConnection')
     }
   },
   methods: {
@@ -160,6 +228,16 @@ export default {
       // The URL is the only persisted protocol setting.
       this.draftServiceURL = (value ? 'https://' : 'http://') + this.draftServiceURL.replace(/^https?:\/\//i, '')
       updateForm({ AUTH_UKEY_XJCA_SVS_URL: this.draftServiceURL })
+    },
+    changeVCTKSServiceURL(value, updateForm) {
+      this.draftVCTKSServiceURL = value
+      if (/^https?:\/\//i.test(value)) {
+        updateForm({ [VCTKS_SSL_FIELD]: /^https:\/\//i.test(value) })
+      }
+    },
+    changeVCTKSSSL(value, updateForm) {
+      this.draftVCTKSServiceURL = (value ? 'https://' : 'http://') + this.draftVCTKSServiceURL.replace(/^https?:\/\//i, '')
+      updateForm({ AUTH_UKEY_VCTK_S_SVS_URL: this.draftVCTKSServiceURL })
     },
     changeVendor(value, updateForm) {
       this.draftVendor = value
@@ -175,6 +253,9 @@ export default {
     getProvider(id) {
       return this.providers.find(provider => provider.id === id) || {}
     },
+    getProviderFields(provider) {
+      return provider.id === 'vctk_s' ? VCTKS_FIELDS : provider.fields || []
+    },
     configureProviders(providers) {
       this.providers = providers
       this.settings.encryptedFields = this.secretFields
@@ -184,20 +265,27 @@ export default {
           provider.label,
           provider.id === 'xjca'
             ? provider.fields.flatMap(field => field === 'AUTH_UKEY_XJCA_SVS_URL' ? [field, SSL_FIELD] : [field])
-            : provider.fields
-        ])
+            : this.getProviderFields(provider).filter(field => !VCTKS_AUTH_FIELDS.includes(field)).flatMap(field => (
+              field === 'AUTH_UKEY_VCTK_S_SVS_URL' ? [field, VCTKS_SSL_FIELD] : [field]
+            ))
+        ]),
+        [this.$t('UKeyVCTKSAuthorizationAdvanced'), VCTKS_AUTH_FIELDS]
       ]
       const fieldsMeta = { ...this.settings.fieldsMeta }
-      for (const key of new Set(providers.flatMap(provider => provider.fields))) {
+      for (const key of new Set(providers.flatMap(provider => this.getProviderFields(provider)))) {
         fieldsMeta[key] = {
           ...fieldsMeta[key],
           hidden: form => {
             // Group headers receive the initial form; use the current selection for both.
             const provider = this.activeProvider
-            if (!(provider.fields || []).includes(key)) return true
+            if (!this.getProviderFields(provider).includes(key)) return true
             if (key === 'AUTH_UKEY_XJCA_TLS_VERIFY') return !form[SSL_FIELD]
             if (key === 'AUTH_UKEY_XJCA_TLS_CA_CERT') {
               return !form[SSL_FIELD] || form.AUTH_UKEY_XJCA_TLS_VERIFY !== 'custom'
+            }
+            if (key === 'AUTH_UKEY_VCTK_S_TLS_VERIFY') return !form[VCTKS_SSL_FIELD]
+            if (key === 'AUTH_UKEY_VCTK_S_TLS_CA_CERT') {
+              return !form[VCTKS_SSL_FIELD] || form.AUTH_UKEY_VCTK_S_TLS_VERIFY !== 'custom'
             }
             if (key === 'AUTH_UKEY_ENROLL_ENABLED') return !provider.supports_enrollment
             if (key === 'AUTH_UKEY_DEFAULT_PIN') return !provider.expose_default_pin
@@ -209,7 +297,7 @@ export default {
     },
     cleanSettings(data) {
       const provider = this.getProvider(data.AUTH_UKEY_CA_PROVIDER)
-      const allowed = new Set([...BASIC_FIELDS, ...(provider.fields || [])])
+      const allowed = new Set([...BASIC_FIELDS, ...this.getProviderFields(provider)])
       const values = Object.fromEntries(Object.entries(data).filter(([key]) => allowed.has(key)))
       if (provider.id !== 'builtin' || this.savedProvider !== 'builtin' || data.AUTH_UKEY_VENDOR !== this.savedVendor) {
         values.AUTH_UKEY_CONFIG_REVISION = this.revision
@@ -227,7 +315,8 @@ export default {
         return
       }
       const provider = this.getProvider(value.AUTH_UKEY_CA_PROVIDER)
-      const draft = Object.fromEntries((provider.connection_fields || []).map(key => [key, value[key]]))
+      const connectionFields = provider.id === 'vctk_s' ? VCTKS_CONNECTION_FIELDS : provider.connection_fields || []
+      const draft = Object.fromEntries(connectionFields.map(key => [key, value[key]]))
       draft.AUTH_UKEY_CA_PROVIDER = provider.id
       draft.AUTH_UKEY_VENDOR = value.AUTH_UKEY_VENDOR
       button.loading = true
@@ -237,8 +326,10 @@ export default {
           if (draft[key]) draft[key] = encryptPassword(draft[key])
           else delete draft[key]
         }
-        await this.$axios.post('/api/v1/settings/ukey/testing/', draft)
-        this.$message.success(this.$t('UKeyConnectionPassed'))
+        const result = await this.$axios.post('/api/v1/settings/ukey/testing/', draft)
+        this.$message.success(result.msg || this.$t(
+          provider.id === 'vctk_s' ? 'UKeyVCTKSConnectionPassed' : 'UKeyConnectionPassed'
+        ))
       } finally {
         button.loading = false
       }
@@ -247,6 +338,7 @@ export default {
       this.draftProvider = this.initialDraft.provider
       this.draftVendor = this.initialDraft.vendor
       this.draftServiceURL = this.initialDraft.serviceURL
+      this.draftVCTKSServiceURL = this.initialDraft.vctksServiceURL
     },
     captureSettings(value) {
       this.configureProviders(value.AUTH_UKEY_CA_PROVIDERS || [])
@@ -256,6 +348,9 @@ export default {
       this.savedVendor = value.AUTH_UKEY_VENDOR
       this.draftVendor = value.AUTH_UKEY_VENDOR
       this.draftServiceURL = value.AUTH_UKEY_XJCA_SVS_URL || ''
+      this.draftVCTKSServiceURL = value.AUTH_UKEY_VCTK_S_SVS_URL || ''
+      const configured = value.AUTH_UKEY_VCTK_S_ISSUING_CA_CONFIGURED
+      this.issuingCAConfigured = typeof configured === 'boolean' ? configured : null
     }
   }
 }
