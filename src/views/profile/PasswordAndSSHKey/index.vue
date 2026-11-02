@@ -4,7 +4,6 @@
       <component
         :is="config.activeMenu"
         :key="config.activeMenu"
-        :credential-type="config.activeMenu === 'FileEncryption' ? 'file' : 'lock'"
         :object="user"
         @update:active-menu="handleUpdate"
       />
@@ -16,24 +15,19 @@
 import { GenericDetailPage } from '@/layout/components'
 import Password from './Password/Password.vue'
 import SSHKeyList from './SSHKey/SSHKeyList.vue'
-import ClientCredentials from './ClientCredentials.vue'
 
 export default {
   components: {
     GenericDetailPage,
     Password,
-    SSHKeyList,
-    ClientCredentials,
-    FileEncryption: ClientCredentials
+    SSHKeyList
   },
   data() {
     return {
       user: this.$store.state.users.profile,
       config: {
         title: this.$t('PasswordAndSSHKey'),
-        activeMenu: ['ClientCredentials', 'FileEncryption'].includes(this.$route.query.tab)
-          ? this.$route.query.tab
-          : 'Password',
+        activeMenu: this.$route.query.tab === 'SSHKeyList' ? 'SSHKeyList' : 'Password',
         submenu: this.getSubmenu(),
         hasRightSide: false,
         hasActivity: false,
@@ -58,7 +52,7 @@ export default {
             this.$store.state.users.profile.can_public_key_auth &&
             this.$hasPerm('authentication.view_sshkey')
               ? 'SSHKeyList'
-              : 'ClientCredentials'
+              : 'Password'
         }
       }
     }
@@ -77,14 +71,6 @@ export default {
           disabled:
             !this.$store.state.users.profile.can_public_key_auth ||
             !this.$hasPerm('authentication.view_sshkey')
-        },
-        {
-          title: this.$t('ClientCredentials'),
-          name: 'ClientCredentials'
-        },
-        {
-          title: this.$t('FileEncryption'),
-          name: 'FileEncryption'
         }
       ]
     },

@@ -8,12 +8,19 @@
     />
     <template v-else>
       <el-alert
-        :title="$t(credentialType === 'file' ? 'FileEncryptionHelp' : 'ClientCredentialsHelp')"
+        :title="$t(credentialType === 'lock' ? 'ClientCredentialsHelp' : 'FileEncryptionHelp')"
         type="info"
         :closable="false"
       />
       <IBox>
-        <GenericCreateUpdateForm :key="formVersion" v-bind="config" submit-method="patch" />
+        <div>
+          <GenericCreateUpdateForm
+            :key="formVersion"
+            v-bind="config"
+            submit-method="patch"
+            :more-buttons="clearPasswordButtons"
+          />
+        </div>
       </IBox>
     </template>
   </div>
@@ -73,12 +80,22 @@ export default {
           }
     return {
       formVersion: 0,
+      clearingPassword: false,
+      lockPasswordConfigured: false,
       config: {
         url: '/api/v1/users/profile/client-credentials/',
         hasDetailInMsg: false,
-        fields: [
-          [this.$t(group === 'lock' ? 'ClientLockPassword' : 'FileEncryptionPassword'), [group]]
-        ],
+        afterGetRemoteMeta: (meta) => {
+          if (group === 'file' && meta.file?.children?.has_secret_key) {
+            // The tab reminder contains the file-encryption explanation.
+            meta.file.children.has_secret_key.help_text = ''
+          }
+        },
+        afterGetFormValue: (values) => {
+          this.lockPasswordConfigured = Boolean(values.lock?.has_password)
+          return values
+        },
+        fields: [group],
         fieldsMeta: { [group]: groupMeta },
         cleanFormValue: (values) => ({
           [group]: Object.fromEntries(
@@ -95,9 +112,47 @@ export default {
     }
   },
   computed: {
+    clearPasswordButtons() {
+      return this.credentialType === 'lock'
+        ? [
+            {
+              title: this.$t('IdleLock.ClearPassword'),
+              type: 'danger',
+              plain: true,
+              loading: this.clearingPassword,
+              disabled: !this.lockPasswordConfigured || this.clearingPassword,
+              callback: () => this.clearLockPassword()
+            }
+          ]
+        : []
+    },
     accountMismatch() {
       const expected = this.$route.query.user_id
       return Boolean(expected && expected !== this.$store.state.users.profile.id)
+    }
+  },
+  methods: {
+    async clearLockPassword() {
+      if (!this.lockPasswordConfigured || this.clearingPassword) return
+      this.clearingPassword = true
+      try {
+        await this.$confirm(
+          this.$t('IdleLock.ClearPasswordConfirm'),
+          this.$t('IdleLock.ClearPassword'),
+          { type: 'warning' }
+        )
+        await this.$axios.patch('/api/v1/users/profile/client-credentials/', {
+          lock: { clear: true }
+        })
+        this.$message.success(this.$t('IdleLock.PasswordCleared'))
+        this.formVersion += 1
+      } catch (error) {
+        if (error !== 'cancel' && error !== 'close') {
+          this.$log.error('Failed to clear lock password', error)
+        }
+      } finally {
+        this.clearingPassword = false
+      }
     }
   }
 }
@@ -107,6 +162,6 @@ export default {
 .credential-form {
   display: flex;
   flex-direction: column;
-  gap: var(--page-section-gap, 8px);
+  gap: 16px;
 }
 </style>

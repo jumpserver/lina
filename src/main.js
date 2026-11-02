@@ -131,16 +131,7 @@ async function initApp() {
   setRootColors()
 
   watchSessions()
-  // Mount app and remove initial loading overlay
   app.mount('#app')
-  try {
-    const el = document.getElementById('loading')
-    if (el && el.parentNode) {
-      el.parentNode.removeChild(el)
-    }
-  } catch (e) {
-    // ignore
-  }
 }
 
 initApp().then()

@@ -65,6 +65,12 @@ export default {
       ]
     },
     {
+      path: '/profile/security',
+      name: 'ProfileSecurity',
+      component: () => import('@/views/profile/Security/index.vue'),
+      meta: { title: i18n.t('PersonalSecurity.Title'), icon: 'lock', permissions: [] }
+    },
+    {
       path: '/profile/passkeys',
       name: 'Passkey',
       component: () => import('@/views/profile/PassKey'),

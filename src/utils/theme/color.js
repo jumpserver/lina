@@ -113,10 +113,8 @@ export function colorToRgba(inputColor, alpha) {
 }
 
 export function setRootColors() {
-  const themeColors = defaultThemeConfig || {}
-  for (const [key, value] of Object.entries(themeColors)) {
-    document.documentElement.style.setProperty(key, value)
-  }
+  // Initialize Element Plus shades too, including button keyboard-focus outlines.
+  changeMenuColor(defaultThemeConfig)
 }
 
 function syncElementPlusColorVars(elementStyle, colorName, currentColor) {

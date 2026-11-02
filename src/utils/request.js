@@ -22,6 +22,14 @@ const service = axios.create({
   timeout: 2 * 60 * 1000 // request timeout
 })
 
+let lockSignOutUntil = 0
+
+export function deferAuthFailureUntil(at) {
+  if (Number.isFinite(at)) {
+    lockSignOutUntil = Math.max(lockSignOutUntil, Math.min(at, Date.now() + 5000))
+  }
+}
+
 function beforeRequestAddToken(config) {
   const csrfToken = getTokenFromCookie()
   if (csrfToken) {
@@ -69,6 +77,10 @@ function goToLogin() {
 }
 
 function ifUnauthorized({ response }) {
+  if (response.status === 401 && lockSignOutUntil > Date.now()) {
+    response.config.disableFlashErrorMsg = true
+    return
+  }
   if (response.status === 401) {
     response.config.disableFlashErrorMsg = true
     if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
@@ -172,6 +184,10 @@ service.interceptors.response.use(
       return Promise.reject(error)
     }
     const response = error.response
+    if (response.status === 423 && response.data?.code === 'web_session_locked') {
+      window.dispatchEvent(new Event('jms:web-session-locked'))
+      return Promise.reject(error)
+    }
 
     if (isTemplateFollowingConflict(error)) {
       return retryWithoutTemplateFollowing(
