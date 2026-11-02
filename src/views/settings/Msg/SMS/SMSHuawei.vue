@@ -5,7 +5,6 @@
 <script>
 import BaseSMS from './Base.vue'
 import { PhoneInput, UpdateToken } from '@/components/Form/FormFields'
-import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'SMSHuawei',
@@ -16,6 +15,7 @@ export default {
     const vm = this
     return {
       url: `/api/v1/settings/setting/?category=huawei`,
+      encryptedFields: ['HUAWEI_APP_SECRET'],
       hasDetailInMsg: false,
       visible: false,
       moreButtons: [
@@ -23,18 +23,7 @@ export default {
           title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
-            btn.loading = true
-            vm.$axios.post(
-              `/api/v1/settings/sms/huawei/testing/`,
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch((error) => {
-              vm.$log.error('err occur')
-              vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => {
-              btn.loading = false
-            })
+            return vm.$refs.baseSms.testSettings(value, form, btn, 'huawei')
           }
         }
       ],
@@ -73,7 +62,6 @@ export default {
           label: this.$t('AppEndpoint')
         },
         SMS_TEST_PHONE: {
-          rules: [Required],
           component: PhoneInput
         }
       },

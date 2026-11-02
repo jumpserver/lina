@@ -4,7 +4,7 @@ jest.mock('@/views/settings/Auth/Base', () => ({}))
 jest.mock('@/components', () => ({ UploadKey: {} }))
 jest.mock('@/components/Form/FormFields/TextReadonly.vue', () => ({}))
 jest.mock('@/components/Form/DataForm/rules', () => ({ Required: { required: true } }))
-jest.mock('@/utils/session-encrypt', () => ({ encryptPassword: value => value }))
+jest.mock('@/utils/session-encrypt', () => ({ encryptPassword: value => `encrypted:${value}` }))
 
 const providers = [
   {
@@ -80,7 +80,7 @@ describe('VCTK_S settings', () => {
       AUTH_UKEY_VCTK_S_USERNAME: 'business', AUTH_UKEY_VCTK_S_PASSWORD: 'new-password'
     }, null, { loading: false })
     expect(vm.$axios.post.mock.calls[0][1]).toMatchObject({
-      AUTH_UKEY_VCTK_S_USERNAME: 'business', AUTH_UKEY_VCTK_S_PASSWORD: 'new-password'
+      AUTH_UKEY_VCTK_S_USERNAME: 'business', AUTH_UKEY_VCTK_S_PASSWORD: 'encrypted:new-password'
     })
   })
 
@@ -164,14 +164,52 @@ describe('VCTK_S settings', () => {
     expect(button.loading).toBe(false)
   })
 
-  it('allows retry after a failed connection test', async () => {
+  it.each([
+    [new Error('timeout'), 'timeout'],
+    [{ response: { data: { AUTH_UKEY_VCTK_S_SVS_URL: ['Invalid service URL'] } } },
+      'AUTH_UKEY_VCTK_S_SVS_URL: Invalid service URL'],
+    [{ response: { data: { detail: 'Too many requests' } } }, 'Too many requests'],
+    [{}, 'TestFailed']
+  ])('reports a failed connection once and allows retry', async (error, message) => {
     const vm = createVM()
-    vm.$axios = { post: jest.fn().mockRejectedValue(new Error('timeout')) }
+    vm.$axios = { post: jest.fn().mockRejectedValueOnce(error).mockResolvedValueOnce({ msg: 'passed' }) }
+    vm.$message = { error: jest.fn(), success: jest.fn() }
     const button = { loading: false }
-    await expect(vm.testConnection({
+    const value = {
       AUTH_UKEY_CA_PROVIDER: 'vctk_s', AUTH_UKEY_VENDOR: 'ji_da'
-    }, null, button)).rejects.toThrow('timeout')
+    }
+    await vm.testConnection(value, null, button)
+    expect(vm.$message.error).toHaveBeenCalledTimes(1)
+    expect(vm.$message.error).toHaveBeenCalledWith(message)
+    expect(vm.$message.success).not.toHaveBeenCalled()
+    expect(vm.$axios.post.mock.calls[0][2]).toEqual({ disableFlashErrorMsg: true })
     expect(button.loading).toBe(false)
+    await vm.testConnection(value, null, button)
+    expect(vm.$message.success).toHaveBeenCalledWith('passed')
+    expect(button.loading).toBe(false)
+  })
+
+  it('omits blank credentials without changing the draft or validating save-only fields', async () => {
+    const vm = createVM()
+    vm.$axios = { post: jest.fn().mockResolvedValue({ msg: 'passed' }) }
+    vm.$message = { success: jest.fn() }
+    const value = {
+      AUTH_UKEY_CA_PROVIDER: 'vctk_s', AUTH_UKEY_VENDOR: 'ji_da',
+      AUTH_UKEY_VCTK_S_USERNAME: '', AUTH_UKEY_VCTK_S_PASSWORD: '',
+      AUTH_UKEY_VCTK_S_TLS_CA_CERT: '', AUTH_UKEY_VCTK_S_ISSUING_CA: '',
+      AUTH_UKEY_DEFAULT_PIN: 'not-a-connection-field'
+    }
+    const original = { ...value }
+    const form = { validate: jest.fn() }
+    await vm.testConnection(value, form, { loading: false })
+    const draft = vm.$axios.post.mock.calls[0][1]
+    expect(draft.AUTH_UKEY_VCTK_S_USERNAME).toBe('')
+    for (const key of ['AUTH_UKEY_VCTK_S_PASSWORD', 'AUTH_UKEY_VCTK_S_TLS_CA_CERT',
+      'AUTH_UKEY_VCTK_S_ISSUING_CA', 'AUTH_UKEY_DEFAULT_PIN']) {
+      expect(draft).not.toHaveProperty(key)
+    }
+    expect(value).toEqual(original)
+    expect(form.validate).not.toHaveBeenCalled()
   })
 
   it('returns to builtin when switching to a vendor without VCTK_S support', () => {

@@ -35,6 +35,7 @@ const ISSUING_CA = 'AUTH_UKEY_VCTK_S_ISSUING_CA'
 const CA_CONFIGURED = 'AUTH_UKEY_VCTK_S_ISSUING_CA_CONFIGURED'
 const AUTH_USER = 'AUTH_UKEY_VCTK_S_USERNAME'
 const AUTH_PASSWORD = 'AUTH_UKEY_VCTK_S_PASSWORD'
+const testLabels = { UKeyTestConnection: 'Test', UKeyTestFishermanConnection: 'Test' }
 const fields = [SERVER_URL, TLS_VERIFY, TLS_CA, ISSUING_CA, AUTH_USER, AUTH_PASSWORD]
 const writeOnlyFields = [TLS_CA, ISSUING_CA, AUTH_PASSWORD, 'AUTH_UKEY_DEFAULT_PIN', 'AUTH_UKEY_CA_CERT_CONTENT', 'AUTH_UKEY_XJCA_TLS_CA_CERT']
 const providers = [
@@ -86,7 +87,7 @@ async function settle() {
   await Vue.nextTick()
 }
 
-async function createForm(initial = {}, metadata = remoteMeta) {
+async function createForm(initial = {}, { translate = key => testLabels[key] || key, metadata = remoteMeta } = {}) {
   const saved = {
     AUTH_UKEY: true, AUTH_UKEY_VENDOR: 'ji_da', AUTH_UKEY_CA_PROVIDER: 'vctk_s',
     AUTH_UKEY_CONFIG_REVISION: 'revision-1', AUTH_UKEY_CA_PROVIDERS: providers,
@@ -112,8 +113,8 @@ async function createForm(initial = {}, metadata = remoteMeta) {
   const wrapper = mount(UKey, {
     localVue,
     mocks: {
-      $t: key => key, $log: logger, $axios: axios,
-      $message: { success: jest.fn(), warning: jest.fn() },
+      $t: translate, $log: logger, $axios: axios,
+      $message: { success: jest.fn(), warning: jest.fn(), error: jest.fn() },
       $route: { name: 'UKeyList', params: {}, query: {} },
       $router: { currentRoute: { name: 'UKeyList' }, push: jest.fn() },
       $store: {
@@ -168,7 +169,7 @@ describe('VCTK_S settings in the shared form', () => {
     const form = await createForm({
       AUTH_UKEY_VENDOR: vendor, AUTH_UKEY_CA_PROVIDER: providerId,
       AUTH_UKEY_CA_PROVIDERS: legacyProviders
-    }, metadata)
+    }, { metadata })
     wrapper = form.wrapper
     expect(wrapper.text()).not.toContain('UKeyVCTKSAuthorizationAdvanced')
     expect(item(wrapper, AUTH_USER).exists()).toBe(false)
@@ -314,7 +315,7 @@ describe('VCTK_S settings in the shared form', () => {
     wrapper = form.wrapper
     item(wrapper, SERVER_URL).find('input').setValue('https://draft.example.com:45679')
     await settle()
-    const testButton = button(wrapper, 'UKeyTestConnection')
+    const testButton = button(wrapper, 'Test')
     expect(testButton.isVisible()).toBe(true)
     expect(testButton.attributes('hidden')).toBeUndefined()
     testButton.trigger('click')
@@ -322,17 +323,40 @@ describe('VCTK_S settings in the shared form', () => {
     expect(form.axios.post).toHaveBeenCalledWith('/api/v1/settings/ukey/testing/', {
       AUTH_UKEY_CA_PROVIDER: 'vctk_s', AUTH_UKEY_VENDOR: 'ji_da',
       [SERVER_URL]: 'https://draft.example.com:45679', [TLS_VERIFY]: 'custom'
-    })
+    }, { disableFlashErrorMsg: true })
     expect(testButton.classes()).not.toContain('is-loading')
     expect(wrapper.vm.$message.success).toHaveBeenCalledWith('Random generation only; verification not tested.')
+    expect(form.axios.patch).not.toHaveBeenCalled()
+    expect(form.stored[SERVER_URL]).toBe('http://vctks.example.com:8000')
+    expect(form.stored.AUTH_UKEY_CONFIG_REVISION).toBe('revision-1')
+  })
+
+  it('restores the visible test button after a network failure and retries without saving', async () => {
+    const form = await createForm()
+    wrapper = form.wrapper
+    form.axios.post.mockRejectedValueOnce(new Error('Network timeout'))
+    const testButton = button(wrapper, 'Test')
+    testButton.trigger('click')
+    await settle()
+    expect(wrapper.vm.$message.error).toHaveBeenCalledTimes(1)
+    expect(wrapper.vm.$message.error).toHaveBeenCalledWith('Network timeout')
+    expect(testButton.classes()).not.toContain('is-loading')
+    testButton.trigger('click')
+    await settle()
+    expect(form.axios.post).toHaveBeenCalledTimes(2)
+    expect(wrapper.vm.$message.success).toHaveBeenCalledTimes(1)
+    expect(form.axios.patch).not.toHaveBeenCalled()
+    expect(form.stored.AUTH_UKEY_CONFIG_REVISION).toBe('revision-1')
   })
 
   it('preserves builtin and Longmai provider controls and connection behavior', async () => {
-    const form = await createForm()
+    const translate = jest.fn(key => testLabels[key] || key)
+    const form = await createForm({}, { translate })
     wrapper = form.wrapper
+    expect(translate).toHaveBeenCalledWith('UKeyTestConnection')
     item(wrapper, 'AUTH_UKEY_CA_PROVIDER').find('input[value="builtin"]').setChecked(true)
     await settle()
-    expect(button(wrapper, 'UKeyTestConnection')).toBeUndefined()
+    expect(button(wrapper, 'Test')).toBeUndefined()
     expect(wrapper.text()).not.toContain('UKeyVCTKSAuthorizationAdvanced')
     expect(item(wrapper, AUTH_USER).exists()).toBe(false)
     expect(item(wrapper, AUTH_PASSWORD).exists()).toBe(false)
@@ -348,13 +372,22 @@ describe('VCTK_S settings in the shared form', () => {
     expect(item(wrapper, SSL).exists()).toBe(false)
     expect(item(wrapper, 'AUTH_UKEY_XJCA_USE_SSL').exists()).toBe(true)
     expect(item(wrapper, 'AUTH_UKEY_XJCA_TLS_VERIFY').findAll('input').wrappers.map(input => input.element.value)).toEqual(['custom', 'insecure'])
-    const testButton = button(wrapper, 'UKeyTestFishermanConnection')
+    const testButton = button(wrapper, 'Test')
     expect(testButton.isVisible()).toBe(true)
+    expect(translate).toHaveBeenCalledWith('UKeyTestFishermanConnection')
     testButton.trigger('click')
     await settle()
     expect(form.axios.post.mock.calls[0][1]).toEqual({
       AUTH_UKEY_CA_PROVIDER: 'xjca', AUTH_UKEY_VENDOR: 'long_mai',
       AUTH_UKEY_XJCA_SVS_URL: 'https://fisherman.example.com:443', AUTH_UKEY_XJCA_TLS_VERIFY: 'custom'
     })
+    translate.mockClear()
+    item(wrapper, 'AUTH_UKEY_VENDOR').find('input[value="ji_da"]').setChecked(true)
+    await settle()
+    item(wrapper, 'AUTH_UKEY_CA_PROVIDER').find('input[value="vctk_s"]').setChecked(true)
+    await settle()
+    expect(translate).toHaveBeenCalledWith('UKeyTestConnection')
+    expect(button(wrapper, 'Test').isVisible()).toBe(true)
+    expect(form.axios.patch).not.toHaveBeenCalled()
   })
 })

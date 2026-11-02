@@ -12,6 +12,7 @@ import { UploadKey } from '@/components'
 import TextReadonly from '@/components/Form/FormFields/TextReadonly.vue'
 import { Required } from '@/components/Form/DataForm/rules'
 import { encryptPassword } from '@/utils/session-encrypt'
+import { settingsTestErrorMessage } from '@/views/settings/testSettings'
 
 const BASIC_FIELDS = ['AUTH_UKEY', 'AUTH_UKEY_VENDOR', 'AUTH_UKEY_CA_PROVIDER', 'AUTH_UKEY_CHALLENGE_TTL']
 const ENROLLMENT_FIELDS = [
@@ -328,10 +329,14 @@ export default {
           if (draft[key]) draft[key] = encryptPassword(draft[key])
           else delete draft[key]
         }
-        const result = await this.$axios.post('/api/v1/settings/ukey/testing/', draft)
+        const result = await this.$axios.post('/api/v1/settings/ukey/testing/', draft, {
+          disableFlashErrorMsg: true
+        })
         this.$message.success(result.msg || this.$t(
           provider.id === 'vctk_s' ? 'UKeyVCTKSConnectionPassed' : 'UKeyConnectionPassed'
         ))
+      } catch (error) {
+        this.$message.error(settingsTestErrorMessage(error, this.$t('TestFailed')))
       } finally {
         button.loading = false
       }

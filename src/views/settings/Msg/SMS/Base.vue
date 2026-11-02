@@ -20,12 +20,16 @@
 <script>
 import Dialog from '@/components/Dialog/index.vue'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
+import { runSettingsTest } from '@/views/settings/testSettings'
 
 export default {
   name: 'Base',
   components: {
     Dialog,
     GenericCreateUpdateForm
+  },
+  inject: {
+    getSMSTestSettings: { default: () => () => ({}) }
   },
   props: {
     title: {
@@ -48,6 +52,18 @@ export default {
     }
   },
   methods: {
+    testSettings(value, form, button, backend) {
+      return runSettingsTest(this, {
+        value: { ...value, ...this.getSMSTestSettings() },
+        form,
+        button,
+        encryptedFields: this.config.encryptedFields || [],
+        request: data => this.$axios.post(`/api/v1/settings/sms/${backend}/testing/`, data, {
+          disableFlashErrorMsg: true
+        }),
+        onError: error => this.testPerformError(error)
+      })
+    },
     onConfirm() {
     },
     submitSuccess(res) {

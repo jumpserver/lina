@@ -1,6 +1,7 @@
 <template>
   <BaseAuth
     :config="settings"
+    :help-text="$t('SlackTestHelpText')"
     :title="$tc('Slack')"
     enable-field="AUTH_SLACK"
     v-on="$listeners"
@@ -8,6 +9,7 @@
 </template>
 
 <script>
+import { runSettingsTest } from '@/views/settings/testSettings'
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
 import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
@@ -28,19 +30,17 @@ export default {
             title: this.$t('Test'),
             loading: false,
             callback: function(value, form, btn) {
-              btn.loading = true
-              vm.$axios.post(
-                '/api/v1/settings/slack/testing/',
-                value
-              ).then(res => {
-                vm.$message.success(res['msg'])
-              }).catch(() => {
-                vm.$log.error('err occur')
-              }).finally(() => { btn.loading = false })
+              return runSettingsTest(vm, {
+                value, form, button: btn,
+                encryptedFields: vm.settings.encryptedFields,
+                request: data => vm.$axios.post('/api/v1/settings/slack/testing/', data, {
+                  disableFlashErrorMsg: true
+                })
+              })
             }
           }
         ],
-        encryptedFields: ['SLACK_SECRET'],
+        encryptedFields: ['SLACK_CLIENT_SECRET', 'SLACK_BOT_TOKEN'],
         fields: [
           [this.$t('Basic'), [
             'AUTH_SLACK', 'SLACK_CLIENT_ID', 'SLACK_CLIENT_SECRET',
@@ -51,7 +51,7 @@ export default {
           ]]
         ],
         fieldsMeta: {
-          SLACK_APP_SECRET: {
+          SLACK_CLIENT_SECRET: {
             component: UpdateToken
           },
           SLACK_BOT_TOKEN: {

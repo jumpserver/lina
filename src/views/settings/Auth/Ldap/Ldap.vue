@@ -1,5 +1,6 @@
 <template>
   <IBox>
+    <el-alert :closable="false" :title="$t('LdapTestHelpText')" type="info" />
     <GenericCreateUpdateForm v-bind="$data" />
     <ImportDialog v-if="dialogLdapUserImport" :category="category" :visible.sync="dialogLdapUserImport" />
     <TestLoginDialog :visible.sync="dialogTest" :category="category" />

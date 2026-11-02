@@ -1,12 +1,14 @@
 <template>
   <BaseAuth
     :config="settings"
+    :help-text="$t('IMTestHelpText')"
     enable-field="AUTH_DINGTALK"
     v-on="$listeners"
   />
 </template>
 
 <script>
+import { runSettingsTest } from '@/views/settings/testSettings'
 import BaseAuth from './Base'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'
 import { getOrgSelect2Meta } from '@/views/settings/Auth/const'
@@ -26,15 +28,13 @@ export default {
             title: this.$t('DingTalkTest'),
             loading: false,
             callback: function(value, form, btn) {
-              btn.loading = true
-              vm.$axios.post(
-                '/api/v1/settings/dingtalk/testing/',
-                value
-              ).then(res => {
-                vm.$message.success(res['msg'])
-              }).catch(() => {
-                vm.$log.error('err occur')
-              }).finally(() => { btn.loading = false })
+              return runSettingsTest(vm, {
+                value, form, button: btn,
+                encryptedFields: vm.settings.encryptedFields,
+                request: data => vm.$axios.post('/api/v1/settings/dingtalk/testing/', data, {
+                  disableFlashErrorMsg: true
+                })
+              })
             }
           }
         ],

@@ -8,7 +8,6 @@
 <script>
 import BaseSMS from './Base.vue'
 import { PhoneInput } from '@/components/Form/FormFields'
-import { Required } from '@/components/Form/DataForm/rules'
 
 export default {
   name: 'SMSFileCustom',
@@ -20,6 +19,7 @@ export default {
     return {
       helpMessage: this.$t('CustomFile'),
       url: `/api/v1/settings/setting/?category=custom_file`,
+      encryptedFields: [],
       hasDetailInMsg: false,
       visible: false,
       moreButtons: [
@@ -27,16 +27,7 @@ export default {
           title: this.$t('Test'),
           loading: false,
           callback: function(value, form, btn) {
-            btn.loading = true
-            vm.$axios.post(
-              `/api/v1/settings/sms/custom_file/testing/`,
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch((error) => {
-              vm.$log.error('err occur')
-              vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => { btn.loading = false })
+            return vm.$refs.baseSms.testSettings(value, form, btn, 'custom_file')
           }
         }
       ],
@@ -50,7 +41,6 @@ export default {
       ],
       fieldsMeta: {
         SMS_TEST_PHONE: {
-          rules: [Required],
           component: PhoneInput
         }
       },
