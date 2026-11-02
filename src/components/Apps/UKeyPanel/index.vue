@@ -143,11 +143,25 @@
 import { mapGetters } from 'vuex'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import IBox from '@/components/Common/IBox'
-import VCTKSCertificates from './vctksCertificates'
 
 const CONFIG_API = '/api/v1/authentication/ukey/ukey-sdk-config/'
 
 const SCRIPT_TAG_ID = 'ukey-sdk-script'
+
+const JIDA_CERT_INFO_FIELDS = {
+  1: 'Version',
+  2: 'SN',
+  3: 'StartTime',
+  4: 'EndTime',
+  5: 'PublicKey',
+  6: 'IssuerCN',
+  7: 'IssuerO',
+  8: 'IssuerOU',
+  9: 'SubjectCN',
+  10: 'SubjectO',
+  11: 'SubjectOU',
+  13: 'CertAlgType'
+}
 
 // 模块级单例 — 防止 Vue 响应式代理污染第三方 SDK 对象
 let _instance = null // UKey SDK 实例
@@ -211,10 +225,6 @@ export default {
 
   computed: {
     ...mapGetters(['publicSettings']),
-
-    managesVctksCertificates() {
-      return this.mode === 'admin' && this.config.vendor === 'ji_da' && this.config.provider === 'vctk_s'
-    },
 
     operationsConfig() {
       const operations = this.sdkConfig?.operations
@@ -309,47 +319,11 @@ export default {
 
   beforeDestroy() {
     this.disposed = true
-    this.clearVctksCertificates()
     if (this.pollTimer) clearInterval(this.pollTimer)
     if (this.inputDialog.visible) this.cancelInputDialog()
   },
 
   methods: {
-    clearVctksCertificates() {
-      if (this._vctksCertificates) this._vctksCertificates.clear()
-      this._vctksCertificates = null
-    },
-
-    syncVctksCertificates() {
-      const selection = this._vctksCertificates
-      if (selection && selection.sdk !== _instance) return
-      _ukey.devSN = selection?.serial || ''
-      _ukey.cert = selection?.selected?.Cert || ''
-      _ukey.connected = !!selection?.certificates.length
-      this.syncUkeySnapshot()
-    },
-
-    refreshVctksCertificates(select = false) {
-      const selection = this._vctksCertificates
-      if (!selection || selection.sdk !== _instance) throw new Error(this.$t('UKeyConfigChanged'))
-      try {
-        if (select) selection.select()
-        else selection.scan()
-      } finally {
-        this.syncVctksCertificates()
-      }
-    },
-
-    assertVctksBindingContext(vars) {
-      if (!vars.vctksSelection) return
-      const selection = this._vctksCertificates
-      if (this.disposed || !this.managesVctksCertificates ||
-          selection !== vars.vctksSelection || selection.sdk !== _instance ||
-          selection.selected?.Cert !== vars.vctksCertificate) {
-        throw new Error(this.$t('UKeyCertificateSelectionChanged'))
-      }
-    },
-
     syncUkeySnapshot() {
       if (this.disposed) return
       if (this.config.capabilities?.binding_mode === 'certificate') _ukey.binding = this.certificateBinding
@@ -395,7 +369,6 @@ export default {
 
     requireRefresh() {
       if (this.disposed) return
-      this.clearVctksCertificates()
       if (this.pollTimer) clearInterval(this.pollTimer)
       this.refreshRequired = true
       this.sdkLoaded = false
@@ -525,8 +498,6 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     async initSDKInstance() {
       if (this.disposed || this.refreshRequired) return
-      this.clearVctksCertificates()
-      if (this.managesVctksCertificates && this.pollTimer) clearInterval(this.pollTimer)
       this.sdkLoaded = false
       _instance = null
       // 3a. 创建实例
@@ -549,15 +520,7 @@ export default {
 
       // 3b. 执行 setup 步骤（各厂商按需配置，结果可注册到 ukey.* 供后续使用）
       try {
-        if (this.managesVctksCertificates) {
-          this._vctksCertificates = new VCTKSCertificates(_instance)
-          if (this._vctksCertificates.call('UKey_CheckInstall') !== 0) {
-            throw new Error('UKeyCertificateSelectionFailed')
-          }
-          _ukey.devVersion = this._vctksCertificates.call('UKey_GetVersion')
-          this.refreshVctksCertificates(true)
-        }
-        const setupSteps = this.managesVctksCertificates ? [] : (this.sdkConfig.sdk?.setup?.steps || [])
+        const setupSteps = this.sdkConfig.sdk?.setup?.steps || []
         for (const step of setupSteps) {
           const ctx = this.buildContext({ vars: {}, input: {} })
           const result = this.callUKeyMethod(step, ctx)
@@ -565,14 +528,8 @@ export default {
           this.appendLog(`${this.$t('Initialize')}: ${step.label || step.name || step.call} ${this.$t('Success')}`, 'success')
         }
       } catch (e) {
-        if (this.managesVctksCertificates && e.message === 'OperationCanceled') {
-          this.appendLog(this.$t('OperationCanceled'), 'warn')
-        } else {
-          const message = this.managesVctksCertificates ? this.$t(e.message || String(e)) : e.message
-          this.appendLog(`${this.$t('DeviceInitFailed')}: ${message}`, 'error')
-        }
-        if (this.managesVctksCertificates) this.syncVctksCertificates()
-        else _ukey = {}
+        this.appendLog(`${this.$t('DeviceInitFailed')}: ${e.message}`, 'error')
+        _ukey = {}
         this.syncUkeySnapshot()
       }
 
@@ -613,9 +570,7 @@ export default {
 
         // status.cases：通过 source 表达式的值匹配 case，决定显示文本和标签颜色
         if (field.status && Array.isArray(field.status.cases)) {
-          const sourceVal = this.managesVctksCertificates && field.key === 'ukeyConnected'
-            ? !!this._vctksCertificates?.certificates.length
-            : (field.source !== undefined ? this.resolveValue(field.source, ctx) : raw)
+          const sourceVal = field.source !== undefined ? this.resolveValue(field.source, ctx) : raw
           const matchedIndex = field.status.cases.findIndex(c => {
             if (c.match === 'truthy') return !!sourceVal
             if (c.match === 'falsy') return !sourceVal
@@ -653,9 +608,8 @@ export default {
         try {
           if (!await this.checkConfigRevision()) return
           if (this.disposed || this.running) return
-          if (this.managesVctksCertificates) this.refreshVctksCertificates()
           // 重新执行 setup 步骤检测设备是否仍然在线
-          const setupSteps = this.managesVctksCertificates ? [] : (this.sdkConfig?.sdk?.setup?.steps || [])
+          const setupSteps = this.sdkConfig?.sdk?.setup?.steps || []
           for (const step of setupSteps) {
             const ctx = this.buildContext({ vars: {}, input: {} })
             const result = this.callUKeyMethod(step, ctx)
@@ -696,28 +650,6 @@ export default {
 
       const ctx = this.buildContext({ vars: {}, input: {} })
 
-      if (this.managesVctksCertificates) {
-        const selection = this._vctksCertificates?.sdk === _instance ? this._vctksCertificates : null
-        try {
-          this.certInfoItems = selection?.selected ? fields.map(field => {
-            const args = this.resolveArgs(field.args || [], ctx)
-            const value = field.call === 'UKey_GetCertInfo' ? selection.field(args[1]) : null
-            return { key: field.key, label: field.label, value: value == null ? '-' : String(value) }
-          }) : []
-          this.hasCert = !!selection?.selected
-        } catch (error) {
-          this.certInfoItems = []
-          this.hasCert = false
-          // Do not keep retrying a failed SDK read on every background refresh.
-          selection.clear()
-          this.syncVctksCertificates()
-          this.appendLog(this.$t(error.message || String(error)), 'error')
-        } finally {
-          this.certLoading = false
-        }
-        return
-      }
-
       // cert 级别 check 钩子：false → hasCert = false，显示「暂未签发证书」
       if (certCheck !== undefined) {
         let passed = false
@@ -747,10 +679,30 @@ export default {
 
       if (!fields.length) { this.certInfoItems = []; this.hasCert = false; this.certLoading = false; return }
 
+      let readField
+      if (this.mode === 'admin' && this.config.vendor === 'ji_da' && this.config.provider === 'vctk_s') {
+        // Field 14 returns all certificate details in one SDK call; never cache across reads.
+        let details
+        try {
+          const result = this.callUKeyMethod({ call: 'UKey_GetCertInfo', args: ['{{ config.certType }}', 14] }, ctx)
+          details = JSON.parse(result)
+          if (!details || typeof details !== 'object' || Array.isArray(details)) details = {}
+        } catch (_) {
+          details = {}
+        }
+        readField = (field, fieldContext) => {
+          if (field.call !== 'UKey_GetCertInfo') return this.callUKeyMethod(field, fieldContext)
+          const [, infoType] = this.resolveArgs(field.args || [], fieldContext)
+          const key = JIDA_CERT_INFO_FIELDS[infoType]
+          const value = Object.prototype.hasOwnProperty.call(details, key) ? details[key] : null
+          return typeof value === 'string' || typeof value === 'number' ? value : null
+        }
+      }
+
       let hasAny = false
 
       const items = fields.map(field => {
-        const rawVal = this.resolveFieldValue(field, ctx)
+        const rawVal = this.resolveFieldValue(field, ctx, readField)
 
         const item = {
           key: field.key,
@@ -828,12 +780,6 @@ export default {
         if (!await this.checkConfigRevision(operationConfig)) throw new Error(this.$t('UKeyConfigChanged'))
         const operationVars = {} // vars.* 命名空间，仅当前操作可见
         const collectedInput = {} // input.* 命名空间，跨步骤累积
-        if (this.managesVctksCertificates && op.key === 'bindUserUKeySN') {
-          this.refreshVctksCertificates(true)
-          if (!this._vctksCertificates.selected) throw new Error(this.$t('NoCertificateInfo'))
-          operationVars.vctksSelection = this._vctksCertificates
-          operationVars.vctksCertificate = this._vctksCertificates.selected.Cert
-        }
         for (const step of (op.steps || [])) {
           await this.executeStep(step, operationVars, collectedInput, operationConfig)
           if (this.disposed) return
@@ -841,19 +787,10 @@ export default {
         this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Completed')}`, 'success')
         await this.handleEvents(op.event)
       } catch (e) {
-        const message = this.managesVctksCertificates ? this.$t(e.message || String(e)) : e.message
-        this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Failed')}: ${message}`, 'error')
+        this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Failed')}: ${e.message}`, 'error')
       } finally {
-        try {
-          if (this.managesVctksCertificates && !this.disposed && this._vctksCertificates?.sdk === _instance) {
-            this.syncVctksCertificates()
-            await this.readDeviceInfo()
-            await this.readCertInfo()
-          }
-        } finally {
-          this.running = false
-          this.currentOperation = ''
-        }
+        this.running = false
+        this.currentOperation = ''
       }
     },
 
@@ -881,7 +818,6 @@ export default {
       if (step.input || /^(SOF|UKey)_(Create|Delete|Import|Unblock|Gen|Change)/.test(step.call || '')) {
         if (!await this.checkConfigRevision(operationConfig)) throw new Error(this.$t('UKeyConfigChanged'))
       }
-      this.assertVctksBindingContext(operationVars)
       const ctx = this.buildContext({ vars: operationVars, input: collectedInput })
       let result
 
@@ -1006,17 +942,6 @@ export default {
         throw new Error(`UKey ${this.$t('Method')} "${step.call}" ${this.$t('NotExist')}`)
       }
       const args = this.resolveArgs(step.args || [], ctx)
-      const selection = ctx.vars?.vctksSelection
-      if (selection) {
-        this.assertVctksBindingContext(ctx.vars)
-        try {
-          if (step.call === 'UKey_VerifyPIN' || step.call === 'UKey_P7SignAttach') {
-            selection.assertCertificate(ctx.vars.vctksCertificate)
-          }
-        } catch (error) {
-          throw new Error(this.$t(error.message || String(error)))
-        }
-      }
       if (this.config.provider === 'vctk_s' && step.digest_certificate) {
         if (typeof window.VCTKSCertificateDigest !== 'function') {
           throw new Error(this.$t('UKeyCertificateAlgorithmUnsupported'))
@@ -1024,15 +949,7 @@ export default {
         args[0] = window.VCTKSCertificateDigest(this.resolveValue(step.digest_certificate, ctx))
         if (![1, 4].includes(args[0])) throw new Error(this.$t('UKeyCertificateAlgorithmUnsupported'))
       }
-      const result = _instance[step.call](...args)
-      if (selection && (step.call === 'UKey_GetCert' || step.call === 'UKey_P7SignAttach')) {
-        try {
-          selection.assertCertificate(ctx.vars.vctksCertificate, step.call === 'UKey_GetCert' ? result : undefined)
-        } catch (error) {
-          throw new Error(this.$t(error.message || String(error)))
-        }
-      }
-      return result
+      return _instance[step.call](...args)
     },
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -1067,11 +984,11 @@ export default {
      * 读取一个 info 字段的值，优先级：call > value（支持模板）
      * 任何错误均静默返回 null
      */
-    resolveFieldValue(field, ctx) {
+    resolveFieldValue(field, ctx, readField = this.callUKeyMethod) {
       if (field.call) {
         let result
         try {
-          result = this.callUKeyMethod(field, ctx)
+          result = readField(field, ctx)
         } catch (_) { return null }
         // 调用成功后对返回值做校验（check 配置），未通过则不显示该字段
         if (field.check !== undefined) {
