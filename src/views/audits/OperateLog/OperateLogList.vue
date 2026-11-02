@@ -75,7 +75,20 @@ export default {
         hasReportExport: true,
         hasDatePicker: true,
         searchConfig: {
-          getUrlQuery: true
+          getUrlQuery: true,
+          queryKeyMap: {
+            resource_type: 'resource_type',
+            upgrade_resource_type: 'resource_type'
+          },
+          options: [{
+            label: this.$t('UpgradeResourceType'),
+            value: 'upgrade_resource_type',
+            type: 'choice',
+            children: [
+              { label: this.$t('SystemUpgrade'), value: 'Upgrade' },
+              { label: this.$t('PatchUpgrade'), value: 'Patch' }
+            ]
+          }]
         }
       }
     }

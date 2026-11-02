@@ -5,6 +5,7 @@
       v-bind="config"
       @afterGenerateColumns="onColumnsGenerated"
       @input="onFormInput"
+      @submitSuccess="submitSuccess"
     />
     <WatermarkHelpDialog :variables="sessionVariables" :visible.sync="showSessionHelpDialog" />
     <WatermarkHelpDialog :variables="consoleVariables" :visible.sync="showConsoleHelpDialog" />
@@ -20,12 +21,28 @@ export default {
   name: 'SessionSecurity',
   components: { GenericCreateUpdateForm, IBox, WatermarkHelpDialog },
   data() {
-    const lifetimeField = () => ({
+    const lifetimeField = (min = 300, max = 86400) => ({
       helpTextAsTip: true,
-      helpTextAsPlaceholder: false
+      helpTextAsPlaceholder: false,
+      rules: [{
+        validator: (rule, value, callback) => {
+          if (!this.isSangfor || (rule.field === 'CONNECTION_TOKEN_REUSABLE_EXPIRATION' && !this.connectionTokenReusable)) {
+            return callback()
+          }
+          const text = typeof value === 'string' ? value.trim() : String(value)
+          const seconds = Number(text)
+          if (!/^\d+$/.test(text) || !Number.isInteger(seconds) || seconds < min || seconds > max) {
+            const message = max === 86400 ? 'LoginLifetimeRangeError' : 'CredentialLifetimeRangeError'
+            return callback(new Error(this.$t(message, { min, max })))
+          }
+          callback()
+        },
+        trigger: 'blur'
+      }]
     })
     return {
       reusableExpirationField: null,
+      connectionTokenReusable: false,
       showSessionHelpDialog: false,
       showConsoleHelpDialog: false,
       sessionVariables: [
@@ -46,6 +63,10 @@ export default {
       config: {
         url: '/api/v1/settings/setting/?category=security_session',
         hasDetailInMsg: false,
+        afterGetFormValue: (values) => {
+          this.onFormInput(values)
+          return values
+        },
         fields: [
           [
             this.$t('Basic'),
@@ -93,8 +114,8 @@ export default {
             helpTextAsTip: true,
             helpTextAsPlaceholder: false
           },
-          CONNECTION_TOKEN_ONETIME_EXPIRATION: lifetimeField(),
-          CONNECTION_TOKEN_REUSABLE_EXPIRATION: lifetimeField(),
+          CONNECTION_TOKEN_ONETIME_EXPIRATION: lifetimeField(300, 2147483647),
+          CONNECTION_TOKEN_REUSABLE_EXPIRATION: lifetimeField(1, 2147483647),
           OAUTH2_PROVIDER_ACCESS_TOKEN_EXPIRE_SECONDS: lifetimeField(),
           OAUTH2_PROVIDER_REFRESH_TOKEN_EXPIRE_SECONDS: lifetimeField(),
           SECURITY_WATERMARK_SESSION_CONTENT: {
@@ -135,35 +156,37 @@ export default {
             }
           }
         },
-        onSubmit: async (validValues) => {
-          const url = '/api/v1/settings/setting/?category=security_session'
-
-          try {
-            const res = await this.$axios.patch(url, validValues)
-
-            if (res) {
-              this.$message.success(this.$t('UpdateSuccessMsg'))
-              this.$store.commit('settings/SET_SECURITY_WATERMARK_ENABLED', res['SECURITY_WATERMARK_ENABLED'])
-              this.$store.commit('settings/SET_PUBLIC_SETTINGS', {
-                ...this.$store.getters.publicSettings,
-                CONNECTION_TOKEN_REUSABLE: res.CONNECTION_TOKEN_REUSABLE
-              })
-            }
-          } catch (error) {
-            throw new Error(error)
+        cleanFormValue: (values) => {
+          const result = { ...values }
+          if (this.isSangfor && !values.CONNECTION_TOKEN_REUSABLE) {
+            delete result.CONNECTION_TOKEN_REUSABLE_EXPIRATION
           }
+          return result
         }
       }
     }
   },
+  computed: {
+    isSangfor() {
+      return String(this.$store.getters.publicSettings?.VENDOR || '').trim().toLowerCase() === 'sangfor'
+    }
+  },
   methods: {
+    submitSuccess(res) {
+      this.$store.commit('settings/SET_SECURITY_WATERMARK_ENABLED', res.SECURITY_WATERMARK_ENABLED)
+      this.$store.commit('settings/SET_PUBLIC_SETTINGS', {
+        ...this.$store.getters.publicSettings,
+        CONNECTION_TOKEN_REUSABLE: res.CONNECTION_TOKEN_REUSABLE
+      })
+    },
     onColumnsGenerated(fields) {
       this.reusableExpirationField = fields.find(field => field.id === 'CONNECTION_TOKEN_REUSABLE_EXPIRATION')
-      this.$set(this.reusableExpirationField.el, 'disabled', true)
+      this.$set(this.reusableExpirationField.el, 'disabled', !this.connectionTokenReusable)
     },
     onFormInput(values) {
+      this.connectionTokenReusable = !!values.CONNECTION_TOKEN_REUSABLE
       if (this.reusableExpirationField) {
-        this.reusableExpirationField.el.disabled = !values.CONNECTION_TOKEN_REUSABLE
+        this.reusableExpirationField.el.disabled = !this.connectionTokenReusable
       }
     }
   }

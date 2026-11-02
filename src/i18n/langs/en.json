@@ -27,5 +27,10 @@
     "AssetsInOtherZonesTitle": "Confirm asset zone change",
     "AssetsInOtherZonesConfirm": "The following assets currently belong to other zones. Continuing will change their assigned zones: {assets}. Do you want to continue?",
     "AssetsInOtherZonesRemaining": "and {count} more assets not shown",
-    "RoleMemberAlreadyAdded": "Already added"
+    "RoleMemberAlreadyAdded": "Already added",
+    "LoginLifetimeRangeError": "Enter an integer from 300 to 86400 seconds (5 minutes to 24 hours).",
+    "CredentialLifetimeRangeError": "Enter an integer from {min} to {max} seconds.",
+    "UpgradeResourceType": "Upgrade resource type",
+    "SystemUpgrade": "System upgrade",
+    "PatchUpgrade": "Patch upgrade"
 }
