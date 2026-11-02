@@ -76,7 +76,9 @@ export default {
               return runSettingsTest(vm, {
                 value, form, button: btn,
                 encryptedFields: vm.settings.encryptedFields,
-                request: data => vm.$axios.post(`/api/v1/settings/${vm.category}/testing/`, data)
+                request: data => vm.$axios.post(`/api/v1/settings/${vm.category}/testing/`, data, {
+                  disableFlashErrorMsg: true
+                })
               })
             }
           }

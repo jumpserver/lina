@@ -33,7 +33,9 @@ export default {
             return runSettingsTest(vm, {
               value, form, button: btn,
               encryptedFields: vm.encryptedFields,
-              request: data => vm.$axios.post('/api/v1/settings/chatai/testing/', data)
+              request: data => vm.$axios.post('/api/v1/settings/chatai/testing/', data, {
+                disableFlashErrorMsg: true
+              })
             })
           }
         }

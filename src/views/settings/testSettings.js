@@ -33,6 +33,10 @@ function errorMessage(data) {
   return data ? String(data) : ''
 }
 
+export function settingsTestErrorMessage(error, fallback) {
+  return errorMessage(error.response?.data) || error.message || fallback
+}
+
 export async function runSettingsTest(vm, {
   value, form, button, request, encryptedFields = [], normalize, onError
 }) {
@@ -48,7 +52,7 @@ export async function runSettingsTest(vm, {
     return result
   } catch (error) {
     if (onError && error.response?.data) onError(error)
-    vm.$message.error(errorMessage(error.response?.data) || error.message || vm.$t('TestFailed'))
+    vm.$message.error(settingsTestErrorMessage(error, vm.$t('TestFailed')))
   } finally {
     button.loading = false
   }

@@ -58,7 +58,9 @@ export default {
         form,
         button,
         encryptedFields: this.config.encryptedFields || [],
-        request: data => this.$axios.post(`/api/v1/settings/sms/${backend}/testing/`, data),
+        request: data => this.$axios.post(`/api/v1/settings/sms/${backend}/testing/`, data, {
+          disableFlashErrorMsg: true
+        }),
         onError: error => this.testPerformError(error)
       })
     },

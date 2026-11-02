@@ -133,10 +133,61 @@ describe('Settings page wiring', () => {
     await base.methods.testSettings.call(vm, draft, { validate: cb => cb(true) }, { loading: false }, 'alibaba')
     expect(vm.$axios.post).toHaveBeenCalledWith('/api/v1/settings/sms/alibaba/testing/', {
       ...draft, ALIBABA_ACCESS_KEY_SECRET: 'encrypted:new', SMS_CODE_LENGTH: 8
-    })
+    }, { disableFlashErrorMsg: true })
     parentDraft = { SMS_CODE_LENGTH: 6 }
     expect(provided.getSMSTestSettings()).toEqual({ SMS_CODE_LENGTH: 6 })
     expect(draft.ALIBABA_ACCESS_KEY_SECRET).toBe('new')
+  })
+
+  it.each([
+    ['Auth/WeCom.vue', 'wecom'],
+    ['Auth/DingTalk.vue', 'dingtalk'],
+    ['Auth/FeiShu.vue', 'feishu'],
+    ['Auth/FeiShu.vue', 'lark'],
+    ['Auth/Slack.vue', 'slack'],
+    ['Feature/Chat.vue', 'chatai']
+  ])('%s handles test failures without a second global toast (%s)', async (file, category) => {
+    const component = loadComponent(file, {
+      '@/views/settings/testSettings': { runSettingsTest },
+      '@/views/settings/Auth/const': { getOrgSelect2Meta: () => ({}) },
+      vuex: { mapGetters: () => ({}) }
+    })
+    const vm = {
+      ...feedback(), category, encryptedFields: [], formFields: [], formFieldsMeta: {},
+      $axios: {
+        post: jest.fn((url, data, config) => {
+          if (!config?.disableFlashErrorMsg) vm.$message.error('Global error')
+          return Promise.reject({ response: { data: { detail: 'Service unavailable' } } })
+        })
+      }
+    }
+    Object.assign(vm, component.data.call(vm))
+    const testButton = (vm.settings || vm).moreButtons[0]
+    await testButton.callback({ ENABLED: false }, { validate: cb => cb(true) }, testButton)
+    expect(vm.$axios.post).toHaveBeenCalledWith(`/api/v1/settings/${category}/testing/`,
+      { ENABLED: false }, { disableFlashErrorMsg: true })
+    expect(vm.$message.error).toHaveBeenCalledTimes(1)
+    expect(vm.$message.error).toHaveBeenCalledWith('Service unavailable')
+    expect(testButton.loading).toBe(false)
+  })
+
+  it('SMS retains field errors while showing a failed test only once', async () => {
+    const base = loadComponent('Msg/SMS/Base.vue', {
+      '@/views/settings/testSettings': { runSettingsTest }
+    })
+    const fieldError = { SMS_TEST_PHONE: ['Invalid phone number'] }
+    const vm = {
+      ...feedback(), config: {}, getSMSTestSettings: () => ({}),
+      testPerformError: jest.fn(),
+      $axios: { post: jest.fn().mockRejectedValue({ response: { data: fieldError } }) }
+    }
+    const button = { loading: false }
+    await base.methods.testSettings.call(vm, {}, { validate: cb => cb(true) }, button, 'alibaba')
+    expect(vm.$axios.post.mock.calls[0][2]).toEqual({ disableFlashErrorMsg: true })
+    expect(vm.testPerformError).toHaveBeenCalledTimes(1)
+    expect(vm.$message.error).toHaveBeenCalledTimes(1)
+    expect(vm.$message.error).toHaveBeenCalledWith('SMS_TEST_PHONE: Invalid phone number')
+    expect(button.loading).toBe(false)
   })
 
   it('Chat test visibility follows both initial settings and unsaved mode changes', () => {
