@@ -51,7 +51,6 @@
           <div class="rd-page-body" />
           <div class="rd-watermark" data-report-watermark :style="watermarkStyle" />
           <footer class="rd-page-footer">
-            <span>{{ organizationName }} · {{ formatDateTime(snapshot.generated_at) }}</span>
             <span data-report-page-number />
           </footer>
         </article>
@@ -975,18 +974,12 @@ export default {
   border-top: 1px solid #dfe4e9;
   padding-top: 9px;
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: flex-end;
   color: #7b8592;
   font-size: 10px;
   line-height: 1.4;
 }
-.rd-page-footer span:first-child {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.rd-page-footer span:last-child {
+.rd-page-footer span {
   flex-shrink: 0;
 }
 .rd-watermark {
