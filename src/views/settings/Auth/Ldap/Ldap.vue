@@ -80,7 +80,7 @@ export default {
       hasDetailInMsg: false,
       moreButtons: [
         {
-          title: this.$t('Test'),
+          title: this.$t('LdapConnectTest'),
           loading: false,
           callback: function(value, form, btn) {
             if (value['AUTH_LDAP_BIND_PASSWORD'] === undefined) {

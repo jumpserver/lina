@@ -95,7 +95,7 @@ export default {
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {
-          title: this.$t('Test'),
+          title: this.$t('EmailTest'),
           loading: false,
           callback: function(value, form, btn) {
             return runSettingsTest(vm, {

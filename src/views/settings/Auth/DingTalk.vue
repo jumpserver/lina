@@ -25,7 +25,7 @@ export default {
         url: '/api/v1/settings/setting/?category=dingtalk',
         moreButtons: [
           {
-            title: this.$t('Test'),
+            title: this.$t('DingTalkTest'),
             loading: false,
             callback: function(value, form, btn) {
               return runSettingsTest(vm, {

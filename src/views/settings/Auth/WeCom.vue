@@ -26,7 +26,7 @@ export default {
         hasDetailInMsg: false,
         moreButtons: [
           {
-            title: this.$t('Test'),
+            title: this.$t('WeComTest'),
             loading: false,
             callback: function(value, form, btn) {
               return runSettingsTest(vm, {

@@ -46,7 +46,7 @@ export default {
       initialDraft: { provider: '', vendor: '', serviceURL: '', vctksServiceURL: '' },
       providers: [],
       connectionButton: {
-        title: this.$t('Test'),
+        title: this.$t('UKeyTestConnection'),
         loading: false,
         callback: this.testConnection
       },
@@ -211,6 +211,11 @@ export default {
     },
     secretFields() {
       return [...new Set(this.providers.flatMap(provider => provider.secret_fields || []))]
+    }
+  },
+  watch: {
+    draftProvider(value) {
+      this.connectionButton.title = this.$t(value === 'xjca' ? 'UKeyTestFishermanConnection' : 'UKeyTestConnection')
     }
   },
   methods: {

@@ -155,7 +155,7 @@ export default {
       },
       moreButtons: [
         {
-          title: this.$t('Test'),
+          title: this.$t('NasTest'),
           loading: false,
           callback: (value, form, btn) => {
             return runSettingsTest(this, {
