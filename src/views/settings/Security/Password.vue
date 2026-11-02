@@ -46,10 +46,18 @@ export default {
         ],
         [
           this.$t('AssetAccountPasswordProtection'),
-          ['SECURITY_ACCOUNT_SECRET_READ']
+          ['SECURITY_ACCOUNT_SECRET_READ', 'CHANGE_AUTH_PLAN_SECURE_MODE_ENABLED', 'CHANGE_SECRET_AFTER_SESSION_END']
         ]
       ],
       fieldsMeta: {
+        CHANGE_AUTH_PLAN_SECURE_MODE_ENABLED: {
+          helpTextAsTip: true,
+          helpTextAsPlaceholder: false
+        },
+        CHANGE_SECRET_AFTER_SESSION_END: {
+          helpTextAsTip: true,
+          helpTextAsPlaceholder: false
+        },
         SECURITY_ACCOUNT_SECRET_READ: {
           helpTextAsTip: true,
           helpTextAsPlaceholder: false
@@ -66,7 +74,8 @@ export default {
     submitSuccess(res) {
       this.$store.commit('settings/SET_PUBLIC_SETTINGS', {
         ...this.$store.getters.publicSettings,
-        SECURITY_ACCOUNT_SECRET_READ: res.SECURITY_ACCOUNT_SECRET_READ
+        SECURITY_ACCOUNT_SECRET_READ: res.SECURITY_ACCOUNT_SECRET_READ,
+        CHANGE_SECRET_AFTER_SESSION_END: res.CHANGE_SECRET_AFTER_SESSION_END
       })
     },
     submitMethod() {

@@ -87,7 +87,7 @@ async function settle() {
   await Vue.nextTick()
 }
 
-async function createForm(initial = {}, translate = key => testLabels[key] || key) {
+async function createForm(initial = {}, { translate = key => testLabels[key] || key, metadata = remoteMeta } = {}) {
   const saved = {
     AUTH_UKEY: true, AUTH_UKEY_VENDOR: 'ji_da', AUTH_UKEY_CA_PROVIDER: 'vctk_s',
     AUTH_UKEY_CONFIG_REVISION: 'revision-1', AUTH_UKEY_CA_PROVIDERS: providers,
@@ -120,7 +120,7 @@ async function createForm(initial = {}, translate = key => testLabels[key] || ke
       $store: {
         state: { app: { device: 'desktop' }, common: { inDrawer: false } },
         dispatch: jest.fn(name => Promise.resolve(
-          name === 'common/getUrlMeta' ? { actions: { PATCH: _.cloneDeep(remoteMeta) } } : null
+          name === 'common/getUrlMeta' ? { actions: { PATCH: _.cloneDeep(metadata) } } : null
         ))
       }
     }
@@ -158,6 +158,27 @@ describe('VCTK_S settings in the shared form', () => {
 
   afterEach(() => {
     if (wrapper) wrapper.destroy()
+  })
+
+  it.each([
+    ['ji_da', 'builtin'], ['long_mai', 'builtin'], ['long_mai', 'xjca']
+  ])('hides VCTK_S authorization with an old backend for %s / %s', async (vendor, providerId) => {
+    const legacyProviders = providers.filter(provider => provider.id !== 'vctk_s')
+    const metadata = Object.fromEntries(Object.entries(_.cloneDeep(remoteMeta)).filter(([key]) => !key.startsWith('AUTH_UKEY_VCTK_S_')))
+    metadata.AUTH_UKEY_CA_PROVIDER.choices = legacyProviders.map(provider => ({ value: provider.id, label: provider.label }))
+    const form = await createForm({
+      AUTH_UKEY_VENDOR: vendor, AUTH_UKEY_CA_PROVIDER: providerId,
+      AUTH_UKEY_CA_PROVIDERS: legacyProviders
+    }, { metadata })
+    wrapper = form.wrapper
+    expect(wrapper.text()).not.toContain('UKeyVCTKSAuthorizationAdvanced')
+    expect(item(wrapper, AUTH_USER).exists()).toBe(false)
+    expect(item(wrapper, AUTH_PASSWORD).exists()).toBe(false)
+    const providerField = providerId === 'builtin' ? 'AUTH_UKEY_CA_CERT_CONTENT' : 'AUTH_UKEY_XJCA_SVS_URL'
+    expect(item(wrapper, providerField).exists()).toBe(true)
+    await submit(wrapper)
+    expect(form.axios.patch).toHaveBeenCalledTimes(1)
+    expect(Object.keys(form.axios.patch.mock.calls[0][1]).some(key => key.startsWith('AUTH_UKEY_VCTK_S_'))).toBe(false)
   })
 
   it('renders optional authorization without exposing the saved password and preserves it on save', async () => {
@@ -330,17 +351,23 @@ describe('VCTK_S settings in the shared form', () => {
 
   it('preserves builtin and Longmai provider controls and connection behavior', async () => {
     const translate = jest.fn(key => testLabels[key] || key)
-    const form = await createForm({}, translate)
+    const form = await createForm({}, { translate })
     wrapper = form.wrapper
     expect(translate).toHaveBeenCalledWith('UKeyTestConnection')
     item(wrapper, 'AUTH_UKEY_CA_PROVIDER').find('input[value="builtin"]').setChecked(true)
     await settle()
     expect(button(wrapper, 'Test')).toBeUndefined()
+    expect(wrapper.text()).not.toContain('UKeyVCTKSAuthorizationAdvanced')
+    expect(item(wrapper, AUTH_USER).exists()).toBe(false)
+    expect(item(wrapper, AUTH_PASSWORD).exists()).toBe(false)
     expect(item(wrapper, 'AUTH_UKEY_CA_CERT_CONTENT').exists()).toBe(true)
     item(wrapper, 'AUTH_UKEY_VENDOR').find('input[value="long_mai"]').setChecked(true)
     await settle()
     item(wrapper, 'AUTH_UKEY_CA_PROVIDER').find('input[value="xjca"]').setChecked(true)
     await settle()
+    expect(wrapper.text()).not.toContain('UKeyVCTKSAuthorizationAdvanced')
+    expect(item(wrapper, AUTH_USER).exists()).toBe(false)
+    expect(item(wrapper, AUTH_PASSWORD).exists()).toBe(false)
     expect(item(wrapper, SERVER_URL).exists()).toBe(false)
     expect(item(wrapper, SSL).exists()).toBe(false)
     expect(item(wrapper, 'AUTH_UKEY_XJCA_USE_SSL').exists()).toBe(true)

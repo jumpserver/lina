@@ -41,6 +41,16 @@ function createVM() {
 }
 
 describe('VCTK_S settings', () => {
+  it('omits VCTK_S authorization when the backend does not provide VCTK_S', () => {
+    const vm = createVM()
+    vm.captureSettings({
+      AUTH_UKEY_CA_PROVIDERS: providers.filter(provider => provider.id !== 'vctk_s'),
+      AUTH_UKEY_CA_PROVIDER: 'builtin', AUTH_UKEY_VENDOR: 'ji_da'
+    })
+    expect(vm.settings.fields.some(([label]) => label === 'UKeyVCTKSAuthorizationAdvanced')).toBe(false)
+    expect(vm.settings.fields.flatMap(([, fields]) => fields).some(field => field.startsWith('AUTH_UKEY_VCTK_S_'))).toBe(false)
+  })
+
   it('groups optional business authorization separately and hides it for other providers', () => {
     const vm = createVM()
     const fields = vm.settings.fields.find(([label]) => label === 'UKeyVCTKSAuthorizationAdvanced')[1]

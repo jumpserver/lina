@@ -270,7 +270,9 @@ export default {
               field === 'AUTH_UKEY_VCTK_S_SVS_URL' ? [field, VCTKS_SSL_FIELD] : [field]
             ))
         ]),
-        [this.$t('UKeyVCTKSAuthorizationAdvanced'), VCTKS_AUTH_FIELDS]
+        ...(providers.some(provider => provider.id === 'vctk_s')
+          ? [[this.$t('UKeyVCTKSAuthorizationAdvanced'), VCTKS_AUTH_FIELDS]]
+          : [])
       ]
       const fieldsMeta = { ...this.settings.fieldsMeta }
       for (const key of new Set(providers.flatMap(provider => this.getProviderFields(provider)))) {

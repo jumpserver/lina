@@ -25,5 +25,10 @@
     "AssetsInOtherZonesTitle": "确认变更资产网域",
     "AssetsInOtherZonesConfirm": "以下资产当前已属于其他网域，继续操作将变更其所属网域：{assets}。是否继续？",
     "AssetsInOtherZonesRemaining": "另有 {count} 个资产未展示",
-    "RoleMemberAlreadyAdded": "已添加"
+    "RoleMemberAlreadyAdded": "已添加",
+    "LoginLifetimeRangeError": "请输入 300～86400 秒之间的整数（5 分钟～24 小时）。",
+    "CredentialLifetimeRangeError": "请输入 {min}～{max} 秒之间的整数。",
+    "UpgradeResourceType": "升级资源类型",
+    "SystemUpgrade": "系统升级",
+    "PatchUpgrade": "补丁升级"
 }
