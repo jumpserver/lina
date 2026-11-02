@@ -136,7 +136,7 @@
                     </div>
                   </div>
                 </div>
-                <!-- Plain borders and fills are exported as native PDF lines and rectangles. -->
+                <!-- Preview and PDF export share the same vector line, area and points. -->
                 <div class="rd-trend-chart" :aria-label="trend.title">
                   <div class="rd-trend-plot">
                     <div
@@ -147,18 +147,28 @@
                     >
                       <span>{{ metricValue(tick) }}</span>
                     </div>
-                    <div class="rd-trend-columns">
-                      <div
-                        v-for="(row, rowIndex) in trend.rows"
-                        :key="rowIndex"
-                        class="rd-trend-column"
-                      >
-                        <div
-                          class="rd-trend-bar"
-                          :style="{ height: `${(row.count / trend.maximum) * 100}%` }"
-                        />
-                      </div>
-                    </div>
+                    <svg
+                      class="rd-trend-series"
+                      data-report-trend
+                      :viewBox="trend.chart.viewBox"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <polygon
+                        v-if="trend.chart.points.length > 1"
+                        class="rd-trend-area"
+                        :points="trend.chart.areaPoints"
+                      />
+                      <polyline class="rd-trend-line" :points="trend.chart.linePoints" />
+                      <circle
+                        v-for="(point, pointIndex) in trend.chart.points"
+                        :key="pointIndex"
+                        class="rd-trend-point"
+                        :cx="point.x"
+                        :cy="point.y"
+                        r="2"
+                      />
+                    </svg>
                   </div>
                   <div class="rd-trend-axis">
                     <span v-for="(label, labelIndex) in trend.labels" :key="labelIndex">{{
@@ -245,6 +255,7 @@ import {
   isEmptyReportTable,
   reportEmptySectionKey,
   reportTrend,
+  reportTrendChart,
   isReportCountColumn
 } from './reportContent'
 import {
@@ -402,7 +413,9 @@ export default {
       return (section.tables || [])
         .map((table) => {
           const trend = reportTrend(table)
-          return trend?.total > 0 ? { key: table.key, title: table.title, ...trend } : null
+          return trend?.total > 0
+            ? { key: table.key, title: table.title, ...trend, chart: reportTrendChart(trend) }
+            : null
         })
         .filter(Boolean)
     },
@@ -1142,24 +1155,29 @@ export default {
   width: 30px;
   text-align: right;
 }
-.rd-trend-columns {
+.rd-trend-series {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-}
-.rd-trend-column {
-  flex: 1 1 0;
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-.rd-trend-bar {
   width: 100%;
-  max-width: 16px;
-  background: var(--color-primary, #1ab394);
+  height: 100%;
+  overflow: visible;
+  color: var(--color-primary, #1ab394);
+}
+.rd-trend-area {
+  fill: currentColor;
+  fill-opacity: 0.1;
+}
+.rd-trend-line,
+.rd-trend-point {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.rd-trend-line {
+  fill: none;
+}
+.rd-trend-point {
+  fill: #fff;
 }
 .rd-trend-axis {
   position: absolute;
@@ -1181,6 +1199,9 @@ export default {
 }
 .rd-trend-axis span:last-child {
   text-align: right;
+}
+.rd-trend-axis span:only-child {
+  text-align: center;
 }
 .rd-empty-result {
   margin: 10px 0 !important;
