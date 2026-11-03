@@ -161,6 +161,7 @@ div.info-panel {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
+  min-width: 0;
   min-height: 0;
   height: auto !important;
   padding: 10px;

@@ -60,6 +60,7 @@ export default {
     .el-card__body {
       display: flex;
       flex: 1 1 auto;
+      min-width: 0;
       min-height: 0;
       height: auto !important;
     }
