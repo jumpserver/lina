@@ -147,6 +147,7 @@ export default {
       inputPlaceholder: '',
       smsBtnText: this.$t('SendVerificationCode'),
       smsBtnDisabled: false,
+      confirmPurpose: '',
       confirmTypeRequired: '',
       subTypeChoices: [],
       secretValue: '',
@@ -201,10 +202,14 @@ export default {
       this.cancel = cancel
       this.$log.debug('perform confirm action')
       const confirmType = response.data?.code
+      this.confirmPurpose = response.data?.purpose || ''
+      this.passkeyUrl =
+        '/api/v1/authentication/passkeys/login/?mfa=1' +
+        (this.confirmPurpose ? '&purpose=' + encodeURIComponent(this.confirmPurpose) : '')
       const confirmUrl = '/api/v1/authentication/confirm/'
       this.$axios
         .get(confirmUrl, {
-          params: { confirm_type: confirmType },
+          params: { confirm_type: confirmType, purpose: this.confirmPurpose || undefined },
           disableFlashErrorMsg: true
         })
         .then((data) => {
@@ -271,7 +276,9 @@ export default {
       this.checkPasskeyStatus()
     },
     checkPasskeyStatus() {
-      const url = '/api/v1/authentication/confirm/check/?confirm_type=mfa'
+      const url =
+        '/api/v1/authentication/confirm/check/?confirm_type=mfa' +
+        (this.confirmPurpose ? '&purpose=' + encodeURIComponent(this.confirmPurpose) : '')
       const t = setInterval(() => {
         this.$axios.get(url).then(() => {
           this.passkeyVisible = false
@@ -363,6 +370,7 @@ export default {
     },
     resetDialogState() {
       this.secretValue = ''
+      this.confirmPurpose = ''
       this.smsBtnText = this.$t('SendVerificationCode')
       this.smsBtnDisabled = false
       this.passkeyVisible = false
@@ -404,6 +412,7 @@ export default {
 
       const data = {
         confirm_type: this.confirmTypeRequired,
+        purpose: this.confirmPurpose || undefined,
         mfa_type: this.confirmTypeRequired === 'mfa' ? this.subTypeSelected : '',
         secret_key:
           this.confirmTypeRequired === 'password'

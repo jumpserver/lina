@@ -13,8 +13,8 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item command="ProfileIndex">
-            <svg-icon class="icon" icon-class="attestation" />
-            {{ $t('YourProfile') }}
+            <svg-icon class="icon" icon-class="setting" />
+            {{ $t('PersonalSettings') }}
           </el-dropdown-item>
 
           <el-dropdown-item command="PasswordAndSSHKey">
@@ -22,10 +22,20 @@
             {{ $t('PasswordAndSSHKey') }}
           </el-dropdown-item>
 
+          <el-dropdown-item command="ProfileSecurity">
+            <svg-icon class="icon" icon-class="lock" />
+            {{ $t('PersonalSecurity.Title') }}
+          </el-dropdown-item>
+
           <!--  Preference -->
           <el-dropdown-item command="Preferences" divided>
             <svg-icon class="icon" icon-class="preference" />
             {{ $t('Preferences') }}
+          </el-dropdown-item>
+
+          <el-dropdown-item command="lock" divided>
+            <svg-icon class="icon" icon-class="lock" />
+            {{ $t('ScreenLock.LockNow') }}
           </el-dropdown-item>
 
           <!-- logout -->
@@ -41,6 +51,7 @@
 
 <script>
 import { LOGOUT_PATH } from '@/utils/env'
+import { lockWebSession } from '@/composables/useWebSessionLock'
 import { mapGetters } from 'vuex'
 import { getAssetUrl } from '@/utils/assets'
 
@@ -65,8 +76,14 @@ export default {
         case 'PasswordAndSSHKey':
           this.$router.push({ name: 'SSHKeyList' })
           break
+        case 'ProfileSecurity':
+          this.$router.push({ name: 'ProfileSecurity' })
+          break
         case 'Preferences':
           this.$router.push({ name: 'Preferences' })
+          break
+        case 'lock':
+          lockWebSession().catch(() => this.$message.error(this.$t('ScreenLock.LoadFailed')))
           break
         case 'logout':
           this.logout()
