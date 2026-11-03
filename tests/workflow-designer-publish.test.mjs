@@ -227,7 +227,10 @@ test('a corrected approval can be published through the normal flow', async () =
   vm.$route = { name: 'WorkflowDetail' }
   vm.$message = { success: () => {} }
   vm.$axios = {
-    patch: async (url, data) => calls.push({ url, data }),
+    patch: async (url, data) => {
+      calls.push({ url, data })
+      return { ...vm.workflow, ...data }
+    },
     post: async (url, data) => {
       calls.push({ url, data })
       return { id: 'version-1', number: 1 }
@@ -290,4 +293,110 @@ test('the approver field is red when first mounted after jumping from another no
     assert.ok(html.includes('is-required'))
     assert.ok(!html.includes('el-form-item__error'))
   }
+})
+
+test('publishing an inherited workflow uses the local copy and its version, including after a failed publish', async () => {
+  const vm = mount({
+    id: 'global',
+    active_version: 'global-v4',
+    active_version_number: 4,
+    enabled: true
+  })
+  vm.$route = { name: 'WorkflowDetail', params: { id: 'global' } }
+  const routes = []
+  const calls = []
+  vm.$router = { replace: async (route) => routes.push(route) }
+  vm.$message = { success: () => {} }
+  let fail = true
+  vm.$axios = {
+    patch: async (url, data) => {
+      calls.push({ url, data })
+      return {
+        ...vm.workflow,
+        ...data,
+        id: 'local',
+        active_version: 'local-v1',
+        active_version_number: 1
+      }
+    },
+    get: async (url) => {
+      assert.equal(url, '/api/v1/tickets/workflows/local/versions/')
+      return { results: [{ id: 'local-v1', number: 1 }], next: null }
+    },
+    post: async (url, data) => {
+      calls.push({ url, data })
+      assert.equal(url, '/api/v1/tickets/workflows/local/publish/')
+      assert.equal(data.expected_version, 1)
+      if (fail) throw new Error('Temporary failure')
+      return { id: 'local-v2', number: 2 }
+    }
+  }
+  await vm.publish()
+  assert.ok(vm.error.includes('Temporary failure'))
+  assert.equal(vm.workflow.id, 'local')
+  assert.equal(routes.length, 0)
+  fail = false
+  await vm.publish()
+  assert.equal(vm.error, '')
+  assert.equal(calls[0].url, '/api/v1/tickets/workflows/global/')
+  assert.equal(calls[0].data.expected_version, 4)
+  assert.equal(calls[2].url, '/api/v1/tickets/workflows/local/')
+  assert.equal(calls[2].data.expected_version, 1)
+  assert.deepEqual(
+    vm.versions.map(({ id }) => id),
+    ['local-v2', 'local-v1']
+  )
+  assert.deepEqual(routes, [{ name: 'WorkflowDetail', params: { id: 'local' } }])
+})
+
+test('disabling an inherited workflow switches to the local copy without losing unsaved metadata', async () => {
+  const vm = mount({
+    id: 'global',
+    active_version: 'global-v4',
+    active_version_number: 4,
+    enabled: true
+  })
+  vm.workflow.comment = 'Unsaved comment'
+  const routes = []
+  vm.$router = { replace: async (route) => routes.push(route) }
+  vm.$axios = {
+    patch: async (url, data) => {
+      assert.equal(url, '/api/v1/tickets/workflows/global/')
+      assert.deepEqual(data, { enabled: false, expected_version: 4 })
+      return {
+        ...vm.workflow,
+        comment: 'Saved comment',
+        id: 'local',
+        enabled: false,
+        active_version: 'local-v1',
+        active_version_number: 1
+      }
+    },
+    get: async (url) => {
+      assert.equal(url, '/api/v1/tickets/workflows/local/versions/')
+      return { results: [{ id: 'local-v1', number: 1 }], next: null }
+    }
+  }
+  await vm.toggleEnabled()
+  assert.equal(vm.workflow.id, 'local')
+  assert.equal(vm.workflow.enabled, false)
+  assert.equal(vm.workflow.comment, 'Unsaved comment')
+  assert.equal(vm.selectedVersion, 'local-v1')
+  assert.equal(vm.dirty, true)
+  assert.deepEqual(routes, [{ name: 'WorkflowDetail', params: { id: 'local' } }])
+})
+
+test('a failed publish does not silently advance the expected version for an existing workflow', async () => {
+  const vm = mount({ id: 'local', active_version: 'local-v2', active_version_number: 2 })
+  vm.$axios = {
+    patch: async () => ({ ...vm.workflow, active_version: 'local-v3', active_version_number: 3 }),
+    post: async (url, data) => {
+      assert.equal(data.expected_version, 2)
+      throw { response: { status: 409 } }
+    }
+  }
+  await vm.publish()
+  await vm.publish()
+  assert.equal(vm.workflow.active_version_number, 2)
+  assert.equal(vm.error, i18n.global.t('WFConflict'))
 })

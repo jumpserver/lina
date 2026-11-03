@@ -665,10 +665,21 @@ export default {
       this.saving = true
       try {
         const metadata = this.metadata
-        const expected = this.workflow.active_version_number || 0
-        if (!this.workflow.id) {
+        const previousId = this.workflow.id
+        let expected = this.workflow.active_version_number || 0
+        if (!previousId) {
           this.workflow = await this.$axios.post('/api/v1/tickets/workflows/', metadata)
-        } else await this.$axios.patch(`/api/v1/tickets/workflows/${this.workflow.id}/`, metadata)
+        } else {
+          const saved = await this.$axios.patch(`/api/v1/tickets/workflows/${previousId}/`, {
+            ...metadata,
+            expected_version: expected
+          })
+          if (saved.id !== previousId) {
+            this.workflow = saved
+            expected = saved.active_version_number || 0
+            await this.loadVersions()
+          }
+        }
         const definition = JSON.parse(JSON.stringify(this.definition))
         definition.nodes.forEach((n) => {
           if (!n.name) n.name = this.$t(nodeLabels[n.type])
@@ -688,7 +699,10 @@ export default {
           })
         )
         // Navigate only after publication; the detail page mounts and fetches here.
-        if (this.$route.name === 'WorkflowCreate') {
+        if (
+          this.$route.name === 'WorkflowCreate' ||
+          (this.$route.params?.id && this.$route.params.id !== this.workflow.id)
+        ) {
           await this.$router.replace({ name: 'WorkflowDetail', params: { id: this.workflow.id } })
         }
       } catch (e) {
@@ -702,9 +716,16 @@ export default {
     },
     async toggleEnabled() {
       const data = await this.$axios.patch(`/api/v1/tickets/workflows/${this.workflow.id}/`, {
-        enabled: !this.workflow.enabled
+        enabled: !this.workflow.enabled,
+        expected_version: this.workflow.active_version_number || 0
       })
       this.workflow.enabled = data.enabled
+      if (data.id !== this.workflow.id) {
+        this.workflow = { ...data, ...this.metadata }
+        await this.loadVersions()
+        this.selectedVersion = this.workflow.active_version
+        await this.$router.replace({ name: 'WorkflowDetail', params: { id: this.workflow.id } })
+      }
     }
   }
 }
