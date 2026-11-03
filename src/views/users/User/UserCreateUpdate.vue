@@ -215,6 +215,7 @@ export default {
         return obj
       },
       cleanFormValue(value) {
+        value.manager = value.manager?.id || value.manager || null
         const method = this.submitMethod()
         if (method === 'post' && value.password_strategy === 'email') {
           delete value['password']

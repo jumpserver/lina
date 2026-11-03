@@ -1,12 +1,17 @@
 import Layout from '@/layout'
+import { hasPermission } from '@/utils/jms/permission'
 import empty from '@/layout/empty'
 import i18n from '@/i18n/i18n'
 
 export default {
   path: '/tickets',
-  redirect: {
-    name: 'MyTicketList'
-  },
+  redirect: () => ({
+    name: hasPermission('tickets.view_ticket')
+      ? 'MyTicketList'
+      : hasPermission('tickets.view_workflow')
+        ? 'WorkflowList'
+        : 'AuditTicketList'
+  }),
   component: Layout,
   meta: {
     title: i18n.t('BaseTickets'),
@@ -16,7 +21,7 @@ export default {
     showNavSwitcher: false,
     resource: 'ticket',
     licenseRequired: true,
-    permissions: ['tickets.view_ticket']
+    permissions: ['tickets.view_ticket | tickets.view_workflow | audits.view_ticketaudit']
   },
   children: [
     {
@@ -27,7 +32,7 @@ export default {
         title: i18n.t('MyTickets'),
         icon: 'ticket-apply',
         showOrganization: false,
-        permissions: []
+        permissions: ['tickets.view_ticket']
       }
     },
     {
@@ -35,10 +40,10 @@ export default {
       name: 'AssignedTicketList',
       component: () => import('@/views/tickets/AssignedTicketList'),
       meta: {
-        title: i18n.t('AwaitingMyApproval'),
+        title: i18n.t('TicketRelatedToMe'),
         icon: 'ticket-approval',
         showOrganization: false,
-        permissions: []
+        permissions: ['tickets.view_ticket']
       }
     },
     {
@@ -52,6 +57,17 @@ export default {
         showOrganization: false
       },
       children: [
+        {
+          path: 'create',
+          name: 'PluginTicketCreate',
+          component: () => import('@/views/tickets/plugins/Create'),
+          meta: {
+            title: i18n.t('OpenTicket'),
+            permissions: ['tickets.view_ticket'],
+            activeMenu: '/tickets/my-tickets'
+          },
+          hidden: true
+        },
         {
           path: 'request-host-perm/create',
           name: 'RequestAssetPermTicketCreateUpdate',
@@ -69,7 +85,7 @@ export default {
           component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
           meta: {
             title: i18n.t('TicketDetail'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         },
@@ -79,7 +95,7 @@ export default {
           component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
           meta: {
             title: i18n.t('TicketDetail'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         },
@@ -89,7 +105,7 @@ export default {
           component: () => import('@/views/tickets/LoginConfirm/Detail'),
           meta: {
             title: i18n.t('TicketDetail'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         },
@@ -99,7 +115,7 @@ export default {
           component: () => import('@/views/tickets/CommandConfirm/Detail'),
           meta: {
             title: i18n.t('CommandConfirm'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         },
@@ -109,67 +125,41 @@ export default {
           component: () => import('@/views/tickets/TicketDetail'),
           meta: {
             title: i18n.t('TicketDetail'),
-            permissions: ['tickets.view_ticket']
+            permissions: ['tickets.view_ticket | audits.view_ticketaudit']
           },
           hidden: true
         }
       ]
     },
     {
-      path: '/tickets/flow',
+      path: '/tickets/workflows',
       component: empty,
-      redirect: {
-        name: 'TicketFlow'
-      },
       meta: {
-        title: i18n.t('BaseFlowSetUp'),
+        title: i18n.t('WFWorkflows'),
         icon: 'ticket-flow',
-        permissions: ['tickets.view_ticketflow'],
-        resource: 'ticketflow'
+        permissions: ['tickets.view_workflow'],
+        resource: 'workflow'
       },
       children: [
         {
           path: '',
-          name: 'TicketFlow',
-          component: () => import('@/views/tickets/TicketFlow/TicketFlow'),
-          meta: {
-            title: i18n.t('FlowSetUp'),
-            permissions: ['tickets.view_ticketflow'],
-            activeMenu: '/tickets/flow'
-          }
-        },
-        {
-          path: ':id',
-          name: 'FlowDetail',
-          component: () => import('@/views/tickets/TicketFlow/Detail'),
-          meta: {
-            title: i18n.t('TicketFlow'),
-            permissions: ['tickets.view_ticketflow'],
-            activeMenu: '/tickets/flow'
-          },
-          hidden: true
+          name: 'WorkflowList',
+          component: () => import('@/views/tickets/Workflow/List'),
+          meta: { title: i18n.t('WFWorkflows'), permissions: ['tickets.view_workflow'] }
         },
         {
           path: 'create',
-          name: 'TicketFlowCreate',
-          component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
-          meta: {
-            title: i18n.t('TicketFlowCreate'),
-            permissions: ['tickets.add_ticketflow'],
-            activeMenu: '/tickets/flow'
-          },
-          hidden: true
+          name: 'WorkflowCreate',
+          hidden: true,
+          component: () => import('@/views/tickets/Workflow/Designer'),
+          meta: { title: i18n.t('WFDesigner'), permissions: ['tickets.add_workflow'] }
         },
         {
-          path: ':id/update',
-          name: 'TicketFlowUpdate',
-          component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
-          meta: {
-            title: i18n.t('TicketFlowUpdate'),
-            permissions: ['tickets.change_ticketflow'],
-            activeMenu: '/tickets/flow'
-          },
-          hidden: true
+          path: ':id',
+          name: 'WorkflowDetail',
+          hidden: true,
+          component: () => import('@/views/tickets/Workflow/Designer'),
+          meta: { title: i18n.t('WFDesigner'), permissions: ['tickets.view_workflow'] }
         }
       ]
     }

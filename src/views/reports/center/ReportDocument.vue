@@ -6,13 +6,22 @@
         <el-button :disabled="currentPage <= 1 || preparing" @click="showPage(currentPage - 1)">
           {{ $t('AuditReportDocPrevious') }}
         </el-button>
-        <span aria-live="polite">
-          {{
-            preparing
-              ? $t('AuditReportDocLayout')
-              : $t('AuditReportDocPage', { current: currentPage, total: pageCount })
-          }}
-        </span>
+        <span v-if="preparing" role="status">{{ $t('AuditReportDocLayout') }}</span>
+        <i18n-t v-else keypath="AuditReportDocPage" tag="label" class="rd-page-jump" scope="global">
+          <template #current>
+            <el-input
+              v-model="pageInput"
+              class="rd-page-input"
+              inputmode="numeric"
+              :disabled="pageCount < 1"
+              :aria-label="$t('AuditReportDocPage', { current: currentPage, total: pageCount })"
+              @focus="$event.target.select()"
+              @keydown.enter.prevent="jumpToPage"
+              @blur="jumpToPage"
+            />
+          </template>
+          <template #total>{{ pageCount }}</template>
+        </i18n-t>
         <el-button
           :disabled="currentPage >= pageCount || preparing"
           @click="showPage(currentPage + 1)"
@@ -35,12 +44,13 @@
               class="rd-logo"
               @error="useDefaultLogo"
             />
-            <div class="rd-header-text">{{ config.header || $t('AuditReportDocHeader') }}</div>
+            <div class="rd-header-text" :title="config.header || $t('AuditReportDocHeader')">
+              {{ config.header || $t('AuditReportDocHeader') }}
+            </div>
           </header>
           <div class="rd-page-body" />
           <div class="rd-watermark" data-report-watermark :style="watermarkStyle" />
           <footer class="rd-page-footer">
-            <span>{{ organizationName }} · {{ formatDateTime(snapshot.generated_at) }}</span>
             <span data-report-page-number />
           </footer>
         </article>
@@ -118,12 +128,14 @@
                     ><strong>{{ trend.active }} / {{ trend.periods }}</strong>
                   </div>
                   <div>
-                    <span>{{ $t('AuditReportTrendPeak') }}</span
-                    ><strong>{{ metricValue(trend.peak) }}</strong
-                    ><small v-if="trend.peakDates">{{ trend.peakDates }}</small>
+                    <span>{{ $t('AuditReportTrendPeak') }}</span>
+                    <div class="rd-trend-peak-value">
+                      <strong>{{ metricValue(trend.peak) }}</strong>
+                      <small v-if="trend.peakDates">{{ trend.peakDates }}</small>
+                    </div>
                   </div>
                 </div>
-                <!-- Plain borders and fills are exported as native PDF lines and rectangles. -->
+                <!-- Preview and PDF export share the same vector line, area and points. -->
                 <div class="rd-trend-chart" :aria-label="trend.title">
                   <div class="rd-trend-plot">
                     <div
@@ -134,18 +146,28 @@
                     >
                       <span>{{ metricValue(tick) }}</span>
                     </div>
-                    <div class="rd-trend-columns">
-                      <div
-                        v-for="(row, rowIndex) in trend.rows"
-                        :key="rowIndex"
-                        class="rd-trend-column"
-                      >
-                        <div
-                          class="rd-trend-bar"
-                          :style="{ height: `${(row.count / trend.maximum) * 100}%` }"
-                        />
-                      </div>
-                    </div>
+                    <svg
+                      class="rd-trend-series"
+                      data-report-trend
+                      :viewBox="trend.chart.viewBox"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <polygon
+                        v-if="trend.chart.points.length > 1"
+                        class="rd-trend-area"
+                        :points="trend.chart.areaPoints"
+                      />
+                      <polyline class="rd-trend-line" :points="trend.chart.linePoints" />
+                      <circle
+                        v-for="(point, pointIndex) in trend.chart.points"
+                        :key="pointIndex"
+                        class="rd-trend-point"
+                        :cx="point.x"
+                        :cy="point.y"
+                        r="2"
+                      />
+                    </svg>
                   </div>
                   <div class="rd-trend-axis">
                     <span v-for="(label, labelIndex) in trend.labels" :key="labelIndex">{{
@@ -224,6 +246,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { Translation } from 'vue-i18n'
 import defaultLogo from '@/assets/img/logo_text_green.png'
 import { isDefaultInterfaceLogo } from '@/utils/interfaceLogo'
 import { reportEvidenceLink } from './api'
@@ -231,6 +254,7 @@ import {
   isEmptyReportTable,
   reportEmptySectionKey,
   reportTrend,
+  reportTrendChart,
   isReportCountColumn
 } from './reportContent'
 import {
@@ -243,6 +267,7 @@ import {
 
 export default {
   name: 'ReportDocument',
+  components: { I18nT: Translation },
   props: {
     snapshot: { type: Object, default: null },
     config: { type: Object, default: () => ({}) }
@@ -250,6 +275,7 @@ export default {
   data() {
     return {
       currentPage: 1,
+      pageInput: '1',
       pageCount: 0,
       preparing: false,
       layoutError: '',
@@ -386,7 +412,9 @@ export default {
       return (section.tables || [])
         .map((table) => {
           const trend = reportTrend(table)
-          return trend?.total > 0 ? { key: table.key, title: table.title, ...trend } : null
+          return trend?.total > 0
+            ? { key: table.key, title: table.title, ...trend, chart: reportTrendChart(trend) }
+            : null
         })
         .filter(Boolean)
     },
@@ -459,8 +487,17 @@ export default {
       if (event.target.src === defaultLogo) return
       this.failedLogo = this.snapshot?.branding?.logo ?? this.publicSettings.INTERFACE?.logo_index
     },
+    jumpToPage() {
+      const page = Number(this.pageInput)
+      if (this.preparing || !String(this.pageInput).trim() || !Number.isInteger(page)) {
+        this.pageInput = String(this.currentPage)
+        return
+      }
+      this.showPage(page)
+    },
     showPage(page) {
       this.currentPage = Math.max(1, Math.min(this.pageCount, page))
+      this.pageInput = String(this.currentPage)
       Array.from(this.$refs.pages?.children || []).forEach((shell, index) => {
         shell.hidden = index + 1 !== this.currentPage
       })
@@ -516,7 +553,7 @@ export default {
     },
     paginate() {
       const source = this.$refs.source
-      const template = source.querySelector('.rd-page-template')
+      const template = source.querySelector('.rd-page-template').cloneNode(true)
       const blocks = [...source.querySelector('.rd-source-blocks').children]
       const stage = document.createElement('div')
       source.appendChild(stage)
@@ -736,6 +773,21 @@ export default {
         }
       }
       try {
+        stage.appendChild(template)
+        const header = template.querySelector('.rd-header-text')
+        if (header.scrollWidth > header.clientWidth) {
+          // Use real text ellipsis so the preview and native PDF renderer agree.
+          const characters = Array.from(header.textContent)
+          let low = 0
+          let high = characters.length
+          while (low < high) {
+            const middle = Math.ceil((low + high) / 2)
+            header.textContent = `${characters.slice(0, middle).join('')}…`
+            if (header.scrollWidth <= header.clientWidth) low = middle
+            else high = middle - 1
+          }
+          header.textContent = `${characters.slice(0, low).join('')}…`
+        }
         newPage()
         for (let index = 0; index < blocks.length; index++) {
           const original = blocks[index]
@@ -757,6 +809,10 @@ export default {
                 }
               }
             }
+            if (next?.tagName === 'P' && !fitsOnNewPage([node, next])) {
+              // A multi-page paragraph stays with its heading via its first fragment.
+              next.textContent = Array.from(next.textContent).slice(0, 1).join('')
+            }
             body.appendChild(node)
             if (next) body.appendChild(next)
             const valid =
@@ -769,6 +825,10 @@ export default {
           if (append(node)) continue
           if (original.getAttribute('data-report-block') === 'table') {
             appendTable(original)
+            continue
+          }
+          if (original.tagName === 'P') {
+            appendText(original)
             continue
           }
           if (hasContent()) newPage()
@@ -812,6 +872,19 @@ export default {
   padding: 12px 0;
   font-size: 12px;
   color: var(--el-text-color-secondary);
+}
+.rd-page-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.rd-page-input {
+  width: 56px;
+}
+.rd-page-input :deep(.el-input__inner) {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 .rd-viewport {
   overflow: auto;
@@ -863,11 +936,12 @@ export default {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  border-bottom: 2px solid #17965e;
+  border-bottom: 2px solid var(--color-primary, #1ab394);
   padding-bottom: 12px;
   box-sizing: border-box;
 }
 .rd-logo {
+  flex-shrink: 0;
   width: 118px;
   height: 28px;
   object-fit: contain;
@@ -875,12 +949,13 @@ export default {
 }
 .rd-header-text {
   color: #66717f;
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   text-align: right;
   font-size: 11px;
   overflow: hidden;
-  max-height: 34px;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .rd-page-body {
   position: absolute;
@@ -899,18 +974,12 @@ export default {
   border-top: 1px solid #dfe4e9;
   padding-top: 9px;
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: flex-end;
   color: #7b8592;
   font-size: 10px;
   line-height: 1.4;
 }
-.rd-page-footer span:first-child {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.rd-page-footer span:last-child {
+.rd-page-footer span {
   flex-shrink: 0;
 }
 .rd-watermark {
@@ -925,7 +994,7 @@ export default {
   margin-bottom: 20px;
 }
 .rd-document-kicker {
-  color: #16965d;
+  color: var(--color-primary, #1ab394);
   font-size: 11px;
   letter-spacing: 2px;
 }
@@ -943,7 +1012,7 @@ export default {
   font-size: 16px;
   font-weight: 600;
   line-height: 1.5;
-  border-left: 3px solid #16965d;
+  border-left: 3px solid var(--color-primary, #1ab394);
   padding-left: 10px;
   overflow-wrap: anywhere;
 }
@@ -1047,6 +1116,12 @@ export default {
   font-size: 18px;
   font-weight: 600;
 }
+.rd-trend-peak-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
 .rd-trend-chart {
   position: relative;
   height: 164px;
@@ -1073,24 +1148,29 @@ export default {
   width: 30px;
   text-align: right;
 }
-.rd-trend-columns {
+.rd-trend-series {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-}
-.rd-trend-column {
-  flex: 1 1 0;
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-.rd-trend-bar {
   width: 100%;
-  max-width: 16px;
-  background: #35b497;
+  height: 100%;
+  overflow: visible;
+  color: var(--color-primary, #1ab394);
+}
+.rd-trend-area {
+  fill: currentColor;
+  fill-opacity: 0.1;
+}
+.rd-trend-line,
+.rd-trend-point {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.rd-trend-line {
+  fill: none;
+}
+.rd-trend-point {
+  fill: #fff;
 }
 .rd-trend-axis {
   position: absolute;
@@ -1112,6 +1192,9 @@ export default {
 }
 .rd-trend-axis span:last-child {
   text-align: right;
+}
+.rd-trend-axis span:only-child {
+  text-align: center;
 }
 .rd-empty-result {
   margin: 10px 0 !important;
@@ -1179,7 +1262,7 @@ export default {
 <style scoped>
 .rd-page a,
 .rd-source-blocks a {
-  color: #147d56;
+  color: var(--color-primary, #1ab394);
   text-decoration: underline;
   overflow-wrap: anywhere;
 }

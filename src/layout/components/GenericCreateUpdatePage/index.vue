@@ -1,6 +1,7 @@
 <template>
   <Page v-bind="pageAttrs" :class="{ drawer: drawer }">
     <IBox>
+      <slot name="form-header" />
       <GenericCreateUpdateForm v-bind="$attrs" ref="createUpdateForm" />
     </IBox>
   </Page>

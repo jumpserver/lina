@@ -7,10 +7,13 @@
     class="generic-detail-page"
     @tab-click="handleTabClick"
   >
-    <template #headingRightSide>
-      <span v-if="hasRightSide && !loading && !loadError">
+    <template
+      v-if="!loading && !loadError && ($slots.headingRightSide || (hasRightSide && hasPageActions))"
+      #headingRightSide
+    >
+      <slot name="headingRightSide">
         <ActionsGroup :actions="pageActions" class="header-buttons" />
-      </span>
+      </slot>
     </template>
     <div v-if="!loading">
       <el-result v-if="loadError" icon="warning" :title="loadError" />
@@ -160,6 +163,11 @@ export default {
           callback: this.validActions.deleteCallback.bind(this)
         }
       ]
+    },
+    hasPageActions() {
+      return this.pageActions.some((action) =>
+        typeof action.has === 'function' ? action.has(action) : (action.has ?? true)
+      )
     },
     detailTitle() {
       return this.title || this.getTitle(this.object)

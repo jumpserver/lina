@@ -146,6 +146,16 @@ export default {
  * 普通(非 tab)页面仍由 .drawer__content 整体滚动。
  */
 .el-drawer.drawer {
+  .el-drawer__title {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+  }
+
+  .el-drawer__close-btn {
+    flex-shrink: 0;
+  }
+
   .el-drawer__body {
     display: flex;
     flex-direction: column;

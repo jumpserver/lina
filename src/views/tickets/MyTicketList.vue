@@ -1,35 +1,75 @@
 <template>
-  <BaseTicketList v-bind="$data" :url="url" />
+  <div>
+    <BaseTicketList
+      :url="url"
+      :extra-ticket-action="tab === 'manual' ? extraTicketAction : { hasCreate: false }"
+    >
+      <template #tableBefore>
+        <div class="ticket-list-filters">
+          <el-tabs v-model="tab" class="ticket-list-tabs">
+            <el-tab-pane name="manual" :label="$t('TicketManualRequests')" />
+            <el-tab-pane name="system" :label="$t('TicketSystemTriggered')" />
+            <el-tab-pane name="beneficiary" :label="$t('TicketRequestedForMe')" />
+            <el-tab-pane name="all" :label="$t('TicketAllRequests')" />
+          </el-tabs>
+        </div>
+      </template>
+    </BaseTicketList>
+    <TicketTypeDrawer
+      v-if="showTicketTypes"
+      v-model:visible="showTicketTypes"
+      @select-type="selectTicketType"
+    />
+  </div>
 </template>
 
 <script>
+import { getTicketCreateRoute } from './plugins/registry'
 import { mapGetters } from 'vuex'
 import BaseTicketList from './BaseTicketList'
+import TicketTypeDrawer from './components/TicketTypeDrawer'
+
+const TAB_FILTERS = {
+  manual: { origin: 'manual' },
+  system: { origin: 'system' },
+  all: {}
+}
 
 export default {
   name: 'MyTicketList',
   components: {
-    BaseTicketList
+    BaseTicketList,
+    TicketTypeDrawer
   },
   data() {
     return {
+      tab: 'manual',
+      showTicketTypes: false,
       extraTicketAction: {
-        moreCreates: {
-          dropdown: [
-            {
-              name: 'RequestAssetPerm',
-              title: this.$t('RequestAssetPerm')
-            }
-          ]
+        onCreate: () => {
+          this.showTicketTypes = true
         }
       }
     }
   },
   computed: {
     url() {
-      return `/api/v1/tickets/tickets/?applicant=${this.currentUser.id}&state=pending`
+      const filters =
+        this.tab === 'beneficiary'
+          ? { beneficiary: this.currentUser.id }
+          : { applicant: this.currentUser.id, ...TAB_FILTERS[this.tab] }
+      const params = new URLSearchParams(filters)
+      return `/api/v1/tickets/tickets/?${params.toString()}`
     },
     ...mapGetters(['currentUser'])
+  },
+  methods: {
+    selectTicketType(plugin) {
+      this.showTicketTypes = false
+      this.$router.push(getTicketCreateRoute(plugin.type))
+    }
   }
 }
 </script>
+
+<style src="./ticket-list-tabs.css" scoped></style>

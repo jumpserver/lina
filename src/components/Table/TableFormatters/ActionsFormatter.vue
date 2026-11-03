@@ -330,6 +330,7 @@ export default {
     },
     moreButtonProps() {
       return {
+        'aria-label': this.$t('More'),
         size: 'small',
         type: '',
         plain: false
@@ -374,6 +375,7 @@ export default {
     getButtonProps(action) {
       const { type, disabled, plain, loading, hoverType } = action
       return {
+        'aria-label': action.title,
         size: 'small',
         type,
         disabled,

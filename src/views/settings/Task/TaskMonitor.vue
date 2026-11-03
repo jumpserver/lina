@@ -135,7 +135,7 @@
               <template #default="{ row }">{{ booleanLabel(row.acknowledged) }}</template>
             </el-table-column>
             <el-table-column
-              v-if="canViewLogs || canViewHistory"
+              v-if="canViewLogs || canViewHistory || canStopTasks"
               :label="t('Actions')"
               min-width="190"
               fixed="right"
@@ -155,6 +155,15 @@
                     underline="never"
                     @click="openHistory(row)"
                     >{{ t('ExecutionHistory') }}</el-link
+                  >
+                  <el-link
+                    v-if="canStopTasks && row.id && row.routing_key === 'celery'"
+                    type="danger"
+                    underline="never"
+                    :disabled="!canStopTask(row)"
+                    :title="stopTaskHint(row)"
+                    @click="stopTask(row)"
+                    >{{ t(taskState === 'active' ? 'Stop' : 'TaskMonitorRevoke') }}</el-link
                   >
                 </div>
               </template>
@@ -180,6 +189,7 @@
 import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import Page from '@/layout/components/Page/index.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import request from '@/utils/request'
@@ -207,6 +217,8 @@ const metrics = [
   { key: 'queued', label: 'TaskMonitorQueued' }
 ]
 const canMonitor = computed(() => hasPermission('ops.view_taskmonitor'))
+const canStopTasks = computed(() => hasPermission('ops.stop_taskmonitor'))
+const stoppingTasks = ref(new Set())
 const canViewTasks = computed(() => hasPermission('ops.view_celerytask'))
 const canViewLogs = computed(() => hasPermission('ops.view_celerytaskexecution'))
 const canViewHistory = computed(() => canViewTasks.value && canViewLogs.value)
@@ -286,6 +298,69 @@ function openHistory(task) {
     params: { id: task.definition_id },
     query: { tab: 'TaskHistory' }
   })
+}
+
+function canStopTask(task) {
+  return (
+    selectedWorker.value?.status === 'online' &&
+    !stoppingTasks.value.has(task.id) &&
+    (taskState.value !== 'active' || selectedWorker.value?.pool === 'prefork')
+  )
+}
+
+function stopTaskHint(task) {
+  if (taskState.value === 'active' && selectedWorker.value?.pool !== 'prefork') {
+    return t('TaskMonitorStopUnsupportedPool')
+  }
+  return ''
+}
+
+async function stopTask(task) {
+  if (!canStopTask(task)) return
+  const worker = selectedWorkerName.value
+  const mode = taskState.value === 'active' ? 'running' : 'waiting'
+  try {
+    await ElMessageBox.confirm(
+      t(mode === 'running' ? 'TaskMonitorStopConfirm' : 'TaskMonitorRevokeConfirm', {
+        id: task.id
+      }),
+      t(mode === 'running' ? 'Stop' : 'TaskMonitorRevoke'),
+      { type: 'warning', confirmButtonText: t('Confirm'), cancelButtonText: t('Cancel') }
+    )
+  } catch {
+    return
+  }
+  stoppingTasks.value = new Set([...stoppingTasks.value, task.id])
+  try {
+    const result = await request.post(
+      '/api/v1/ops/celery/monitor/stop/',
+      {
+        worker,
+        task_id: task.id,
+        mode
+      },
+      { timeout: 15000, disableFlashErrorMsg: true, 'axios-retry': { retries: 0 } }
+    )
+    ElMessage.success(
+      t(result.status === 'revoked' ? 'TaskMonitorRevoked' : 'TaskMonitorStopRequested')
+    )
+    await loadSnapshot()
+  } catch (error) {
+    const keys = {
+      already_running: 'TaskMonitorStopAlreadyRunning',
+      not_running: 'TaskMonitorStopNotRunning',
+      not_found: 'TaskMonitorStopNotFound',
+      unsupported_queue: 'TaskMonitorStopUnsupportedQueue',
+      unsupported_pool: 'TaskMonitorStopUnsupportedPool',
+      unavailable: 'TaskMonitorStopUnavailable'
+    }
+    ElMessage.error(t(keys[error.response?.data?.status] || 'TaskMonitorStopUnavailable'))
+    await loadSnapshot()
+  } finally {
+    const next = new Set(stoppingTasks.value)
+    next.delete(task.id)
+    stoppingTasks.value = next
+  }
 }
 
 function canPoll() {

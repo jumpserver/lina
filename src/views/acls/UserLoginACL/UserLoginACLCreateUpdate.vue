@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import Select2 from '@/components/Form/FormFields/Select2'
 import { Required } from '@/components/Form/DataForm/rules'
 import { ResourceSelect, TagInput, WeekCronSelect } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
@@ -31,10 +32,24 @@ export default {
         [this.$t('Basic'), ['name', 'priority']],
         [this.$t('Users'), ['users']],
         [this.$t('Rules'), ['rules']],
-        [this.$t('Action'), ['action', 'reviewers']],
+        [this.$t('Action'), ['action', 'workflow', 'reviewers']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        workflow: {
+          component: Select2,
+          label: this.$t('WFWorkflows'),
+          helpText: this.$t('WFACLHint'),
+          hidden: (value) => value.action !== 'review',
+          el: {
+            multiple: false,
+            clearable: true,
+            ajax: {
+              url: `/api/v1/tickets/workflows/options/?type=login_confirm&org_id=00000000-0000-0000-0000-000000000000`,
+              transformOption: (w) => ({ label: w.name, value: w.id })
+            }
+          }
+        },
         is_active: {
           type: 'checkbox'
         },
@@ -49,7 +64,10 @@ export default {
           },
           rules: [Required],
           hidden: (formValue) => {
-            return !['review', 'notice'].includes(formValue.action)
+            return (
+              !['review', 'notice'].includes(formValue.action) ||
+              (formValue.action === 'review' && !!formValue.workflow)
+            )
           }
         },
         rules: {
@@ -82,6 +100,7 @@ export default {
         return url
       },
       cleanFormValue(value) {
+        value.workflow = value.action === 'review' ? value.workflow || null : null
         if (
           Array.isArray(value.rules.time_period) &&
           value.rules.time_period.every((item) => item.value === '')
