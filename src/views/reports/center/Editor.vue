@@ -111,15 +111,13 @@
                     />
                     <el-button
                       v-if="form.conclusion"
-                      text
-                      type="primary"
+                      class="conclusion-action"
                       @click="form.conclusion = ''"
                       >{{ $t('AuditReportUseSuggestedConclusion') }}</el-button
                     >
                     <el-button
                       v-else-if="snapshot?.conclusions?.length"
-                      text
-                      type="primary"
+                      class="conclusion-action"
                       :disabled="busy || !previewFresh"
                       @click="editSuggestedConclusion"
                       >{{ $t('AuditReportEditSuggestedConclusion') }}</el-button
@@ -315,12 +313,7 @@ export default {
   async activated() {
     if (this.active) return
     this.active = true
-    if (!this.catalog || this.loadedContextKey !== this.reportContextKey) {
-      await this.load()
-    } else {
-      await this.$nextTick()
-      this.setChapterDraggable()
-    }
+    await this.load()
   },
   deactivated() {
     this.active = false
@@ -354,6 +347,7 @@ export default {
       this.previewConfig = null
       this.previewFingerprint = ''
       this.form = makeConfig('', [])
+      this.configTab = 'content'
       this.chapterOrder = []
       this.autoTitle = ''
       try {
@@ -654,6 +648,10 @@ export default {
   padding: 4px 0 0;
   line-height: 20px;
   text-align: right;
+}
+.conclusion-action.el-button {
+  max-width: 100%;
+  margin-top: 6px;
 }
 .chapter-error {
   margin: 0 0 8px;

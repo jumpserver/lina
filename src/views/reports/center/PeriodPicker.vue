@@ -121,7 +121,6 @@ export default {
     modelValue: {
       deep: true,
       handler(value) {
-        this.customRange = [value.start, value.end]
         this.year = value.start.slice(0, 4)
         // Annual ranges start in January; preserve the selected month and quarter.
         const month =
@@ -140,7 +139,8 @@ export default {
     },
     changeKind() {
       this.error = ''
-      if (this.kind !== 'custom') this.applyPreset()
+      if (this.kind === 'custom') this.applyCustom(this.customRange)
+      else this.applyPreset()
     },
     applyPreset() {
       let start, end
