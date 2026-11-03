@@ -142,5 +142,7 @@
   "RemoveAccountParams": "账号移除参数",
   "NoUnreadMsg": "暂无未读消息",
   "LoadFailed": "加载失败",
-  "Retry": "重试"
+  "Retry": "重试",
+  "ClientSecurity": "客户端安全",
+  "ClientSecurityChangeHelp": "修改任一配置会使已有客户端登录立即失效，需要重新登录。已建立的资产连接继续遵循原有超时规则。"
 }

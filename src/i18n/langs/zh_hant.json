@@ -124,5 +124,7 @@
   "RemoveAccountParams": "帳號移除參數",
   "NoUnreadMsg": "暫無未讀消息",
   "LoadFailed": "載入失敗",
-  "Retry": "重試"
+  "Retry": "重試",
+  "ClientSecurity": "用戶端安全",
+  "ClientSecurityChangeHelp": "修改任一設定會使現有用戶端登入立即失效，需要重新登入。已建立的資產連線繼續遵循原有逾時規則。"
 }
