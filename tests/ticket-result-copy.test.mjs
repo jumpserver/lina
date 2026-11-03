@@ -44,7 +44,7 @@ async function load(name) {
       }
     })
     app.component('ElIcon', slot)
-    app.component('ElProgress', slot)
+    app.component('ElProgress', { render: () => Vue.h('progress') })
     for (const icon of ['Hide', 'View', 'CopyDocument', 'Refresh', 'Document']) {
       app.component(icon, slot)
     }
@@ -92,10 +92,20 @@ test('password changes show concise progress and retain failure and verification
     const html = await render({
       execution_mode: 'automatic',
       state: state === 'pending' ? 'pending' : 'approved',
-      result: { state }
+      result: {
+        state,
+        counts: {
+          total: 2,
+          pending: state === 'running' ? 1 : 2,
+          success: state === 'running' ? 1 : 0,
+          failed: 0,
+          unverified: 0
+        }
+      }
     })
     assert.ok(html.includes(label), state)
     assert.equal(html.includes('class="execution-help"'), false, state)
+    assert.equal(/<progress[\s>]/.test(html), state === 'running', state)
   }
   for (const [state, logTaskId, key] of [
     ['failed', 'worker', 'TicketChangeSecretLogHelp'],
@@ -107,10 +117,22 @@ test('password changes show concise progress and retain failure and verification
     const html = await render({
       execution_mode: 'automatic',
       state: 'approved',
-      result: { state, log_task_id: logTaskId, date_finished: finished }
+      result: {
+        state,
+        log_task_id: logTaskId,
+        date_finished: finished,
+        counts: {
+          total: state === 'unavailable' ? 0 : 1,
+          pending: 0,
+          success: 0,
+          failed: state === 'failed' ? 1 : 0,
+          unverified: state === 'unverified' ? 1 : 0
+        }
+      }
     })
     assert.ok(html.includes(messages[key]), state)
     assert.ok(html.includes(finished), state)
     assert.equal(html.includes(messages.ExecutionLog), !!logTaskId, state)
+    assert.doesNotMatch(html, /<progress[\s>]/)
   }
 })

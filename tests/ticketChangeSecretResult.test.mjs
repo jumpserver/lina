@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
-import { parse, compileTemplate } from '@vue/compiler-sfc'
+import { parse } from '@vue/compiler-sfc'
 
 const source = await readFile(
   new URL('../src/views/tickets/components/TicketChangeSecretResult.vue', import.meta.url),
@@ -54,15 +54,6 @@ test('approval alone never displays a successful password change', () => {
   assert.equal(vm.statusMessage, 'TicketChangeSecretUnapproved')
 })
 
-test('the execution card template compiles', () => {
-  const result = compileTemplate({
-    source: descriptor.template.content,
-    filename: 'TicketChangeSecretResult.vue',
-    id: 'ticket-change-secret'
-  })
-  assert.deepEqual(result.errors, [])
-})
-
 test('execution logs use the worker task ID and remain unavailable before a task starts', () => {
   const vm = state({ state: 'approved', result: { execution_id: 'ticket-id', state: 'queued' } })
   component.methods.openExecutionLog.call(vm)
@@ -70,9 +61,7 @@ test('execution logs use the worker task ID and remain unavailable before a task
   vm.object.result.log_task_id = 'worker-task-id'
   component.methods.openExecutionLog.call(vm)
   assert.deepEqual(openedTasks, ['worker-task-id'])
-  assert.match(descriptor.template.content, /v-if="result.log_task_id"/)
   assert.match(descriptor.template.content, /@click="openExecutionLog"/)
-  assert.match(descriptor.template.content, /\$t\('ExecutionLog'\)/)
 })
 
 test('finished failures show the affected counts without a misleading success progress bar', () => {
@@ -93,7 +82,6 @@ test('finished failures show the affected counts without a misleading success pr
       ['failed', 1]
     ]
   )
-  assert.match(descriptor.template.content, /v-if="state === 'running' && result.counts"/)
   delete vm.object.result.log_task_id
   assert.equal(vm.helpMessage, 'TicketChangeSecretFailureHelp')
   vm.object.result.state = 'unverified'
