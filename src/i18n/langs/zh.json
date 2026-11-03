@@ -3227,6 +3227,7 @@
   "ChatAIConfiguration": "助手配置",
   "AgentSessions": "Agent 会话",
   "AgentActions": "Agent 操作",
+  "AgentSessionActions": "本会话操作",
   "AgentAuditDetail": "Agent 审计详情",
   "AgentTerminalSession": "关联终端会话",
   "AgentRequest": "操作请求",

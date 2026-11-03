@@ -5,9 +5,12 @@
       v-model:active-menu="activeMenu"
       :title="item?.id || t('AgentAuditDetail')"
       :submenu="detailTabs"
-      :go-back="() => router.push(routeTo(kind))"
+      :go-back="() => router.push(backRoute)"
     >
       <template #headingRightSide>
+        <el-button v-if="kind === 'actions' && item?.session_id" @click="router.push(backRoute)">
+          {{ t('AgentSessionActions') }}
+        </el-button>
         <el-button icon="refresh" :loading="loading" @click="load()">{{ t('Refresh') }}</el-button>
       </template>
       <el-alert v-if="error" :title="error" type="error" :closable="false" />
@@ -100,6 +103,11 @@ const loading = ref(false)
 const error = ref('')
 const active = ref(false)
 const activeMenu = ref('Basic')
+const backRoute = computed(() =>
+  props.kind === 'actions' && item.value?.session_id
+    ? routeTo('sessions', item.value.session_id, 'AgentActions')
+    : routeTo(props.kind)
+)
 const outputs = computed(() => evidenceOutput(events.value, nextOffset.value === null))
 const pageKey = computed(
   () => `${props.kind}:${detailId.value || ''}:${route.query.oid || store.getters.currentOrg?.id}`
@@ -153,8 +161,8 @@ const ownsRoute = () =>
   `${props.kind === 'sessions' ? 'AgentSession' : 'AgentAction'}${detailId.value ? 'Detail' : 'List'}`
 const orgHeaders = () => ({ 'X-JMS-ORG': route.query.oid || store.getters.currentOrg?.id })
 
-function routeTo(kind, id) {
-  return agentAuditRoute(kind, id, session.value?.org_id || route.query.oid)
+function routeTo(kind, id, tab) {
+  return agentAuditRoute(kind, id, session.value?.org_id || route.query.oid, tab)
 }
 
 function terminalRoute(id) {

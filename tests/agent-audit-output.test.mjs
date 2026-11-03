@@ -49,6 +49,12 @@ test('Agent lists and details survive permission filtering and resolve with an o
     await router.push(agentAuditRoute(kind, undefined, 'organization-id'))
     assert.equal(router.currentRoute.value.query.tab, kind === 'sessions' ? 'AgentSessions' : 'AgentActions')
   }
+  const scopedActions = agentAuditRoute('sessions', 'parent-session', 'organization-id', 'AgentActions')
+  await router.push(scopedActions)
+  assert.equal(router.currentRoute.value.name, 'AgentSessionDetail')
+  assert.equal(router.currentRoute.value.params.id, 'parent-session')
+  assert.equal(router.currentRoute.value.query.tab, 'AgentActions')
+  assert.equal(router.currentRoute.value.query.oid, 'organization-id')
   assert.equal(router.hasRoute('SessionDetail'), false)
   assert.equal(filtered.filter(route => !route.hidden).length, 2)
 })

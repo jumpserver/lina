@@ -3233,6 +3233,7 @@
   "ChatAIConfiguration": "Assistant configuration",
   "AgentSessions": "Agent sessions",
   "AgentActions": "Agent operations",
+  "AgentSessionActions": "Session operations",
   "AgentAuditDetail": "Agent audit details",
   "AgentTerminalSession": "Terminal session",
   "AgentRequest": "Operation request",

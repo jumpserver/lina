@@ -9,10 +9,15 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import GenericListTable from '@/layout/components/GenericListTable'
-import { DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
+import {
+  ActionsFormatter,
+  DateFormatter,
+  DetailFormatter
+} from '@/components/Table/TableFormatters'
 import request from '@/utils/request'
 import { agentAuditRoute } from './routes'
 
@@ -24,6 +29,7 @@ const props = defineProps({
   dateEnd: { type: String, default: '' }
 })
 const store = useStore()
+const router = useRouter()
 const { t } = useI18n()
 const organizationId = computed(() => props.orgId || store.getters.currentOrg?.id)
 const orgHeaders = () => ({ 'X-JMS-ORG': organizationId.value })
@@ -58,7 +64,36 @@ const columnsMeta = computed(() => ({
         protocol: { label: t('Protocol'), width: '100px' }
       }
     : {}),
-  date_created: { label: t('DateCreated'), minWidth: '180px', formatter: DateFormatter }
+  date_created: { label: t('DateCreated'), minWidth: '180px', formatter: DateFormatter },
+  ...(props.kind === 'sessions'
+    ? {
+        actions: {
+          formatter: ActionsFormatter,
+          formatterArgs: {
+            hasClone: false,
+            hasDelete: false,
+            hasUpdate: false,
+            extraActions: [
+              {
+                name: 'view',
+                title: t('AgentSessionActions'),
+                type: 'primary',
+                can: true,
+                callback: ({ row }) =>
+                  router.push(
+                    agentAuditRoute(
+                      'sessions',
+                      row.id,
+                      row.org_id || organizationId.value,
+                      'AgentActions'
+                    )
+                  )
+              }
+            ]
+          }
+        }
+      }
+    : {})
 }))
 const tableConfig = computed(() => ({
   url: `/api/v1/terminal/agent/audit/${props.kind}/`,
@@ -67,8 +102,11 @@ const tableConfig = computed(() => ({
   columns: [
     ...new Set([...Object.keys(columnsMeta.value), 'account', 'client_id', 'asset_id', 'protocol'])
   ],
-  columnsShow: { min: [primaryColumn.value], default: Object.keys(columnsMeta.value) },
-  columnsMeta: { ...columnsMeta.value, actions: { has: false } }
+  columnsShow: {
+    min: [primaryColumn.value, ...(props.kind === 'sessions' ? ['actions'] : [])],
+    default: Object.keys(columnsMeta.value)
+  },
+  columnsMeta: { actions: { has: false }, ...columnsMeta.value }
 }))
 const tableMetadata = (url) => request({ url, method: 'options', headers: orgHeaders() })
 </script>
