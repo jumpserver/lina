@@ -22,10 +22,8 @@ const ENROLLMENT_FIELDS = [
 const READONLY_FIELDS = ['AUTH_UKEY_CA_CERT_ALGORITHM']
 const SSL_FIELD = 'AUTH_UKEY_XJCA_USE_SSL'
 const VCTKS_SSL_FIELD = 'AUTH_UKEY_VCTK_S_USE_SSL'
-const VCTKS_AUTH_FIELDS = ['AUTH_UKEY_VCTK_S_USERNAME', 'AUTH_UKEY_VCTK_S_PASSWORD']
 const VCTKS_CONNECTION_FIELDS = [
-  'AUTH_UKEY_VCTK_S_SVS_URL', 'AUTH_UKEY_VCTK_S_TLS_VERIFY', 'AUTH_UKEY_VCTK_S_TLS_CA_CERT',
-  ...VCTKS_AUTH_FIELDS
+  'AUTH_UKEY_VCTK_S_SVS_URL', 'AUTH_UKEY_VCTK_S_TLS_VERIFY', 'AUTH_UKEY_VCTK_S_TLS_CA_CERT'
 ]
 const VCTKS_FIELDS = [...VCTKS_CONNECTION_FIELDS, 'AUTH_UKEY_VCTK_S_ISSUING_CA']
 
@@ -77,16 +75,6 @@ export default {
           AUTH_UKEY_CA_CERT_ALGORITHM: { component: TextReadonly, el: { bolder: false } },
           AUTH_UKEY_CA_KEY_CONTENT: { component: UploadKey, label: this.$t('UKeyCAKey') },
           AUTH_UKEY_CA_KEY_PASS: { label: this.$t('UKeyCAKeyPassword') },
-          AUTH_UKEY_VCTK_S_USERNAME: {
-            label: this.$t('UKeyVCTKSAuthorizationUsername'),
-            helpText: this.$t('UKeyVCTKSAuthorizationHelp'),
-            el: { autocomplete: 'off' }
-          },
-          AUTH_UKEY_VCTK_S_PASSWORD: {
-            label: this.$t('UKeyVCTKSAuthorizationPassword'),
-            helpText: this.$t('UKeyVCTKSAuthorizationPasswordHelp'),
-            el: { type: 'password', showPassword: true, autocomplete: 'new-password' }
-          },
           AUTH_UKEY_VCTK_S_SVS_URL: {
             label: this.$t('UKeyVCTKSServerURL'),
             rules: [Required],
@@ -116,12 +104,15 @@ export default {
           },
           AUTH_UKEY_VCTK_S_TLS_VERIFY: {
             options: [
-              { value: 'custom', label: this.$t('UKeyTLSCustomCA') },
+              { value: 'custom', label: this.$t('UKeyTLSCustomSSL') },
               { value: 'insecure', label: this.$t('UKeyTLSInsecure') }
             ],
             tips: false
           },
-          AUTH_UKEY_VCTK_S_TLS_CA_CERT: { component: UploadKey, label: this.$t('CACertificate') },
+          AUTH_UKEY_VCTK_S_TLS_CA_CERT: {
+            component: UploadKey, label: this.$t('UKeySSLCertificate'),
+            helpText: this.$t('UKeySSLCertificateHelp')
+          },
           AUTH_UKEY_XJCA_SVS_URL: {
             label: this.$t('UKeySVSURL'),
             rules: [Required],
@@ -140,12 +131,15 @@ export default {
           },
           AUTH_UKEY_XJCA_TLS_VERIFY: {
             options: [
-              { value: 'custom', label: this.$t('UKeyTLSCustomCA') },
+              { value: 'custom', label: this.$t('UKeyTLSCustomSSL') },
               { value: 'insecure', label: this.$t('UKeyTLSInsecure') }
             ],
             tips: false
           },
-          AUTH_UKEY_XJCA_TLS_CA_CERT: { component: UploadKey, label: this.$t('CACertificate') }
+          AUTH_UKEY_XJCA_TLS_CA_CERT: {
+            component: UploadKey, label: this.$t('UKeySSLCertificate'),
+            helpText: this.$t('UKeySSLCertificateHelp')
+          }
         },
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
@@ -258,21 +252,21 @@ export default {
       return provider.id === 'vctk_s' ? VCTKS_FIELDS : provider.fields || []
     },
     configureProviders(providers) {
-      this.providers = providers
+      this.providers = providers.map(provider => ({
+        ...provider,
+        label: provider.id === 'builtin' ? this.$t('UKeyBuiltinCARootCertificate') : provider.label
+      }))
       this.settings.encryptedFields = this.secretFields
       this.settings.fields = [
         [this.$t('Basic'), BASIC_FIELDS],
-        ...providers.map(provider => [
+        ...this.providers.map(provider => [
           provider.label,
           provider.id === 'xjca'
             ? provider.fields.flatMap(field => field === 'AUTH_UKEY_XJCA_SVS_URL' ? [field, SSL_FIELD] : [field])
-            : this.getProviderFields(provider).filter(field => !VCTKS_AUTH_FIELDS.includes(field)).flatMap(field => (
+            : this.getProviderFields(provider).flatMap(field => (
               field === 'AUTH_UKEY_VCTK_S_SVS_URL' ? [field, VCTKS_SSL_FIELD] : [field]
             ))
-        ]),
-        ...(providers.some(provider => provider.id === 'vctk_s')
-          ? [[this.$t('UKeyVCTKSAuthorizationAdvanced'), VCTKS_AUTH_FIELDS]]
-          : [])
+        ])
       ]
       const fieldsMeta = { ...this.settings.fieldsMeta }
       for (const key of new Set(providers.flatMap(provider => this.getProviderFields(provider)))) {

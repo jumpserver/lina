@@ -32,5 +32,9 @@
     "CredentialLifetimeRangeError": "Enter an integer from {min} to {max} seconds.",
     "UpgradeResourceType": "Upgrade resource type",
     "SystemUpgrade": "System upgrade",
-    "PatchUpgrade": "Patch upgrade"
+    "PatchUpgrade": "Patch upgrade",
+    "UKeyBuiltinCARootCertificate": "Builtin CA root certificate",
+    "UKeyTLSCustomSSL": "Use custom SSL certificate",
+    "UKeySSLCertificate": "SSL certificate",
+    "UKeySSLCertificateHelp": "Upload SSL trust certificates for the verification service (PEM CA certificates or a certificate chain, no private key, up to 64 KB). Leave blank to keep the saved configuration."
 }

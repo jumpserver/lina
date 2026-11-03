@@ -54,7 +54,7 @@ const providers = [
     id: 'vctk_s', label: 'VCTK_S', supported_vendors: ['ji_da'], fields,
     secret_fields: [ISSUING_CA, TLS_CA, AUTH_PASSWORD],
     connection_fields: [SERVER_URL, TLS_VERIFY, TLS_CA, AUTH_USER, AUTH_PASSWORD],
-    supports_connection_test: true, binding_mode: 'certificate', expose_default_pin: true, supports_enrollment: false
+    supports_connection_test: true, binding_mode: 'certificate', expose_default_pin: false, supports_enrollment: false
   }
 ]
 const stringField = { type: 'string', max_length: 65536, required: false }
@@ -181,19 +181,21 @@ describe('VCTK_S settings in the shared form', () => {
     expect(Object.keys(form.axios.patch.mock.calls[0][1]).some(key => key.startsWith('AUTH_UKEY_VCTK_S_'))).toBe(false)
   })
 
-  it('renders optional authorization without exposing the saved password and preserves it on save', async () => {
+  it('omits business authorization and preserves saved credentials on save and test', async () => {
     const form = await createForm({ [AUTH_USER]: 'business', [AUTH_PASSWORD]: 'saved-secret' })
     wrapper = form.wrapper
-    expect(item(wrapper, AUTH_USER).find('input').element.value).toBe('business')
-    const password = item(wrapper, AUTH_PASSWORD).find('input')
-    expect(password.attributes('type')).toBe('password')
-    expect(password.element.value).toBe('')
-    item(wrapper, AUTH_USER).find('input').setValue('')
-    await settle()
+    expect(wrapper.text()).not.toContain('UKeyVCTKSAuthorizationAdvanced')
+    expect(item(wrapper, AUTH_USER).exists()).toBe(false)
+    expect(item(wrapper, AUTH_PASSWORD).exists()).toBe(false)
     await submit(wrapper)
-    expect(form.axios.patch.mock.calls[0][1][AUTH_USER]).toBe('')
+    expect(form.axios.patch.mock.calls[0][1]).not.toHaveProperty(AUTH_USER)
     expect(form.axios.patch.mock.calls[0][1]).not.toHaveProperty(AUTH_PASSWORD)
     expect(form.stored[AUTH_PASSWORD]).toBe('saved-secret')
+    expect(form.stored[AUTH_USER]).toBe('business')
+    button(wrapper, 'Test').trigger('click')
+    await settle()
+    expect(form.axios.post.mock.calls[0][1]).not.toHaveProperty(AUTH_USER)
+    expect(form.axios.post.mock.calls[0][1]).not.toHaveProperty(AUTH_PASSWORD)
   })
 
   it('shows the compact HTTP form and preserves saved certificates and administrative settings', async () => {
@@ -222,7 +224,7 @@ describe('VCTK_S settings in the shared form', () => {
     expect(item(wrapper, SSL).find('.el-switch').classes()).toContain('is-checked')
     expect(item(wrapper, TLS_VERIFY).findAll('input').wrappers.map(input => input.element.value)).toEqual(['custom', 'insecure'])
     expect(item(wrapper, TLS_VERIFY).findAll('.el-radio__label').wrappers.map(label => label.text())).toEqual([
-      'UKeyTLSCustomCA', 'UKeyTLSInsecure'
+      'UKeyTLSCustomSSL', 'UKeyTLSInsecure'
     ])
     expect(item(wrapper, TLS_VERIFY).find('input[value="custom"]').element.checked).toBe(true)
     expect(item(wrapper, TLS_CA).exists()).toBe(true)
