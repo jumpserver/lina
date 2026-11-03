@@ -144,5 +144,7 @@
   "RemoveAccountParams": "Account removal parameters",
   "NoUnreadMsg": "No unread notifications",
   "LoadFailed": "Load failed",
-  "Retry": "Retry"
+  "Retry": "Retry",
+  "ClientSecurity": "Client security",
+  "ClientSecurityChangeHelp": "Changing either setting immediately invalidates existing client logins. Sign in again to continue. Established asset connections follow their existing timeout rules."
 }
