@@ -5,6 +5,7 @@ import { parse } from '@vue/compiler-sfc'
 import { createRenderer, h, KeepAlive, nextTick } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import { createStore } from 'vuex'
+import { redirectLegacyMCPSettings } from '../src/router/settings/legacy-mcp.js'
 
 async function source(path) {
   return readFile(new URL(`../src/${path}`, import.meta.url), 'utf8')
@@ -24,7 +25,7 @@ const routeView = new Function(
 )(['drawer', 'drawerTab', 'drawerAction'])
 const CachedRouterView = await load('layout/components/CachedRouterView.vue', routeView)
 const settings = await load('router/settings/index.js', {
-  i18n: { t: (value) => value }, empty: {}, store: {}, openJDMC() {}, getFirstAccessibleChildPath() {}
+  i18n: { t: (value) => value }, empty: {}, store: {}, openJDMC() {}, getFirstAccessibleChildPath() {}, redirectLegacyMCPSettings
 })
 const roleRoute = settings.children.find((route) => route.path === '/settings/roles').children.find((route) => route.name === 'RoleList')
 const TabPage = await load('layout/components/TabPage/index.vue', {

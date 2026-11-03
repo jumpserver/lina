@@ -20,10 +20,11 @@ export default {
   },
   data() {
     const sessionId = this.object.id
+    const orgQuery = this.object.org_id ? `oid=${encodeURIComponent(this.object.org_id)}` : ''
     return {
       tableConfig: {
         hasSelection: false,
-        url: `/api/v1/audits/ftp-logs/?session=${sessionId}`,
+        url: `/api/v1/audits/ftp-logs/?session=${encodeURIComponent(sessionId)}${orgQuery ? `&${orgQuery}` : ''}`,
         columnsShow: {
           default: [
             'id',
@@ -71,7 +72,9 @@ export default {
                   },
                   callback: function ({ row }) {
                     // 跳转下载页面
-                    download(`/api/v1/audits/ftp-logs/${row.id}/file/download/`)
+                    download(
+                      `/api/v1/audits/ftp-logs/${row.id}/file/download/${orgQuery ? `?${orgQuery}` : ''}`
+                    )
                   }
                 }
               ]

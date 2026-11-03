@@ -1,7 +1,48 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import { agentAuditRoute } from '@/views/audits/AgentAudit/routes'
 
 export default [
+  ...['sessions', 'actions'].map((kind) => {
+    const resource = kind === 'sessions' ? 'AgentSession' : 'AgentAction'
+    const title = kind === 'sessions' ? 'AgentSessions' : 'AgentActions'
+    return {
+      path: `agent-${kind}`,
+      component: empty,
+      hidden: true,
+      redirect: { name: `${resource}List` },
+      meta: {
+        title: i18n.t(title),
+        app: 'terminal',
+        resource: resource.toLowerCase(),
+        icon: 'audit',
+        permissions: [`terminal.view_${resource.toLowerCase()}`]
+      },
+      children: [
+        {
+          path: '',
+          name: `${resource}List`,
+          redirect: (to) => ({
+            ...agentAuditRoute(kind),
+            query: { ...to.query, ...agentAuditRoute(kind).query }
+          }),
+          meta: { title: i18n.t(title), permissions: [`terminal.view_${resource.toLowerCase()}`] }
+        },
+        {
+          path: ':id',
+          name: `${resource}Detail`,
+          component: () => import('@/views/audits/AgentAudit/index.vue'),
+          props: { kind },
+          hidden: true,
+          meta: {
+            title: i18n.t(title),
+            permissions: [`terminal.view_${resource.toLowerCase()}`],
+            activeMenu: kind === 'sessions' ? '/audit/sessions/sessions' : '/audit/sessions/command'
+          }
+        }
+      ]
+    }
+  }),
   {
     path: 'sessions',
     redirect: {
@@ -9,21 +50,21 @@ export default [
     },
     component: empty,
     meta: {
-      title: i18n.t('Sessions'),
+      title: i18n.t('SessionRecords'),
       app: 'terminal',
       resource: 'session',
       expanded: true,
       icon: 'session',
-      permissions: ['terminal.view_session']
+      permissions: ['terminal.view_session | terminal.view_agentsession']
     },
     children: [
       {
         path: '',
         name: 'SessionList',
-        component: () => import('@/views/sessions/SessionList'),
+        component: () => import('@/views/audits/SessionRecords.vue'),
         meta: {
-          title: i18n.t('SessionList'),
-          permissions: ['terminal.view_session']
+          title: i18n.t('SessionRecords'),
+          permissions: ['terminal.view_session | terminal.view_agentsession']
         }
       },
       {
@@ -31,24 +72,24 @@ export default [
         name: 'SessionDetail',
         component: () => import('@/views/sessions/SessionDetail'),
         hidden: true,
-        meta: { title: i18n.t('SessionDetail') }
+        meta: { title: i18n.t('SessionDetail'), permissions: ['terminal.view_session'] }
       }
     ]
   },
   {
     path: 'command',
     name: 'CommandList',
-    component: () => import('@/views/sessions/CommandList/index'),
+    component: () => import('@/views/audits/CommandRecords.vue'),
     meta: {
-      title: i18n.t('SessionCommands'),
+      title: i18n.t('CommandRecords'),
       icon: 'command',
-      permissions: ['terminal.view_command']
+      permissions: ['terminal.view_command | terminal.view_agentaction']
     }
   },
   {
     path: 'ftp',
     name: 'FtpLog',
-    component: () => import('@/views/sessions/FTPLogList'),
+    component: () => import('@/views/audits/FileTransferRecords.vue'),
     meta: {
       title: i18n.t('FileTransfer'),
       icon: 'file-transfer',
