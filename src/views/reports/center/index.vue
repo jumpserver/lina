@@ -203,9 +203,6 @@
                 <span
                   >{{ $t('AuditReportCollectedAt') }} {{ dateTime(snapshot.generated_at) }}</span
                 >
-                <el-button v-if="sourceRoute" text type="primary" @click="$router.push(sourceRoute)"
-                  >{{ $t('AuditReportOpenAuditLogs') }}<el-icon><ArrowRight /></el-icon
-                ></el-button>
               </div>
             </template>
           </div>
@@ -457,15 +454,6 @@ export default {
           }
         ]
       }
-    },
-    sourceRoute() {
-      if (this.selectedTheme === 'activity' && this.$hasPerm('terminal.view_session')) {
-        return { name: 'SessionList' }
-      }
-      if (this.selectedTheme === 'security' && this.$hasPerm('terminal.view_command')) {
-        return { name: 'CommandList' }
-      }
-      return null
     }
   },
   watch: {
