@@ -769,6 +769,7 @@
   "ConfirmDeleteReport": "Voulez-vous vraiment supprimer ce rapport personnalisé ?",
   "ConfirmExecuteOperation": "Voulez-vous vraiment exécuter cette opération ?",
   "ConfirmPassword": "Confirmer le mot de passe",
+  "PasswordMismatch": "Les deux mots de passe ne correspondent pas",
   "ConfirmRunningAssets": "Confirmer les actifs en cours",
   "Connect": "Connecter",
   "ConnectAssets": "Accéder aux actifs",

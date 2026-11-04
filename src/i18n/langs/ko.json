@@ -769,6 +769,7 @@
   "ConfirmDeleteReport": "이 사용자 지정 보고서를 삭제하시겠습니까?",
   "ConfirmExecuteOperation": "이 작업을 실행하시겠습니까?",
   "ConfirmPassword": "비밀번호 확인",
+  "PasswordMismatch": "입력한 두 비밀번호가 일치하지 않습니다",
   "ConfirmRunningAssets": "자산 실행 확인",
   "Connect": "연결",
   "ConnectAssets": "자산 연결",

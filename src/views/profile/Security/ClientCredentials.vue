@@ -16,6 +16,7 @@
         <div>
           <GenericCreateUpdateForm
             :key="formVersion"
+            ref="credentialForm"
             v-bind="config"
             submit-method="patch"
             :more-buttons="clearPasswordButtons"
@@ -50,9 +51,23 @@ export default {
     const group = this.credentialType === 'file' ? 'file' : 'lock'
     const fields =
       group === 'file' ? ['secret_key', 'secret_key_again'] : ['password', 'password_again']
-    const passwordMeta = (name) => ({
+    const passwordMeta = (name, confirmation = false) => ({
       component: PasswordInput,
-      el: { autocomplete: 'new-password', name }
+      el: { autocomplete: 'new-password', name },
+      rules: confirmation
+        ? [
+            {
+              trigger: ['blur', 'change'],
+              validator: (rule, value, callback) => {
+                const form = this.$refs.credentialForm?.$refs.form?.dataForm
+                const password = form?.getFormValue()?.[fields[0]] || ''
+                callback(
+                  (value || '') === password ? undefined : new Error(this.$t('PasswordMismatch'))
+                )
+              }
+            }
+          ]
+        : []
     })
     const formFields =
       group === 'lock'
@@ -68,7 +83,7 @@ export default {
                   name: 'client-lock-password'
                 }
               },
-              password_again: passwordMeta('client-lock-password-confirmation')
+              password_again: passwordMeta('client-lock-password-confirmation', true)
             }
           }
         : {
@@ -76,7 +91,7 @@ export default {
             fieldsMeta: {
               has_secret_key: { label: this.$t('Configured'), component: BoolTextReadonly },
               secret_key: passwordMeta('file-encryption-password'),
-              secret_key_again: passwordMeta('file-encryption-password-confirmation')
+              secret_key_again: passwordMeta('file-encryption-password-confirmation', true)
             }
           }
     return {

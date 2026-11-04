@@ -769,6 +769,7 @@
   "ConfirmDeleteReport": "Bạn có chắc chắn muốn xóa báo cáo tùy chỉnh này không?",
   "ConfirmExecuteOperation": "Xác nhận thực hiện thao tác này?",
   "ConfirmPassword": "Xác nhận mật khẩu",
+  "PasswordMismatch": "Hai mật khẩu không khớp",
   "ConfirmRunningAssets": "Xác nhận chạy tài sản",
   "Connect": "Kết nối",
   "ConnectAssets": "Kết nối tài sản",

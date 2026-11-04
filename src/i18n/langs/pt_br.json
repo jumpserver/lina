@@ -769,6 +769,7 @@
   "ConfirmDeleteReport": "Tem certeza de que deseja excluir este relatório personalizado?",
   "ConfirmExecuteOperation": "Deseja confirmar esta ação?",
   "ConfirmPassword": "Confirmar senha",
+  "PasswordMismatch": "As duas senhas não coincidem",
   "ConfirmRunningAssets": "Confirmar ativos em funcionamento",
   "Connect": "Conectar",
   "ConnectAssets": "Conectar ativos",

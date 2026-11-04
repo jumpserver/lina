@@ -769,6 +769,7 @@
   "ConfirmDeleteReport": "Вы уверены, что хотите удалить этот пользовательский отчет?",
   "ConfirmExecuteOperation": "Подтвердить выполнение операции?",
   "ConfirmPassword": "Подтвердите пароль",
+  "PasswordMismatch": "Введённые пароли не совпадают",
   "ConfirmRunningAssets": "Подтвердить текущие активы",
   "Connect": "Подключение",
   "ConnectAssets": "Доступ к активам",

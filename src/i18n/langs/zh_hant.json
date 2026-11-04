@@ -721,6 +721,7 @@
   "ConfirmDeleteReport": "確定刪除當前自定義報告嗎？",
   "ConfirmExecuteOperation": "確認執行此操作？",
   "ConfirmPassword": "確認密碼",
+  "PasswordMismatch": "兩次輸入的密碼不一致",
   "ConfirmRunningAssets": "確認運行資產",
   "Connect": "連接",
   "ConnectAssets": "連接資產",

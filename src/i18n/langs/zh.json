@@ -512,6 +512,7 @@
   "ConfirmDeleteReport": "确定删除当前自定义报告吗？",
   "ConfirmExecuteOperation": "确认执行此操作？",
   "ConfirmPassword": "确认密码",
+  "PasswordMismatch": "两次输入的密码不一致",
   "ConfirmRunningAssets": "确认运行资产",
   "Connect": "连接",
   "ConnectAssets": "连接资产",

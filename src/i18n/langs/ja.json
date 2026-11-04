@@ -729,6 +729,7 @@
   "ConfirmDeleteReport": "このカスタムレポートを削除してもよろしいですか？",
   "ConfirmExecuteOperation": "この操作を実行しますか？",
   "ConfirmPassword": "パスワードの確認",
+  "PasswordMismatch": "入力された2つのパスワードが一致しません",
   "ConfirmRunningAssets": "確認したアセット",
   "Connect": "接続",
   "ConnectAssets": "接続資産",

@@ -13,7 +13,7 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item command="ProfileIndex">
-            <svg-icon class="icon" icon-class="setting" />
+            <svg-icon class="icon" icon-class="nav-setting" />
             {{ $t('PersonalSettings') }}
           </el-dropdown-item>
 
