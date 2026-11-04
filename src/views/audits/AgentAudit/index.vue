@@ -8,7 +8,10 @@
       :go-back="() => router.push(backRoute)"
     >
       <template #headingRightSide>
-        <el-button v-if="kind === 'actions' && item?.session_id" @click="router.push(backRoute)">
+        <el-button
+          v-if="kind === 'actions' && item?.session_id && canViewSessions"
+          @click="router.push(backRoute)"
+        >
           {{ t('AgentSessionActions') }}
         </el-button>
         <el-button icon="refresh" :loading="loading" @click="load()">{{ t('Refresh') }}</el-button>
@@ -32,7 +35,7 @@
           </template>
         </TwoCol>
         <AgentList
-          v-else-if="kind === 'sessions' && activeMenu === 'AgentActions'"
+          v-else-if="kind === 'sessions' && activeMenu === 'AgentActions' && canViewActions"
           kind="actions"
           :session-id="detailId"
           :org-id="route.query.oid || store.getters.currentOrg?.id"
@@ -88,6 +91,7 @@ import request from '@/utils/request'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { evidenceOutput } from './output'
 import { agentAuditRoute } from './routes'
+import { hasPermission } from '@/utils/jms/permission'
 
 const props = defineProps({ kind: { type: String, required: true } })
 const { t } = useI18n()
@@ -96,7 +100,8 @@ const router = useRouter()
 const store = useStore()
 const detailId = computed(() => route.params.id)
 const item = ref(null)
-const session = ref(null)
+const canViewSessions = computed(() => hasPermission('terminal.view_agentsession'))
+const canViewActions = computed(() => hasPermission('terminal.view_agentaction'))
 const events = ref([])
 const nextOffset = ref(null)
 const loading = ref(false)
@@ -104,7 +109,7 @@ const error = ref('')
 const active = ref(false)
 const activeMenu = ref('Basic')
 const backRoute = computed(() =>
-  props.kind === 'actions' && item.value?.session_id
+  props.kind === 'actions' && item.value?.session_id && canViewSessions.value
     ? routeTo('sessions', item.value.session_id, 'AgentActions')
     : routeTo(props.kind)
 )
@@ -114,14 +119,15 @@ const pageKey = computed(
 )
 const detailTabs = computed(() => [
   { title: t('Basic'), name: 'Basic' },
-  props.kind === 'sessions'
-    ? { title: t('AgentActions'), name: 'AgentActions' }
-    : { title: t('Output'), name: 'Output' }
+  ...(props.kind === 'sessions'
+    ? canViewActions.value
+      ? [{ title: t('AgentActions'), name: 'AgentActions' }]
+      : []
+    : [{ title: t('Output'), name: 'Output' }])
 ])
 const detailItems = computed(() => {
   if (!item.value) return []
   const data = item.value
-  const parent = session.value
   const linkedItem = (key, value, to) => ({
     key: t(key),
     value,
@@ -131,22 +137,28 @@ const detailItems = computed(() => {
     { key: 'ID', value: data.id },
     { key: t('Status'), value: data.status },
     { key: t('Operation'), value: data.kind, has: !!data.kind },
-    { key: t('User'), value: data.user_display || parent?.user_display || parent?.user_id },
+    { key: t('User'), value: data.user_display || data.user_id },
     { key: t('DateCreated'), value: date(data.date_created) },
-    { key: t('Asset'), value: parent?.asset_id },
-    { key: t('Account'), value: parent?.account },
-    { key: t('Protocol'), value: parent?.protocol },
-    { key: t('MCPClientID'), value: parent?.client_id },
+    { key: t('Asset'), value: data.asset_id },
+    { key: t('Account'), value: data.account },
+    { key: t('Protocol'), value: data.protocol },
+    { key: t('MCPClientID'), value: data.client_id },
     ...(data.session_id
-      ? [linkedItem('AgentSessions', data.session_id, routeTo('sessions', data.session_id))]
+      ? [
+          canViewSessions.value
+            ? linkedItem('AgentSessions', data.session_id, routeTo('sessions', data.session_id))
+            : { key: t('AgentSessions'), value: data.session_id }
+        ]
       : []),
-    parent?.terminal_session_id && router.hasRoute('SessionDetail')
+    data.terminal_session_id &&
+    hasPermission('terminal.view_session') &&
+    router.hasRoute('SessionDetail')
       ? linkedItem(
           'AgentTerminalSession',
-          parent.terminal_session_id,
-          terminalRoute(parent.terminal_session_id)
+          data.terminal_session_id,
+          terminalRoute(data.terminal_session_id)
         )
-      : { key: t('AgentTerminalSession'), value: parent?.terminal_session_id },
+      : { key: t('AgentTerminalSession'), value: data.terminal_session_id },
     { key: t('DateStart'), value: date(data.date_started), has: !!data.date_started },
     { key: t('DateEnd'), value: date(data.date_finished), has: !!data.date_finished }
   ]
@@ -162,14 +174,14 @@ const ownsRoute = () =>
 const orgHeaders = () => ({ 'X-JMS-ORG': route.query.oid || store.getters.currentOrg?.id })
 
 function routeTo(kind, id, tab) {
-  return agentAuditRoute(kind, id, session.value?.org_id || route.query.oid, tab)
+  return agentAuditRoute(kind, id, item.value?.org_id || route.query.oid, tab)
 }
 
 function terminalRoute(id) {
   return {
     name: 'SessionDetail',
     params: { id },
-    query: session.value?.org_id ? { oid: session.value.org_id } : {}
+    query: item.value?.org_id ? { oid: item.value.org_id } : {}
   }
 }
 
@@ -180,7 +192,7 @@ async function load() {
   controller = current
   loading.value = true
   error.value = ''
-  item.value = session.value = null
+  item.value = null
   events.value = []
   nextOffset.value = null
   const headers = orgHeaders()
@@ -190,17 +202,8 @@ async function load() {
       headers,
       signal: current.signal
     })
-    let parent = null
-    if (props.kind === 'actions') {
-      parent = await request({
-        url: `/api/v1/terminal/agent/audit/sessions/${data.session_id}/`,
-        headers,
-        signal: current.signal
-      })
-    }
     if (current.signal.aborted) return
     item.value = data
-    session.value = props.kind === 'sessions' ? data : parent
     events.value = data.events || []
     nextOffset.value = data.next_offset ?? null
   } catch (e) {
@@ -258,7 +261,7 @@ function activate() {
 function deactivate() {
   active.value = false
   controller?.abort()
-  item.value = session.value = null
+  item.value = null
   events.value = []
 }
 onMounted(activate)

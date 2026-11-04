@@ -19,6 +19,7 @@ import {
   DetailFormatter
 } from '@/components/Table/TableFormatters'
 import request from '@/utils/request'
+import { hasPermission } from '@/utils/jms/permission'
 import { agentAuditRoute } from './routes'
 
 const props = defineProps({
@@ -45,6 +46,7 @@ const headerActions = computed(() => ({
   searchConfig: { getUrlQuery: true, excludeFields: props.sessionId ? ['session_id'] : [] }
 }))
 const primaryColumn = computed(() => (props.kind === 'sessions' ? 'operation' : 'kind'))
+const canViewActions = computed(() => hasPermission('terminal.view_agentaction'))
 const columnsMeta = computed(() => ({
   [primaryColumn.value]: {
     label: t(props.kind === 'sessions' ? 'AgentSessions' : 'Operation'),
@@ -65,7 +67,7 @@ const columnsMeta = computed(() => ({
       }
     : {}),
   date_created: { label: t('DateCreated'), minWidth: '180px', formatter: DateFormatter },
-  ...(props.kind === 'sessions'
+  ...(props.kind === 'sessions' && canViewActions.value
     ? {
         actions: {
           formatter: ActionsFormatter,
@@ -103,7 +105,7 @@ const tableConfig = computed(() => ({
     ...new Set([...Object.keys(columnsMeta.value), 'account', 'client_id', 'asset_id', 'protocol'])
   ],
   columnsShow: {
-    min: [primaryColumn.value, ...(props.kind === 'sessions' ? ['actions'] : [])],
+    min: [primaryColumn.value, ...(columnsMeta.value.actions ? ['actions'] : [])],
     default: Object.keys(columnsMeta.value)
   },
   columnsMeta: { actions: { has: false }, ...columnsMeta.value }

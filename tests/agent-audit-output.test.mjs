@@ -20,13 +20,15 @@ test('Agent output joins UTF-8 bytes split across evidence pages and separates s
   ])
 })
 
-test('Agent lists and details survive permission filtering and resolve with an organization', async () => {
+async function auditRouter(permissions) {
   const source = await readFile(new URL('../src/router/audit/sessions.js', import.meta.url), 'utf8')
   const routes = new Function('i18n', 'empty', 'agentAuditRoute', source.replace(/^import .*$/gm, '').replace('export default', 'return'))({ t: key => key }, {}, agentAuditRoute)
+  const checks = await readFile(new URL('../src/utils/jms/permission.js', import.meta.url), 'utf8')
+  const check = new Function(checks.replace(/^import .*$/gm, '').replaceAll('export function', 'function') + '\nreturn checkPermission')()
   const permissionSource = await readFile(new URL('../src/store/modules/permission.js', import.meta.url), 'utf8')
   const filter = new Function('getResourceNameByPath', 'hasPermission', 'i18n', '_',
     permissionSource.slice(0, permissionSource.indexOf('const state =')).replace(/^import .*$/gm, '').replaceAll('export function', 'function') + '\nreturn filterPermedRoutes'
-  )(value => value, permissions => permissions.length === 0, { global: { t: value => value } }, lodash)
+  )(value => value, required => check(required, permissions), { global: { t: value => value } }, lodash)
   const filtered = filter(routes, { meta: { level: 2, fullPath: '/audit/sessions', view: 'audit' } })
   const withoutLazyComponents = (items) => items.map(item => ({
     ...item,
@@ -34,6 +36,25 @@ test('Agent lists and details survive permission filtering and resolve with an o
     ...(item.children ? { children: withoutLazyComponents(item.children) } : {})
   }))
   const router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/audit/sessions', children: withoutLazyComponents(filtered) }] })
+  return { router, filtered }
+}
+
+test('Agent audit routes require their independent view permissions', async () => {
+  for (const permissions of [[], ['terminal.view_agentsession'], ['terminal.view_agentaction'], ['terminal.view_session', 'terminal.view_command']]) {
+    const { router } = await auditRouter(permissions)
+    for (const resource of ['AgentSession', 'AgentAction']) {
+      const allowed = permissions.includes(`terminal.view_${resource.toLowerCase()}`)
+      assert.equal(router.hasRoute(`${resource}List`), allowed)
+      assert.equal(router.hasRoute(`${resource}Detail`), allowed)
+    }
+    assert.equal(router.hasRoute('SessionList'), permissions.some(p => ['terminal.view_session', 'terminal.view_agentsession'].includes(p)))
+    assert.equal(router.hasRoute('CommandList'), permissions.some(p => ['terminal.view_command', 'terminal.view_agentaction'].includes(p)))
+    assert.equal(router.hasRoute('SessionDetail'), permissions.includes('terminal.view_session'))
+  }
+})
+
+test('Authorized Agent routes preserve organization, filters and session actions navigation', async () => {
+  const { router, filtered } = await auditRouter(['terminal.view_agentsession', 'terminal.view_agentaction'])
   for (const resource of ['AgentSession', 'AgentAction']) {
     assert.equal(router.hasRoute(`${resource}List`), true)
     const detail = router.resolve({ name: `${resource}Detail`, params: { id: 'record-id' }, query: { oid: 'organization-id' } })

@@ -16,7 +16,7 @@ export default [
         app: 'terminal',
         resource: resource.toLowerCase(),
         icon: 'audit',
-        permissions: []
+        permissions: [`terminal.view_${resource.toLowerCase()}`]
       },
       children: [
         {
@@ -26,7 +26,7 @@ export default [
             ...agentAuditRoute(kind),
             query: { ...to.query, ...agentAuditRoute(kind).query }
           }),
-          meta: { title: i18n.t(title), permissions: [] }
+          meta: { title: i18n.t(title), permissions: [`terminal.view_${resource.toLowerCase()}`] }
         },
         {
           path: ':id',
@@ -36,7 +36,7 @@ export default [
           hidden: true,
           meta: {
             title: i18n.t(title),
-            permissions: [],
+            permissions: [`terminal.view_${resource.toLowerCase()}`],
             activeMenu: kind === 'sessions' ? '/audit/sessions/sessions' : '/audit/sessions/command'
           }
         }
@@ -55,7 +55,7 @@ export default [
       resource: 'session',
       expanded: true,
       icon: 'session',
-      permissions: []
+      permissions: ['terminal.view_session | terminal.view_agentsession']
     },
     children: [
       {
@@ -64,7 +64,7 @@ export default [
         component: () => import('@/views/audits/SessionRecords.vue'),
         meta: {
           title: i18n.t('SessionRecords'),
-          permissions: []
+          permissions: ['terminal.view_session | terminal.view_agentsession']
         }
       },
       {
@@ -83,7 +83,7 @@ export default [
     meta: {
       title: i18n.t('CommandRecords'),
       icon: 'command',
-      permissions: []
+      permissions: ['terminal.view_command | terminal.view_agentaction']
     }
   },
   {

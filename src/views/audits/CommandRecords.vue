@@ -43,7 +43,11 @@ export default {
           title: this.$t('TerminalCommands'),
           hidden: !this.$hasPerm('terminal.view_command')
         },
-        { name: 'AgentActions', title: this.$t('AgentActions') }
+        {
+          name: 'AgentActions',
+          title: this.$t('AgentActions'),
+          hidden: !this.$hasPerm('terminal.view_agentaction')
+        }
       ]
     },
     contentReady() {

@@ -49,7 +49,11 @@ export default {
           title: this.$t('SessionOffline'),
           hidden: !this.$hasPerm('terminal.view_session')
         },
-        { name: 'AgentSessions', title: this.$t('AgentSessions') }
+        {
+          name: 'AgentSessions',
+          title: this.$t('AgentSessions'),
+          hidden: !this.$hasPerm('terminal.view_agentsession')
+        }
       ]
     },
     activeComponent() {
