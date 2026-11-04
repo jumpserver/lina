@@ -33,7 +33,7 @@
         </el-table-column>
         <el-table-column
           :label="$tc('Receivers')"
-          :show-overflow-tooltip="{ hideAfter: 200 }"
+          :show-overflow-tooltip="{ hideAfter: 200, popperClass: 'subscription-receivers-popper' }"
           :tooltip-formatter="formatReceiversTooltip"
         >
           <template #default="scope">
@@ -211,11 +211,39 @@ export default {
 </style>
 
 <style>
+.subscription-receivers-popper.el-popper {
+  padding-right: 4px;
+}
+
 .subscription-receivers-tooltip {
+  --receivers-scrollbar-thumb: rgb(255 255 255 / 36%);
+
   max-width: min(400px, calc(100vw - 48px));
   max-height: min(320px, 60vh);
+  padding-right: 7px;
   overflow-y: auto;
   overflow-wrap: anywhere;
   white-space: normal;
+  color-scheme: dark;
+  scrollbar-width: thin;
+  scrollbar-color: var(--receivers-scrollbar-thumb) transparent;
+}
+
+.subscription-receivers-tooltip:hover {
+  --receivers-scrollbar-thumb: rgb(255 255 255 / 52%);
+}
+
+.subscription-receivers-tooltip::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+
+.subscription-receivers-tooltip::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.subscription-receivers-tooltip::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--receivers-scrollbar-thumb);
 }
 </style>
