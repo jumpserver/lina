@@ -24,6 +24,20 @@
         {{ $t('Copy') }}
       </el-button>
     </div>
+    <template v-if="publicURL">
+      <h5 class="client-title">{{ $t('MCPOneSentenceSetup') }}</h5>
+      <p class="guide-description">{{ $t('MCPAgentSetupHelp') }}</p>
+      <div class="connection-config agent-setup">
+        <div class="config-toolbar">
+          <span>Codex / DSH</span>
+          <el-button :disabled="!canConnect" @click="copy(agentSetupPrompt)">
+            {{ $t('MCPCopyForAgent') }}
+          </el-button>
+        </div>
+        <pre>{{ agentSetupPrompt }}</pre>
+      </div>
+      <p class="guide-description">{{ $t('MCPAgentSetupBoundary') }}</p>
+    </template>
     <h5 class="client-title">Codex</h5>
     <div v-if="publicURL" class="connection-config">
       <div class="config-toolbar">
@@ -66,6 +80,12 @@ export default {
     },
     canConnect() {
       return Boolean(this.settings.MCP_ENABLED && this.publicURL)
+    },
+    agentSetupPrompt() {
+      return this.$t('MCPAgentSetupPrompt', {
+        guide: new URL('/core/auth/agent/install.md', window.location.origin).href,
+        url: this.publicURL
+      })
     },
     codexCommands() {
       const quotedURL = "'" + this.publicURL.replaceAll("'", "'\"'\"'") + "'"
@@ -116,6 +136,10 @@ export default {
   border: 1px solid var(--el-border-color);
   border-radius: 4px;
   background: var(--el-fill-color-light);
+}
+
+.agent-setup {
+  margin-bottom: 12px;
 }
 
 .config-toolbar {
