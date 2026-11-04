@@ -245,10 +245,7 @@
                     v-model="selected.config.users"
                     multiple
                     :placeholder="$t('WFCCPlaceholder')"
-                    :ajax="{
-                      url: '/api/v1/users/users/?fields_size=mini&is_valid=true',
-                      transformOption: (user) => ({ label: user.name, value: user.id })
-                    }"
+                    url="/api/v1/users/users/?fields_size=mini&is_valid=true"
                   />
                 </el-form-item>
                 <ConditionEditor
