@@ -1,6 +1,15 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="24">
+      <Session
+        v-if="
+          object.type?.value === 'login_asset_confirm' &&
+          object.state?.value === 'approved' &&
+          $hasPerm('tickets.view_ticket')
+        "
+        :key="ticketKey"
+        :object="object"
+      />
       <p
         v-if="object.execution_mode === 'approval_only' && !plugin.requestComponent"
         class="ticket-approval-hint"
@@ -47,9 +56,6 @@
         @busy="workflowBusy = $event"
       />
       <Comments v-bind="$attrs" :object="object" />
-    </el-col>
-    <el-col :span="24">
-      <Session v-if="$hasPerm('tickets.view_ticket')" :object="object" />
     </el-col>
   </el-row>
 </template>
