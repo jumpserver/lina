@@ -74,9 +74,6 @@ export default {
           label: this.$t('ChangePassword'),
           type: 'checkbox',
           hidden: (formValue) => {
-            if (formValue.update_password) {
-              return true
-            }
             return formValue.source !== 'local' || this.$context.get('action') !== 'update'
           }
         },
