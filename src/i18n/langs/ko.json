@@ -2230,6 +2230,7 @@
   "VerifySignTmpl": "인증 코드 문자 템플릿",
   "Version": "버전",
   "View": "보기",
+  "AssetPermissionViewHelp": "권한이 부여된 자산 트리와 자산 목록에서 자산을 볼 수 있습니다. 보기 권한만 있는 경우 자산에 연결하거나 다른 작업을 수행할 수 없습니다.",
   "ViewMore": "더 보기",
   "ViewPerm": "권한 보기",
   "ViewSecret": "비밀문서 조회",

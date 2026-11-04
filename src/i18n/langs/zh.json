@@ -2056,6 +2056,7 @@
   "VerifySignTmpl": "验证码短信模板",
   "Version": "版本",
   "View": "查看",
+  "AssetPermissionViewHelp": "可在授权树和资产列表中查看资产。仅有查看权限时，无法连接资产或执行其他操作。",
   "ViewMore": "查看更多",
   "ViewPerm": "查看授权",
   "ViewSecret": "查看密文",

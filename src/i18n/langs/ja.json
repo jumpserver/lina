@@ -2193,6 +2193,7 @@
   "VerifySignTmpl": "認証コードのSMSテンプレート",
   "Version": "バージョン",
   "View": "閲覧",
+  "AssetPermissionViewHelp": "認可された資産ツリーと資産一覧で資産を閲覧できます。閲覧権限のみの場合、資産への接続やその他の操作はできません。",
   "ViewMore": "もっと見る",
   "ViewPerm": "認可を表示",
   "ViewSecret": "暗号文を見る",

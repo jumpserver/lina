@@ -2297,6 +2297,7 @@
   "VerifySignTmpl": "Modèle SMS",
   "Version": "Version",
   "View": "Voir",
+  "AssetPermissionViewHelp": "Permet de consulter les actifs dans l’arborescence des actifs autorisés et dans la liste des actifs. L’accès en consultation seule ne permet pas de se connecter aux actifs ni d’effectuer d’autres opérations.",
   "ViewMore": "Voir plus",
   "ViewPerm": "Voir",
   "ViewSecret": "Voir le secret",

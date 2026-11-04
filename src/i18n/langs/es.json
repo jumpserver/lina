@@ -2230,6 +2230,7 @@
   "VerifySignTmpl": "Plantilla de mensaje de verificación",
   "Version": "Versión",
   "View": "Ver",
+  "AssetPermissionViewHelp": "Permite ver activos en el árbol de activos autorizados y en la lista de activos. El acceso de solo lectura no permite conectarse a los activos ni realizar otras operaciones.",
   "ViewMore": "Ver más",
   "ViewPerm": "Ver autorización",
   "ViewSecret": "Ver texto cifrado",

@@ -2070,6 +2070,7 @@
   "VerifySignTmpl": "Sms template",
   "Version": "Version",
   "View": "View",
+  "AssetPermissionViewHelp": "View assets in the authorized asset tree and asset list. View-only access does not allow connecting to assets or performing other operations.",
   "ViewMore": "View more",
   "ViewPerm": "View",
   "ViewSecret": "View secret",

@@ -2184,6 +2184,7 @@
   "VerifySignTmpl": "驗證碼簡訊模板",
   "Version": "版本",
   "View": "查看",
+  "AssetPermissionViewHelp": "可在授權樹和資產列表中查看資產。僅有查看權限時，無法連線至資產或執行其他操作。",
   "ViewMore": "查看更多",
   "ViewPerm": "查看授權",
   "ViewSecret": "查看密文",

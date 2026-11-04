@@ -2230,6 +2230,7 @@
   "VerifySignTmpl": "Mẫu tin nhắn xác nhận số điện thoại",
   "Version": "Phiên bản",
   "View": "Xem",
+  "AssetPermissionViewHelp": "Cho phép xem tài sản trong cây tài sản được cấp quyền và danh sách tài sản. Khi chỉ có quyền xem, không thể kết nối với tài sản hoặc thực hiện các thao tác khác.",
   "ViewMore": "Xem thêm",
   "ViewPerm": "Xem quyền truy cập",
   "ViewSecret": "Xem văn bản mã hóa",
