@@ -13,7 +13,6 @@ export default {
   data() {
     return {
       category: 'lina',
-      fieldsExclude: ['file'],
       fieldsMeta: {
         basic: {
           fieldsMeta: {

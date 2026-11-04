@@ -1,28 +1,22 @@
 <template>
-  <div class="credential-form">
+  <div class="password-settings">
     <el-alert
-      v-if="accountMismatch"
-      :title="$t('ClientCredentialsAccountMismatch')"
-      type="warning"
+      :title="$t(passwordType === 'lock' ? 'LockPasswordHelp' : 'FileEncryptionHelp')"
+      type="info"
       :closable="false"
     />
-    <template v-else>
-      <el-alert
-        :title="$t(credentialType === 'lock' ? 'ClientCredentialsHelp' : 'FileEncryptionHelp')"
-        type="info"
-        :closable="false"
-      />
-      <IBox>
-        <div>
-          <GenericCreateUpdateForm
-            :key="formVersion"
-            v-bind="config"
-            submit-method="patch"
-            :more-buttons="clearPasswordButtons"
-          />
-        </div>
-      </IBox>
-    </template>
+    <IBox>
+      <div>
+        <GenericCreateUpdateForm
+          :key="formVersion"
+          ref="passwordForm"
+          v-bind="config"
+          submit-method="patch"
+          :more-buttons="clearPasswordButtons"
+          class="password-settings-form"
+        />
+      </div>
+    </IBox>
   </div>
 </template>
 
@@ -32,29 +26,41 @@ import { IBox } from '@/components'
 import BoolTextReadonly from '@/components/Form/FormFields/BoolTextReadonly'
 import UserPassword from '@/components/Form/FormFields/UserPassword.vue'
 import { PasswordInput } from '@/components/Form/FormFields'
-import { encryptPassword } from '@/utils/session-encrypt'
 
 export default {
-  name: 'ClientCredentials',
+  name: 'UserPasswordSettings',
   components: { GenericCreateUpdateForm, IBox },
   props: {
-    object: { type: Object, default: null },
-    credentialType: {
+    passwordType: {
       type: String,
       default: 'lock',
       validator: (value) => ['lock', 'file'].includes(value)
     }
   },
   data() {
-    const group = this.credentialType === 'file' ? 'file' : 'lock'
+    const passwordType = this.passwordType
     const fields =
-      group === 'file' ? ['secret_key', 'secret_key_again'] : ['password', 'password_again']
-    const passwordMeta = (name) => ({
+      passwordType === 'file' ? ['secret_key', 'secret_key_again'] : ['password', 'password_again']
+    const passwordMeta = (name, confirmation = false) => ({
       component: PasswordInput,
-      el: { autocomplete: 'new-password', name }
+      el: { autocomplete: 'new-password', name },
+      rules: confirmation
+        ? [
+            {
+              trigger: ['blur', 'change'],
+              validator: (rule, value, callback) => {
+                const form = this.$refs.passwordForm?.$refs.form?.dataForm
+                const password = form?.getFormValue()?.[fields[0]] || ''
+                callback(
+                  (value || '') === password ? undefined : new Error(this.$t('PasswordMismatch'))
+                )
+              }
+            }
+          ]
+        : []
     })
-    const groupMeta =
-      group === 'lock'
+    const formFields =
+      passwordType === 'lock'
         ? {
             fields: ['has_password', ...fields],
             fieldsMeta: {
@@ -64,10 +70,10 @@ export default {
                 el: {
                   userIsOrgAdmin: this.$store.state.users.profile.is_org_admin,
                   autocomplete: 'new-password',
-                  name: 'client-lock-password'
+                  name: 'lock-password'
                 }
               },
-              password_again: passwordMeta('client-lock-password-confirmation')
+              password_again: passwordMeta('lock-password-confirmation', true)
             }
           }
         : {
@@ -75,7 +81,7 @@ export default {
             fieldsMeta: {
               has_secret_key: { label: this.$t('Configured'), component: BoolTextReadonly },
               secret_key: passwordMeta('file-encryption-password'),
-              secret_key_again: passwordMeta('file-encryption-password-confirmation')
+              secret_key_again: passwordMeta('file-encryption-password-confirmation', true)
             }
           }
     return {
@@ -83,27 +89,18 @@ export default {
       clearingPassword: false,
       lockPasswordConfigured: false,
       config: {
-        url: '/api/v1/users/profile/client-credentials/',
+        url: `/api/v1/users/profile/${passwordType === 'lock' ? 'lock-password' : 'file-encryption'}/`,
         hasDetailInMsg: false,
-        afterGetRemoteMeta: (meta) => {
-          if (group === 'file' && meta.file?.children?.has_secret_key) {
-            // The tab reminder contains the file-encryption explanation.
-            meta.file.children.has_secret_key.help_text = ''
-          }
-        },
+        encryptedFields: fields,
         afterGetFormValue: (values) => {
-          this.lockPasswordConfigured = Boolean(values.lock?.has_password)
+          this.lockPasswordConfigured = Boolean(values.has_password)
           return values
         },
-        fields: [group],
-        fieldsMeta: { [group]: groupMeta },
-        cleanFormValue: (values) => ({
-          [group]: Object.fromEntries(
-            fields
-              .filter((field) => values[group]?.[field])
-              .map((field) => [field, encryptPassword(values[group][field])])
-          )
-        }),
+        ...formFields,
+        cleanFormValue: (values) =>
+          Object.fromEntries(
+            fields.filter((field) => values[field]).map((field) => [field, values[field]])
+          ),
         onPerformSuccess: () => {
           this.$message.success(this.$t('UpdateSuccessMsg'))
           this.formVersion += 1
@@ -113,7 +110,7 @@ export default {
   },
   computed: {
     clearPasswordButtons() {
-      return this.credentialType === 'lock'
+      return this.passwordType === 'lock'
         ? [
             {
               title: this.$t('IdleLock.ClearPassword'),
@@ -125,10 +122,6 @@ export default {
             }
           ]
         : []
-    },
-    accountMismatch() {
-      const expected = this.$route.query.user_id
-      return Boolean(expected && expected !== this.$store.state.users.profile.id)
     }
   },
   methods: {
@@ -141,8 +134,8 @@ export default {
           this.$t('IdleLock.ClearPassword'),
           { type: 'warning' }
         )
-        await this.$axios.patch('/api/v1/users/profile/client-credentials/', {
-          lock: { clear: true }
+        await this.$axios.patch(this.config.url, {
+          clear: true
         })
         this.$message.success(this.$t('IdleLock.PasswordCleared'))
         this.formVersion += 1
@@ -158,10 +151,15 @@ export default {
 }
 </script>
 
-<style scoped>
-.credential-form {
+<style lang="scss" scoped>
+.password-settings {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.password-settings-form :deep(.password-input) {
+  width: 600px;
+  max-width: 100%;
 }
 </style>
