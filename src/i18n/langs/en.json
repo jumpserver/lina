@@ -3214,5 +3214,21 @@
     "WebIdleHelp": "Locks the console and Web terminal after the specified idle time. Enter the lock password to unlock.",
     "LifetimeHelp": "Counted from login. Sign in again when it expires; activity does not extend it.",
     "AdminClientHelp": "Administrator settings are defaults and limits. Users may choose stricter settings; otherwise they follow the administrator."
-  }
+  },
+  "ConnectivityTests": "Connection tests",
+  "AccountConnectivity": "Account connectivity test",
+  "AssetConnectivity": "Asset connectivity test",
+  "AccountConnectivityTasks": "Account test tasks",
+  "AssetConnectivityTasks": "Asset test tasks",
+  "AccountConnectivityCreate": "Create account connectivity test",
+  "AccountConnectivityUpdate": "Edit account connectivity test",
+  "AssetConnectivityCreate": "Create asset connectivity test",
+  "AssetConnectivityUpdate": "Edit asset connectivity test",
+  "ConnectivityAccountsHelp": "Enter account usernames. Leave empty to test all active accounts on the selected assets, including accounts from joined directory services. Node assets and accounts are resolved each time the task runs.",
+  "ConnectivityAllAccounts": "All active accounts",
+  "ConnectivityResults": "Connectivity results",
+  "ConnectivityTarget": "Asset / account",
+  "ConnectivityUnsupported": "Unsupported assets",
+  "ConnectivityTasks": "Test tasks",
+  "ConnectivityTargets": "Test targets"
 }

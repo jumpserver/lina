@@ -3198,5 +3198,21 @@
     "WebIdleHelp": "閒置達到設定時間後鎖定控制台與 Web 終端，輸入鎖屏密碼解鎖。",
     "LifetimeHelp": "從登入時間起計算，到期須重新登入，操作不會延長。",
     "AdminClientHelp": "管理員設定為預設值與上限，使用者可設定得更嚴格；未自行設定則跟隨管理員。"
-  }
+  },
+  "ConnectivityTests": "連線測試",
+  "AccountConnectivity": "帳號連線測試",
+  "AssetConnectivity": "資產連線測試",
+  "AccountConnectivityTasks": "帳號測試任務",
+  "AssetConnectivityTasks": "資產測試任務",
+  "AccountConnectivityCreate": "建立帳號連線測試",
+  "AccountConnectivityUpdate": "編輯帳號連線測試",
+  "AssetConnectivityCreate": "建立資產連線測試",
+  "AssetConnectivityUpdate": "編輯資產連線測試",
+  "ConnectivityAccountsHelp": "填寫帳號使用者名稱；留空時測試所選資產上的全部啟用帳號（含關聯目錄服務帳號）。每次執行時重新取得節點下的資產及帳號。",
+  "ConnectivityAllAccounts": "全部啟用帳號",
+  "ConnectivityResults": "連線測試結果",
+  "ConnectivityTarget": "資產 / 帳號",
+  "ConnectivityUnsupported": "不支援的資產",
+  "ConnectivityTasks": "測試任務",
+  "ConnectivityTargets": "測試目標"
 }

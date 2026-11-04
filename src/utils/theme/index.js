@@ -17,15 +17,17 @@ export function changeElementColor(themeColors) {
       const disabledColor = mix('ffffff', value.replace(/#/g, ''), 50)
       const darken = mix('000000', value.replace(/#/g, ''), 10)
       const tooLightColor = mix('ffffff', value.replace(/#/g, ''), 90)
+      // Plain and transparent variants manage their own foreground/background states.
+      const filledButton = `.el-button--${key}:not(.is-plain):not(.is-text):not(.is-link):not(.is-dashed)`
       colorsCssText =
         colorsCssText +
         `
         .el-button--${key}{
            border-color: var(--color-border);
         }
-        .el-button--${key}:not(.is-disabled):focus,
-        .el-button--${key}:not(.is-disabled):active,
-        .el-button--${key}:not(.is-disabled):hover {
+        ${filledButton}:not(.is-disabled):focus,
+        ${filledButton}:not(.is-disabled):active,
+        ${filledButton}:not(.is-disabled):hover {
           background-color: ${darken}!important;
           border-color: var(--color-border)!important;
         }
