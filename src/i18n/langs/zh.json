@@ -3208,5 +3208,21 @@
     "WebIdleHelp": "空闲达到设定时间后锁定控制台和 Web 终端，输入锁屏密码解锁。",
     "LifetimeHelp": "从登录时间起计算，到期需重新登录，操作不会延长。",
     "AdminClientHelp": "管理员设置为默认值和上限，用户可设置得更严格；未自行设置则跟随管理员。"
-  }
+  },
+  "ConnectivityTests": "连接测试",
+  "AccountConnectivity": "账号连接性测试",
+  "AssetConnectivity": "资产连接性测试",
+  "AccountConnectivityTasks": "账号测试任务",
+  "AssetConnectivityTasks": "资产测试任务",
+  "AccountConnectivityCreate": "创建账号连接性测试",
+  "AccountConnectivityUpdate": "编辑账号连接性测试",
+  "AssetConnectivityCreate": "创建资产连接性测试",
+  "AssetConnectivityUpdate": "编辑资产连接性测试",
+  "ConnectivityAccountsHelp": "填写账号用户名；留空时测试所选资产上的全部启用账号（含关联目录服务账号）。每次执行时重新获取节点下的资产及账号。",
+  "ConnectivityAllAccounts": "全部启用账号",
+  "ConnectivityResults": "连接性测试结果",
+  "ConnectivityTarget": "资产 / 账号",
+  "ConnectivityUnsupported": "不支持的资产",
+  "ConnectivityTasks": "测试任务",
+  "ConnectivityTargets": "测试目标"
 }
