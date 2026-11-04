@@ -494,7 +494,8 @@ export default {
     },
     async getObjectDetail(url, id) {
       this.$log.debug('Get object detail: ', url)
-      let data = await this.$axios.get(url, { params: { id } })
+      const params = id == null || id === '' ? {} : { id }
+      let data = await this.$axios.get(url, { params })
       if (Array.isArray(data)) {
         data = {}
       }
