@@ -2863,11 +2863,10 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "Utilisé par le client, la console et le terminal Web. La création ou modification exige une vérification : mot de passe de connexion pour un compte local, méthode MFA activée (code email ou Passkey) pour les autres. Laissez vide pour conserver le mot de passe.",
+  "LockPasswordHelp": "Utilisé par le client, la console et le terminal Web. La création ou modification exige une vérification : mot de passe de connexion pour un compte local, méthode MFA activée (code email ou Passkey) pour les autres. Laissez vide pour conserver le mot de passe.",
   "ClientLockPassword": "Mot de passe de verrouillage",
   "FileEncryptionPassword": "Mot de passe de chiffrement des fichiers",
-  "ClientCredentials": "Paramètres de verrouillage",
-  "ClientCredentialsAccountMismatch": "Le compte du navigateur diffère de celui du client. Connectez-vous au compte affiché dans le client.",
+  "PersonalSecurityAccountMismatch": "Le compte du navigateur diffère de celui du client. Connectez-vous au compte affiché dans le client.",
   "FileEncryption": "Chiffrement des fichiers",
   "FileEncryptionHelp": "Chiffre et déchiffre les exports du système et les pièces jointes, par exemple les sauvegardes de comptes et les résultats de changement de mot de passe. Laissez vide pour conserver le mot de passe actuel.",
   "ScreenLock": {

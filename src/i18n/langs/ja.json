@@ -2872,11 +2872,10 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "クライアント、コンソール、Web ターミナルで使用します。設定・変更には本人確認が必要です。ローカルアカウントはログインパスワード、その他は有効な MFA（メールコード、Passkey など）で確認します。空欄の場合は変更しません。",
+  "LockPasswordHelp": "クライアント、コンソール、Web ターミナルで使用します。設定・変更には本人確認が必要です。ローカルアカウントはログインパスワード、その他は有効な MFA（メールコード、Passkey など）で確認します。空欄の場合は変更しません。",
   "ClientLockPassword": "画面ロックパスワード",
   "FileEncryptionPassword": "ファイル暗号化パスワード",
-  "ClientCredentials": "画面ロック設定",
-  "ClientCredentialsAccountMismatch": "ブラウザーとクライアントのアカウントが異なります。クライアントに表示されたアカウントでログインしてください。",
+  "PersonalSecurityAccountMismatch": "ブラウザーとクライアントのアカウントが異なります。クライアントに表示されたアカウントでログインしてください。",
   "FileEncryption": "ファイル暗号化",
   "FileEncryptionHelp": "アカウントのバックアップやパスワード変更結果など、システムのエクスポートファイルとメール添付の暗号化・復号に使用します。空欄なら現在のパスワードを保持します。",
   "ScreenLock": {

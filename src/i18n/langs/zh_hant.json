@@ -3120,11 +3120,10 @@
   "TicketTransferCount_unverified": "{count} 個待核驗",
   "TicketTransferCount_pending": "{count} 個未執行",
   "TicketTransferCount_running": "{count} 個傳輸中",
-  "ClientCredentialsHelp": "用於用戶端、控制台和 Web 終端。設定或修改時須驗證身分：本機帳號輸入登入密碼，其他帳號使用已啟用的 MFA（如電子郵件驗證碼、Passkey）。留空保留原密碼。",
+  "LockPasswordHelp": "用於用戶端、控制台和 Web 終端。設定或修改時須驗證身分：本機帳號輸入登入密碼，其他帳號使用已啟用的 MFA（如電子郵件驗證碼、Passkey）。留空保留原密碼。",
   "ClientLockPassword": "鎖屏密碼",
   "FileEncryptionPassword": "檔案加密密碼",
-  "ClientCredentials": "鎖屏設定",
-  "ClientCredentialsAccountMismatch": "瀏覽器帳號與用戶端帳號不符，請先登入用戶端顯示的帳號再設定憑證。",
+  "PersonalSecurityAccountMismatch": "瀏覽器帳號與用戶端帳號不符，請先登入用戶端顯示的帳號再設定憑證。",
   "FileEncryption": "檔案加密",
   "FileEncryptionHelp": "用於系統匯出檔案及郵件附件的加密與解密，例如帳號備份、帳號改密結果檔案。留空保留現有密碼。",
   "ScreenLock": {

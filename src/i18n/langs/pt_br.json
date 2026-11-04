@@ -2692,11 +2692,10 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "Usada no cliente, console e terminal Web. Definir ou alterar exige verificação: senha de login para contas locais; MFA habilitado (código por email ou Passkey) para outras contas. Deixe em branco para manter a senha.",
+  "LockPasswordHelp": "Usada no cliente, console e terminal Web. Definir ou alterar exige verificação: senha de login para contas locais; MFA habilitado (código por email ou Passkey) para outras contas. Deixe em branco para manter a senha.",
   "ClientLockPassword": "Senha de bloqueio de tela",
   "FileEncryptionPassword": "Senha de criptografia de arquivos",
-  "ClientCredentials": "Configurações de bloqueio de tela",
-  "ClientCredentialsAccountMismatch": "A conta do navegador difere da conta do cliente. Entre com a conta exibida no cliente.",
+  "PersonalSecurityAccountMismatch": "A conta do navegador difere da conta do cliente. Entre com a conta exibida no cliente.",
   "FileEncryption": "Criptografia de arquivos",
   "FileEncryptionHelp": "Criptografa e descriptografa exportações do sistema e anexos de email, como backups de contas e resultados de alteração de senha. Deixe em branco para manter a senha atual.",
   "ScreenLock": {

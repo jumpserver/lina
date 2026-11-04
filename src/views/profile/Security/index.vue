@@ -2,7 +2,7 @@
   <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
     <el-alert
       v-if="accountMismatch"
-      :title="$t('ClientCredentialsAccountMismatch')"
+      :title="$t('PersonalSecurityAccountMismatch')"
       type="warning"
       :closable="false"
     />
@@ -12,21 +12,20 @@
         :key="config.activeMenu"
         :scope="config.activeMenu"
       />
-      <ClientCredentials
+      <UserPasswordSettings
         v-else
         :key="config.activeMenu"
-        :credential-type="config.activeMenu === 'FileEncryption' ? 'file' : 'lock'"
-        :object="user"
+        :password-type="config.activeMenu === 'FileEncryption' ? 'file' : 'lock'"
       />
     </keep-alive>
   </GenericDetailPage>
 </template>
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import ClientCredentials from './ClientCredentials.vue'
+import UserPasswordSettings from './UserPasswordSettings.vue'
 import SessionPreferences from './SessionPreferences.vue'
 export default {
-  components: { GenericDetailPage, ClientCredentials, SessionPreferences },
+  components: { GenericDetailPage, UserPasswordSettings, SessionPreferences },
   data() {
     const tabs = ['Web', 'Client', 'LockPassword', 'FileEncryption']
     return {

@@ -3136,11 +3136,10 @@
   "TicketTransferCount_unverified": "{count} awaiting verification",
   "TicketTransferCount_pending": "{count} not executed",
   "TicketTransferCount_running": "{count} transferring",
-  "ClientCredentialsHelp": "Used by the desktop client, console and Web terminal. Setting or changing it requires identity verification: local accounts use their sign-in password; other accounts use an enabled MFA method, such as email codes or Passkey. Leave blank to keep the existing password.",
+  "LockPasswordHelp": "Used by the desktop client, console and Web terminal. Setting or changing it requires identity verification: local accounts use their sign-in password; other accounts use an enabled MFA method, such as email codes or Passkey. Leave blank to keep the existing password.",
   "ClientLockPassword": "Screen lock password",
   "FileEncryptionPassword": "File encryption password",
-  "ClientCredentials": "Screen lock settings",
-  "ClientCredentialsAccountMismatch": "The browser account differs from the client account. Sign in to the account shown in the client before configuring credentials.",
+  "PersonalSecurityAccountMismatch": "The browser account differs from the client account. Sign in to the account shown in the client before configuring credentials.",
   "FileEncryption": "File encryption",
   "FileEncryptionHelp": "Encrypts and decrypts system exports and email attachments, such as account backups and password change results. Leave blank to keep the existing password.",
   "ScreenLock": {

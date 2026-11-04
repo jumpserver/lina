@@ -2692,11 +2692,10 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "Dùng cho ứng dụng, bảng điều khiển và terminal Web. Khi đặt hoặc đổi phải xác minh: tài khoản cục bộ dùng mật khẩu đăng nhập; tài khoản khác dùng MFA đã bật (mã email hoặc Passkey). Để trống để giữ mật khẩu cũ.",
+  "LockPasswordHelp": "Dùng cho ứng dụng, bảng điều khiển và terminal Web. Khi đặt hoặc đổi phải xác minh: tài khoản cục bộ dùng mật khẩu đăng nhập; tài khoản khác dùng MFA đã bật (mã email hoặc Passkey). Để trống để giữ mật khẩu cũ.",
   "ClientLockPassword": "Mật khẩu khóa màn hình",
   "FileEncryptionPassword": "Mật khẩu mã hóa tệp",
-  "ClientCredentials": "Cài đặt khóa màn hình",
-  "ClientCredentialsAccountMismatch": "Tài khoản trình duyệt khác tài khoản ứng dụng khách. Hãy đăng nhập tài khoản được hiển thị trong ứng dụng khách.",
+  "PersonalSecurityAccountMismatch": "Tài khoản trình duyệt khác tài khoản ứng dụng khách. Hãy đăng nhập tài khoản được hiển thị trong ứng dụng khách.",
   "FileEncryption": "Mã hóa tệp",
   "FileEncryptionHelp": "Mã hóa và giải mã tệp xuất hệ thống và tệp đính kèm email, như bản sao lưu tài khoản và kết quả đổi mật khẩu. Để trống để giữ mật khẩu hiện tại.",
   "ScreenLock": {

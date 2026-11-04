@@ -2692,11 +2692,10 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "ClientCredentialsHelp": "클라이언트, 콘솔, Web 터미널에서 사용합니다. 설정·변경 시 본인 확인이 필요합니다. 로컬 계정은 로그인 비밀번호, 다른 계정은 활성 MFA(이메일 코드, Passkey 등)로 확인합니다. 비워두면 기존 비밀번호를 유지합니다.",
+  "LockPasswordHelp": "클라이언트, 콘솔, Web 터미널에서 사용합니다. 설정·변경 시 본인 확인이 필요합니다. 로컬 계정은 로그인 비밀번호, 다른 계정은 활성 MFA(이메일 코드, Passkey 등)로 확인합니다. 비워두면 기존 비밀번호를 유지합니다.",
   "ClientLockPassword": "화면 잠금 비밀번호",
   "FileEncryptionPassword": "파일 암호화 비밀번호",
-  "ClientCredentials": "화면 잠금 설정",
-  "ClientCredentialsAccountMismatch": "브라우저와 클라이언트 계정이 다릅니다. 클라이언트에 표시된 계정으로 로그인하세요.",
+  "PersonalSecurityAccountMismatch": "브라우저와 클라이언트 계정이 다릅니다. 클라이언트에 표시된 계정으로 로그인하세요.",
   "FileEncryption": "파일 암호화",
   "FileEncryptionHelp": "계정 백업과 비밀번호 변경 결과 등 시스템 내보내기 파일 및 이메일 첨부 파일의 암호화와 복호화에 사용합니다. 비워 두면 기존 비밀번호를 유지합니다.",
   "ScreenLock": {
