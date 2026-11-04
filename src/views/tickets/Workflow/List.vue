@@ -12,11 +12,20 @@ import { getTicketTypeLabel } from '../const'
 export default {
   components: { GenericListPage },
   data() {
+    const defaultColumns = [
+      'name',
+      'type',
+      'org_name',
+      'active_version_number',
+      'enabled',
+      'date_updated'
+    ]
     return {
       tableConfig: {
         url: '/api/v1/tickets/workflows/',
         permissions: { resource: 'workflow' },
-        columns: ['name', 'type', 'active_version_number', 'enabled', 'date_updated'],
+        columns: [...defaultColumns, 'org_id'],
+        columnsShow: { default: [...defaultColumns, 'actions'] },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
