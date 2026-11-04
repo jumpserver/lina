@@ -19,6 +19,7 @@
             v-bind="config"
             submit-method="patch"
             :more-buttons="clearPasswordButtons"
+            class="credential-password-update"
           />
         </div>
       </IBox>
@@ -53,7 +54,7 @@ export default {
       component: PasswordInput,
       el: { autocomplete: 'new-password', name }
     })
-    const groupMeta =
+    const formFields =
       group === 'lock'
         ? {
             fields: ['has_password', ...fields],
@@ -83,27 +84,26 @@ export default {
       clearingPassword: false,
       lockPasswordConfigured: false,
       config: {
-        url: '/api/v1/users/profile/client-credentials/',
+        url: `/api/v1/users/profile/${group === 'lock' ? 'lock-password' : 'file-encryption'}/`,
         hasDetailInMsg: false,
+        encryptedFields: [],
         afterGetRemoteMeta: (meta) => {
-          if (group === 'file' && meta.file?.children?.has_secret_key) {
+          if (group === 'file' && meta.has_secret_key) {
             // The tab reminder contains the file-encryption explanation.
-            meta.file.children.has_secret_key.help_text = ''
+            meta.has_secret_key.help_text = ''
           }
         },
         afterGetFormValue: (values) => {
-          this.lockPasswordConfigured = Boolean(values.lock?.has_password)
+          this.lockPasswordConfigured = Boolean(values.has_password)
           return values
         },
-        fields: [group],
-        fieldsMeta: { [group]: groupMeta },
-        cleanFormValue: (values) => ({
-          [group]: Object.fromEntries(
+        ...formFields,
+        cleanFormValue: (values) =>
+          Object.fromEntries(
             fields
-              .filter((field) => values[group]?.[field])
-              .map((field) => [field, encryptPassword(values[group][field])])
-          )
-        }),
+              .filter((field) => values[field])
+              .map((field) => [field, encryptPassword(values[field])])
+          ),
         onPerformSuccess: () => {
           this.$message.success(this.$t('UpdateSuccessMsg'))
           this.formVersion += 1
@@ -141,8 +141,8 @@ export default {
           this.$t('IdleLock.ClearPassword'),
           { type: 'warning' }
         )
-        await this.$axios.patch('/api/v1/users/profile/client-credentials/', {
-          lock: { clear: true }
+        await this.$axios.patch(this.config.url, {
+          clear: true
         })
         this.$message.success(this.$t('IdleLock.PasswordCleared'))
         this.formVersion += 1
@@ -158,10 +158,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .credential-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.credential-password-update :deep(.password-input) {
+  width: 600px;
+  max-width: 100%;
 }
 </style>
