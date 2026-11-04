@@ -31,22 +31,13 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('Receivers')">
+        <el-table-column
+          :label="$tc('Receivers')"
+          :show-overflow-tooltip="{ hideAfter: 200 }"
+          :tooltip-formatter="formatReceiversTooltip"
+        >
           <template #default="scope">
-            <el-popover
-              v-if="!scope.row.children && scope.row.receivers && scope.row.receivers.length"
-              placement="top"
-              popper-class="black-theme-popover"
-              trigger="hover"
-            >
-              <p v-for="item in scope.row.receivers" :key="item.name">{{ item.name }}</p>
-              <template #reference>
-                <span class="name-wrapper">
-                  {{ scope.row.receivers.map((item) => item.name).join(', ') }}
-                </span>
-              </template>
-            </el-popover>
-            <span v-else-if="!scope.row.children && scope.row.receivers">
+            <span v-if="!scope.row.children && scope.row.receivers">
               {{ scope.row.receivers.map((item) => item.name).join(', ') }}
             </span>
           </template>
@@ -73,6 +64,7 @@
 </template>
 
 <script>
+import { h } from 'vue'
 import SelectDialog from './SelectDialog.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 
@@ -97,6 +89,13 @@ export default {
     await this.initSubscriptions()
   },
   methods: {
+    formatReceiversTooltip({ row }) {
+      return h(
+        'div',
+        { class: 'subscription-receivers-tooltip' },
+        (row.receivers || []).map((item) => h('div', { key: item.id || item.name }, item.name))
+      )
+    },
     onCheckReceiveBackend(sub) {
       const backends = []
       for (const [name, checked] of Object.entries(sub.receiveBackends)) {
@@ -209,25 +208,14 @@ export default {
   margin-bottom: 0;
   width: 50%;
 }
+</style>
 
-:deep(.el-table .cell) {
-  display: flex;
-
-  .name-wrapper {
-    display: inline-block;
-    max-height: 55px;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    cursor: pointer;
-  }
-}
-
-:deep(.black-theme-popover .el-popover__inner) {
-  background-color: #000 !important;
-  color: #fff !important;
-  border-color: #000 !important;
+<style>
+.subscription-receivers-tooltip {
+  max-width: min(400px, calc(100vw - 48px));
+  max-height: min(320px, 60vh);
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 </style>
