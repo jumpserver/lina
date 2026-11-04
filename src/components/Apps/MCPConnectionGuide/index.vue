@@ -29,7 +29,7 @@
       <p class="guide-description">{{ $t('MCPAgentSetupHelp') }}</p>
       <div class="connection-config agent-setup">
         <div class="config-toolbar">
-          <span>Codex / DSH</span>
+          <span>{{ $t('MCPAgentSetupInstructions') }}</span>
           <el-button :disabled="!canConnect" @click="copy(agentSetupPrompt)">
             {{ $t('MCPCopyForAgent') }}
           </el-button>

@@ -15,7 +15,10 @@ test('One-sentence setup uses this site and preserves connection and authorizati
     const prompt = component.computed.agentSetupPrompt.call(guide)
     assert.ok(prompt.includes('https://jumpserver.example:8443/core/auth/agent/install.md'))
     assert.ok(prompt.includes(guide.publicURL))
-    assert.ok(prompt.includes('Codex') && prompt.includes('DSH') && prompt.includes('OAuth'))
+    assert.ok(prompt.includes('Agent') || prompt.includes('agent'))
+    assert.ok(prompt.includes('OAuth'))
+    assert.ok(!prompt.includes('Codex') && !prompt.includes('DSH'))
+    assert.match(prompt, /manual|手动/)
     assert.equal(component.computed.canConnect.call(guide), true)
     guide.settings.MCP_ENABLED = false
     assert.equal(component.computed.canConnect.call(guide), false)
