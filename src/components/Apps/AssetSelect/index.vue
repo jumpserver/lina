@@ -24,7 +24,8 @@
       </el-tag>
       <el-icon class="asset-select__icon"><Search /></el-icon>
     </div>
-    <AssetSelectDialog
+    <component
+      :is="userAssets ? 'UserAssetSelectDialog' : 'AssetSelectDialog'"
       v-if="dialogVisible"
       ref="dialog"
       v-model:visible="dialogVisible"
@@ -42,6 +43,7 @@
 
 <script>
 import { createSourceIdCache } from '@/api/common'
+import UserAssetSelectDialog from '@/components/Apps/GrantedAssets/UserAssetSelectDialog.vue'
 import AssetSelectDialog from './dialog.vue'
 
 function normalizeAssetValue(value) {
@@ -74,9 +76,13 @@ function formatAssetLabel(item) {
 
 export default {
   componentName: 'AssetSelect',
-  components: { AssetSelectDialog },
+  components: { AssetSelectDialog, UserAssetSelectDialog },
   inheritAttrs: false,
   props: {
+    userAssets: {
+      type: Boolean,
+      default: false
+    },
     baseUrl: {
       type: String,
       default: '/api/v1/assets/assets/'

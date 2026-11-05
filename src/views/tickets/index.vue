@@ -41,7 +41,7 @@ export default {
             name: 'MyTicketList'
           },
           {
-            title: i18n.global.t('AwaitingMyApproval'),
+            title: i18n.global.t('TicketRelatedToMe'),
             name: 'AssignedTicketList'
           }
         ]

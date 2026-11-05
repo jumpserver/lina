@@ -1,7 +1,7 @@
 <template>
   <Page v-bind="$attrs">
-    <TwoCol>
-      <DetailCard :items="detailCardItems" />
+    <TwoCol class="profile-cards">
+      <DetailCard :items="detailCardItems" class="profile-details" />
       <template #right>
         <QuickActions :actions="authQuickActions" :title="$tc('AuthSettings')" type="primary" />
         <QuickActions
@@ -11,43 +11,18 @@
           style="margin-top: 15px"
           type="info"
         />
-        <QuickActions
-          v-if="biometricFeaturesActions.some((action) => action.has)"
-          :actions="biometricFeaturesActions"
-          :title="$tc('BiometricFeatures')"
-          style="margin-top: 15px"
-          type="warning"
-        />
-        <IBox
-          v-if="!store.getters.publicSettings['PRIVACY_MODE']"
-          :title="$tc('InformationModification')"
-          class="update-info"
-          fa="fa-edit"
-        >
-          <el-form class="update-info-form" label-position="left" label-width="80px">
-            <el-form-item :label="$t('Phone')">
-              <PhoneInput :value="object.phone" @change="profilePhone = $event" />
-            </el-form-item>
-            <el-form-item :label="$t('WeChat')">
-              <el-input v-model="object.wechat" />
-            </el-form-item>
-            <el-form-item label=" ">
-              <el-button type="primary" @click="updateProfile">
-                {{ $t('Update') }}
-              </el-button>
-            </el-form-item>
-          </el-form>
-        </IBox>
       </template>
     </TwoCol>
   </Page>
 </template>
 
 <script lang="jsx">
-import { IBox, QuickActions } from '@/components'
+import { markRaw } from 'vue'
+import { QuickActions } from '@/components'
 import { PhoneInput } from '@/components/Form/FormFields'
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/Cards/DetailCard'
+import EditableFormatter from '@/components/Cards/Formatters/EditableFormatter.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import store from '@/store'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
@@ -55,8 +30,6 @@ export default {
   components: {
     TwoCol,
     Page,
-    IBox,
-    PhoneInput,
     DetailCard,
     QuickActions
   },
@@ -69,32 +42,57 @@ export default {
   data() {
     return {
       url: `/api/v1/users/profile/`,
-      profilePhone: null,
       showPasswordDialog: false,
       currentEdit: '',
-      biometricFeaturesActions: [
+      authQuickActions: [
         {
-          title: this.$t('FacialFeatures'),
-          has:
-            this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
-            !store.getters.publicSettings['PRIVACY_MODE'],
+          title: this.$t('ChangePassword'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_face_code_set
-              ? this.$t('Unbind')
-              : this.$t('Bind')
+            label: this.$t('Update'),
+            disabled: !this.isUserFromSource('local')
           },
           callbacks: {
-            click: () => {
-              const next_url = this.$store.state.users.profile.is_face_code_set
-                ? '/core/auth/profile/face/disable/'
-                : '/core/auth/profile/face/enable/'
-              window.open(next_url, '_blank')
+            click: function () {
+              this.$router.push({
+                name: 'SSHKeyList',
+                query: {
+                  tab: 'Password'
+                }
+              })
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('UpdateSSHKey'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Update'),
+            disabled: !this.$store.state.users.profile.can_public_key_auth
+          },
+          callbacks: {
+            click: function () {
+              this.$router.push({
+                name: 'SSHKeyList',
+                query: {
+                  tab: 'SSHKeyList'
+                }
+              })
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('SetMFA'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('Setting')
+          },
+          callbacks: {
+            click: function () {
+              window.open('/core/auth/profile/mfa/', '_blank')
             }
           }
-        }
-      ],
-      authQuickActions: [
+        },
         {
           title: this.$t('WeComOAuth'),
           attrs: {
@@ -191,51 +189,23 @@ export default {
           }
         },
         {
-          title: this.$t('SetMFA'),
+          title: this.$t('FacialFeatures'),
+          has:
+            this.$store.getters.publicSettings.FACE_RECOGNITION_ENABLED &&
+            !store.getters.publicSettings['PRIVACY_MODE'],
           attrs: {
             type: 'primary',
-            label: this.$t('Setting')
+            label: this.$store.state.users.profile.is_face_code_set
+              ? this.$t('Unbind')
+              : this.$t('Bind')
           },
           callbacks: {
-            click: function () {
-              window.open('/core/auth/profile/mfa/', '_blank')
+            click: () => {
+              const next_url = this.$store.state.users.profile.is_face_code_set
+                ? '/core/auth/profile/face/disable/'
+                : '/core/auth/profile/face/enable/'
+              window.open(next_url, '_blank')
             }
-          }
-        },
-        {
-          title: this.$t('ChangePassword'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('Update'),
-            disabled: !this.isUserFromSource('local')
-          },
-          callbacks: {
-            click: function () {
-              this.$router.push({
-                name: 'SSHKeyList',
-                query: {
-                  tab: 'Password'
-                }
-              })
-            }.bind(this)
-          }
-        },
-        {
-          title: this.$t('UpdateSSHKey'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('Update'),
-            disabled: !this.$store.state.users.profile.can_public_key_auth
-          },
-          callbacks: {
-            click: function () {
-              this.$router.push({
-                name: 'SSHKeyList',
-                query: {
-                  tab: 'SSHKeyList'
-                }
-              })
-            }.bind(this)
           }
         }
       ],
@@ -327,9 +297,6 @@ export default {
     }
   },
   computed: {
-    store() {
-      return store
-    },
     detailCardItems() {
       return [
         {
@@ -345,19 +312,31 @@ export default {
           key: this.$t('Email')
         },
         {
-          value: this.object.phone,
+          component: markRaw(EditableFormatter),
+          field: 'phone',
+          url: this.url,
+          object: this.object,
+          onUpdated: this.onProfileUpdated,
           key: this.$t('Phone'),
-          formatter: (item, val) => {
-            if (val?.phone) {
-              return (
-                <span>
-                  {val.code} {val.phone}
-                </span>
-              )
-            } else {
-              return '-'
-            }
+          value: this.object.phone,
+          formatter: (item, value) => {
+            if (typeof value === 'string') return value || this.$t('NotSet')
+            return value?.phone ? `${value.code} ${value.phone}` : this.$t('NotSet')
           },
+          inputComponent: markRaw(PhoneInput),
+          valueProp: 'value',
+          changeEvent: 'change',
+          has: !store.getters.publicSettings['PRIVACY_MODE']
+        },
+        {
+          component: markRaw(EditableFormatter),
+          field: 'wechat',
+          url: this.url,
+          object: this.object,
+          onUpdated: this.onProfileUpdated,
+          key: this.$t('WeChat'),
+          value: this.object.wechat,
+          formatter: (item, value) => value || this.$t('NotSet'),
           has: !store.getters.publicSettings['PRIVACY_MODE']
         },
         {
@@ -439,23 +418,8 @@ export default {
     }
   },
   methods: {
-    updateProfile() {
-      const url = `/api/v1/users/profile/`
-      const data = {
-        phone: this.profilePhone === null ? this.object.phone : this.profilePhone,
-        wechat: this.object.wechat
-      }
-      this.$axios
-        .patch(url, data)
-        .then((profile) => {
-          this.object.phone = profile.phone
-          this.profilePhone = null
-          this.$message.success(this.$tc('UpdateSuccessMsg'))
-        })
-        .catch((err) => {
-          const errMsg = err.request.response
-          this.$message.error(this.$tc('Error') + ': ' + errMsg)
-        })
+    onProfileUpdated({ field, value }) {
+      this.object[field] = value
     },
     isBind(sourceName) {
       return !!this.$store.state.users.profile[`${sourceName}_id`]
@@ -515,24 +479,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.update-info {
-  .update-info-form {
-    // 不沿用全局 .el-card__body .el-form 的 margin-top/right，改为 flex 纵向布局自控间距
-    margin: 0 !important;
-    display: flex;
-    flex-direction: column;
-    gap: 20px; // FormItem 间距统一 20px
-
-    :deep(.el-form-item) {
-      margin-bottom: 0;
-
-      .el-form-item__label {
-        height: 30px;
-        line-height: 30px;
-        display: inline-flex;
-        align-items: center;
-      }
-    }
-  }
+.profile-cards :deep(.ibox > .el-card__body) {
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 </style>

@@ -15,6 +15,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import ImportDialog from './ImportDialog.vue'
 import TestLoginDialog from './TestLoginDialog.vue'
 import SyncSettingDialog from './HaSyncSettingDialog.vue'
+import { requestLdap } from './request'
 import { IBox, UploadKey } from '@/components'
 import rules, { JsonRequired } from '@/components/Form/DataForm/rules'
 import { JsonEditor, UpdateToken } from '@/components/Form/FormFields'

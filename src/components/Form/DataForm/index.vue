@@ -16,10 +16,15 @@
         '--form-section-gap': '15px'
       }"
       :server-errors="serverErrors"
+      :collapsed-fields="collapsedFields"
+      :field-groups="fieldGroups"
       @input="handleFormUpdate"
       @update:form="handleFormUpdate"
     >
       <!-- named slot 透传给 ElFormRender，保持与字段渲染顺序一致 -->
+      <template v-for="group in fieldGroups" :key="`section:${group.id}`" #[`section:${group.id}`]>
+        <slot :name="`section:${group.id}`" />
+      </template>
       <template v-for="item in processedFields" :key="`id:${item.id}`" #[`id:${item.id}`]>
         <slot :name="`id:${item.id}`" />
       </template>
@@ -143,6 +148,14 @@ export default {
       type: Array,
       default: () => []
     },
+    collapsedFields: {
+      type: Array,
+      default: () => []
+    },
+    fieldGroups: {
+      type: Array,
+      default: () => []
+    },
     // 初始值
     form: {
       type: Object,
@@ -199,10 +212,21 @@ export default {
     processedFields() {
       function markComponents(fields) {
         if (!Array.isArray(fields)) return fields
+        let controller = null
         return fields.map((field) => {
-          if (!field) return field
-          if (typeof field === 'string') return field
+          if (!field || typeof field === 'string') {
+            controller = null
+            return field
+          }
           const f = { ...field }
+          if (f.groupStart) controller = null
+          // Only consecutive dependents of the same switch share its value column.
+          f.dependentLayout = !!controller && f.dependsOn === (controller.id || controller.prop)
+          if (f.dependentLayout) {
+            f.attrs = { ...f.attrs, labelPosition: 'top' }
+          } else {
+            controller = ['checkbox', 'switch'].includes(f.type) ? f : null
+          }
           if (f.component && typeof f.component !== 'string') {
             f.component = markRaw(toRaw(f.component))
           }
@@ -211,6 +235,9 @@ export default {
           }
           if (f.children) {
             f.children = markComponents(f.children)
+          }
+          if (f.items) {
+            f.items = markComponents(f.items)
           }
           return f
         })
@@ -306,11 +333,14 @@ export default {
 }
 
 .form-fields.el-form {
+  --form-group-indent: 20px;
+  --form-subgroup-offset: calc(var(--label-width) + var(--form-column-gap));
+  --form-dependent-start: calc(var(--label-width) + var(--form-column-gap));
   display: flex;
   flex-direction: column;
   gap: var(--form-section-gap);
   margin: 0;
-  padding: 20px 0 24px;
+  padding: 20px 20px 24px 0;
 
   .el-form {
     margin-right: 0;
@@ -323,6 +353,32 @@ export default {
 
   :deep(.form-group-header) {
     color: var(--color-text-primary);
+  }
+
+  :deep(.form-section-card) {
+    min-width: 0;
+    margin-inline-start: var(--form-group-indent, 20px);
+    border: 1px solid var(--el-border-color-light, #e4e7ed);
+    border-radius: 4px;
+    background-color: var(--el-bg-color, #fff);
+  }
+
+  :deep(.form-section-card__header) {
+    padding: 8px 0 8px 12px;
+    border-radius: 3px 3px 0 0;
+    background-color: var(--page-content-background-color);
+  }
+
+  :deep(.form-section-card__body) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--form-section-gap);
+    padding: 16px;
+    border-top: 1px solid var(--el-border-color-light, #e4e7ed);
+  }
+
+  :deep(.form-section-card--collapsed .form-section-card__header) {
+    border-radius: 3px;
   }
 
   :deep(.el-form-item) {
@@ -409,8 +465,37 @@ export default {
     padding-inline-start: calc(var(--label-width) + var(--form-column-gap));
   }
 
+  :deep(.form-item--dependent) {
+    position: relative;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    margin-inline-start: var(--form-dependent-start);
+
+    .el-form-item__label-wrap {
+      flex: 0 0 auto !important;
+      width: 100% !important;
+    }
+
+    .el-form-item__label {
+      width: 100% !important;
+      min-height: 0;
+      justify-content: flex-start;
+      line-height: 18px;
+      margin-bottom: 0;
+    }
+
+    .el-form-item__content {
+      flex-basis: auto;
+      width: 100%;
+    }
+  }
+
   &.el-form--label-top,
   &.label-top {
+    --form-group-indent: 0px;
+    --form-subgroup-offset: 0px;
+    --form-dependent-start: 0px;
     :deep(.el-form-item) {
       flex-direction: column;
       align-items: stretch;
@@ -482,6 +567,9 @@ export default {
 }
 
 .el-form.mobile {
+  --form-group-indent: 0px;
+  --form-subgroup-offset: 0px;
+  --form-dependent-start: 0px;
   padding: 16px 0 20px;
 
   :deep(.form-buttons) {
@@ -497,8 +585,11 @@ export default {
  * 设置页即使运行在 desktop 设备上，也可能因抽屉或分栏被压缩。此处按表单自身宽度
  * 切换布局，避免百分比 label 被挤成逐字换行，并让帮助文案跟随控件完整展示。
  */
-@container data-form (max-width: 640px) {
+@mixin compact-data-form {
   .form-fields.el-form {
+    --form-group-indent: 0px;
+    --form-subgroup-offset: 0px;
+    --form-dependent-start: 0px;
     :deep(.el-form-item) {
       flex-direction: column;
       align-items: stretch;
@@ -543,5 +634,14 @@ export default {
       padding-inline-start: 0;
     }
   }
+}
+
+@container data-form (max-width: 640px) {
+  @include compact-data-form;
+}
+
+// Keep fields usable in narrow drawers when container queries are unavailable.
+@supports not (container-type: inline-size) {
+  @include compact-data-form;
 }
 </style>

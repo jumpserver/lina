@@ -17,6 +17,7 @@
         <AccountFormatter
           :assets="assetIds"
           :nodes="nodeIds"
+          :enable-exclude-accounts="true"
           :value="object['accounts']"
           class="checkbox-accounts"
           @change="updateAccount"

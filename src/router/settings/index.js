@@ -429,7 +429,7 @@ export default {
           meta: {
             title: i18n.t('Applets'),
             icon: 'application',
-            permissions: ['terminal.view_applet']
+            permissions: ['terminal.view_applet | terminal.view_applethost']
           }
         },
         {
@@ -617,6 +617,17 @@ export default {
           meta: {
             title: i18n.t('SystemTasks'),
             permissions: ['ops.view_celerytask']
+          }
+        },
+        {
+          path: 'monitor',
+          name: 'TaskMonitor',
+          component: () => import('@/views/settings/Task/TaskMonitor.vue'),
+          hidden: true,
+          meta: {
+            title: i18n.t('TaskMonitor'),
+            permissions: ['ops.view_taskmonitor'],
+            activeMenu: '/settings/tasks'
           }
         },
         {

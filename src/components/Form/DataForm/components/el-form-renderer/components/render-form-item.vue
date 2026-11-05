@@ -2,9 +2,12 @@
   <el-form-item
     v-bind="data.attrs"
     v-if="_show"
+    v-show="!collapsed"
     :class="[
       classes,
       {
+        'form-item--dependent': data.dependentLayout,
+        'is-no-asterisk': data.required,
         'checkbox-inline-help':
           rawComponent === 'el-checkbox' && (helpText || data.helpTextFormatter)
       }
@@ -16,7 +19,6 @@
   >
     <template v-if="data.label" #label>
       <span :title="data.helpTip ? undefined : data.label">
-        <span v-if="data.required" class="form-item-required-mark">*</span>
         {{ data.label }}
         <el-tooltip
           v-if="data.helpTip"
@@ -141,6 +143,7 @@ export default {
     }
   },
   props: {
+    collapsed: Boolean,
     // eslint-disable-next-line vue/require-default-prop
     data: Object,
     serverErrors: {
@@ -440,12 +443,11 @@ export default {
   width: 300px;
 }
 
-.form-item-required-mark {
-  margin-right: 4px;
-  color: var(--el-color-danger, #ed5565);
-}
-
 .help-block {
+  > span {
+    white-space: pre-line;
+  }
+
   :deep(.el-alert__icon) {
     font-size: 16px;
   }

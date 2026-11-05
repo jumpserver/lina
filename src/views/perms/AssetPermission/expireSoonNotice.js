@@ -3,22 +3,18 @@ function toTimestamp(value) {
   return Number.isFinite(timestamp) ? timestamp : null
 }
 
-const FALLBACK_EXPIRE_SOON_NOTICE_MINUTES = 15
+const DEFAULT_EXPIRE_SOON_NOTICE_MINUTES = 15
 
 export function isPositiveInteger(value) {
   return Number.isInteger(value) && value > 0
 }
 
-export function getDefaultExpireSoonNoticeMinutes(publicSettings) {
-  return publicSettings.PERM_EXPIRED_SOON_NOTICE_MINUTES ?? FALLBACK_EXPIRE_SOON_NOTICE_MINUTES
-}
-
-export function hydrateExpireNoticeFormValue(value, prefix = '', defaultMinutes) {
+export function hydrateExpireNoticeFormValue(value, prefix = '') {
   const switchKey = `${prefix}expire_soon_notice_switch`
   const minutesKey = `${prefix}expire_soon_notice_minutes`
   const enabled = isPositiveInteger(value[minutesKey])
   value[switchKey] = enabled
-  value[minutesKey] = enabled ? value[minutesKey] : defaultMinutes
+  value[minutesKey] = enabled ? value[minutesKey] : DEFAULT_EXPIRE_SOON_NOTICE_MINUTES
   return value
 }
 

@@ -414,7 +414,7 @@ export async function cancelConversation(id) {
 
 export function getAuditedConversation(id, options = {}) {
   return quietRequest({
-    url: KAEL_BASE + '/admin/audit/conversations/' + id,
+    url: '/api/v1/chat-ai/audit/conversations/' + id + '/',
     method: 'get',
     signal: options.signal
   })

@@ -86,7 +86,7 @@ export function getPermedViews() {
     ['audit', store.getters.auditOrgs.length > 0],
     ['pam', store.getters.pamOrgs.length > 0],
     ['workbench', true],
-    ['tickets', hasPermission('tickets.view_ticket')],
+    ['tickets', hasPermission('tickets.view_ticket | tickets.view_workflow')],
     ['settings', hasPermission('settings.view_setting')]
   ]
   return viewShowMapper.filter((i) => i[1]).map((i) => i[0])
@@ -167,10 +167,13 @@ export function loadPlatformIcon(name, type) {
     Gateway: 'gateway',
     macOS: 'macos',
     BSD: 'bsd',
-    'Vmware-vSphere': 'vmware'
+    'Vmware-vSphere': 'vmware',
+    'OceanBase-MySQL': 'oceanbase',
+    'OceanBase-Oracle': 'oceanbase'
   }
 
   const value = platformMap[name] || type
+  const extension = value === 'oceanbase' ? 'svg' : 'png'
 
-  return getAssetUrlOr(`img/icons/${value}.png`, 'img/icons/other.png')
+  return getAssetUrlOr(`img/icons/${value}.${extension}`, 'img/icons/other.png')
 }

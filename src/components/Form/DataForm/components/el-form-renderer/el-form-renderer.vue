@@ -1,19 +1,28 @@
 <template>
   <el-form v-bind="$attrs" ref="elForm" :model="value" class="el-form-renderer" @submit.prevent>
-    <template v-for="item in innerContent" :key="item.id">
-      <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
-      <component
-        :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
-        :data="item"
-        :server-errors="serverErrors"
-        :disabled="disabled || item.disabled"
-        :item-value="value[item.id]"
-        :options="options[item.id]"
-        :readonly="readonly || item.readonly"
-        :value="value"
-        @update-value="updateValue"
-      />
-      <slot v-if="!isHidden(item)" :name="`$id:${item.id}`" />
+    <template v-for="block in renderBlocks" :key="block.id">
+      <slot v-if="block.group" :name="`section:${block.group.id}`" />
+      <render-form-section :group="block.group">
+        <template v-if="block.group" #header>
+          <slot :name="`id:${block.group.id}`" />
+        </template>
+        <template v-for="item in block.items" :key="item.id">
+          <slot v-if="!isHidden(item) && item.id !== block.group?.id" :name="`id:${item.id}`" />
+          <component
+            :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
+            :collapsed="collapsedFields.includes(item.id)"
+            :data="item"
+            :server-errors="serverErrors"
+            :disabled="disabled || item.disabled"
+            :item-value="value[item.id]"
+            :options="options[item.id]"
+            :readonly="readonly || item.readonly"
+            :value="value"
+            @update-value="updateValue"
+          />
+          <slot v-if="!isHidden(item)" :name="`$id:${item.id}`" />
+        </template>
+      </render-form-section>
     </template>
     <slot />
   </el-form>
@@ -26,6 +35,7 @@ import { markRaw, provide } from 'vue'
 import { FORM_RENDERER_KEY } from './context'
 import RenderFormGroup from './components/render-form-group.vue'
 import RenderFormItem from './components/render-form-item.vue'
+import RenderFormSection from './components/render-form-section.vue'
 import transformContent from './util/transform-content'
 import {
   collect,
@@ -42,9 +52,18 @@ export default {
   name: 'ElFormRenderer',
   components: {
     RenderFormItem: markRaw(RenderFormItem),
+    RenderFormSection: markRaw(RenderFormSection),
     RenderFormGroup: markRaw(RenderFormGroup)
   },
   props: {
+    collapsedFields: {
+      type: Array,
+      default: () => []
+    },
+    fieldGroups: {
+      type: Array,
+      default: () => []
+    },
     content: {
       type: Array,
       required: true
@@ -99,7 +118,28 @@ export default {
   },
   computed: {
     // 用于兼容数据操作
-    innerContent: ({ content }) => transformContent(content)
+    innerContent: ({ content }) => transformContent(content),
+    renderBlocks() {
+      // Visual sections only: keep innerContent and API values flat.
+      const groupsByField = new Map(
+        this.fieldGroups.flatMap((group) => group.fields.map((id) => [id, group]))
+      )
+      const blocks = []
+      this.innerContent.forEach((item) => {
+        const group = groupsByField.get(item.id)
+        const previous = blocks.at(-1)
+        if (group && previous?.group?.id === group.id) {
+          previous.items.push(item)
+        } else {
+          blocks.push({
+            id: group ? `group:${group.id}` : `field:${item.id}`,
+            group,
+            items: [item]
+          })
+        }
+      })
+      return blocks
+    }
   },
   watch: {
     form: {

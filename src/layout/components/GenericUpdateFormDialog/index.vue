@@ -414,7 +414,7 @@ export default {
   }
 }
 
-@container bulk-update-card (max-width: 640px) {
+@mixin compact-bulk-update {
   .bulk-update-target,
   .select-prop {
     flex-direction: column;
@@ -433,5 +433,13 @@ export default {
   .bulk-update-target__control {
     width: 100%;
   }
+}
+
+@container bulk-update-card (max-width: 640px) {
+  @include compact-bulk-update;
+}
+
+@supports not (container-type: inline-size) {
+  @include compact-bulk-update;
 }
 </style>

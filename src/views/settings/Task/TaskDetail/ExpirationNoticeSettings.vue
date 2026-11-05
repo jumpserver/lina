@@ -27,8 +27,7 @@ const taskNoticeFields = {
   },
   'perms.tasks.check_asset_permission_will_expired': {
     first: 'PERM_EXPIRED_FIRST_NOTICE_DAYS',
-    daily: 'PERM_EXPIRED_DAILY_NOTICE_DAYS',
-    soon: 'PERM_EXPIRED_SOON_NOTICE_MINUTES'
+    daily: 'PERM_EXPIRED_DAILY_NOTICE_DAYS'
   }
 }
 
@@ -49,12 +48,10 @@ export default {
       return taskNoticeFields[this.taskName]
     },
     fields() {
-      return [this.noticeFields.first, this.noticeFields.daily, this.noticeFields.soon].filter(
-        Boolean
-      )
+      return [this.noticeFields.first, this.noticeFields.daily]
     },
     fieldsMeta() {
-      const fields = {
+      return {
         [this.noticeFields.first]: {
           label: this.$t('FirstNotice'),
           helpTip: this.$t('FirstNoticeHelpText'),
@@ -69,15 +66,6 @@ export default {
           rules: [{ validator: this.validateDailyNotice, trigger: ['blur', 'change'] }]
         }
       }
-      if (this.noticeFields.soon) {
-        fields[this.noticeFields.soon] = {
-          label: this.$t('DefaultExpireSoonNoticeMinutes'),
-          helpTip: this.$t('DefaultExpireSoonNoticeMinutesHelpText'),
-          el: { inputmode: 'numeric' },
-          rules: [{ validator: this.validateExpireSoonNotice, trigger: ['blur', 'change'] }]
-        }
-      }
-      return fields
     }
   },
   methods: {
@@ -127,14 +115,6 @@ export default {
       const daily = this.parseNoticeDays(value, 365, 'DailyNoticeMaxDays')
       if (daily.error) {
         callback(new Error(daily.error))
-        return
-      }
-      callback()
-    },
-    validateExpireSoonNotice(rule, value, callback) {
-      const notice = this.parseNoticeDays(value)
-      if (notice.error) {
-        callback(new Error(notice.error))
         return
       }
       callback()

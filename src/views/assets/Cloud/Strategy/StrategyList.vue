@@ -42,13 +42,22 @@ export default {
             }
           },
           strategy_rules: {
+            label: this.$t('Rules'),
             formatter: (row) => {
               return row.strategy_rules.length
             }
           },
           strategy_actions: {
+            label: this.$t('Actions'),
             formatter: (row) => {
               return row.strategy_actions.length
+            }
+          },
+          rule_relation: {
+            label: this.$t('RuleRelation'),
+            formatter: (row) => {
+              const value = row.rule_relation?.value || row.rule_relation
+              return this.$t(value === 'or' ? 'Or' : 'And')
             }
           },
           actions: {

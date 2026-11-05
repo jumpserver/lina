@@ -5,7 +5,12 @@
       v-model:visible="createDialogVisible"
       @confirm="doCreate"
     />
-    <TreeTable ref="TreeTable" :tree-setting="treeSetting" :table-config="{}">
+    <TreeTable
+      ref="TreeTable"
+      :tree-setting="treeSetting"
+      :table-config="{}"
+      :title="$t('Playbook')"
+    >
       <template v-if="!disableEdit" #rMenu>
         <li id="m_create_file" class="rmenu" tabindex="-1" @click="onCreate('file')">
           {{ $tc('NewFile') }}

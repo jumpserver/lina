@@ -513,6 +513,7 @@ export default {
   .search-modal-content {
     display: flex;
     flex-direction: column;
+    max-height: min(560px, calc(100vh - 160px));
     max-height: min(560px, calc(100dvh - 160px));
     background: var(--el-bg-color, #fff);
   }
@@ -733,6 +734,7 @@ export default {
   }
 
   .search-modal .search-modal-content {
+    max-height: calc(100vh - 32px);
     max-height: calc(100dvh - 32px);
   }
 

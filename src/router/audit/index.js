@@ -8,6 +8,8 @@ import ReportsRoutes from './reports'
 import TicketRoutes from './tickets'
 import empty from '@/layout/empty'
 import store from '@/store'
+import { hasPermission } from '@/utils/jms/permission'
+import { anyAuditReportPermission } from '@/views/reports/center/permissions'
 
 export default {
   path: '/audit/',
@@ -78,19 +80,21 @@ export default {
       meta: {
         title: i18n.t('TicketsAudit'),
         icon: 'job',
-        permissions: ['tickets.view_ticket']
+        permissions: ['audits.view_ticketaudit']
       },
       children: TicketRoutes
     },
     {
       path: '/audit/reports',
+      alwaysShow: true,
+      hidden: () => !hasPermission(anyAuditReportPermission),
       component: empty,
-      redirect: '',
+      redirect: '/audit/reports/overview',
       name: 'AuditsReports',
       meta: {
-        title: i18n.t('Report'),
-        icon: 'report',
-        permissions: [],
+        title: i18n.t('AuditReportCenter'),
+        icon: 'file',
+        permissions: ['rbac.view_audit'],
         licenseRequired: true
       },
       children: ReportsRoutes

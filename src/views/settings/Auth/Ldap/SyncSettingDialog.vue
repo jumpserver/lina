@@ -22,7 +22,7 @@
 import { Dialog } from '@/components'
 import { Required } from '@/components/Form/DataForm/rules'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
-import { crontab, interval, is_periodic } from '@/components/const'
+import { crontab, interval } from '@/components/const'
 import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
@@ -69,7 +69,9 @@ export default {
               return !this.$hasLicense()
             }
           },
-          AUTH_LDAP_SYNC_IS_PERIODIC: is_periodic,
+          AUTH_LDAP_SYNC_IS_PERIODIC: {
+            type: 'checkbox'
+          },
           AUTH_LDAP_SYNC_CRONTAB: crontab,
           AUTH_LDAP_SYNC_INTERVAL: interval,
           AUTH_LDAP_SYNC_RECEIVERS: {

@@ -66,7 +66,7 @@ export default {
     return {
       showTimer: false,
       url: `/api/v1/xpack/cloud/accounts/${this.object.id}/`,
-      excludes: ['attrs', 'task'],
+      excludes: ['attrs', 'task', 'sync_status'],
       accountFormatters: {
         category: (item, value) => {
           const categoryMap = {
@@ -156,6 +156,7 @@ export default {
               this.$axios
                 .get(`/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/run/`)
                 .then((res) => {
+                  window.dispatchEvent(new CustomEvent('cloud-sync-triggered'))
                   openTaskPage(res['task'])
                 })
             }.bind(this)
@@ -252,7 +253,7 @@ export default {
         {
           key: this.$t('DateLastSync'),
           value: this.object?.task?.date_last_sync
-            ? toSafeLocalDateStr(this.object?.task.date_created)
+            ? toSafeLocalDateStr(this.object?.task.date_last_sync)
             : ''
         },
         {
@@ -275,6 +276,7 @@ export default {
       this.$axios
         .patch(`/api/v1/xpack/cloud/sync-instance-tasks/${this.object.task.id}/`, data)
         .then((res) => {
+          Object.assign(this.object.task, res)
           this.$message.success(this.$tc('UpdateSuccessMsg'))
         })
         .catch((err) => {

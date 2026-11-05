@@ -1,19 +1,47 @@
 <template>
   <IBox :fa="fa" :title="title">
-    <el-form :label-width="labelWidth" class="content detail-card" label-position="left">
+    <el-form
+      :label-width="labelWidth"
+      class="content detail-card"
+      label-position="left"
+      @submit.prevent
+    >
       <template v-for="item in items">
         <div
           v-if="item.has !== false"
           :key="item.key"
-          :class="item.class"
+          :class="[item.class, { 'has-children': item.children?.length }]"
           :label="item.key"
           class="el-form-item"
         >
           <span class="el-form-item__label"> {{ formateLabel(item.key) }}</span>
-          <span class="item-value el-form-item__content">
-            <component v-bind="{ ...item }" :is="item.component" v-if="item.component" />
-            <ItemValue v-bind="item" v-else :value="item.value" />
-          </span>
+          <div class="item-value el-form-item__content">
+            <component
+              v-bind="{ ...item }"
+              :is="item.component"
+              v-if="item.component"
+              :item="item"
+            />
+            <ItemValue v-bind="item" v-else :item="item" :value="item.value" />
+            <div v-if="item.children?.length" class="detail-children">
+              <div
+                v-for="child in item.children"
+                :key="child.name || child.key"
+                class="detail-child"
+              >
+                <span class="detail-child-label">{{ formateLabel(child.key) }}</span>
+                <div class="detail-child-value">
+                  <component
+                    v-bind="child"
+                    :is="child.component"
+                    v-if="child.component"
+                    :item="child"
+                  />
+                  <ItemValue v-bind="child" v-else :item="child" :value="child.value" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </template>
     </el-form>
@@ -88,6 +116,14 @@ export default {
     line-height: 32px;
     min-height: 32px;
 
+    &.has-children {
+      align-items: flex-start;
+
+      .el-form-item__content {
+        display: block;
+      }
+    }
+
     &:last-child {
       //border-bottom: none;
     }
@@ -132,6 +168,30 @@ export default {
     :deep(.el-tag--small) {
       margin-right: 3px;
     }
+  }
+
+  .detail-children {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 0 4px;
+  }
+
+  .detail-child {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .detail-child-label {
+    color: var(--color-icon-primary);
+    font-size: 12px;
+  }
+
+  .detail-child-value {
+    color: var(--color-text-primary);
+    overflow-wrap: anywhere;
   }
 
   .item-value {

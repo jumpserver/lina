@@ -37,19 +37,19 @@
             :title="cName"
           >
             <el-col v-for="(platform, index) of ps" :key="platform.id" :span="8">
-              <el-tooltip :content="platform.name">
-                <el-card
-                  :style="{ borderLeftColor: randomBorderColor(index) }"
-                  class="platform-item"
-                  shadow="never"
-                  @click="handleSelect(platform)"
-                >
-                  <div class="icon-zone">
-                    <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon" />
-                  </div>
-                  <span class="platform-name">{{ platform.name }}</span>
-                </el-card>
-              </el-tooltip>
+              <el-card
+                :style="{ borderLeftColor: randomBorderColor(index) }"
+                class="platform-item"
+                shadow="never"
+                @click="handleSelect(platform)"
+              >
+                <div class="icon-zone">
+                  <img :src="getPlatformLogo(platform)" alt="icon" class="asset-icon" />
+                </div>
+                <span class="platform-name" @mouseenter="updatePlatformTitle">{{
+                  platform.name
+                }}</span>
+              </el-card>
             </el-col>
           </el-collapse-item>
         </el-collapse>
@@ -126,6 +126,13 @@ export default {
     this.loading = false
   },
   methods: {
+    updatePlatformTitle({ currentTarget: el }) {
+      if (el.scrollWidth > el.clientWidth) {
+        el.setAttribute('title', el.textContent)
+      } else {
+        el.removeAttribute('title')
+      }
+    },
     getPlatformLogo(platform) {
       return loadPlatformIcon(platform.name, platform.type.value)
     },

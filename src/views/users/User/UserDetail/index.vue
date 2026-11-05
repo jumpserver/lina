@@ -42,6 +42,7 @@ export default {
       user: { name: '', username: '', email: '', comment: '' },
       config: {
         url: '/api/v1/users/users',
+        notFoundMessage: this.$t('UserNotFoundOrDeletedMsg'),
         activeMenu: 'UserInfo',
         actions: {
           hasUpdate: canManageUser,

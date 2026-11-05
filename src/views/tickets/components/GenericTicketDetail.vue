@@ -1,38 +1,79 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="17" :sm="24">
+    <el-col :span="24">
+      <Session
+        v-if="
+          object.type?.value === 'login_asset_confirm' &&
+          object.state?.value === 'approved' &&
+          $hasPerm('tickets.view_ticket')
+        "
+        :key="ticketKey"
+        :object="object"
+      />
+      <p
+        v-if="object.execution_mode === 'approval_only' && !plugin.requestComponent"
+        class="ticket-approval-hint"
+      >
+        {{ $t('TicketApprovalOnlyHint') }}
+      </p>
       <Details :detail-card-items="iDetailCardItems" :title="$tc('BasicInfo')" />
-      <Details
-        v-if="specialCardItems.length > 0"
-        :detail-card-items="specialCardItems"
-        :title="$tc('ApplyInfo')"
+      <component
+        :is="plugin.requestComponent"
+        v-if="plugin.requestComponent"
+        :object="object"
+        :request-items="specialCardItems"
+        @refresh="$refs.workflow.load(true)"
+      />
+      <TicketRequestInfo
+        v-else-if="specialCardItems.length > 0"
+        :key="ticketKey"
+        :object="object"
+        :items="specialCardItems"
+        :instance="workflow"
+        :busy="workflowBusy"
+        @editing="editingRequest = $event"
+        @saving="savingRequest = $event"
+        @refresh="$refs.workflow.load(true)"
       />
       <Details
         v-if="object.state.value === 'approved' && assignedCardItems.length > 0"
         :detail-card-items="assignedCardItems"
         :title="$tc('AssignedInfo')"
       />
+      <component
+        :is="plugin.resultComponent"
+        v-if="plugin.resultComponent"
+        :object="object"
+        @refresh="$refs.workflow.load(true)"
+      />
       <slot id="MoreDetails" />
+      <WorkflowPanel
+        ref="workflow"
+        :object="object"
+        :editing-request="editingRequest"
+        :saving-request="savingRequest"
+        @loaded="workflow = $event"
+        @busy="workflowBusy = $event"
+      />
       <Comments v-bind="$attrs" :object="object" />
-    </el-col>
-    <el-col :md="7" :sm="24">
-      <Steps :object="object" />
-      <Session v-if="$hasPerm('tickets.view_ticket')" :object="object" />
     </el-col>
   </el-row>
 </template>
 
 <script lang="jsx">
+import { getTicketPlugin } from '../plugins/registry'
 import Comments from './Comments'
 import CcUsers from './CcUsers'
 import Details from './Details'
 import Session from './Session'
-import Steps from './Steps'
+import WorkflowPanel from './WorkflowPanel'
+import TicketRequestInfo from './TicketRequestInfo'
 import { getTicketFlowLabel, getTicketStateLabel, getTicketTypeLabel } from '../const'
 export default {
   name: 'GenericTicketDetail',
   components: {
-    Steps,
+    WorkflowPanel,
+    TicketRequestInfo,
     CcUsers,
     Comments,
     Details,
@@ -54,10 +95,18 @@ export default {
     assignedCardItems: {
       type: Array,
       default: () => []
+    },
+    showComment: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
+      workflow: null,
+      workflowBusy: false,
+      editingRequest: false,
+      savingRequest: false,
       statusMap: {
         pending: 'warning',
         approved: 'success',
@@ -68,12 +117,18 @@ export default {
     }
   },
   computed: {
+    ticketKey() {
+      return `${this.object.org_id || ''}:${this.object.id || ''}`
+    },
+    plugin() {
+      return getTicketPlugin(this.object.type?.value)
+    },
     iDetailCardItems() {
       if (this.detailCardItems) {
         return this.detailCardItems
       }
       const { object } = this
-      return [
+      const items = [
         {
           key: this.$tc('Number'),
           value: object['serial_num']
@@ -114,13 +169,28 @@ export default {
         {
           key: this.$tc('DateCreated'),
           value: object.date_created
-        },
-        {
-          key: this.$tc('Comment'),
-          value: object.comment
         }
       ]
+      if (this.showComment) {
+        items.push({ key: this.$tc('Comment'), value: object.comment })
+      }
+      return items
+    }
+  },
+  watch: {
+    ticketKey() {
+      this.workflow = null
+      this.workflowBusy = false
+      this.editingRequest = false
+      this.savingRequest = false
     }
   }
 }
 </script>
+
+<style scoped>
+.ticket-approval-hint {
+  margin: 0 0 10px;
+  color: var(--color-text-secondary);
+}
+</style>

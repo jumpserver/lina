@@ -297,7 +297,7 @@ export default {
   }
 
   // 容器变窄时：label 移到输入框上方，输入框占满整行，保证可用宽度
-  @container (max-width: 480px) {
+  @mixin compact-auth-form {
     :deep(.el-form-item) {
       flex-direction: column;
       align-items: stretch;
@@ -329,6 +329,14 @@ export default {
     :deep(.sub-form .el-form-item__label-wrap) {
       margin-left: 0 !important;
     }
+  }
+
+  @container (max-width: 480px) {
+    @include compact-auth-form;
+  }
+
+  @supports not (container-type: inline-size) {
+    @include compact-auth-form;
   }
 }
 </style>

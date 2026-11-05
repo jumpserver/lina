@@ -383,6 +383,10 @@ export default {
       }
     },
     getUpdateId() {
+      // 克隆上下文中的 id 是源对象，不应拼入创建/OPTIONS 地址。
+      if (this.action && this.action !== 'update') {
+        return ''
+      }
       if (this.actionId && this.action === 'update') {
         return this.actionId
       }
@@ -490,7 +494,8 @@ export default {
     },
     async getObjectDetail(url, id) {
       this.$log.debug('Get object detail: ', url)
-      let data = await this.$axios.get(url, { params: { id } })
+      const params = id == null || id === '' ? {} : { id }
+      let data = await this.$axios.get(url, { params })
       if (Array.isArray(data)) {
         data = {}
       }

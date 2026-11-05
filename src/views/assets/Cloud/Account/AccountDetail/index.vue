@@ -14,6 +14,7 @@
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import TaskSyncAssetList from './TaskSyncAssetList'
 import TaskHistoryList from './TaskHistoryList'
+import PendingReleaseBindingList from './PendingReleaseBindingList'
 import AccountDetail from './AccountDetail'
 
 export default {
@@ -21,6 +22,7 @@ export default {
     GenericDetailPage,
     TaskSyncAssetList,
     TaskHistoryList,
+    PendingReleaseBindingList,
     AccountDetail,
     TabPage
   },
@@ -38,6 +40,7 @@ export default {
       },
       config: {
         url: `/api/v1/xpack/cloud/accounts`,
+        hasRightSide: false,
         activeMenu: 'AccountDetail',
         submenu: [
           {
@@ -54,6 +57,13 @@ export default {
           {
             title: this.$t('SyncInstanceTaskHistoryAssetList'),
             name: 'TaskSyncAssetList',
+            hidden: () => {
+              return !this.Account.task?.id
+            }
+          },
+          {
+            title: this.$t('PendingReleaseAssets'),
+            name: 'PendingReleaseBindingList',
             hidden: () => {
               return !this.Account.task?.id
             }

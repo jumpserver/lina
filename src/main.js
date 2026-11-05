@@ -1,5 +1,6 @@
+import './utils/browser-polyfills'
 import { createApp } from 'vue'
-import ElementPlus from 'element-plus'
+import ElementPlus, { ElTooltip } from 'element-plus'
 import { getElementLocale } from '@/i18n/langs'
 import { getLangCode } from '@/i18n/utils'
 import 'element-plus/dist/index.css'
@@ -51,6 +52,9 @@ console.log(
 )
 
 async function initApp() {
+  // 统一 Tooltip 默认显示延迟，复制配置以免影响共享该 prop 的其他组件。
+  ElTooltip.props.showAfter = { ...ElTooltip.props.showAfter, default: 500 }
+
   const app = createApp(App)
 
   // i18n helpers (set immediately to avoid undefined)
@@ -127,16 +131,7 @@ async function initApp() {
   setRootColors()
 
   watchSessions()
-  // Mount app and remove initial loading overlay
   app.mount('#app')
-  try {
-    const el = document.getElementById('loading')
-    if (el && el.parentNode) {
-      el.parentNode.removeChild(el)
-    }
-  } catch (e) {
-    // ignore
-  }
 }
 
 initApp().then()

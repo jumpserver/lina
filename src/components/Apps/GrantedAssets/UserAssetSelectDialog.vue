@@ -140,6 +140,27 @@ export default {
       },
       additionalTreeViews: [
         {
+          icon: 'fa-regular fa-star',
+          name: FAVORITE_TREE_NAME,
+          title: this.$t('FavoriteTree'),
+          treeComponent: 'NodeAssetTree',
+          treeSetting: {
+            ...commonTreeSetting,
+            dataSource: favoriteTreeDataSource,
+            expandRootInGlobalOrg: true,
+            getNodeLabel: (node) =>
+              node?.meta?.data?.is_root
+                ? this.$t('FavoriteTreeRoot')
+                : node?.name || node?.meta?.data?.value || '',
+            settingsCacheKey: `${this.settingsCacheKey}:favorite-tree`,
+            treeIcon: 'fa-regular fa-star',
+            treeTitle: this.$t('FavoriteTree'),
+            callback: {
+              onSelected: (event, node) => this.handleFavoriteSelected(node)
+            }
+          }
+        },
+        {
           icon: 'fa-solid fa-shapes',
           name: TYPE_TREE_NAME,
           title: this.$t('TypeTree'),
@@ -160,27 +181,6 @@ export default {
             treeTitle: this.$t('TypeTree'),
             callback: {
               onSelected: (event, node) => this.handleTypeSelected(node)
-            }
-          }
-        },
-        {
-          icon: 'fa-regular fa-star',
-          name: FAVORITE_TREE_NAME,
-          title: this.$t('FavoriteTree'),
-          treeComponent: 'NodeAssetTree',
-          treeSetting: {
-            ...commonTreeSetting,
-            dataSource: favoriteTreeDataSource,
-            expandRootInGlobalOrg: true,
-            getNodeLabel: (node) =>
-              node?.meta?.data?.is_root
-                ? this.$t('FavoriteTreeRoot')
-                : node?.name || node?.meta?.data?.value || '',
-            settingsCacheKey: `${this.settingsCacheKey}:favorite-tree`,
-            treeIcon: 'fa-regular fa-star',
-            treeTitle: this.$t('FavoriteTree'),
-            callback: {
-              onSelected: (event, node) => this.handleFavoriteSelected(node)
             }
           }
         }

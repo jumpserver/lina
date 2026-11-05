@@ -22,6 +22,23 @@
             >{{ $tc('' + executionInfo.status.label) }}</span
           >
         </span>
+        <template v-if="summary">
+          <span class="status-item">
+            <span>{{ $tc('Success') }}: </span>
+            <span class="status_success">{{ summary.success }}</span>
+          </span>
+          <span class="status-item">
+            <span>{{ $tc('Failed') }}: </span>
+            <span class="status_danger">{{ summary.failed }}</span>
+          </span>
+        </template>
+        <span v-if="executionInfo.summary?.unexecuted" class="status-item">
+          <span>{{ $tc('NotExecuted') }}: </span>
+          <span class="status_warning">{{ executionInfo.summary.unexecuted }}</span>
+          <span v-if="executionInfo.summary.error_code === 'command_acl_rejected'">
+            ({{ $tc('CommandRejectedByACL') }})
+          </span>
+        </span>
         <span class="status-item">
           <span>{{ $tc('TimeDelta') }}: </span>
           <span>{{ executionInfo.timeCost }}s</span>
@@ -131,6 +148,16 @@ export default {
         }
       ],
       showScrollButton: false
+    }
+  },
+  computed: {
+    summary() {
+      const { ok, failures = {}, dark = {} } = this.executionInfo.summary || {}
+      if (!ok) return null
+      return {
+        success: ok.length,
+        failed: Object.keys({ ...failures, ...dark }).length
+      }
     }
   },
   mounted: function () {

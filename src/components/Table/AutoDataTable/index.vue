@@ -405,6 +405,17 @@ export default {
       // Default columns are ordered by the generator. Saved user order must
       // also apply to ID/name instead of moving those columns back to the front.
       const columns = source.filter((item) => item !== undefined && item !== null)
+      if (this.config.columnOrder === 'configured') {
+        const order = new Map(
+          this.config.columns.map((column, index) => [
+            typeof column === 'object' ? column.prop : column,
+            index
+          ])
+        )
+        const position = (column) =>
+          order.get(typeof column === 'object' ? column.prop : column) ?? Infinity
+        columns.sort((left, right) => position(left) - position(right))
+      }
       return orderActionColumn(columns, this.config.actionsColumnPosition)
     },
     destroyColumnDraggable() {
@@ -413,6 +424,10 @@ export default {
     },
     setColumnDraggable() {
       if (this.isDeactivated || !this.$el?.isConnected) {
+        return
+      }
+      if (this.config.columnOrder === 'configured') {
+        this.destroyColumnDraggable()
         return
       }
       const el = this.$el.querySelector(
@@ -436,7 +451,7 @@ export default {
           direction: 'horizontal',
           forceFallback: true,
           fallbackTolerance: 4,
-          draggable: 'th:has(.is-column-draggable)',
+          draggable: 'th.is-column-draggable-header',
           handle: 'th',
           filter: (event, cell) => {
             const control = event.target.closest(
@@ -477,6 +492,9 @@ export default {
     generateTotalColumns() {
       const generator = new TableColumnsGenerator(this.config, this.meta, this)
       this.totalColumns = generator.generateColumns()
+      if (this.config.columnOrder === 'configured') {
+        this.totalColumns = this.totalColumns.map((column) => ({ ...column, draggable: false }))
+      }
       this.iConfig = {
         ...this.config,
         columns: [...this.totalColumns],
@@ -732,7 +750,7 @@ export default {
   width: 100%;
   min-width: 0;
 
-  :deep(th:has(.is-column-draggable) > .cell) {
+  :deep(th.is-column-draggable-header > .cell) {
     cursor: grab;
     user-select: none;
   }

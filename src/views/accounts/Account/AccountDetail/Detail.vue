@@ -4,11 +4,25 @@
       <AutoDetailCard v-bind="detail" :fields="detailFields" :object="object" />
       <template #right>
         <QuickActions :actions="quickActions" type="primary" />
+        <IBox
+          v-if="object.secret_type?.value === 'password' && $hasPerm('tickets.view_ticket')"
+          title="TicketViewSecret"
+        >
+          <el-button type="primary" @click="requestSecretVisible = true">{{
+            $t('OpenTicket')
+          }}</el-button>
+        </IBox>
         <ViewSecret
           v-if="showViewSecretDialog"
           v-model:visible="showViewSecretDialog"
           :account="object"
           :url="secretUrl"
+        />
+        <AccountSecretTicketRequest
+          v-if="requestSecretVisible"
+          :account="object"
+          @close="requestSecretVisible = false"
+          @created="openSecretTicket"
         />
         <AutomationParamsForm
           v-model:visible="autoPushVisible"
@@ -19,14 +33,6 @@
         />
       </template>
     </TwoCol>
-    <Drawer
-      v-if="sourceTemplateVisible"
-      v-model:visible="sourceTemplateVisible"
-      :title="$t('AccountTemplate')"
-      :component="sourceTemplateComponent"
-      :component-props="sourceTemplateProps"
-      :has-footer="false"
-    />
     <el-drawer v-model="pamDrawerShow" :append-to-body="true" :with-header="false" size="50%">
       <component :is="drawerRefName" />
     </el-drawer>
@@ -36,22 +42,25 @@
 <script lang="jsx">
 import AutoDetailCard from '@/components/Cards/DetailCard/auto.vue'
 import QuickActions from '@/components/Common/QuickActions/index.vue'
+import IBox from '@/components/Common/IBox'
 import ViewSecret from '@/components/Apps/AccountListTable/ViewSecret.vue'
+import AccountSecretTicketRequest from './AccountSecretTicketRequest.vue'
 import { openTaskPage } from '@/utils/jms/index'
 import AutomationParamsForm from '@/views/assets/Platform/AutomationParamsSetting.vue'
 import AssetDetail from '@/views/assets/Asset/AssetDetail'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
-import Drawer from '@/components/Drawer/index.vue'
+import { withoutDrawerQuery } from '@/components/Drawer/route'
 export default {
   name: 'Detail',
   components: {
-    Drawer,
     TwoCol,
     AutoDetailCard,
     QuickActions,
+    IBox,
     AssetDetail,
     AutomationParamsForm,
-    ViewSecret
+    ViewSecret,
+    AccountSecretTicketRequest
   },
   props: {
     object: {
@@ -62,15 +71,13 @@ export default {
   data() {
     const vm = this
     return {
-      sourceTemplateVisible: false,
-      sourceTemplateProps: {},
-      sourceTemplateComponent: () => import('@/views/accounts/AccountTemplate/Detail/index.vue'),
       pamDrawerShow: false,
       drawerRefName: null,
       needSetAutoPushParams: false,
       autoPushVisible: false,
       secretUrl: `/api/v1/accounts/account-secrets/${this.object.id}/`,
       showViewSecretDialog: false,
+      requestSecretVisible: false,
       quickActions: [
         {
           title: this.$t('Active'),
@@ -285,6 +292,10 @@ export default {
     }
   },
   methods: {
+    openSecretTicket({ id, orgId }) {
+      this.requestSecretVisible = false
+      this.$router.push({ name: 'TicketDetail', params: { id }, query: { oid: orgId } })
+    },
     formatSourceTemplate(item, template) {
       if (!template) {
         return this.object.source_id ? (
@@ -311,19 +322,15 @@ export default {
     },
     openSourceTemplate(template) {
       if (!template?.id || !this.$hasPerm('accounts.view_accounttemplate')) return
-      this.sourceTemplateProps = {
-        drawerContext: {
-          isDrawer: true,
-          action: 'detail',
-          row: template,
-          col: {},
-          id: template.id,
-          params: { id: template.id },
-          query: {},
-          routeName: 'AccountTemplateDetail'
+      return this.$router.push({
+        path: this.$route.path,
+        hash: this.$route.hash,
+        query: {
+          ...withoutDrawerQuery(this.$route.query),
+          drawer: 'AccountTemplateDetail',
+          drawerId: template.id
         }
-      }
-      this.sourceTemplateVisible = true
+      })
     },
     onCanSetting(item) {
       this.needSetAutoPushParams = item

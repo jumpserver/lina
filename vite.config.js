@@ -160,6 +160,9 @@ export default defineConfig(({ mode }) => {
       cors: createCorsOptions()
     },
     build: {
+      // Match the minimum partially supported browsers in the product policy.
+      // Vite's default Baseline target is newer than these versions.
+      target: ['chrome97', 'edge97', 'firefox96', 'safari15'],
       outDir: outputDir,
       assetsDir,
       minify: 'oxc',
