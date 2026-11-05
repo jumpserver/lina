@@ -3114,7 +3114,7 @@
     "ReauthHelp": "Exige novo login após sair e reiniciar. Minimizar ou ocultar o cliente não conta como sair.",
     "ReauthRequired": "Exigido pelo administrador; não pode ser desativado. Minimizar ou ocultar não conta como sair.",
     "UnlimitedHelp": "0 significa ilimitado. Limpe e salve para restaurar o padrão.",
-    "IdleHelp": "Bloqueia após o tempo de inatividade definido. Desbloqueie com a senha de bloqueio na janela principal. Janelas de aplicativos externos não são protegidas.",
+    "IdleHelp": "Bloqueia após o tempo de inatividade. Trocar de conta não reinicia a inatividade da conta anterior. Digite a senha de bloqueio para desbloquear. Aplicativos externos não são protegidos.",
     "WebIdleHelp": "Bloqueia o console e o terminal Web após o tempo de inatividade definido. Digite a senha de bloqueio para desbloquear. Com o bloqueio por inatividade ativado, fechar todas as páginas também bloqueia esta sessão após 10 segundos. A saída ao fechar as páginas tem prioridade. Atualizar ou reabrir em até 10 segundos cancela a ação.",
     "LifetimeHelp": "Contado desde o login. Ao expirar, entre novamente; a atividade não prolonga o prazo.",
     "AdminClientHelp": "O administrador define padrões e limites. O usuário pode adotar opções mais restritas; caso contrário, segue o administrador."

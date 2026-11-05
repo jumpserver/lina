@@ -3116,7 +3116,7 @@
     "ReauthHelp": "Phải đăng nhập lại sau khi thoát và khởi động lại. Thu nhỏ hoặc ẩn ứng dụng không tính là thoát.",
     "ReauthRequired": "Quản trị viên đã bật nên không thể tắt. Thu nhỏ hoặc ẩn không tính là thoát.",
     "UnlimitedHelp": "0 là không giới hạn. Xóa rồi lưu để khôi phục mặc định.",
-    "IdleHelp": "Tự khóa khi hết thời gian nhàn rỗi đã đặt. Nhập mật khẩu khóa tại cửa sổ chính để mở khóa. Cửa sổ ứng dụng bên ngoài không được bảo vệ.",
+    "IdleHelp": "Khóa khi hết thời gian nhàn rỗi. Chuyển tài khoản không đặt lại thời gian nhàn rỗi của tài khoản trước. Nhập mật khẩu khóa để mở khóa. Cửa sổ ứng dụng bên ngoài không được bảo vệ.",
     "WebIdleHelp": "Khóa bảng điều khiển và Web terminal khi hết thời gian nhàn rỗi đã đặt. Nhập mật khẩu khóa để mở khóa. Khi bật khóa do không hoạt động, đóng tất cả các trang cũng khóa phiên sau 10 giây. Đăng xuất khi đóng trang được ưu tiên. Làm mới hoặc mở lại trong 10 giây sẽ hủy thao tác này.",
     "LifetimeHelp": "Tính từ lúc đăng nhập. Hết hạn phải đăng nhập lại; hoạt động không kéo dài thời hạn.",
     "AdminClientHelp": "Quản trị viên đặt mặc định và giới hạn. Người dùng có thể đặt nghiêm ngặt hơn; nếu không tự đặt thì theo quản trị viên."
