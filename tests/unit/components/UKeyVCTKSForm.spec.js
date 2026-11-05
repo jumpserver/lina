@@ -205,9 +205,9 @@ describe('VCTK_S settings in the shared form', () => {
     expect(item(wrapper, 'AUTH_UKEY_DEFAULT_PIN').exists()).toBe(false)
     expect(item(wrapper, SERVER_URL).exists()).toBe(true)
     expect(item(wrapper, SSL).exists()).toBe(true)
-    expect(item(wrapper, ISSUING_CA).exists()).toBe(true)
+    expect(item(wrapper, ISSUING_CA).exists()).toBe(false)
     expect(item(wrapper, TLS_VERIFY).exists()).toBe(false)
-    expect(wrapper.find('.ukey-issuing-ca-status').text()).toBe('UKeyVCTKSIssuingCAConfigured')
+    expect(wrapper.find('.ukey-issuing-ca-status').exists()).toBe(false)
 
     await submit(wrapper)
     const submitted = form.axios.patch.mock.calls[0][1]
@@ -228,7 +228,7 @@ describe('VCTK_S settings in the shared form', () => {
     ])
     expect(item(wrapper, TLS_VERIFY).find('input[value="custom"]').element.checked).toBe(true)
     expect(item(wrapper, TLS_CA).exists()).toBe(true)
-    expect(item(wrapper, ISSUING_CA).exists()).toBe(true)
+    expect(item(wrapper, ISSUING_CA).exists()).toBe(false)
     await submit(wrapper)
     expect(form.axios.patch.mock.calls[0][1][TLS_VERIFY]).toBe('custom')
   })
@@ -289,26 +289,34 @@ describe('VCTK_S settings in the shared form', () => {
     expect(item(wrapper, SERVER_URL).find('input').element.value).toBe('https://vctks.example.com:8000')
   })
 
-  it('uses the read-only CA status and updates it only after a successful upload save', async () => {
+  it('saves without uploading an issuing CA or rendering legacy CA status', async () => {
     const form = await createForm({ [CA_CONFIGURED]: false })
     wrapper = form.wrapper
-    expect(wrapper.find('.ukey-issuing-ca-status').text()).toBe('UKeyVCTKSIssuingCANotConfigured')
-    item(wrapper, ISSUING_CA).find('textarea').setValue('replacement issuing CA')
-    await settle()
-    expect(wrapper.find('.ukey-issuing-ca-status').text()).toBe('UKeyVCTKSIssuingCANotConfigured')
+    expect(item(wrapper, ISSUING_CA).exists()).toBe(false)
+    expect(wrapper.find('.ukey-issuing-ca-status').exists()).toBe(false)
     await submit(wrapper)
-    expect(form.axios.patch.mock.calls[0][1][ISSUING_CA]).toBe('replacement issuing CA')
-    expect(wrapper.find('.ukey-issuing-ca-status').text()).toBe('UKeyVCTKSIssuingCAConfigured')
-    expect(item(wrapper, ISSUING_CA).find('textarea').element.value).toBe('')
+    expect(form.axios.patch).toHaveBeenCalledTimes(1)
+    expect(form.axios.patch.mock.calls[0][1]).not.toHaveProperty(ISSUING_CA)
+    expect(form.axios.patch.mock.calls[0][1]).not.toHaveProperty(CA_CONFIGURED)
     await reset(wrapper)
-    expect(wrapper.find('.ukey-issuing-ca-status').text()).toBe('UKeyVCTKSIssuingCAConfigured')
+    expect(item(wrapper, ISSUING_CA).exists()).toBe(false)
   })
 
-  it('does not infer a missing CA from an old response without configured status', async () => {
-    const form = await createForm({ [CA_CONFIGURED]: undefined })
+  it('renders and saves when the backend omits issuing CA fields and configured status', async () => {
+    const currentProviders = providers.map(provider => ({
+      ...provider,
+      fields: provider.fields.filter(field => field !== ISSUING_CA),
+      secret_fields: provider.secret_fields.filter(field => field !== ISSUING_CA)
+    }))
+    const metadata = _.omit(_.cloneDeep(remoteMeta), [ISSUING_CA, CA_CONFIGURED])
+    const form = await createForm({
+      AUTH_UKEY_CA_PROVIDERS: currentProviders, [CA_CONFIGURED]: undefined
+    }, { metadata })
     wrapper = form.wrapper
-    expect(wrapper.find('.ukey-issuing-ca-status').text()).toBe('')
+    expect(item(wrapper, ISSUING_CA).exists()).toBe(false)
+    expect(wrapper.find('.ukey-issuing-ca-status').exists()).toBe(false)
     await submit(wrapper)
+    expect(form.axios.patch).toHaveBeenCalledTimes(1)
     expect(form.axios.patch.mock.calls[0][1]).not.toHaveProperty(ISSUING_CA)
   })
 

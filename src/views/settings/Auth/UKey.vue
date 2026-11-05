@@ -25,7 +25,6 @@ const VCTKS_SSL_FIELD = 'AUTH_UKEY_VCTK_S_USE_SSL'
 const VCTKS_CONNECTION_FIELDS = [
   'AUTH_UKEY_VCTK_S_SVS_URL', 'AUTH_UKEY_VCTK_S_TLS_VERIFY', 'AUTH_UKEY_VCTK_S_TLS_CA_CERT'
 ]
-const VCTKS_FIELDS = [...VCTKS_CONNECTION_FIELDS, 'AUTH_UKEY_VCTK_S_ISSUING_CA']
 
 export default {
   name: 'UKey',
@@ -40,7 +39,6 @@ export default {
       draftProvider: '',
       draftServiceURL: '',
       draftVCTKSServiceURL: '',
-      issuingCAConfigured: null,
       initialDraft: { provider: '', vendor: '', serviceURL: '', vctksServiceURL: '' },
       providers: [],
       connectionButton: {
@@ -91,16 +89,6 @@ export default {
             helpTip: this.$t('UKeyUseSSLHelp'),
             hidden: () => vm.draftProvider !== 'vctk_s',
             on: { change: ([value], updateForm) => vm.changeVCTKSSSL(value, updateForm) }
-          },
-          AUTH_UKEY_VCTK_S_ISSUING_CA: {
-            component: UploadKey,
-            label: this.$t('UKeyVCTKSIssuingCA'),
-            helpText: this.$t('UKeyVCTKSIssuingCAHelp'),
-            helpTextFormatter: () => vm.$createElement('span', {
-              class: 'ukey-issuing-ca-status'
-            }, vm.issuingCAConfigured === null ? '' : vm.$t(
-              vm.issuingCAConfigured ? 'UKeyVCTKSIssuingCAConfigured' : 'UKeyVCTKSIssuingCANotConfigured'
-            ))
           },
           AUTH_UKEY_VCTK_S_TLS_VERIFY: {
             options: [
@@ -249,7 +237,7 @@ export default {
       return this.providers.find(provider => provider.id === id) || {}
     },
     getProviderFields(provider) {
-      return provider.id === 'vctk_s' ? VCTKS_FIELDS : provider.fields || []
+      return provider.id === 'vctk_s' ? VCTKS_CONNECTION_FIELDS : provider.fields || []
     },
     configureProviders(providers) {
       this.providers = providers.map(provider => ({
@@ -350,8 +338,6 @@ export default {
       this.draftVendor = value.AUTH_UKEY_VENDOR
       this.draftServiceURL = value.AUTH_UKEY_XJCA_SVS_URL || ''
       this.draftVCTKSServiceURL = value.AUTH_UKEY_VCTK_S_SVS_URL || ''
-      const configured = value.AUTH_UKEY_VCTK_S_ISSUING_CA_CONFIGURED
-      this.issuingCAConfigured = typeof configured === 'boolean' ? configured : null
     }
   }
 }

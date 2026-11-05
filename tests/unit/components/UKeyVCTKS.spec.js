@@ -105,13 +105,14 @@ describe('VCTK_S settings', () => {
     expect(vm.availableProviders.map(provider => provider.id)).toEqual(['builtin', 'xjca'])
   })
 
-  it('shows only service, TLS and issuing CA settings', () => {
+  it('shows only service and TLS settings even with legacy issuing CA metadata', () => {
     const vm = createVM()
     const fields = vm.settings.fields.find(([label]) => label === 'VCTK_S')[1]
     expect(fields).toEqual([
       'AUTH_UKEY_VCTK_S_SVS_URL', 'AUTH_UKEY_VCTK_S_USE_SSL', 'AUTH_UKEY_VCTK_S_TLS_VERIFY',
-      'AUTH_UKEY_VCTK_S_TLS_CA_CERT', 'AUTH_UKEY_VCTK_S_ISSUING_CA'
+      'AUTH_UKEY_VCTK_S_TLS_CA_CERT'
     ])
+    expect(vm.settings.fieldsMeta).not.toHaveProperty('AUTH_UKEY_VCTK_S_ISSUING_CA')
     expect(vm.settings.fieldsMeta.AUTH_UKEY_XJCA_SVS_URL.hidden({})).toBe(true)
     expect(vm.formSettings.moreButtons).toHaveLength(1)
     expect(vm.formSettings.moreButtons[0]).not.toHaveProperty('hidden')
@@ -122,6 +123,7 @@ describe('VCTK_S settings', () => {
     const clean = vm.cleanSettings({
       AUTH_UKEY: true, AUTH_UKEY_VENDOR: 'ji_da', AUTH_UKEY_CA_PROVIDER: 'vctk_s',
       AUTH_UKEY_VCTK_S_UNKNOWN: 'not an editable setting',
+      AUTH_UKEY_VCTK_S_ISSUING_CA: 'legacy issuing CA',
       AUTH_UKEY_DEFAULT_PIN: 'saved administrative PIN',
       AUTH_UKEY_VCTK_S_SVS_URL: 'http://vctks.example.com:8000',
       AUTH_UKEY_XJCA_SVS_URL: 'http://another-provider'
