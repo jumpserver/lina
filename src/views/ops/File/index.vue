@@ -25,15 +25,23 @@
       </div>
       <div class="transition-box">
         <div class="transfer-toolbar">
-          <el-button
-            :disabled="runButton.disabled"
-            :loading="running"
-            :type="runButton.el && runButton.el.type"
-            @click="runButton.callback()"
-          >
-            <el-icon v-if="!running"><VideoPlay /></el-icon>
-            <span>{{ runButton.name }}</span>
-          </el-button>
+          <el-tooltip :content="running ? $t('StopJob') : runButton.name">
+            <el-button
+              class="start-stop-btn"
+              :aria-label="running ? $t('Stop') : runButton.name"
+              :disabled="!running && runButton.disabled"
+              :loading="stopping"
+              :type="running ? 'danger' : 'primary'"
+              size="small"
+              @click="running ? stopTransfer() : runButton.callback()"
+            >
+              <i
+                v-if="!stopping"
+                :class="running ? 'fa fa-solid fa-stop' : 'fa fa-solid fa-play'"
+              />
+            </el-button>
+          </el-tooltip>
+          <span v-if="transferCancelled" role="status">{{ $t('OperationCanceled') }}</span>
 
           <el-autocomplete
             v-model="runAsInput.value"
@@ -76,7 +84,7 @@
             <div class="file-uploader-header">
               <span>{{ $t('selectFiles', { number: uploadFileList.length }) }}</span>
               <el-tooltip
-                v-if="uploadFileList.length > 0"
+                v-if="uploadFileList.length > 0 && !running"
                 :content="$t('ClearSelection')"
                 placement="top"
               >
@@ -91,6 +99,7 @@
               ref="upload"
               v-model="uploadFileList"
               :auto-upload="false"
+              :disabled="running"
               :on-change="onFileChange"
               action=""
               drag
@@ -106,7 +115,9 @@
                   <el-icon><Document /></el-icon>{{ file.name }}
                   <span class="file-size">
                     {{ formatFileSize(file.size) }}
-                    <el-icon class="remove-icon" @click="removeFile(file)"><Close /></el-icon>
+                    <el-icon v-if="!running" class="remove-icon" @click="removeFile(file)"
+                      ><Close
+                    /></el-icon>
                   </span>
                 </a>
               </template>
@@ -166,7 +177,7 @@
 import Term from '@/components/Widgets/Term'
 import Page from '@/layout/components/Page'
 import IBox from '@/components/Common/IBox/index.vue'
-import { createJob, getTaskDetail, JobUploadFile } from '@/api/ops'
+import { createJob, getTaskDetail, JobUploadFile, cancelFileUpload } from '@/api/ops'
 import { formatFileSize } from '@/utils/common/index'
 import store from '@/store'
 import SelectJobAssetDialog from '@/views/ops/Adhoc/components/SelectJobAssetDialog.vue'
@@ -185,6 +196,10 @@ export default {
     return {
       ready: true,
       running: false,
+      stopping: false,
+      transferCancelled: false,
+      currentJobId: '',
+      uploadController: null,
       currentStatus: '',
       currentTaskId: '',
       executionInfo: {
@@ -257,7 +272,6 @@ export default {
       },
       progressLength: 0,
       showProgress: false,
-      upload_interval: null,
       uploadFileList: [],
       sizeLimitMb: store.getters.publicSettings['FILE_UPLOAD_SIZE_LIMIT_MB'],
       summary: {
@@ -304,6 +318,7 @@ export default {
     },
     setWsCallback() {
       this.ws.onmessage = (e) => {
+        if (this.stopping || this.transferCancelled) return
         const data = JSON.parse(e.data)
         if (Object.prototype.hasOwnProperty.call(data, 'message')) {
           let message = data.message
@@ -311,7 +326,9 @@ export default {
           this.xterm.write(message)
         }
         if (data?.event === 'end') {
+          const taskId = this.currentTaskId
           setTimeout(() => {
+            if (taskId !== this.currentTaskId || this.stopping || this.transferCancelled) return
             clearInterval(this.executionInfo.cancel)
             this.execute_stop()
             this.getTaskStatus()
@@ -331,12 +348,13 @@ export default {
       this.summary['skip'] = excludesKeys.length + skipped.length
     },
     getTaskStatus() {
-      getTaskDetail(this.currentTaskId).then((data) => {
+      const taskId = this.currentTaskId
+      getTaskDetail(taskId).then((data) => {
+        if (taskId !== this.currentTaskId || this.stopping || this.transferCancelled) return
         this.executionInfo.status = data['status']
         this.taskStatusStat(data['summary'])
         if (this.executionInfo.status === 'success') {
           this.$message.success(this.$tc('RunSucceed'))
-          clearInterval(this.upload_interval)
           this.showProgress = false
         }
       })
@@ -397,11 +415,13 @@ export default {
       return isGtLimit
     },
     onFileChange(file, fileList) {
+      if (this.running) return
       file.name = this.truncateFileName(file.name)
       this.uploadFileList = fileList
       this.handleSameFile(fileList)
     },
     removeFile(file) {
+      if (this.running) return
       this.uploadFileList.splice(this.uploadFileList.indexOf(file), 1)
       this.handleSameFile(this.uploadFileList)
     },
@@ -409,6 +429,7 @@ export default {
       return `${this.formatFileSize(bps)}/s`
     },
     execute() {
+      if (this.running) return
       const { hosts, nodes } = this.getSelectedNodesAndHosts()
       for (const file of this.uploadFileList) {
         if (file.isSame) {
@@ -453,13 +474,19 @@ export default {
         }
       })
     },
-    onConfirmRunAsset(assets) {
+    async onConfirmRunAsset(assets) {
+      if (this.running) return
       if (assets.length === 0) {
         this.$message.error(this.$tc('RequiredAssetOrNode'))
         return
       }
 
       this.setButtonLoading()
+      this.stopping = false
+      this.transferCancelled = false
+      this.currentJobId = ''
+      this.currentTaskId = ''
+      this.executionInfo.status = ''
       this.showProgress = true
       this.progressLength = 0
 
@@ -478,62 +505,91 @@ export default {
       if (this.chdir) {
         data.chdir = this.chdir
       }
-      createJob(data)
-        .then((res) => {
-          this.executionInfo.timeCost = 0
-          this.speedText = ''
-          const form = new FormData()
-          const start = Date.now()
-          for (const file of this.uploadFileList) {
-            form.append('files', file.raw)
-            form.append('job_id', res.id)
+      let controller
+      try {
+        const job = await createJob(data)
+        this.currentJobId = job.id
+        if (this.stopping) {
+          await this.cancelCurrentTransfer()
+          return
+        }
+        this.executionInfo.timeCost = 0
+        this.speedText = ''
+        const form = new FormData()
+        const start = Date.now()
+        for (const file of this.uploadFileList) {
+          form.append('files', file.raw)
+        }
+        form.append('job_id', job.id)
+        controller = new AbortController()
+        this.uploadController = controller
+        const res = await JobUploadFile(form, {
+          signal: controller.signal,
+          onUploadProgress: (e) => {
+            if (!e.total || this.stopping || this.uploadController !== controller) return
+            const percent = Math.floor((e.loaded / e.total) * 100)
+            this.progressLength = Math.min(percent, 100)
+            this.loadedSize = formatFileSize(e.loaded)
+            this.totalSize = formatFileSize(e.total)
+            const elapsedSec = (Date.now() - start) / 1000
+            if (elapsedSec > 0) {
+              this.speedText = this.formatSpeed(e.loaded / elapsedSec)
+            }
           }
-          this.upload_interval = setInterval(() => {
-            if (this.progressLength >= 99) {
-              clearInterval(this.upload_interval)
-              return
-            }
-          }, 100)
-          JobUploadFile(form, {
-            onUploadProgress: (e) => {
-              if (!e.total) return
-              const percent = Math.floor((e.loaded / e.total) * 100)
-              this.progressLength = Math.min(percent, 100)
-              this.loadedSize = formatFileSize(e.loaded)
-              this.totalSize = formatFileSize(e.total)
-              const elapsedSec = (Date.now() - start) / 1000
-              if (elapsedSec > 0) {
-                const speed = e.loaded / elapsedSec
-                this.speedText = this.formatSpeed(speed)
-              }
-            }
-          })
-            .then((res) => {
-              this.showProgress = true
-              this.executionInfo.status = 'running'
-              this.currentTaskId = res.task_id
-              this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
-              this.setCostTimeInterval()
-              this.writeExecutionOutput()
-            })
-            .catch(() => {
-              this.execute_stop()
-            })
         })
-        .catch(() => {
+        if (this.stopping || this.uploadController !== controller) return
+        this.uploadController = null
+        this.executionInfo.status = 'running'
+        this.currentTaskId = res.task_id
+        this.xtermConfig = { taskId: this.currentTaskId, type: 'shortcut_cmd' }
+        this.setCostTimeInterval()
+        this.writeExecutionOutput()
+      } catch (error) {
+        if (
+          !this.currentJobId ||
+          (controller === this.uploadController && error.code !== 'ERR_CANCELED' && !this.stopping)
+        ) {
           this.execute_stop()
-        })
+        }
+      }
+    },
+    async stopTransfer() {
+      if (!this.running || this.stopping) return
+      this.stopping = true
+      this.uploadController?.abort()
+      // A pending job creation must return its id before the server can confirm cancellation.
+      if (this.currentJobId) await this.cancelCurrentTransfer()
+    },
+    async cancelCurrentTransfer() {
+      try {
+        const result = await cancelFileUpload(this.currentJobId)
+        if (!result.cancelled) {
+          this.currentTaskId = result.task_id
+          this.execute_stop()
+          this.getTaskStatus()
+          return
+        }
+        this.transferCancelled = true
+        this.executionInfo.status = ''
+        this.xterm.write(this.wrapperError(this.$t('OperationCanceled')))
+        this.execute_stop()
+      } catch {
+        this.stopping = false
+      }
     },
     execute_stop() {
       this.progressLength = 0
       this.showProgress = false
+      this.stopping = false
+      this.uploadController = null
       this.resetButtonState()
-      clearInterval(this.upload_interval)
+      clearInterval(this.executionInfo.cancel)
     },
     handleSelectAssets(assets) {
       this.selectHosts = assets
     },
     clearAllFiles() {
+      if (this.running) return
       this.$refs.upload.clearFiles()
       this.uploadFileList = []
     }
@@ -563,6 +619,10 @@ export default {
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 12px;
+
+  .start-stop-btn {
+    height: 30px;
+  }
 
   // el-autocomplete 根节点是 ElTooltip(多根 fragment),拿不到 scoped data-v,
   // 普通 scoped class 选不中,需用 :deep 才能定宽;el-input 单根节点则两者皆可。
