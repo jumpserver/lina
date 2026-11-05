@@ -92,8 +92,7 @@ export default [
       icon: 'short-message',
       permissions: [],
       hidden: () => {
-        const settings = store.getters.publicSettings || {}
-        return !store.getters.currentUserIsSuperAdmin || settings.CHAT_AI_ENABLED !== true
+        return !store.getters.currentUserIsSuperAdmin
       }
     }
   },
