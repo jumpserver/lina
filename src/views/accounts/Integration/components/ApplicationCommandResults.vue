@@ -6,6 +6,7 @@
 import { ElTag } from 'element-plus'
 import DataTable from '@/components/Table/DataTable'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { applicationFailureLabel } from './applicationFailure'
 
 export default {
   components: { DataTable },
@@ -54,7 +55,10 @@ export default {
               </ElTag>
               {row.error_code && (
                 <div class="command-secondary">
-                  {this.$t(this.errorLabels[row.error_code] || 'ApplicationCommandExecutionFailed')}
+                  {this.$t(applicationFailureLabel(row.error_code))}
+                  <div>
+                    <code>{row.error_code}</code>
+                  </div>
                 </div>
               )}
             </div>
@@ -83,6 +87,7 @@ export default {
         running: 'Running',
         success: 'Success',
         failed: 'Failed',
+        skip: 'Skipped',
         timeout: 'Timeout'
       },
       tagTypes: {
@@ -91,11 +96,8 @@ export default {
         running: 'warning',
         success: 'success',
         failed: 'danger',
+        skip: 'info',
         timeout: 'danger'
-      },
-      errorLabels: {
-        superseded: 'ApplicationCommandSuperseded',
-        execution_failed: 'ApplicationCommandExecutionFailed'
       }
     }
   },

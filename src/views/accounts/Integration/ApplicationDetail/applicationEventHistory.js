@@ -6,6 +6,7 @@ const commandStatusLabels = {
   running: 'Running',
   success: 'Success',
   failed: 'Failed',
+  skip: 'Skipped',
   timeout: 'Timeout'
 }
 
@@ -15,6 +16,7 @@ const statusTypes = {
   running: 'warning',
   success: 'success',
   failed: 'danger',
+  skip: 'info',
   timeout: 'danger'
 }
 
@@ -24,7 +26,7 @@ export function applicationEventRows(events, source) {
     return recipients.map((recipient, index) => {
       const row = { ...event, ...recipient }
       const status =
-        source === 'manual' || ['success', 'failed'].includes(row.status)
+        source === 'manual' || ['success', 'failed', 'skip'].includes(row.status)
           ? row.status
           : receiptStatus(event.recipients.length ? recipient : null)
       return {
@@ -32,7 +34,7 @@ export function applicationEventRows(events, source) {
         key: `${source}:${event.id || event.command_id}:${index}`,
         source,
         published_at: source === 'manual' ? event.occurred_at : event.published_at,
-        statusLabel: (source === 'manual' || ['success', 'failed'].includes(row.status)
+        statusLabel: (source === 'manual' || ['success', 'failed', 'skip'].includes(row.status)
           ? commandStatusLabels
           : statusLabels)[status],
         statusType: statusTypes[status] || 'info'
@@ -49,18 +51,28 @@ export function applicationEventGroups(events, source) {
     ).length
     const received = recipients.filter((row) => row.received_at).length
     const succeeded = recipients.filter((row) => row.status === 'success').length
+    const skipped = recipients.filter((row) => row.status === 'skip').length
+    const resolved = succeeded + skipped
+    const reviews = recipients.filter((row) => row.failure_review?.review_required).length
+    const approved = recipients.filter((row) => row.failure_review?.reviewed_at).length
     const label =
       event.notification_enabled === false
         ? 'ApplicationNotificationsDisabled'
         : !recipients.length
           ? 'ApplicationEventNoRecipients'
-          : failed
-            ? 'Failed'
-            : succeeded === recipients.length
-              ? 'Success'
-              : received === recipients.length
-                ? 'RotationEventReceived'
-                : 'ApplicationCommandPending'
+          : reviews
+            ? 'ApplicationFailureReviewRequired'
+            : approved === recipients.length
+              ? 'ApplicationFailureApproved'
+              : failed
+                ? 'Failed'
+                : skipped === recipients.length
+                  ? 'Skipped'
+                  : resolved === recipients.length
+                    ? 'Success'
+                    : received === recipients.length
+                      ? 'RotationEventReceived'
+                      : 'ApplicationCommandPending'
     return {
       ...event,
       source,
@@ -69,12 +81,17 @@ export function applicationEventGroups(events, source) {
       recipientRows: recipients,
       receivedCount: received,
       successCount: succeeded,
+      skippedCount: skipped,
+      reviewRequiredCount: reviews,
+      adminApprovedCount: approved,
       statusLabel: label,
-      statusType: failed
+      statusType: reviews
         ? 'danger'
-        : succeeded === recipients.length && recipients.length
-          ? 'success'
-          : 'info'
+        : failed
+          ? 'danger'
+          : succeeded === recipients.length && recipients.length
+            ? 'success'
+            : 'info'
     }
   })
 }

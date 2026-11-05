@@ -1,6 +1,7 @@
 <template>
   <GenericDetailPage
     v-bind="config"
+    :has-activity="false"
     v-model:active-menu="config.activeMenu"
     v-model:object="object"
   >
@@ -18,6 +19,7 @@ import ApplicationAudit from '../components/ApplicationAudit.vue'
 import ApplicationCallLog from '../components/ApplicationCallLog.vue'
 import ApplicationConnections from './ApplicationConnections.vue'
 import ApplicationEventProcessing from './ApplicationEventProcessing.vue'
+import ApplicationEventLog from '../components/ApplicationEventLog.vue'
 
 export default {
   components: {
@@ -27,7 +29,8 @@ export default {
     ApplicationAudit,
     ApplicationCallLog,
     ApplicationConnections,
-    ApplicationEventProcessing
+    ApplicationEventProcessing,
+    ApplicationEventLog
   },
   data() {
     return {
@@ -67,6 +70,11 @@ export default {
           },
           {
             title: this.$t('ApplicationEventLogs'),
+            name: 'ApplicationEventLog',
+            hidden: () => !this.$hasPerm('audits.view_integrationapplicationlog')
+          },
+          {
+            title: this.$t('ApplicationActivityLogs'),
             name: 'ApplicationAudit',
             hidden: () => !this.$hasPerm('audits.view_integrationapplicationlog')
           }

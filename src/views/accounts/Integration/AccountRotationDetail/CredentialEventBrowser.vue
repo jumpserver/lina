@@ -118,9 +118,6 @@
         />
         <template v-else-if="detail">
           <section class="cycle-summary record-section" :aria-label="$t('PolicyCycleSummary')">
-            <h4 class="record-heading">
-              <el-icon><DataAnalysis /></el-icon>{{ $t('PolicyCycleSummary') }}
-            </h4>
             <div class="cycle-heading">
               <div>
                 <h3>
@@ -146,10 +143,10 @@
                 </p>
                 <p v-else-if="detail.account">{{ accountLabel(detail.account) }}</p>
               </div>
-              <div class="cycle-identifier">
-                <span>{{ $t('PolicyCycleID') }}</span>
+              <details class="cycle-identifier">
+                <summary>{{ $t('PolicyCycleID') }}</summary>
                 <code>{{ detail.id }}</code>
-              </div>
+              </details>
             </div>
           </section>
 
@@ -160,11 +157,32 @@
           >
             <h4 class="record-heading">
               <el-icon><Guide /></el-icon>{{ $t('PolicyCycleStages') }}
+              <el-tooltip
+                :content="$t('PolicyCycleStagesHelp')"
+                :popper-style="{ maxWidth: '360px' }"
+              >
+                <button
+                  type="button"
+                  class="section-help"
+                  :aria-label="$t('PolicyCycleStagesHelp')"
+                >
+                  <el-icon><QuestionFilled /></el-icon>
+                </button>
+              </el-tooltip>
             </h4>
             <div class="progress-content">
-              <div class="cycle-stages">
-                <div
+              <div
+                class="cycle-stages"
+                role="region"
+                :aria-label="$t('PolicyCycleStages')"
+                tabindex="0"
+              >
+                <button
                   v-for="stage in stages"
+                  type="button"
+                  :disabled="!stage.event"
+                  :aria-pressed="!!stage.event && selectedEventId === stage.event.id"
+                  @click="selectEvent(stage.event)"
                   :key="stage.label"
                   :class="[
                     'cycle-stage',
@@ -172,16 +190,17 @@
                       emitted: stage.event,
                       current: stage.current,
                       completed: stage.completed,
-                      failed: stage.event?.event.endsWith('.failed')
+                      failed:
+                        stage.event?.event.endsWith('.failed') ||
+                        stage.statusLabel === 'ApplicationFailureReviewRequired'
                     }
                   ]"
                 >
                   <el-icon><component :is="stage.icon" /></el-icon>
                   <span>{{ $t(stage.label) }}</span>
                   <small>{{ $t(stage.statusLabel) }}</small>
-                </div>
+                </button>
               </div>
-              <p class="stage-help">{{ $t('PolicyCycleStagesHelp') }}</p>
             </div>
           </section>
 
@@ -193,6 +212,18 @@
             <h4 class="record-heading">
               <el-icon><Timer /></el-icon>
               {{ $t('RotationSourceWaitingEvent') }}
+              <el-tooltip
+                :content="$t('SourceNoTrafficDaysHelp')"
+                :popper-style="{ maxWidth: '360px' }"
+              >
+                <button
+                  type="button"
+                  class="section-help"
+                  :aria-label="$t('SourceNoTrafficDaysHelp')"
+                >
+                  <el-icon><QuestionFilled /></el-icon>
+                </button>
+              </el-tooltip>
               <el-tag :type="detail.source_traffic.ready ? 'success' : 'warning'">
                 {{
                   $t(
@@ -204,7 +235,6 @@
               </el-tag>
             </h4>
             <div class="observation-content">
-              <p>{{ $t('SourceNoTrafficDaysHelp') }}</p>
               <dl>
                 <div>
                   <dt>{{ $t('SourceNoTrafficDays') }}</dt>
@@ -239,7 +269,14 @@
               <div class="timeline-scroll">
                 <el-timeline>
                   <el-timeline-item
-                    v-for="{ event, type, hollow, trail, statusLabel } in timelineEvents"
+                    v-for="{
+                      event,
+                      type,
+                      hollow,
+                      trail,
+                      statusLabel,
+                      confirmationEvent
+                    } in timelineEvents"
                     :key="event.id"
                     hide-timestamp
                     :class="['event-timeline-item', `trail-${trail}`]"
@@ -257,54 +294,51 @@
                         ><strong>{{ eventName(event) }}</strong
                         ><span>{{ formatDate(event.published_at) }}</span></span
                       >
-                      <code>{{ event.event }}</code>
-                      <span v-if="event.rotation_accounts" class="event-account-context">
-                        <span v-if="event.published_account"
-                          >{{ $t('RotationPublishedAccount') }}：{{
-                            accountLabel(event.published_account)
-                          }}</span
-                        >
-                        <span
-                          >{{ $t('RotationChangeAccount') }}：{{
-                            accountLabel(event.rotation_accounts.change)
-                          }}</span
-                        >
+                      <span
+                        v-if="
+                          !event.rotation_accounts && detail.accounts?.length > 1 && event.account
+                        "
+                      >
+                        {{ accountLabel(event.account) }}
                       </span>
-                      <span v-else-if="detail.accounts?.length > 1 && event.account">{{
-                        accountLabel(event.account)
-                      }}</span>
-
-                      <span v-if="event.source_traffic" class="event-observation">
-                        <span
-                          >{{ $t('SourceNoTrafficDays') }}：{{
-                            $t('StandbyNoTrafficDaysValue', {
-                              days: event.source_traffic.no_traffic_days
+                      <span class="event-footer">
+                        <span class="event-meta"
+                          ><span class="event-progress is-info">{{ $t('PolicyStageEmitted') }}</span
+                          ><span
+                            v-if="
+                              statusLabel !== 'PolicyStageEmitted' &&
+                              !(confirmationEvent && event.event === 'rotation.waiting_for_app')
+                            "
+                            :class="['event-progress', `is-${type}`]"
+                            >{{ $t(statusLabel) }}</span
+                          ><span>{{
+                            $t('RotationEventReceiptCount', {
+                              received: event.received_count,
+                              total: event.recipient_count
                             })
                           }}</span
-                        >
-                        <span
-                          >{{ $t('SourceChangeEligibleAt') }}：{{
-                            formatDate(event.source_traffic.eligible_at)
+                          ><span v-if="confirmationEvent">{{
+                            $t('PolicyEventConfirmCount', {
+                              confirmed: confirmationEvent.confirmed_count,
+                              total: confirmationEvent.recipient_count
+                            })
                           }}</span
+                          ><span v-if="confirmationEvent?.skipped_count">{{
+                            $t('PolicyEventSkipCount', {
+                              skipped: confirmationEvent.skipped_count,
+                              total: confirmationEvent.recipient_count
+                            })
+                          }}</span
+                          ><span v-if="confirmationEvent?.review_required_count"
+                            >{{ $t('ApplicationFailureReviewRequired') }}
+                            {{ confirmationEvent.review_required_count }}</span
+                          ><span v-if="confirmationEvent?.admin_approved_count"
+                            >{{ $t('ApplicationFailureApproved') }}
+                            {{ confirmationEvent.admin_approved_count }}</span
+                          ></span
                         >
+                        <code class="event-code">{{ event.event }}</code>
                       </span>
-                      <span class="event-meta"
-                        ><span :class="['event-progress', `is-${type}`]">{{ $t(statusLabel) }}</span
-                        ><span v-if="event.revision != null"
-                          >{{ $t('AppAuditRevision') }} {{ event.revision }}</span
-                        ><span>{{
-                          $t('RotationEventReceiptCount', {
-                            received: event.received_count,
-                            total: event.recipient_count
-                          })
-                        }}</span
-                        ><span v-if="event.requires_confirmation">{{
-                          $t('PolicyEventConfirmCount', {
-                            confirmed: event.confirmed_count,
-                            total: event.recipient_count
-                          })
-                        }}</span></span
-                      >
                     </button>
                   </el-timeline-item>
                 </el-timeline>
@@ -318,26 +352,51 @@
                 <el-icon><Connection /></el-icon>{{ $t('PolicyEventRecipients') }}
               </h4>
               <div class="recipient-content">
-                <template v-if="selectedEvent">
+                <template v-if="recipientEvent">
                   <div class="recipient-event">
-                    <strong>{{ eventName(selectedEvent) }}</strong
-                    ><code>{{ selectedEvent.event }}</code
-                    ><span>{{ formatDate(selectedEvent.published_at) }}</span>
-                    <span v-if="selectedEvent.published_account"
-                      >{{ $t('RotationPublishedAccount') }}：{{
-                        accountLabel(selectedEvent.published_account)
-                      }}</span
-                    >
+                    <strong>{{ eventName(recipientEvent) }}</strong>
+                    <span>{{ formatDate(recipientEvent.published_at) }}</span>
+                    <details :key="recipientEvent.id" class="event-details">
+                      <summary>{{ $t('Details') }}</summary>
+                      <dl>
+                        <div v-if="recipientEvent.revision != null">
+                          <dt>{{ $t('AppAuditRevision') }}</dt>
+                          <dd>{{ recipientEvent.revision }}</dd>
+                        </div>
+                        <div v-if="recipientEvent.published_account">
+                          <dt>{{ $t('RotationPublishedAccount') }}</dt>
+                          <dd>{{ accountLabel(recipientEvent.published_account) }}</dd>
+                        </div>
+                        <div v-if="recipientEvent.rotation_accounts?.change">
+                          <dt>{{ $t('RotationChangeAccount') }}</dt>
+                          <dd>{{ accountLabel(recipientEvent.rotation_accounts.change) }}</dd>
+                        </div>
+                        <div v-if="recipientEvent.source_traffic">
+                          <dt>{{ $t('SourceNoTrafficDays') }}</dt>
+                          <dd>
+                            {{
+                              $t('StandbyNoTrafficDaysValue', {
+                                days: recipientEvent.source_traffic.no_traffic_days
+                              })
+                            }}
+                          </dd>
+                        </div>
+                        <div v-if="recipientEvent.source_traffic">
+                          <dt>{{ $t('SourceChangeEligibleAt') }}</dt>
+                          <dd>{{ formatDate(recipientEvent.source_traffic.eligible_at) }}</dd>
+                        </div>
+                      </dl>
+                      <p class="recipient-help">
+                        {{
+                          $t(
+                            recipientEvent.requires_confirmation
+                              ? 'PolicyEventConfirmationHelp'
+                              : 'PolicyEventReceiptHelp'
+                          )
+                        }}
+                      </p>
+                    </details>
                   </div>
-                  <p class="recipient-help">
-                    {{
-                      $t(
-                        selectedEvent.requires_confirmation
-                          ? 'PolicyEventConfirmationHelp'
-                          : 'PolicyEventReceiptHelp'
-                      )
-                    }}
-                  </p>
                   <div
                     class="recipient-filters"
                     role="group"
@@ -360,7 +419,7 @@
                     clearable
                   />
                   <el-empty
-                    v-if="!selectedEvent.recipients.length"
+                    v-if="!recipientEvent.recipients.length"
                     :description="$t('PolicyEventNoRecipients')"
                     :image-size="48"
                   />
@@ -398,18 +457,74 @@
                         }}</small>
                       </div>
                       <div
-                        v-if="selectedEvent.requires_confirmation"
+                        v-if="recipientEvent.requires_confirmation"
                         class="recipient-status-block"
                       >
                         <div class="recipient-status">
                           <span>{{ $t('PolicyEventApplicationConfirmation') }}</span
-                          ><el-tag :type="client.confirmed_at ? 'success' : 'warning'">{{
-                            $t(client.confirmed_at ? 'PolicyEventApplied' : 'PolicyEventNotApplied')
-                          }}</el-tag>
+                          ><el-tag
+                            :type="
+                              client.confirmed_at
+                                ? 'success'
+                                : client.skipped_at
+                                  ? 'info'
+                                  : client.status === 'failed'
+                                    ? 'danger'
+                                    : 'warning'
+                            "
+                            >{{
+                              $t(
+                                client.confirmed_at
+                                  ? 'PolicyEventApplied'
+                                  : client.skipped_at
+                                    ? 'Skipped'
+                                    : client.status === 'failed'
+                                      ? applicationFailureLabel(client.error_code)
+                                      : 'PolicyEventNotApplied'
+                              )
+                            }}</el-tag
+                          >
                         </div>
-                        <small v-if="client.confirmed_at">{{
-                          formatDate(client.confirmed_at)
+                        <small v-if="client.confirmed_at || client.skipped_at">{{
+                          formatDate(client.confirmed_at || client.skipped_at)
                         }}</small>
+                      </div>
+                      <div v-if="client.failure_review?.id" class="failure-review">
+                        <el-tag :type="client.failure_review.review_required ? 'danger' : 'info'">
+                          {{
+                            $t(
+                              client.failure_review.review_required
+                                ? 'ApplicationFailureReviewRequired'
+                                : 'ApplicationFailureApproved'
+                            )
+                          }}
+                        </el-tag>
+                        <small
+                          >{{ formatDate(client.failure_review.failed_at) }} ·
+                          {{ $t(applicationFailureLabel(client.failure_review.error_code)) }}</small
+                        >
+                        <code v-if="client.failure_review.error_code">{{
+                          client.failure_review.error_code
+                        }}</code>
+                        <el-button
+                          v-if="
+                            client.failure_review.review_required &&
+                            client.failure_review.can_review &&
+                            $hasPerm('accounts.change_applicationcredential')
+                          "
+                          size="small"
+                          type="warning"
+                          :loading="reviewingClientId === client.id"
+                          @click="reviewFailure(client)"
+                          >{{ $t('ApplicationFailureContinue') }}</el-button
+                        >
+                        <template v-else-if="client.failure_review.reviewed_at">
+                          <small
+                            >{{ client.failure_review.reviewed_by }} ·
+                            {{ formatDate(client.failure_review.reviewed_at) }}</small
+                          >
+                          <small>{{ client.failure_review.reason }}</small>
+                        </template>
                       </div>
                     </div>
                   </div>
@@ -442,9 +557,14 @@ import {
   TagChoicesFormatter
 } from '@/components/Table/TableFormatters'
 import request from '@/utils/request'
-import { credentialUrl, getCredentialEventCycles } from '@/api/applicationCredential'
+import {
+  credentialUrl,
+  getCredentialEventCycles,
+  reviewApplicationFailure
+} from '@/api/applicationCredential'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { subscribedAccountLabel } from '../components/subscriptionAccount'
+import { applicationFailureLabel } from '../components/applicationFailure'
 import {
   statusLabels,
   receiptStatus,
@@ -505,6 +625,7 @@ export default {
       currentCycle: null,
       retentionDays: null,
       cycleId: '',
+      reviewingClientId: '',
       detail: null,
       selectedEventId: '',
       detailLoading: false,
@@ -624,8 +745,14 @@ export default {
     selectedEvent() {
       return this.detail?.events.find((event) => event.id === this.selectedEventId)
     },
+    recipientEvent() {
+      return this.confirmationEventFor(this.selectedEvent) || this.selectedEvent
+    },
     timelineEvents() {
-      return buildCycleEventTimeline(this.detail, this.stages)
+      return buildCycleEventTimeline(this.detail, this.stages).map((node) => ({
+        ...node,
+        confirmationEvent: this.confirmationEventFor(node.event)
+      }))
     },
     stages() {
       const definitions =
@@ -662,18 +789,31 @@ export default {
                 'recovery_required'
               ].includes(phase)
             : this.detail.status === 'success' ||
-              !!(publication && publication.confirmed_count === publication.recipient_count)
+              !!(
+                publication &&
+                publication.confirmed_count + (publication.skipped_count || 0) ===
+                  publication.recipient_count
+              )
+          if (publication?.review_required_count) completed = false
           current =
             !completed &&
             (phase
               ? ['waiting_switch', 'waiting_revert'].includes(phase)
               : this.detail.status === 'running')
-          statusLabel = completed
-            ? 'PolicyEventApplied'
-            : this.detail.status === 'cancelled'
-              ? 'Cancelled'
-              : 'PolicyEventNotApplied'
-          icon = completed ? 'Check' : 'Clock'
+          statusLabel = publication?.review_required_count
+            ? 'ApplicationFailureReviewRequired'
+            : publication?.admin_approved_count
+              ? 'ApplicationFailureApproved'
+              : completed
+                ? publication?.skipped_count
+                  ? publication.confirmed_count
+                    ? 'Success'
+                    : 'Skipped'
+                  : 'PolicyEventApplied'
+                : this.detail.status === 'cancelled'
+                  ? 'Cancelled'
+                  : 'PolicyEventNotApplied'
+          icon = publication?.review_required_count ? 'CircleClose' : completed ? 'Check' : 'Clock'
         } else if (label === 'RotationSourceWaitingEvent') {
           completed = !!this.detail.source_traffic?.ready
           current = !!this.detail.source_traffic && !completed && phase === 'waiting_source'
@@ -707,7 +847,7 @@ export default {
       })
     },
     receiptFilters() {
-      const recipients = this.selectedEvent?.recipients || []
+      const recipients = this.recipientEvent?.recipients || []
       const filters = [
         { value: '', label: 'PolicyEventAllRecipients', count: recipients.length },
         {
@@ -721,18 +861,30 @@ export default {
           count: recipients.filter((client) => !client.received_at).length
         }
       ]
-      if (this.selectedEvent?.requires_confirmation) {
-        filters.push({
-          value: 'confirmed',
-          label: 'PolicyEventApplied',
-          count: recipients.filter((client) => client.confirmed_at).length
-        })
+      if (this.recipientEvent?.requires_confirmation) {
+        filters.push(
+          {
+            value: 'confirmed',
+            label: 'PolicyEventApplied',
+            count: recipients.filter((client) => client.confirmed_at).length
+          },
+          {
+            value: 'skipped',
+            label: 'Skipped',
+            count: recipients.filter((client) => client.skipped_at).length
+          },
+          {
+            value: 'review',
+            label: 'ApplicationFailureReviewRequired',
+            count: recipients.filter((client) => client.failure_review?.review_required).length
+          }
+        )
       }
       return filters
     },
     filteredRecipients() {
       const search = this.search.trim().toLowerCase()
-      return (this.selectedEvent?.recipients || [])
+      return (this.recipientEvent?.recipients || [])
         .filter(
           (client) =>
             (!search ||
@@ -740,11 +892,15 @@ export default {
                 value.toLowerCase().includes(search)
               )) &&
             (!this.receiptFilter ||
-              (this.receiptFilter === 'confirmed'
-                ? client.confirmed_at
-                : this.receiptFilter === 'received'
-                  ? client.received_at
-                  : !client.received_at))
+              (this.receiptFilter === 'review'
+                ? client.failure_review?.review_required
+                : this.receiptFilter === 'skipped'
+                  ? client.skipped_at
+                  : this.receiptFilter === 'confirmed'
+                    ? client.confirmed_at
+                    : this.receiptFilter === 'received'
+                      ? client.received_at
+                      : !client.received_at))
         )
         .sort(
           (a, b) =>
@@ -784,6 +940,49 @@ export default {
     this.latestRequest++
   },
   methods: {
+    applicationFailureLabel,
+    async reviewFailure(client) {
+      let reason
+      try {
+        const result = await this.$prompt(
+          this.$t('ApplicationFailureReviewPrompt'),
+          this.$t('ApplicationFailureContinue'),
+          {
+            inputValidator: (value) => !!value?.trim() && value.trim().length <= 512,
+            inputErrorMessage: this.$t('ApplicationFailureReviewReason'),
+            type: 'warning'
+          }
+        )
+        reason = result.value.trim()
+      } catch {
+        return
+      }
+      this.reviewingClientId = client.id
+      try {
+        await reviewApplicationFailure(this.credentialId, {
+          client_id: client.id,
+          failure_id: client.failure_review.id,
+          reason
+        })
+        await this.loadCycle(this.cycleId, { silent: true })
+      } finally {
+        this.reviewingClientId = ''
+      }
+    },
+    confirmationEventFor(event) {
+      if (event?.requires_confirmation) return event
+      if (event?.event !== 'rotation.waiting_for_app') return null
+      // Progress events share the application results of their own switch
+      // revision. Never borrow confirmation from an earlier switch.
+      return (
+        this.detail?.events.findLast(
+          (item) =>
+            item.event === 'credential.switch.published' &&
+            item.revision === event.revision &&
+            item.requires_confirmation
+        ) || null
+      )
+    },
     receiptStatus,
     accountLabel: subscribedAccountLabel,
     cycleAccounts(cycle) {
@@ -1010,8 +1209,6 @@ export default {
   align-items: center;
   gap: 8px;
 }
-.event-help,
-.stage-help,
 .recipient-help {
   color: var(--el-text-color-regular);
   font-size: 12px;
@@ -1123,28 +1320,71 @@ export default {
   color: var(--el-text-color-secondary);
   font-size: 12px;
 }
+.cycle-identifier summary,
+.event-details summary {
+  cursor: pointer;
+  color: var(--el-text-color-regular);
+  font-size: 12px;
+}
 .cycle-identifier code {
+  display: block;
+  margin-top: 6px;
   font-size: 11px;
   overflow-wrap: anywhere;
 }
 .cycle-stages {
   display: flex;
-  gap: 8px;
-  margin: 0 0 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  gap: 24px;
+  margin: 0;
+  padding: 2px 0 10px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  &:focus-visible {
+    outline: 2px solid var(--el-color-primary);
+    outline-offset: 2px;
+  }
 }
 .cycle-stage {
-  flex: 1 1 140px;
-  min-width: 0;
+  position: relative;
+  flex: 1 0 auto;
   padding: 10px;
   border: 1px dashed var(--el-border-color);
   border-radius: 4px;
   color: var(--el-text-color-secondary);
   display: grid;
-  grid-template-columns: 16px 1fr;
+  grid-template-columns: 16px max-content;
   gap: 5px 8px;
   align-items: center;
+  font: inherit;
   font-size: 12px;
+  text-align: left;
+  background: transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  &:disabled {
+    cursor: default;
+  }
+  &:not(:disabled):hover,
+  &[aria-pressed='true'] {
+    border-color: var(--el-color-primary-light-5);
+    background: var(--el-color-primary-light-9);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--el-color-primary);
+    outline-offset: -2px;
+  }
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border-top: 1px solid var(--el-text-color-placeholder);
+    border-right: 1px solid var(--el-text-color-placeholder);
+    transform: translateY(-50%) rotate(45deg);
+  }
 }
 .cycle-stage small {
   grid-column: 2;
@@ -1172,12 +1412,6 @@ export default {
 .cycle-stage.completed > .el-icon {
   color: var(--el-color-success);
 }
-.standby-observation p {
-  color: var(--el-text-color-regular);
-  font-size: 12px;
-  margin: 0 0 14px;
-  line-height: 1.7;
-}
 .standby-observation dl {
   margin: 0;
   display: grid;
@@ -1191,19 +1425,6 @@ export default {
 }
 .standby-observation dd {
   margin: 0;
-  overflow-wrap: anywhere;
-}
-.event-observation {
-  display: grid;
-  gap: 5px;
-  font-size: 12px;
-  color: var(--el-text-color-regular);
-}
-.event-account-context {
-  display: grid;
-  gap: 5px;
-  font-size: 12px;
-  color: var(--el-text-color-regular);
   overflow-wrap: anywhere;
 }
 .event-workspace {
@@ -1238,8 +1459,8 @@ export default {
   border-left-style: solid;
   border-left-color: var(--el-color-danger);
 }
-.event-timeline-item :deep(.el-timeline-item__node--warning.is-hollow) {
-  box-shadow: 0 0 0 4px var(--el-color-warning-light-9);
+.event-timeline-item :deep(.el-timeline-item__node--primary.is-hollow) {
+  box-shadow: 0 0 0 4px var(--el-color-primary-light-9);
 }
 .event-timeline-item :deep(.el-timeline-item__node.is-hollow) {
   background-color: var(--el-bg-color);
@@ -1297,9 +1518,18 @@ export default {
   font-size: 12px;
   color: var(--el-text-color-regular);
 }
-.event-option code,
-.recipient-event code {
-  font-size: 12px;
+.event-footer {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.event-code {
+  margin-left: auto;
+  max-width: 100%;
+  color: var(--el-text-color-secondary);
+  font-size: 11px;
+  text-align: right;
   overflow-wrap: anywhere;
 }
 .event-meta {
@@ -1317,8 +1547,27 @@ export default {
   gap: 8px;
   margin-bottom: 12px;
 }
-.recipient-help {
-  margin-bottom: 12px;
+.event-details dl {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+  font-size: 12px;
+}
+.event-details dt {
+  color: var(--el-text-color-secondary);
+  margin-bottom: 4px;
+}
+.event-details dd {
+  margin: 0;
+}
+.section-help {
+  display: inline-flex;
+  border: 0;
+  padding: 2px;
+  background: transparent;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+  cursor: help;
 }
 .recipient-event > span {
   font-size: 12px;
@@ -1374,6 +1623,12 @@ export default {
   gap: 8px;
   font-size: 12px;
 }
+.failure-review {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  margin-top: 12px;
+}
 .recipient-status-block {
   margin-top: 12px;
 }
@@ -1381,7 +1636,10 @@ export default {
   margin-bottom: 0;
 }
 .event-option:focus-visible,
-.recipient-filters button:focus-visible {
+.recipient-filters button:focus-visible,
+.section-help:focus-visible,
+.event-details summary:focus-visible,
+.cycle-identifier summary:focus-visible {
   outline: 2px solid var(--el-color-primary);
   outline-offset: 2px;
 }

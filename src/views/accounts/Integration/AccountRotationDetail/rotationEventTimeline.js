@@ -74,23 +74,19 @@ export function buildCycleEventTimeline(cycle, stages = []) {
   )
   const nodes = (cycle?.events || []).map((event) => {
     const stage = byEvent.get(event.id)
-    const failed = event.event.endsWith('.failed')
+    const reviewRequired =
+      !!event.review_required_count || stage?.statusLabel === 'ApplicationFailureReviewRequired'
+    const failed = event.event.endsWith('.failed') || reviewRequired
     const waiting = !failed && !stage?.completed && stage?.icon === 'Clock'
     return {
       event,
-      type: failed
-        ? 'danger'
-        : stage?.completed
-          ? 'success'
-          : waiting
-            ? stage.current
-              ? 'warning'
-              : 'info'
-            : event.event === 'rotation.verify.skipped'
-              ? 'info'
-              : 'primary',
+      type: failed ? 'danger' : waiting && !stage.current ? 'info' : 'primary',
       hollow: waiting,
-      statusLabel: failed ? 'Failed' : stage?.statusLabel || 'PolicyStageEmitted'
+      statusLabel: reviewRequired
+        ? 'ApplicationFailureReviewRequired'
+        : failed
+          ? 'Failed'
+          : stage?.statusLabel || 'PolicyStageEmitted'
     }
   })
   let traversed = true

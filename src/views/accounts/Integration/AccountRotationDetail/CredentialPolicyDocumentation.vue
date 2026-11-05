@@ -20,7 +20,7 @@
       </header>
       <el-descriptions :column="2" border>
         <el-descriptions-item :label="$t('CurrentAccount')">
-          {{ object.active_account?.username || object.active_account?.name || '-' }}
+          {{ subscribedAccountLabel(object.active_account) }}
         </el-descriptions-item>
         <el-descriptions-item :label="$t('PolicyDocsObservationWindow')">
           {{ $t('PolicyDocsObservationDays', { days: object.source_no_traffic_days ?? 7 }) }}
@@ -66,6 +66,7 @@
 import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer/index.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import { printDocumentation } from '../documentationPrint'
+import { subscribedAccountLabel } from '../components/subscriptionAccount.js'
 
 export default {
   name: 'CredentialPolicyDocumentation',
@@ -150,6 +151,7 @@ export default {
     }
   },
   methods: {
+    subscribedAccountLabel,
     async exportPdf() {
       if (this.exportLoading) return
       this.exportLoading = true

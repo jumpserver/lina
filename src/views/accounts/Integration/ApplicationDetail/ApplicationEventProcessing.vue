@@ -75,34 +75,16 @@ export default {
           prop: 'event',
           label: this.$t('AppAuditEvent'),
           minWidth: 200,
-          formatter: (row) => (
-            <div>
-              <div>{this.eventName(row)}</div>
-              <div class="secondary-text">
-                {[row.account, row.credential].filter(Boolean).join(' · ')}
-              </div>
-            </div>
-          )
+          formatter: (row) => <span class="event-text">{this.eventName(row)}</span>
         },
+        { prop: 'credential', label: this.$t('ApplicationCredential'), minWidth: 150 },
+        { prop: 'account', label: this.$t('Account'), minWidth: 130 },
         { prop: 'revision', label: this.$t('Revision'), minWidth: 70 },
         {
           prop: 'status',
           label: this.$t('Status'),
           minWidth: 170,
-          formatter: (row) => (
-            <div>
-              <ElTag type={row.statusType}>{this.$t(row.statusLabel)}</ElTag>
-              {!!row.recipientRows.length && (
-                <div class="secondary-text">
-                  {this.$t('ApplicationEventProgress', {
-                    total: row.recipientRows.length,
-                    received: row.receivedCount,
-                    success: row.successCount
-                  })}
-                </div>
-              )}
-            </div>
-          )
+          formatter: (row) => <ElTag type={row.statusType}>{this.$t(row.statusLabel)}</ElTag>
         }
       ],
       eventLabels: {
@@ -224,13 +206,6 @@ export default {
 
 .context-help {
   margin: 0 0 12px;
-}
-
-.application-events :deep(.secondary-text) {
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
-  margin-top: 2px;
-  overflow-wrap: anywhere;
 }
 
 .application-events :deep(.event-text) {

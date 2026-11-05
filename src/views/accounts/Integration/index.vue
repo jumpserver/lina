@@ -38,6 +38,13 @@ export default {
             name: 'events',
             title: this.$t('ApplicationEventLogs'),
             hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
+            component: () =>
+              import('@/views/accounts/Integration/components/ApplicationEventLog.vue')
+          },
+          {
+            name: 'activities',
+            title: this.$t('ApplicationActivityLogs'),
+            hidden: !this.$hasPerm('audits.view_integrationapplicationlog'),
             component: () => import('@/views/accounts/Integration/components/ApplicationAudit.vue')
           },
           {

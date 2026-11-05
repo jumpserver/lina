@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
+import { applicationFailureLabel } from '../src/views/accounts/Integration/components/applicationFailure.js'
 import {
   rotationEventTitle,
   buildCycleEventTimeline
@@ -30,7 +31,7 @@ function cycle(id, status = 'success') {
   }
 }
 
-function viewFor(api, initialCycleId = '') {
+function viewFor(api, initialCycleId = '', review = async () => {}) {
   const component = new Function(
     'ListTable',
     'IBox',
@@ -48,6 +49,8 @@ function viewFor(api, initialCycleId = '') {
     'receiptStatus',
     'rotationEventTitle',
     'buildCycleEventTimeline',
+    'reviewApplicationFailure',
+    'applicationFailureLabel',
     script
   )(
     null,
@@ -65,7 +68,9 @@ function viewFor(api, initialCycleId = '') {
     {},
     () => '',
     rotationEventTitle,
-    buildCycleEventTimeline
+    buildCycleEventTimeline,
+    review,
+    applicationFailureLabel
   )
   const emitted = []
   const view = {
@@ -77,7 +82,15 @@ function viewFor(api, initialCycleId = '') {
     $emit: (...args) => emitted.push(args)
   }
   Object.assign(view, component.data.call(view))
-  Object.defineProperty(view, 'stages', { get: () => component.computed.stages.call(view) })
+  for (const name of [
+    'stages',
+    'selectedEvent',
+    'recipientEvent',
+    'receiptFilters',
+    'filteredRecipients'
+  ]) {
+    Object.defineProperty(view, name, { get: () => component.computed[name].call(view) })
+  }
   for (const [name, method] of Object.entries(component.methods)) view[name] = method.bind(view)
   view.scheduleObservationRefresh = () => {}
   return {
@@ -99,6 +112,110 @@ test('skipped verification is shown explicitly in the rotation stages', () => {
   assert.equal(stages()[0].label, 'RotationVerificationSkippedEvent')
   assert.equal(stages()[0].event.id, 'skip')
   assert.equal(stages()[0].skipped, false)
+})
+
+test('selecting the application switch stage shows confirmed publication instances', () => {
+  const { view, stages, timeline } = viewFor(async () => ({}))
+  const confirmed = {
+    id: 'confirmed',
+    instance_id: 'agent-one',
+    application: { name: 'orders' },
+    received_at: 'received',
+    confirmed_at: 'confirmed'
+  }
+  const pending = {
+    id: 'pending',
+    instance_id: 'agent-two',
+    application: { name: 'orders' },
+    received_at: 'received',
+    confirmed_at: null
+  }
+  const publication = {
+    id: 'publish',
+    event: 'credential.switch.published',
+    revision: 6,
+    requires_confirmation: true,
+    confirmed_count: 1,
+    recipient_count: 2,
+    recipients: [confirmed, pending]
+  }
+  const waiting = {
+    id: 'wait',
+    event: 'rotation.waiting_for_app',
+    revision: 6,
+    requires_confirmation: false,
+    recipients: [{ ...confirmed, confirmed_at: null }]
+  }
+  view.detail = { kind: 'rotation', status: 'running', events: [publication, waiting] }
+
+  view.selectEvent(
+    stages().find((stage) => stage.label === 'PolicyStageWaitingForApplication').event
+  )
+  assert.equal(view.selectedEvent, waiting)
+  assert.equal(view.recipientEvent, publication)
+  assert.equal(view.recipientEvent.recipients[0].confirmed_at, 'confirmed')
+  assert.equal(view.receiptFilters.find((filter) => filter.value === 'confirmed').count, 1)
+  view.receiptFilter = 'confirmed'
+  assert.deepEqual(view.filteredRecipients, [confirmed])
+  const nodes = timeline()
+  assert.equal(nodes[0].confirmationEvent, publication)
+  assert.equal(nodes[1].confirmationEvent, publication)
+  assert.equal(nodes[1].confirmationEvent.confirmed_count, 1)
+  assert.equal(nodes[1].confirmationEvent.recipient_count, 2)
+})
+
+test('application switch details use the same revision and never borrow an earlier confirmation', () => {
+  const { view } = viewFor(async () => ({}))
+  const original = {
+    id: 'original',
+    event: 'credential.switch.published',
+    revision: 6,
+    requires_confirmation: true,
+    recipients: []
+  }
+  const revert = {
+    id: 'revert',
+    event: 'credential.switch.published',
+    revision: 7,
+    requires_confirmation: true,
+    recipients: []
+  }
+  const waiting = {
+    id: 'wait-revert',
+    event: 'rotation.waiting_for_app',
+    revision: 7,
+    recipients: []
+  }
+  view.detail = { events: [original, revert, waiting] }
+  view.selectEvent(waiting)
+  assert.equal(view.recipientEvent, revert)
+  view.detail.events = [original, waiting]
+  assert.equal(view.recipientEvent, waiting)
+})
+
+test('receipt-only events keep their own recipients and do not show unrelated application confirmations', () => {
+  const { view } = viewFor(async () => ({}))
+  const publication = {
+    id: 'publish',
+    event: 'credential.switch.published',
+    revision: 6,
+    requires_confirmation: true,
+    recipients: []
+  }
+  const observation = {
+    id: 'observe',
+    event: 'rotation.source.waiting',
+    revision: 6,
+    requires_confirmation: false,
+    recipients: []
+  }
+  view.detail = { events: [publication, observation] }
+  view.selectEvent(observation)
+  assert.equal(view.recipientEvent, observation)
+  assert.equal(
+    view.receiptFilters.some((filter) => filter.value === 'confirmed'),
+    false
+  )
 })
 
 function rotationWithProgress(phase, ready = false) {
@@ -130,7 +247,7 @@ test('timeline fills published history but stops the traversed line at unconfirm
   assert.equal(nodes[0].statusLabel, 'PolicyStageEmitted')
   assert.equal(nodes[0].trail, 'primary')
   assert.equal(nodes[1].hollow, true)
-  assert.equal(nodes[1].type, 'warning')
+  assert.equal(nodes[1].type, 'primary')
   assert.equal(nodes[1].statusLabel, 'PolicyEventNotApplied')
   assert.equal(nodes[1].trail, 'pending')
   assert.equal(nodes[2].hollow, true)
@@ -147,10 +264,10 @@ test('confirmed switching fills its node and advances the solid path to observat
   view.detail = rotationWithProgress('waiting_source')
   const nodes = timeline()
   assert.equal(nodes[1].hollow, false)
-  assert.equal(nodes[1].type, 'success')
+  assert.equal(nodes[1].type, 'primary')
   assert.equal(nodes[1].trail, 'primary')
   assert.equal(nodes[2].hollow, true)
-  assert.equal(nodes[2].type, 'warning')
+  assert.equal(nodes[2].type, 'primary')
 })
 
 test('failure colors its path red while an emitted retry continues the traversed history', () => {
@@ -341,4 +458,95 @@ test('background refresh preserves the selected event and receipt filter, includ
   await view.loadLatestCycle({ silent: true })
   assert.equal(view.detail.id, 'last')
   assert.equal(view.detailFailed, false)
+})
+
+test('skipped application checks complete the switch stage without counting as confirmed', () => {
+  const { view, stages, timeline } = viewFor(async () => ({}))
+  const skipped = {
+    id: 'skip-client',
+    instance_id: 'file-agent',
+    application: { name: 'orders' },
+    received_at: 'received',
+    confirmed_at: null,
+    skipped_at: 'skipped'
+  }
+  const publication = {
+    id: 'publish',
+    event: 'credential.switch.published',
+    revision: 6,
+    requires_confirmation: true,
+    confirmed_count: 0,
+    skipped_count: 1,
+    recipient_count: 1,
+    recipients: [skipped]
+  }
+  const waiting = { id: 'wait', event: 'rotation.waiting_for_app', revision: 6, recipients: [] }
+  view.detail = { kind: 'rotation', status: 'running', events: [publication, waiting] }
+  const stage = stages().find((stage) => stage.label === 'PolicyStageWaitingForApplication')
+  assert.equal(stage.completed, true)
+  assert.equal(stage.statusLabel, 'Skipped')
+  view.selectEvent(waiting)
+  assert.equal(view.receiptFilters.find((filter) => filter.value === 'confirmed').count, 0)
+  assert.equal(view.receiptFilters.find((filter) => filter.value === 'skipped').count, 1)
+  view.receiptFilter = 'skipped'
+  assert.deepEqual(view.filteredRecipients, [skipped])
+  assert.equal(timeline()[1].confirmationEvent, publication)
+})
+
+test('a failed application stays blocked for administrator review after a successful retry', () => {
+  const { view, stages, timeline } = viewFor(async () => ({}))
+  const publication = {
+    id: 'publish',
+    event: 'credential.switch.published',
+    revision: 6,
+    requires_confirmation: true,
+    confirmed_count: 1,
+    skipped_count: 0,
+    recipient_count: 1,
+    review_required_count: 1,
+    recipients: []
+  }
+  view.detail = {
+    kind: 'rotation',
+    status: 'running',
+    rotation_status: { rotation_phase: 'waiting_switch' },
+    events: [publication, { id: 'wait', event: 'rotation.waiting_for_app', revision: 6 }]
+  }
+  const stage = stages().find((stage) => stage.label === 'PolicyStageWaitingForApplication')
+  assert.equal(stage.completed, false)
+  assert.equal(stage.statusLabel, 'ApplicationFailureReviewRequired')
+  assert.equal(timeline()[1].type, 'danger')
+  publication.review_required_count = 0
+  publication.admin_approved_count = 1
+  view.detail.rotation_status.rotation_phase = 'waiting_source'
+  assert.equal(
+    stages().find((stage) => stage.label === 'PolicyStageWaitingForApplication').statusLabel,
+    'ApplicationFailureApproved'
+  )
+})
+
+test('administrator continuation submits the selected failure and reason, then refreshes details', async () => {
+  const calls = []
+  const { view } = viewFor(
+    async () => ({}),
+    '',
+    async (...args) => calls.push(args)
+  )
+  view.$prompt = async () => ({ value: '  validated manually  ' })
+  view.cycleId = 'cycle'
+  let refreshed
+  view.loadCycle = async (...args) => {
+    refreshed = args
+  }
+  await view.reviewFailure({ id: 'agent', failure_review: { id: 'current-failure' } })
+  assert.deepEqual(calls, [
+    ['policy', { client_id: 'agent', failure_id: 'current-failure', reason: 'validated manually' }]
+  ])
+  assert.deepEqual(refreshed, ['cycle', { silent: true }])
+  assert.equal(view.reviewingClientId, '')
+  view.$prompt = async () => {
+    throw new Error('cancel')
+  }
+  await view.reviewFailure({ id: 'agent', failure_review: { id: 'other-failure' } })
+  assert.equal(calls.length, 1)
 })

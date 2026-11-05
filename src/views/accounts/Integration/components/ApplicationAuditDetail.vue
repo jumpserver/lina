@@ -6,6 +6,24 @@
         <el-tag :type="resultTagTypes[object.result]">{{ object.result_display }}</el-tag>
       </div>
       <p class="event-date">{{ formatDate(object.datetime) }}</p>
+      <p v-if="object.event_meaning" class="event-meaning">
+        {{ $t('AppAuditEventMeaning') }}：{{ object.event_meaning }}
+      </p>
+      <details v-if="object.event_meaning" class="event-reference">
+        <summary>{{ $t('AppAuditEventReference') }}</summary>
+        <div v-if="object.related_protocol_events?.length" class="related-protocol-events">
+          <span>{{ $t('AppAuditRelatedProtocolEvents') }}</span>
+          <code v-for="event in object.related_protocol_events" :key="event">{{ event }}</code>
+        </div>
+        <router-link
+          @click="$emit('open-documentation')"
+          :to="{
+            name: 'IntegrationApplicationList',
+            query: { tab: 'docs', documentation: 'protocol' }
+          }"
+          >{{ $t('Documentation') }}</router-link
+        >
+      </details>
       <p class="event-summary">{{ object.summary }}</p>
       <el-descriptions :column="2" :label-width="120" size="small">
         <el-descriptions-item
@@ -59,6 +77,7 @@ import { resultTagTypes } from './applicationAudit'
 
 export default {
   name: 'ApplicationAuditDetail',
+  emits: ['open-documentation'],
   components: { Page, ItemValue, IBox, DataTable },
   props: { object: { type: Object, required: true } },
   data() {
@@ -98,6 +117,7 @@ export default {
     },
     traceItems() {
       return [
+        { key: this.$t('AppAuditEventCode'), value: this.object.event },
         { key: this.$t('AppAuditRecordID'), value: this.object.id },
         { key: this.$t('AppAuditRotationID'), value: this.object.rotation_id }
       ].filter((item) => ![null, undefined, '', '-'].includes(item.value))
@@ -171,6 +191,29 @@ export default {
 .event-summary {
   margin: 12px 0 20px;
   color: var(--color-text-primary);
+}
+
+.event-meaning {
+  margin: 12px 0;
+  color: var(--el-text-color-regular);
+  line-height: 1.7;
+}
+
+.event-reference {
+  margin: 12px 0;
+  font-size: 12px;
+
+  summary {
+    cursor: pointer;
+    color: var(--el-text-color-secondary);
+  }
+}
+
+.related-protocol-events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 8px 0;
 }
 
 .trace-fields {

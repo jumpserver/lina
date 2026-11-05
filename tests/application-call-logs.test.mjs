@@ -2,6 +2,11 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
+import {
+  auditEventDefinitions,
+  auditEvents,
+  normalizeAudit
+} from '../src/views/accounts/Integration/components/applicationAudit.js'
 
 async function component(path, bindings) {
   const source = await readFile(new URL(path, import.meta.url), 'utf8')
@@ -28,7 +33,7 @@ const eventLog = await component(
     toSafeLocalDateStr: (value) => value,
     request: null,
     ApplicationAuditDetail: null,
-    auditEvents: { credential_fetched: 'Fetch', rotation_started: 'Rotation' },
+    auditEvents,
     auditResults: {},
     resultTagTypes: {},
     normalizeAudit: (value) => value
@@ -70,9 +75,18 @@ test('event requests exclude fetches without losing the application scope', asyn
     exclude_event: 'credential_fetched'
   })
   const metadata = await eventLog.methods.getMetadata.call(view())
-  assert.deepEqual(metadata.filters.event.choices, [
-    { value: 'rotation_started', label: 'Rotation' }
+  const eventTypes = metadata.filters.event.choices.map(({ value }) => value)
+  assert.equal(eventTypes.includes('credential_fetched'), false)
+  assert.equal(eventTypes.includes('secret_change_finished'), false)
+  for (const value of [
+    'rotation_started',
+    'secret_change_started',
+    'secret_change_completed',
+    'secret_change_failed',
+    'application_failure_reviewed',
+    'credential_confirmation_skipped'
   ])
+    assert.ok(eventTypes.includes(value), `Missing current audit event: ${value}`)
   assert.equal(metadata.filters.id.type, 'uuid')
   assert.equal(metadata.filters.service.label, 'Application')
   assert.equal(metadata.actions.GET.id.type, 'uuid')
@@ -81,14 +95,60 @@ test('event requests exclude fetches without losing the application scope', asyn
   assert.deepEqual(metadata.filters.event.operators, ['exact', 'in'])
 })
 
-test('main integration tabs expose separate call and event records with existing permission', async () => {
+test('retired audit event names remain readable in history without returning to the filter', () => {
+  const row = normalizeAudit({ event: 'secret_change_finished' }, (key) => `translated:${key}`)
+  assert.equal(row.event_display, 'translated:AppAuditSecretChangeFinished')
+  assert.equal(Object.hasOwn(auditEvents, 'secret_change_finished'), false)
+  assert.equal(
+    normalizeAudit({ event: 'unknown_event' }, (key) => key).event_display,
+    'unknown_event'
+  )
+})
+
+test('audit details explain the same current event types offered in the filter', async () => {
+  const zh = JSON.parse(
+    await readFile(new URL('../src/i18n/langs/zh.json', import.meta.url), 'utf8')
+  )
+  const t = (key) => zh[key]
+  assert.equal(Object.keys(auditEvents).length, 28)
+  for (const [event, definition] of Object.entries(auditEventDefinitions)) {
+    const row = normalizeAudit({ event }, t)
+    assert.ok(row.event_display, event)
+    assert.ok(row.event_meaning, event)
+    assert.deepEqual(row.related_protocol_events, definition.protocolEvents)
+  }
+  assert.equal(normalizeAudit({ event: 'command_result' }, t).event_display, '应用处理结果')
+  assert.equal(
+    normalizeAudit({ event: 'credential_confirmation_skipped' }, t).event_display,
+    '跳过应用校验'
+  )
+  assert.equal(
+    normalizeAudit({ event: 'application_failure_reviewed' }, t).event_display,
+    '管理员确认继续'
+  )
+  assert.match(
+    normalizeAudit({ event: 'credential_confirmed' }, t).event_meaning,
+    /与事件回执和取密分开/
+  )
+  assert.match(
+    normalizeAudit({ event: 'credential_confirmation_skipped' }, t).event_meaning,
+    /不表示校验通过/
+  )
+  assert.match(
+    normalizeAudit({ event: 'application_failure_reviewed' }, t).event_meaning,
+    /保留原始失败/
+  )
+})
+
+test('main integration tabs separate retrieval, protocol events and activities with existing permission', async () => {
   const integration = await component('../src/views/accounts/Integration/index.vue', {
     TabPage: null
   })
   const state = integration.data.call({ $t: (key) => key, $hasPerm: () => false })
   for (const [name, label] of [
     ['records', 'ApplicationCallLogs'],
-    ['events', 'ApplicationEventLogs']
+    ['events', 'ApplicationEventLogs'],
+    ['activities', 'ApplicationActivityLogs']
   ]) {
     const tab = state.tab.submenu.find((item) => item.name === name)
     assert.equal(tab.title, label)

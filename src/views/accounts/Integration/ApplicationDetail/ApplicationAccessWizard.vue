@@ -199,11 +199,6 @@
                 :label="$t('AgentApplicationCheck')"
                 prop="application_check"
                 :error="errors.application_check"
-                :rules="
-                  form.agent_setup === 'rotation'
-                    ? [{ required: true, message: $t('Required'), trigger: 'blur' }]
-                    : []
-                "
               >
                 <el-input
                   v-model="form.application_check"

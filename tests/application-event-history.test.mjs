@@ -201,3 +201,37 @@ test('disabled notifications and missing recipients remain distinct in grouped h
   assert.equal(rows[1].statusLabel, 'ApplicationEventNoRecipients')
   assert.equal(rows[0].recipientRows.length, 0)
 })
+
+test('skip results have a visible label in both policy and manual event history', () => {
+  const event = {
+    id: 'skipped',
+    event: 'credential.switch.published',
+    recipients: [
+      {
+        id: 'agent',
+        status: 'skip',
+        received_at: '2026-11-05T00:00:00Z',
+        publish_result: 'published'
+      }
+    ]
+  }
+  for (const source of ['policy', 'manual']) {
+    const row = applicationEventRows([event], source)[0]
+    assert.equal(row.statusLabel, 'Skipped')
+  }
+})
+
+test('application history keeps administrator review visible after a successful retry', () => {
+  const event = {
+    id: 'review',
+    recipients: [
+      { id: 'agent', status: 'success', failure_review: { id: 'failure', review_required: true } }
+    ]
+  }
+  let group = applicationEventGroups([event], 'policy')[0]
+  assert.equal(group.statusLabel, 'ApplicationFailureReviewRequired')
+  event.recipients[0].failure_review.review_required = false
+  event.recipients[0].failure_review.reviewed_at = '2026-11-05T00:00:00Z'
+  group = applicationEventGroups([event], 'policy')[0]
+  assert.equal(group.statusLabel, 'ApplicationFailureApproved')
+})

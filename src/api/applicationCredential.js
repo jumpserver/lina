@@ -105,3 +105,6 @@ export const setClientInstanceActive = (id, isActive, reason = '') =>
 export async function forceStopApplicationCredentialRotation(id, reason) {
   return normalizeCredential(await request.post(`${credentialUrl}${id}/force-stop/`, { reason }))
 }
+
+export const reviewApplicationFailure = (id, data) =>
+  request.post(`${credentialUrl}${id}/review-application-failure/`, data)

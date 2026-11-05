@@ -1,33 +1,15 @@
 import { rotationStatuses } from './credentialStatus.js'
 
-export const auditEvents = {
-  command_requested: 'SendApplicationEvent',
-  command_result: 'ApplicationCommandResult',
-  configuration_created: 'AppAuditConfigurationCreated',
-  configuration_updated: 'AppAuditConfigurationUpdated',
-  configuration_deleted: 'AppAuditConfigurationDeleted',
-  authorization_granted: 'AppAuditAuthorizationUpdated',
-  authorization_revoked: 'AppAuditAuthorizationRevoked',
-  credential_fetched: 'AppAuditCredentialFetched',
-  credential_secret_updated: 'CredentialSecretUpdatedEvent',
-  credential_switch_published: 'RotationSwitchPublished',
-  credential_refresh_requested: 'CredentialRefreshRequestedEvent',
-  credential_republished: 'AppAuditCredentialRepublished',
-  credential_confirmed: 'AppAuditCredentialApplied',
-  credential_stream_connected: 'AppAuditCredentialStreamConnected',
-  credential_stream_disconnected: 'AppAuditCredentialStreamDisconnected',
-  rotation_step: 'AppAuditRotationStep',
-  rotation_started: 'AppAuditRotationStarted',
-  rotation_cancelled: 'CancelRotation',
-  secret_change_finished: 'AppAuditSecretChangeFinished',
-  secret_change_started: 'AppAuditSecretChangeStarted',
-  secret_change_completed: 'AppAuditSecretChangeCompleted',
-  secret_change_failed: 'AppAuditSecretChangeFailed',
-  client_registered: 'AppAuditClientRegistered',
-  client_enabled: 'Enable',
-  client_disabled: 'AppAuditClientDisabled',
-  notification: 'AppAuditNotificationDelivered',
-  application_secret_reset: 'ApplicationSecretReset'
+import auditEventDefinitions from './auditEventDefinitions.json' with { type: 'json' }
+
+export { auditEventDefinitions }
+export const auditEvents = Object.fromEntries(
+  Object.entries(auditEventDefinitions).map(([event, definition]) => [event, definition.label])
+)
+// Retired event names remain readable in stored audit records, but are not
+// offered in the event type filter built from auditEvents.
+const historicalAuditEvents = {
+  secret_change_finished: 'AppAuditSecretChangeFinished'
 }
 export const auditResults = {
   running: 'Running',
@@ -87,9 +69,13 @@ function formatChangeValue(field, value, t) {
 }
 
 export function normalizeAudit(row, t) {
+  const definition = auditEventDefinitions[row.event]
+  const eventLabel = definition?.label || historicalAuditEvents[row.event]
   return {
     ...row,
-    event_display: auditEvents[row.event] ? t(auditEvents[row.event]) : row.event,
+    event_display: eventLabel ? t(eventLabel) : row.event,
+    event_meaning: definition ? t(definition.meaning) : '',
+    related_protocol_events: definition?.protocolEvents || [],
     result_display: auditResults[row.result] ? t(auditResults[row.result]) : row.result,
     summary: summaries[row.summary] ? t(summaries[row.summary]) : row.summary,
     changes: (row.changes || []).map((change) => ({

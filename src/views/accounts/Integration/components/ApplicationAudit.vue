@@ -6,8 +6,12 @@
       :header-actions="headerActions"
       :table-metadata-provider="getMetadata"
     />
-    <Drawer v-model:visible="detailVisible" :title="$t('AppAuditDetail')">
-      <ApplicationAuditDetail v-if="detailVisible" :object="selected" />
+    <Drawer v-model:visible="detailVisible" :title="$t('ApplicationActivityDetail')">
+      <ApplicationAuditDetail
+        v-if="detailVisible"
+        :object="selected"
+        @open-documentation="detailVisible = false"
+      />
     </Drawer>
   </div>
 </template>
@@ -67,7 +71,7 @@ export default {
           { prop: 'id', label: this.$t('AppAuditRecordID'), minWidth: 260 },
           {
             prop: 'event_display',
-            label: this.$t('AppAuditEvent'),
+            label: this.$t('ApplicationActivityType'),
             minWidth: 170,
             formatter: DetailFormatter,
             formatterArgs: {
@@ -121,7 +125,7 @@ export default {
         filters: {
           ...metadata.filters,
           event: choice(
-            this.$t('AppAuditEvent'),
+            this.$t('ApplicationActivityType'),
             Object.fromEntries(
               Object.entries(auditEvents).filter(([event]) => event !== 'credential_fetched')
             )
