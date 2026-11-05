@@ -3108,15 +3108,26 @@
     "LockPassword": "Senha de bloqueio de tela",
     "FileEncryption": "Criptografia de arquivos",
     "ClientSettings": "Configurações do cliente",
-    "Reauth": "Entrar novamente ao sair",
-    "Lifetime": "Duração máxima de login (min)",
+    "Reauth": "Entrar novamente após sair do cliente",
+    "Lifetime": "Duração máxima do login do cliente (min)",
     "Idle": "Bloqueio do cliente por inatividade (min)",
     "ReauthHelp": "Exige novo login após sair e reiniciar. Minimizar ou ocultar o cliente não conta como sair.",
     "ReauthRequired": "Exigido pelo administrador; não pode ser desativado. Minimizar ou ocultar não conta como sair.",
     "UnlimitedHelp": "0 significa ilimitado. Limpe e salve para restaurar o padrão.",
     "IdleHelp": "Bloqueia após o tempo de inatividade definido. Desbloqueie com a senha de bloqueio na janela principal. Janelas de aplicativos externos não são protegidas.",
-    "WebIdleHelp": "Bloqueia o console e o terminal Web após o tempo de inatividade definido. Digite a senha de bloqueio para desbloquear.",
+    "WebIdleHelp": "Bloqueia o console e o terminal Web após o tempo de inatividade definido. Digite a senha de bloqueio para desbloquear. Com o bloqueio por inatividade ativado, fechar todas as páginas também bloqueia esta sessão após 10 segundos. A saída ao fechar as páginas tem prioridade. Atualizar ou reabrir em até 10 segundos cancela a ação.",
     "LifetimeHelp": "Contado desde o login. Ao expirar, entre novamente; a atividade não prolonga o prazo.",
     "AdminClientHelp": "O administrador define padrões e limites. O usuário pode adotar opções mais restritas; caso contrário, segue o administrador."
+  },
+  "OnlineSessionPolicy": {
+    "Title": "Informações de validade",
+    "Expires": "Expira em",
+    "Duration": "Duração da sessão",
+    "ClientDuration": "Duração máxima do login do cliente",
+    "Renew": "Renovar por solicitação",
+    "IdleLock": "Bloqueio por inatividade",
+    "Grace": "Fim da tolerância por alteração",
+    "Unlimited": "Sem limite",
+    "BrowserExit": "Entrar novamente ao fechar o navegador"
   }
 }

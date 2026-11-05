@@ -3279,15 +3279,26 @@
     "LockPassword": "Mot de passe de verrouillage",
     "FileEncryption": "Chiffrement des fichiers",
     "ClientSettings": "Paramètres du client",
-    "Reauth": "Se reconnecter après fermeture",
-    "Lifetime": "Durée maximale de connexion (min)",
+    "Reauth": "Se reconnecter après avoir quitté le client",
+    "Lifetime": "Durée maximale de connexion du client (min)",
     "Idle": "Verrouillage du client après inactivité (min)",
     "ReauthHelp": "Exige une nouvelle connexion après avoir quitté et relancé le client. Réduire ou masquer la fenêtre ne compte pas comme quitter.",
     "ReauthRequired": "Imposé par l’administrateur et non désactivable. Réduire ou masquer la fenêtre ne compte pas comme quitter.",
     "UnlimitedHelp": "0 signifie illimité. Effacez puis enregistrez pour rétablir la valeur par défaut.",
     "IdleHelp": "Verrouille après le délai d’inactivité indiqué. Saisissez le mot de passe de verrouillage dans la fenêtre principale. Les applications externes ne sont pas protégées.",
-    "WebIdleHelp": "Verrouille la console et le terminal Web après le délai d’inactivité indiqué. Saisissez le mot de passe de verrouillage pour déverrouiller.",
+    "WebIdleHelp": "Verrouille la console et le terminal Web après le délai d’inactivité indiqué. Saisissez le mot de passe de verrouillage pour déverrouiller. Si le verrouillage pour inactivité est activé, fermer toutes les pages verrouille aussi cette session après 10 secondes. La déconnexion à la fermeture est prioritaire. Actualiser ou rouvrir dans les 10 secondes annule cette action.",
     "LifetimeHelp": "Calculé depuis la connexion. Reconnectez-vous à l’expiration ; l’activité ne prolonge pas la durée.",
     "AdminClientHelp": "L’administrateur définit les valeurs par défaut et les limites. L’utilisateur peut être plus restrictif ; sinon, il suit l’administrateur."
+  },
+  "OnlineSessionPolicy": {
+    "Title": "Informations de validité",
+    "Expires": "Expiration",
+    "Duration": "Durée de validité de la session",
+    "ClientDuration": "Durée maximale de connexion du client",
+    "Renew": "Renouvellement sur requête",
+    "IdleLock": "Verrouillage après inactivité",
+    "Grace": "Fin du délai après modification",
+    "Unlimited": "Illimité",
+    "BrowserExit": "Se reconnecter à la fermeture du navigateur"
   }
 }

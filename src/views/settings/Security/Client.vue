@@ -22,8 +22,12 @@ export default {
   components: { GenericCreateUpdateForm, IBox },
   props: { scope: { type: String, default: 'Client' } },
   data() {
-    const webConfigFields = ['SESSION_COOKIE_AGE', 'SESSION_SAVE_EVERY_REQUEST']
-    const webFields = ['SESSION_EXPIRE_AT_BROWSER_CLOSE', 'SECURITY_WEB_IDLE_LOCK_TIME']
+    const webFields = [
+      'SESSION_EXPIRE_AT_BROWSER_CLOSE',
+      'SESSION_COOKIE_AGE',
+      'SESSION_RENEW_ON_REQUEST',
+      'SECURITY_WEB_IDLE_LOCK_TIME'
+    ]
     const clientFields = [
       'SECURITY_CLIENT_REAUTH_ON_EXIT',
       'SECURITY_CLIENT_MAX_SESSION_TIME',
@@ -35,17 +39,18 @@ export default {
       config: {
         url: '/api/v1/settings/setting/?category=security_session',
         hasDetailInMsg: false,
-        fields: isWeb ? [...webConfigFields, ...webFields] : clientFields,
+        fields: settingFields,
         initial: {
           SESSION_EXPIRE_AT_BROWSER_CLOSE: false,
+          SESSION_COOKIE_AGE: 86400,
+          SESSION_RENEW_ON_REQUEST: false,
           SECURITY_WEB_IDLE_LOCK_TIME: 15,
           SECURITY_CLIENT_REAUTH_ON_EXIT: false,
           SECURITY_CLIENT_MAX_SESSION_TIME: 0,
           SECURITY_CLIENT_IDLE_LOCK_TIME: 15
         },
         fieldsMeta: {
-          SESSION_COOKIE_AGE: { type: 'input', readonly: true, el: { type: 'text' } },
-          SESSION_SAVE_EVERY_REQUEST: { readonly: true }
+          SESSION_COOKIE_AGE: { type: 'input', el: { type: 'number', min: 1 } }
         },
         cleanFormValue: (values) =>
           Object.fromEntries(settingFields.map((field) => [field, values[field]])),

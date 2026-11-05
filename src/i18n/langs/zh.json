@@ -3998,14 +3998,14 @@
     "LockPassword": "锁屏密码",
     "FileEncryption": "文件加密",
     "ClientSettings": "客户端设置",
-    "Reauth": "退出后重新登录",
-    "Lifetime": "最长登录有效期 (分)",
+    "Reauth": "客户端退出后重新登录",
+    "Lifetime": "客户端最长登录有效期 (分)",
     "Idle": "客户端空闲锁屏 (分)",
     "ReauthHelp": "开启后，退出并重新启动需重新登录，最小化或隐藏不受影响。",
     "ReauthRequired": "管理员已开启，不能关闭。最小化或隐藏不算退出。",
     "UnlimitedHelp": "0 表示不限制，清空后保存恢复默认值。",
     "IdleHelp": "空闲达到设定时间后自动锁屏，在主窗口输入锁屏密码解锁。外部软件窗口不受保护。",
-    "WebIdleHelp": "空闲达到设定时间后锁定控制台和 Web 终端，输入锁屏密码解锁。",
+    "WebIdleHelp": "空闲达到设定时间后锁定控制台和 Web 终端，输入锁屏密码解锁。 开启空闲锁屏后，关闭全部页面 10 秒后也会锁定；开启关闭页面退出则优先注销，刷新或 10 秒内重开可取消。",
     "LifetimeHelp": "从登录时间起计算，到期需重新登录，操作不会延长。",
     "AdminClientHelp": "管理员设置为默认值和上限，用户可设置得更严格；未自行设置则跟随管理员。"
   },
@@ -4024,5 +4024,16 @@
   "ConnectivityTarget": "资产 / 账号",
   "ConnectivityUnsupported": "不支持的资产",
   "ConnectivityTasks": "测试任务",
-  "ConnectivityTargets": "测试目标"
+  "ConnectivityTargets": "测试目标",
+  "OnlineSessionPolicy": {
+    "Title": "有效期信息",
+    "Expires": "到期时间",
+    "Duration": "会话有效时长",
+    "ClientDuration": "客户端最长登录有效期",
+    "Renew": "请求续期",
+    "IdleLock": "空闲锁屏",
+    "Grace": "配置变更宽限至",
+    "Unlimited": "不限制",
+    "BrowserExit": "浏览器关闭时重新登录"
+  }
 }

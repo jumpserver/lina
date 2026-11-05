@@ -3108,15 +3108,26 @@
     "LockPassword": "Contraseña de bloqueo",
     "FileEncryption": "Cifrado de archivos",
     "ClientSettings": "Configuración del cliente",
-    "Reauth": "Volver a iniciar sesión al salir",
-    "Lifetime": "Duración máxima de sesión (min)",
+    "Reauth": "Volver a iniciar sesión al salir del cliente",
+    "Lifetime": "Duración máxima del inicio de sesión del cliente (min)",
     "Idle": "Bloqueo del cliente por inactividad (min)",
     "ReauthHelp": "Exige iniciar sesión de nuevo al salir y reiniciar. Minimizar u ocultar el cliente no cuenta como salir.",
     "ReauthRequired": "Obligatorio por el administrador; no se puede desactivar. Minimizar u ocultar no cuenta como salir.",
     "UnlimitedHelp": "0 significa sin límite. Borre el campo y guarde para restaurar el valor predeterminado.",
     "IdleHelp": "Se bloquea tras el tiempo de inactividad indicado. Desbloquee con la contraseña de bloqueo en la ventana principal. Las aplicaciones externas no están protegidas.",
-    "WebIdleHelp": "Bloquea la consola y el terminal Web tras el tiempo de inactividad indicado. Introduzca la contraseña de bloqueo para desbloquear.",
+    "WebIdleHelp": "Bloquea la consola y el terminal Web tras el tiempo de inactividad indicado. Introduzca la contraseña de bloqueo para desbloquear. Con el bloqueo por inactividad activado, cerrar todas las páginas también bloquea esta sesión tras 10 segundos. El cierre de sesión al cerrar las páginas tiene prioridad. Actualizar o reabrir en 10 segundos lo cancela.",
     "LifetimeHelp": "Se cuenta desde el inicio de sesión. Al vencer, vuelva a iniciar sesión; la actividad no lo prolonga.",
     "AdminClientHelp": "El administrador define valores predeterminados y límites. El usuario puede elegir opciones más estrictas; en otro caso, sigue al administrador."
+  },
+  "OnlineSessionPolicy": {
+    "Title": "Información de validez",
+    "Expires": "Vencimiento",
+    "Duration": "Duración de la sesión",
+    "ClientDuration": "Duración máxima del inicio de sesión del cliente",
+    "Renew": "Renovar al recibir solicitudes",
+    "IdleLock": "Bloqueo por inactividad",
+    "Grace": "Fin de la prórroga por cambio",
+    "Unlimited": "Sin límite",
+    "BrowserExit": "Volver a iniciar sesión al cerrar el navegador"
   }
 }

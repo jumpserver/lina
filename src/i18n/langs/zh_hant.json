@@ -3566,14 +3566,14 @@
     "LockPassword": "鎖屏密碼",
     "FileEncryption": "檔案加密",
     "ClientSettings": "用戶端設定",
-    "Reauth": "退出後重新登入",
-    "Lifetime": "最長登入有效期 (分)",
+    "Reauth": "用戶端退出後重新登入",
+    "Lifetime": "用戶端最長登入有效期 (分)",
     "Idle": "用戶端閒置鎖屏 (分)",
     "ReauthHelp": "啟用後，退出並重新啟動須重新登入，最小化或隱藏不受影響。",
     "ReauthRequired": "管理員已啟用，無法停用。最小化或隱藏不算退出。",
     "UnlimitedHelp": "0 表示不限制，清空後儲存恢復預設值。",
     "IdleHelp": "閒置達到設定時間後自動鎖屏，在主視窗輸入鎖屏密碼解鎖。外部軟體視窗不受保護。",
-    "WebIdleHelp": "閒置達到設定時間後鎖定控制台與 Web 終端，輸入鎖屏密碼解鎖。",
+    "WebIdleHelp": "閒置達到設定時間後鎖定控制台與 Web 終端，輸入鎖屏密碼解鎖。 開啟閒置鎖屏後，關閉全部頁面 10 秒後也會鎖定；開啟關閉頁面登出則優先登出，重新整理或 10 秒內重開可取消。",
     "LifetimeHelp": "從登入時間起計算，到期須重新登入，操作不會延長。",
     "AdminClientHelp": "管理員設定為預設值與上限，使用者可設定得更嚴格；未自行設定則跟隨管理員。"
   },
@@ -3592,5 +3592,16 @@
   "ConnectivityTarget": "資產 / 帳號",
   "ConnectivityUnsupported": "不支援的資產",
   "ConnectivityTasks": "測試任務",
-  "ConnectivityTargets": "測試目標"
+  "ConnectivityTargets": "測試目標",
+  "OnlineSessionPolicy": {
+    "Title": "有效期資訊",
+    "Expires": "到期時間",
+    "Duration": "工作階段有效時長",
+    "ClientDuration": "用戶端最長登入有效期",
+    "Renew": "依請求續期",
+    "IdleLock": "閒置鎖定",
+    "Grace": "設定變更寬限至",
+    "Unlimited": "不限制",
+    "BrowserExit": "瀏覽器關閉時重新登入"
+  }
 }

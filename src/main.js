@@ -18,7 +18,6 @@ import store from './store'
 import router from './router'
 import { eventBus } from './utils/vue/eventbus'
 import '@/styles/fonts/loadSans'
-import { watchSessions } from './utils/jms/auth'
 
 import { installSvgIcon } from '@/icons' // icon
 import { installElementPlusIcons } from '@/icons/element-plus-icons'
@@ -130,7 +129,6 @@ async function initApp() {
   // 初始化默认主题变量（确保在应用启动时就注入 CSS 变量）
   setRootColors()
 
-  watchSessions()
   app.mount('#app')
 }
 

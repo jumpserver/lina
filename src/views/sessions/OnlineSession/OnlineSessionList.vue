@@ -11,6 +11,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import SessionExpiryFormatter from '@/components/Table/TableFormatters/SessionExpiryFormatter.vue'
 
 export default {
   components: {
@@ -26,7 +27,7 @@ export default {
           resource: 'usersession'
         },
         url: '/api/v1/audits/user-sessions/',
-        columnsExclude: ['backend', 'user', 'is_current_user_session'],
+        columnsExclude: ['backend', 'user', 'is_current_user_session', 'session_policy'],
         columnsShow: {
           min: ['user_display', 'actions'],
           default: [
@@ -35,6 +36,7 @@ export default {
             'backend_display',
             'city',
             'date_created',
+            'date_expired',
             'is_active',
             'is_locked',
             'actions'
@@ -54,8 +56,15 @@ export default {
           'actions'
         ],
         columnsMeta: {
+          date_expired: {
+            label: this.$t('OnlineSessionPolicy.Expires'),
+            formatter: SessionExpiryFormatter,
+            minWidth: 190,
+            sortable: false
+          },
           is_locked: {
             label: this.$t('DeviceLocked'),
+            sortable: false,
             formatterArgs: {
               showText: false,
               showFalse: false

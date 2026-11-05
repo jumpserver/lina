@@ -77,6 +77,10 @@ function goToLogin() {
 }
 
 function ifUnauthorized({ response }) {
+  if (response.status === 401 && response.data?.code === 'authentication_required') {
+    response.config.disableFlashErrorMsg = true
+    return
+  }
   if (response.status === 401 && lockSignOutUntil > Date.now()) {
     response.config.disableFlashErrorMsg = true
     return

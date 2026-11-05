@@ -30,7 +30,7 @@
                   $t(
                     state.logoutAt
                       ? 'ScreenLock.SignedOut'
-                      : unconfirmed
+                      : unconfirmed || state.error
                         ? 'ScreenLock.CheckFailed'
                         : 'ScreenLock.Title'
                   )
@@ -38,7 +38,12 @@
               </h1>
             </div>
             <p
-              v-if="!state.logoutAt && !unconfirmed && state.session?.has_password !== false"
+              v-if="
+                !state.logoutAt &&
+                !state.error &&
+                !unconfirmed &&
+                state.session?.has_password !== false
+              "
               class="screen-lock-description"
             >
               {{ $t('ScreenLock.Description') }}
@@ -66,15 +71,6 @@
           >
             {{ displayedError || $t('ScreenLock.LoadFailed') }}
           </p>
-          <el-button
-            v-if="!state.logoutAt && state.error"
-            class="screen-lock-unlock-button"
-            :loading="pendingAction === 'retry'"
-            :disabled="busy"
-            @click="retry"
-          >
-            {{ $t('ScreenLock.Retry') }}
-          </el-button>
           <div v-if="state.logoutAt" class="screen-lock-countdown" role="status" aria-live="polite">
             <el-button
               class="screen-lock-unlock-button screen-lock-return-button"
@@ -84,7 +80,7 @@
             </el-button>
           </div>
           <el-form
-            v-else-if="state.session?.has_password"
+            v-else-if="!state.error && state.session?.has_password"
             label-position="top"
             class="screen-lock-form"
             @submit.prevent="unlock"
@@ -112,7 +108,11 @@
               >{{ $t('ScreenLock.Unlock') }}</el-button
             >
           </el-form>
-          <p v-else-if="state.session" class="screen-lock-unset-message" role="status">
+          <p
+            v-else-if="!state.error && state.session"
+            class="screen-lock-unset-message"
+            role="status"
+          >
             {{ $t('ScreenLock.Unset') }}
           </p>
           <p v-else-if="!state.error" class="screen-lock-description">
@@ -120,13 +120,18 @@
           </p>
           <div v-if="!state.logoutAt" class="screen-lock-actions">
             <el-button
-              :link="!!state.session?.has_password"
-              :type="state.session?.has_password ? undefined : 'primary'"
-              :class="
-                state.session?.has_password
-                  ? 'screen-lock-logout-button'
-                  : 'screen-lock-unlock-button'
-              "
+              v-if="state.error"
+              class="screen-lock-unlock-button"
+              :loading="pendingAction === 'retry'"
+              :disabled="busy"
+              @click="retry"
+            >
+              {{ $t('ScreenLock.Retry') }}
+            </el-button>
+            <el-button
+              :link="logoutAsText"
+              :type="logoutAsText ? undefined : 'primary'"
+              :class="logoutAsText ? 'screen-lock-logout-button' : 'screen-lock-unlock-button'"
               :loading="pendingAction === 'logout'"
               :disabled="busy"
               @click="exit"
@@ -173,6 +178,9 @@ export default {
     },
     unconfirmed() {
       return !this.state.session
+    },
+    logoutAsText() {
+      return Boolean(this.state.error || this.state.session?.has_password)
     },
     displayedError() {
       const remaining = this.state.attemptsRemaining
@@ -299,6 +307,13 @@ export default {
 }
 .web-session-lock-shield::backdrop {
   background: var(--el-bg-color-page);
+}
+
+.screen-lock-actions {
+  flex-direction: column;
+}
+.screen-lock-actions > .el-button + .el-button {
+  margin-left: 0;
 }
 
 .screen-lock-form-card :deep(.el-card__body) {
