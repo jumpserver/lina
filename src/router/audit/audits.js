@@ -1,6 +1,5 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-import store from '@/store'
 
 export default [
   {
@@ -90,10 +89,7 @@ export default [
       title: i18n.t('ChatAIConversationAudit'),
       menuTitle: i18n.t('ChatAI'),
       icon: 'short-message',
-      permissions: [],
-      hidden: () => {
-        return !store.getters.currentUserIsSuperAdmin
-      }
+      permissions: ['chat_ai.view_auditconversation']
     }
   },
   {
@@ -104,7 +100,7 @@ export default [
     meta: {
       title: i18n.t('ChatAIConversationAudit'),
       activeMenu: '/audit/audits/ai-conversations',
-      permissions: []
+      permissions: ['chat_ai.view_auditconversation']
     }
   }
 ]
