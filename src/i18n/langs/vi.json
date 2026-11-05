@@ -2215,7 +2215,7 @@
   "Valid": "Cập nhật miền.",
   "Value": "Giá trị",
   "Variable": "Biến",
-  "VariableHelpText": "Bạn có thể sử dụng {{ key }} trong lệnh để đọc biến tích hợp",
+  "VariableHelpText": "Bạn có thể sử dụng {'{{ key }}'} trong lệnh để đọc biến tích hợp",
   "VariableName": "Biến số",
   "VaultHCPMountPoint": "Điểm kết nối của máy chủ Vault, mặc định là pam",
   "VaultHelpText": "1. Vì lý do bảo mật, hãy bật lưu trữ Vault trong tệp cấu hình.<br>2. Sau khi bật, hoàn tất cấu hình và kiểm tra kết nối.<br>3. Đồng bộ sẽ di chuyển các bí mật từ cơ sở dữ liệu cục bộ sang Vault từ xa; sau đó chúng không còn được lưu cục bộ. Dùng Khôi phục vào cơ sở dữ liệu để ghi lại các bí mật đã đồng bộ vào máy cục bộ. Các bản sao trong Vault sẽ được giữ lại.<br>4. Khởi động lại dịch vụ sau khi thay đổi cấu hình Vault.",

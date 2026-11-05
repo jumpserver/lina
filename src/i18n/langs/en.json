@@ -2055,7 +2055,7 @@
   "Valid": "Valid",
   "Value": "Value",
   "Variable": "Variable",
-  "VariableHelpText": "You can use {{ key }} to read built-in variables in commands",
+  "VariableHelpText": "You can use {'{{ key }}'} to read built-in variables in commands",
   "VariableName": "Variable name",
   "VaultHCPMountPoint": "The mount point of the Vault server, default is pam",
   "VaultHelpText": "1. For security reasons, enable Vault storage in the configuration file; the default backend is OpenBao.<br>2. After enabling it, complete the provider configuration and test the connection.<br>3. Sync migrates secrets from the local database to the remote Vault. After synchronization, the local database no longer stores the secrets. Use Restore to database to write synchronized secrets back locally; copies in Vault are retained.<br>4. Restart the service after changing the Vault configuration.",

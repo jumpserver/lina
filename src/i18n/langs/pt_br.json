@@ -2215,7 +2215,7 @@
   "Valid": "Válido",
   "Value": "Valor",
   "Variable": "Variáveis",
-  "VariableHelpText": "Você pode usar {{ key }} no comando para ler a variável integrada",
+  "VariableHelpText": "Você pode usar {'{{ key }}'} no comando para ler a variável integrada",
   "VariableName": " Nome da variável ",
   "VaultHCPMountPoint": "Ponto de montagem do servidor Vault, padrão é pam",
   "VaultHelpText": "1. Por segurança, ative o armazenamento Vault no arquivo de configuração.<br>2. Depois de ativá-lo, preencha a configuração e teste a conexão.<br>3. A sincronização migra os segredos do banco de dados local para o Vault remoto; depois disso, eles não ficam armazenados localmente. Use Restaurar para o banco de dados para gravar novamente os segredos sincronizados no banco local. As cópias no Vault serão mantidas.<br>4. Reinicie o serviço após alterar a configuração do Vault.",

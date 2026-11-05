@@ -2282,7 +2282,7 @@
   "Valid": "Valide",
   "Value": "Valeur",
   "Variable": "Variable",
-  "VariableHelpText": "Vous pouvez utiliser {'{'}{'{'} key {'}'}{'}'} pour lire les variables intégrées dans les commandes",
+  "VariableHelpText": "Vous pouvez utiliser {'{{ key }}'} pour lire les variables intégrées dans les commandes",
   "VariableName": "Nom de la variable",
   "VaultHCPMountPoint": "Le point de montage du serveur Vault, par défaut pam",
   "VaultHelpText": "1. Pour des raisons de sécurité, activez le stockage Vault dans le fichier de configuration ; le backend par défaut est OpenBao.<br>2. Une fois activé, complétez la configuration du fournisseur et testez la connexion.<br>3. La synchronisation migre les secrets de la base de données locale vers le Vault distant. Après synchronisation, la base de données locale ne stocke plus les secrets. Utilisez Restaurer vers la base de données pour réécrire les secrets synchronisés localement ; les copies dans le Vault sont conservées.<br>4. Redémarrez le service après avoir modifié la configuration du Vault.",
