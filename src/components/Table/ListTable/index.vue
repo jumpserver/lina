@@ -23,6 +23,9 @@
       :table-url="tableUrl"
       @done="handleActionInitialDone"
     >
+      <template v-if="$slots['search-before']" #search-before>
+        <slot name="search-before" />
+      </template>
       <template v-if="$slots['search-after']" #search-after>
         <slot name="search-after" />
       </template>

@@ -2,6 +2,7 @@
   <el-button
     ref="deleteButton"
     :circle="formatterArgs.compact"
+    :class="{ 'is-compact': formatterArgs.compact }"
     :disabled="iDisabled"
     :title="$t('Remove')"
     size="small"
@@ -64,4 +65,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.el-button.is-compact {
+  width: 30px;
+  min-width: 30px;
+  padding: 0;
+}
+</style>
