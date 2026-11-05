@@ -10,5 +10,9 @@
   "InvalidJson": "JSON 格式错误.",
   "requiredHasUserNameMapped": "用户名属性是必需的。",
   "Diff": "",
-  "RoleMemberAlreadyAdded": "追加済み"
+  "RoleMemberAlreadyAdded": "追加済み",
+    "UKeyBuiltinCARootCertificate": "組み込み CA ルート証明書",
+    "UKeyTLSCustomSSL": "カスタム SSL 証明書を使用",
+    "UKeySSLCertificate": "SSL 証明書",
+    "UKeySSLCertificateHelp": "検証サービスの SSL 証明書をアップロードしてください（PEM 形式の CA 証明書または証明書チェーン、秘密鍵なし、最大 64 KB）。空欄の場合は保存済みの設定を保持します。"
 }

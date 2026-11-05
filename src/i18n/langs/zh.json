@@ -30,5 +30,9 @@
     "CredentialLifetimeRangeError": "请输入 {min}～{max} 秒之间的整数。",
     "UpgradeResourceType": "升级资源类型",
     "SystemUpgrade": "系统升级",
-    "PatchUpgrade": "补丁升级"
+    "PatchUpgrade": "补丁升级",
+    "UKeyBuiltinCARootCertificate": "内置 CA 根证书",
+    "UKeyTLSCustomSSL": "使用自定义 SSL 证书",
+    "UKeySSLCertificate": "SSL 证书",
+    "UKeySSLCertificateHelp": "上传验签服务的 SSL 证书（PEM 格式的 CA 证书或证书链，不含私钥，最大 64 KB），留空保留已有配置。"
 }

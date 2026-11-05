@@ -22,7 +22,7 @@ const providers = [
     secret_fields: ['AUTH_UKEY_VCTK_S_TLS_CA_CERT', 'AUTH_UKEY_VCTK_S_ISSUING_CA', 'AUTH_UKEY_VCTK_S_PASSWORD'],
     connection_fields: ['AUTH_UKEY_VCTK_S_SVS_URL', 'AUTH_UKEY_VCTK_S_TLS_VERIFY', 'AUTH_UKEY_VCTK_S_TLS_CA_CERT',
       'AUTH_UKEY_VCTK_S_USERNAME', 'AUTH_UKEY_VCTK_S_PASSWORD'],
-    supports_connection_test: true, binding_mode: 'certificate', expose_default_pin: true, supports_enrollment: false
+    supports_connection_test: true, binding_mode: 'certificate', expose_default_pin: false, supports_enrollment: false
   }
 ]
 
@@ -51,27 +51,27 @@ describe('VCTK_S settings', () => {
     expect(vm.settings.fields.flatMap(([, fields]) => fields).some(field => field.startsWith('AUTH_UKEY_VCTK_S_'))).toBe(false)
   })
 
-  it('groups optional business authorization separately and hides it for other providers', () => {
+  it('omits authorization fields even when the backend still advertises them', () => {
     const vm = createVM()
-    const fields = vm.settings.fields.find(([label]) => label === 'UKeyVCTKSAuthorizationAdvanced')[1]
-    expect(fields).toEqual(['AUTH_UKEY_VCTK_S_USERNAME', 'AUTH_UKEY_VCTK_S_PASSWORD'])
-    expect(vm.settings.fieldsMeta.AUTH_UKEY_VCTK_S_PASSWORD.el.type).toBe('password')
-    expect(vm.settings.fieldsMeta.AUTH_UKEY_VCTK_S_USERNAME.hidden({})).toBe(false)
-    vm.draftProvider = 'builtin'
-    expect(vm.settings.fieldsMeta.AUTH_UKEY_VCTK_S_USERNAME.hidden({})).toBe(true)
+    expect(vm.settings.fields.some(([label]) => label === 'UKeyVCTKSAuthorizationAdvanced')).toBe(false)
+    const fields = vm.settings.fields.flatMap(([, fields]) => fields)
+    expect(fields).not.toContain('AUTH_UKEY_VCTK_S_USERNAME')
+    expect(fields).not.toContain('AUTH_UKEY_VCTK_S_PASSWORD')
+    expect(vm.settings.fieldsMeta).not.toHaveProperty('AUTH_UKEY_VCTK_S_USERNAME')
+    expect(vm.settings.fieldsMeta).not.toHaveProperty('AUTH_UKEY_VCTK_S_PASSWORD')
   })
 
-  it('keeps a saved password when blank and allows authorization to be disabled', () => {
+  it('excludes authorization from saves to preserve saved credentials', () => {
     const vm = createVM()
     const clean = vm.cleanSettings({
       AUTH_UKEY_CA_PROVIDER: 'vctk_s', AUTH_UKEY_VENDOR: 'ji_da',
       AUTH_UKEY_VCTK_S_USERNAME: '', AUTH_UKEY_VCTK_S_PASSWORD: ''
     })
-    expect(clean.AUTH_UKEY_VCTK_S_USERNAME).toBe('')
+    expect(clean).not.toHaveProperty('AUTH_UKEY_VCTK_S_USERNAME')
     expect(clean).not.toHaveProperty('AUTH_UKEY_VCTK_S_PASSWORD')
   })
 
-  it('includes supplied business authorization in connection tests', async () => {
+  it('excludes authorization from connection tests even if values are supplied', async () => {
     const vm = createVM()
     vm.$axios = { post: jest.fn().mockResolvedValue({ msg: 'Random generation checked' }) }
     vm.$message = { success: jest.fn() }
@@ -79,9 +79,22 @@ describe('VCTK_S settings', () => {
       AUTH_UKEY_CA_PROVIDER: 'vctk_s', AUTH_UKEY_VENDOR: 'ji_da',
       AUTH_UKEY_VCTK_S_USERNAME: 'business', AUTH_UKEY_VCTK_S_PASSWORD: 'new-password'
     }, null, { loading: false })
-    expect(vm.$axios.post.mock.calls[0][1]).toMatchObject({
-      AUTH_UKEY_VCTK_S_USERNAME: 'business', AUTH_UKEY_VCTK_S_PASSWORD: 'encrypted:new-password'
-    })
+    expect(vm.$axios.post.mock.calls[0][1]).not.toHaveProperty('AUTH_UKEY_VCTK_S_USERNAME')
+    expect(vm.$axios.post.mock.calls[0][1]).not.toHaveProperty('AUTH_UKEY_VCTK_S_PASSWORD')
+  })
+
+  it('uses root CA and SSL labels for both vendors without changing provider values', () => {
+    const vm = createVM()
+    expect(vm.getProvider('builtin').label).toBe('UKeyBuiltinCARootCertificate')
+    expect(vm.settings.fields.some(([label]) => label === 'UKeyBuiltinCARootCertificate')).toBe(true)
+    expect(providers[0].label).toBe('Builtin CA')
+    for (const prefix of ['AUTH_UKEY_VCTK_S', 'AUTH_UKEY_XJCA']) {
+      expect(vm.settings.fieldsMeta[prefix + '_TLS_VERIFY'].options[0]).toEqual({
+        value: 'custom', label: 'UKeyTLSCustomSSL'
+      })
+      expect(vm.settings.fieldsMeta[prefix + '_TLS_CA_CERT'].label).toBe('UKeySSLCertificate')
+      expect(vm.settings.fieldsMeta[prefix + '_TLS_CA_CERT'].helpText).toBe('UKeySSLCertificateHelp')
+    }
   })
 
   it('shows VCTK_S for JIT and keeps Xinjiang CA restricted to Longmai', () => {
@@ -92,13 +105,14 @@ describe('VCTK_S settings', () => {
     expect(vm.availableProviders.map(provider => provider.id)).toEqual(['builtin', 'xjca'])
   })
 
-  it('shows only service, TLS and issuing CA settings', () => {
+  it('shows only service and TLS settings even with legacy issuing CA metadata', () => {
     const vm = createVM()
     const fields = vm.settings.fields.find(([label]) => label === 'VCTK_S')[1]
     expect(fields).toEqual([
       'AUTH_UKEY_VCTK_S_SVS_URL', 'AUTH_UKEY_VCTK_S_USE_SSL', 'AUTH_UKEY_VCTK_S_TLS_VERIFY',
-      'AUTH_UKEY_VCTK_S_TLS_CA_CERT', 'AUTH_UKEY_VCTK_S_ISSUING_CA'
+      'AUTH_UKEY_VCTK_S_TLS_CA_CERT'
     ])
+    expect(vm.settings.fieldsMeta).not.toHaveProperty('AUTH_UKEY_VCTK_S_ISSUING_CA')
     expect(vm.settings.fieldsMeta.AUTH_UKEY_XJCA_SVS_URL.hidden({})).toBe(true)
     expect(vm.formSettings.moreButtons).toHaveLength(1)
     expect(vm.formSettings.moreButtons[0]).not.toHaveProperty('hidden')
@@ -109,6 +123,7 @@ describe('VCTK_S settings', () => {
     const clean = vm.cleanSettings({
       AUTH_UKEY: true, AUTH_UKEY_VENDOR: 'ji_da', AUTH_UKEY_CA_PROVIDER: 'vctk_s',
       AUTH_UKEY_VCTK_S_UNKNOWN: 'not an editable setting',
+      AUTH_UKEY_VCTK_S_ISSUING_CA: 'legacy issuing CA',
       AUTH_UKEY_DEFAULT_PIN: 'saved administrative PIN',
       AUTH_UKEY_VCTK_S_SVS_URL: 'http://vctks.example.com:8000',
       AUTH_UKEY_XJCA_SVS_URL: 'http://another-provider'
@@ -203,7 +218,7 @@ describe('VCTK_S settings', () => {
     const form = { validate: jest.fn() }
     await vm.testConnection(value, form, { loading: false })
     const draft = vm.$axios.post.mock.calls[0][1]
-    expect(draft.AUTH_UKEY_VCTK_S_USERNAME).toBe('')
+    expect(draft).not.toHaveProperty('AUTH_UKEY_VCTK_S_USERNAME')
     for (const key of ['AUTH_UKEY_VCTK_S_PASSWORD', 'AUTH_UKEY_VCTK_S_TLS_CA_CERT',
       'AUTH_UKEY_VCTK_S_ISSUING_CA', 'AUTH_UKEY_DEFAULT_PIN']) {
       expect(draft).not.toHaveProperty(key)
