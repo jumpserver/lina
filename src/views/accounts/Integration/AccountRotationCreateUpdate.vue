@@ -201,8 +201,7 @@ export default {
           account_id: item?.account?.id || '',
           alternate_account_id: item?.alternate_account?.id || '',
           verify_before_switch: item?.verify_before_switch ?? true,
-          source_no_traffic_days:
-            item?.source_no_traffic_days ?? item?.standby_no_traffic_days ?? 7,
+          source_no_traffic_days: item?.source_no_traffic_days ?? 7,
           subscription_account_ids: (item?.subscription_accounts || []).map(
             (account) => account.id
           ),

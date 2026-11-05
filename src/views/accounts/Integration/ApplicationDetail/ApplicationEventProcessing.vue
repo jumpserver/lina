@@ -34,7 +34,7 @@ import { markRaw } from 'vue'
 import ApplicationEventRecipients from './ApplicationEventRecipients.vue'
 import ListTable from '@/components/Table/ListTable'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
-import { eventLabels } from '../AccountRotationDetail/rotationEventTimeline'
+import { eventLabels, rotationEventTitle } from '../AccountRotationDetail/rotationEventTimeline'
 import ApplicationEventSendDialog from '../components/ApplicationEventSendDialog.vue'
 import { createApplicationEventHistory } from './applicationEventHistory'
 
@@ -77,7 +77,7 @@ export default {
           minWidth: 200,
           formatter: (row) => (
             <div>
-              <div>{this.$t(this.eventLabels[row.event] || 'AppAuditEvent')}</div>
+              <div>{this.eventName(row)}</div>
               <div class="secondary-text">
                 {[row.account, row.credential].filter(Boolean).join(' · ')}
               </div>
@@ -164,6 +164,11 @@ export default {
     }
   },
   methods: {
+    eventName(event) {
+      const { action, template, params } = rotationEventTitle(event)
+      const label = this.$t(this.eventLabels[event.event] || action)
+      return template ? this.$t(template, { action: this.$t(action), ...params }) : label
+    },
     formatDate(value) {
       return value ? toSafeLocalDateStr(value) : '-'
     },

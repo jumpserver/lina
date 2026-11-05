@@ -3,13 +3,9 @@ export const eventLabels = {
   'rotation.verify.skipped': 'RotationVerificationSkippedEvent',
   'rotation.verify.failed': 'RotationVerificationFailedEvent',
   'rotation.verify.cancelled': 'RotationVerificationCancelledEvent',
-  'rotation.preparation.started': 'RotationPreparationStartedEvent',
-  'rotation.accounts.aligned': 'RotationAccountsAlignedEvent',
-  'rotation.standby.waiting': 'RotationStandbyWaitingEvent',
-  'rotation.preparation.ready': 'RotationPreparationReadyEvent',
-  'rotation.preparation.cancelled': 'RotationPreparationCancelledEvent',
-  'credential.updated': 'AppAuditCredentialPublished',
-  'credential.revoked': 'AppAuditAuthorizationRevoked',
+  'credential.secret.updated': 'CredentialSecretUpdatedEvent',
+  'credential.switch.published': 'RotationSwitchPublished',
+  'credential.refresh.requested': 'CredentialRefreshRequestedEvent',
   'app.scope.updated': 'AppAuditApplicationScopeUpdated',
   'rotation.started': 'AppAuditRotationStarted',
   'rotation.waiting_for_app': 'RotationEventWaitingForSwitch',
@@ -23,28 +19,94 @@ export const eventLabels = {
   'credential.change.failed': 'AppAuditSecretChangeFailed'
 }
 
-export function canonicalEventName(value) {
-  const aliases = {
-    'rotation.verification.skipped': 'rotation.verify.skipped',
-    'rotation.verification.started': 'rotation.verify.started',
-    'rotation.verification.failed': 'rotation.verify.failed',
-    'rotation.verification.cancelled': 'rotation.verify.cancelled',
-    'application.scope.updated': 'app.scope.updated',
-    'application.restart.requested': 'app.restart.requested',
-    'rotation.waiting_for_application': 'rotation.waiting_for_app',
-    'configuration.updated': 'app.scope.updated'
-  }
-  return Object.hasOwn(aliases, value) ? aliases[value] : value
+const accountName = (account) => {
+  const name = account?.name || account?.username || account?.id || '—'
+  return account?.username && account.username !== name ? `${name} (${account.username})` : name
 }
 
-eventLabels['rotation.verification.started'] = eventLabels['rotation.verify.started']
-eventLabels['rotation.verification.failed'] = eventLabels['rotation.verify.failed']
-eventLabels['rotation.verification.cancelled'] = eventLabels['rotation.verify.cancelled']
-eventLabels['application.scope.updated'] = eventLabels['app.scope.updated']
-eventLabels['rotation.waiting_for_application'] = eventLabels['rotation.waiting_for_app']
-eventLabels['configuration.updated'] = eventLabels['app.scope.updated']
+export function rotationEventTitle(event) {
+  const code = event.event
+  const accounts = event.rotation_accounts
+  const action = eventLabels[code] || code
+  if (!accounts) return { action }
+  if (code === 'credential.switch.published' && event.account_switch) {
+    return {
+      action: event.account_switch.reverting
+        ? 'RotationRevertPublished'
+        : 'RotationSwitchPublished',
+      template: 'RotationEventWithDirection',
+      params: {
+        source: accountName(event.account_switch.from_account),
+        target: accountName(event.account_switch.to_account)
+      }
+    }
+  }
+  if (code === 'rotation.started' || code === 'rotation.completed') {
+    return {
+      action,
+      template: 'RotationEventWithDirection',
+      params: { source: accountName(accounts.source), target: accountName(accounts.target) }
+    }
+  }
+  const account = code.startsWith('rotation.verify.')
+    ? accounts.target
+    : code.startsWith('credential.change.')
+      ? (typeof event.account === 'object' && event.account) ||
+        Object.values(accounts).find((account) => account?.id === event.account_id) ||
+        accounts.change
+      : code.startsWith('rotation.source.')
+        ? accounts.source
+        : [
+              'rotation.waiting_for_app',
+              'credential.secret.updated',
+              'credential.refresh.requested'
+            ].includes(code)
+          ? event.published_account
+          : null
+  return account
+    ? { action, template: 'RotationEventWithAccount', params: { account: accountName(account) } }
+    : { action }
+}
 
-eventLabels['rotation.verification.skipped'] = eventLabels['rotation.verify.skipped']
+export function buildCycleEventTimeline(cycle, stages = []) {
+  const byEvent = new Map(
+    stages.filter((stage) => stage.event).map((stage) => [stage.event.id, stage])
+  )
+  const nodes = (cycle?.events || []).map((event) => {
+    const stage = byEvent.get(event.id)
+    const failed = event.event.endsWith('.failed')
+    const waiting = !failed && !stage?.completed && stage?.icon === 'Clock'
+    return {
+      event,
+      type: failed
+        ? 'danger'
+        : stage?.completed
+          ? 'success'
+          : waiting
+            ? stage.current
+              ? 'warning'
+              : 'info'
+            : event.event === 'rotation.verify.skipped'
+              ? 'info'
+              : 'primary',
+      hollow: waiting,
+      statusLabel: failed ? 'Failed' : stage?.statusLabel || 'PolicyStageEmitted'
+    }
+  })
+  let traversed = true
+  return nodes.map((node, index) => {
+    traversed = traversed && !node.hollow
+    return {
+      ...node,
+      trail:
+        traversed && index < nodes.length - 1
+          ? node.type === 'danger' || nodes[index + 1].type === 'danger'
+            ? 'danger'
+            : 'primary'
+          : 'pending'
+    }
+  })
+}
 
 export const statusLabels = {
   received: 'RotationEventReceived',

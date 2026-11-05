@@ -74,9 +74,6 @@ export const deleteApplicationCredential = (id) => request.delete(`${credentialU
 export async function advanceApplicationCredentialRotation(credential) {
   const actions = {
     idle: 'start',
-    preparing: 'check-preparation',
-    waiting_standby: 'check-preparation',
-    ready_to_switch: 'start',
     waiting_switch: 'check-usage',
     ready_for_change: 'change-secret',
     changing_secret: 'check-secret-change',

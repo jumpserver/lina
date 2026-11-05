@@ -36,7 +36,7 @@ export default {
         url: '/api/v1/audits/service-access-logs/',
         extraQuery: this.object.id ? { service_id: this.object.id } : {},
         permissions: { view: 'audits.view_integrationapplicationlog' },
-        hasSelection: false,
+        hasSelection: true,
         hasOperation: false,
         columnsShow: {
           min: ['service', 'asset', 'account', 'datetime'],

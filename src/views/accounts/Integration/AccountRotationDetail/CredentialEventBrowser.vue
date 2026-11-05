@@ -133,7 +133,15 @@
                   {{ formatDate(detail.date_started) }} ·
                   {{ $t('PolicyCycleEventCount', { count: detail.event_count }) }}
                 </p>
-                <p v-if="detail.accounts?.length > 1">
+                <template v-if="detail.rotation_accounts">
+                  <p>{{ rotationDirection(detail.rotation_accounts) }}</p>
+                  <p>
+                    {{ $t('RotationChangeAccount') }}：{{
+                      accountLabel(detail.rotation_accounts.change)
+                    }}
+                  </p>
+                </template>
+                <p v-else-if="detail.accounts?.length > 1">
                   {{ detail.accounts.map(accountLabel).join(' · ') }}
                 </p>
                 <p v-else-if="detail.account">{{ accountLabel(detail.account) }}</p>
@@ -144,27 +152,7 @@
               </div>
             </div>
           </section>
-          <el-alert
-            v-if="detail.kind === 'legacy'"
-            :title="$t('PolicyCycleLegacyHelp')"
-            type="warning"
-            :closable="false"
-            show-icon
-          />
-          <el-alert
-            v-if="
-              detail.kind === 'rotation' &&
-              !detail.preparation &&
-              !detail.source_traffic &&
-              !detail.events.some((event) =>
-                canonicalEventName(event.event).startsWith('rotation.verify.')
-              )
-            "
-            :title="$t('RotationLegacyPreparationMissing')"
-            type="info"
-            :closable="false"
-            show-icon
-          />
+
           <section
             v-if="stages.length"
             class="cycle-progress record-section"
@@ -183,61 +171,20 @@
                     {
                       emitted: stage.event,
                       current: stage.current,
+                      completed: stage.completed,
                       failed: stage.event?.event.endsWith('.failed')
                     }
                   ]"
                 >
-                  <el-icon
-                    ><component
-                      :is="
-                        stage.current
-                          ? 'Clock'
-                          : stage.event
-                            ? stage.event.event.endsWith('.failed')
-                              ? 'CircleClose'
-                              : 'Check'
-                            : 'Clock'
-                      "
-                  /></el-icon>
+                  <el-icon><component :is="stage.icon" /></el-icon>
                   <span>{{ $t(stage.label) }}</span>
-                  <small>{{
-                    $t(
-                      stage.current
-                        ? 'StandbyObservationInProgress'
-                        : stage.event
-                          ? 'PolicyStageEmitted'
-                          : stage.skipped
-                            ? 'PolicyStageSkipped'
-                            : 'PolicyStageNotEmitted'
-                    )
-                  }}</small>
+                  <small>{{ $t(stage.statusLabel) }}</small>
                 </div>
               </div>
               <p class="stage-help">{{ $t('PolicyCycleStagesHelp') }}</p>
             </div>
           </section>
-          <section
-            v-if="detail.preparation"
-            class="standby-observation record-section"
-            :aria-label="$t('RotationStandbyWaitingEvent')"
-          >
-            <h4 class="record-heading">
-              <el-icon><Timer /></el-icon>
-              {{ $t('RotationStandbyWaitingEvent') }}
-              <el-tag :type="detail.preparation.status === 'waiting_standby' ? 'warning' : 'info'">
-                {{ observationStatus }}
-              </el-tag>
-            </h4>
-            <div class="observation-content">
-              <p>{{ observationHelp }}</p>
-              <dl>
-                <div v-for="item in observationItems" :key="item.label">
-                  <dt>{{ $t(item.label) }}</dt>
-                  <dd>{{ item.value }}</dd>
-                </div>
-              </dl>
-            </div>
-          </section>
+
           <section
             v-if="detail.source_traffic"
             class="standby-observation record-section"
@@ -292,17 +239,12 @@
               <div class="timeline-scroll">
                 <el-timeline>
                   <el-timeline-item
-                    v-for="event in detail.events"
+                    v-for="{ event, type, hollow, trail, statusLabel } in timelineEvents"
                     :key="event.id"
                     hide-timestamp
-                    :type="
-                      event.event.endsWith('.failed')
-                        ? 'danger'
-                        : selectedEventId === event.id
-                          ? 'primary'
-                          : 'info'
-                    "
-                    :hollow="selectedEventId !== event.id"
+                    :class="['event-timeline-item', `trail-${trail}`]"
+                    :type="type"
+                    :hollow="hollow"
                   >
                     <button
                       type="button"
@@ -316,24 +258,22 @@
                         ><span>{{ formatDate(event.published_at) }}</span></span
                       >
                       <code>{{ event.event }}</code>
-                      <span v-if="detail.accounts?.length > 1 && event.account">{{
-                        accountLabel(event.account)
-                      }}</span>
-                      <span
-                        v-if="event.event === 'rotation.standby.waiting' && event.preparation"
-                        class="event-observation"
-                      >
-                        <span>{{
-                          $t('StandbyObservationRequirement', {
-                            days: event.preparation.standby_no_traffic_days
-                          })
-                        }}</span>
+                      <span v-if="event.rotation_accounts" class="event-account-context">
+                        <span v-if="event.published_account"
+                          >{{ $t('RotationPublishedAccount') }}：{{
+                            accountLabel(event.published_account)
+                          }}</span
+                        >
                         <span
-                          >{{ $t('StandbyObservationEventEligibleAt') }}：{{
-                            formatDate(event.preparation.eligible_at)
+                          >{{ $t('RotationChangeAccount') }}：{{
+                            accountLabel(event.rotation_accounts.change)
                           }}</span
                         >
                       </span>
+                      <span v-else-if="detail.accounts?.length > 1 && event.account">{{
+                        accountLabel(event.account)
+                      }}</span>
+
                       <span v-if="event.source_traffic" class="event-observation">
                         <span
                           >{{ $t('SourceNoTrafficDays') }}：{{
@@ -349,6 +289,7 @@
                         >
                       </span>
                       <span class="event-meta"
+                        ><span :class="['event-progress', `is-${type}`]">{{ $t(statusLabel) }}</span
                         ><span v-if="event.revision != null"
                           >{{ $t('AppAuditRevision') }} {{ event.revision }}</span
                         ><span>{{
@@ -382,6 +323,11 @@
                     <strong>{{ eventName(selectedEvent) }}</strong
                     ><code>{{ selectedEvent.event }}</code
                     ><span>{{ formatDate(selectedEvent.published_at) }}</span>
+                    <span v-if="selectedEvent.published_account"
+                      >{{ $t('RotationPublishedAccount') }}：{{
+                        accountLabel(selectedEvent.published_account)
+                      }}</span
+                    >
                   </div>
                   <p class="recipient-help">
                     {{
@@ -500,10 +446,10 @@ import { credentialUrl, getCredentialEventCycles } from '@/api/applicationCreden
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { subscribedAccountLabel } from '../components/subscriptionAccount'
 import {
-  eventLabels,
   statusLabels,
   receiptStatus,
-  canonicalEventName
+  rotationEventTitle,
+  buildCycleEventTimeline
 } from './rotationEventTimeline'
 
 const cycleKinds = {
@@ -511,8 +457,7 @@ const cycleKinds = {
   subscription: 'PolicySubscriptionCycle',
   subscription_refresh: 'PolicySubscriptionRefreshCycle',
   update: 'PolicyCredentialUpdate',
-  event: 'PolicyStandaloneEvent',
-  legacy: 'PolicyLegacyEvent'
+  event: 'PolicyStandaloneEvent'
 }
 const cycleStatuses = {
   preparing: 'PolicyCyclePreparing',
@@ -525,11 +470,11 @@ const cycleStatuses = {
 const subscriptionStages = [
   ['PolicyStageChangeStarted', ['credential.change.started']],
   ['PolicyStageChangeResult', ['credential.change.completed', 'credential.change.failed']],
-  ['PolicyStageCredentialPublished', ['credential.updated']]
+  ['PolicyStageCredentialPublished', ['credential.secret.updated']]
 ]
 const rotationStages = [
   ['RotationVerificationStartedEvent', ['rotation.verify.started', 'rotation.verify.skipped']],
-  ['PolicyStageAccountPublished', ['rotation.started']],
+  ['PolicyStageAccountPublished', ['credential.switch.published']],
   ['PolicyStageWaitingForApplication', ['rotation.waiting_for_app']],
   ['RotationSourceWaitingEvent', ['rotation.source.waiting']],
   ['RotationSourceReadyEvent', ['rotation.source.ready']],
@@ -679,55 +624,8 @@ export default {
     selectedEvent() {
       return this.detail?.events.find((event) => event.id === this.selectedEventId)
     },
-    observationStatus() {
-      const labels = {
-        preparing: 'StandbyObservationAwaitingAlignment',
-        waiting_standby: 'StandbyObservationInProgress',
-        ready_to_switch: 'StandbyObservationReady',
-        completed: 'StandbyObservationCompleted',
-        cancelled: 'PolicyCycleCancelled'
-      }
-      return this.$t(labels[this.detail.preparation.status] || 'StandbyObservationCompleted')
-    },
-    observationHelp() {
-      const status = this.detail.preparation.status
-      const key =
-        status === 'preparing'
-          ? 'StandbyObservationAlignmentHelp'
-          : status === 'ready_to_switch'
-            ? 'StandbyObservationReadyHelp'
-            : 'StandbyObservationTrafficHelp'
-      return this.$t(key)
-    },
-    observationItems() {
-      const observation = this.detail.preparation
-      const days = observation.standby_no_traffic_days
-      const seconds = observation.remaining_seconds
-      const minutes = seconds == null ? null : Math.ceil(seconds / 60)
-      return [
-        { label: 'StandbyAccount', value: this.accountLabel(observation.standby_account) },
-        {
-          label: 'StandbyNoTrafficDays',
-          value: days == null ? '—' : this.$t('StandbyNoTrafficDaysValue', { days })
-        },
-        {
-          label: 'StandbyLastSecretAccess',
-          value: this.formatDate(observation.standby_last_access)
-        },
-        { label: 'StandbyIdleSince', value: this.formatDate(observation.standby_idle_since) },
-        { label: 'RotationEligibleAt', value: this.formatDate(observation.eligible_at) },
-        {
-          label: 'StandbyObservationRemaining',
-          value:
-            minutes == null
-              ? '—'
-              : this.$t('StandbyObservationDuration', {
-                  days: Math.floor(minutes / 1440),
-                  hours: Math.floor((minutes % 1440) / 60),
-                  minutes: minutes % 60
-                })
-        }
-      ]
+    timelineEvents() {
+      return buildCycleEventTimeline(this.detail, this.stages)
     },
     stages() {
       const definitions =
@@ -736,37 +634,75 @@ export default {
           : this.detail?.kind === 'subscription'
             ? subscriptionStages
             : this.detail?.kind === 'subscription_refresh'
-              ? [['PolicyStageCredentialPublished', ['credential.updated']]]
+              ? [['CredentialRefreshRequestedEvent', ['credential.refresh.requested']]]
               : []
-      const preparationStages =
-        this.detail?.preparation ||
-        this.detail?.events.some((event) => event.event.startsWith('rotation.preparation.'))
-          ? [
-              ['RotationPreparationStartedEvent', ['rotation.preparation.started']],
-              ['RotationAccountsAlignedEvent', ['rotation.accounts.aligned']],
-              ['RotationStandbyWaitingEvent', ['rotation.standby.waiting']],
-              ['RotationPreparationReadyEvent', ['rotation.preparation.ready']]
-            ]
-          : []
-      return [...preparationStages, ...definitions].map(([label, codes]) => {
-        const event = this.detail.events.findLast((event) =>
-          codes.includes(canonicalEventName(event.event))
-        )
+      const phase = this.detail?.rotation_status?.rotation_phase
+      return definitions.map(([label, codes]) => {
+        const event = this.detail.events.findLast((event) => codes.includes(event.event))
+        const skipped = !event && ['cancelled', 'failed'].includes(this.detail.status)
+        let current = false
+        let completed = false
+        let statusLabel = event
+          ? 'PolicyStageEmitted'
+          : skipped
+            ? 'PolicyStageSkipped'
+            : 'PolicyStageNotEmitted'
+        let icon = event ? 'Message' : 'Clock'
+        if (label === 'PolicyStageWaitingForApplication' && event) {
+          const publication = this.detail.events.findLast(
+            (item) =>
+              item.event === 'credential.switch.published' && item.revision === event.revision
+          )
+          completed = phase
+            ? [
+                'waiting_source',
+                'ready_for_change',
+                'changing_secret',
+                'change_failed',
+                'recovery_required'
+              ].includes(phase)
+            : this.detail.status === 'success' ||
+              !!(publication && publication.confirmed_count === publication.recipient_count)
+          current =
+            !completed &&
+            (phase
+              ? ['waiting_switch', 'waiting_revert'].includes(phase)
+              : this.detail.status === 'running')
+          statusLabel = completed
+            ? 'PolicyEventApplied'
+            : this.detail.status === 'cancelled'
+              ? 'Cancelled'
+              : 'PolicyEventNotApplied'
+          icon = completed ? 'Check' : 'Clock'
+        } else if (label === 'RotationSourceWaitingEvent') {
+          completed = !!this.detail.source_traffic?.ready
+          current = !!this.detail.source_traffic && !completed && phase === 'waiting_source'
+          statusLabel =
+            !this.detail.source_traffic && (this.detail.rotation_status || !event)
+              ? 'PolicyStageNotStarted'
+              : completed
+                ? 'StandbyObservationCompleted'
+                : this.detail.status === 'running'
+                  ? 'Running'
+                  : this.detail.status === 'cancelled'
+                    ? 'Cancelled'
+                    : 'PolicyStageEmitted'
+          icon = completed ? 'Check' : 'Clock'
+        }
+        if (event?.event.endsWith('.failed')) icon = 'CircleClose'
         return {
           label:
-            event?.event === 'rotation.verify.skipped' ? 'RotationVerificationSkippedEvent' : label,
+            event?.event === 'rotation.verify.skipped'
+              ? 'RotationVerificationSkippedEvent'
+              : label === 'PolicyStageWaitingForApplication' && phase === 'waiting_revert'
+                ? 'WaitingForAccountRevert'
+                : label,
           event,
-          current:
-            (this.detail.status === 'running' &&
-              label === 'RotationSourceWaitingEvent' &&
-              this.detail.source_traffic &&
-              !this.detail.source_traffic.ready) ||
-            (this.detail.preparation?.is_current &&
-              ((label === 'RotationStandbyWaitingEvent' &&
-                this.detail.preparation.status === 'waiting_standby') ||
-                (label === 'RotationAccountsAlignedEvent' &&
-                  this.detail.preparation.status === 'preparing'))),
-          skipped: !event && ['cancelled', 'failed'].includes(this.detail.status)
+          current,
+          completed,
+          statusLabel,
+          icon,
+          skipped
         }
       })
     },
@@ -848,10 +784,10 @@ export default {
     this.latestRequest++
   },
   methods: {
-    canonicalEventName,
     receiptStatus,
     accountLabel: subscribedAccountLabel,
     cycleAccounts(cycle) {
+      if (cycle.rotation_accounts) return this.rotationDirection(cycle.rotation_accounts)
       const accounts = cycle.accounts?.length
         ? cycle.accounts
         : cycle.account
@@ -1022,7 +958,16 @@ export default {
       )
     },
     eventName(event) {
-      return this.$t(eventLabels[event.event] || event.event)
+      const { action, template, params } = rotationEventTitle(event)
+      const label = this.$t(action)
+      return template ? this.$t(template, { action: label, ...params }) : label
+    },
+    rotationDirection(accounts) {
+      return this.$t('RotationEventWithDirection', {
+        action: this.$t('RotationSwitchDirection'),
+        source: this.accountLabel(accounts.source),
+        target: this.accountLabel(accounts.target)
+      })
     },
     receiptType(client) {
       return client.received_at ? 'success' : client.publish_result === 'failed' ? 'danger' : 'info'
@@ -1134,6 +1079,7 @@ export default {
 }
 .record-section {
   min-width: 0;
+  overflow-wrap: anywhere;
 }
 .record-heading {
   display: flex;
@@ -1209,7 +1155,7 @@ export default {
   color: var(--el-text-color-regular);
   background: var(--el-fill-color-light);
 }
-.cycle-stage.emitted:not(.failed):not(.current) > .el-icon {
+.cycle-stage.emitted:not(.failed):not(.current):not(.completed) > .el-icon {
   color: var(--el-color-primary);
 }
 .cycle-stage.failed {
@@ -1222,6 +1168,9 @@ export default {
   border-color: var(--el-color-primary-light-5);
   color: var(--el-color-primary);
   background: var(--el-color-primary-light-9);
+}
+.cycle-stage.completed > .el-icon {
+  color: var(--el-color-success);
 }
 .standby-observation p {
   color: var(--el-text-color-regular);
@@ -1250,9 +1199,16 @@ export default {
   font-size: 12px;
   color: var(--el-text-color-regular);
 }
+.event-account-context {
+  display: grid;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--el-text-color-regular);
+  overflow-wrap: anywhere;
+}
 .event-workspace {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr);
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   border-top: 1px solid var(--el-border-color-lighter);
   padding-top: 20px;
   align-items: start;
@@ -1269,6 +1225,49 @@ export default {
 }
 .timeline-scroll :deep(.el-timeline) {
   padding-left: 6px;
+}
+.event-timeline-item :deep(.el-timeline-item__tail) {
+  border-left-style: dashed;
+  border-left-color: var(--el-border-color);
+}
+.event-timeline-item.trail-primary :deep(.el-timeline-item__tail) {
+  border-left-style: solid;
+  border-left-color: var(--el-color-primary);
+}
+.event-timeline-item.trail-danger :deep(.el-timeline-item__tail) {
+  border-left-style: solid;
+  border-left-color: var(--el-color-danger);
+}
+.event-timeline-item :deep(.el-timeline-item__node--warning.is-hollow) {
+  box-shadow: 0 0 0 4px var(--el-color-warning-light-9);
+}
+.event-timeline-item :deep(.el-timeline-item__node.is-hollow) {
+  background-color: var(--el-bg-color);
+}
+.event-timeline-item :deep(.el-timeline-item__node--info) {
+  background-color: var(--el-text-color-placeholder);
+  border-color: var(--el-text-color-placeholder);
+}
+.event-timeline-item :deep(.el-timeline-item__node--info.is-hollow) {
+  background-color: var(--el-bg-color);
+}
+.event-progress {
+  font-weight: 500;
+}
+.event-progress.is-primary {
+  color: var(--el-color-primary);
+}
+.event-progress.is-success {
+  color: var(--el-color-success);
+}
+.event-progress.is-warning {
+  color: var(--el-color-warning-dark-2);
+}
+.event-progress.is-danger {
+  color: var(--el-color-danger);
+}
+.event-progress.is-info {
+  color: var(--el-text-color-secondary);
 }
 .event-option {
   box-sizing: border-box;
@@ -1385,20 +1384,6 @@ export default {
 .recipient-filters button:focus-visible {
   outline: 2px solid var(--el-color-primary);
   outline-offset: 2px;
-}
-@container (max-width: 760px) {
-  .event-workspace {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-  }
-  .policy-timeline {
-    padding-right: 0;
-  }
-  .event-recipients {
-    padding: 20px 0 0;
-    border-left: 0;
-    border-top: 1px solid var(--el-border-color-lighter);
-  }
 }
 @container (max-width: 500px) {
   .cycle-heading {

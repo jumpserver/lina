@@ -22,8 +22,9 @@
   "RotationPreparationCancelledEvent": "Preparation cancelled",
   "PolicyCyclePreparing": "Preparing",
   "PolicyDocsPreparationTitle": "Administrator-triggered preparation",
-  "PolicyDocsPreparationFlow": "The administrator first starts preparation. The current account is republished; SDK and Agent instances fetch, apply and confirm its new revision. Applications using only the legacy account-secret API become aligned after successfully fetching the current account during preparation. After all applications align, every successful Secret request for the standby account resets the observation period. Traffic means Secret API access, including SDK, Agent and legacy requests, rather than application business connections. The default no-traffic duration is 7 days. Readiness notifies the administrator who started preparation; switching still requires a manual action. Preparation, switching and secret change belong to the same cycle.",
-  "PolicyDocsPreparationAction": "Update preparation progress. Apply and confirm credential.updated for account alignment. Preparation readiness does not initiate switching or change passwords.",
+  "PolicyDocsPreparationAction": "Update preparation progress. Apply and confirm credential.secret.updated for account alignment. Preparation readiness does not initiate switching or change passwords.",
   "PolicyDocsPreparationTrigger": "Emitted when the corresponding preparation stage starts or completes.",
-  "AlternatingAccountRotationHelp": "The administrator starts preparation to align the current account. After the standby account has no Secret API requests for the configured period, notify the administrator to start switching manually. Change the original account password after all participating applications switch."
+  "AlternatingAccountRotationHelp": "The administrator starts preparation to align the current account. After the standby account has no Secret API requests for the configured period, notify the administrator to start switching manually. Change the original account password after all participating applications switch.",
+  "CurlExample": "cURL account access example",
+  "CurlDescription": "Fetch application-authorized account credentials through the signed HTTP API."
 }

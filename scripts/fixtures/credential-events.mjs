@@ -3,7 +3,7 @@ export function createCredentialEventFixture(mode = 'rotation', count = 300) {
   const codes =
     mode === 'rotation'
       ? [
-          'credential.updated',
+          'credential.switch.published',
           'rotation.started',
           'rotation.waiting_for_application',
           'credential.change.started',
@@ -13,13 +13,13 @@ export function createCredentialEventFixture(mode = 'rotation', count = 300) {
       : [
           'credential.change.started',
           'credential.change.completed',
-          'credential.updated',
+          'credential.secret.updated',
           'application.scope.updated',
           'credential.change.started',
           'credential.change.failed',
           'credential.change.started',
           'credential.change.completed',
-          'credential.updated',
+          'credential.secret.updated',
           'credential.revoked'
         ]
   const events = Array.from({ length: 180 }, (_, index) => ({

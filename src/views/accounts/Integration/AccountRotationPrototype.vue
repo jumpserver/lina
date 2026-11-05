@@ -99,7 +99,10 @@ export default {
                 >
                   {this.mode === 'subscription'
                     ? this.$t(row.is_active ? 'Enabled' : 'Disabled')
-                    : credentialStatusLabel(row, this.$t)}
+                    : credentialStatusLabel(
+                        this.selectedCredential?.id === row.id ? this.selectedCredential : row,
+                        this.$t
+                      )}
                 </el-tag>
               </el-tooltip>
             )

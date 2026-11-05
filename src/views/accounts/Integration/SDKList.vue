@@ -69,7 +69,7 @@
             <template v-else-if="documentationTab === 'sdk'">
               <el-tag effect="plain" size="small">{{ sdkRuntime }}</el-tag>
               <el-tag effect="plain" size="small" type="info">
-                {{ $t(credentialPolicies ? 'ApplicationCredential' : 'SDKLegacyExample') }}
+                {{ $t(credentialPolicies ? 'ApplicationCredential' : 'CurlExample') }}
               </el-tag>
             </template>
           </div>
@@ -200,7 +200,7 @@ export default {
       if (this.documentationTab === 'socket') return 'SocketAPIDescription'
       if (this.documentationTab === 'overview') return 'IntegrationDocsOverviewDescription'
       if (this.documentationTab === 'protocol') return 'IntegrationDocsProtocolDescription'
-      return this.credentialPolicies ? 'SDKDescription' : 'SDKLegacyDescription'
+      return this.credentialPolicies ? 'SDKDescription' : 'CurlDescription'
     },
     activeDocument() {
       const marker = `${this.documentationTab}-doc`

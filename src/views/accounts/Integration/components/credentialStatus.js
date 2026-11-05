@@ -1,9 +1,7 @@
 export const rotationStatuses = {
   idle: 'RotationNormal',
-  preparing: 'RotationPreparing',
-  waiting_standby: 'RotationWaitingStandby',
-  ready_to_switch: 'RotationReadyToSwitch',
   waiting_switch: 'WaitingForAccountSwitch',
+  waiting_source: 'WaitingForSourceNoSecretFetch',
   ready_for_change: 'ReadyForSecretChange',
   changing_secret: 'ChangingSecret',
   change_failed: 'PamChangeFailed',
@@ -11,11 +9,16 @@ export const rotationStatuses = {
   waiting_revert: 'WaitingForAccountRevert'
 }
 
-export function credentialStatusLabel(credential, t) {
+export function credentialStatusLabel(credential, t, rotationStatus) {
   const enabled = t(credential.is_active ? 'Enabled' : 'Disabled')
   if (credential.mode === 'subscription' || credential.status === 'idle') return enabled
-  const status = rotationStatuses[credential.status]
-    ? t(rotationStatuses[credential.status])
-    : credential.status || '-'
+  const phase =
+    credential.status === 'waiting_switch'
+      ? (rotationStatus?.credential_status === credential.status &&
+          rotationStatus.rotation_phase) ||
+        credential.rotation_phase ||
+        credential.status
+      : credential.status
+  const status = rotationStatuses[phase] ? t(rotationStatuses[phase]) : credential.status || '-'
   return credential.is_active ? status : `${enabled} · ${status}`
 }

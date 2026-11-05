@@ -2,7 +2,10 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
-import { canonicalEventName } from '../src/views/accounts/Integration/AccountRotationDetail/rotationEventTimeline.js'
+import {
+  rotationEventTitle,
+  buildCycleEventTimeline
+} from '../src/views/accounts/Integration/AccountRotationDetail/rotationEventTimeline.js'
 
 const source = await readFile(
   new URL(
@@ -43,7 +46,8 @@ function viewFor(api, initialCycleId = '') {
     'eventLabels',
     'statusLabels',
     'receiptStatus',
-    'canonicalEventName',
+    'rotationEventTitle',
+    'buildCycleEventTimeline',
     script
   )(
     null,
@@ -60,7 +64,8 @@ function viewFor(api, initialCycleId = '') {
     {},
     {},
     () => '',
-    canonicalEventName
+    rotationEventTitle,
+    buildCycleEventTimeline
   )
   const emitted = []
   const view = {
@@ -72,12 +77,14 @@ function viewFor(api, initialCycleId = '') {
     $emit: (...args) => emitted.push(args)
   }
   Object.assign(view, component.data.call(view))
+  Object.defineProperty(view, 'stages', { get: () => component.computed.stages.call(view) })
   for (const [name, method] of Object.entries(component.methods)) view[name] = method.bind(view)
   view.scheduleObservationRefresh = () => {}
   return {
     view,
     emitted,
     stages: () => component.computed.stages.call(view),
+    timeline: () => component.computed.timelineEvents.call(view),
     unmount: () => component.beforeUnmount.call(view)
   }
 }
@@ -92,6 +99,137 @@ test('skipped verification is shown explicitly in the rotation stages', () => {
   assert.equal(stages()[0].label, 'RotationVerificationSkippedEvent')
   assert.equal(stages()[0].event.id, 'skip')
   assert.equal(stages()[0].skipped, false)
+})
+
+function rotationWithProgress(phase, ready = false) {
+  return {
+    kind: 'rotation',
+    status: 'running',
+    rotation_status: { credential_status: 'waiting_switch', rotation_phase: phase },
+    source_traffic: { ready },
+    events: [
+      {
+        id: 'publish',
+        event: 'credential.switch.published',
+        revision: 6,
+        recipient_count: 1,
+        received_count: 1,
+        confirmed_count: 0
+      },
+      { id: 'wait', event: 'rotation.waiting_for_app', revision: 6, received_count: 1 },
+      { id: 'observe', event: 'rotation.source.waiting', revision: 6, received_count: 1 }
+    ]
+  }
+}
+
+test('timeline fills published history but stops the traversed line at unconfirmed switching', () => {
+  const { view, timeline } = viewFor(async () => ({}))
+  view.detail = { ...rotationWithProgress('waiting_switch'), source_traffic: null }
+  const nodes = timeline()
+  assert.equal(nodes[0].hollow, false)
+  assert.equal(nodes[0].statusLabel, 'PolicyStageEmitted')
+  assert.equal(nodes[0].trail, 'primary')
+  assert.equal(nodes[1].hollow, true)
+  assert.equal(nodes[1].type, 'warning')
+  assert.equal(nodes[1].statusLabel, 'PolicyEventNotApplied')
+  assert.equal(nodes[1].trail, 'pending')
+  assert.equal(nodes[2].hollow, true)
+  assert.equal(nodes[2].type, 'info')
+  assert.equal(nodes[2].statusLabel, 'PolicyStageNotStarted')
+  view.selectedEventId = 'publish'
+  assert.deepEqual(timeline(), nodes)
+  view.selectedEventId = 'observe'
+  assert.deepEqual(timeline(), nodes)
+})
+
+test('confirmed switching fills its node and advances the solid path to observation', () => {
+  const { view, timeline } = viewFor(async () => ({}))
+  view.detail = rotationWithProgress('waiting_source')
+  const nodes = timeline()
+  assert.equal(nodes[1].hollow, false)
+  assert.equal(nodes[1].type, 'success')
+  assert.equal(nodes[1].trail, 'primary')
+  assert.equal(nodes[2].hollow, true)
+  assert.equal(nodes[2].type, 'warning')
+})
+
+test('failure colors its path red while an emitted retry continues the traversed history', () => {
+  const nodes = buildCycleEventTimeline({
+    events: [
+      { id: 'start', event: 'credential.change.started' },
+      { id: 'fail', event: 'credential.change.failed' },
+      { id: 'retry', event: 'credential.change.started' },
+      { id: 'done', event: 'credential.change.completed' }
+    ]
+  })
+  assert.equal(nodes[0].trail, 'danger')
+  assert.equal(nodes[1].type, 'danger')
+  assert.equal(nodes[1].hollow, false)
+  assert.equal(nodes[1].trail, 'danger')
+  assert.equal(nodes[2].trail, 'primary')
+})
+
+test('an old observation event and its receipt cannot start observation before the switch', () => {
+  const { view, stages } = viewFor(async () => ({}))
+  view.detail = rotationWithProgress('waiting_switch')
+  view.detail.source_traffic = null
+  const application = stages().find((stage) => stage.label === 'PolicyStageWaitingForApplication')
+  const observation = stages().find((stage) => stage.label === 'RotationSourceWaitingEvent')
+  assert.equal(application.current, true)
+  assert.equal(application.completed, false)
+  assert.equal(application.icon, 'Clock')
+  assert.equal(application.statusLabel, 'PolicyEventNotApplied')
+  assert.equal(observation.current, false)
+  assert.equal(observation.completed, false)
+  assert.equal(observation.icon, 'Clock')
+  assert.equal(observation.statusLabel, 'PolicyStageNotStarted')
+})
+
+test('confirmed applications advance the current stage to source observation', () => {
+  const { view, stages } = viewFor(async () => ({}))
+  view.detail = rotationWithProgress('waiting_source')
+  const application = stages().find((stage) => stage.label === 'PolicyStageWaitingForApplication')
+  const observation = stages().find((stage) => stage.label === 'RotationSourceWaitingEvent')
+  assert.equal(application.completed, true)
+  assert.equal(application.icon, 'Check')
+  assert.equal(application.statusLabel, 'PolicyEventApplied')
+  assert.equal(observation.current, true)
+  assert.equal(observation.icon, 'Clock')
+})
+
+test('an idle source does not bypass the still-pending application confirmation', () => {
+  const { view, stages } = viewFor(async () => ({}))
+  view.detail = rotationWithProgress('waiting_switch', true)
+  const application = stages().find((stage) => stage.label === 'PolicyStageWaitingForApplication')
+  const observation = stages().find((stage) => stage.label === 'RotationSourceWaitingEvent')
+  assert.equal(application.current, true)
+  assert.equal(application.completed, false)
+  assert.equal(observation.completed, true)
+  assert.equal(observation.statusLabel, 'StandbyObservationCompleted')
+})
+
+test('cancellation waits for account restoration rather than highlighting source observation', () => {
+  const { view, stages } = viewFor(async () => ({}))
+  view.detail = rotationWithProgress('waiting_revert')
+  const application = stages().find((stage) => stage.label === 'WaitingForAccountRevert')
+  assert.equal(application.current, true)
+  assert.equal(application.completed, false)
+  assert.equal(
+    stages().find((stage) => stage.label === 'RotationSourceWaitingEvent').current,
+    false
+  )
+})
+
+test('historical waiting events without confirmation never render a completion check', () => {
+  const { view, stages } = viewFor(async () => ({}))
+  view.detail = { ...rotationWithProgress(null), rotation_status: null, status: 'cancelled' }
+  let application = stages().find((stage) => stage.label === 'PolicyStageWaitingForApplication')
+  assert.equal(application.completed, false)
+  assert.equal(application.current, false)
+  assert.equal(application.icon, 'Clock')
+  view.detail.events[0].confirmed_count = 1
+  application = stages().find((stage) => stage.label === 'PolicyStageWaitingForApplication')
+  assert.equal(application.completed, true)
 })
 
 function deferred() {
