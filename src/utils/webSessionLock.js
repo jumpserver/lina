@@ -180,7 +180,7 @@ export function createWebSessionLock({
       channel = new env.BroadcastChannel(prefix)
       channel.onmessage = (event) => receive(event.data)
     }
-    const wasLocked = state.ready && state.locked
+    const wasLocked = state.session?.locked === true
     state.session = data
     if (
       Number.isInteger(data.attempts_remaining) &&
@@ -496,6 +496,10 @@ export function createWebSessionLock({
     listen(env, 'pageshow', (event) => {
       if (event.persisted) {
         stateRevision++
+        // A cached page may outlive its login or lock while no page was open.
+        state.ready = false
+        state.locked = true
+        publish()
         pageHidden = false
         pageId = newId()
         pageEntering = true
