@@ -749,6 +749,13 @@ li.rmenu i.fa {
   flex-shrink: 0;
 }
 
+// 提示文字字号、换行会改变 Alert 高度，关闭按钮不能沿用 Element Plus 固定的 top。
+.el-alert .el-alert__close-btn,
+.el-alert .el-alert__close-btn.is-customed {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .el-alert.el-alert--success.is-light {
   border-color: var(--color-success-light);
 }
@@ -813,12 +820,6 @@ li.rmenu i.fa {
 .el-drawer.drawer .el-drawer__body,
 .el-drawer__wrapper .el-drawer__body {
   padding: 0;
-}
-
-.black-theme-popover {
-  width: 300px;
-  max-height: 700px;
-  overflow-y: scroll;
 }
 
 .text-overflow {

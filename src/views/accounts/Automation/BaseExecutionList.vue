@@ -1,6 +1,10 @@
 <template>
   <div>
-    <DrawerListTable :header-actions="headerActions" :table-config="tableConfig" />
+    <DrawerListTable
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+      :drawer-props="drawerProps"
+    />
     <ReportDialog v-model:visible="visible" :url="reportUrl" />
   </div>
 </template>
@@ -37,6 +41,22 @@ export default {
       type: String,
       required: true
     },
+    permissionApp: {
+      type: String,
+      default: 'accounts'
+    },
+    automationResource: {
+      type: String,
+      default: ''
+    },
+    columns: {
+      type: Array,
+      default: null
+    },
+    drawerProps: {
+      type: Object,
+      default: () => ({})
+    },
     customActions: {
       type: Object,
       default: null
@@ -49,6 +69,8 @@ export default {
       reportUrl: '',
       tableConfig: {
         url: this.url,
+        permissions: { app: this.permissionApp, resource: this.resource },
+        ...(this.columns ? { columns: this.columns } : {}),
         columnsMeta: {
           id: {
             label: this.$t('ID'),
@@ -81,11 +103,17 @@ export default {
                 name: this.automationRoute,
                 params: { id: row.automation.id }
               }),
-              can: ({ row }) => row.automation?.id,
+              can: ({ row }) =>
+                row.automation?.id &&
+                this.$hasPerm(
+                  `${this.permissionApp}.view_${this.automationResource || this.resource}`
+                ),
               drawer: true
             },
             id: ({ row }) => row.automation,
-            can: this.$hasPerm('accounts.view_' + this.resource)
+            can: this.$hasPerm(
+              `${this.permissionApp}.view_${this.automationResource || this.resource}`
+            )
           },
           date_start: {
             width: null
@@ -109,10 +137,10 @@ export default {
                   name: 'report',
                   title: this.$t('Report'),
                   type: 'success',
-                  can: this.$hasPerm('accounts.view_' + this.resource),
+                  can: this.$hasPerm(`${this.permissionApp}.view_${this.resource}`),
                   callback: function ({ row }) {
                     vm.visible = true
-                    const url = this.url.split('?')[0]
+                    const url = vm.url.split('?')[0]
                     vm.reportUrl = `${url}${row.id}/report/`
                   }
                 }

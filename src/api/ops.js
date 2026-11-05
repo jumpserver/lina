@@ -61,6 +61,14 @@ export function stopJob(form) {
   })
 }
 
+export function cancelFileUpload(jobId) {
+  return request({
+    url: '/api/v1/ops/jobs/cancel-upload/',
+    method: 'post',
+    data: { job_id: jobId }
+  })
+}
+
 export function JobUploadFile(form, config = {}) {
   return request({
     url: '/api/v1/ops/jobs/upload/',

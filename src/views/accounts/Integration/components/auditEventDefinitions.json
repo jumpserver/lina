@@ -1,0 +1,158 @@
+{
+  "command_requested": {
+    "label": "AppAuditTypeCommandRequested",
+    "meaning": "AppAuditMeaningCommandRequested",
+    "protocolEvents": ["credential.switch.requested", "app.restart.requested"]
+  },
+  "command_result": {
+    "label": "AppAuditTypeCommandResult",
+    "meaning": "AppAuditMeaningCommandResult",
+    "protocolEvents": [
+      "credential.secret.updated",
+      "credential.switch.published",
+      "credential.refresh.requested",
+      "credential.switch.requested",
+      "app.restart.requested"
+    ]
+  },
+  "configuration_created": {
+    "label": "AppAuditTypeConfigurationCreated",
+    "meaning": "AppAuditMeaningConfigurationCreated",
+    "protocolEvents": ["app.scope.updated"]
+  },
+  "configuration_updated": {
+    "label": "AppAuditTypeConfigurationUpdated",
+    "meaning": "AppAuditMeaningConfigurationUpdated",
+    "protocolEvents": ["app.scope.updated"]
+  },
+  "configuration_deleted": {
+    "label": "AppAuditTypeConfigurationDeleted",
+    "meaning": "AppAuditMeaningConfigurationDeleted",
+    "protocolEvents": []
+  },
+  "authorization_granted": {
+    "label": "AppAuditTypeAuthorizationGranted",
+    "meaning": "AppAuditMeaningAuthorizationGranted",
+    "protocolEvents": ["credential.refresh.requested"]
+  },
+  "authorization_revoked": {
+    "label": "AppAuditTypeAuthorizationRevoked",
+    "meaning": "AppAuditMeaningAuthorizationRevoked",
+    "protocolEvents": ["app.scope.updated"]
+  },
+  "credential_fetched": {
+    "label": "AppAuditTypeCredentialFetched",
+    "meaning": "AppAuditMeaningCredentialFetched",
+    "protocolEvents": []
+  },
+  "credential_secret_updated": {
+    "label": "AppAuditTypeCredentialSecretUpdated",
+    "meaning": "AppAuditMeaningCredentialSecretUpdated",
+    "protocolEvents": ["credential.secret.updated"]
+  },
+  "credential_switch_published": {
+    "label": "AppAuditTypeCredentialSwitchPublished",
+    "meaning": "AppAuditMeaningCredentialSwitchPublished",
+    "protocolEvents": ["credential.switch.published"]
+  },
+  "credential_refresh_requested": {
+    "label": "AppAuditTypeCredentialRefreshRequested",
+    "meaning": "AppAuditMeaningCredentialRefreshRequested",
+    "protocolEvents": ["credential.refresh.requested"]
+  },
+  "credential_republished": {
+    "label": "AppAuditTypeCredentialRepublished",
+    "meaning": "AppAuditMeaningCredentialRepublished",
+    "protocolEvents": ["credential.refresh.requested", "snapshot"]
+  },
+  "credential_confirmed": {
+    "label": "AppAuditTypeCredentialConfirmed",
+    "meaning": "AppAuditMeaningCredentialConfirmed",
+    "protocolEvents": []
+  },
+  "credential_confirmation_skipped": {
+    "label": "AppAuditTypeCredentialConfirmationSkipped",
+    "meaning": "AppAuditMeaningCredentialConfirmationSkipped",
+    "protocolEvents": []
+  },
+  "application_failure_reviewed": {
+    "label": "AppAuditTypeApplicationFailureReviewed",
+    "meaning": "AppAuditMeaningApplicationFailureReviewed",
+    "protocolEvents": []
+  },
+  "credential_stream_connected": {
+    "label": "AppAuditTypeCredentialStreamConnected",
+    "meaning": "AppAuditMeaningCredentialStreamConnected",
+    "protocolEvents": ["snapshot"]
+  },
+  "credential_stream_disconnected": {
+    "label": "AppAuditTypeCredentialStreamDisconnected",
+    "meaning": "AppAuditMeaningCredentialStreamDisconnected",
+    "protocolEvents": []
+  },
+  "rotation_step": {
+    "label": "AppAuditTypeRotationStep",
+    "meaning": "AppAuditMeaningRotationStep",
+    "protocolEvents": [
+      "rotation.verify.started",
+      "rotation.verify.skipped",
+      "rotation.verify.failed",
+      "rotation.verify.cancelled",
+      "rotation.waiting_for_app",
+      "rotation.source.waiting",
+      "rotation.source.ready",
+      "rotation.completed",
+      "rotation.failed"
+    ]
+  },
+  "rotation_started": {
+    "label": "AppAuditTypeRotationStarted",
+    "meaning": "AppAuditMeaningRotationStarted",
+    "protocolEvents": ["rotation.started"]
+  },
+  "rotation_cancelled": {
+    "label": "AppAuditTypeRotationCancelled",
+    "meaning": "AppAuditMeaningRotationCancelled",
+    "protocolEvents": ["credential.switch.published", "rotation.force_stopped"]
+  },
+  "secret_change_started": {
+    "label": "AppAuditTypeSecretChangeStarted",
+    "meaning": "AppAuditMeaningSecretChangeStarted",
+    "protocolEvents": ["credential.change.started"]
+  },
+  "secret_change_completed": {
+    "label": "AppAuditTypeSecretChangeCompleted",
+    "meaning": "AppAuditMeaningSecretChangeCompleted",
+    "protocolEvents": ["credential.change.completed"]
+  },
+  "secret_change_failed": {
+    "label": "AppAuditTypeSecretChangeFailed",
+    "meaning": "AppAuditMeaningSecretChangeFailed",
+    "protocolEvents": ["credential.change.failed"]
+  },
+  "client_registered": {
+    "label": "AppAuditTypeClientRegistered",
+    "meaning": "AppAuditMeaningClientRegistered",
+    "protocolEvents": []
+  },
+  "client_enabled": {
+    "label": "AppAuditTypeClientEnabled",
+    "meaning": "AppAuditMeaningClientEnabled",
+    "protocolEvents": []
+  },
+  "client_disabled": {
+    "label": "AppAuditTypeClientDisabled",
+    "meaning": "AppAuditMeaningClientDisabled",
+    "protocolEvents": []
+  },
+  "notification": {
+    "label": "AppAuditTypeNotification",
+    "meaning": "AppAuditMeaningNotification",
+    "protocolEvents": []
+  },
+  "application_secret_reset": {
+    "label": "AppAuditTypeApplicationSecretReset",
+    "meaning": "AppAuditMeaningApplicationSecretReset",
+    "protocolEvents": []
+  }
+}

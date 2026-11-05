@@ -4,25 +4,33 @@
     :show-confirm="false"
     :title="title"
     :visible="visible"
-    class="help-dialog"
-    top="1vh"
-    width="50%"
+    top="8vh"
+    width="640px"
     @update:visible="$emit('update:visible', $event)"
   >
-    <p>{{ $t('VariableHelpText') }}</p>
-    <table border="1" class="help-table">
-      <tbody>
+    <p class="help-intro">{{ $t('VariableHelpText') }}</p>
+    <table class="help-table">
+      <thead>
         <tr>
-          <th>{{ $tc('Variable') }}</th>
-          <th>{{ $tc('Description') }}</th>
+          <th scope="col">{{ $t('Variable') }}</th>
+          <th scope="col">{{ $t('Description') }}</th>
         </tr>
-        <tr v-for="(val, key, index) in variables" :key="index">
-          <td :title="$tc('ClickCopy')" class="item-td text-link" @click="onCopy(key)">
-            <label class="item-label">{{ key }}</label>
-          </td>
+      </thead>
+      <tbody>
+        <tr v-for="(description, key) in variables" :key="key">
           <td>
-            <span>{{ val }}</span>
+            <button
+              :aria-label="`${$t('ClickCopy')} ${key}`"
+              :title="$t('ClickCopy')"
+              class="variable-copy"
+              type="button"
+              @click="onCopy(key)"
+            >
+              <code>{{ key }}</code>
+              <el-icon aria-hidden="true"><CopyDocument /></el-icon>
+            </button>
           </td>
+          <td>{{ description }}</td>
         </tr>
       </tbody>
     </table>
@@ -64,29 +72,69 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:deep(.help-dialog.dialog .el-dialog__footer) {
-  border-top: none;
-  padding: 8px;
+.help-intro {
+  margin: 0 0 16px;
+  color: var(--el-text-color-regular);
 }
 
 .help-table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #dee2e6;
-}
+  table-layout: fixed;
+  line-height: 1.5;
 
-:deep(.help-table) {
   th,
   td {
-    height: 40px;
-    padding: 0 8px;
-    text-align: left;
+    padding: 8px 12px;
+    text-align: start;
+    overflow-wrap: anywhere;
+  }
+
+  th {
+    background: var(--el-fill-color-light);
+    color: var(--el-text-color-regular);
+    font-weight: 600;
+  }
+
+  th:first-child {
+    width: 40%;
+  }
+
+  td {
+    border-bottom: 1px solid var(--el-border-color-lighter);
   }
 }
 
-:deep(.help-table .item-td),
-:deep(.help-table .item-label) {
+.variable-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--el-text-color-primary);
+  font: inherit;
+  text-align: start;
   cursor: pointer;
-  color: var(--color-primary);
+
+  code {
+    min-width: 0;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  .el-icon {
+    color: var(--el-text-color-secondary);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--el-color-primary);
+
+    .el-icon {
+      color: inherit;
+    }
+  }
 }
 </style>
