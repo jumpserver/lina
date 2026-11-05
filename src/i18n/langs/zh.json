@@ -2041,7 +2041,7 @@
   "Valid": "有效",
   "Value": "数值",
   "Variable": "变量",
-  "VariableHelpText": "您可以在命令中使用 {{ key }} 读取内置变量",
+  "VariableHelpText": "您可以在命令中使用 {'{{ key }}'} 读取内置变量",
   "VariableName": "变量名",
   "VaultHCPMountPoint": "Vault 服务器的挂载点，默认为 pam",
   "VaultHelpText": "1. 由于安全原因，需要在配置文件中开启 Vault 存储，默认后端为 OpenBao。<br>2. 开启后，填写存储配置并测试连接。<br>3. 同步会将密钥从本地数据库迁移到远端 Vault，同步完成后本地数据库不再存储密钥；使用“还原”可将已同步密钥重新写回本地，Vault 中的副本会保留。<br>4. 修改 Vault 配置后需重启服务。",

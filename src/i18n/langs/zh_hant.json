@@ -2169,7 +2169,7 @@
   "Valid": "有效",
   "Value": "數值",
   "Variable": "變數",
-  "VariableHelpText": "您可以在命令中使用 {{ key }} 讀取內建變數",
+  "VariableHelpText": "您可以在命令中使用 {'{{ key }}'} 讀取內建變數",
   "VariableName": "變數名",
   "VaultHCPMountPoint": "重新嘗試所選",
   "VaultHelpText": "1. 由於安全原因，需要在設定檔中開啟 Vault 儲存。<br>2. 開啟後，填寫儲存設定並測試連線。<br>3. 同步會將密鑰從本機資料庫遷移到遠端 Vault；同步完成後本機資料庫不再儲存密鑰。使用「還原」可將已同步密鑰重新寫回本機，Vault 中的副本會保留。<br>4. 修改 Vault 設定後需重新啟動服務。",
