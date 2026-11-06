@@ -7,28 +7,34 @@
       class="policy-alert"
       show-icon
     />
-    <div class="account-scope-actions">
-      <span class="selection-hint">{{ $t('CloudReviewSelectionExportOnly') }}</span>
-      <el-button
-        :disabled="!taskId"
-        :loading="deletingReleasedAssets"
-        plain
-        type="danger"
-        @click="deleteReleasedAssets"
-      >
-        {{ $t('DeleteAllReleasedAssetsForAccount') }}
-      </el-button>
-    </div>
     <GenericListTable
       ref="PendingReviewTable"
       :header-actions="headerActions"
       :table-config="tableConfig"
-    />
+      @selection-change="selectedRows = $event"
+      @loaded="selectedRows = []"
+    >
+      <template #search-after>
+        <el-button
+          v-if="canDeleteAssets"
+          :disabled="!selectedRows.length"
+          :loading="deletingSelectedAssets"
+          class="delete-selected-assets"
+          plain
+          size="small"
+          type="danger"
+          @click="deleteSelectedAssets"
+        >
+          {{ $t('DeleteSelected') }} ({{ selectedRows.length }})
+        </el-button>
+      </template>
+    </GenericListTable>
   </div>
 </template>
 
 <script lang="jsx">
 import GenericListTable from '@/layout/components/GenericListTable/index'
+import { getErrorResponseMsg } from '@/utils/common'
 import { DateFormatter, DetailFormatter } from '@/components/Table/TableFormatters'
 
 const REASON_I18N_KEYS = Object.freeze({
@@ -57,7 +63,8 @@ export default {
   },
   data() {
     return {
-      deletingReleasedAssets: false,
+      deletingSelectedAssets: false,
+      selectedRows: [],
       headerActions: {
         hasLeftActions: false,
         hasBulkDelete: false,
@@ -119,8 +126,8 @@ export default {
     }
   },
   computed: {
-    taskId() {
-      return this.object.task?.id || ''
+    canDeleteAssets() {
+      return this.$hasPerm('assets.delete_asset') && this.$hasPerm('xpack.view_cloudaccount')
     },
     reviewPolicy() {
       const key = this.object.task?.release_assets
@@ -133,40 +140,43 @@ export default {
     }
   },
   methods: {
-    async deleteReleasedAssets() {
-      if (!this.taskId) {
-        this.$message.error(this.$t('CloudSyncTaskUnavailable'))
-        return
-      }
-      try {
-        await this.$confirm(
-          this.$t('DeleteAllReleasedAssetsForAccountConfirm', {
-            account: this.object.name || '-'
-          }),
-          this.$t('DeleteAllReleasedAssetsForAccount'),
-          {
-            confirmButtonText: this.$t('DeleteAllReleasedAssetsForAccount'),
-            cancelButtonText: this.$t('Cancel'),
-            type: 'warning'
+    deleteSelectedAssets() {
+      const ids = this.selectedRows.map((row) => row.id)
+      const account = this.object.id
+      if (!ids.length || !this.canDeleteAssets || this.deletingSelectedAssets) return
+      this.$alert(
+        this.$t('DeleteSelectedCloudAssetsConfirm', {
+          account: this.object.name || '-',
+          count: ids.length
+        }),
+        this.$t('DeleteSelected'),
+        {
+          type: 'warning',
+          confirmButtonClass: 'el-button--danger',
+          confirmButtonText: this.$t('DeleteSelected'),
+          showCancelButton: true,
+          beforeClose: async (action, instance, done) => {
+            if (action !== 'confirm') return done()
+            this.deletingSelectedAssets = true
+            instance.confirmButtonLoading = true
+            try {
+              await this.$axios.delete('/api/v1/xpack/cloud/cloud-asset-bindings/stale/', {
+                data: { account, ids },
+                disableFlashErrorMsg: true
+              })
+              done()
+              this.selectedRows = []
+              this.$refs.PendingReviewTable?.reloadTable()
+              this.$message.success(this.$t('BulkDeleteSuccessMsg'))
+            } catch (error) {
+              this.$message.error(this.$t('BulkDeleteErrorMsg') + getErrorResponseMsg(error))
+            } finally {
+              this.deletingSelectedAssets = false
+              instance.confirmButtonLoading = false
+            }
           }
-        )
-      } catch {
-        return
-      }
-
-      const url =
-        '/api/v1/xpack/cloud/sync-instance-tasks/released-assets/' +
-        `?task_id=${encodeURIComponent(this.taskId)}`
-      this.deletingReleasedAssets = true
-      try {
-        await this.$axios.delete(url)
-        this.$message.success(this.$t('DeleteAllReleasedAssetsForAccountSuccess'))
-        this.$refs.PendingReviewTable?.reloadTable()
-      } catch {
-        this.$message.error(this.$t('DeleteAllReleasedAssetsForAccountFailed'))
-      } finally {
-        this.deletingReleasedAssets = false
-      }
+        }
+      ).catch(() => {})
     },
     formatReason(row) {
       const reasonCode = row.stale_reason?.code
@@ -179,26 +189,12 @@ export default {
 
 <style lang="scss" scoped>
 .policy-alert {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
-.account-scope-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.selection-hint {
-  color: var(--el-text-color-secondary);
-  line-height: 1.5;
-}
-
-@media (max-width: 768px) {
-  .account-scope-actions {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+.delete-selected-assets {
+  flex: 0 0 auto;
+  height: 30px;
+  margin: 0;
 }
 </style>

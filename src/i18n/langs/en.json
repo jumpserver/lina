@@ -3368,6 +3368,7 @@
   "CloudScheduleIncomplete": "Configuration incomplete",
   "CloudScheduleRequired": "Set an interval or a cron schedule before enabling scheduled execution.",
   "NoAdditionalDetails": "No additional details",
+  "DeleteSelectedCloudAssetsConfirm": "Delete the local assets associated with the {count} selected resources awaiting review in account “{account}”? Cloud resources will not be deleted. This action cannot be undone.",
   "DeleteAllReleasedAssetsForAccount": "Delete all released assets for this account",
   "DeleteAllReleasedAssetsForAccountConfirm": "Delete all local assets previously released by cloud sync for account “{account}”? Selected review rows are not affected. This action cannot be undone.",
   "DeleteAllReleasedAssetsForAccountSuccess": "Deleted all released assets for this account",
