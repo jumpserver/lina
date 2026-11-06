@@ -866,12 +866,6 @@
   "CurrentConnections": "Connexions actuelles",
   "CurrentStatus": "Statut actuel",
   "CurrentUserVerify": "Confirmer votre identité",
-  "IdentityConfirm": {
-    "PasswordHint": "Saisissez votre mot de passe de connexion pour continuer",
-    "MFAHint": "Effectuez la vérification MFA pour continuer",
-    "ReloginHint": "Reconnectez-vous pour confirmer votre identité. Continuer fermera cette session, y compris les autres pages qui l’utilisent. Les modifications non enregistrées seront perdues. Après la connexion, revenez sur cette page et répétez l’opération.",
-    "GoToLogin": "Se connecter"
-  },
   "Custom": "Personnalisé",
   "CustomCol": "Personnaliser les colonnes affichées",
   "CustomCreate": "Créer un actif - personnalisé",
@@ -3304,6 +3298,20 @@
     "WebIdleHelp": "Verrouille la console et le terminal Web après le délai d’inactivité indiqué. Saisissez le mot de passe de verrouillage pour déverrouiller. Si le verrouillage pour inactivité est activé, fermer toutes les pages verrouille aussi cette session après 10 secondes. La déconnexion à la fermeture est prioritaire. Actualiser ou rouvrir dans les 10 secondes annule cette action.",
     "LifetimeHelp": "Calculé depuis la connexion. Reconnectez-vous à l’expiration ; l’activité ne prolonge pas la durée.",
     "AdminClientHelp": "L’administrateur définit les valeurs par défaut et les limites. L’utilisateur peut être plus restrictif ; sinon, il suit l’administrateur."
+  },
+  "MCPClientID": "ID du client",
+  "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "Activer MCP",
+  "MCPEnabledHelp": "Koko synchronise ces paramètres toutes les 60 secondes. La désactivation bloque les nouvelles requêtes, tout en poursuivant la finalisation des tâches acceptées et la transmission des journaux d’audit.",
+  "MCPAllowRegistration": "Autoriser l’inscription automatique des clients",
+  "MCPRegistrationHelp": "Prend effet lorsque MCP est activé. Les utilisateurs configurent uniquement l’URL MCP, puis se connectent à JumpServer pour autoriser l’accès. La désactivation bloque les nouvelles inscriptions sans révoquer les autorisations existantes.",
+  "MCPPublicURL": "URL d’accès MCP",
+  "MCPPublicURLHelp": "Obligatoire lorsque MCP est activé. Saisissez l’URL MCP externe complète en HTTP ou HTTPS, sans barre oblique finale, paramètres de requête ni fragment. L’adresse d’autorisation utilise l’URL du site des paramètres de base.",
+  "IdentityConfirm": {
+    "PasswordHint": "Saisissez votre mot de passe de connexion pour continuer",
+    "MFAHint": "Effectuez la vérification MFA pour continuer",
+    "ReloginHint": "Reconnectez-vous pour confirmer votre identité. Continuer fermera cette session, y compris les autres pages qui l’utilisent. Les modifications non enregistrées seront perdues. Après la connexion, revenez sur cette page et répétez l’opération.",
+    "GoToLogin": "Se connecter"
   },
   "OnlineSessionPolicy": {
     "Title": "Informations de validité",

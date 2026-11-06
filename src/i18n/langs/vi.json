@@ -866,12 +866,6 @@
   "CurrentConnections": "Số lượng kết nối hiện tại",
   "CurrentStatus": "Tình trạng hiện tại",
   "CurrentUserVerify": "Xác nhận danh tính của bạn",
-  "IdentityConfirm": {
-    "PasswordHint": "Nhập mật khẩu đăng nhập để tiếp tục",
-    "MFAHint": "Hoàn tất xác minh MFA để tiếp tục",
-    "ReloginHint": "Hãy đăng nhập lại để xác nhận danh tính. Tiếp tục sẽ kết thúc phiên này, bao gồm các trang khác dùng cùng phiên. Nội dung chưa lưu sẽ bị mất. Sau khi đăng nhập lại, hãy quay về trang này và thực hiện lại thao tác.",
-    "GoToLogin": "Đến trang đăng nhập"
-  },
   "Custom": "Tùy chỉnh",
   "CustomCol": "Trống",
   "CustomCreate": "Tạo tài sản - Tùy chỉnh",
@@ -3135,6 +3129,20 @@
     "WebIdleHelp": "Khóa bảng điều khiển và Web terminal khi hết thời gian nhàn rỗi đã đặt. Nhập mật khẩu khóa để mở khóa. Khi bật khóa do không hoạt động, đóng tất cả các trang cũng khóa phiên sau 10 giây. Đăng xuất khi đóng trang được ưu tiên. Làm mới hoặc mở lại trong 10 giây sẽ hủy thao tác này.",
     "LifetimeHelp": "Tính từ lúc đăng nhập. Hết hạn phải đăng nhập lại; hoạt động không kéo dài thời hạn.",
     "AdminClientHelp": "Quản trị viên đặt mặc định và giới hạn. Người dùng có thể đặt nghiêm ngặt hơn; nếu không tự đặt thì theo quản trị viên."
+  },
+  "MCPClientID": "ID ứng dụng khách",
+  "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "Bật MCP",
+  "MCPEnabledHelp": "Koko đồng bộ cấu hình mỗi 60 giây. Tắt MCP sẽ dừng nhận yêu cầu mới, trong khi các tác vụ đã nhận tiếp tục hoàn tất và gửi bản ghi kiểm toán.",
+  "MCPAllowRegistration": "Cho phép tự động đăng ký ứng dụng khách",
+  "MCPRegistrationHelp": "Có hiệu lực khi MCP được bật. Người dùng chỉ cần cấu hình URL MCP, sau đó đăng nhập JumpServer và cấp quyền truy cập. Tắt tùy chọn này chỉ dừng đăng ký ứng dụng khách mới, không thu hồi quyền đã cấp.",
+  "MCPPublicURL": "URL truy cập MCP",
+  "MCPPublicURLHelp": "Bắt buộc khi bật MCP. Nhập URL MCP HTTP hoặc HTTPS bên ngoài đầy đủ, không có dấu gạch chéo cuối, tham số truy vấn hoặc phần fragment. Địa chỉ ủy quyền sử dụng URL trang web trong cài đặt cơ bản.",
+  "IdentityConfirm": {
+    "PasswordHint": "Nhập mật khẩu đăng nhập để tiếp tục",
+    "MFAHint": "Hoàn tất xác minh MFA để tiếp tục",
+    "ReloginHint": "Hãy đăng nhập lại để xác nhận danh tính. Tiếp tục sẽ kết thúc phiên này, bao gồm các trang khác dùng cùng phiên. Nội dung chưa lưu sẽ bị mất. Sau khi đăng nhập lại, hãy quay về trang này và thực hiện lại thao tác.",
+    "GoToLogin": "Đến trang đăng nhập"
   },
   "OnlineSessionPolicy": {
     "Title": "Thông tin hiệu lực",

@@ -866,12 +866,6 @@
   "CurrentConnections": "Número actual de conexiones",
   "CurrentStatus": "estado actual",
   "CurrentUserVerify": "Confirme su identidad",
-  "IdentityConfirm": {
-    "PasswordHint": "Introduzca su contraseña de inicio de sesión para continuar",
-    "MFAHint": "Complete la verificación MFA para continuar",
-    "ReloginHint": "Vuelva a iniciar sesión para confirmar su identidad. Al continuar, se cerrará esta sesión, incluidas las demás páginas que la usan. Se perderán los cambios sin guardar. Tras iniciar sesión, vuelva a esta página y repita la operación.",
-    "GoToLogin": "Ir al inicio de sesión"
-  },
   "Custom": "Personalizado",
   "CustomCol": "Campos de lista personalizados",
   "CustomCreate": "Crear activo - Personalizado",
@@ -3133,6 +3127,20 @@
     "WebIdleHelp": "Bloquea la consola y el terminal Web tras el tiempo de inactividad indicado. Introduzca la contraseña de bloqueo para desbloquear. Con el bloqueo por inactividad activado, cerrar todas las páginas también bloquea esta sesión tras 10 segundos. El cierre de sesión al cerrar las páginas tiene prioridad. Actualizar o reabrir en 10 segundos lo cancela.",
     "LifetimeHelp": "Se cuenta desde el inicio de sesión. Al vencer, vuelva a iniciar sesión; la actividad no lo prolonga.",
     "AdminClientHelp": "El administrador define valores predeterminados y límites. El usuario puede elegir opciones más estrictas; en otro caso, sigue al administrador."
+  },
+  "MCPClientID": "ID de cliente",
+  "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "Activar MCP",
+  "MCPEnabledHelp": "Koko sincroniza esta configuración cada 60 segundos. Al desactivar MCP se detienen las nuevas solicitudes, mientras continúa la finalización de las tareas aceptadas y el envío de registros de auditoría.",
+  "MCPAllowRegistration": "Permitir el registro automático de clientes",
+  "MCPRegistrationHelp": "Se aplica cuando MCP está activado. Los usuarios solo configuran la URL MCP y luego inician sesión en JumpServer para autorizar el acceso. Al desactivar esta opción se detienen los nuevos registros, sin revocar las autorizaciones existentes.",
+  "MCPPublicURL": "URL de acceso MCP",
+  "MCPPublicURLHelp": "Obligatorio cuando MCP está activado. Introduzca la URL MCP externa completa en HTTP o HTTPS, sin barra final, parámetros de consulta ni fragmentos. La dirección de autorización utiliza la URL del sitio de la configuración básica.",
+  "IdentityConfirm": {
+    "PasswordHint": "Introduzca su contraseña de inicio de sesión para continuar",
+    "MFAHint": "Complete la verificación MFA para continuar",
+    "ReloginHint": "Vuelva a iniciar sesión para confirmar su identidad. Al continuar, se cerrará esta sesión, incluidas las demás páginas que la usan. Se perderán los cambios sin guardar. Tras iniciar sesión, vuelva a esta página y repita la operación.",
+    "GoToLogin": "Ir al inicio de sesión"
   },
   "OnlineSessionPolicy": {
     "Title": "Información de validez",

@@ -27,6 +27,7 @@ async function workflowPanel() {
     CcUsers: {},
     TicketValueList: {},
     useDateTime: () => ({}),
+    eventBus: { emit() {} },
     stateLabels: {},
     nodeLabels: {}
   })
@@ -113,6 +114,7 @@ test('reassignment validates the current task, submits once and preserves failed
     ...panel.data(),
     myTask: { id: 'task' },
     object: { id: 'ticket', org_id: 'org' },
+    $route: { path: '/tickets/tickets/ticket' },
     requestConfig: { params: { oid: 'org' } },
     $axios: {
       async post(...args) {
