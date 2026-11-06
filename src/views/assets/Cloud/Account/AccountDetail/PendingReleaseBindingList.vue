@@ -1,12 +1,6 @@
 <template>
-  <div class="pending-review-list">
-    <el-alert
-      :closable="false"
-      :title="reviewPolicy"
-      :type="reviewPolicyType"
-      class="policy-alert"
-      show-icon
-    />
+  <div>
+    <el-alert :closable="false" :title="reviewPolicy" :type="reviewPolicyType" show-icon />
     <GenericListTable
       ref="PendingReviewTable"
       :header-actions="headerActions"
@@ -195,10 +189,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.policy-alert {
-  margin-bottom: 12px;
-}
-
 .delete-selected-assets {
   flex: 0 0 auto;
   height: 30px;

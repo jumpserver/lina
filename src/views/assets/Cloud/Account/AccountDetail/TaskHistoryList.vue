@@ -63,9 +63,27 @@
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import Dialog from '@/components/Dialog/index.vue'
 import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
+import OverflowTooltipFormatter from '@/components/Table/TableFormatters/OverflowTooltipFormatter.vue'
 import { openTaskPage } from '@/utils/jms/index'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { CLOUD_SYNC_ACTIONS } from '@/views/assets/Cloud/syncStatus'
+
+const DIFF_FIELD_I18N_KEYS = Object.freeze({
+  name: 'Name',
+  address: 'Address',
+  platform_id: 'Platform',
+  zone_id: 'Zone',
+  node_ids: 'Nodes',
+  protocols: 'Protocols',
+  label_ids: 'Labels',
+  account_template_ids: 'AccountTemplate',
+  db_name: 'DefaultDatabase',
+  status: 'Status',
+  missing_count: 'MissingCount',
+  stale_since: 'FirstMissingAt',
+  last_seen_at: 'LastSeenAt'
+})
+
 export default {
   name: 'TaskHistoryList',
   components: {
@@ -188,7 +206,11 @@ export default {
           {
             prop: 'scope',
             label: this.$t('Scope'),
-            formatter: (row) => this.formatScope(row.scope)
+            width: '200px',
+            formatter: OverflowTooltipFormatter,
+            formatterArgs: {
+              getText: ({ row }) => this.formatScope(row.scope)
+            }
           },
           {
             prop: 'summary.new',
@@ -213,10 +235,6 @@ export default {
           {
             prop: 'summary.skip',
             label: this.$t('SkipCount')
-          },
-          {
-            prop: 'summary.conflict',
-            label: this.$t('ConflictCount')
           },
           {
             prop: 'summary.released',
@@ -382,13 +400,19 @@ export default {
       if (value === null || value === undefined || value === '') return '-'
       return typeof value === 'object' ? JSON.stringify(value) : String(value)
     },
+    translateDiffFieldName(field) {
+      const key = DIFF_FIELD_I18N_KEYS[field]
+      return key ? this.$t(key) : field
+    },
     formatDiff(row) {
       if (!row.changed_fields?.length) return '-'
       return (
         <div class="field-diff">
           {row.changed_fields.map((field) => (
             <div key={field}>
-              <strong>{field}</strong>: {this.stringifyDiffValue(row.before?.[field])}
+              <strong>{this.translateDiffFieldName(field)}</strong>
+              {': '}
+              {this.stringifyDiffValue(row.before?.[field])}
               {' → '}
               {this.stringifyDiffValue(row.after?.[field])}
             </div>
