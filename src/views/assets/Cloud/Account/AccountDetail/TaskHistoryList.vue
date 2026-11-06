@@ -115,7 +115,7 @@ export default {
             highlightCurrentRow: false
           },
           columnsShow: {
-            min: [],
+            min: ['action', 'external_id'],
             default: [
               'action',
               'asset_display',
