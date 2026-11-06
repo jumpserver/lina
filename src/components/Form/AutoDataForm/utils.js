@@ -266,7 +266,7 @@ export class FormFieldGenerator {
     if (!label) {
       return field
     }
-    if (field.placeholder || field.el.placeholder) {
+    if (field.placeholder !== undefined || field.el.placeholder !== undefined) {
       return field
     }
     if (field.type === 'select' || [ObjectSelect2].indexOf(field.component) > -1) {

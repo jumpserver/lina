@@ -866,6 +866,12 @@
   "CurrentConnections": "Número actual de conexiones",
   "CurrentStatus": "estado actual",
   "CurrentUserVerify": "Confirme su identidad",
+  "IdentityConfirm": {
+    "PasswordHint": "Introduzca su contraseña de inicio de sesión para continuar",
+    "MFAHint": "Complete la verificación MFA para continuar",
+    "ReloginHint": "Vuelva a iniciar sesión para confirmar su identidad. Al continuar, se cerrará esta sesión, incluidas las demás páginas que la usan. Se perderán los cambios sin guardar. Tras iniciar sesión, vuelva a esta página y repita la operación.",
+    "GoToLogin": "Ir al inicio de sesión"
+  },
   "Custom": "Personalizado",
   "CustomCol": "Campos de lista personalizados",
   "CustomCreate": "Crear activo - Personalizado",
@@ -3041,7 +3047,7 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "LockPasswordHelp": "Se usa en el cliente, la consola y el terminal Web. Configurarla o cambiarla requiere verificar la identidad: contraseña de acceso para cuentas locales, MFA habilitado (código por correo o Passkey) para otras cuentas. Déjala vacía para conservarla.",
+  "LockPasswordHelp": "Se usa en el cliente, la consola y el terminal web. Para establecerla, cambiarla o borrarla, se requiere la contraseña de acceso, MFA o volver a iniciar sesión, según la configuración. Al guardarla, la sesión sigue activa; las sesiones ya bloqueadas también usarán la nueva contraseña. Déjela vacía para conservar la actual.",
   "ClientLockPassword": "Contraseña de bloqueo",
   "FileEncryptionPassword": "Contraseña de cifrado de archivos",
   "PersonalSecurityAccountMismatch": "La cuenta del navegador no coincide con la del cliente. Inicia sesión con la cuenta que muestra el cliente.",
@@ -3097,8 +3103,9 @@
     "Saved": "Guardado",
     "InputPlaceholder": "Introduce minutos",
     "ClearPassword": "Borrar contraseña de bloqueo",
-    "ClearPasswordConfirm": "¿Borrar la contraseña guardada? El bloqueo por inactividad sigue activo. Sin contraseña no puedes desbloquear directamente; vuelve a iniciar sesión para configurarla.",
-    "PasswordCleared": "Contraseña de bloqueo borrada",
+    "ClearPasswordConfirm": "¿Borrar la contraseña de bloqueo guardada? Se borrará tras confirmar su identidad. La sesión seguirá activa y el bloqueo automático conservará su configuración. Las sesiones bloqueadas no se pueden desbloquear sin contraseña; inicie sesión de nuevo para establecer una.",
+    "PasswordCleared": "Contraseña de bloqueo borrada. La sesión sigue activa y el bloqueo automático no cambia.",
+    "PasswordUpdated": "Contraseña de bloqueo guardada. La sesión sigue activa; use la nueva contraseña para desbloquear.",
     "ResetDefault": "Restablecer valores predeterminados"
   },
   "PersonalSecurity": {
@@ -3108,15 +3115,26 @@
     "LockPassword": "Contraseña de bloqueo",
     "FileEncryption": "Cifrado de archivos",
     "ClientSettings": "Configuración del cliente",
-    "Reauth": "Volver a iniciar sesión al salir",
-    "Lifetime": "Duración máxima de sesión (min)",
+    "Reauth": "Volver a iniciar sesión al salir del cliente",
+    "Lifetime": "Duración máxima del inicio de sesión del cliente (min)",
     "Idle": "Bloqueo del cliente por inactividad (min)",
     "ReauthHelp": "Exige iniciar sesión de nuevo al salir y reiniciar. Minimizar u ocultar el cliente no cuenta como salir.",
     "ReauthRequired": "Obligatorio por el administrador; no se puede desactivar. Minimizar u ocultar no cuenta como salir.",
     "UnlimitedHelp": "0 significa sin límite. Borre el campo y guarde para restaurar el valor predeterminado.",
-    "IdleHelp": "Se bloquea tras el tiempo de inactividad indicado. Desbloquee con la contraseña de bloqueo en la ventana principal. Las aplicaciones externas no están protegidas.",
-    "WebIdleHelp": "Bloquea la consola y el terminal Web tras el tiempo de inactividad indicado. Introduzca la contraseña de bloqueo para desbloquear.",
+    "IdleHelp": "Se bloquea al superar el tiempo de inactividad. Cambiar de cuenta no reinicia la inactividad de la cuenta anterior. Introduzca la contraseña de bloqueo para desbloquear. Las aplicaciones externas no están protegidas.",
+    "WebIdleHelp": "Bloquea la consola y el terminal Web tras el tiempo de inactividad indicado. Introduzca la contraseña de bloqueo para desbloquear. Con el bloqueo por inactividad activado, cerrar todas las páginas también bloquea esta sesión tras 10 segundos. El cierre de sesión al cerrar las páginas tiene prioridad. Actualizar o reabrir en 10 segundos lo cancela.",
     "LifetimeHelp": "Se cuenta desde el inicio de sesión. Al vencer, vuelva a iniciar sesión; la actividad no lo prolonga.",
     "AdminClientHelp": "El administrador define valores predeterminados y límites. El usuario puede elegir opciones más estrictas; en otro caso, sigue al administrador."
+  },
+  "OnlineSessionPolicy": {
+    "Title": "Información de validez",
+    "Expires": "Vencimiento",
+    "Duration": "Duración de la sesión",
+    "ClientDuration": "Duración máxima del inicio de sesión del cliente",
+    "Renew": "Renovar al recibir solicitudes",
+    "IdleLock": "Bloqueo por inactividad",
+    "Grace": "Fin de la prórroga por cambio",
+    "Unlimited": "Sin límite",
+    "BrowserExit": "Volver a iniciar sesión al cerrar el navegador"
   }
 }

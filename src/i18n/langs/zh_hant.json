@@ -820,6 +820,12 @@
   "CurrentConnections": "當前連接數",
   "CurrentStatus": "當前狀態",
   "CurrentUserVerify": "確認您的身份",
+  "IdentityConfirm": {
+    "PasswordHint": "請輸入登入密碼以繼續操作",
+    "MFAHint": "請完成 MFA 驗證以繼續操作",
+    "ReloginHint": "需要重新登入以確認身分。繼續將結束目前登入，同一登入的其他頁面也會登出，未儲存的內容不會保留。重新登入後，請回到此頁重新操作。",
+    "GoToLogin": "前往登入"
+  },
   "Custom": "自訂",
   "CustomCol": "自訂列表欄位",
   "CustomCreate": "創建資產-自訂",
@@ -3500,7 +3506,7 @@
   "TicketTransferCount_unverified": "{count} 個待核驗",
   "TicketTransferCount_pending": "{count} 個未執行",
   "TicketTransferCount_running": "{count} 個傳輸中",
-  "LockPasswordHelp": "用於用戶端、控制台和 Web 終端。設定或修改時須驗證身分：本機帳號輸入登入密碼，其他帳號使用已啟用的 MFA（如電子郵件驗證碼、Passkey）。留空保留原密碼。",
+  "LockPasswordHelp": "用於用戶端、主控台和 Web 終端。設定、修改或清除時，依系統設定驗證登入密碼、MFA 或重新登入。儲存後目前登入保持有效，已鎖定的工作階段也使用新密碼解鎖；留空保留原密碼。",
   "ClientLockPassword": "鎖屏密碼",
   "FileEncryptionPassword": "檔案加密密碼",
   "PersonalSecurityAccountMismatch": "瀏覽器帳號與用戶端帳號不符，請先登入用戶端顯示的帳號再設定憑證。",
@@ -3556,8 +3562,9 @@
     "Saved": "已儲存",
     "InputPlaceholder": "輸入分鐘數",
     "ClearPassword": "清空鎖屏密碼",
-    "ClearPasswordConfirm": "確定清空已儲存的鎖屏密碼？清空後仍會依閒置時間鎖屏，沒有鎖屏密碼時無法直接解鎖，可重新登入後再設定。",
-    "PasswordCleared": "鎖屏密碼已清空",
+    "ClearPasswordConfirm": "確定清除已儲存的鎖定密碼？通過身分確認後才會清除。清除不會結束目前登入，也不會關閉自動鎖定；清除後無法直接解鎖，需重新登入後再設定密碼。",
+    "PasswordCleared": "鎖定密碼已清除，目前登入保持有效，自動鎖定設定不變。",
+    "PasswordUpdated": "鎖定密碼已儲存，目前登入保持有效，下次解鎖請使用新密碼。",
     "ResetDefault": "重設為預設值"
   },
   "PersonalSecurity": {
@@ -3567,14 +3574,14 @@
     "LockPassword": "鎖屏密碼",
     "FileEncryption": "檔案加密",
     "ClientSettings": "用戶端設定",
-    "Reauth": "退出後重新登入",
-    "Lifetime": "最長登入有效期 (分)",
+    "Reauth": "用戶端退出後重新登入",
+    "Lifetime": "用戶端最長登入有效期 (分)",
     "Idle": "用戶端閒置鎖屏 (分)",
     "ReauthHelp": "啟用後，退出並重新啟動須重新登入，最小化或隱藏不受影響。",
     "ReauthRequired": "管理員已啟用，無法停用。最小化或隱藏不算退出。",
     "UnlimitedHelp": "0 表示不限制，清空後儲存恢復預設值。",
-    "IdleHelp": "閒置達到設定時間後自動鎖屏，在主視窗輸入鎖屏密碼解鎖。外部軟體視窗不受保護。",
-    "WebIdleHelp": "閒置達到設定時間後鎖定控制台與 Web 終端，輸入鎖屏密碼解鎖。",
+    "IdleHelp": "閒置逾時後鎖定，切換帳號不會重設原帳號的閒置時間。輸入鎖定密碼解鎖，外部軟體視窗不受保護。",
+    "WebIdleHelp": "閒置達到設定時間後鎖定控制台與 Web 終端，輸入鎖屏密碼解鎖。 開啟閒置鎖屏後，關閉全部頁面 10 秒後也會鎖定；開啟關閉頁面登出則優先登出，重新整理或 10 秒內重開可取消。",
     "LifetimeHelp": "從登入時間起計算，到期須重新登入，操作不會延長。",
     "AdminClientHelp": "管理員設定為預設值與上限，使用者可設定得更嚴格；未自行設定則跟隨管理員。"
   },
@@ -3593,5 +3600,16 @@
   "ConnectivityTarget": "資產 / 帳號",
   "ConnectivityUnsupported": "不支援的資產",
   "ConnectivityTasks": "測試任務",
-  "ConnectivityTargets": "測試目標"
+  "ConnectivityTargets": "測試目標",
+  "OnlineSessionPolicy": {
+    "Title": "有效期資訊",
+    "Expires": "到期時間",
+    "Duration": "工作階段有效時長",
+    "ClientDuration": "用戶端最長登入有效期",
+    "Renew": "依請求續期",
+    "IdleLock": "閒置鎖定",
+    "Grace": "設定變更寬限至",
+    "Unlimited": "不限制",
+    "BrowserExit": "瀏覽器關閉時重新登入"
+  }
 }

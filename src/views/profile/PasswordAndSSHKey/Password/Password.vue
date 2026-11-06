@@ -41,19 +41,22 @@ export default {
       fieldsMeta: {
         old_password: {
           label: this.$t('OldPassword'),
-          component: PasswordInput
+          component: PasswordInput,
+          el: { placeholder: '' }
         },
         new_password: {
           label: this.$t('NewPassword'),
           rules: [rules.RequiredChange],
           component: UserPassword,
           el: {
-            userIsOrgAdmin: false
+            userIsOrgAdmin: false,
+            placeholder: ''
           }
         },
         new_password_again: {
           label: this.$t('ConfirmPassword'),
-          component: PasswordInput
+          component: PasswordInput,
+          el: { placeholder: '' }
         }
       },
       updateSuccessNextRoute: {

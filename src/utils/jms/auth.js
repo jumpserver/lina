@@ -67,22 +67,20 @@ export function getPreOrgLocal(username) {
   }
 }
 
-export function watchSessions() {
-  request({
-    url: '/api/v1/authentication/user-session/',
-    method: 'get',
-    disableFlashErrorMsg: true
-  })
-
-  let idBeforeunload = false
-
-  window.addEventListener('beforeunload', (event) => {
-    if (idBeforeunload) return
-    idBeforeunload = true
-    request({
-      url: '/api/v1/authentication/user-session/',
-      method: 'delete',
-      disableFlashErrorMsg: true
-    })
-  })
+export function notifyWebSessionClose(close) {
+  const url = '/api/v1/authentication/user-session/'
+  const body = new URLSearchParams({ ...close, csrfmiddlewaretoken: getTokenFromCookie() || '' })
+  try {
+    if (navigator.sendBeacon?.(url, body)) return
+  } catch {
+    /* Fall back when the browser cannot queue a beacon. */
+  }
+  void request({
+    url,
+    method: 'post',
+    data: close,
+    disableFlashErrorMsg: true,
+    adapter: 'fetch',
+    fetchOptions: { keepalive: true }
+  }).catch(() => {})
 }

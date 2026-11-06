@@ -866,6 +866,12 @@
   "CurrentConnections": "현재 연결 수",
   "CurrentStatus": "현재 상태",
   "CurrentUserVerify": "본인 확인",
+  "IdentityConfirm": {
+    "PasswordHint": "계속하려면 로그인 비밀번호를 입력하세요",
+    "MFAHint": "계속하려면 MFA 인증을 완료하세요",
+    "ReloginHint": "본인 확인을 위해 다시 로그인해야 합니다. 계속하면 같은 로그인을 사용하는 다른 페이지도 로그아웃되며 저장하지 않은 내용은 사라집니다. 로그인 후 이 페이지로 돌아와 작업을 다시 진행해 주세요.",
+    "GoToLogin": "로그인으로 이동"
+  },
   "Custom": "사용자 정의",
   "CustomCol": "사용자 정의 목록 필드",
   "CustomCreate": "자산 생성 - 사용자 정의",
@@ -3043,7 +3049,7 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "LockPasswordHelp": "클라이언트, 콘솔, Web 터미널에서 사용합니다. 설정·변경 시 본인 확인이 필요합니다. 로컬 계정은 로그인 비밀번호, 다른 계정은 활성 MFA(이메일 코드, Passkey 등)로 확인합니다. 비워두면 기존 비밀번호를 유지합니다.",
+  "LockPasswordHelp": "클라이언트, 콘솔 및 Web 터미널에서 사용합니다. 설정·변경·삭제 시 시스템 설정에 따라 로그인 비밀번호, MFA 또는 재로그인으로 본인을 확인합니다. 저장 후에도 로그인은 유지되며 이미 잠긴 세션도 새 비밀번호로 해제합니다. 비워 두면 기존 비밀번호를 유지합니다.",
   "ClientLockPassword": "화면 잠금 비밀번호",
   "FileEncryptionPassword": "파일 암호화 비밀번호",
   "PersonalSecurityAccountMismatch": "브라우저와 클라이언트 계정이 다릅니다. 클라이언트에 표시된 계정으로 로그인하세요.",
@@ -3099,8 +3105,9 @@
     "Saved": "저장됨",
     "InputPlaceholder": "분 입력",
     "ClearPassword": "잠금 비밀번호 삭제",
-    "ClearPasswordConfirm": "저장된 잠금 비밀번호를 삭제할까요? 유휴 잠금은 유지됩니다. 비밀번호 없이는 직접 해제할 수 없으며 다시 로그인해 설정할 수 있습니다.",
-    "PasswordCleared": "잠금 비밀번호가 삭제되었습니다",
+    "ClearPasswordConfirm": "저장된 잠금 비밀번호를 삭제하시겠습니까? 본인 확인 후 삭제됩니다. 로그인 상태와 자동 잠금 설정은 유지됩니다. 삭제 후에는 잠금을 직접 해제할 수 없으므로 다시 로그인하여 비밀번호를 설정해야 합니다.",
+    "PasswordCleared": "잠금 비밀번호가 삭제되었습니다. 로그인 상태와 자동 잠금 설정은 유지됩니다.",
+    "PasswordUpdated": "잠금 비밀번호가 저장되었습니다. 로그인은 유지되며 다음 잠금 해제 시 새 비밀번호를 사용하세요.",
     "ResetDefault": "기본값으로 재설정"
   },
   "PersonalSecurity": {
@@ -3110,15 +3117,26 @@
     "LockPassword": "화면 잠금 비밀번호",
     "FileEncryption": "파일 암호화",
     "ClientSettings": "클라이언트 설정",
-    "Reauth": "종료 후 다시 로그인",
-    "Lifetime": "최대 로그인 시간(분)",
+    "Reauth": "클라이언트 종료 후 다시 로그인",
+    "Lifetime": "클라이언트 최대 로그인 유효 시간 (분)",
     "Idle": "클라이언트 유휴 화면 잠금(분)",
     "ReauthHelp": "종료 후 다시 실행하면 재로그인이 필요합니다. 최소화하거나 숨기는 것은 종료가 아닙니다.",
     "ReauthRequired": "관리자가 활성화하여 끌 수 없습니다. 최소화하거나 숨기는 것은 종료가 아닙니다.",
     "UnlimitedHelp": "0은 무제한입니다. 비우고 저장하면 기본값으로 복원됩니다.",
-    "IdleHelp": "설정한 유휴 시간이 지나면 자동 잠깁니다. 기본 창에서 잠금 비밀번호를 입력해 해제합니다. 외부 앱 창은 보호되지 않습니다.",
-    "WebIdleHelp": "설정한 유휴 시간이 지나면 콘솔과 Web 터미널이 잠깁니다. 잠금 비밀번호를 입력해 해제합니다.",
+    "IdleHelp": "유휴 시간이 초과되면 잠깁니다. 계정을 전환해도 이전 계정의 유휴 시간은 초기화되지 않습니다. 잠금 비밀번호로 해제합니다. 외부 앱 창은 보호되지 않습니다.",
+    "WebIdleHelp": "설정한 유휴 시간이 지나면 콘솔과 Web 터미널이 잠깁니다. 잠금 비밀번호를 입력해 해제합니다. 유휴 잠금이 켜져 있으면 모든 페이지를 닫아도 10초 후 잠깁니다. 페이지 종료 시 로그아웃 설정이 우선합니다. 10초 안에 새로 고치거나 다시 열면 취소됩니다.",
     "LifetimeHelp": "로그인 시점부터 계산합니다. 만료 시 재로그인이 필요하며 활동해도 연장되지 않습니다.",
     "AdminClientHelp": "관리자 설정이 기본값과 상한입니다. 사용자는 더 엄격하게 설정할 수 있으며, 직접 설정하지 않으면 관리자를 따릅니다."
+  },
+  "OnlineSessionPolicy": {
+    "Title": "유효 기간 정보",
+    "Expires": "만료 시간",
+    "Duration": "세션 유효 시간",
+    "ClientDuration": "클라이언트 최대 로그인 유효 시간",
+    "Renew": "요청 시 갱신",
+    "IdleLock": "유휴 화면 잠금",
+    "Grace": "설정 변경 유예 종료",
+    "Unlimited": "무제한",
+    "BrowserExit": "브라우저를 닫으면 다시 로그인"
   }
 }

@@ -43,7 +43,11 @@ export default {
       passwordType === 'file' ? ['secret_key', 'secret_key_again'] : ['password', 'password_again']
     const passwordMeta = (name, confirmation = false) => ({
       component: PasswordInput,
-      el: { autocomplete: 'new-password', name },
+      el: {
+        autocomplete: 'new-password',
+        name,
+        ...(passwordType === 'lock' ? { placeholder: '' } : {})
+      },
       rules: confirmation
         ? [
             {
@@ -70,7 +74,8 @@ export default {
                 el: {
                   userIsOrgAdmin: this.$store.state.users.profile.is_org_admin,
                   autocomplete: 'new-password',
-                  name: 'lock-password'
+                  name: 'lock-password',
+                  placeholder: ''
                 }
               },
               password_again: passwordMeta('lock-password-confirmation', true)
@@ -102,7 +107,9 @@ export default {
             fields.filter((field) => values[field]).map((field) => [field, values[field]])
           ),
         onPerformSuccess: () => {
-          this.$message.success(this.$t('UpdateSuccessMsg'))
+          this.$message.success(
+            this.$t(passwordType === 'lock' ? 'IdleLock.PasswordUpdated' : 'UpdateSuccessMsg')
+          )
           this.formVersion += 1
         }
       }
