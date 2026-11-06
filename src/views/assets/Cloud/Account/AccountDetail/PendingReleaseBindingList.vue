@@ -70,13 +70,20 @@ export default {
         hasBulkDelete: false,
         hasImport: false,
         hasExport: true,
-        hasColumnSetting: false,
+        hasColumnSetting: true,
         hasRefresh: true,
         hasSearch: true,
         exportOptions: {
           canExportSelected: true
         },
-        searchConfig: { getUrlQuery: false }
+        searchConfig: {
+          getUrlQuery: false,
+          excludeFields: ['id', 'account', 'account_name', 'provider', 'resource_type', 'status'],
+          fieldLabels: {
+            region: this.$t('Region'),
+            external_id: this.$t('ExternalID')
+          }
+        }
       },
       tableConfig: {
         url: `/api/v1/xpack/cloud/cloud-asset-bindings/stale/?account=${this.object.id}`,
