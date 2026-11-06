@@ -2911,6 +2911,7 @@
   "CloudScheduleIncomplete": "設定が不完全です",
   "CloudScheduleRequired": "定期実行を有効にする前に、実行間隔または cron スケジュールを設定してください。",
   "NoAdditionalDetails": "追加情報はありません",
+  "DeleteSelectedCloudAssetsConfirm": "アカウント「{account}」で選択した確認待ちリソース {count} 件に関連付けられたローカルアセットを削除しますか？クラウドリソースは削除されません。この操作は元に戻せません。",
   "DeleteAllReleasedAssetsForAccount": "このアカウントの解放済みアセットをすべて削除",
   "DeleteAllReleasedAssetsForAccountConfirm": "アカウント「{account}」でクラウド同期により解放済みとされたローカルアセットをすべて削除しますか？現在選択している確認待ち項目には影響しません。この操作は元に戻せません。",
   "DeleteAllReleasedAssetsForAccountSuccess": "このアカウントの解放済みアセットをすべて削除しました",
