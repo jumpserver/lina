@@ -363,6 +363,7 @@ import Select2 from '@/components/Form/FormFields/Select2'
 import ConditionEditor from './ConditionEditor'
 import { newDefinition, layoutGraph, insertNode, removeNode, nodeLabels } from './graph'
 import { getTicketTypeLabel } from '../const'
+import { getErrorResponseMsg } from '@/utils/common'
 export default {
   components: { Page, IBox, Select2, ConditionEditor },
   data() {
@@ -704,9 +705,7 @@ export default {
         }
       } catch (e) {
         this.error =
-          e.response?.status === 409
-            ? this.$t('WFConflict')
-            : JSON.stringify(e.response?.data || e.message)
+          e.response?.status === 409 ? this.$t('WFConflict') : getErrorResponseMsg(e) || e.message
       } finally {
         this.saving = false
       }
