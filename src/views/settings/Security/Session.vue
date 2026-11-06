@@ -1,6 +1,7 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
+      :key="formRevision"
       submit-method="patch"
       v-bind="config"
       @afterGenerateColumns="onColumnsGenerated"
@@ -16,6 +17,8 @@
 import IBox from '@/components/Common/IBox/index.vue'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
 import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
+import { UploadKey } from '@/components'
+import TextReadonly from '@/components/Form/FormFields/TextReadonly.vue'
 
 export default {
   name: 'SessionSecurity',
@@ -41,6 +44,7 @@ export default {
       }]
     })
     return {
+      formRevision: 0,
       reusableExpirationField: null,
       connectionTokenReusable: false,
       showSessionHelpDialog: false,
@@ -91,7 +95,11 @@ export default {
             this.$t('ClientLogin'),
             [
               'OAUTH2_PROVIDER_ACCESS_TOKEN_EXPIRE_SECONDS',
-              'OAUTH2_PROVIDER_REFRESH_TOKEN_EXPIRE_SECONDS'
+              'OAUTH2_PROVIDER_REFRESH_TOKEN_EXPIRE_SECONDS',
+              'RDP_SIGN_ENABLED',
+              'RDP_SIGN_CERT_CONTENT',
+              'RDP_SIGN_KEY_CONTENT',
+              'RDP_SIGN_CERT_INFO'
             ]
           ],
           [
@@ -118,6 +126,31 @@ export default {
           CONNECTION_TOKEN_REUSABLE_EXPIRATION: lifetimeField(1, 2147483647),
           OAUTH2_PROVIDER_ACCESS_TOKEN_EXPIRE_SECONDS: lifetimeField(),
           OAUTH2_PROVIDER_REFRESH_TOKEN_EXPIRE_SECONDS: lifetimeField(),
+          RDP_SIGN_ENABLED: {
+            label: this.$t('RDPSignEnabled'),
+            helpText: this.$t('RDPSignEnabledHelp'),
+            helpTextAsTip: false,
+            helpTextAsPlaceholder: false
+          },
+          RDP_SIGN_CERT_CONTENT: {
+            component: UploadKey,
+            label: this.$t('RDPSignCertificate'),
+            helpText: this.$t('RDPSignCertificateHelp'),
+            helpTextAsTip: false,
+            helpTextAsPlaceholder: false
+          },
+          RDP_SIGN_KEY_CONTENT: {
+            component: UploadKey,
+            label: this.$t('RDPSignPrivateKey'),
+            helpText: this.$t('RDPSignPrivateKeyHelp'),
+            helpTextAsTip: false,
+            helpTextAsPlaceholder: false
+          },
+          RDP_SIGN_CERT_INFO: {
+            component: TextReadonly,
+            label: this.$t('RDPSignCertificateStatus'),
+            el: { bolder: false }
+          },
           SECURITY_WATERMARK_SESSION_CONTENT: {
             helpTextFormatter: () => {
               const handleClick = () => {
@@ -158,6 +191,12 @@ export default {
         },
         cleanFormValue: (values) => {
           const result = { ...values }
+          delete result.RDP_SIGN_CERT_INFO
+          for (const name of ['RDP_SIGN_CERT_CONTENT', 'RDP_SIGN_KEY_CONTENT']) {
+            if (!result[name]) {
+              delete result[name]
+            }
+          }
           if (this.isSangfor && !values.CONNECTION_TOKEN_REUSABLE) {
             delete result.CONNECTION_TOKEN_REUSABLE_EXPIRATION
           }
@@ -178,6 +217,7 @@ export default {
         ...this.$store.getters.publicSettings,
         CONNECTION_TOKEN_REUSABLE: res.CONNECTION_TOKEN_REUSABLE
       })
+      this.formRevision += 1
     },
     onColumnsGenerated(fields) {
       this.reusableExpirationField = fields.find(field => field.id === 'CONNECTION_TOKEN_REUSABLE_EXPIRATION')
