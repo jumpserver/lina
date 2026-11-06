@@ -2930,6 +2930,7 @@
   "CloudScheduleIncomplete": "設定不完整",
   "CloudScheduleRequired": "啟用定時執行後，請設定執行間隔或定時任務。",
   "NoAdditionalDetails": "無補充說明",
+  "DeleteSelectedCloudAssetsConfirm": "確定要刪除帳號「{account}」下所選的 {count} 項待複核資源關聯的本機資產嗎？不會刪除雲端資源，此操作無法復原。",
   "DeleteAllReleasedAssetsForAccount": "刪除此帳號的全部已釋放資產",
   "DeleteAllReleasedAssetsForAccountConfirm": "確定要刪除帳號「{account}」下由雲端同步標記為已釋放的全部本機資產嗎？目前勾選的待複核項目不會受到影響，且此操作無法復原。",
   "DeleteAllReleasedAssetsForAccountSuccess": "已刪除此帳號下的全部已釋放資產",

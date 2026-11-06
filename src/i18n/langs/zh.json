@@ -3362,6 +3362,7 @@
   "CloudScheduleIncomplete": "配置不完整",
   "CloudScheduleRequired": "启用定时执行后，请设置执行间隔或定时任务。",
   "NoAdditionalDetails": "无补充说明",
+  "DeleteSelectedCloudAssetsConfirm": "确定要删除账号「{account}」下所选的 {count} 项待复核资源关联的本地资产吗？不会删除云端资源，此操作不可撤销。",
   "DeleteAllReleasedAssetsForAccount": "删除此账号的全部已释放资产",
   "DeleteAllReleasedAssetsForAccountConfirm": "确定要删除账号「{account}」下由云同步标记为已释放的全部本地资产吗？当前勾选的待复核项不会受到影响，且此操作不可撤销。",
   "DeleteAllReleasedAssetsForAccountSuccess": "已删除此账号下的全部已释放资产",
