@@ -147,6 +147,7 @@
 <script>
 import LogoSymbol from '@/layout/components/NavLeft/LogoSymbol.vue'
 import { isDefaultInterfaceLogo } from '@/utils/interfaceLogo'
+import { describeWebSessionError } from '@/utils/webSessionLock'
 import {
   webSessionLockState,
   startWebSessionLock,
@@ -183,6 +184,11 @@ export default {
       return Boolean(this.state.error || this.state.session?.has_password)
     },
     displayedError() {
+      if (this.state.error) {
+        return this.state.errorInfo
+          ? this.$t(this.state.errorInfo.key, this.state.errorInfo.params)
+          : this.describeError(null)
+      }
       const remaining = this.state.attemptsRemaining
       return (
         this.error ||
@@ -249,13 +255,10 @@ export default {
           this.error = ''
           return
         }
-        this.error = this.$t(
-          error.response?.status === 429
-            ? 'ScreenLock.TooManyAttempts'
-            : error.response?.status === 400
-              ? 'ScreenLock.UnlockFailed'
-              : 'ScreenLock.LoadFailed'
-        )
+        this.error =
+          error.response?.status === 400
+            ? this.$t('ScreenLock.UnlockFailed')
+            : this.describeError(error)
       } finally {
         this.password = ''
         this.pendingAction = ''
@@ -270,8 +273,8 @@ export default {
       this.error = ''
       try {
         await refreshWebSessionLock()
-      } catch {
-        this.error = this.$t('ScreenLock.LoadFailed')
+      } catch (error) {
+        this.error = this.describeError(error)
       } finally {
         this.pendingAction = ''
       }
@@ -280,11 +283,15 @@ export default {
       this.pendingAction = 'logout'
       try {
         await logoutLockedSession()
-      } catch {
-        this.error = this.$t('ScreenLock.LoadFailed')
+      } catch (error) {
+        this.error = this.describeError(error)
       } finally {
         this.pendingAction = ''
       }
+    },
+    describeError(error) {
+      const { key, params } = describeWebSessionError(error)
+      return this.$t(key, params)
     }
   }
 }

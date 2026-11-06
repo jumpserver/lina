@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue'
-import { createWebSessionLock } from '@/utils/webSessionLock'
+import { createWebSessionLock, describeWebSessionError } from '@/utils/webSessionLock'
 import request, { logout, deferAuthFailureUntil } from '@/utils/request'
 import { LOGIN_PATH } from '@/utils/env'
 import { notifyWebSessionClose } from '@/utils/jms/auth'
@@ -11,6 +11,7 @@ export const webSessionLockState = reactive({
   logoutAt: 0,
   attemptsRemaining: null,
   error: false,
+  errorInfo: null,
   session: null
 })
 let creating
@@ -44,11 +45,14 @@ export async function startWebSessionLock() {
           if (state.logoutAt) deferAuthFailureUntil(state.logoutAt)
           if (state.error) {
             console.error(
-              'Web session lock status check failed:',
+              'Web session status check failed:',
               state.error.message || 'Unknown error'
             )
           }
-          Object.assign(webSessionLockState, state, { error: Boolean(state.error) })
+          Object.assign(webSessionLockState, state, {
+            error: Boolean(state.error),
+            errorInfo: state.error ? describeWebSessionError(state.error) : null
+          })
         },
         onSessionChanged: () => window.location.reload(),
         onUnauthenticated: login
@@ -56,9 +60,14 @@ export async function startWebSessionLock() {
       await controller.start()
       return controller
     })().catch((error) => {
-      console.error('Web session lock initialization failed:', error.message || 'Unknown error')
+      console.error('Web session initialization failed:', error.message || 'Unknown error')
       creating = null
-      Object.assign(webSessionLockState, { ready: true, locked: true, error: true })
+      Object.assign(webSessionLockState, {
+        ready: true,
+        locked: true,
+        error: true,
+        errorInfo: describeWebSessionError(error)
+      })
       throw error
     })
   }
