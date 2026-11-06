@@ -55,6 +55,15 @@ export default {
             tags: ['clipboard']
           },
           {
+            id: 'UserLoginMFAACL',
+            display_name: this.$t('UserLoginMFAACL'),
+            name: 'UserLoginMFAACLList',
+            comment: this.$t('UserLoginMFAACLHelpText'),
+            icon: 'login',
+            edition: 'enterprise',
+            tags: ['login', 'mfa']
+          },
+          {
             id: 'UserLoginACL',
             display_name: this.$t('UserLoginACLs'),
             name: 'UserLoginACLList',
