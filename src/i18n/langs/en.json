@@ -958,6 +958,12 @@
   "CurrentConnections": "Current connections",
   "CurrentStatus": "Current Status",
   "CurrentUserVerify": "Confirm your identity",
+  "IdentityConfirm": {
+    "PasswordHint": "Enter your login password to continue",
+    "MFAHint": "Complete MFA verification to continue",
+    "ReloginHint": "Sign in again to confirm your identity. Continuing will end this login, including other pages using the same login. Unsaved changes will be lost. After signing in again, return to this page and repeat the operation.",
+    "GoToLogin": "Go to sign in"
+  },
   "Custom": "Custom",
   "CustomCol": "Customize display columns",
   "CustomCreate": "Create asset - custom",
@@ -3938,7 +3944,7 @@
   "TicketTransferCount_unverified": "{count} awaiting verification",
   "TicketTransferCount_pending": "{count} not executed",
   "TicketTransferCount_running": "{count} transferring",
-  "LockPasswordHelp": "Used by the desktop client, console and Web terminal. Setting or changing it requires identity verification: local accounts use their sign-in password; other accounts use an enabled MFA method, such as email codes or Passkey. Leave blank to keep the existing password.",
+  "LockPasswordHelp": "Used by the client, console and Web terminal. Setting, changing or clearing it requires your login password, MFA or signing in again, according to system settings. Saving keeps you signed in; already locked sessions also use the new password. Leave blank to keep the current password.",
   "ClientLockPassword": "Screen lock password",
   "FileEncryptionPassword": "File encryption password",
   "PersonalSecurityAccountMismatch": "The browser account differs from the client account. Sign in to the account shown in the client before configuring credentials.",
@@ -3994,8 +4000,9 @@
     "Saved": "Saved",
     "InputPlaceholder": "Enter minutes",
     "ClearPassword": "Clear lock password",
-    "ClearPasswordConfirm": "Clear the saved screen lock password? Idle locking still applies. Without a lock password, you cannot unlock directly; sign in again to set one.",
-    "PasswordCleared": "Lock password cleared",
+    "ClearPasswordConfirm": "Clear the saved lock password? It will be cleared only after identity confirmation. Your current login and automatic lock settings will be kept. Locked sessions cannot be unlocked without a password; sign in again to set one.",
+    "PasswordCleared": "Lock password cleared. You are still signed in; automatic lock settings are unchanged.",
+    "PasswordUpdated": "Lock password saved. You are still signed in; use the new password next time you unlock.",
     "ResetDefault": "Reset to default"
   },
   "PersonalSecurity": {

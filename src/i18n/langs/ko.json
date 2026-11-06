@@ -866,6 +866,12 @@
   "CurrentConnections": "현재 연결 수",
   "CurrentStatus": "현재 상태",
   "CurrentUserVerify": "본인 확인",
+  "IdentityConfirm": {
+    "PasswordHint": "계속하려면 로그인 비밀번호를 입력하세요",
+    "MFAHint": "계속하려면 MFA 인증을 완료하세요",
+    "ReloginHint": "본인 확인을 위해 다시 로그인해야 합니다. 계속하면 같은 로그인을 사용하는 다른 페이지도 로그아웃되며 저장하지 않은 내용은 사라집니다. 로그인 후 이 페이지로 돌아와 작업을 다시 진행해 주세요.",
+    "GoToLogin": "로그인으로 이동"
+  },
   "Custom": "사용자 정의",
   "CustomCol": "사용자 정의 목록 필드",
   "CustomCreate": "자산 생성 - 사용자 정의",
@@ -3043,7 +3049,7 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "LockPasswordHelp": "클라이언트, 콘솔, Web 터미널에서 사용합니다. 설정·변경 시 본인 확인이 필요합니다. 로컬 계정은 로그인 비밀번호, 다른 계정은 활성 MFA(이메일 코드, Passkey 등)로 확인합니다. 비워두면 기존 비밀번호를 유지합니다.",
+  "LockPasswordHelp": "클라이언트, 콘솔 및 Web 터미널에서 사용합니다. 설정·변경·삭제 시 시스템 설정에 따라 로그인 비밀번호, MFA 또는 재로그인으로 본인을 확인합니다. 저장 후에도 로그인은 유지되며 이미 잠긴 세션도 새 비밀번호로 해제합니다. 비워 두면 기존 비밀번호를 유지합니다.",
   "ClientLockPassword": "화면 잠금 비밀번호",
   "FileEncryptionPassword": "파일 암호화 비밀번호",
   "PersonalSecurityAccountMismatch": "브라우저와 클라이언트 계정이 다릅니다. 클라이언트에 표시된 계정으로 로그인하세요.",
@@ -3099,8 +3105,9 @@
     "Saved": "저장됨",
     "InputPlaceholder": "분 입력",
     "ClearPassword": "잠금 비밀번호 삭제",
-    "ClearPasswordConfirm": "저장된 잠금 비밀번호를 삭제할까요? 유휴 잠금은 유지됩니다. 비밀번호 없이는 직접 해제할 수 없으며 다시 로그인해 설정할 수 있습니다.",
-    "PasswordCleared": "잠금 비밀번호가 삭제되었습니다",
+    "ClearPasswordConfirm": "저장된 잠금 비밀번호를 삭제하시겠습니까? 본인 확인 후 삭제됩니다. 로그인 상태와 자동 잠금 설정은 유지됩니다. 삭제 후에는 잠금을 직접 해제할 수 없으므로 다시 로그인하여 비밀번호를 설정해야 합니다.",
+    "PasswordCleared": "잠금 비밀번호가 삭제되었습니다. 로그인 상태와 자동 잠금 설정은 유지됩니다.",
+    "PasswordUpdated": "잠금 비밀번호가 저장되었습니다. 로그인은 유지되며 다음 잠금 해제 시 새 비밀번호를 사용하세요.",
     "ResetDefault": "기본값으로 재설정"
   },
   "PersonalSecurity": {

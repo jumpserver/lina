@@ -866,6 +866,12 @@
   "CurrentConnections": "Số lượng kết nối hiện tại",
   "CurrentStatus": "Tình trạng hiện tại",
   "CurrentUserVerify": "Xác nhận danh tính của bạn",
+  "IdentityConfirm": {
+    "PasswordHint": "Nhập mật khẩu đăng nhập để tiếp tục",
+    "MFAHint": "Hoàn tất xác minh MFA để tiếp tục",
+    "ReloginHint": "Hãy đăng nhập lại để xác nhận danh tính. Tiếp tục sẽ kết thúc phiên này, bao gồm các trang khác dùng cùng phiên. Nội dung chưa lưu sẽ bị mất. Sau khi đăng nhập lại, hãy quay về trang này và thực hiện lại thao tác.",
+    "GoToLogin": "Đến trang đăng nhập"
+  },
   "Custom": "Tùy chỉnh",
   "CustomCol": "Trống",
   "CustomCreate": "Tạo tài sản - Tùy chỉnh",
@@ -3043,7 +3049,7 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "LockPasswordHelp": "Dùng cho ứng dụng, bảng điều khiển và terminal Web. Khi đặt hoặc đổi phải xác minh: tài khoản cục bộ dùng mật khẩu đăng nhập; tài khoản khác dùng MFA đã bật (mã email hoặc Passkey). Để trống để giữ mật khẩu cũ.",
+  "LockPasswordHelp": "Dùng cho ứng dụng khách, bảng điều khiển và Web terminal. Khi đặt, đổi hoặc xóa, cần xác minh bằng mật khẩu đăng nhập, MFA hoặc đăng nhập lại theo cấu hình hệ thống. Lưu không kết thúc phiên; các phiên đang khóa cũng dùng mật khẩu mới. Để trống để giữ mật khẩu hiện tại.",
   "ClientLockPassword": "Mật khẩu khóa màn hình",
   "FileEncryptionPassword": "Mật khẩu mã hóa tệp",
   "PersonalSecurityAccountMismatch": "Tài khoản trình duyệt khác tài khoản ứng dụng khách. Hãy đăng nhập tài khoản được hiển thị trong ứng dụng khách.",
@@ -3099,8 +3105,9 @@
     "Saved": "Đã lưu",
     "InputPlaceholder": "Nhập số phút",
     "ClearPassword": "Xóa mật khẩu khóa màn hình",
-    "ClearPasswordConfirm": "Xóa mật khẩu đã lưu? Khóa nhàn rỗi vẫn hoạt động. Không có mật khẩu sẽ không thể mở khóa trực tiếp; đăng nhập lại để đặt mật khẩu.",
-    "PasswordCleared": "Đã xóa mật khẩu khóa màn hình",
+    "ClearPasswordConfirm": "Xóa mật khẩu khóa đã lưu? Mật khẩu chỉ được xóa sau khi xác nhận danh tính. Phiên đăng nhập và cấu hình tự động khóa vẫn được giữ. Không thể mở khóa các phiên đã khóa khi không có mật khẩu; hãy đăng nhập lại để đặt mật khẩu.",
+    "PasswordCleared": "Đã xóa mật khẩu khóa. Phiên đăng nhập và cấu hình tự động khóa vẫn được giữ.",
+    "PasswordUpdated": "Đã lưu mật khẩu khóa. Phiên đăng nhập vẫn được giữ; dùng mật khẩu mới để mở khóa lần sau.",
     "ResetDefault": "Đặt lại mặc định"
   },
   "PersonalSecurity": {

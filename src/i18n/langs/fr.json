@@ -866,6 +866,12 @@
   "CurrentConnections": "Connexions actuelles",
   "CurrentStatus": "Statut actuel",
   "CurrentUserVerify": "Confirmer votre identité",
+  "IdentityConfirm": {
+    "PasswordHint": "Saisissez votre mot de passe de connexion pour continuer",
+    "MFAHint": "Effectuez la vérification MFA pour continuer",
+    "ReloginHint": "Reconnectez-vous pour confirmer votre identité. Continuer fermera cette session, y compris les autres pages qui l’utilisent. Les modifications non enregistrées seront perdues. Après la connexion, revenez sur cette page et répétez l’opération.",
+    "GoToLogin": "Se connecter"
+  },
   "Custom": "Personnalisé",
   "CustomCol": "Personnaliser les colonnes affichées",
   "CustomCreate": "Créer un actif - personnalisé",
@@ -3212,7 +3218,7 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "LockPasswordHelp": "Utilisé par le client, la console et le terminal Web. La création ou modification exige une vérification : mot de passe de connexion pour un compte local, méthode MFA activée (code email ou Passkey) pour les autres. Laissez vide pour conserver le mot de passe.",
+  "LockPasswordHelp": "Utilisé par le client, la console et le terminal Web. Sa création, sa modification ou sa suppression nécessite le mot de passe de connexion, la MFA ou une reconnexion, selon les paramètres. L’enregistrement conserve la session ; les sessions déjà verrouillées utilisent aussi le nouveau mot de passe. Laissez vide pour conserver le mot de passe actuel.",
   "ClientLockPassword": "Mot de passe de verrouillage",
   "FileEncryptionPassword": "Mot de passe de chiffrement des fichiers",
   "PersonalSecurityAccountMismatch": "Le compte du navigateur diffère de celui du client. Connectez-vous au compte affiché dans le client.",
@@ -3268,8 +3274,9 @@
     "Saved": "Enregistré",
     "InputPlaceholder": "Saisissez des minutes",
     "ClearPassword": "Effacer le mot de passe de verrouillage",
-    "ClearPasswordConfirm": "Effacer le mot de passe enregistré ? Le verrouillage après inactivité reste actif. Sans mot de passe, vous ne pouvez pas déverrouiller directement ; reconnectez-vous pour en définir un.",
-    "PasswordCleared": "Mot de passe de verrouillage effacé",
+    "ClearPasswordConfirm": "Supprimer le mot de passe de verrouillage enregistré ? Il sera supprimé après confirmation de votre identité. La session et les paramètres de verrouillage automatique seront conservés. Les sessions verrouillées ne peuvent pas être déverrouillées sans mot de passe ; reconnectez-vous pour en définir un.",
+    "PasswordCleared": "Mot de passe de verrouillage supprimé. La session et les paramètres de verrouillage automatique sont conservés.",
+    "PasswordUpdated": "Mot de passe de verrouillage enregistré. Vous restez connecté ; utilisez le nouveau mot de passe pour déverrouiller.",
     "ResetDefault": "Rétablir les valeurs par défaut"
   },
   "PersonalSecurity": {

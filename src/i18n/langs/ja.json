@@ -828,6 +828,12 @@
   "CurrentConnections": "現在のコネクション数",
   "CurrentStatus": "現在の状態",
   "CurrentUserVerify": "本人確認",
+  "IdentityConfirm": {
+    "PasswordHint": "続行するにはログインパスワードを入力してください",
+    "MFAHint": "続行するには MFA 認証を完了してください",
+    "ReloginHint": "本人確認のため再ログインが必要です。続行すると、同じログインを使用する他のページも含めてログアウトし、未保存の内容は失われます。再ログイン後、このページに戻って操作をやり直してください。",
+    "GoToLogin": "ログインへ進む"
+  },
   "Custom": "カスタマイズ",
   "CustomCol": "カスタムリストフィールド",
   "CustomCreate": "資産作成-カスタマイズ",
@@ -3241,7 +3247,7 @@
   "WFAdvancedSettings": "Timeout and approval actions",
   "WFConditionMode": "Condition mode",
   "WFOperator": "Operator",
-  "LockPasswordHelp": "クライアント、コンソール、Web ターミナルで使用します。設定・変更には本人確認が必要です。ローカルアカウントはログインパスワード、その他は有効な MFA（メールコード、Passkey など）で確認します。空欄の場合は変更しません。",
+  "LockPasswordHelp": "クライアント、コンソール、Web ターミナルで使用します。設定・変更・削除には、システム設定に応じてログインパスワード、MFA、または再ログインによる本人確認が必要です。保存後もログインは維持され、すでにロックされたセッションにも新しいパスワードを使用します。空欄の場合は現在のパスワードを保持します。",
   "ClientLockPassword": "画面ロックパスワード",
   "FileEncryptionPassword": "ファイル暗号化パスワード",
   "PersonalSecurityAccountMismatch": "ブラウザーとクライアントのアカウントが異なります。クライアントに表示されたアカウントでログインしてください。",
@@ -3297,8 +3303,9 @@
     "Saved": "保存しました",
     "InputPlaceholder": "分数を入力",
     "ClearPassword": "ロックパスワードを削除",
-    "ClearPasswordConfirm": "保存済みのロックパスワードを削除しますか？アイドルロックは継続します。パスワードなしでは直接解除できません。再ログインして設定してください。",
-    "PasswordCleared": "ロックパスワードを削除しました",
+    "ClearPasswordConfirm": "保存済みのロックパスワードを削除しますか？本人確認後に削除されます。ログイン状態と自動ロック設定は維持されます。削除後はロックを直接解除できないため、再ログインしてパスワードを設定してください。",
+    "PasswordCleared": "ロックパスワードを削除しました。ログイン状態と自動ロック設定は維持されます。",
+    "PasswordUpdated": "ロックパスワードを保存しました。ログイン状態は維持されます。次回の解除には新しいパスワードを使用してください。",
     "ResetDefault": "既定値に戻す"
   },
   "PersonalSecurity": {

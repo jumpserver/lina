@@ -149,7 +149,7 @@ export function flashErrorMsg({ response, error }) {
 }
 
 function ifConfirmRequired({ response }) {
-  if (response.status !== 412) {
+  if (response.status !== 412 || response.config?.skipUserConfirmation) {
     return null
   }
   return new Promise((resolve, reject) => {
