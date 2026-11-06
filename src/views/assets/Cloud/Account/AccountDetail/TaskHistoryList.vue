@@ -237,10 +237,6 @@ export default {
             label: this.$t('SkipCount')
           },
           {
-            prop: 'summary.conflict',
-            label: this.$t('ConflictCount')
-          },
-          {
             prop: 'summary.released',
             label: this.$t('ReleasedCount')
           },
