@@ -20,6 +20,7 @@ import { lan, privateCloudProviders, publicDBProviders, publicHostProviders } fr
 import CreateDialog from './components/CreateDialog.vue'
 import SyncDialog from './components/SyncDialog.vue'
 import UpdateDialog from './components/UpdateDialog.vue'
+import { formatCloudSyncException } from '@/views/assets/Cloud/syncStatus'
 
 export default {
   name: 'CloudAccountList',
@@ -54,6 +55,7 @@ export default {
           getInfos: (obj) => {
             const status = obj?.sync_status || {}
             const summary = status.summary || {}
+            const exception = formatCloudSyncException(status.primary_exception, this.$t)
             return [
               {
                 title: this.$tc('SyncHealth'),
@@ -81,11 +83,12 @@ export default {
               },
               {
                 title: this.$tc('LatestChanges'),
-                content: `${this.$t('Create')} ${summary.new || 0} · ${this.$t('Update')} ${summary.updated || 0} · ${this.$t('NoChange')} ${summary.nochange || 0} · ${this.$t('PendingRelease')} ${summary.stale || 0} · ${this.$t('Failed')} ${summary.failed || 0}`
+                content: `${this.$t('Create')} ${summary.new || 0} · ${this.$t('Update')} ${summary.updated || 0} · ${this.$t('NoChange')} ${summary.nochange || 0} · ${this.$t('PendingRelease')} ${status.stale_count || 0} · ${this.$t('Failed')} ${summary.failed || 0}`
               },
               {
                 title: this.$tc('SyncException'),
-                content: status.primary_exception?.message || '-'
+                content: exception.message,
+                tooltip: exception.detail
               }
             ]
           },
@@ -357,6 +360,7 @@ export default {
     }
 
     &:nth-child(8) .item-value {
+      display: block;
       white-space: nowrap;
       text-overflow: ellipsis;
     }

@@ -77,6 +77,10 @@ function goToLogin() {
 }
 
 function ifUnauthorized({ response }) {
+  if (response.status === 401 && response.data?.code === 'authentication_required') {
+    response.config.disableFlashErrorMsg = true
+    return
+  }
   if (response.status === 401 && lockSignOutUntil > Date.now()) {
     response.config.disableFlashErrorMsg = true
     return
@@ -145,7 +149,7 @@ export function flashErrorMsg({ response, error }) {
 }
 
 function ifConfirmRequired({ response }) {
-  if (response.status !== 412) {
+  if (response.status !== 412 || response.config?.skipUserConfirmation) {
     return null
   }
   return new Promise((resolve, reject) => {

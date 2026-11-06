@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
 import { parse, compileTemplate } from '@vue/compiler-sfc'
-import { nextTick, reactive, watch } from 'vue'
+import { markRaw, nextTick, reactive, watch } from 'vue'
 
 const source = await readFile(
   new URL('../src/layout/components/NavHeader/SiteMessages.vue', import.meta.url),
@@ -21,6 +21,7 @@ class FakeWebSocket {
   static instances = []
 
   constructor(url) {
+    markRaw(this)
     this.url = url
     FakeWebSocket.instances.push(this)
   }
@@ -46,6 +47,7 @@ function createView() {
   const calls = []
   const view = reactive({
     ...component.data(),
+    webSessionUsable: true,
     $nextTick: nextTick,
     $log: { debug() {} },
     $refs: { messageList: { scrollTo() {} } },

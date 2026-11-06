@@ -42,13 +42,13 @@ export default {
             }
           },
           strategy_rules: {
-            label: this.$t('Rules'),
+            label: this.$t('Rule'),
             formatter: (row) => {
               return row.strategy_rules.length
             }
           },
           strategy_actions: {
-            label: this.$t('Actions'),
+            label: this.$t('Action'),
             formatter: (row) => {
               return row.strategy_actions.length
             }
