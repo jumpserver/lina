@@ -11,6 +11,8 @@
       :title="executionItemDialog.title"
       :width="executionItemDialog.width"
       :show-buttons="false"
+      class="cloud-execution-dialog"
+      top="5vh"
     >
       <el-descriptions v-if="selectedExecution" :column="3" border class="execution-summary">
         <el-descriptions-item :label="$t('TriggerMode')">
@@ -48,6 +50,8 @@
         </div>
       </el-alert>
       <GenericListTable
+        class="execution-item-table"
+        :table-metadata-provider="getExecutionItemMetadata"
         :header-actions="executionItemDialog.headerActions"
         :table-config="executionItemDialog.tableConfig"
       />
@@ -61,6 +65,7 @@ import Dialog from '@/components/Dialog/index.vue'
 import { ActionsFormatter, DateFormatter } from '@/components/Table/TableFormatters'
 import { openTaskPage } from '@/utils/jms/index'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { CLOUD_SYNC_ACTIONS } from '@/views/assets/Cloud/syncStatus'
 export default {
   name: 'TaskHistoryList',
   components: {
@@ -102,22 +107,32 @@ export default {
         },
         tableConfig: {
           url: '',
+          hasSelection: false,
+          tableAttrs: {
+            height: 'min(420px, 45vh)',
+            rowKey: 'id',
+            stripe: false,
+            highlightCurrentRow: false
+          },
+          columnsShow: {
+            min: ['action', 'external_id'],
+            default: [
+              'action',
+              'asset_display',
+              'external_id',
+              'region',
+              'changed_fields',
+              'reason_display',
+              'error_display',
+              'date_created'
+            ]
+          },
           columns: [
             {
               prop: 'action',
               label: this.$t('Action'),
               formatter: (row) => {
-                const actionMap = {
-                  create: { label: 'Create', type: 'success' },
-                  update: { label: 'Update', type: 'primary' },
-                  nochange: { label: 'NoChange', type: 'info' },
-                  stale: { label: 'PendingRelease', type: 'warning' },
-                  release: { label: 'Release', type: 'danger' },
-                  skip: { label: 'Skip', type: 'info' },
-                  conflict: { label: 'Conflict', type: 'danger' },
-                  fail: { label: 'Failed', type: 'danger' }
-                }
-                const action = actionMap[row.action] || actionMap.fail
+                const action = CLOUD_SYNC_ACTIONS[row.action] || CLOUD_SYNC_ACTIONS.fail
                 return (
                   <el-tag type={action.type} size="small">
                     {this.$t(action.label)}
@@ -126,16 +141,16 @@ export default {
               }
             },
             {
+              prop: 'asset_display',
+              label: this.$t('Asset')
+            },
+            {
               prop: 'external_id',
               label: this.$t('ExternalID')
             },
             {
               prop: 'region',
               label: this.$t('Region')
-            },
-            {
-              prop: 'asset_display',
-              label: this.$t('Asset')
             },
             {
               prop: 'changed_fields',
@@ -156,7 +171,9 @@ export default {
               prop: 'date_created',
               label: this.$t('DateCreated'),
               formatter: DateFormatter
-            }
+            },
+            { prop: 'id', label: 'ID' },
+            { prop: 'actions', has: false }
           ]
         }
       },
@@ -278,6 +295,35 @@ export default {
     }
   },
   methods: {
+    async getExecutionItemMetadata(url) {
+      const meta = await this.$store.dispatch('common/getUrlMeta', { url })
+      const labels = {
+        action: this.$t('Action'),
+        region: this.$t('Region'),
+        external_id: this.$t('ExternalID'),
+        resource_type: this.$t('ResourceType')
+      }
+      // Keep the API filter values/operators and translate only their display labels.
+      const filters = Object.fromEntries(
+        Object.entries(meta.filters || {}).map(([name, field]) => [
+          name,
+          {
+            ...field,
+            label: labels[name] || field.label,
+            ...(name === 'action' &&
+              field.choices && {
+                choices: field.choices.map((choice) => ({
+                  ...choice,
+                  label: CLOUD_SYNC_ACTIONS[choice.value]
+                    ? this.$t(CLOUD_SYNC_ACTIONS[choice.value].label)
+                    : choice.label
+                }))
+              })
+          }
+        ])
+      )
+      return { ...meta, filters }
+    },
     formatTrigger(trigger) {
       const labels = {
         manual: 'SyncManual',
@@ -360,4 +406,21 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.execution-summary,
+.region-summary {
+  margin-bottom: 16px;
+}
+
+.execution-item-table {
+  margin-bottom: 0;
+}
+</style>
+
+<style lang="scss">
+.el-dialog.cloud-execution-dialog .el-dialog__body {
+  box-sizing: border-box;
+  max-height: calc(90vh - 60px);
+  overflow-y: auto;
+}
+</style>
