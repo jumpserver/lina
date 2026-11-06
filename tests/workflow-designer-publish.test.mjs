@@ -8,12 +8,34 @@ import * as Vue from 'vue'
 import { renderToString } from '@vue/server-renderer'
 import { ElFormItem, ID_INJECTION_KEY } from 'element-plus'
 import * as graph from '../src/views/tickets/Workflow/graph.js'
+import _ from 'lodash'
+import { toPlainTextMessage } from '../src/utils/common/message.js'
 
 const source = await readFile(
   new URL('../src/views/tickets/Workflow/Designer.vue', import.meta.url),
   'utf8'
 )
-const bindings = { Page: {}, IBox: {}, Select2: {}, ConditionEditor: {}, ...graph }
+const commonSource = await readFile(
+  new URL('../src/utils/common/index.js', import.meta.url),
+  'utf8'
+)
+const errorSource = commonSource.match(
+  /export function getErrorResponseMsg\(error\) \{[\s\S]*?\n\}/
+)[0]
+const getErrorResponseMsg = new Function(
+  '_',
+  'i18n',
+  'toPlainTextMessage',
+  errorSource.replace('export ', '') + '\nreturn getErrorResponseMsg'
+)(_, { t: (...args) => i18n.global.t(...args) }, toPlainTextMessage)
+const bindings = {
+  Page: {},
+  IBox: {},
+  Select2: {},
+  ConditionEditor: {},
+  getErrorResponseMsg,
+  ...graph
+}
 const component = new Function(
   ...Object.keys(bindings),
   parse(source)
@@ -399,4 +421,30 @@ test('a failed publish does not silently advance the expected version for an exi
   await vm.publish()
   assert.equal(vm.workflow.active_version_number, 2)
   assert.equal(vm.error, i18n.global.t('WFConflict'))
+})
+
+test('publish errors show readable messages while preserving the unpublished definition', async () => {
+  const message = '审批流程必须包含 2 至 128 个节点。'
+  for (const [error, expected] of [
+    [{ response: { status: 400, data: { definition: [message] } } }, message],
+    [{ response: { status: 400, data: { detail: message } } }, message],
+    [new Error('Network Error'), 'Error: Network Error'],
+    [{ response: { status: 400, data: {} }, message: 'Publish failed' }, 'Publish failed']
+  ]) {
+    const vm = mount({ id: 'workflow', active_version: 'version-1', active_version_number: 1 })
+    vm.definition.nodes[0].name = 'Unsaved start'
+    const definition = structuredClone(vm.definition)
+    vm.$axios = {
+      patch: async () => vm.workflow,
+      post: async () => {
+        throw error
+      }
+    }
+    await vm.publish()
+    assert.equal(vm.error, expected)
+    assert.equal(vm.saving, false)
+    assert.equal(vm.workflow.active_version, 'version-1')
+    assert.equal(vm.dirty, true)
+    assert.deepEqual(vm.definition, definition)
+  }
 })
