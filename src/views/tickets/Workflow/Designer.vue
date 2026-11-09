@@ -200,6 +200,9 @@
                         :label="$t(`WFResolver_${kind}`)"
                       />
                     </el-select>
+                    <p v-if="selected.config.approvers.type === 'asset_owner'" class="help-block">
+                      {{ $t('WFAssetOwnerHelp') }}
+                    </p>
                   </el-form-item>
                   <el-form-item
                     v-if="resourceResolver"
@@ -383,7 +386,7 @@ export default {
       selectedId: 'approval_1',
       ticketTypes: [],
       nodeLabels,
-      resolvers: ['user', 'user_group', 'role', 'applicant_manager', 'asset_owner', 'org_admin']
+      resolvers: ['user', 'user_group', 'role', 'asset_owner', 'org_admin']
     }
   },
   computed: {
@@ -996,6 +999,9 @@ h3 {
   padding: 0;
   line-height: 18px;
   font-size: 12px;
+}
+.inspector .help-block {
+  color: var(--el-text-color-regular);
 }
 .inspector :deep(.el-input-number) {
   width: 100%;

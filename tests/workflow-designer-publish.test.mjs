@@ -229,7 +229,7 @@ test('validation advances to the next empty approval and clears after changing r
   vm.changeResolver('org_admin')
   assert.equal(vm.approverError, '')
   assert.equal(vm.definition.nodes.find(vm.missingApprovers), undefined)
-  for (const type of ['applicant_manager', 'asset_owner', 'org_admin']) {
+  for (const type of ['asset_owner', 'org_admin']) {
     second.config.approvers = { type }
     assert.equal(vm.missingApprovers(second), false)
   }
@@ -446,5 +446,28 @@ test('publish errors show readable messages while preserving the unpublished def
     assert.equal(vm.workflow.active_version, 'version-1')
     assert.equal(vm.dirty, true)
     assert.deepEqual(vm.definition, definition)
+  }
+})
+
+test('asset owner guidance is localized and only shown for asset owner approvals', async () => {
+  const template = parse(source).descriptor.template.content.match(
+    /<p v-if="selected.config.approvers.type === 'asset_owner'"[\s\S]*?<\/p>/
+  )[0]
+  const render = new Function(
+    'Vue',
+    compile(template, { mode: 'function', prefixIdentifiers: true }).code
+  )(Vue)
+  assert.ok(!mount().resolvers.includes('applicant_manager'))
+  for (const locale of ['zh', 'zh_hant', 'en']) {
+    for (const type of ['asset_owner', 'user', 'org_admin']) {
+      const app = Vue.createSSRApp({
+        render,
+        setup: () => ({ selected: { config: { approvers: { type } } } })
+      })
+      app.config.globalProperties.$t = (key) => messages[locale][key]
+      const html = await renderToString(app)
+      assert.ok(messages[locale].WFAssetOwnerHelp)
+      assert.equal(html.includes(messages[locale].WFAssetOwnerHelp), type === 'asset_owner')
+    }
   }
 })
