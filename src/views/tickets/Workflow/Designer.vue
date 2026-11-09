@@ -266,9 +266,9 @@
                 <el-collapse-item name="approval" :title="$t('WFAdvancedSettings')">
                   <el-form-item :label="$t('WFTimeout')">
                     <el-input-number
-                      v-model="selected.config.timeout"
+                      v-model="timeoutMinutes"
                       :min="0"
-                      :max="31536000"
+                      :max="525600"
                       :precision="0"
                       controls-position="right"
                     />
@@ -438,6 +438,14 @@ export default {
     },
     selected() {
       return this.definition.nodes.find((n) => n.id === this.selectedId)
+    },
+    timeoutMinutes: {
+      get() {
+        return (this.selected?.config.timeout || 0) / 60
+      },
+      set(value) {
+        this.selected.config.timeout = (value ?? 0) * 60
+      }
     },
     layout() {
       const nodes = layoutGraph(this.definition)

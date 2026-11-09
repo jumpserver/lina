@@ -64,8 +64,12 @@ function mount(workflow = {}) {
   }
   vm.workflow = { ...vm.workflow, name: 'Approval', ...workflow }
   for (const [key, method] of Object.entries(component.methods)) vm[key] = method.bind(vm)
-  for (const [key, getter] of Object.entries(component.computed))
-    Object.defineProperty(vm, key, { get: getter.bind(vm) })
+  for (const [key, computed] of Object.entries(component.computed)) {
+    Object.defineProperty(vm, key, {
+      get: (typeof computed === 'function' ? computed : computed.get).bind(vm),
+      set: computed.set?.bind(vm)
+    })
+  }
   vm.captureBaseline()
   return vm
 }
@@ -470,4 +474,16 @@ test('asset owner guidance is localized and only shown for asset owner approvals
       assert.equal(html.includes(messages[locale].WFAssetOwnerHelp), type === 'asset_owner')
     }
   }
+})
+
+test('timeout input uses whole minutes while workflow definitions keep seconds', () => {
+  const vm = mount()
+  assert.equal(vm.timeoutMinutes, 1440)
+  for (const minutes of [0, 1, 30, 525600]) {
+    vm.timeoutMinutes = minutes
+    assert.equal(vm.selected.config.timeout, minutes * 60)
+    assert.equal(vm.timeoutMinutes, minutes)
+  }
+  vm.timeoutMinutes = null
+  assert.equal(vm.selected.config.timeout, 0)
 })
