@@ -3,7 +3,6 @@
     v-bind="settings"
     ref="form"
     class="form"
-    @perform-error="handlePerformError"
     @perform-finished="handlePerformFinished"
     @submit-success="handleSubmitSuccess"
   />
@@ -11,6 +10,8 @@
 
 <script>
 import { GenericCreateUpdateForm } from '@/layout/components'
+import { getErrorResponseMsg } from '@/utils/common'
+import { flashErrorMsg } from '@/utils/request'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, encryptAttrsField } from '@/views/assets/Cloud/const'
 import { RequiredChange, specialEmojiCheck } from '@/components/Form/DataForm/rules'
 import { UploadKey } from '@/components'
@@ -60,7 +61,6 @@ export default {
     }
 
     return {
-      priSubmitForm: null,
       submitType: 'auto',
       settings: {
         url: `/api/v1/xpack/cloud/accounts/`,
@@ -172,6 +172,43 @@ export default {
           }
           return `${vm.settings.url}?provider=${this.provider}`
         },
+        async performSubmit(values) {
+          try {
+            return await this.$axios[this.method](this.iUrl, values, { disableFlashErrorMsg: true })
+          } catch (error) {
+            if (error.templateFollowCancelled) throw error
+            const { response } = error
+            const data = response?.data
+            if (response?.status === 400 && data && typeof data === 'object') {
+              const unhandled = Object.fromEntries(
+                Object.entries(data).filter(
+                  ([name]) => !Object.keys(vm.settings.fieldsMeta).includes(name)
+                )
+              )
+              if (Object.keys(data).length && !Object.keys(unhandled).length) throw error
+              vm.$message.error(getErrorResponseMsg(unhandled) || error.message)
+            } else if (!response) {
+              vm.$message.error(getErrorResponseMsg(error) || error.message)
+            } else if (
+              response.status !== 401 &&
+              !(response.status === 423 && response.data?.code === 'web_session_locked')
+            ) {
+              response.config.disableFlashErrorMsg = false
+              flashErrorMsg({ response, error })
+            }
+            throw error
+          }
+        },
+        afterGetRemoteMeta: () => {
+          const attrs = this.settings.fieldsMeta.attrs
+          for (const name of attrs.fields) {
+            attrs.fieldsMeta[name].on = {
+              input: () => {
+                delete this.$refs.form.$refs.form.serverErrors.attrs?.[name]
+              }
+            }
+          }
+        },
         cleanFormValue(values) {
           const newValues = JSON.parse(JSON.stringify(values))
           newValues['attrs'] = encryptAttrsField(newValues.attrs)
@@ -185,7 +222,6 @@ export default {
   },
   methods: {
     submitForm(form, btn, submitType) {
-      this.priSubmitForm = form
       form.validate((valid) => {
         if (valid) {
           btn.loading = true
@@ -208,29 +244,6 @@ export default {
     handlePerformFinished() {
       for (const btn of this.settings.moreButtons) {
         btn.loading = false
-      }
-    },
-    handlePerformError(errorData) {
-      if (Object.prototype.hasOwnProperty.call(errorData, 'attrs')) {
-        for (const f in errorData['attrs']) {
-          this.setAttrsFieldError(f, errorData['attrs'][f])
-        }
-      }
-    },
-    setAttrsFieldError(name, errors) {
-      for (const item of this.priSubmitForm.content) {
-        if (item.id === 'attrs') {
-          errors = Array.isArray(errors) ? errors.join(',') : errors
-          const totalFields = item.el.fields
-          const field = totalFields.find((v) => v.prop === name)
-          if (!field) {
-            return
-          }
-          if (typeof errors === 'string') {
-            field.el.errors = errors
-            field.attrs.error = errors
-          }
-        }
       }
     }
   }
