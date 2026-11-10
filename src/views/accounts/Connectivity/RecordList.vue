@@ -5,8 +5,7 @@
       :table-config="tableConfig"
       :header-actions="headerActions"
       :drawer-props="{ connectivityType: drawerType }"
-      reload-order-query="-date_start"
-      @loaded="handleLoaded"
+      reload-order-query="-date_start,-id"
     />
   </div>
 </template>
@@ -26,7 +25,6 @@ export default {
   data() {
     return {
       drawerType: '',
-      unresolved: 0,
       headerActions: {
         hasCreate: false,
         hasLeftActions: false,
@@ -73,15 +71,21 @@ export default {
           asset: {
             label: this.$t('Asset'),
             minWidth: 200,
-            formatter: (row) =>
-              row.asset_address ? `${row.asset} (${row.asset_address})` : row.asset
+            formatter: (row) => {
+              const name = row.asset || row.asset_id || '-'
+              return row.asset_address ? `${name} (${row.asset_address})` : name
+            }
           },
           account: {
             label: this.$t('Account'),
             minWidth: 140,
             formatter: (row) => row.account || '-'
           },
-          username: { label: this.$t('Username'), minWidth: 140 },
+          username: {
+            label: this.$t('Username'),
+            minWidth: 140,
+            formatter: (row) => row.username || row.account_id || '-'
+          },
           privileged: {
             label: this.$t('Privileged'),
             width: 120,
@@ -138,20 +142,11 @@ export default {
         }
       }
     }
-  },
-  methods: {
-    handleLoaded({ response }) {
-      this.unresolved = response?.unresolved || 0
-    }
   }
 }
 </script>
 
 <style scoped>
-.record-warning {
-  margin-bottom: 12px;
-}
-
 .connectivity-records :deep(.el-table__body td.connectivity-record-error.el-table__cell .cell) {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
