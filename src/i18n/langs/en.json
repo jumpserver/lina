@@ -3964,6 +3964,12 @@
   "FileEncryption": "File encryption",
   "FileEncryptionHelp": "Encrypts and decrypts system exports and email attachments, such as account backups and password change results. Leave blank to keep the existing password.",
   "ScreenLock": {
+    "IdleWarningTitle": "Screen locking soon",
+    "IdleWarningCountdown": "The screen will lock in {seconds} seconds. Move the mouse or press a key to continue.",
+    "ExpiryWarningTitle": "Login expiring soon",
+    "ExpiryWarningCountdown": "Your sign-in expires in {minutes} min {seconds} sec.",
+    "ExpiredTitle": "Login expired",
+    "ExpiredDescription": "Please log in again.",
     "Title": "Screen locked",
     "Description": "Enter your screen lock password to continue.",
     "Password": "Screen lock password",
@@ -4009,7 +4015,7 @@
     "IdleLock": "Idle screen lock",
     "PolicyHelp": "Web and desktop sign-ins are independent. When request renewal is enabled, ordinary requests extend expiry. There is no separate fixed maximum lifetime or keyboard/mouse idle sign-out. Idle locking is configured separately.",
     "FileHelp": "Change session duration and request renewal in Core config.yml, then restart Core. New logins use the new settings. Stored deadlines are not rewritten in bulk. A session with its own saved duration may keep it on renewal; sign in again to apply the new duration.",
-    "CurrentHelp": "The current deadline comes from the server, syncs about once a minute, and may change after requests or session writes. Web and desktop idle locking are independent. Locking does not pause expiry; activity is shared only across tabs on this site."
+    "CurrentHelp": "The displayed deadline is from the latest server check and refreshes when you return to the page or change settings. Requests or session writes may change the actual deadline. Web and desktop idle locking are independent. Locking does not pause expiry; activity is shared only across tabs on this site."
   },
   "IdleLock": {
     "Title": "Idle screen lock",
