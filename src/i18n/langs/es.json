@@ -1199,6 +1199,7 @@
   "InstanceName": "Nombre de la instancia",
   "InstanceNamePartIp": "Nombre de la instancia y parte de la IP",
   "InstancePlatformName": "Nombre de la plataforma de instancia",
+  "IntegerMinimumRequired": "Introduzca un número entero mayor o igual a {min}",
   "IntegerRequired": "Introduzca un número entero.",
   "Integration": "Integración de aplicaciones",
   "Interface": "Interfaz de red",
@@ -3056,7 +3057,7 @@
   "FileEncryptionHelp": "Cifra y descifra las exportaciones del sistema y los adjuntos de correo, como copias de seguridad de cuentas y resultados de cambios de contraseña. Deja en blanco para conservar la contraseña actual.",
   "ScreenLock": {
     "IdleWarningTitle": "La pantalla se bloqueará pronto",
-    "IdleWarningCountdown": "La pantalla se bloqueará en {seconds} segundos Mueva el ratón o pulse una tecla para continuar",
+    "IdleWarningCountdown": "La pantalla se bloqueará en {seconds} segundos; mueva el ratón o pulse una tecla para continuar",
     "ExpiryWarningTitle": "La sesión está por caducar",
     "ExpiryWarningCountdown": "Su sesión caduca en {minutes} min {seconds} s",
     "ExpiryWarningCountdownSeconds": "Su sesión caduca en {seconds} s",

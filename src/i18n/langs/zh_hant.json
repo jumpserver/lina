@@ -1156,6 +1156,7 @@
   "InstanceName": "實例名稱",
   "InstanceNamePartIp": "實例名稱和部分IP",
   "InstancePlatformName": "實例平台名稱",
+  "IntegerMinimumRequired": "請輸入不小於 {min} 的整數",
   "IntegerRequired": "請輸入整數。",
   "Integration": "應用整合",
   "Interface": "網路介面",
