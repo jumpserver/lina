@@ -3226,6 +3226,12 @@
   "FileEncryption": "Chiffrement des fichiers",
   "FileEncryptionHelp": "Chiffre et déchiffre les exports du système et les pièces jointes, par exemple les sauvegardes de comptes et les résultats de changement de mot de passe. Laissez vide pour conserver le mot de passe actuel.",
   "ScreenLock": {
+    "IdleWarningTitle": "Verrouillage imminent",
+    "IdleWarningCountdown": "L’écran se verrouillera dans {seconds} secondes. Déplacez la souris ou appuyez sur une touche pour continuer.",
+    "ExpiryWarningTitle": "Expiration prochaine de la session",
+    "ExpiryWarningCountdown": "Votre session expire dans {minutes} min {seconds} s.",
+    "ExpiredTitle": "Session expirée",
+    "ExpiredDescription": "Veuillez vous reconnecter.",
     "Title": "Écran verrouillé",
     "Description": "Saisissez votre mot de passe de verrouillage pour continuer.",
     "Password": "Mot de passe de verrouillage",
@@ -3271,7 +3277,7 @@
     "IdleLock": "Verrouillage après inactivité",
     "PolicyHelp": "Les connexions Web et du client sont indépendantes. Le renouvellement sur requête prolonge la session lors des requêtes ordinaires. Il n’y a ni durée maximale fixe distincte ni déconnexion pour inactivité clavier/souris. Le verrouillage se configure séparément.",
     "FileHelp": "Modifiez la durée et le renouvellement dans config.yml de Core, puis redémarrez Core. Les nouvelles connexions utilisent les nouveaux réglages ; les échéances existantes ne sont pas réécrites en bloc. Une session ayant sa propre durée peut la conserver au renouvellement ; reconnectez-vous pour appliquer la nouvelle durée.",
-    "CurrentHelp": "L’échéance vient du serveur, se synchronise environ chaque minute et peut changer après une requête ou écriture. Les verrouillages Web et client sont indépendants. Verrouiller ne suspend pas l’expiration ; l’activité est partagée uniquement entre onglets de ce site."
+    "CurrentHelp": "L’échéance affichée vient de la dernière vérification du serveur et est actualisée au retour sur la page ou après une modification des paramètres. Les requêtes ou écritures de session peuvent changer l’échéance réelle. Les verrouillages Web et client sont indépendants. Verrouiller ne suspend pas l’expiration ; l’activité est partagée uniquement entre onglets de ce site."
   },
   "IdleLock": {
     "Title": "Verrouillage après inactivité",

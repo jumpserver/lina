@@ -3520,6 +3520,12 @@
   "FileEncryption": "檔案加密",
   "FileEncryptionHelp": "用於系統匯出檔案及郵件附件的加密與解密，例如帳號備份、帳號改密結果檔案。留空保留現有密碼。",
   "ScreenLock": {
+    "IdleWarningTitle": "即將鎖定畫面",
+    "IdleWarningCountdown": "{seconds} 秒後鎖定畫面。移動滑鼠或按鍵可繼續使用。",
+    "ExpiryWarningTitle": "登入即將到期",
+    "ExpiryWarningCountdown": "{minutes} 分 {seconds} 秒後登入到期。",
+    "ExpiredTitle": "登入已到期",
+    "ExpiredDescription": "請重新登入。",
     "Title": "螢幕已鎖定",
     "Description": "輸入鎖屏密碼繼續使用",
     "Password": "鎖屏密碼",
@@ -3565,7 +3571,7 @@
     "IdleLock": "閒置鎖屏",
     "PolicyHelp": "Web 與用戶端登入各自獨立。啟用請求續期後，一般請求會延長到期時間；沒有單獨的固定最長有效期，也不因鍵鼠閒置直接登出。閒置鎖屏另行控制。",
     "FileHelp": "工作階段有效時長與請求續期須修改 Core 的 config.yml 並重新啟動 Core。新登入採用新設定；已有截止時間不會批次改寫。儲存了獨立時長的工作階段，續期時亦可能保留原時長，須重新登入才採用新時長。",
-    "CurrentHelp": "目前到期時間以伺服器為準，約每分鐘同步，可能隨請求或工作階段寫入變化。Web 與用戶端閒置鎖屏獨立；鎖屏不暫停到期計時，活動僅彙總同站點分頁。"
+    "CurrentHelp": "顯示的到期時間以最近一次伺服器檢查為準，返回頁面或修改設定時更新，實際到期時間可能隨請求或工作階段寫入變化。Web 與用戶端閒置鎖屏獨立；鎖屏不暫停到期計時，活動僅彙總同站點分頁。"
   },
   "IdleLock": {
     "Title": "閒置鎖屏",

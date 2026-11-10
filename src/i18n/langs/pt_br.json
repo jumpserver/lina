@@ -3055,6 +3055,12 @@
   "FileEncryption": "Criptografia de arquivos",
   "FileEncryptionHelp": "Criptografa e descriptografa exportações do sistema e anexos de email, como backups de contas e resultados de alteração de senha. Deixe em branco para manter a senha atual.",
   "ScreenLock": {
+    "IdleWarningTitle": "A tela será bloqueada em breve",
+    "IdleWarningCountdown": "A tela será bloqueada em {seconds} segundos. Mova o mouse ou pressione uma tecla para continuar.",
+    "ExpiryWarningTitle": "A sessão vai expirar em breve",
+    "ExpiryWarningCountdown": "Sua sessão expira em {minutes} min {seconds} s.",
+    "ExpiredTitle": "Sessão expirada",
+    "ExpiredDescription": "Faça login novamente.",
     "Title": "Tela bloqueada",
     "Description": "Digite a senha de bloqueio para continuar.",
     "Password": "Senha de bloqueio de tela",
@@ -3100,7 +3106,7 @@
     "IdleLock": "Bloqueio por inatividade",
     "PolicyHelp": "Os logins Web e do cliente são independentes. Com a renovação ativada, requisições normais prolongam a validade. Não há limite máximo fixo separado nem saída por inatividade do teclado/mouse. O bloqueio é configurado separadamente.",
     "FileHelp": "Altere a duração e a renovação em config.yml do Core e reinicie o Core. Novos logins usam os novos valores; prazos existentes não são regravados em lote. Uma sessão com duração própria pode mantê-la ao renovar; entre novamente para aplicar a nova duração.",
-    "CurrentHelp": "O prazo vem do servidor, sincroniza aproximadamente a cada minuto e pode mudar após solicitações ou gravações. O bloqueio Web e do cliente é independente. Bloquear não pausa o vencimento; a atividade é compartilhada apenas entre abas deste site."
+    "CurrentHelp": "O prazo exibido vem da última verificação do servidor e é atualizado ao voltar à página ou alterar as configurações. Solicitações ou gravações de sessão podem mudar o prazo real. O bloqueio Web e do cliente é independente. Bloquear não pausa o vencimento; a atividade é compartilhada apenas entre abas deste site."
   },
   "IdleLock": {
     "Title": "Bloqueio por inatividade",
