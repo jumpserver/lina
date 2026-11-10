@@ -1563,7 +1563,7 @@
   "PrivateKey": "秘密鍵",
   "Privileged": "特権アカウント",
   "PrivilegedAccount": "特権アカウント",
-  "PrivilegedFirst": "優先的な特権アカウント",
+  "PrivilegedFirst": "特権アカウントを優先",
   "PrivilegedOnly": "特権アカウントのみ",
   "PrivilegedTemplate": "特別な権限",
   "Processing": "処理中",
@@ -3341,6 +3341,9 @@
     "LifetimeHelp": "ログイン時刻から計算し、期限切れ後は再ログインが必要です。操作しても延長されません。",
     "AdminClientHelp": "管理者設定が既定値と上限です。ユーザーはより厳しい設定にでき、未設定の場合は管理者設定に従います。"
   },
+  "AccountConnectivity": "アカウントの接続テスト",
+  "AssetConnectivity": "アセットの接続テスト",
+  "ConnectivityAllAccounts": "すべての有効なアカウント",
   "OnlineSessionPolicy": {
     "Title": "有効期限情報",
     "Expires": "有効期限",

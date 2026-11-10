@@ -1631,7 +1631,7 @@
   "PrivateKey": "개인키",
   "Privileged": "특권 계정",
   "PrivilegedAccount": "특권 계정",
-  "PrivilegedFirst": "우선 특권 계정",
+  "PrivilegedFirst": "특권 계정 우선",
   "PrivilegedOnly": "특권 계정만",
   "PrivilegedTemplate": "특권",
   "Processing": "처리 중",
@@ -2236,7 +2236,7 @@
   "UserTreeSort": "사용자 정렬",
   "UserUKey": "사용자 UKey",
   "UserUpdate": "사용자 업데이트",
-  "Username": "같음",
+  "Username": "사용자 이름",
   "UsernamePlaceholder": "사용자 이름을 입력하십시오",
   "Users": "사용자",
   "UsersAmount": "사용자",
@@ -3137,6 +3137,9 @@
     "LifetimeHelp": "로그인 시점부터 계산합니다. 만료 시 재로그인이 필요하며 활동해도 연장되지 않습니다.",
     "AdminClientHelp": "관리자 설정이 기본값과 상한입니다. 사용자는 더 엄격하게 설정할 수 있으며, 직접 설정하지 않으면 관리자를 따릅니다."
   },
+  "AccountConnectivity": "계정 연결 테스트",
+  "AssetConnectivity": "자산 연결 테스트",
+  "ConnectivityAllAccounts": "모든 활성 계정",
   "OnlineSessionPolicy": {
     "Title": "유효 기간 정보",
     "Expires": "만료 시간",

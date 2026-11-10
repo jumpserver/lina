@@ -1631,7 +1631,7 @@
   "PrivateKey": "Khóa bí mật",
   "Privileged": "Tài khoản đặc quyền",
   "PrivilegedAccount": "Tài khoản đặc quyền",
-  "PrivilegedFirst": "Tài khoản ưu tiên đặc quyền",
+  "PrivilegedFirst": "Ưu tiên tài khoản đặc quyền",
   "PrivilegedOnly": "Chỉ tài khoản đặc quyền",
   "PrivilegedTemplate": "Đặc quyền",
   "Processing": "Đang xử lý",
@@ -3137,6 +3137,9 @@
     "LifetimeHelp": "Tính từ lúc đăng nhập. Hết hạn phải đăng nhập lại; hoạt động không kéo dài thời hạn.",
     "AdminClientHelp": "Quản trị viên đặt mặc định và giới hạn. Người dùng có thể đặt nghiêm ngặt hơn; nếu không tự đặt thì theo quản trị viên."
   },
+  "AccountConnectivity": "Kiểm tra kết nối tài khoản",
+  "AssetConnectivity": "Kiểm tra kết nối tài sản",
+  "ConnectivityAllAccounts": "Tất cả tài khoản đang hoạt động",
   "OnlineSessionPolicy": {
     "Title": "Thông tin hiệu lực",
     "Expires": "Hết hạn lúc",
