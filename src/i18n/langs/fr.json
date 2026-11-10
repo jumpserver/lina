@@ -1206,6 +1206,7 @@
   "InstanceName": "Nom de l'instance",
   "InstanceNamePartIp": "Nom de l'instance et IP partielle",
   "InstancePlatformName": "Nom de plateforme de l'instance",
+  "IntegerMinimumRequired": "Saisissez un entier supérieur ou égal à {min}",
   "IntegerRequired": "Veuillez saisir un entier.",
   "Integration": "Intégration",
   "Interface": "Apparence",
@@ -3227,7 +3228,7 @@
   "FileEncryptionHelp": "Chiffre et déchiffre les exports du système et les pièces jointes, par exemple les sauvegardes de comptes et les résultats de changement de mot de passe. Laissez vide pour conserver le mot de passe actuel.",
   "ScreenLock": {
     "IdleWarningTitle": "Verrouillage imminent",
-    "IdleWarningCountdown": "L’écran se verrouillera dans {seconds} secondes Déplacez la souris ou appuyez sur une touche pour continuer",
+    "IdleWarningCountdown": "L’écran se verrouillera dans {seconds} secondes ; déplacez la souris ou appuyez sur une touche pour continuer",
     "ExpiryWarningTitle": "Expiration prochaine de la session",
     "ExpiryWarningCountdown": "Votre session expire dans {minutes} min {seconds} s",
     "ExpiryWarningCountdownSeconds": "Votre session expire dans {seconds} s",

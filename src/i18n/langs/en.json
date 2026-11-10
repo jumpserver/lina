@@ -1293,6 +1293,7 @@
   "InstanceName": "Instance name",
   "InstanceNamePartIp": "Instance name and partial IP",
   "InstancePlatformName": "Instance platform name",
+  "IntegerMinimumRequired": "Enter an integer greater than or equal to {min}",
   "IntegerRequired": "Please enter an integer.",
   "Integration": "Integration",
   "Interface": "Appearance",
@@ -3965,7 +3966,7 @@
   "FileEncryptionHelp": "Encrypts and decrypts system exports and email attachments, such as account backups and password change results. Leave blank to keep the existing password.",
   "ScreenLock": {
     "IdleWarningTitle": "Screen locking soon",
-    "IdleWarningCountdown": "The screen will lock in {seconds} seconds Move the mouse or press a key to continue",
+    "IdleWarningCountdown": "The screen will lock in {seconds} seconds; move the mouse or press a key to continue",
     "ExpiryWarningTitle": "Login expiring soon",
     "ExpiryWarningCountdown": "Your sign-in expires in {minutes} min {seconds} sec",
     "ExpiryWarningCountdownSeconds": "Your sign-in expires in {seconds} sec",

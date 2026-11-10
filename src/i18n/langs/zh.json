@@ -1274,6 +1274,7 @@
   "InstanceName": "实例名称",
   "InstanceNamePartIp": "实例名称和部分IP",
   "InstancePlatformName": "实例平台名称",
+  "IntegerMinimumRequired": "请输入不小于 {min} 的整数",
   "IntegerRequired": "请输入整数。",
   "Integration": "集成",
   "Interface": "网络接口",

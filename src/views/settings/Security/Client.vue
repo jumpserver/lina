@@ -59,6 +59,7 @@ export default {
                 type: 'integer',
                 min: 300,
                 transform: Number,
+                message: () => this.$t('IntegerMinimumRequired', { min: 300 }),
                 trigger: ['blur', 'change']
               }
             ]

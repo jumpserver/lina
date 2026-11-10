@@ -1199,6 +1199,7 @@
   "InstanceName": "인스턴스 이름",
   "InstanceNamePartIp": "인스턴스 이름 및 일부 IP",
   "InstancePlatformName": "인스턴스 플랫폼 이름",
+  "IntegerMinimumRequired": "{min} 이상의 정수를 입력하세요",
   "IntegerRequired": "정수를 입력하세요.",
   "Integration": "애플리케이션 통합",
   "Interface": "네트워크 인터페이스",
@@ -3058,7 +3059,7 @@
   "FileEncryptionHelp": "계정 백업과 비밀번호 변경 결과 등 시스템 내보내기 파일 및 이메일 첨부 파일의 암호화와 복호화에 사용합니다. 비워 두면 기존 비밀번호를 유지합니다.",
   "ScreenLock": {
     "IdleWarningTitle": "곧 화면이 잠깁니다",
-    "IdleWarningCountdown": "{seconds}초 후 화면이 잠깁니다 계속 사용하려면 마우스를 움직이거나 키를 누르세요",
+    "IdleWarningCountdown": "{seconds}초 후 화면이 잠깁니다. 계속 사용하려면 마우스를 움직이거나 키를 누르세요",
     "ExpiryWarningTitle": "로그인이 곧 만료됩니다",
     "ExpiryWarningCountdown": "{minutes}분 {seconds}초 후 로그인이 만료됩니다",
     "ExpiryWarningCountdownSeconds": "{seconds}초 후 로그인이 만료됩니다",
