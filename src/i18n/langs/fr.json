@@ -1650,7 +1650,7 @@
   "PrivateIP": "IP privée",
   "PrivateKey": "Clé privée",
   "Privileged": "Privilégié",
-  "PrivilegedFirst": "Privilégié en priorité",
+  "PrivilegedFirst": "Priorité aux comptes privilégiés",
   "PrivilegedOnly": "Privilégié uniquement",
   "PrivilegedTemplate": "Privilégié",
   "Processing": "Traitement en cours",
@@ -3306,6 +3306,9 @@
     "LifetimeHelp": "Calculé depuis la connexion. Reconnectez-vous à l’expiration ; l’activité ne prolonge pas la durée.",
     "AdminClientHelp": "L’administrateur définit les valeurs par défaut et les limites. L’utilisateur peut être plus restrictif ; sinon, il suit l’administrateur."
   },
+  "AccountConnectivity": "Test de connectivité des comptes",
+  "AssetConnectivity": "Test de connectivité des actifs",
+  "ConnectivityAllAccounts": "Tous les comptes actifs",
   "OnlineSessionPolicy": {
     "Title": "Informations de validité",
     "Expires": "Expiration",

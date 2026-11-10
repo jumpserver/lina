@@ -1631,7 +1631,7 @@
   "PrivateKey": "Chave privada",
   "Privileged": "Conta Privilegiada",
   "PrivilegedAccount": "Conta privilegiada",
-  "PrivilegedFirst": "Conta com privilégios prioritários",
+  "PrivilegedFirst": "Priorizar contas privilegiadas",
   "PrivilegedOnly": "Apenas contas privilegiadas",
   "PrivilegedTemplate": "Privilégios",
   "Processing": "Em processamento",
@@ -3135,6 +3135,9 @@
     "LifetimeHelp": "Contado desde o login. Ao expirar, entre novamente; a atividade não prolonga o prazo.",
     "AdminClientHelp": "O administrador define padrões e limites. O usuário pode adotar opções mais restritas; caso contrário, segue o administrador."
   },
+  "AccountConnectivity": "Teste de conectividade de contas",
+  "AssetConnectivity": "Teste de conectividade de ativos",
+  "ConnectivityAllAccounts": "Todas as contas ativas",
   "OnlineSessionPolicy": {
     "Title": "Informações de validade",
     "Expires": "Expira em",

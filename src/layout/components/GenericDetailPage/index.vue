@@ -12,7 +12,12 @@
       #headingRightSide
     >
       <slot name="headingRightSide">
-        <ActionsGroup v-if="hasRightSide" :actions="pageActions" class="header-buttons" />
+        <ActionsGroup
+          v-if="hasRightSide"
+          :actions="pageActions"
+          size="default"
+          class="header-buttons"
+        />
       </slot>
     </template>
     <!-- Keep slot roots directly under TabPage so its section spacing reaches tab content. -->
@@ -146,8 +151,8 @@ export default {
         {
           name: 'update',
           title: this.$t('Edit'),
-          icon: 'el-icon-edit-outline',
-          size: 'small',
+          type: 'primary',
+          icon: 'el-icon-edit',
           can: this.validActions.canUpdate,
           has: this.validActions.hasUpdate,
           callback: this.validActions.updateCallback.bind(this)
@@ -158,7 +163,6 @@ export default {
           type: 'danger',
           plain: true,
           icon: 'el-icon-delete',
-          size: 'small',
           can: this.validActions.canDelete,
           has: this.validActions.hasDelete,
           callback: this.validActions.deleteCallback.bind(this)
@@ -360,7 +364,38 @@ export default {
 
 <style lang="scss" scoped>
 .header-buttons {
-  z-index: 999;
-  margin-right: 20px;
+  --data-actions-gap: 8px;
+
+  :deep(.el-button.action-item) {
+    min-width: 76px;
+    height: 30px;
+    padding: 0 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  :deep(.action-content) {
+    gap: 6px;
+  }
+
+  :deep(.action-content .pre-icon) {
+    font-size: 14px;
+  }
+
+  :deep(.action-content .pre-icon + span) {
+    margin-left: 0;
+  }
+
+  :deep(.el-button.delete) {
+    --el-button-bg-color: var(--el-bg-color);
+    --el-button-border-color: var(--el-border-color);
+    --el-button-hover-text-color: var(--el-color-danger);
+    --el-button-hover-bg-color: var(--el-color-danger-light-9);
+    --el-button-hover-border-color: var(--el-color-danger-light-5);
+    --el-button-active-text-color: var(--el-color-danger);
+    --el-button-active-bg-color: var(--el-color-danger-light-8);
+    --el-button-active-border-color: var(--el-color-danger);
+  }
 }
 </style>
