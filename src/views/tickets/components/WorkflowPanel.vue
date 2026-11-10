@@ -15,8 +15,8 @@
     </template>
     <template v-if="instance">
       <div class="workflow-summary">
-        <el-tag :type="stateTone(instance.state)" effect="light">
-          {{ $t(stateLabels[instance.state]) }}
+        <el-tag :type="deadlinePassed ? 'warning' : stateTone(instance.state)" effect="light">
+          {{ $t(deadlinePassed ? 'WFTimeoutPending' : stateLabels[instance.state]) }}
         </el-tag>
         <span class="hint">{{ $t('WFVersion') }} {{ instance.version_number }}</span>
       </div>
@@ -37,36 +37,44 @@
           :rows="2"
           maxlength="4096"
           :placeholder="$t('WFDecisionComment')"
+          :disabled="deadlinePassed"
         />
         <div class="buttons">
           <template v-if="myTask">
             <el-button
               type="primary"
               :disabled="
-                busy || savingRequest || editingRequest || instance.resource_adjustment?.pending
+                deadlinePassed ||
+                busy ||
+                savingRequest ||
+                editingRequest ||
+                instance.resource_adjustment?.pending
               "
               @click="decide('approve')"
               >{{ $t('Accept') }}</el-button
             >
-            <el-button type="danger" :disabled="busy || savingRequest" @click="decide('reject')">{{
-              $t('Reject')
-            }}</el-button>
+            <el-button
+              type="danger"
+              :disabled="deadlinePassed || busy || savingRequest"
+              @click="decide('reject')"
+              >{{ $t('Reject') }}</el-button
+            >
             <el-button
               v-if="currentNode.config.allow_transfer"
-              :disabled="busy || savingRequest"
+              :disabled="deadlinePassed || busy || savingRequest"
               @click="openReassign('transfer')"
               >{{ $t('WFTransfer') }}</el-button
             >
             <el-button
               v-if="currentNode.config.allow_add_approver"
-              :disabled="busy || savingRequest"
+              :disabled="deadlinePassed || busy || savingRequest"
               @click="openReassign('add-approver')"
               >{{ $t('WFAddApprover') }}</el-button
             >
           </template>
           <el-button
             v-if="canWithdraw"
-            :disabled="busy || savingRequest"
+            :disabled="deadlinePassed || busy || savingRequest"
             @click="decide('cancel')"
             >{{ $t('WFWithdraw') }}</el-button
           >
@@ -97,10 +105,20 @@
                 }}</strong>
                 <el-tag
                   v-if="node.type === 'approval' || node.state !== 'approved'"
-                  :type="stateTone(node.state)"
+                  :type="
+                    node.id === currentNode?.id && deadlinePassed
+                      ? 'warning'
+                      : stateTone(node.state)
+                  "
                   effect="plain"
                   size="small"
-                  >{{ $t(stateLabels[node.state]) }}</el-tag
+                  >{{
+                    $t(
+                      node.id === currentNode?.id && deadlinePassed
+                        ? 'WFDeadlinePassed'
+                        : stateLabels[node.state]
+                    )
+                  }}</el-tag
                 >
               </div>
               <time
@@ -232,14 +250,17 @@
       <p class="reassign-description">
         {{ $t(operation === 'transfer' ? 'WFTransferHint' : 'WFAddHint') }}
       </p>
-      <p v-if="reassignTaskChanged" class="reassign-warning" role="alert">
+      <p v-if="deadlinePassed" class="reassign-warning" role="alert">
+        {{ $t('WFTimeoutPending') }}
+      </p>
+      <p v-else-if="reassignTaskChanged" class="reassign-warning" role="alert">
         {{ $t('WFReassignTaskChanged') }}
       </p>
       <WorkflowMemberSelect
         v-if="myTask"
         v-model="target"
         :url="targetUrl"
-        :disabled="busy || reassignTaskChanged"
+        :disabled="deadlinePassed || busy || reassignTaskChanged"
         :label="$t(operation === 'transfer' ? 'WFTransferTo' : 'WFAddedApprover')"
       />
       <el-form class="reassign-comment" label-position="top" @submit.prevent>
@@ -250,7 +271,7 @@
             :rows="4"
             maxlength="4096"
             show-word-limit
-            :disabled="busy"
+            :disabled="deadlinePassed || busy"
             :placeholder="$t('WFReassignCommentPlaceholder')"
             resize="vertical"
           />
@@ -260,7 +281,7 @@
         <el-button :disabled="busy" @click="reassignVisible = false">{{ $t('Cancel') }}</el-button>
         <el-button
           type="primary"
-          :disabled="!target || !myTask || busy || reassignTaskChanged"
+          :disabled="deadlinePassed || !target || !myTask || busy || reassignTaskChanged"
           :loading="busy"
           @click="decide(operation)"
         >
@@ -308,6 +329,8 @@ export default {
     stateLabels,
     nodeLabels,
     timer: null,
+    deadlineTimer: null,
+    now: Date.now(),
     disposed: false
   }),
   setup: useDateTime,
@@ -335,6 +358,11 @@ export default {
     currentNode() {
       return this.instance?.nodes.find((n) => n.state === 'running' && n.type === 'approval')
     },
+    deadlinePassed() {
+      return Boolean(
+        this.currentNode?.deadline && Date.parse(this.currentNode.deadline) <= this.now
+      )
+    },
     myTask() {
       return this.currentNode?.tasks.find(
         (t) => t.assignee === this.$store.state.users.profile.id && t.state === 'pending'
@@ -355,6 +383,7 @@ export default {
   },
   watch: {
     instance(value) {
+      this.scheduleDeadline()
       this.$emit('loaded', value)
     },
     busy(value) {
@@ -365,6 +394,7 @@ export default {
       handler() {
         this.requestId++
         clearTimeout(this.timer)
+        clearTimeout(this.deadlineTimer)
         this.instance = null
         this.loading = false
         this.comment = ''
@@ -378,6 +408,7 @@ export default {
   },
   activated() {
     this.disposed = false
+    this.scheduleDeadline()
     if (this.object.workflow_instance && !this.loading) this.load()
   },
   deactivated() {
@@ -386,13 +417,27 @@ export default {
     this.loading = false
     this.reassignVisible = false
     clearTimeout(this.timer)
+    clearTimeout(this.deadlineTimer)
   },
   beforeUnmount() {
     this.disposed = true
     this.requestId++
     clearTimeout(this.timer)
+    clearTimeout(this.deadlineTimer)
   },
   methods: {
+    scheduleDeadline() {
+      clearTimeout(this.deadlineTimer)
+      this.deadlineTimer = null
+      this.now = Date.now()
+      const remaining = Date.parse(this.currentNode?.deadline) - this.now
+      if (!this.disposed && remaining > 0) {
+        this.deadlineTimer = setTimeout(
+          () => this.scheduleDeadline(),
+          Math.min(remaining, 2147483647)
+        )
+      }
+    },
     stateTone(state) {
       if (state === 'approved') return 'success'
       if (state === 'running' || state === 'pending') return 'primary'
@@ -449,7 +494,8 @@ export default {
       }
     },
     openReassign(operation) {
-      if (this.busy || this.savingRequest || !this.myTask) return
+      this.now = Date.now()
+      if (this.deadlinePassed || this.busy || this.savingRequest || !this.myTask) return
       this.reassignTaskId = this.myTask.id
       this.operation = operation
       this.target = null
@@ -457,7 +503,8 @@ export default {
       this.reassignVisible = true
     },
     async decide(operation) {
-      if (this.busy || this.savingRequest) return
+      this.now = Date.now()
+      if (this.deadlinePassed || this.busy || this.savingRequest) return
       if (
         operation === 'approve' &&
         (this.editingRequest || this.instance?.resource_adjustment?.pending)

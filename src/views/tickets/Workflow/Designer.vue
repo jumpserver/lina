@@ -200,6 +200,9 @@
                         :label="$t(`WFResolver_${kind}`)"
                       />
                     </el-select>
+                    <p v-if="selected.config.approvers.type === 'asset_owner'" class="help-block">
+                      {{ $t('WFAssetOwnerHelp') }}
+                    </p>
                   </el-form-item>
                   <el-form-item
                     v-if="resourceResolver"
@@ -263,9 +266,9 @@
                 <el-collapse-item name="approval" :title="$t('WFAdvancedSettings')">
                   <el-form-item :label="$t('WFTimeout')">
                     <el-input-number
-                      v-model="selected.config.timeout"
+                      v-model="timeoutMinutes"
                       :min="0"
-                      :max="31536000"
+                      :max="525600"
                       :precision="0"
                       controls-position="right"
                     />
@@ -383,7 +386,7 @@ export default {
       selectedId: 'approval_1',
       ticketTypes: [],
       nodeLabels,
-      resolvers: ['user', 'user_group', 'role', 'applicant_manager', 'asset_owner', 'org_admin']
+      resolvers: ['user', 'user_group', 'role', 'asset_owner', 'org_admin']
     }
   },
   computed: {
@@ -435,6 +438,14 @@ export default {
     },
     selected() {
       return this.definition.nodes.find((n) => n.id === this.selectedId)
+    },
+    timeoutMinutes: {
+      get() {
+        return (this.selected?.config.timeout || 0) / 60
+      },
+      set(value) {
+        this.selected.config.timeout = (value ?? 0) * 60
+      }
     },
     layout() {
       const nodes = layoutGraph(this.definition)
@@ -996,6 +1007,9 @@ h3 {
   padding: 0;
   line-height: 18px;
   font-size: 12px;
+}
+.inspector .help-block {
+  color: var(--el-text-color-regular);
 }
 .inspector :deep(.el-input-number) {
   width: 100%;

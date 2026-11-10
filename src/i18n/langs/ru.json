@@ -2942,12 +2942,11 @@
   "WFResolver_user": "Users",
   "WFResolver_user_group": "User groups",
   "WFResolver_role": "Roles",
-  "WFResolver_applicant_manager": "Applicant manager",
   "WFResolver_asset_owner": "Asset owners",
   "WFResolver_org_admin": "Organization administrators",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
-  "WFTimeout": "Timeout in seconds (0 for no deadline)",
+  "WFTimeout": "Timeout in minutes (0 for no deadline)",
   "WFTimeoutAction": "Timeout action",
   "WFExcludeApplicant": "Exclude applicant",
   "WFAllowTransfer": "Allow transfer",
@@ -3018,7 +3017,6 @@
   "WFTransferHint": "Assign your task to another organization member. The deadline stays unchanged.",
   "WFAddHint": "The added approver must approve, in addition to the original approval threshold.",
   "WFBulkFailed": "{count} tasks failed or changed state. The list has been refreshed.",
-  "WFManager": "Manager",
   "WFACLHint": "Select a workflow, or leave empty to use a single approval step with the reviewers below.",
   "WFProcessedByMe": "Processed by me",
   "TicketRelatedToMe": "Связанные со мной",
@@ -3050,6 +3048,13 @@
   "FileEncryption": "Шифрование файлов",
   "FileEncryptionHelp": "Шифрует и расшифровывает экспортируемые файлы и почтовые вложения, например резервные копии учётных записей и результаты смены паролей. Оставьте поле пустым, чтобы сохранить текущий пароль.",
   "ScreenLock": {
+    "IdleWarningTitle": "Скоро экран будет заблокирован",
+    "IdleWarningCountdown": "Экран будет заблокирован через {seconds} сек; переместите мышь или нажмите клавишу для продолжения",
+    "ExpiryWarningTitle": "Сеанс скоро истечёт",
+    "ExpiryWarningCountdown": "Срок действия сеанса истекает через {minutes} мин {seconds} сек",
+    "ExpiryWarningCountdownSeconds": "Срок действия сеанса истекает через {seconds} сек",
+    "ExpiredTitle": "Срок действия сеанса истёк",
+    "ExpiredDescription": "Войдите снова",
     "Title": "Экран заблокирован",
     "Description": "Введите пароль блокировки экрана, чтобы продолжить.",
     "Password": "Пароль блокировки экрана",
@@ -3095,7 +3100,7 @@
     "IdleLock": "Блокировка при бездействии",
     "PolicyHelp": "Вход через Web и клиент независимы. При включённом продлении обычные запросы сдвигают срок окончания. Отдельного фиксированного максимума и выхода из-за отсутствия ввода нет. Блокировка настраивается отдельно.",
     "FileHelp": "Измените срок и продление в config.yml Core и перезапустите Core. Новые входы используют новые значения; сохранённые сроки не переписываются массово. Сессия со своим сроком может сохранить его при продлении; войдите заново для применения нового срока.",
-    "CurrentHelp": "Текущий срок берётся с сервера, синхронизируется примерно раз в минуту и может меняться после запросов или записей. Web-блокировка и блокировка клиента независимы. Блокировка не останавливает срок; активность общая только у вкладок этого сайта."
+    "CurrentHelp": "Отображаемый срок получен при последней проверке сервера и обновляется при возврате на страницу или изменении настроек. Запросы или записи сеанса могут изменить фактический срок. Web-блокировка и блокировка клиента независимы. Блокировка не останавливает срок; активность общая только у вкладок этого сайта."
   },
   "IdleLock": {
     "Title": "Блокировка при бездействии",
@@ -3154,5 +3159,12 @@
     "Grace": "Конец отсрочки после изменения",
     "Unlimited": "Без ограничений",
     "BrowserExit": "Входить заново при закрытии браузера"
-  }
+  },
+  "IntegerMinimumRequired": "Введите целое число не меньше {min}",
+  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
+  "WFDeadlinePassed": "Deadline passed",
+  "WFTimeoutPending": "Deadline passed; awaiting system processing",
+  "AccountConnectivity": "Проверка подключения для учётных записей",
+  "AssetConnectivity": "Проверка подключения к активам",
+  "ConnectivityAllAccounts": "Все активные учётные записи"
 }

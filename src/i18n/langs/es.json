@@ -1625,7 +1625,7 @@
   "PrivateKey": "Clave privada",
   "Privileged": "Cuenta privilegiada",
   "PrivilegedAccount": "Cuenta privilegiada",
-  "PrivilegedFirst": "Cuenta de privilegios especiales",
+  "PrivilegedFirst": "Priorizar cuentas privilegiadas",
   "PrivilegedOnly": "Solo cuentas privilegiadas",
   "PrivilegedTemplate": "Privilegiado",
   "Processing": "En proceso",
@@ -2940,12 +2940,11 @@
   "WFResolver_user": "Users",
   "WFResolver_user_group": "User groups",
   "WFResolver_role": "Roles",
-  "WFResolver_applicant_manager": "Applicant manager",
   "WFResolver_asset_owner": "Asset owners",
   "WFResolver_org_admin": "Organization administrators",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
-  "WFTimeout": "Timeout in seconds (0 for no deadline)",
+  "WFTimeout": "Timeout in minutes (0 for no deadline)",
   "WFTimeoutAction": "Timeout action",
   "WFExcludeApplicant": "Exclude applicant",
   "WFAllowTransfer": "Allow transfer",
@@ -3016,7 +3015,6 @@
   "WFTransferHint": "Assign your task to another organization member. The deadline stays unchanged.",
   "WFAddHint": "The added approver must approve, in addition to the original approval threshold.",
   "WFBulkFailed": "{count} tasks failed or changed state. The list has been refreshed.",
-  "WFManager": "Manager",
   "WFACLHint": "Select a workflow, or leave empty to use a single approval step with the reviewers below.",
   "WFProcessedByMe": "Processed by me",
   "TicketRelatedToMe": "Relacionados conmigo",
@@ -3048,6 +3046,13 @@
   "FileEncryption": "Cifrado de archivos",
   "FileEncryptionHelp": "Cifra y descifra las exportaciones del sistema y los adjuntos de correo, como copias de seguridad de cuentas y resultados de cambios de contraseña. Deja en blanco para conservar la contraseña actual.",
   "ScreenLock": {
+    "IdleWarningTitle": "La pantalla se bloqueará pronto",
+    "IdleWarningCountdown": "La pantalla se bloqueará en {seconds} segundos; mueva el ratón o pulse una tecla para continuar",
+    "ExpiryWarningTitle": "La sesión está por caducar",
+    "ExpiryWarningCountdown": "Su sesión caduca en {minutes} min {seconds} s",
+    "ExpiryWarningCountdownSeconds": "Su sesión caduca en {seconds} s",
+    "ExpiredTitle": "La sesión ha caducado",
+    "ExpiredDescription": "Vuelva a iniciar sesión",
     "Title": "Pantalla bloqueada",
     "Description": "Introduce la contraseña de bloqueo para continuar.",
     "Password": "Contraseña de bloqueo",
@@ -3093,7 +3098,7 @@
     "IdleLock": "Bloqueo por inactividad",
     "PolicyHelp": "Las sesiones Web y del cliente son independientes. Al activar la renovación, las solicitudes normales extienden el vencimiento. No hay un máximo fijo independiente ni cierre por inactividad del teclado o ratón. El bloqueo se configura por separado.",
     "FileHelp": "Cambie la duración y la renovación en config.yml de Core y reinicie Core. Los nuevos inicios usan la configuración nueva; los plazos existentes no se reescriben en bloque. Una sesión con duración propia puede conservarla al renovarse; vuelva a iniciar sesión para aplicar la nueva duración.",
-    "CurrentHelp": "El plazo actual procede del servidor, se sincroniza aproximadamente cada minuto y puede cambiar tras solicitudes o escrituras. El bloqueo Web y del cliente es independiente. Bloquear no detiene el vencimiento; la actividad solo se comparte entre pestañas de este sitio."
+    "CurrentHelp": "El vencimiento mostrado procede de la última comprobación del servidor y se actualiza al volver a la página o cambiar la configuración. Las solicitudes o escrituras de sesión pueden cambiar el vencimiento real. El bloqueo Web y del cliente es independiente. Bloquear no detiene el vencimiento; la actividad solo se comparte entre pestañas de este sitio."
   },
   "IdleLock": {
     "Title": "Bloqueo por inactividad",
@@ -3152,5 +3157,12 @@
     "Grace": "Fin de la prórroga por cambio",
     "Unlimited": "Sin límite",
     "BrowserExit": "Volver a iniciar sesión al cerrar el navegador"
-  }
+  },
+  "IntegerMinimumRequired": "Introduzca un número entero mayor o igual a {min}",
+  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
+  "WFDeadlinePassed": "Deadline passed",
+  "WFTimeoutPending": "Deadline passed; awaiting system processing",
+  "AccountConnectivity": "Prueba de conectividad de cuentas",
+  "AssetConnectivity": "Prueba de conectividad de activos",
+  "ConnectivityAllAccounts": "Todas las cuentas activas"
 }

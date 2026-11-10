@@ -10,6 +10,8 @@ export const webSessionLockState = reactive({
   pending: false,
   logoutAt: 0,
   attemptsRemaining: null,
+  idleRemaining: null,
+  expiryRemaining: null,
   error: false,
   errorInfo: null,
   session: null
@@ -65,6 +67,8 @@ export async function startWebSessionLock() {
       Object.assign(webSessionLockState, {
         ready: true,
         locked: true,
+        idleRemaining: null,
+        expiryRemaining: null,
         error: true,
         errorInfo: describeWebSessionError(error)
       })

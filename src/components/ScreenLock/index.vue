@@ -17,7 +17,7 @@
         <LogoSymbol v-else class="screen-lock-brand-mark" />
         <span>JumpServer</span>
       </div>
-      <div v-if="!unconfirmed" class="screen-lock-security-indicator">
+      <div v-if="!unconfirmed && !state.error" class="screen-lock-security-indicator">
         {{ $t('ScreenLock.SecureLabel') }}
       </div>
       <div class="screen-lock-content">
@@ -30,9 +30,11 @@
                   $t(
                     state.logoutAt
                       ? 'ScreenLock.SignedOut'
-                      : unconfirmed || state.error
+                      : state.error
                         ? 'ScreenLock.CheckFailed'
-                        : 'ScreenLock.Title'
+                        : unconfirmed
+                          ? 'ScreenLock.Checking'
+                          : 'ScreenLock.Title'
                   )
                 }}
               </h1>
@@ -80,7 +82,7 @@
             </el-button>
           </div>
           <el-form
-            v-else-if="!state.error && state.session?.has_password"
+            v-else-if="!state.error && !unconfirmed && state.session?.has_password"
             label-position="top"
             class="screen-lock-form"
             @submit.prevent="unlock"
@@ -109,7 +111,7 @@
             >
           </el-form>
           <p
-            v-else-if="!state.error && state.session"
+            v-else-if="!state.error && !unconfirmed && state.session"
             class="screen-lock-unset-message"
             role="status"
           >
@@ -142,10 +144,16 @@
       </div>
     </div>
   </dialog>
+  <SessionWarnings
+    :append-to="blocked ? warningTarget : null"
+    :idle-remaining="state.idleRemaining"
+    :expiry-remaining="state.expiryRemaining"
+  />
 </template>
 
 <script>
 import LogoSymbol from '@/layout/components/NavLeft/LogoSymbol.vue'
+import SessionWarnings from './SessionWarnings.vue'
 import { isDefaultInterfaceLogo } from '@/utils/interfaceLogo'
 import { describeWebSessionError } from '@/utils/webSessionLock'
 import {
@@ -159,8 +167,9 @@ import {
 
 export default {
   name: 'WebScreenLock',
-  components: { LogoSymbol },
+  components: { LogoSymbol, SessionWarnings },
   data: () => ({
+    warningTarget: null,
     countdownNow: Date.now(),
     countdownTimer: null,
     logoFailed: false,
@@ -178,7 +187,7 @@ export default {
       return isDefaultInterfaceLogo(logo) ? '' : logo.trim()
     },
     unconfirmed() {
-      return !this.state.session
+      return !this.state.session?.locked
     },
     logoutAsText() {
       return Boolean(this.state.error || this.state.session?.has_password)
@@ -222,6 +231,7 @@ export default {
     }
   },
   mounted() {
+    this.warningTarget = this.$refs.dialog
     this.syncDialog()
     startWebSessionLock().catch(() => {})
   },

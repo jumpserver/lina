@@ -1625,7 +1625,7 @@
   "PrivateKey": "Khóa bí mật",
   "Privileged": "Tài khoản đặc quyền",
   "PrivilegedAccount": "Tài khoản đặc quyền",
-  "PrivilegedFirst": "Tài khoản ưu tiên đặc quyền",
+  "PrivilegedFirst": "Ưu tiên tài khoản đặc quyền",
   "PrivilegedOnly": "Chỉ tài khoản đặc quyền",
   "PrivilegedTemplate": "Đặc quyền",
   "Processing": "Đang xử lý",
@@ -2942,12 +2942,11 @@
   "WFResolver_user": "Users",
   "WFResolver_user_group": "User groups",
   "WFResolver_role": "Roles",
-  "WFResolver_applicant_manager": "Applicant manager",
   "WFResolver_asset_owner": "Asset owners",
   "WFResolver_org_admin": "Organization administrators",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
-  "WFTimeout": "Timeout in seconds (0 for no deadline)",
+  "WFTimeout": "Timeout in minutes (0 for no deadline)",
   "WFTimeoutAction": "Timeout action",
   "WFExcludeApplicant": "Exclude applicant",
   "WFAllowTransfer": "Allow transfer",
@@ -3018,7 +3017,6 @@
   "WFTransferHint": "Assign your task to another organization member. The deadline stays unchanged.",
   "WFAddHint": "The added approver must approve, in addition to the original approval threshold.",
   "WFBulkFailed": "{count} tasks failed or changed state. The list has been refreshed.",
-  "WFManager": "Manager",
   "WFACLHint": "Select a workflow, or leave empty to use a single approval step with the reviewers below.",
   "WFProcessedByMe": "Processed by me",
   "TicketRelatedToMe": "Liên quan đến tôi",
@@ -3050,6 +3048,13 @@
   "FileEncryption": "Mã hóa tệp",
   "FileEncryptionHelp": "Mã hóa và giải mã tệp xuất hệ thống và tệp đính kèm email, như bản sao lưu tài khoản và kết quả đổi mật khẩu. Để trống để giữ mật khẩu hiện tại.",
   "ScreenLock": {
+    "IdleWarningTitle": "Màn hình sắp khóa",
+    "IdleWarningCountdown": "Màn hình sẽ khóa sau {seconds} giây; di chuyển chuột hoặc nhấn phím để tiếp tục",
+    "ExpiryWarningTitle": "Phiên đăng nhập sắp hết hạn",
+    "ExpiryWarningCountdown": "Phiên đăng nhập sẽ hết hạn sau {minutes} phút {seconds} giây",
+    "ExpiryWarningCountdownSeconds": "Phiên đăng nhập sẽ hết hạn sau {seconds} giây",
+    "ExpiredTitle": "Phiên đăng nhập đã hết hạn",
+    "ExpiredDescription": "Vui lòng đăng nhập lại",
     "Title": "Màn hình đã khóa",
     "Description": "Nhập mật khẩu khóa màn hình để tiếp tục.",
     "Password": "Mật khẩu khóa màn hình",
@@ -3095,7 +3100,7 @@
     "IdleLock": "Khóa khi không hoạt động",
     "PolicyHelp": "Đăng nhập Web và ứng dụng độc lập. Khi bật gia hạn, yêu cầu thông thường sẽ kéo dài thời hạn. Không có thời hạn tối đa cố định riêng hay đăng xuất do không dùng bàn phím/chuột. Khóa khi không hoạt động được cấu hình riêng.",
     "FileHelp": "Đổi thời lượng và gia hạn trong config.yml của Core, rồi khởi động lại Core. Lần đăng nhập mới dùng cấu hình mới; hạn đã lưu không bị sửa hàng loạt. Phiên lưu thời lượng riêng có thể vẫn giữ giá trị cũ khi gia hạn; đăng nhập lại để áp dụng thời lượng mới.",
-    "CurrentHelp": "Thời hạn hiện tại lấy từ máy chủ, đồng bộ khoảng mỗi phút và có thể thay đổi khi có yêu cầu hoặc ghi phiên. Khóa Web và ứng dụng khách độc lập. Khóa không dừng đếm thời hạn; hoạt động chỉ chia sẻ giữa các tab cùng trang."
+    "CurrentHelp": "Thời hạn hiển thị lấy từ lần kiểm tra máy chủ gần nhất và cập nhật khi quay lại trang hoặc thay đổi cài đặt. Yêu cầu hoặc thao tác ghi phiên có thể thay đổi thời hạn thực tế. Khóa Web và ứng dụng khách độc lập. Khóa không dừng đếm thời hạn; hoạt động chỉ chia sẻ giữa các tab cùng trang."
   },
   "IdleLock": {
     "Title": "Khóa khi nhàn rỗi",
@@ -3154,5 +3159,12 @@
     "Grace": "Hạn gia hạn do thay đổi cấu hình",
     "Unlimited": "Không giới hạn",
     "BrowserExit": "Đăng nhập lại khi đóng trình duyệt"
-  }
+  },
+  "IntegerMinimumRequired": "Vui lòng nhập số nguyên lớn hơn hoặc bằng {min}",
+  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
+  "WFDeadlinePassed": "Deadline passed",
+  "WFTimeoutPending": "Deadline passed; awaiting system processing",
+  "AccountConnectivity": "Kiểm tra kết nối tài khoản",
+  "AssetConnectivity": "Kiểm tra kết nối tài sản",
+  "ConnectivityAllAccounts": "Tất cả tài khoản đang hoạt động"
 }

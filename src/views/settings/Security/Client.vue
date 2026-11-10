@@ -50,7 +50,20 @@ export default {
           SECURITY_CLIENT_IDLE_LOCK_TIME: 15
         },
         fieldsMeta: {
-          SESSION_COOKIE_AGE: { type: 'input', el: { type: 'number', min: 1 } }
+          SESSION_COOKIE_AGE: {
+            type: 'input',
+            el: { type: 'number', min: 300 },
+            rules: [
+              {
+                required: true,
+                type: 'integer',
+                min: 300,
+                transform: Number,
+                message: () => this.$t('IntegerMinimumRequired', { min: 300 }),
+                trigger: ['blur', 'change']
+              }
+            ]
+          }
         },
         cleanFormValue: (values) =>
           Object.fromEntries(settingFields.map((field) => [field, values[field]])),

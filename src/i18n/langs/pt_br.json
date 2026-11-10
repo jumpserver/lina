@@ -1625,7 +1625,7 @@
   "PrivateKey": "Chave privada",
   "Privileged": "Conta Privilegiada",
   "PrivilegedAccount": "Conta privilegiada",
-  "PrivilegedFirst": "Conta com privilégios prioritários",
+  "PrivilegedFirst": "Priorizar contas privilegiadas",
   "PrivilegedOnly": "Apenas contas privilegiadas",
   "PrivilegedTemplate": "Privilégios",
   "Processing": "Em processamento",
@@ -2940,12 +2940,11 @@
   "WFResolver_user": "Users",
   "WFResolver_user_group": "User groups",
   "WFResolver_role": "Roles",
-  "WFResolver_applicant_manager": "Applicant manager",
   "WFResolver_asset_owner": "Asset owners",
   "WFResolver_org_admin": "Organization administrators",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
-  "WFTimeout": "Timeout in seconds (0 for no deadline)",
+  "WFTimeout": "Timeout in minutes (0 for no deadline)",
   "WFTimeoutAction": "Timeout action",
   "WFExcludeApplicant": "Exclude applicant",
   "WFAllowTransfer": "Allow transfer",
@@ -3016,7 +3015,6 @@
   "WFTransferHint": "Assign your task to another organization member. The deadline stays unchanged.",
   "WFAddHint": "The added approver must approve, in addition to the original approval threshold.",
   "WFBulkFailed": "{count} tasks failed or changed state. The list has been refreshed.",
-  "WFManager": "Manager",
   "WFACLHint": "Select a workflow, or leave empty to use a single approval step with the reviewers below.",
   "WFProcessedByMe": "Processed by me",
   "TicketRelatedToMe": "Relacionados a mim",
@@ -3048,6 +3046,13 @@
   "FileEncryption": "Criptografia de arquivos",
   "FileEncryptionHelp": "Criptografa e descriptografa exportações do sistema e anexos de email, como backups de contas e resultados de alteração de senha. Deixe em branco para manter a senha atual.",
   "ScreenLock": {
+    "IdleWarningTitle": "A tela será bloqueada em breve",
+    "IdleWarningCountdown": "A tela será bloqueada em {seconds} segundos; mova o mouse ou pressione uma tecla para continuar",
+    "ExpiryWarningTitle": "A sessão vai expirar em breve",
+    "ExpiryWarningCountdown": "Sua sessão expira em {minutes} min {seconds} s",
+    "ExpiryWarningCountdownSeconds": "Sua sessão expira em {seconds} s",
+    "ExpiredTitle": "Sessão expirada",
+    "ExpiredDescription": "Faça login novamente",
     "Title": "Tela bloqueada",
     "Description": "Digite a senha de bloqueio para continuar.",
     "Password": "Senha de bloqueio de tela",
@@ -3093,7 +3098,7 @@
     "IdleLock": "Bloqueio por inatividade",
     "PolicyHelp": "Os logins Web e do cliente são independentes. Com a renovação ativada, requisições normais prolongam a validade. Não há limite máximo fixo separado nem saída por inatividade do teclado/mouse. O bloqueio é configurado separadamente.",
     "FileHelp": "Altere a duração e a renovação em config.yml do Core e reinicie o Core. Novos logins usam os novos valores; prazos existentes não são regravados em lote. Uma sessão com duração própria pode mantê-la ao renovar; entre novamente para aplicar a nova duração.",
-    "CurrentHelp": "O prazo vem do servidor, sincroniza aproximadamente a cada minuto e pode mudar após solicitações ou gravações. O bloqueio Web e do cliente é independente. Bloquear não pausa o vencimento; a atividade é compartilhada apenas entre abas deste site."
+    "CurrentHelp": "O prazo exibido vem da última verificação do servidor e é atualizado ao voltar à página ou alterar as configurações. Solicitações ou gravações de sessão podem mudar o prazo real. O bloqueio Web e do cliente é independente. Bloquear não pausa o vencimento; a atividade é compartilhada apenas entre abas deste site."
   },
   "IdleLock": {
     "Title": "Bloqueio por inatividade",
@@ -3152,5 +3157,12 @@
     "Grace": "Fim da tolerância por alteração",
     "Unlimited": "Sem limite",
     "BrowserExit": "Entrar novamente ao fechar o navegador"
-  }
+  },
+  "IntegerMinimumRequired": "Insira um número inteiro maior ou igual a {min}",
+  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
+  "WFDeadlinePassed": "Deadline passed",
+  "WFTimeoutPending": "Deadline passed; awaiting system processing",
+  "AccountConnectivity": "Teste de conectividade de contas",
+  "AssetConnectivity": "Teste de conectividade de ativos",
+  "ConnectivityAllAccounts": "Todas as contas ativas"
 }

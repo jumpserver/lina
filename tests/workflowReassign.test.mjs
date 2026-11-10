@@ -2,6 +2,10 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { parse } from '@vue/compiler-sfc'
+import { compile } from '@vue/compiler-dom'
+import * as Vue from 'vue'
+import { renderToString } from '@vue/server-renderer'
+import { ElButton, ElInput, ID_INJECTION_KEY } from 'element-plus'
 
 async function component(name, globals = {}) {
   const source = await readFile(
@@ -125,6 +129,7 @@ test('reassignment validates the current task, submits once and preserves failed
       }
     },
     $message: { success() {} },
+    $route: { path: '/tickets/assigned-tickets' },
     $t: (key) => key
   })
   vm.load = async () => {}
@@ -492,4 +497,136 @@ test('approved workflows keep refreshing while the business task is processing',
   } finally {
     panel.beforeUnmount.call(vm)
   }
+})
+
+async function timedApproval(deadline) {
+  const panel = await workflowPanel()
+  const vm = bindMethods(panel, {
+    ...panel.data(),
+    object: { id: 'ticket', org_id: 'org', workflow_instance: 'instance' },
+    instance: {
+      state: 'running',
+      applicant: 'applicant',
+      nodes: [
+        {
+          id: 'node',
+          type: 'approval',
+          state: 'running',
+          deadline,
+          config: { allow_transfer: true, allow_add_approver: true },
+          tasks: [{ id: 'task', assignee: 'reviewer', state: 'pending' }]
+        }
+      ]
+    },
+    $store: { state: { users: { profile: { id: 'reviewer' } } } },
+    $emit() {},
+    $t: (key) => key
+  })
+  for (const [key, getter] of Object.entries(panel.computed)) {
+    Object.defineProperty(vm, key, { get: getter.bind(vm) })
+  }
+  vm.load = async () => {}
+  panel.watch.instance.call(vm, vm.instance)
+  return { panel, vm }
+}
+
+test('deadline disables approval controls without waiting for the next poll', async (t) => {
+  t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 1000 })
+  const { vm } = await timedApproval(new Date(61000).toISOString())
+  assert.equal(vm.deadlinePassed, false)
+  t.mock.timers.tick(59999)
+  assert.equal(vm.deadlinePassed, false)
+  t.mock.timers.tick(1)
+  assert.equal(vm.deadlinePassed, true)
+  assert.equal(vm.instance.state, 'running', 'the server still owns the final state')
+  assert.equal(vm.deadlineTimer, null)
+
+  const source = await readFile(
+    new URL('../src/views/tickets/components/WorkflowPanel.vue', import.meta.url),
+    'utf8'
+  )
+  const template = source.slice(
+    source.indexOf('<div v-if="myTask || canWithdraw"'),
+    source.indexOf('<el-timeline')
+  )
+  const render = new Function(
+    'Vue',
+    compile(template, { mode: 'function', prefixIdentifiers: true }).code
+  )(Vue)
+  const app = Vue.createSSRApp({
+    render,
+    setup: () => ({
+      myTask: vm.myTask,
+      currentNode: vm.currentNode,
+      canWithdraw: vm.canWithdraw,
+      deadlinePassed: vm.deadlinePassed,
+      instance: vm.instance,
+      comment: '',
+      busy: false,
+      savingRequest: false,
+      editingRequest: false,
+      decide: vm.decide,
+      openReassign: vm.openReassign
+    })
+  })
+  app.config.globalProperties.$t = vm.$t
+  app.component('ElButton', ElButton)
+  app.component('ElInput', ElInput)
+  app.component('ElIcon', { template: '<span><slot /></span>' })
+  app.component('EditPen', { template: '<span />' })
+  app.provide(ID_INJECTION_KEY, { prefix: 100, current: 0 })
+  const html = await renderToString(app)
+  const buttons = html.match(/<button\b[^>]*>/g)
+  assert.equal(buttons.length, 4)
+  assert.ok(
+    buttons.every((button) => /\bdisabled\b/.test(button)),
+    html
+  )
+  assert.match(html, /<textarea[^>]*disabled/)
+})
+
+test('late clicks and an already open reassignment dialog cannot submit after the deadline', async (t) => {
+  t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 1000 })
+  const { vm } = await timedApproval(new Date(2000).toISOString())
+  vm.openReassign('transfer')
+  assert.equal(vm.reassignVisible, true)
+  vm.target = 'replacement'
+  let posts = 0
+  vm.$axios = {
+    post: async () => {
+      posts++
+    }
+  }
+  t.mock.timers.setTime(3000)
+  for (const operation of ['approve', 'reject', 'transfer', 'add-approver', 'cancel']) {
+    await vm.decide(operation)
+  }
+  assert.equal(posts, 0)
+  assert.equal(vm.deadlinePassed, true)
+  vm.reassignVisible = false
+  vm.openReassign('add-approver')
+  assert.equal(vm.reassignVisible, false)
+})
+
+test('deadline timers follow refreshed nodes and stop while the panel is inactive', async (t) => {
+  t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 1000 })
+  const { panel, vm } = await timedApproval(new Date(2000).toISOString())
+  vm.instance.nodes[0].deadline = new Date(4000).toISOString()
+  panel.watch.instance.call(vm, vm.instance)
+  t.mock.timers.tick(1500)
+  assert.equal(vm.deadlinePassed, false)
+  panel.deactivated.call(vm)
+  t.mock.timers.tick(2000)
+  assert.equal(vm.now, 1000)
+  panel.activated.call(vm)
+  assert.equal(vm.deadlinePassed, true)
+  vm.instance.nodes[0].deadline = null
+  panel.watch.instance.call(vm, vm.instance)
+  assert.equal(vm.deadlinePassed, false)
+  assert.equal(vm.deadlineTimer, null)
+  vm.instance.nodes[0].deadline = new Date(10000).toISOString()
+  panel.watch.instance.call(vm, vm.instance)
+  panel.beforeUnmount.call(vm)
+  t.mock.timers.tick(10000)
+  assert.equal(vm.now, 4500)
 })

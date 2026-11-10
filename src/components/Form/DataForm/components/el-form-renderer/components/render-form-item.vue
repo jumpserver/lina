@@ -118,6 +118,11 @@ import { FORM_RENDERER_KEY } from '../context'
 import getEnableWhenStatus from '../util/enable-when'
 import { noop } from '../util/utils'
 
+function isDomEvent(value) {
+  // Business values can also have a target field; only unwrap native events.
+  return typeof Event !== 'undefined' && value instanceof Event
+}
+
 function validator(data) {
   if (!data) {
     throw new Error('data must be an Object.')
@@ -296,7 +301,7 @@ export default {
         ),
         // 手动更新表单数据
         input: (value, ...rest) => {
-          if (this.data.type === 'checkbox-group' && value?.target) {
+          if (this.data.type === 'checkbox-group' && isDomEvent(value)) {
             return
           }
           this.handleValueUpdate({
@@ -398,7 +403,7 @@ export default {
   },
   methods: {
     normalizeEmittedValue(value) {
-      if (value && typeof value === 'object' && 'target' in value) {
+      if (isDomEvent(value) && value.target) {
         if (this.data.type === 'checkbox' && 'checked' in value.target) {
           return value.target.checked
         }

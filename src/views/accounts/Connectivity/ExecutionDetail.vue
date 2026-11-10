@@ -3,7 +3,9 @@
     ref="detailPage"
     :key="connectivity.type"
     v-model:object="execution"
+    v-model:active-menu="activeMenu"
     :url="connectivity.executionUrl"
+    :submenu="submenu"
     :actions="{ hasUpdate: false, hasDelete: false }"
     :has-activity="false"
     :get-title="(object) => object.snapshot?.name || object.id || $t('ExecutionDetail')"
@@ -13,7 +15,8 @@
       <el-button @click="openLog">{{ $t('Log') }}</el-button>
       <el-button type="primary" @click="reportVisible = true">{{ $t('Report') }}</el-button>
     </template>
-    <template v-if="execution.id">
+    <RecordList v-if="execution.id && activeMenu === 'records'" :execution-id="execution.id" />
+    <template v-else-if="execution.id">
       <AutoDetailCard
         :key="`${execution.id}:${execution.status?.value}`"
         :object="execution"
@@ -59,11 +62,12 @@
           layout="total, prev, pager, next"
         />
       </IBox>
-      <ReportDialog
-        v-model:visible="reportVisible"
-        :url="`${connectivity.executionUrl}${execution.id}/report/`"
-      />
     </template>
+    <ReportDialog
+      v-if="execution.id"
+      v-model:visible="reportVisible"
+      :url="`${connectivity.executionUrl}${execution.id}/report/`"
+    />
   </GenericDetailPage>
 </template>
 
@@ -74,15 +78,22 @@ import IBox from '@/components/Common/IBox'
 import ReportDialog from '@/components/Dialog/ReportDialog.vue'
 import { openTaskPage } from '@/utils/jms'
 import { connectivityMixin } from './config'
+import RecordList from './RecordList.vue'
 
 export default {
   name: 'ConnectivityExecutionDetail',
-  components: { GenericDetailPage, AutoDetailCard, IBox, ReportDialog },
+  components: { GenericDetailPage, AutoDetailCard, IBox, ReportDialog, RecordList },
   mixins: [connectivityMixin],
   data() {
-    return { execution: {}, reportVisible: false, page: 1, pageSize: 20 }
+    return { execution: {}, activeMenu: 'basic', reportVisible: false, page: 1, pageSize: 20 }
   },
   computed: {
+    submenu() {
+      return [
+        { name: 'basic', title: this.$t('BasicInfo') },
+        { name: 'records', title: this.$t('ExecutionRecord') }
+      ]
+    },
     resultRows() {
       const result = this.execution.result || {}
       return [

@@ -114,6 +114,17 @@ export default {
               hasClone: false,
               extraActions: [
                 {
+                  name: 'record',
+                  type: 'primary',
+                  title: this.$t('Record'),
+                  can: ({ row }) => this.$hasPerm(configForRow(row).viewExecutionPermission),
+                  callback: ({ row }) =>
+                    this.$router.push({
+                      name: 'ConnectivityList',
+                      query: { tab: 'ConnectivityRecords', execution_id: row.id }
+                    })
+                },
+                {
                   name: 'log',
                   type: 'primary',
                   title: this.$t('Log'),

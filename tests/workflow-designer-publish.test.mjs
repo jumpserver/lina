@@ -64,8 +64,12 @@ function mount(workflow = {}) {
   }
   vm.workflow = { ...vm.workflow, name: 'Approval', ...workflow }
   for (const [key, method] of Object.entries(component.methods)) vm[key] = method.bind(vm)
-  for (const [key, getter] of Object.entries(component.computed))
-    Object.defineProperty(vm, key, { get: getter.bind(vm) })
+  for (const [key, computed] of Object.entries(component.computed)) {
+    Object.defineProperty(vm, key, {
+      get: (typeof computed === 'function' ? computed : computed.get).bind(vm),
+      set: computed.set?.bind(vm)
+    })
+  }
   vm.captureBaseline()
   return vm
 }
@@ -229,7 +233,7 @@ test('validation advances to the next empty approval and clears after changing r
   vm.changeResolver('org_admin')
   assert.equal(vm.approverError, '')
   assert.equal(vm.definition.nodes.find(vm.missingApprovers), undefined)
-  for (const type of ['applicant_manager', 'asset_owner', 'org_admin']) {
+  for (const type of ['asset_owner', 'org_admin']) {
     second.config.approvers = { type }
     assert.equal(vm.missingApprovers(second), false)
   }
@@ -447,4 +451,39 @@ test('publish errors show readable messages while preserving the unpublished def
     assert.equal(vm.dirty, true)
     assert.deepEqual(vm.definition, definition)
   }
+})
+
+test('asset owner guidance is localized and only shown for asset owner approvals', async () => {
+  const template = parse(source).descriptor.template.content.match(
+    /<p v-if="selected.config.approvers.type === 'asset_owner'"[\s\S]*?<\/p>/
+  )[0]
+  const render = new Function(
+    'Vue',
+    compile(template, { mode: 'function', prefixIdentifiers: true }).code
+  )(Vue)
+  assert.ok(!mount().resolvers.includes('applicant_manager'))
+  for (const locale of ['zh', 'zh_hant', 'en']) {
+    for (const type of ['asset_owner', 'user', 'org_admin']) {
+      const app = Vue.createSSRApp({
+        render,
+        setup: () => ({ selected: { config: { approvers: { type } } } })
+      })
+      app.config.globalProperties.$t = (key) => messages[locale][key]
+      const html = await renderToString(app)
+      assert.ok(messages[locale].WFAssetOwnerHelp)
+      assert.equal(html.includes(messages[locale].WFAssetOwnerHelp), type === 'asset_owner')
+    }
+  }
+})
+
+test('timeout input uses whole minutes while workflow definitions keep seconds', () => {
+  const vm = mount()
+  assert.equal(vm.timeoutMinutes, 1440)
+  for (const minutes of [0, 1, 30, 525600]) {
+    vm.timeoutMinutes = minutes
+    assert.equal(vm.selected.config.timeout, minutes * 60)
+    assert.equal(vm.timeoutMinutes, minutes)
+  }
+  vm.timeoutMinutes = null
+  assert.equal(vm.selected.config.timeout, 0)
 })
