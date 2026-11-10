@@ -5,11 +5,6 @@
     :aria-label="$t('ScreenLock.Title')"
     @cancel.prevent
   >
-    <SessionWarnings
-      v-if="blocked"
-      :idle-remaining="state.idleRemaining"
-      :expiry-remaining="state.expiryRemaining"
-    />
     <div class="screen-lock-surface">
       <div class="screen-lock-brand">
         <img
@@ -150,7 +145,7 @@
     </div>
   </dialog>
   <SessionWarnings
-    v-if="!blocked"
+    :append-to="blocked ? warningTarget : null"
     :idle-remaining="state.idleRemaining"
     :expiry-remaining="state.expiryRemaining"
   />
@@ -174,6 +169,7 @@ export default {
   name: 'WebScreenLock',
   components: { LogoSymbol, SessionWarnings },
   data: () => ({
+    warningTarget: null,
     countdownNow: Date.now(),
     countdownTimer: null,
     logoFailed: false,
@@ -235,6 +231,7 @@ export default {
     }
   },
   mounted() {
+    this.warningTarget = this.$refs.dialog
     this.syncDialog()
     startWebSessionLock().catch(() => {})
   },
