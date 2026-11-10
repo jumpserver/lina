@@ -18,7 +18,6 @@ import IBox from '@/components/Common/IBox/index.vue'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index.vue'
 import WatermarkHelpDialog from '@/components/Apps/VariablesHelpTextDialog'
 import { UploadKey } from '@/components'
-import TextReadonly from '@/components/Form/FormFields/TextReadonly.vue'
 
 export default {
   name: 'SessionSecurity',
@@ -45,6 +44,7 @@ export default {
     })
     return {
       formRevision: 0,
+      rdpSignCertificateValid: null,
       reusableExpirationField: null,
       connectionTokenReusable: false,
       showSessionHelpDialog: false,
@@ -68,6 +68,7 @@ export default {
         url: '/api/v1/settings/setting/?category=security_session',
         hasDetailInMsg: false,
         afterGetFormValue: (values) => {
+          this.rdpSignCertificateValid = values.RDP_SIGN_CERT_VALID
           this.onFormInput(values)
           return values
         },
@@ -98,8 +99,7 @@ export default {
               'OAUTH2_PROVIDER_REFRESH_TOKEN_EXPIRE_SECONDS',
               'RDP_SIGN_ENABLED',
               'RDP_SIGN_CERT_CONTENT',
-              'RDP_SIGN_KEY_CONTENT',
-              'RDP_SIGN_CERT_INFO'
+              'RDP_SIGN_KEY_CONTENT'
             ]
           ],
           [
@@ -134,22 +134,29 @@ export default {
           },
           RDP_SIGN_CERT_CONTENT: {
             component: UploadKey,
+            hidden: form => !form.RDP_SIGN_ENABLED,
             label: this.$t('RDPSignCertificate'),
             helpText: this.$t('RDPSignCertificateHelp'),
             helpTextAsTip: false,
-            helpTextAsPlaceholder: false
+            helpTextAsPlaceholder: false,
+            helpTextFormatter: () => {
+              if (this.rdpSignCertificateValid !== false) {
+                return null
+              }
+              return (
+                <span role='status' style='color: var(--color-warning)'>
+                  <i class='el-icon-warning-outline' aria-hidden='true' /> {this.$t('RDPSignCertificateInvalid')}
+                </span>
+              )
+            }
           },
           RDP_SIGN_KEY_CONTENT: {
             component: UploadKey,
+            hidden: form => !form.RDP_SIGN_ENABLED,
             label: this.$t('RDPSignPrivateKey'),
             helpText: this.$t('RDPSignPrivateKeyHelp'),
             helpTextAsTip: false,
             helpTextAsPlaceholder: false
-          },
-          RDP_SIGN_CERT_INFO: {
-            component: TextReadonly,
-            label: this.$t('RDPSignCertificateStatus'),
-            el: { bolder: false }
           },
           SECURITY_WATERMARK_SESSION_CONTENT: {
             helpTextFormatter: () => {
@@ -192,8 +199,9 @@ export default {
         cleanFormValue: (values) => {
           const result = { ...values }
           delete result.RDP_SIGN_CERT_INFO
+          delete result.RDP_SIGN_CERT_VALID
           for (const name of ['RDP_SIGN_CERT_CONTENT', 'RDP_SIGN_KEY_CONTENT']) {
-            if (!result[name]) {
+            if (!result.RDP_SIGN_ENABLED || !result[name]) {
               delete result[name]
             }
           }
