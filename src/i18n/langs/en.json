@@ -1,4 +1,5 @@
 {
+    "UKeyCertificateReadRetryOnEntry": "No certificate was read or selection was canceled. Leave and reopen the UKey tab to retry.",
     "FieldRequiredError": "This field is required.",
     "ServerError": "An error occurred while processing your request. Please try again later.",
     "DataError": "Data exception",

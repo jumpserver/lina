@@ -32,7 +32,7 @@
                 <td class="cp-action-btn">
                   <el-button
                     :type="op.btnType || 'primary'"
-                    :disabled="refreshRequired || (!deviceReady && op.requires_device !== false) || running || polling || op._disabled"
+                    :disabled="refreshRequired || (isVctks && !configLoaded) || (!deviceReady && op.requires_device !== false) || running || polling || op._disabled"
                     size="small"
                     @click="handleOperation(op)"
                   >
@@ -167,6 +167,7 @@ const JIDA_CERT_INFO_FIELDS = {
 let _instance = null // UKey SDK 实例
 let _ukey = {} // ukey.* 命名空间（sdk.setup.steps register 的变量）
 let _userOverride = null // user.* 命名空间覆盖（操作步骤 register: user 写入）
+let _sdkOwner = null
 
 export default {
   name: 'UKeyPanel',
@@ -193,6 +194,9 @@ export default {
       certificateBinding: { bound: false, binding_version: '', hardware_serial: '' },
       polling: false,
       disposed: false,
+      pageActive: true,
+      pageEpoch: 0,
+      detectedSerial: '',
       refreshRequired: false,
       configLoaded: false,
       sdkLoaded: false,
@@ -225,6 +229,14 @@ export default {
 
   computed: {
     ...mapGetters(['publicSettings']),
+
+    isVctks() {
+      return this.config.vendor === 'ji_da' && this.config.provider === 'vctk_s'
+    },
+
+    vctksDisplayEnabled() {
+      return this.mode === 'admin' || this.certificateBinding.bound
+    },
 
     operationsConfig() {
       const operations = this.sdkConfig?.operations
@@ -261,6 +273,7 @@ export default {
           tag: this.sdkLoaded ? 'success' : 'warning'
         }
       ]
+      if (this.isVctks && !this.vctksDisplayEnabled) return fixed.slice(0, 1)
       const dynamic = this.deviceInfoItems.filter(item =>
         this.mode === 'admin' || (item.scope || 'both') !== 'admin'
       )
@@ -286,6 +299,7 @@ export default {
         config: this.config
       }
       return operationItems.filter(op => {
+        if (this.isVctks && this.certificateBinding.bound && op.key === 'bindUserUKeySN') return false
         const scope = op.scope || 'both'
         if (scope === 'admin' && this.mode !== 'admin') return false
         if (scope === 'user' && this.mode !== 'user') return false
@@ -312,20 +326,120 @@ export default {
     }
   },
 
+  watch: {
+    'object.id'() {
+      if (!this.isVctks && this.configLoaded) return
+      const active = this.pageActive
+      this.leavePage()
+      if (active) this.enterPage()
+    }
+  },
+
   async mounted() {
     this.pollTimer = null // 非响应式，直接挂实例
-    if (await this.loadConfig()) this.loadSDKScript()
+    await this.enterPage()
+  },
+
+  activated() {
+    if (!this.pageActive) this.enterPage()
+  },
+
+  deactivated() {
+    if (this.isVctks || !this.configLoaded) this.leavePage()
   },
 
   beforeDestroy() {
     this.disposed = true
-    if (this.pollTimer) clearInterval(this.pollTimer)
-    if (this.inputDialog.visible) this.cancelInputDialog()
+    this.leavePage()
+    if (_sdkOwner === this) {
+      _sdkOwner = null
+      if (this.isVctks) {
+        _instance = null
+        _ukey = {}
+        _userOverride = null
+      }
+    }
   },
 
   methods: {
+    pageIsCurrent(epoch) {
+      return !this.disposed && this.pageActive && epoch === this.pageEpoch
+    },
+
+    clearCertificateDisplay() {
+      this.certInfoItems = []
+      this.hasCert = false
+      this.certLoading = false
+    },
+
+    leavePage() {
+      this.pageActive = false
+      this.pageEpoch++
+      clearInterval(this.pollTimer)
+      this.pollTimer = null
+      if (this.inputDialog.visible) this.cancelInputDialog()
+    },
+
+    async enterPage() {
+      this.pageActive = true
+      const epoch = ++this.pageEpoch
+      clearInterval(this.pollTimer)
+      this.pollTimer = null
+      this.clearCertificateDisplay()
+      this.deviceInfoItems = []
+      this.detectedSerial = ''
+      this.sdkLoaded = false
+      this.configLoaded = false
+      if (_sdkOwner === this) {
+        _instance = null
+        _ukey = {}
+        _userOverride = null
+        _sdkOwner = null
+      }
+      this.ukeySnapshot = {}
+      if (await this.loadConfig(epoch) && this.pageIsCurrent(epoch)) await this.startConfiguredSDK()
+    },
+
+    startConfiguredSDK() {
+      if (this.isVctks && !this.vctksDisplayEnabled) {
+        this.clearCertificateDisplay()
+        return
+      }
+      return this.loadSDKScript()
+    },
+
+    async readVctksDevice(epoch = this.pageEpoch) {
+      if (!this.pageIsCurrent(epoch) || !this.vctksDisplayEnabled) return
+      // Device serial detection does not invoke the native certificate selector.
+      let serial = ''
+      try {
+        serial = this.callUKeyMethod({ call: 'UKey_GetDevSN', args: [] }, this.buildContext({}))
+      } catch (_) {
+        this.clearCertificateDisplay()
+        this.applyRegister('ukey.devSN', '', {})
+        this.applyRegister('ukey.connected', false, {})
+        await this.readDeviceInfo()
+        // An SDK/network error is not proof of removal; do not rearm the selector.
+        return
+      }
+      if (typeof serial !== 'string') serial = ''
+      const previous = this.detectedSerial
+      this.detectedSerial = serial
+      this.applyRegister('ukey.devSN', serial, {})
+      this.applyRegister('ukey.connected', !!serial, {})
+      if (serial !== previous || !serial) this.clearCertificateDisplay()
+      await this.readDeviceInfo()
+      if (!this.pageIsCurrent(epoch) || _sdkOwner !== this) return
+      // Consume the transition even on cancellation/failure; do not retry on a timer.
+      if (serial && serial !== previous) await this.readCertInfo()
+    },
+
     syncUkeySnapshot() {
       if (this.disposed) return
+      if (this.isVctks && _sdkOwner !== this) {
+        this.ukeySnapshot = { binding: this.certificateBinding }
+        return
+      }
       if (this.config.capabilities?.binding_mode === 'certificate') _ukey.binding = this.certificateBinding
       this.ukeySnapshot = Object.assign({}, _ukey)
     },
@@ -343,10 +457,12 @@ export default {
     },
 
     async checkConfigRevision(expected = this.config) {
+      const epoch = this.pageEpoch
       if (this.disposed || this.refreshRequired) return false
       if (this.config.capabilities?.binding_mode !== 'certificate') return true
       const latest = await this.$axios.get(CONFIG_API, { params: { revision_only: 1 } })
       if (this.disposed) return false
+      if (this.isVctks && !this.pageIsCurrent(epoch)) return false
       if (latest.vendor !== this.config.vendor || latest.provider !== this.config.provider) {
         this.requireRefresh()
         return false
@@ -355,7 +471,7 @@ export default {
         return latest.revision === expected.revision && latest.provider === expected.provider
       }
       if (this.pollTimer) clearInterval(this.pollTimer)
-      if (!await this.loadConfig()) {
+      if (!await this.loadConfig(epoch)) {
         if (this.disposed) return false
         throw new Error(this.$t('ConfigLoadedFailed'))
       }
@@ -363,7 +479,8 @@ export default {
         this.requireRefresh()
         return false
       }
-      await this.initSDKInstance()
+      if (this.isVctks) await this.startConfiguredSDK()
+      else await this.initSDKInstance()
       return false
     },
 
@@ -372,8 +489,10 @@ export default {
       if (this.pollTimer) clearInterval(this.pollTimer)
       this.refreshRequired = true
       this.sdkLoaded = false
-      _instance = null
-      _ukey = {}
+      if (!this.isVctks || _sdkOwner === this) {
+        _instance = null
+        _ukey = {}
+      }
       this.syncUkeySnapshot()
     },
 
@@ -425,14 +544,14 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     // 1. 配置加载
     // ═══════════════════════════════════════════════════════════════════════════
-    async loadConfig() {
+    async loadConfig(epoch = this.pageEpoch) {
       if (this.disposed) return false
       try {
         const sdkConfig = await this.$axios.get(CONFIG_API)
-        if (this.disposed) return false
+        if (!this.pageIsCurrent(epoch)) return false
         const config = sdkConfig.config || {}
         const binding = await this.readBinding(config)
-        if (this.disposed) return false
+        if (!this.pageIsCurrent(epoch)) return false
         this.sdkConfig = sdkConfig
         this.config = config
         this.certificateBinding = binding
@@ -441,7 +560,7 @@ export default {
         this.appendLog(this.$t('ConfigLoadedSuccess'), 'success')
         return true
       } catch (e) {
-        if (this.disposed) return false
+        if (!this.pageIsCurrent(epoch)) return false
         this.configLoaded = false
         this.requireRefresh()
         this.appendLog(`${this.$t('ConfigLoadedFailed')}: ${e.message}`, 'error')
@@ -454,6 +573,12 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     loadSDKScript() {
       if (this.disposed || !this.sdkConfig) return
+      if (this.isVctks && (!this.pageActive || !this.vctksDisplayEnabled)) return
+      const epoch = this.pageEpoch
+      const initialize = () => {
+        if (this.disposed || (this.isVctks && !this.pageIsCurrent(epoch))) return
+        this.initSDKInstance()
+      }
 
       const existingScript = document.getElementById(SCRIPT_TAG_ID)
       if (existingScript) {
@@ -462,7 +587,9 @@ export default {
           return
         }
         // 脚本已注入（页面复用），直接初始化实例
-        this.initSDKInstance()
+        if (this.isVctks && !window[this.sdkConfig.sdk?.create?.constructor]) {
+          existingScript.addEventListener('load', initialize, { once: true })
+        } else return this.initSDKInstance()
         return
       }
 
@@ -477,15 +604,18 @@ export default {
       script.async = true
       const vendor = this.config.vendor
       const provider = this.config.provider
+      script.dataset.vendor = vendor
+      script.dataset.provider = provider
       script.onload = () => {
         script.dataset.vendor = vendor
         script.dataset.provider = provider
         if (this.disposed) return
+        if (this.isVctks && !this.pageIsCurrent(epoch)) return
         if (vendor !== this.config.vendor || provider !== this.config.provider) {
           this.requireRefresh()
           return
         }
-        this.initSDKInstance()
+        initialize()
       }
       script.onerror = () => {
         this.appendLog(this.$t('SdkScriptLoadFailed'), 'error')
@@ -498,6 +628,10 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     async initSDKInstance() {
       if (this.disposed || this.refreshRequired) return
+      if (this.isVctks && (!this.pageActive || !this.vctksDisplayEnabled)) return
+      const epoch = this.pageEpoch
+      clearInterval(this.pollTimer)
+      this.pollTimer = null
       this.sdkLoaded = false
       _instance = null
       // 3a. 创建实例
@@ -508,12 +642,14 @@ export default {
         }
         const ctorArgs = this.sdkConfig.sdk.create?.args || []
         _instance = new window[constructorName](...ctorArgs)
+        _sdkOwner = this
         _ukey = {}
         _userOverride = null
         this.sdkLoaded = true
         this.appendLog(`${this.$t('DriverInstanceCreated')} (${constructorName})`, 'success')
       } catch (e) {
-        this.requireRefresh()
+        if (this.isVctks && this.certificateBinding.bound) this.syncUkeySnapshot()
+        else this.requireRefresh()
         this.appendLog(`${this.$t('DriverInstanceCreateFailed')}: ${e.message}`, 'error')
         return
       }
@@ -534,10 +670,17 @@ export default {
       }
 
       // 3c. 读取设备信息和证书信息（无论 setup 是否成功都执行）
-      await this.readDeviceInfo()
-      if (this.disposed) return
-      await this.readCertInfo()
-      if (this.disposed) return
+      if (this.isVctks) {
+        this.detectedSerial = ''
+        await this.readVctksDevice(epoch)
+      } else {
+        await this.readDeviceInfo()
+        if (this.disposed) return
+        await this.readCertInfo()
+      }
+      if (this.disposed || (this.isVctks && (!this.pageIsCurrent(epoch) || _sdkOwner !== this))) return
+      // Bound pages read once on entry; binding does not require background detection.
+      if (this.isVctks && (this.certificateBinding.bound || this.mode !== 'admin')) return
 
       // 3d. 启动轮询，定时刷新设备状态和证书信息
       const interval = this.config.poll_interval || 5000
@@ -603,8 +746,18 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     async pollStatus() {
       if (this.disposed || this.refreshRequired || this.running || this.polling) return // 操作进行中，跳过本次轮询
+      const epoch = this.pageEpoch
+      if (this.isVctks && (!this.pageIsCurrent(epoch) || this.certificateBinding.bound || this.mode !== 'admin' || _sdkOwner !== this)) return
       this.polling = true
       try {
+        if (this.isVctks) {
+          try {
+            if (await this.checkConfigRevision() && this.pageIsCurrent(epoch) && !this.running) {
+              await this.readVctksDevice(epoch)
+            }
+          } catch (_) { /* Never fall back to certificate polling on a status/config error. */ }
+          return
+        }
         try {
           if (!await this.checkConfigRevision()) return
           if (this.disposed || this.running) return
@@ -636,6 +789,10 @@ export default {
     //             fetch 结果注入 cert.* 命名空间，字段用 {{ cert.xxx }} 引用
     // ═══════════════════════════════════════════════════════════════════════════
     async readCertInfo() {
+      if (this.isVctks && (!this.pageActive || !this.vctksDisplayEnabled || _sdkOwner !== this)) {
+        this.clearCertificateDisplay()
+        return
+      }
       if (!this.infoWhenPassed) {
         this.certInfoItems = []
         this.hasCert = false
@@ -680,7 +837,7 @@ export default {
       if (!fields.length) { this.certInfoItems = []; this.hasCert = false; this.certLoading = false; return }
 
       let readField
-      if (this.mode === 'admin' && this.config.vendor === 'ji_da' && this.config.provider === 'vctk_s') {
+      if (this.isVctks) {
         // Field 14 returns all certificate details in one SDK call; never cache across reads.
         let details
         try {
@@ -690,6 +847,7 @@ export default {
         } catch (_) {
           details = {}
         }
+        if (!Object.keys(details).length) this.appendLog(this.$t('UKeyCertificateReadRetryOnEntry'), 'warn')
         readField = (field, fieldContext) => {
           if (field.call !== 'UKey_GetCertInfo') return this.callUKeyMethod(field, fieldContext)
           const [, infoType] = this.resolveArgs(field.args || [], fieldContext)
@@ -737,6 +895,18 @@ export default {
      * 无 event 配置时默认刷新 cert
      */
     async handleEvents(event) {
+      if (this.isVctks) {
+        if (this.certificateBinding.bound) {
+          clearInterval(this.pollTimer)
+          this.pollTimer = null
+          // Update binding status without another certificate read/selection after binding.
+          if (this.pageActive) await this.readDeviceInfo()
+        } else if (this.pageActive && this.mode === 'admin') {
+          this.clearCertificateDisplay()
+          await this.startConfiguredSDK()
+        }
+        return
+      }
       const events = event === undefined
         ? ['refresh.info.cert']
         : (event == null ? [] : (Array.isArray(event) ? event : [event]))
@@ -747,6 +917,10 @@ export default {
     },
     async handleOperation(op) {
       if (this.disposed || this.refreshRequired || this.running || this.polling) return
+      if (this.isVctks && (!this.pageActive || !this.configLoaded || this.mode !== 'admin' ||
+          (op.key === 'bindUserUKeySN' && (this.certificateBinding.bound || !this.ukeySnapshot.connected || _sdkOwner !== this)))) return
+      const epoch = this.pageEpoch
+      this.operationEpoch = epoch
       const operationConfig = { revision: this.config.revision, provider: this.config.provider }
       this.running = true
       try {
@@ -776,17 +950,22 @@ export default {
           } catch (_) { return }
         }
 
+        if (this.isVctks && !this.pageIsCurrent(epoch)) return
         this.currentOperation = op.key
         if (!await this.checkConfigRevision(operationConfig)) throw new Error(this.$t('UKeyConfigChanged'))
+        if (this.isVctks && !this.pageIsCurrent(epoch)) return
         const operationVars = {} // vars.* 命名空间，仅当前操作可见
         const collectedInput = {} // input.* 命名空间，跨步骤累积
         for (const step of (op.steps || [])) {
+          if (this.isVctks && !this.pageIsCurrent(epoch)) return
           await this.executeStep(step, operationVars, collectedInput, operationConfig)
           if (this.disposed) return
         }
+        if (this.isVctks && !this.pageIsCurrent(epoch)) return
         this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Completed')}`, 'success')
         await this.handleEvents(op.event)
       } catch (e) {
+        if (this.isVctks && !this.pageIsCurrent(epoch)) return
         this.appendLog(`${this.$t('Operation')}「${op.label}」${this.$t('Failed')}: ${e.message}`, 'error')
       } finally {
         this.running = false
@@ -798,6 +977,13 @@ export default {
     // 7. 单步执行器
     // ═══════════════════════════════════════════════════════════════════════════
     async executeStep(step, operationVars, collectedInput = {}, operationConfig = this.config) {
+      const epoch = this.pageEpoch
+      const assertCurrent = () => {
+        if (this.isVctks && (!this.pageIsCurrent(epoch) || (this.operationEpoch !== undefined && this.operationEpoch !== epoch))) {
+          throw new Error(this.$t('OperationCanceled'))
+        }
+      }
+      assertCurrent()
       // 7a. 若步骤声明了 input，先弹对话框收集用户输入
       if (step.input) {
         try {
@@ -808,6 +994,7 @@ export default {
             inputCtx
           )
           if (this.disposed) return
+          assertCurrent()
           Object.assign(collectedInput, newInput)
         } catch (_) {
           throw new Error(this.$t('OperationCanceled'))
@@ -819,6 +1006,7 @@ export default {
         if (!await this.checkConfigRevision(operationConfig)) throw new Error(this.$t('UKeyConfigChanged'))
       }
       const ctx = this.buildContext({ vars: operationVars, input: collectedInput })
+      assertCurrent()
       let result
 
       try {
@@ -830,6 +1018,7 @@ export default {
         if (step.type === 'api') {
           result = await this.executeApiStep(step, ctx)
           if (this.disposed) return
+          assertCurrent()
         } else {
           result = this.callUKeyMethod(step, ctx)
         }
@@ -938,6 +1127,7 @@ export default {
     // ═══════════════════════════════════════════════════════════════════════════
     callUKeyMethod(step, ctx) {
       if (!step.call) return undefined
+      if (this.isVctks && (!this.pageActive || _sdkOwner !== this)) throw new Error(this.$t('UKeyConfigChanged'))
       if (!_instance || typeof _instance[step.call] !== 'function') {
         throw new Error(`UKey ${this.$t('Method')} "${step.call}" ${this.$t('NotExist')}`)
       }
@@ -1009,16 +1199,18 @@ export default {
 
     /** 构建上下文对象，供模板解析使用 */
     buildContext({ vars = {}, input = {} }) {
-      const ukey = (_ukey && typeof _ukey === 'object' && Object.keys(_ukey).length > 0)
-        ? _ukey
-        : (this.ukeySnapshot || {})
+      const ukey = this.isVctks && _sdkOwner !== this
+        ? { binding: this.certificateBinding }
+        : (_ukey && typeof _ukey === 'object' && Object.keys(_ukey).length > 0)
+          ? _ukey
+          : (this.ukeySnapshot || {})
       return {
         ukey,
         instance: _instance,
         vars,
         input,
         mode: this.mode,
-        user: _userOverride || this.object || {},
+        user: (this.isVctks && _sdkOwner !== this ? this.object : _userOverride || this.object) || {},
         settings: this.publicSettings || {},
         config: this.config
       }
@@ -1131,7 +1323,13 @@ export default {
      * register 格式：ukey.appHandle  /  vars.certData  /  vars.certData.certificate
      */
     applyRegister(register, value, operationVars) {
-      if (register === 'ukey.binding') this.certificateBinding = value
+      if (register === 'ukey.binding') {
+        this.certificateBinding = value
+        if (this.isVctks && _sdkOwner !== this) {
+          this.syncUkeySnapshot()
+          return
+        }
+      }
       const dot = register.indexOf('.')
       // 无点号：整体替换命名空间
       if (dot === -1) {

@@ -72,6 +72,11 @@ function createVM(config = {}, mode = 'admin') {
   return vm
 }
 
+async function advanceTimers(ms) {
+  jest.advanceTimersByTime(ms)
+  for (let i = 0; i < 20; i++) await Promise.resolve()
+}
+
 function values(vm) {
   return Object.fromEntries(vm.certInfoItems.map(item => [item.key, item.value]))
 }
@@ -117,7 +122,8 @@ describe('VCTK_S fresh SDK all-field reads', () => {
     expect(sdk.UKey_GetCertInfo.mock.calls.every(([, id]) => id === 14)).toBe(true)
   }
 
-  it('renders all twelve configured rows from one SDK all-field read', async () => {
+  it.each([false, true])('renders all twelve configured rows from one SDK all-field read (bound=%s)', async bound => {
+    vm.certificateBinding = { bound, hardware_serial: bound ? 'bound-device' : '' }
     await vm.initSDKInstance()
     expect(sdk.UKey_GetCertInfo).toHaveBeenCalledTimes(1)
     expect(sdk.UKey_GetCertInfo).toHaveBeenCalledWith(1, 14)
@@ -164,24 +170,13 @@ describe('VCTK_S fresh SDK all-field reads', () => {
     expectNoSelectionOrPerFieldCalls()
   })
 
-  it('reads again every cycle and immediately displays a changed certificate on the same device', async () => {
-    sdk.UKey_GetCertInfo.mockReturnValueOnce(SM2_RESULT).mockReturnValueOnce(RSA_RESULT).mockReturnValueOnce(SM2_RESULT)
+  it('does not read certificates again while polling the same device', async () => {
     await vm.initSDKInstance()
     const first = values(vm)
     await vm.pollStatus()
-    const second = values(vm)
-    expect(second).toMatchObject({
-      CERT_SUBJECT_CN: 'rsa-user',
-      CERT_SERIAL: '123456789ABCDEF0',
-      CERT_VERSION: 'V1',
-      CERT_ALG_TYPE: '1'
-    })
-    expect(second.CERT_SUBJECT_CN).not.toEqual(first.CERT_SUBJECT_CN)
-    expect(second.CERT_SERIAL).not.toEqual(first.CERT_SERIAL)
-    expect(second.CERT_DER_PUBLIC_KEY).not.toEqual(first.CERT_DER_PUBLIC_KEY)
     await vm.pollStatus()
     expect(values(vm)).toEqual(first)
-    expect(sdk.UKey_GetCertInfo).toHaveBeenCalledTimes(3)
+    expect(sdk.UKey_GetCertInfo).toHaveBeenCalledTimes(1)
     expectNoSelectionOrPerFieldCalls()
   })
 
@@ -342,8 +337,7 @@ describe('VCTK_S fresh SDK all-field reads', () => {
   it.each([
     ['admin', 'ji_da', 'builtin'],
     ['admin', 'long_mai', 'builtin'],
-    ['admin', 'long_mai', 'xjca'],
-    ['user', 'ji_da', 'vctk_s']
+    ['admin', 'long_mai', 'xjca']
   ])('keeps original per-field reads for %s / %s / %s', async (mode, vendor, provider) => {
     vm = createVM({ vendor, provider }, mode)
     await vm.initSDKInstance()
@@ -355,7 +349,7 @@ describe('VCTK_S fresh SDK all-field reads', () => {
     expect(sdk.UKey_SetCurCert).not.toHaveBeenCalled()
   })
 
-  it('preserves setup calls and fresh detail collection on each five-second poll', async () => {
+  it('polls only safe device state after the initial certificate read', async () => {
     vm.sdkConfig.sdk.setup = {
       steps: [
         { call: 'UKey_CheckInstall', args: [] },
@@ -364,14 +358,14 @@ describe('VCTK_S fresh SDK all-field reads', () => {
       ]
     }
     await vm.initSDKInstance()
-    expect(calls).toEqual(['install', 'serial', 'version', 'certificate'])
+    expect(calls).toEqual(['install', 'serial', 'version', 'serial', 'certificate'])
     expect(vm.ukeySnapshot).toMatchObject({ devSN: 'same-device', devVersion: '1.0' })
-    await jest.advanceTimersByTimeAsync(4999)
+    await advanceTimers(4999)
     expect(sdk.UKey_GetCertInfo).toHaveBeenCalledTimes(1)
-    await jest.advanceTimersByTimeAsync(1)
+    await advanceTimers(1)
     expect(calls).toEqual([
-      'install', 'serial', 'version', 'certificate',
-      'install', 'serial', 'version', 'certificate'
+      'install', 'serial', 'version', 'serial', 'certificate',
+      'serial'
     ])
     expectNoSelectionOrPerFieldCalls()
   })
@@ -379,11 +373,11 @@ describe('VCTK_S fresh SDK all-field reads', () => {
   it('keeps polling paused while an operation runs and resumes afterward', async () => {
     await vm.initSDKInstance()
     vm.running = true
-    await jest.advanceTimersByTimeAsync(5000)
+    await advanceTimers(5000)
     expect(sdk.UKey_GetCertInfo).toHaveBeenCalledTimes(1)
     vm.running = false
-    await jest.advanceTimersByTimeAsync(5000)
-    expect(sdk.UKey_GetCertInfo).toHaveBeenCalledTimes(2)
+    await advanceTimers(5000)
+    expect(sdk.UKey_GetCertInfo).toHaveBeenCalledTimes(1)
     expect(vm.polling).toBe(false)
   })
 
@@ -392,7 +386,7 @@ describe('VCTK_S fresh SDK all-field reads', () => {
     await vm.initSDKInstance()
     const firstCN = values(vm).CERT_SUBJECT_CN
     Panel.beforeDestroy.call(vm)
-    await jest.advanceTimersByTimeAsync(5000)
+    await advanceTimers(5000)
     expect(sdk.UKey_GetCertInfo).toHaveBeenCalledTimes(1)
     vm = createVM()
     vm.object.id = 'another-managed-account'

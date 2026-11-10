@@ -1,4 +1,5 @@
 {
+    "UKeyCertificateReadRetryOnEntry": "証明書を読み取れなかったか、選択がキャンセルされました。再試行するには UKey タブを開き直してください。",
   "FieldRequiredError": "这个字段是必需的。",
   "InputEmailAddress": "输入一个电子邮件地址。",
   "ServerError": "服务错误，请联系管理员。",

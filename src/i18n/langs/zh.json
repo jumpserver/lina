@@ -1,4 +1,5 @@
 {
+    "UKeyCertificateReadRetryOnEntry": "未读取到证书或已取消选择；如需重试，请离开 UKey 页后重新进入。",
     "FieldRequiredError": "这个字段是必需的。",
     "InputEmailAddress": "输入一个电子邮件地址。",
     "ServerError": "服务错误，请联系管理员。",
