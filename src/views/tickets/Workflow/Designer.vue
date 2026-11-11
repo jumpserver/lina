@@ -518,13 +518,14 @@ export default {
   },
   activated() {
     // The app caches route pages. Opening Create again must start a new draft.
-    if (this.$route.name === 'WorkflowCreate' && this.workflow.active_version) {
+    if (this.$route.name === 'WorkflowCreate') {
       this.workflow = { name: '', type: 'apply_asset', comment: '', enabled: false }
       this.definition = newDefinition()
       this.versions = []
       this.selectedVersion = null
       this.moreVersions = false
       this.selectedId = 'approval_1'
+      this.advancedOpen = []
       this.error = ''
       this.approverValidationId = null
       this.captureBaseline()
