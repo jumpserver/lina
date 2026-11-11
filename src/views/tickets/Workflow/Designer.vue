@@ -471,16 +471,12 @@ export default {
     },
     approverValidationNode() {
       return this.definition.nodes.find(
-        (node) => node.id === this.approverValidationId && this.missingApprovers(node)
+        (node) => node.id === this.approverValidationId && this.getApproverError(node)
       )
     },
     approverError() {
       const node = this.approverValidationNode
-      return node
-        ? this.$t(`WFApproversRequired_${node.config.approvers.type}`, {
-            node: node.name || this.$t('WFApproval')
-          })
-        : ''
+      return node ? this.getApproverError(node) : ''
     },
     resourceResolver() {
       return ['user', 'user_group', 'role'].includes(this.selected?.config?.approvers?.type)
@@ -656,6 +652,28 @@ export default {
         !approvers.value?.length
       )
     },
+    getApproverError(node) {
+      const name = node.name || this.$t('WFApproval')
+      if (this.missingApprovers(node)) {
+        return this.$t(`WFApproversRequired_${node.config.approvers.type}`, { node: name })
+      }
+      const approvers = node.config?.approvers
+      if (
+        node.type === 'approval' &&
+        approvers?.type === 'user' &&
+        node.config.strategy === 'quorum'
+      ) {
+        const count = new Set([approvers.value || []].flat()).size
+        if (count < node.config.required) {
+          return this.$t('WFQuorumApproversRequired', {
+            node: name,
+            required: node.config.required,
+            count
+          })
+        }
+      }
+      return ''
+    },
     async publish() {
       if (this.saving) return
       this.approverValidationId = null
@@ -664,10 +682,10 @@ export default {
         this.error = this.$t('WFNameRequired')
         return
       }
-      const missing = this.definition.nodes.find(this.missingApprovers)
-      if (missing) {
-        this.approverValidationId = missing.id
-        this.selectedId = missing.id
+      const invalid = this.definition.nodes.find((node) => this.getApproverError(node))
+      if (invalid) {
+        this.approverValidationId = invalid.id
+        this.selectedId = invalid.id
         await this.$nextTick()
         const field = this.$refs.approverField?.$el
         field?.scrollIntoView({ block: 'nearest' })
