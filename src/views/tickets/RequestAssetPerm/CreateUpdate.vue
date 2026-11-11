@@ -197,6 +197,8 @@ export default {
           }
         },
         apply_assets: {
+          required: (formValue) =>
+            !formValue.apply_nodes?.length && !this.resourceAvailability?.description_allowed,
           type: 'assetSelect',
           label: this.$t('Asset'),
           component: Select2,
@@ -226,6 +228,7 @@ export default {
           }
         },
         apply_accounts: {
+          required: () => !this.resourceAvailability?.description_allowed,
           component: AccountFormatter,
           rules: [
             {

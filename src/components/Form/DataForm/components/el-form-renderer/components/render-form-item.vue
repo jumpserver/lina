@@ -7,7 +7,7 @@
       classes,
       {
         'form-item--dependent': data.dependentLayout,
-        'is-no-asterisk': data.required,
+        'is-required': typeof data.required === 'function' ? data.required(value) : data.required,
         'checkbox-inline-help':
           rawComponent === 'el-checkbox' && (helpText || data.helpTextFormatter)
       }
