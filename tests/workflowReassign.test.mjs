@@ -275,6 +275,81 @@ test('workflow refreshes and submitted decisions cannot overwrite a newer ticket
   }
 })
 
+test('workflow polling stays unobtrusive while initial and manual loads show feedback', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  const panel = await workflowPanel()
+  const source = await readFile(
+    new URL('../src/views/tickets/components/WorkflowPanel.vue', import.meta.url), 'utf8'
+  )
+  const header = parse(source).descriptor.template.content.split('<template v-if="instance">')[0]
+  const render = new Function(
+    'Vue', compile(`${header}</IBox>`, { mode: 'function', prefixIdentifiers: true }).code
+  )(Vue)
+  const requests = []
+  const vm = bindMethods(panel, {
+    ...panel.data(),
+    object: { id: 'ticket', org_id: 'org', workflow_instance: 'workflow' },
+    comment: 'Unsent approval opinion',
+    $axios: { get(url) {
+      if (url.includes('/tickets/tickets/')) return Promise.resolve({ state: { value: 'pending' } })
+      return new Promise((resolve, reject) => requests.push({ resolve, reject }))
+    } }
+  })
+  for (const key of ['workflowKey', 'requestConfig']) {
+    Object.defineProperty(vm, key, { get: () => panel.computed[key].call(vm) })
+  }
+  async function feedback(mask, spinner) {
+    const app = Vue.createSSRApp({ render, setup: () => vm })
+    app.config.globalProperties.$t = (key) => key
+    app.component('IBox', { setup: (_, { slots }) => () => Vue.h('div', slots.header?.()) })
+    app.component('ElButton', ElButton)
+    app.component('ElIcon', { render: () => Vue.h('span') })
+    app.component('Refresh', { render: () => Vue.h('span') })
+    app.directive('loading', { getSSRProps: ({ value }) => ({ 'data-loading': String(value) }) })
+    app.provide(ID_INJECTION_KEY, { prefix: 100, current: 0 })
+    const html = await renderToString(app)
+    assert.match(html, new RegExp(`data-loading="${mask}"`))
+    assert.equal(/is-loading/.test(html), spinner, html)
+  }
+  try {
+    const first = vm.load()
+    await feedback(true, false)
+    requests[0].resolve({ id: 'workflow', state: 'running' })
+    await first
+    await feedback(false, false)
+
+    t.mock.timers.tick(15000)
+    assert.equal(requests.length, 2, 'automatic polling is retained')
+    assert.equal(vm.loading, true)
+    await vm.load()
+    assert.equal(requests.length, 2, 'background requests cannot overlap')
+    await feedback(false, false)
+    assert.equal(vm.instance.id, 'workflow')
+    assert.equal(vm.comment, 'Unsent approval opinion')
+    requests[1].reject(new Error('offline'))
+    await new Promise(setImmediate)
+    assert.equal(vm.loading, false)
+
+    const manual = vm.load(true)
+    await feedback(false, true)
+    requests[2].resolve({ id: 'workflow', state: 'running' })
+    await manual
+    await feedback(false, false)
+    assert.equal(vm.comment, 'Unsent approval opinion')
+
+    const leaving = vm.load(true)
+    panel.deactivated.call(vm)
+    assert.equal(vm.refreshing, false)
+    requests[3].resolve({ id: 'stale', state: 'running' })
+    await leaving
+    assert.equal(vm.instance.id, 'workflow')
+    t.mock.timers.tick(15000)
+    assert.equal(requests.length, 4, 'inactive panels stop polling')
+  } finally {
+    panel.beforeUnmount.call(vm)
+  }
+})
+
 test('polling refreshes approved access actions and other terminal ticket states', async (t) => {
   t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 1000 })
   const panel = await workflowPanel()

@@ -1,15 +1,15 @@
 <template>
   <IBox
     v-if="object.workflow_instance"
-    v-loading="loading"
+    v-loading="loading && !instance"
     title="WFProgress"
     class="workflow-panel"
   >
     <template #header>
       <div class="workflow-heading">
         <strong>{{ $t('WFProgress') }}</strong>
-        <el-button link :disabled="loading" @click="load">
-          <el-icon><Refresh /></el-icon>{{ $t('Refresh') }}
+        <el-button link :loading="refreshing" :disabled="loading" @click="load(true)">
+          <el-icon v-if="!refreshing"><Refresh /></el-icon>{{ $t('Refresh') }}
         </el-button>
       </div>
     </template>
@@ -324,6 +324,7 @@ export default {
   data: () => ({
     instance: null,
     loading: false,
+    refreshing: false,
     requestId: 0,
     busy: false,
     comment: '',
@@ -408,6 +409,7 @@ export default {
         clearTimeout(this.deadlineTimer)
         this.instance = null
         this.loading = false
+        this.refreshing = false
         this.comment = ''
         this.reassignComment = ''
         this.reassignVisible = false
@@ -426,6 +428,7 @@ export default {
     this.disposed = true
     this.requestId++
     this.loading = false
+    this.refreshing = false
     this.reassignVisible = false
     clearTimeout(this.timer)
     clearTimeout(this.deadlineTimer)
@@ -481,6 +484,7 @@ export default {
       const requestConfig = this.requestConfig
       let retry = true
       this.loading = true
+      this.refreshing = force
       try {
         const instance = await this.$axios.get(
           `/api/v1/tickets/workflow-instances/${ticket.workflow_instance}/`,
@@ -511,6 +515,7 @@ export default {
       } finally {
         if (requestId === this.requestId && workflowKey === this.workflowKey) {
           this.loading = false
+          this.refreshing = false
           if (!this.disposed && retry) {
             this.timer = setTimeout(() => this.load(), 15000)
           }
