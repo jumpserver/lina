@@ -3704,6 +3704,7 @@
   "WFApproversRequired_user": "Could not publish: select approvers for the \"{node}\" node.",
   "WFApproversRequired_user_group": "Could not publish: select approver groups for the \"{node}\" node.",
   "WFApproversRequired_role": "Could not publish: select approver roles for the \"{node}\" node.",
+  "WFQuorumApproversRequired": "Could not publish: select at least {required} approvers for the \"{node}\" node; currently {count} selected.",
   "WFStrategy": "Approval strategy",
   "WFStrategy_any": "Any one approves",
   "WFStrategy_all": "All approve",

@@ -217,6 +217,47 @@ test('missing explicit approvers blocks all writes and focuses the node without 
   }
 })
 
+test('impossible quorum blocks all writes, selects the node and counts unique users', async () => {
+  const user = '27338af8-fcef-46ec-893a-d84171fb13e0'
+  for (const value of [[user], [user, user], user]) {
+    const vm = mount({ id: 'workflow', active_version: 'version-1' })
+    const approval = vm.definition.nodes.find((node) => node.type === 'approval')
+    approval.name = 'Security review'
+    approval.config = { ...approval.config, approvers: { type: 'user', value }, strategy: 'quorum', required: 2 }
+    vm.selectedId = 'start'
+    const original = JSON.stringify(vm.definition)
+    const calls = []
+    vm.$axios = { post: async (...args) => calls.push(args), patch: async (...args) => calls.push(args) }
+    await vm.publish()
+    assert.deepEqual(calls, [])
+    assert.equal(vm.selectedId, approval.id)
+    assert.equal(vm.approverValidationNode, approval)
+    assert.equal(vm.approverError, '未能发布：「Security review」节点至少选择 2 名审批人，当前已选择 1 名。')
+    assert.equal(JSON.stringify(vm.definition), original)
+    assert.equal(vm.workflow.active_version, 'version-1')
+    approval.config.approvers.value = [user, '63a39ac1-165f-4ef1-b0fa-0b32e96386aa']
+    assert.equal(vm.approverError, '')
+    approval.config.approvers.value = [user]
+    assert.notEqual(vm.approverError, '')
+    approval.config.required = 1
+    assert.equal(vm.approverError, '')
+    approval.config.required = 2
+    vm.changeStrategy('all')
+    assert.equal(vm.approverError, '')
+  }
+})
+
+test('quorum validation keeps dynamic approver sources available', () => {
+  const vm = mount()
+  const approval = vm.definition.nodes.find((node) => node.type === 'approval')
+  approval.config.strategy = 'quorum'
+  approval.config.required = 2
+  for (const type of ['user_group', 'role', 'org_admin', 'asset_owner']) {
+    approval.config.approvers = ['user_group', 'role'].includes(type) ? { type, value: ['resource'] } : { type }
+    assert.equal(vm.getApproverError(approval), '')
+  }
+})
+
 test('validation advances to the next empty approval and clears after changing resolver', async () => {
   const vm = mount()
   const first = vm.definition.nodes.find((node) => node.type === 'approval')
@@ -243,12 +284,14 @@ test('validation advances to the next empty approval and clears after changing r
   assert.equal(vm.missingApprovers(second), false)
 })
 
-test('a corrected approval can be published through the normal flow', async () => {
+test('a corrected quorum can be published through the normal flow', async () => {
   const vm = mount({ id: 'workflow', enabled: false })
   const approval = vm.definition.nodes.find((node) => node.type === 'approval')
-  approval.config.approvers = { type: 'user', value: [] }
+  approval.config.strategy = 'quorum'
+  approval.config.required = 2
+  approval.config.approvers = { type: 'user', value: ['27338af8-fcef-46ec-893a-d84171fb13e0'] }
   await vm.publish()
-  approval.config.approvers.value = ['27338af8-fcef-46ec-893a-d84171fb13e0']
+  approval.config.approvers.value = ['27338af8-fcef-46ec-893a-d84171fb13e0', '63a39ac1-165f-4ef1-b0fa-0b32e96386aa']
   const calls = []
   vm.$route = { name: 'WorkflowDetail' }
   vm.$message = { success: () => {} }
@@ -270,7 +313,7 @@ test('a corrected approval can be published through the normal flow', async () =
   assert.equal(vm.workflow.active_version, 'version-1')
   assert.deepEqual(
     calls[1].data.definition.nodes.find((node) => node.type === 'approval').config.approvers.value,
-    ['27338af8-fcef-46ec-893a-d84171fb13e0']
+    ['27338af8-fcef-46ec-893a-d84171fb13e0', '63a39ac1-165f-4ef1-b0fa-0b32e96386aa']
   )
 })
 

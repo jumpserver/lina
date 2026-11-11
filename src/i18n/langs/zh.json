@@ -3698,6 +3698,7 @@
   "WFApproversRequired_user": "未能发布：请为「{node}」节点选择审批人。",
   "WFApproversRequired_user_group": "未能发布：请为「{node}」节点选择审批用户组。",
   "WFApproversRequired_role": "未能发布：请为「{node}」节点选择审批角色。",
+  "WFQuorumApproversRequired": "未能发布：「{node}」节点至少选择 {required} 名审批人，当前已选择 {count} 名。",
   "WFStrategy": "审批策略",
   "WFStrategy_any": "或签（一人通过）",
   "WFStrategy_all": "会签（全部通过）",
