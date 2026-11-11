@@ -324,6 +324,10 @@ export default {
           required: true,
           rules: [{ required: true, message: this.$t('FieldRequiredError'), trigger: 'blur' }],
           label: this.$t('TicketFlow'),
+          helpTextFormatter: () =>
+            this.flowBeneficiary && this.flowBeneficiary !== store.getters.currentUser.id
+              ? this.$t('TicketDelegatedWorkflowHelp')
+              : '',
           on: {
             retry: async (_, updateForm) => {
               const flow = await this.loadFlowOptions(this.selectedOrgId, this.flowBeneficiary)

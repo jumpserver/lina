@@ -3604,6 +3604,7 @@
   "TicketWorkflowEmpty": "暂无可用工单流，请联系管理员配置",
   "TicketWorkflowFailed": "加载失败，点击右侧重试",
   "TicketWorkflowReload": "重新加载工单流",
+  "TicketDelegatedWorkflowHelp": "仅显示所有审批路径均包含组织管理员审批的流程",
   "TicketUnsupportedForm": "此工单类型需要专用表单，当前前端尚未安装。",
   "ReviewExemptionDuration": "免审时长",
   "ReviewExemptionDurationHelp": "0 表示每次连接都需要审批。审批通过后，同一用户在免审期内，可通过本规则再次连接同一资产的同一账号。修改时长不影响已有免审资格。",
