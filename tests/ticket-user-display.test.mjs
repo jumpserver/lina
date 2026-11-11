@@ -28,8 +28,8 @@ test('reviewer snapshots display once and preserve historical identities', () =>
   }
 })
 
-test('approval nodes and activity use the same snapshot formatting', async () => {
-  for (const file of ['WorkflowPanel', 'TicketActivity']) {
+test('approval nodes, activity and member selection use the same snapshot formatting', async () => {
+  for (const file of ['WorkflowPanel', 'TicketActivity', 'WorkflowMemberSelect']) {
     const source = await readFile(
       new URL(`../src/views/tickets/components/${file}.vue`, import.meta.url),
       'utf8'
