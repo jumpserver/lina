@@ -627,3 +627,25 @@ test('failed or mismatched reapply cannot silently open a blank submittable form
   assert.equal(vm.loadError, true)
   assert.equal(vm.formReady, false)
 })
+
+test('resource-adjustable forms mark resources only when the existing validator requires them', async () => {
+  const vm = await createAccountForm(async () => [])
+  vm.plugins[0].resource_adjustment = true
+  await vm.configure()
+  for (const descriptionAllowed of [false, true, false]) {
+    vm.resourceAvailability = { description_allowed: descriptionAllowed }
+    for (const name of ['param_asset', 'param_accounts']) {
+      const field = vm.fieldsMeta[name]
+      assert.equal(field.required(), !descriptionAllowed)
+      let error
+      field.rules[0].validator({}, [], (result) => {
+        error = result
+      })
+      assert.equal(Boolean(error), !descriptionAllowed)
+      field.rules[0].validator({}, ['selected'], (result) => {
+        error = result
+      })
+      assert.equal(error, undefined)
+    }
+  }
+})
