@@ -3672,5 +3672,6 @@
     "Grace": "設定變更寬限至",
     "Unlimited": "不限制",
     "BrowserExit": "瀏覽器關閉時重新登入"
-  }
+  },
+  "AgentFileTransfers": "Agent 檔案傳輸"
 }

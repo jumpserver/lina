@@ -89,7 +89,7 @@ export default [
   {
     path: 'ftp',
     name: 'FtpLog',
-    component: () => import('@/views/sessions/FTPLogList'),
+    component: () => import('@/views/audits/FileTransferRecords.vue'),
     meta: {
       title: i18n.t('FileTransfer'),
       icon: 'file-transfer',

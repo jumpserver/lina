@@ -3166,5 +3166,6 @@
   "WFTimeoutPending": "Deadline passed; awaiting system processing",
   "AccountConnectivity": "Kiểm tra kết nối tài khoản",
   "AssetConnectivity": "Kiểm tra kết nối tài sản",
-  "ConnectivityAllAccounts": "Tất cả tài khoản đang hoạt động"
+  "ConnectivityAllAccounts": "Tất cả tài khoản đang hoạt động",
+  "AgentFileTransfers": "Truyền tệp Agent"
 }

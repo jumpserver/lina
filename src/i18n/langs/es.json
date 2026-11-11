@@ -3164,5 +3164,6 @@
   "WFTimeoutPending": "Deadline passed; awaiting system processing",
   "AccountConnectivity": "Prueba de conectividad de cuentas",
   "AssetConnectivity": "Prueba de conectividad de activos",
-  "ConnectivityAllAccounts": "Todas las cuentas activas"
+  "ConnectivityAllAccounts": "Todas las cuentas activas",
+  "AgentFileTransfers": "Transferencias de Agent"
 }

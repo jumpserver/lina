@@ -4117,5 +4117,6 @@
     "Grace": "配置变更宽限至",
     "Unlimited": "不限制",
     "BrowserExit": "浏览器关闭时重新登录"
-  }
+  },
+  "AgentFileTransfers": "Agent 文件传输"
 }

@@ -42,6 +42,16 @@
           :date-start="item.date_created"
           :date-end="item.date_expires"
         />
+        <template
+          v-else-if="kind === 'sessions' && activeMenu === 'FileTransfer' && canViewFTPLogs"
+        >
+          <SessionFTPLogs
+            v-if="item.terminal_session_id"
+            :key="`${item.terminal_session_id}:${item.org_id}`"
+            :object="{ id: item.terminal_session_id, org_id: item.org_id }"
+          />
+          <el-empty v-else :description="t('NoData')" :image-size="60" />
+        </template>
         <IBox v-else-if="kind === 'actions' && activeMenu === 'Output'" title="Output">
           <el-empty v-if="!outputs.length" :description="t('NoData')" :image-size="60" />
           <section v-for="stream in outputs" :key="stream.name">
@@ -83,6 +93,7 @@ import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import AgentList from './List.vue'
+import SessionFTPLogs from '@/views/sessions/SessionDetail/SessionFTPLogs.vue'
 import TabPage from '@/layout/components/TabPage'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import DetailCard from '@/components/Cards/DetailCard'
@@ -102,6 +113,7 @@ const detailId = computed(() => route.params.id)
 const item = ref(null)
 const canViewSessions = computed(() => hasPermission('terminal.view_agentsession'))
 const canViewActions = computed(() => hasPermission('terminal.view_agentaction'))
+const canViewFTPLogs = computed(() => hasPermission('audits.view_ftplog'))
 const events = ref([])
 const nextOffset = ref(null)
 const loading = ref(false)
@@ -123,7 +135,10 @@ const detailTabs = computed(() => [
     ? canViewActions.value
       ? [{ title: t('AgentActions'), name: 'AgentActions' }]
       : []
-    : [{ title: t('Output'), name: 'Output' }])
+    : [{ title: t('Output'), name: 'Output' }]),
+  ...(props.kind === 'sessions' && canViewFTPLogs.value
+    ? [{ title: t('FileTransfer'), name: 'FileTransfer' }]
+    : [])
 ])
 const detailItems = computed(() => {
   if (!item.value) return []

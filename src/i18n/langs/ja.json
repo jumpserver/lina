@@ -3370,5 +3370,6 @@
   "WFTimeoutPending": "Deadline passed; awaiting system processing",
   "AccountConnectivity": "アカウントの接続テスト",
   "AssetConnectivity": "アセットの接続テスト",
-  "ConnectivityAllAccounts": "すべての有効なアカウント"
+  "ConnectivityAllAccounts": "すべての有効なアカウント",
+  "AgentFileTransfers": "Agent ファイル転送"
 }

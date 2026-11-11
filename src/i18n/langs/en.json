@@ -4123,5 +4123,6 @@
     "Grace": "Configuration-change grace until",
     "Unlimited": "Unlimited",
     "BrowserExit": "Log in again when the browser closes"
-  }
+  },
+  "AgentFileTransfers": "Agent transfers"
 }
