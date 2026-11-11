@@ -3610,6 +3610,7 @@
   "TicketWorkflowEmpty": "No ticket flows available. Contact your administrator to configure one.",
   "TicketWorkflowFailed": "Could not load ticket flows. Retry using the icon on the right.",
   "TicketWorkflowReload": "Reload ticket flows",
+  "TicketDelegatedWorkflowHelp": "Only workflows with organization administrator approval on every approval path are shown.",
   "TicketUnsupportedForm": "This ticket type requires a form that is not installed in this frontend.",
   "ReviewExemptionDuration": "Review exemption duration",
   "ReviewExemptionDurationHelp": "0 requires approval for every connection. After approval, the same user can reconnect to the same asset and account under this ACL during the exemption period. Changing this value does not affect existing exemptions.",

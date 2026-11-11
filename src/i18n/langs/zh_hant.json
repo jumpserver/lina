@@ -3176,6 +3176,7 @@
   "TicketWorkflowEmpty": "暫無可用工單流，請聯絡管理員配置",
   "TicketWorkflowFailed": "載入失敗，點擊右側重試",
   "TicketWorkflowReload": "重新載入工單流",
+  "TicketDelegatedWorkflowHelp": "僅顯示所有審批路徑均包含組織管理員審批的流程",
   "TicketUnsupportedForm": "此工單類型需要專用表單，目前前端尚未安裝。",
   "TicketReplayAvailable": "可下載本次工作階段錄影",
   "TicketReplayExpired": "下載權限已過期",
