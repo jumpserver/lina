@@ -43,6 +43,7 @@ export default {
           enabled: { label: this.$t('Enabled') },
           actions: {
             formatterArgs: {
+              hasDelete: false,
               onUpdate: ({ row }) =>
                 this.$router.push({ name: 'WorkflowDetail', params: { id: row.id } })
             }
