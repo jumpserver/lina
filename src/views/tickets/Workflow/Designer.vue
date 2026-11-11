@@ -533,7 +533,9 @@ export default {
   async beforeRouteLeave() {
     if (!this.dirty || this.saving) return true
     try {
-      await this.$confirm(this.$t('WFUnsaved'), this.$t('Confirm'))
+      await this.$confirm(this.$t('WFUnsaved'), this.$t('Confirm'), {
+        closeOnHashChange: false
+      })
       return true
     } catch {
       return false
