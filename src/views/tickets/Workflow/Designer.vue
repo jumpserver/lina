@@ -348,7 +348,7 @@
                   @click="selected.type === 'condition' ? removeBranch() : remove()"
                   ><el-icon><Delete /></el-icon
                   >{{
-                    $t(selected.type === 'condition' ? 'WFRemoveCondition' : 'WFRemoveNode')
+                    $t(selected.type === 'condition' ? 'WFRemoveCondition' : 'DeleteNode')
                   }}</el-button
                 >
               </div>
