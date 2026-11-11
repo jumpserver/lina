@@ -18,7 +18,11 @@
         <el-tag :type="deadlinePassed ? 'warning' : stateTone(instance.state)" effect="light">
           {{ $t(deadlinePassed ? 'WFTimeoutPending' : stateLabels[instance.state]) }}
         </el-tag>
-        <span class="hint">{{ $t('WFVersion') }} {{ instance.version_number }}</span>
+        <span class="workflow-identity hint">
+          <span v-if="instance.workflow_name || object.workflow?.name"
+            >{{ instance.workflow_name || object.workflow.name }} · </span
+          >{{ $t('WFVersion') }} {{ instance.version_number }}
+        </span>
       </div>
       <el-alert
         v-if="instance.state === 'error'"
@@ -135,6 +139,7 @@
             </div>
             <template v-if="node.type === 'approval'">
               <div class="step-description hint">
+                <span v-if="node.config.approvers">{{ approverSource(node) }} · </span>
                 {{
                   node.config.strategy === 'quorum'
                     ? $t('WFRequiredCount', { count: node.required })
@@ -426,6 +431,19 @@ export default {
     clearTimeout(this.deadlineTimer)
   },
   methods: {
+    approverSource(node) {
+      const approvers = node.config.approvers
+      if (
+        approvers.type === 'role' &&
+        this.instance?.approver_role_names &&
+        approvers.value?.length
+      ) {
+        return approvers.value
+          .map((id) => this.instance.approver_role_names[id] || this.$t('Unknown'))
+          .join(', ')
+      }
+      return this.$t(`WFResolver_${approvers.type}`)
+    },
     scheduleDeadline() {
       clearTimeout(this.deadlineTimer)
       this.deadlineTimer = null
@@ -574,6 +592,11 @@ export default {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 20px;
+}
+.workflow-identity {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 .workflow-panel :deep(.el-alert) {
   margin-bottom: 16px;
