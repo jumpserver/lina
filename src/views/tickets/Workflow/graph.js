@@ -27,6 +27,8 @@ export const stateLabels = {
   expired: 'WFExpired',
   error: 'WFError',
   skipped: 'WFSkipped',
+  not_started: 'WFNotStarted',
+  branch_pending: 'WFBranchPending',
   transferred: 'WFTransferred'
 }
 export const eventLabels = {

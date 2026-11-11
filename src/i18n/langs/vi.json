@@ -2998,6 +2998,8 @@
   "WFExpired": "Expired",
   "WFError": "Workflow error",
   "WFSkipped": "Skipped",
+  "WFNotStarted": "Chưa bắt đầu",
+  "WFBranchPending": "Chưa xác định nhánh",
   "WFTransferred": "Transferred",
   "WFStarted": "Request submitted",
   "WFNodeEntered": "Entered node",

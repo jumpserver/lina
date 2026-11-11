@@ -97,6 +97,7 @@
                 <VideoPlay v-if="node.type === 'start'" />
                 <Promotion v-else-if="node.type === 'cc'" />
                 <Share v-else-if="node.type === 'condition'" />
+                <Finished v-else-if="node.type === 'end'" />
                 <User v-else />
               </el-icon>
             </span>
@@ -347,8 +348,11 @@ export default {
       return this.reassignVisible && this.reassignTaskId !== this.myTask?.id
     },
     timelineNodes() {
-      return (this.instance?.nodes || [])
-        .filter((node) => node.state !== 'skipped' && node.type !== 'end')
+      return [...(this.instance?.nodes || []), ...(this.instance?.upcoming_nodes || [])]
+        .filter(
+          (node) =>
+            node.state !== 'skipped' && (node.type !== 'end' || !this.instance.date_finished)
+        )
         .map((node) => ({
           ...node,
           pendingTasks: (node.tasks || []).filter((task) => task.state === 'pending'),
@@ -358,7 +362,9 @@ export default {
         }))
     },
     skippedNodes() {
-      return (this.instance?.nodes || []).filter((node) => node.state === 'skipped')
+      return [...(this.instance?.nodes || []), ...(this.instance?.upcoming_nodes || [])].filter(
+        (node) => node.state === 'skipped'
+      )
     },
     currentNode() {
       return this.instance?.nodes.find((n) => n.state === 'running' && n.type === 'approval')
