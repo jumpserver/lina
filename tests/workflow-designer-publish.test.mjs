@@ -487,3 +487,43 @@ test('timeout input uses whole minutes while workflow definitions keep seconds',
   vm.timeoutMinutes = null
   assert.equal(vm.selected.config.timeout, 0)
 })
+
+test('leaving a dirty workflow keeps the confirmation open across hash changes', async () => {
+  for (const action of ['confirm', 'cancel', 'close']) {
+    const vm = mount()
+    vm.renameWorkflow('Unsaved workflow')
+    let options
+    let finish
+    vm.$confirm = (message, title, suppliedOptions) => {
+      options = suppliedOptions
+      return new Promise((resolve, reject) => {
+        finish = () => (action === 'confirm' ? resolve(action) : reject(action))
+      })
+    }
+    let settled = false
+    const navigation = component.beforeRouteLeave.call(vm).then((result) => {
+      settled = true
+      return result
+    })
+    await Promise.resolve()
+    assert.equal(settled, false)
+    assert.equal(options?.closeOnHashChange, false)
+    finish()
+    assert.equal(await navigation, action === 'confirm')
+    assert.equal(vm.workflow.name, 'Unsaved workflow')
+    assert.equal(vm.dirty, true)
+  }
+})
+
+test('unchanged workflows and publication navigation do not prompt before leaving', async () => {
+  const vm = mount()
+  let prompts = 0
+  vm.$confirm = async () => {
+    prompts += 1
+  }
+  assert.equal(await component.beforeRouteLeave.call(vm), true)
+  vm.renameWorkflow('Publishing workflow')
+  vm.saving = true
+  assert.equal(await component.beforeRouteLeave.call(vm), true)
+  assert.equal(prompts, 0)
+})
