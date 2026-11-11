@@ -527,3 +527,47 @@ test('unchanged workflows and publication navigation do not prompt before leavin
   assert.equal(await component.beforeRouteLeave.call(vm), true)
   assert.equal(prompts, 0)
 })
+
+test('reopening Create starts clean after discarding unpublished and published drafts', async () => {
+  for (const workflow of [
+    {},
+    { id: 'unpublished-draft' },
+    { id: 'published-workflow', active_version: 'version-1' }
+  ]) {
+    const vm = mount(workflow)
+    vm.$route = { name: 'WorkflowCreate', params: {} }
+    let prompts = 0
+    vm.$confirm = async () => {
+      prompts += 1
+    }
+    vm.renameWorkflow('Discard this draft')
+    vm.workflow.type = 'change_secret'
+    vm.workflow.comment = 'Discard this comment'
+    vm.selected.config.approvers = { type: 'user', value: ['reviewer'] }
+    vm.selected.config.strategy = 'quorum'
+    vm.selected.config.required = 2
+    vm.insert(vm.outgoing[0], 'approval')
+    vm.advancedOpen = ['advanced']
+    vm.error = 'Previous error'
+    vm.approverValidationId = vm.selectedId
+    vm.ticketTypes = [{ type: 'apply_asset' }]
+    const defaults = component.data()
+
+    assert.equal(vm.dirty, true)
+    assert.equal(await component.beforeRouteLeave.call(vm), true)
+    component.activated.call(vm)
+
+    assert.deepEqual(vm.workflow, defaults.workflow)
+    assert.deepEqual(vm.definition, defaults.definition)
+    assert.equal(vm.selectedId, defaults.selectedId)
+    assert.deepEqual(vm.advancedOpen, [])
+    assert.equal(vm.error, '')
+    assert.equal(vm.approverValidationId, null)
+    assert.equal(vm.dirty, false)
+    assert.equal(vm.selectedVersion, null)
+    assert.deepEqual(vm.versions, [])
+    assert.deepEqual(vm.ticketTypes, [{ type: 'apply_asset' }])
+    assert.equal(await component.beforeRouteLeave.call(vm), true)
+    assert.equal(prompts, 1)
+  }
+})
