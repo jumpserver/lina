@@ -2996,6 +2996,8 @@
   "WFExpired": "Expired",
   "WFError": "Workflow error",
   "WFSkipped": "Skipped",
+  "WFNotStarted": "Sin iniciar",
+  "WFBranchPending": "Rama por determinar",
   "WFTransferred": "Transferred",
   "WFStarted": "Request submitted",
   "WFNodeEntered": "Entered node",

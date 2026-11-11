@@ -3765,6 +3765,8 @@
   "WFExpired": "已超时",
   "WFError": "流程异常",
   "WFSkipped": "未经过",
+  "WFNotStarted": "未开始",
+  "WFBranchPending": "分支待确定",
   "WFTransferred": "已转交",
   "WFStarted": "提交申请",
   "WFNodeEntered": "进入节点",

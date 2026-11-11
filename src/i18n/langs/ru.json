@@ -2998,6 +2998,8 @@
   "WFExpired": "Expired",
   "WFError": "Workflow error",
   "WFSkipped": "Skipped",
+  "WFNotStarted": "Не начато",
+  "WFBranchPending": "Ветка не определена",
   "WFTransferred": "Transferred",
   "WFStarted": "Request submitted",
   "WFNodeEntered": "Entered node",
