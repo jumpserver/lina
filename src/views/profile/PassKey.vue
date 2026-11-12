@@ -158,8 +158,11 @@ export default {
           if (error.response?.status === 412 || error.name === 'NotAllowedError') {
             return
           }
-          const msg = getErrorResponseMsg(error)
-          alert(msg)
+          const msg =
+            error.name === 'InvalidStateError'
+              ? this.$t('PasskeyAlreadyRegistered')
+              : getErrorResponseMsg(error)
+          this.$message.error(msg)
         })
     },
     makeCredReq(makeCredReq) {

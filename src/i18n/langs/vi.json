@@ -1566,6 +1566,7 @@
   "PassKey": "Passkey",
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "Nguồn xác thực của bạn là {source}, không hỗ trợ thêm Passkey",
+  "PasskeyAlreadyRegistered": "Thiết bị hoặc trình xác thực này đã có khóa truy cập cho tài khoản này. Hãy dùng khóa hiện có hoặc thử lại bằng thiết bị hay trình xác thực khác.",
   "PasskeySummary": "Xác thực sinh trắc học không cần mật khẩu",
   "Passphrase": "Mật khẩu khóa",
   "Password": "Mật khẩu",

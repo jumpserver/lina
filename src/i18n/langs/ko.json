@@ -1566,6 +1566,7 @@
   "PassKey": "패스키",
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "인증 소스가 {source}이므로 Passkey 추가를 지원하지 않습니다",
+  "PasskeyAlreadyRegistered": "이 기기 또는 인증기에는 이 계정의 패스키가 이미 등록되어 있습니다. 기존 패스키를 사용하거나 다른 기기 또는 인증기로 다시 시도하세요.",
   "PasskeySummary": "무비밀번호 생체 인증",
   "Passphrase": "키 비밀번호",
   "Password": "비밀번호",

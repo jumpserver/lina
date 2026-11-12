@@ -1624,6 +1624,7 @@
   "PassKey": "Passkey",
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "Your authentication source is {source}, and adding a passkey is not supported",
+  "PasskeyAlreadyRegistered": "This device or authenticator already has a passkey for this account. Use the existing passkey, or try another device or authenticator.",
   "PasskeySummary": "Passwordless biometric authentication",
   "Passphrase": "Key password",
   "Password": "Password",

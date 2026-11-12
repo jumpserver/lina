@@ -1498,6 +1498,7 @@
   "PassKey": "Passkey",
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "認証ソースは {source} で、Passkeyの追加はサポートされていません",
+  "PasskeyAlreadyRegistered": "このデバイスまたは認証器には、このアカウントのパスキーがすでに登録されています。既存のパスキーを使用するか、別のデバイスまたは認証器で再試行してください。",
   "PasskeySummary": "パスワード不要の生体認証",
   "Passphrase": "キーコード",
   "Password": "パスワード",
