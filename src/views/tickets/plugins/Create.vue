@@ -503,7 +503,7 @@ export default {
       for (const field of this.selectedPlugin.fields) {
         if (field.resource === 'asset') {
           this.fieldsMeta[`param_${field.name}`].el.ajax.url =
-            `/api/v1/tickets/apply-assets/suggestions/?oid=${orgId}`
+            `/api/v1/tickets/apply-assets/suggestions/?oid=${orgId}&ticket_type=${type}`
         } else if (field.resource === 'session') {
           const meta = this.fieldsMeta[`param_${field.name}`]
           meta.el.disabled = !orgId
