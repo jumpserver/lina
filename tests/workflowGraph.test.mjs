@@ -45,3 +45,14 @@ test('removing the only branch approval cannot collapse both condition outputs',
   assert.equal(removeNode(graph, branch.target), false)
   assert.equal(paths(graph).length, 2)
 })
+
+test('login workflows default every new approval path to system administrators', () => {
+  const graph = newDefinition('login_confirm')
+  insertNode(graph, graph.edges[1], 'approval', 'Next approval', 'login_confirm')
+  insertNode(graph, graph.edges[0], 'condition', 'Branch', 'login_confirm')
+  for (const node of graph.nodes.filter(node => node.type === 'approval')) {
+    assert.deepEqual(node.config.approvers, { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] })
+    assert.equal(node.config.exclude_applicant, true)
+  }
+  assert.equal(newDefinition().nodes.find(node => node.type === 'approval').config.approvers.type, 'org_admin')
+})

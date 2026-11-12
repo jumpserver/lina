@@ -60,8 +60,11 @@ export const eventLabels = {
   'replay.downloaded': 'DownloadReplay',
   'workflow.migrated': 'WFMigrated'
 }
-export const newApproval = () => ({
-  approvers: { type: 'org_admin' },
+export const newApproval = (ticketType) => ({
+  approvers:
+    ticketType === 'login_confirm'
+      ? { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] }
+      : { type: 'org_admin' },
   strategy: 'any',
   allow_transfer: true,
   allow_add_approver: true,
@@ -70,12 +73,12 @@ export const newApproval = () => ({
   timeout_action: 'expire'
 })
 export const newCondition = () => ({ field: 'asset.labels.env', operator: 'eq', value: 'prod' })
-export function newDefinition() {
+export function newDefinition(ticketType) {
   return {
     nodes: [
       { id: 'start', type: 'start', name: '' },
       { id: 'cc_1', type: 'cc', name: '', config: { users: [] } },
-      { id: 'approval_1', type: 'approval', name: '', config: newApproval() },
+      { id: 'approval_1', type: 'approval', name: '', config: newApproval(ticketType) },
       { id: 'end', type: 'end', name: '' }
     ],
     edges: [
@@ -104,12 +107,13 @@ export function layoutGraph(definition) {
     return { ...node, x: 50 + index * 250, y: 30 + level * 125 }
   })
 }
-export function insertNode(definition, edge, type, name) {
+export function insertNode(definition, edge, type, name, ticketType) {
   const node = {
     id: `${type}_${crypto.randomUUID().slice(0, 8)}`,
     type,
     name,
-    config: type === 'approval' ? newApproval() : type === 'cc' ? { users: [] } : newCondition()
+    config:
+      type === 'approval' ? newApproval(ticketType) : type === 'cc' ? { users: [] } : newCondition()
   }
   definition.nodes.push(node)
   const target = edge.target
@@ -120,7 +124,7 @@ export function insertNode(definition, edge, type, name) {
       id: `approval_${crypto.randomUUID().slice(0, 8)}`,
       type: 'approval',
       name: '',
-      config: newApproval()
+      config: newApproval(ticketType)
     }
     definition.nodes.push(branch)
     definition.edges.push(
