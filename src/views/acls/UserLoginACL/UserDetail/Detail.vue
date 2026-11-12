@@ -57,8 +57,10 @@ export default {
         'date_created',
         'created_by',
         {
-          key: vm.$t('LoginConfirmUser'),
-          value: vm.object.reviewers.map((item) => item.name).join(', ')
+          key: vm.$t(vm.object.workflow ? 'WFWorkflows' : 'LoginConfirmUser'),
+          value: vm.object.workflow
+            ? vm.object.workflow_name || '-'
+            : vm.object.reviewers.map((item) => item.name).join(', ')
         },
         'comment'
       ]

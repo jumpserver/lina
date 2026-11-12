@@ -40,7 +40,7 @@
           type="textarea"
           :rows="2"
           maxlength="4096"
-          :placeholder="$t('WFDecisionComment')"
+          :placeholder="$t(myTask ? 'WFDecisionComment' : 'WFWithdrawReason')"
           :disabled="deadlinePassed"
         />
         <div class="buttons">

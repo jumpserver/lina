@@ -4,6 +4,7 @@
     :title="$t('OnlineSessionPolicy.Title')"
     placement="left"
     trigger="click"
+    popper-class="session-policy-popover"
     :width="380"
   >
     <template #reference>
@@ -108,6 +109,11 @@ export default {
 </script>
 
 <style scoped>
+.el-button.session-expiry-link {
+  padding: 0;
+  border: 0;
+  font-size: inherit;
+}
 .session-expiry-link :deep(> span) {
   gap: 5px;
 }
@@ -116,12 +122,33 @@ export default {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px 18px;
   margin: 0;
+  font-size: 13px;
+  line-height: 20px;
+}
+.session-policy-info dt,
+.session-policy-info dd {
+  min-width: 0;
+  font-weight: 400;
+  overflow-wrap: anywhere;
 }
 .session-policy-info dt {
-  color: var(--el-text-color-secondary);
+  color: var(--el-text-color-regular);
 }
 .session-policy-info dd {
   margin: 0;
+  color: var(--el-text-color-primary);
   text-align: right;
+}
+</style>
+
+<style>
+.el-popover.session-policy-popover {
+  padding: 16px;
+}
+.session-policy-popover .el-popover__title {
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
 }
 </style>

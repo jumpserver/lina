@@ -11,10 +11,15 @@
     @confirm="handleConfirm"
   >
     <div class="export-dialog">
-      <el-radio-group v-model="exportType" size="small" @change="handleTypeChange">
-        <el-radio-button label="table">Table</el-radio-button>
-        <el-radio-button label="xlsx">Excel</el-radio-button>
-      </el-radio-group>
+      <SegmentedControl
+        v-model="exportType"
+        :options="[
+          { value: 'table', label: $t('TableDetails') },
+          { value: 'xlsx', label: 'Excel' }
+        ]"
+        :aria-label="$t('Export')"
+        @change="handleTypeChange"
+      />
 
       <div v-if="exportType === 'table'" v-loading="loading" class="table-preview">
         <div v-if="Array.isArray(tableData)">
@@ -57,13 +62,15 @@
 
 <script>
 import Dialog from '@/components/Dialog'
+import SegmentedControl from '@/components/Common/SegmentedControl/index.vue'
 import { download } from '@/utils/common'
 import { appendQuery, pickReportQuery } from './reportUtils'
 
 export default {
   name: 'ReportExportDialog',
   components: {
-    Dialog
+    Dialog,
+    SegmentedControl
   },
   props: {
     visible: {

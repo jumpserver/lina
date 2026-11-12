@@ -13,56 +13,55 @@
     @update:visible="handleVisibleChange"
   >
     <template #header="{ titleId, titleClass }">
-      <div class="resource-select-dialog__header-content">
-        <div :id="titleId" :class="[titleClass, 'resource-select-dialog__title']">
-          {{ dialogTitle }}
-        </div>
-        <div :aria-label="dialogTitle" class="resource-select-dialog__tabs" role="tablist">
-          <button
-            :aria-selected="activeTab === 'selected'"
-            :class="{ 'is-active': activeTab === 'selected' }"
-            :tabindex="activeTab === 'selected' ? 0 : -1"
-            class="resource-select-dialog__tab"
-            role="tab"
-            type="button"
-            @click="selectDialogTab('selected')"
-            @keydown.right.prevent="selectDialogTab('available')"
-          >
-            <span class="resource-select-dialog__tab-label">
-              <span>{{
-                $t('ResourceSelectSelectedResources', {
-                  resource: displayResourceName
-                })
-              }}</span>
-              <span class="resource-select-dialog__tab-count">({{ selectedCount }})</span>
-            </span>
-          </button>
-          <button
-            :aria-selected="activeTab === 'available'"
-            :class="{ 'is-active': activeTab === 'available' }"
-            :tabindex="activeTab === 'available' ? 0 : -1"
-            class="resource-select-dialog__tab"
-            role="tab"
-            type="button"
-            @click="selectDialogTab('available')"
-            @keydown.left.prevent="selectDialogTab('selected')"
-          >
-            <span class="resource-select-dialog__tab-label">
-              <span>{{
-                $t('ResourceSelectUnselectedResources', {
-                  resource: displayResourceName
-                })
-              }}</span>
-              <span v-if="availableCount !== null" class="resource-select-dialog__tab-count">
-                ({{ availableCount }})
-              </span>
-            </span>
-          </button>
-        </div>
+      <div :id="titleId" :class="[titleClass, 'resource-select-dialog__title']">
+        {{ dialogTitle }}
       </div>
     </template>
 
     <div class="resource-select-dialog__content">
+      <div :aria-label="dialogTitle" class="resource-select-dialog__tabs" role="tablist">
+        <button
+          :aria-selected="activeTab === 'selected'"
+          :class="{ 'is-active': activeTab === 'selected' }"
+          :tabindex="activeTab === 'selected' ? 0 : -1"
+          class="resource-select-dialog__tab"
+          role="tab"
+          type="button"
+          @click="selectDialogTab('selected')"
+          @keydown.right.prevent="selectDialogTab('available')"
+        >
+          <span class="resource-select-dialog__tab-label">
+            <span>{{
+              $t('ResourceSelectSelectedResources', {
+                resource: displayResourceName
+              })
+            }}</span>
+            <span class="resource-select-dialog__tab-count">({{ selectedCount }})</span>
+          </span>
+        </button>
+        <button
+          :aria-selected="activeTab === 'available'"
+          :class="{ 'is-active': activeTab === 'available' }"
+          :tabindex="activeTab === 'available' ? 0 : -1"
+          class="resource-select-dialog__tab"
+          role="tab"
+          type="button"
+          @click="selectDialogTab('available')"
+          @keydown.left.prevent="selectDialogTab('selected')"
+        >
+          <span class="resource-select-dialog__tab-label">
+            <span>{{
+              $t('ResourceSelectUnselectedResources', {
+                resource: displayResourceName
+              })
+            }}</span>
+            <span v-if="availableCount !== null" class="resource-select-dialog__tab-count">
+              ({{ availableCount }})
+            </span>
+          </span>
+        </button>
+      </div>
+
       <div v-show="activeTab === 'available'" class="resource-select-dialog__panel">
         <ListTable
           ref="availableTable"
@@ -941,14 +940,20 @@ export default {
 
   .el-dialog__header {
     flex: 0 0 auto;
-    padding: 8px 24px 0 !important;
+    padding: 12px 24px !important;
     border-bottom: 1px solid var(--panel-border-color, var(--el-border-color));
+  }
+
+  .el-dialog__headerbtn {
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
   }
 
   .el-dialog__body {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 8px 24px 10px !important;
+    padding: 0 0 10px !important;
     overflow: hidden;
     background: var(--resource-select-dialog-body-background);
   }
@@ -966,19 +971,23 @@ export default {
     min-height: 0;
   }
 
-  .resource-select-dialog__header-content {
+  .resource-select-dialog__title {
     display: flex;
-    flex-direction: column;
-    min-width: 0;
-    gap: 12px;
+    align-items: center;
+    min-height: 28px;
+    padding-right: 32px;
+    font-weight: 600;
   }
 
   .resource-select-dialog__tabs {
     position: relative;
     display: flex;
+    flex: 0 0 auto;
     align-items: stretch;
     width: 100%;
     height: var(--tab-page-header-height);
+    box-sizing: border-box;
+    padding-inline: 7px;
     gap: 0;
     background-color: var(--tab-page-navigation-background-color);
   }
@@ -989,12 +998,13 @@ export default {
     display: inline-flex;
     align-items: center;
     height: var(--tab-page-header-height);
-    padding: 0 18px;
+    padding: 0 24px;
+    box-sizing: border-box;
     border: 0;
     border-radius: 0;
     outline: none;
-    background-color: var(--tab-page-navigation-background-color);
-    color: var(--el-text-color-regular, #606266);
+    background-color: transparent;
+    color: var(--el-text-color-primary, #303133);
     cursor: pointer;
     font: inherit;
     font-size: 14px;
@@ -1006,32 +1016,31 @@ export default {
       color 120ms ease,
       background-color 120ms ease;
 
-    &:first-child {
-      padding-left: 0;
-    }
-
     &.is-active {
-      color: var(--el-color-primary);
-      background-color: var(--tab-page-navigation-background-color);
-      border: 0;
-      border-radius: 0;
-      box-shadow: none;
+      .resource-select-dialog__tab-label::after {
+        content: '';
+        position: absolute;
+        right: -6px;
+        bottom: 0;
+        left: -6px;
+        height: 2px;
+        border-radius: 3px;
+        background-color: var(--el-color-primary);
+      }
     }
 
     &:not(.is-active):hover {
-      color: var(--el-text-color-regular, #606266);
-      background-color: var(--tab-page-navigation-background-color);
+      color: var(--el-text-color-primary, #303133);
     }
 
-    &:focus,
-    &:focus:active,
     &:focus-visible {
-      outline: none;
-      box-shadow: none;
+      outline: 2px solid var(--el-color-primary);
+      outline-offset: -4px;
     }
   }
 
   .resource-select-dialog__tab-label {
+    position: relative;
     display: inline-flex;
     align-items: center;
     height: 100%;
@@ -1053,6 +1062,15 @@ export default {
     min-width: 0;
     min-height: 0;
     background: var(--resource-select-dialog-body-background);
+  }
+
+  .resource-select-dialog__content {
+    gap: 8px;
+  }
+
+  .resource-select-dialog__panel {
+    box-sizing: border-box;
+    padding-inline: 24px;
   }
 
   .list-table {
@@ -1083,9 +1101,9 @@ export default {
   }
 
   .auto-data-table .el-data-table > .el-data-table__surface {
-    // Header, tabs, toolbar, dialog padding and footer use 171px in total.
+    // Header, tabs, toolbar, dialog padding and footer use 180px in total.
     // Keep the table inside the dialog's fixed-height content area.
-    max-height: calc(var(--resource-select-dialog-max-height) - 171px);
+    max-height: calc(var(--resource-select-dialog-max-height) - 180px);
   }
 
   .el-dialog__body .table-action .table-action__toolbar .search {

@@ -1,12 +1,11 @@
 <template>
   <div class="import-table-body">
     <div class="tableFilter">
-      <el-radio-group v-model="importStatusFilter" size="small">
-        <el-radio-button value="all">{{ $t('Total') }}: {{ totalCount }}</el-radio-button>
-        <el-radio-button value="ok">{{ $t('Success') }}: {{ successCount }}</el-radio-button>
-        <el-radio-button value="error">{{ $t('Failed') }}: {{ failedCount }}</el-radio-button>
-        <el-radio-button value="pending">{{ $t('Pending') }}: {{ pendingCount }}</el-radio-button>
-      </el-radio-group>
+      <SegmentedControl
+        v-model="importStatusFilter"
+        :options="statusOptions"
+        :aria-label="$t('Status')"
+      />
     </div>
     <div class="progress-row">
       <el-progress :percentage="processedPercent" />
@@ -42,6 +41,7 @@
 
 <script>
 import DataTable from '@/components/Table/DataTable/index.vue'
+import SegmentedControl from '@/components/Common/SegmentedControl/index.vue'
 import { getUpdateObjURL } from '@/utils/common/index'
 import { sleep } from '@/utils/common/time'
 import { EditableInputFormatter } from '@/components/Table/TableFormatters'
@@ -51,7 +51,8 @@ import getStatusColumnMeta from '@/components/Table/ListTable/TableAction/const'
 export default {
   name: 'ImportTable',
   components: {
-    DataTable
+    DataTable,
+    SegmentedControl
   },
   props: {
     jsonData: {
@@ -153,6 +154,14 @@ export default {
     }
   },
   computed: {
+    statusOptions() {
+      return [
+        { value: 'all', label: `${this.$t('Total')}: ${this.totalCount}` },
+        { value: 'ok', label: `${this.$t('Success')}: ${this.successCount}` },
+        { value: 'error', label: `${this.$t('Failed')}: ${this.failedCount}` },
+        { value: 'pending', label: `${this.$t('Pending')}: ${this.pendingCount}` }
+      ]
+    },
     tableColumnNameMapper() {
       const mapper = {}
       for (const column of this.tableConfig.columns) {
@@ -497,14 +506,6 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-// 顶部状态 tab 统一 30px 高度
-.tableFilter :deep(.el-radio-button__inner) {
-  height: 30px;
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
 }
 
 .progress-row {

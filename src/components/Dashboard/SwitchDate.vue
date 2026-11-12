@@ -1,23 +1,19 @@
 <template>
-  <span class="switch" role="group">
-    <button
-      v-for="i in iOptions"
-      :key="i.value"
-      type="button"
-      class="switch-date-button"
-      :class="{ 'is-active': String(i.value) === String(select) }"
-      :aria-pressed="String(i.value) === String(select)"
-      @click="onChange(i.value)"
-    >
-      {{ i.label }}
-    </button>
-  </span>
+  <SegmentedControl
+    :model-value="select"
+    :options="segmentedOptions"
+    :aria-label="$t('Date')"
+    @change="onChange"
+  />
 </template>
 
 <script>
 import { scopedLocalStorage as localStorage } from '@/utils/storage'
+import SegmentedControl from '@/components/Common/SegmentedControl/index.vue'
 
 export default {
+  components: { SegmentedControl },
+  emits: ['change'],
   props: {
     name: {
       type: String,
@@ -50,6 +46,11 @@ export default {
     return {
       select: this.days == null ? null : String(this.days),
       iOptions: this.options.length > 0 ? this.options : defaultOptions
+    }
+  },
+  computed: {
+    segmentedOptions() {
+      return this.iOptions.map((option) => ({ ...option, value: String(option.value) }))
     }
   },
   watch: {
@@ -88,47 +89,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.switch {
-  display: inline-flex;
-  font-weight: 400;
-  vertical-align: middle;
-
-  .switch-date-button {
-    min-width: 64px;
-    height: 28px;
-    padding: 7px 15px;
-    margin: 0 0 0 -1px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1;
-    color: var(--color-text-primary);
-    cursor: pointer;
-    background: #fff;
-    border: 1px solid var(--color-border);
-    border-radius: 0;
-    outline: none;
-
-    &:first-child {
-      margin-left: 0;
-    }
-
-    &:hover,
-    &:focus-visible {
-      position: relative;
-      z-index: 1;
-      color: var(--color-primary);
-      border-color: var(--color-primary);
-    }
-
-    &.is-active {
-      position: relative;
-      z-index: 2;
-      color: var(--menu-active-text, var(--menu-text-active));
-      background: var(--menu-hover);
-      border-color: var(--color-primary);
-    }
-  }
-}
-</style>

@@ -22,6 +22,7 @@ export default [
         name: 'IntegrationApplicationList',
         meta: {
           title: i18n.t('ApplicationIntegration'),
+          cacheIgnoreQueryKeys: ['documentation', 'sdk_language'],
           permissions: ['accounts.view_integrationapplication']
         }
       },

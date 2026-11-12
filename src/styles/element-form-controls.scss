@@ -90,7 +90,10 @@
 
   .el-radio-group .el-radio__input {
     flex: 0 0 auto;
-    margin-top: 8px;
+    // 圆点在 30px 首行内居中，兼容不同尺寸，并保持长文案换行时的首行对齐。
+    height: 30px;
+    align-items: center;
+    margin-top: 0;
   }
 
   .el-radio-group .el-radio__label {

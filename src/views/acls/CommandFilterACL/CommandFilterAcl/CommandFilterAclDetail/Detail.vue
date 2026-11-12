@@ -34,8 +34,10 @@ export default {
           value: this.object.action?.label
         },
         this.object.action?.value === 'review' && {
-          key: this.$t('Reviewer'),
-          value: this.object?.reviewers.map((item) => item?.name).join(', ')
+          key: this.$t(this.object.workflow ? 'WFWorkflows' : 'Reviewer'),
+          value: this.object.workflow
+            ? this.object.workflow_name || '-'
+            : this.object?.reviewers.map((item) => item?.name).join(', ')
         },
         'priority',
         'is_active',
