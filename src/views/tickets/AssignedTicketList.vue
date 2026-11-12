@@ -125,6 +125,7 @@
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import Dialog from '@/components/Dialog'
 import { mapGetters } from 'vuex'
+import { getPendingTicketsUrl } from '@/api/ticket'
 import { h } from 'vue'
 import TicketValueList from './components/TicketValueList'
 import BaseTicketList from './BaseTicketList'
@@ -196,7 +197,7 @@ export default {
         return `/api/v1/tickets/tickets/?cc_users__id=${this.currentUser.id}`
       }
       return this.tab === 'pending'
-        ? `/api/v1/tickets/tickets/?assignees__id=${this.currentUser.id}&state=pending`
+        ? getPendingTicketsUrl(this.currentUser.id)
         : `/api/v1/tickets/tickets/?processed_by=${this.currentUser.id}`
     },
     ...mapGetters(['currentUser'])

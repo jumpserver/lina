@@ -8,6 +8,7 @@
       :header-actions="iTicketAction"
       :quick-filters="quickFilters"
       :table-config="ticketTableConfig"
+      @loaded="onTableLoaded"
     >
       <template #tableBefore>
         <slot name="tableBefore" />
@@ -17,6 +18,7 @@
 </template>
 
 <script>
+import { eventBus } from '@/utils/vue/eventbus'
 import { getTicketDetailRoute } from './plugins/registry'
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter, TagChoicesFormatter } from '@/components/Table/TableFormatters'
@@ -223,6 +225,9 @@ export default {
     this.loadTypes()
   },
   methods: {
+    onTableLoaded() {
+      eventBus.emit('ticket-count-refresh')
+    },
     async loadTypes() {
       try {
         const types = await this.$axios.get('/api/v1/tickets/ticket-types/')
