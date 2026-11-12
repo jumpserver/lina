@@ -145,9 +145,10 @@ export default {
         throw new Error(this.$t('PamRotationExpired'))
       }
       const changeAccount = this.pamRotation.change_account
-      if (!changeAccount) throw new Error(this.$t('PamRotationExpired'))
+      const assetId = changeAccount?.asset_id ?? credential.asset?.id
+      if (!changeAccount || !assetId) throw new Error(this.$t('PamRotationExpired'))
       this.pamRotation.credential_id = credential.id
-      this.asset_ids = [credential.asset.id]
+      this.asset_ids = [assetId]
       Object.assign(this.initial, {
         name: `${credential.name}-${this.$t('ChangeSecret')}-${this.pamRotation.id.slice(0, 8)}`,
         assets: this.asset_ids,

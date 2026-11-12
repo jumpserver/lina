@@ -124,7 +124,7 @@ export default {
                   formatter: (row) =>
                     this.renderRotationValue(
                       row,
-                      row.asset?.name || row.asset?.address || '-',
+                      credentialAssetLabels(row).join(', ') || '-',
                       credentialAssetLabels(row).join(', ') || '-'
                     )
                 },
@@ -207,12 +207,11 @@ export default {
   },
   methods: {
     renderSubscriptionAccounts(row) {
-      const accountName = (account) => account?.username || account?.name || '-'
       const accounts = row.subscription_accounts_preview || []
       const remaining = Math.max(0, (row.subscription_accounts_amount ?? 0) - accounts.length)
       const summary = row.subscription_all_authorized
         ? this.$t('AllApplicationAccounts')
-        : accounts.map(accountName).join(', ') || '-'
+        : accounts.map(subscribedAccountLabel).join(', ') || '-'
       return (
         <el-tooltip
           placement="top"
@@ -250,7 +249,7 @@ export default {
     renderRotationAccount(row, account) {
       return this.renderRotationValue(
         row,
-        account?.username || account?.name || '-',
+        subscribedAccountLabel(account),
         subscribedAccountLabel(account)
       )
     },
