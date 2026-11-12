@@ -17,7 +17,7 @@
   >
     <el-alert v-if="disabled && platformDetail" style="margin-bottom: 10px" type="info">
       {{ $t('InheritPlatformConfig') }}
-      <el-link :href="platformDetail" class="link-more" target="_blank">
+      <el-link :href="platformDetail" class="platform-detail-link" target="_blank">
         {{ $t('View') }}
       </el-link>
       <i class="fa fa-external-link" />
@@ -171,9 +171,8 @@ export default {
   margin-bottom: 0;
 }
 
-.link-more {
-  font-size: 10px;
-  border-bottom: solid 1px;
-  color: inherit;
+.setting-dialog .platform-detail-link {
+  font-size: inherit;
+  line-height: inherit;
 }
 </style>
