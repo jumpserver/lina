@@ -54,7 +54,7 @@
           <dl v-if="state.session" class="screen-lock-user">
             <dt class="screen-lock-label">{{ $t('User') }}</dt>
             <dd class="screen-lock-user-value">
-              {{ state.session.user.name || state.session.user.username }}
+              {{ userDisplayName }}
             </dd>
           </dl>
           <p
@@ -179,6 +179,10 @@ export default {
   }),
   computed: {
     state: () => webSessionLockState,
+    userDisplayName() {
+      const { name, username } = this.state.session?.user || {}
+      return name && username ? `${name} (${username})` : name || username || ''
+    },
     busy() {
       return this.pendingAction !== ''
     },
