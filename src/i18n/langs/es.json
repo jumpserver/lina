@@ -1566,6 +1566,7 @@
   "PassKey": "Clave de acceso",
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "Su fuente de autenticación es {source}, no se admite la adición de Passkey.",
+  "PasskeyAlreadyRegistered": "Este dispositivo o autenticador ya tiene una clave de acceso para esta cuenta. Use la clave existente o inténtelo con otro dispositivo o autenticador.",
   "PasskeySummary": "Autenticación biométrica sin contraseña",
   "Passphrase": "Contraseña de la clave",
   "Password": "Contraseña",

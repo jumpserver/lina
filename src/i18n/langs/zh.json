@@ -1605,6 +1605,7 @@
   "PassKey": "Passkey",
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "你的认证来源是 {source}, 不支持添加 Passkey",
+  "PasskeyAlreadyRegistered": "当前设备或认证器已添加此账号的 Passkey，请使用已有 Passkey，或更换设备/认证器后重试。",
   "PasskeySummary": "无密码生物识别认证",
   "Passphrase": "密钥密码",
   "Password": "密码",

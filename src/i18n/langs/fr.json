@@ -1586,6 +1586,7 @@
   "PassKey": "Clé d'accès",
   "Passkey": "Clé d'accès",
   "PasskeyAddDisableInfo": "Votre source d'authentification est {source}, et l'ajout d'une clé d'accès n'est pas pris en charge",
+  "PasskeyAlreadyRegistered": "Cet appareil ou cet authentificateur possède déjà une clé d’accès pour ce compte. Utilisez la clé existante ou réessayez avec un autre appareil ou authentificateur.",
   "PasskeySummary": "Authentification biométrique sans mot de passe",
   "Passphrase": "Mot de passe de la clé",
   "Password": "Mot de passe",
