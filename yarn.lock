@@ -711,41 +711,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@intlify/core-base@npm:11.4.6":
-  version: 11.4.6
-  resolution: "@intlify/core-base@npm:11.4.6"
+"@intlify/core-base@npm:11.4.14":
+  version: 11.4.14
+  resolution: "@intlify/core-base@npm:11.4.14"
   dependencies:
-    "@intlify/devtools-types": "npm:11.4.6"
-    "@intlify/message-compiler": "npm:11.4.6"
-    "@intlify/shared": "npm:11.4.6"
-  checksum: 10c0/e729a3819a8ac97b5f5dc9859ddd5b96ef26e8be75b238dc717e16805ec4c20d83756959efcfaa0f6120c1165bddefcb3bf480a28b9412478a124ff0000c4c15
+    "@intlify/devtools-types": "npm:11.4.14"
+    "@intlify/message-compiler": "npm:11.4.14"
+    "@intlify/shared": "npm:11.4.14"
+  checksum: 10c0/ae563e917b9a8fc462fefce7c39486833ecb381afa65745c434d91a14da1410df23fb37ccc665c3f6ab5b868489877153b3086ed40af440f9a18b4e7f7cb2cfa
   languageName: node
   linkType: hard
 
-"@intlify/devtools-types@npm:11.4.6":
-  version: 11.4.6
-  resolution: "@intlify/devtools-types@npm:11.4.6"
+"@intlify/devtools-types@npm:11.4.14":
+  version: 11.4.14
+  resolution: "@intlify/devtools-types@npm:11.4.14"
   dependencies:
-    "@intlify/core-base": "npm:11.4.6"
-    "@intlify/shared": "npm:11.4.6"
-  checksum: 10c0/716303d7f0258b1312a0f7183a9d8e2641261a8be007fc274afb81122ddba8d0fb792f06eadd1c2dfa57b7b4482848d915ec89680a3bfbbe6669e3d4db131d12
+    "@intlify/core-base": "npm:11.4.14"
+    "@intlify/shared": "npm:11.4.14"
+  checksum: 10c0/42015e849fe69ad9f845853780783dd19f89edd992ab5269fa0d2e222ef53687db544813fde311cc9b932763c6ec10135bd52e3a1faf56cb39e1c95b61814f77
   languageName: node
   linkType: hard
 
-"@intlify/message-compiler@npm:11.4.6":
-  version: 11.4.6
-  resolution: "@intlify/message-compiler@npm:11.4.6"
+"@intlify/message-compiler@npm:11.4.14":
+  version: 11.4.14
+  resolution: "@intlify/message-compiler@npm:11.4.14"
   dependencies:
-    "@intlify/shared": "npm:11.4.6"
+    "@intlify/shared": "npm:11.4.14"
     source-map-js: "npm:^1.0.2"
-  checksum: 10c0/47457613d312e324f3f5944f20d78123eb2ae9ce95514e5a021ab56a23d46d89a1178e76f3b1bfb59b1a982d92d4e9c8b944e500bed90ef16c2182c35211a048
+  checksum: 10c0/389636cb1a11da3641a9f80ab272ec1c63a2637a2bbe6b74df5cdf36dc18d8d51932bb26233c0b32d67defaf63fbb1645199c12f2c11621e4f3d62f5e9a3d92b
   languageName: node
   linkType: hard
 
-"@intlify/shared@npm:11.4.6":
-  version: 11.4.6
-  resolution: "@intlify/shared@npm:11.4.6"
-  checksum: 10c0/bfe9b44a85ad7bfd03162a07b3943c4e6f9421f0303e28f83dcff2d6dbbab7515250f36985063b89b4928bd8f94c466f9ad0ee71e687e15ed99f3242d377243a
+"@intlify/shared@npm:11.4.14":
+  version: 11.4.14
+  resolution: "@intlify/shared@npm:11.4.14"
+  checksum: 10c0/fa9911e620940f55a60b7d4aaf42cca6ddf4c37d231b924c65cc51af16dd2c5fa98d77f1b07174dfe956da23857ea21eb12634ff3b32eb99a6dc3286776f66b4
   languageName: node
   linkType: hard
 
@@ -3252,15 +3252,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:^3.4.16":
-  version: 3.4.16
-  resolution: "dompurify@npm:3.4.16"
+"dompurify@npm:^3.4.17":
+  version: 3.4.17
+  resolution: "dompurify@npm:3.4.17"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10c0/65a901c6b6d489d3e898f67223d81dac66d613cda48f5785f0ed52a4ae320c4b2745490a58c14161e29f0273080fea0a0cb234a9ef892650e1a9b2a7befa07a5
+  checksum: 10c0/6a12251ef5e700fc91b6d96d33e9f8b5fd590c55276f632cf42d182c5808e9f48d5bef435ab26eac235dfcc05ed8fe95e1c8308dcc502bf1050e561f14d0361a
   languageName: node
   linkType: hard
 
@@ -3675,12 +3675,12 @@ __metadata:
   linkType: hard
 
 "follow-redirects@npm:^1.16.0":
-  version: 1.16.1
-  resolution: "follow-redirects@npm:1.16.1"
+  version: 1.16.2
+  resolution: "follow-redirects@npm:1.16.2"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 10c0/544e24ccb93b7afb5dd5a2199bd556e167b84de2af7c13b2ced08494239677359d7883bae56ae43a9ca98ac5451e75cf4834a5fadd6fa79053b9248fac5447a4
+  checksum: 10c0/ff38c8ceb904e505021057f58d395ea5f2e7c34257032960a76b21df1726395ce753f5678b6ee3b15210a557277c00b2607c67b682ee4dec1f33cb5147e08e90
   languageName: node
   linkType: hard
 
@@ -4582,7 +4582,7 @@ __metadata:
     css-color-function: "npm:^1.3.3"
     decimal.js: "npm:^10.6.0"
     deepmerge: "npm:^4.3.1"
-    dompurify: "npm:^3.4.16"
+    dompurify: "npm:^3.4.17"
     echarts: "npm:^6.1.0"
     element-plus: "npm:^2.14.0"
     entities: "npm:^8.0.0"
@@ -4621,7 +4621,7 @@ __metadata:
     vue-codemirror: "npm:6.1.1"
     vue-cookie-next: "npm:^1.3.0"
     vue-echarts: "npm:^8.0.1"
-    vue-i18n: "npm:^11.4.4"
+    vue-i18n: "npm:^11.4.14"
     vue-i18n-extract: "npm:^2.0.7"
     vue-password-strength-meter: "npm:^2.0.0"
     vue-router: "npm:^5.1.0"
@@ -6536,9 +6536,9 @@ __metadata:
   linkType: hard
 
 "undici@npm:^6.25.0":
-  version: 6.28.0
-  resolution: "undici@npm:6.28.0"
-  checksum: 10c0/3029a70df06b38b5b2f30732932a1e92544c753cd82c8abdf0d35afad48e0ba91612e79fe3a442dbbb9434d6a9eba2b714d5ea28984c903dda2b5d5444f38354
+  version: 6.29.1
+  resolution: "undici@npm:6.29.1"
+  checksum: 10c0/2d6970289fcbaca69a484e968fbb5e6fdadf7d9bff30bb5476f71b619d143ec76df1c75a309ac3cb3b3d78238793c613dcaad47dc9d92b63f9e8e73b86ffec23
   languageName: node
   linkType: hard
 
@@ -6823,17 +6823,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-i18n@npm:^11.4.4":
-  version: 11.4.6
-  resolution: "vue-i18n@npm:11.4.6"
+"vue-i18n@npm:^11.4.14":
+  version: 11.4.14
+  resolution: "vue-i18n@npm:11.4.14"
   dependencies:
-    "@intlify/core-base": "npm:11.4.6"
-    "@intlify/devtools-types": "npm:11.4.6"
-    "@intlify/shared": "npm:11.4.6"
+    "@intlify/core-base": "npm:11.4.14"
+    "@intlify/devtools-types": "npm:11.4.14"
+    "@intlify/shared": "npm:11.4.14"
     "@vue/devtools-api": "npm:^6.5.0"
   peerDependencies:
     vue: ^3.0.0
-  checksum: 10c0/d3ca9b5172e5fc4e7f372a7af7adc98a76e9cbda617e7e53dc659c7b4f3b536494b52f35e931deb0c0bd70a13551c0288ad1dd4e6768f2bde4df15ccf18046bf
+  checksum: 10c0/95090bc78c27e8709610787ea4be80d3355e42e2496b2bf21ecdd8cf1a66cf2e809b0b390bf0c905ac98e637dffaadd30c591f9480fcdc8ddf58fbbc773e13a3
   languageName: node
   linkType: hard
 

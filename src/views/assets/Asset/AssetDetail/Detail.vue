@@ -191,6 +191,7 @@ export default {
           'type',
           'address',
           'platform',
+          'owner',
           'protocols',
           'zone',
           'directory_services',

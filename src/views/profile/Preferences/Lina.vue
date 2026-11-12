@@ -4,7 +4,6 @@
 
 <script>
 import Base from './Base.vue'
-import BoolTextReadonly from '@/components/Form/FormFields/BoolTextReadonly'
 
 export default {
   name: 'Lina',
@@ -15,26 +14,6 @@ export default {
     return {
       category: 'lina',
       fieldsMeta: {
-        file: {
-          fieldsMeta: {
-            has_secret_key: {
-              label: this.$t('Configured'),
-              component: BoolTextReadonly
-            },
-            secret_key: {
-              el: {
-                autocomplete: 'new-password',
-                name: 'file-encryption-password'
-              }
-            },
-            secret_key_again: {
-              el: {
-                autocomplete: 'new-password',
-                name: 'file-encryption-password-confirmation'
-              }
-            }
-          }
-        },
         basic: {
           fieldsMeta: {
             lang: {

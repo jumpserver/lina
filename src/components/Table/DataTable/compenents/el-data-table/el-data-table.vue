@@ -141,7 +141,11 @@
           </el-table>
         </div>
 
-        <div v-if="hasPagination" class="el-data-table__pagination-viewport">
+        <div
+          v-if="hasPagination"
+          ref="paginationViewport"
+          class="el-data-table__pagination-viewport"
+        >
           <el-pagination
             v-bind="{
               ...normalizedExtraPaginationAttrs,
@@ -790,6 +794,7 @@ export default {
       // https://github.com/ElemeFE/element/issues/1153
       total: null,
       tableLoading: false,
+      renderedContentHeight: null,
       listRequestId: 0,
       listAbortController: null,
       // 多选项的数组
@@ -814,19 +819,17 @@ export default {
       if (!this.fillHeight) {
         return undefined
       }
-      // Use intrinsic rendered heights so logos, wrapped cells and expanded
-      // rows can grow. Estimates only cover the initial/loading/empty render.
-      const headerHeight = this.contentHeights.header || 41
+      if (this.renderedContentHeight !== null) {
+        return { '--el-data-table-content-height': `${this.renderedContentHeight}px` }
+      }
+      // Element Plus renders a 40px header plus its 1px bottom separator.
+      const headerHeight = 41
       const rowHeight = 40
       const emptyBodyHeight = 96
       const loadingRows = this.tableLoading && !this.data.length && this.hasPagination
       const visibleRows = loadingRows ? this.size : this.data.length
-      const rowsHeight = visibleRows
-        ? loadingRows
-          ? visibleRows * rowHeight
-          : this.contentHeights.body || visibleRows * rowHeight
-        : emptyBodyHeight
-      const paginationHeight = this.hasPagination ? this.contentHeights.pagination || 44 : 0
+      const rowsHeight = visibleRows ? visibleRows * rowHeight : emptyBodyHeight
+      const paginationHeight = this.hasPagination ? 44 : 0
       const surfaceBorderHeight = 2 // 1px top and bottom borders.
       const surfaceContentHeight =
         headerHeight + rowsHeight + paginationHeight + surfaceBorderHeight
@@ -992,7 +995,16 @@ export default {
   },
   watch: {
     tableModeKey() {
-      this.$nextTick(() => this.selectStrategy.updateElTableSelection())
+      this.$nextTick(() => {
+        this.selectStrategy.updateElTableSelection()
+        this.observeTableContent()
+      })
+    },
+    fillHeight() {
+      this.$nextTick(this.observeTableContent)
+    },
+    showNoData() {
+      this.$nextTick(this.observeTableContent)
     },
     url: {
       handler(val, oldVal) {
@@ -1022,14 +1034,15 @@ export default {
       this.$emit('selection-change', val)
     },
     totalData(val) {
-      if (val && val.length !== this.total) {
-        this.page = defaultFirstPage
+      if (val) {
+        if (val.length !== this.total) this.page = defaultFirstPage
         this.total = val.length
         this.$nextTick(() => this.getList())
       }
     }
   },
   mounted() {
+    this.$nextTick(this.observeTableContent)
     if (this.saveQuery) {
       const query = queryUtil.get(location.href)
       if (query) {
@@ -1057,10 +1070,36 @@ export default {
     this.debouncedGetListFromRemote = _.debounce(this.getListFromRemote, 300)
   },
   beforeUnmount() {
+    this.tableContentObserver?.disconnect()
     this.invalidateListRequest()
   },
   methods: {
     isColumnDraggable,
+    observeTableContent() {
+      this.tableContentObserver?.disconnect()
+      this.renderedContentHeight = null
+      if (!this.fillHeight) return
+
+      const table = this.$refs.table?.$el
+      if (!table) return
+      const header = table.querySelector('.el-table__header')
+      const body = table.querySelector('.el-table__body')
+      const pagination = this.$refs.paginationViewport
+      const measure = () => {
+        // Measure intrinsic table content, not the constrained scroll viewport.
+        // Multiline cells and expanded rows can exceed the nominal 40px row height.
+        if (!table.isConnected || !table.getClientRects().length) return
+        const headerHeight = header?.getBoundingClientRect().height || 0
+        const bodyHeight = this.data.length ? body?.getBoundingClientRect().height || 0 : 96
+        const paginationHeight = pagination?.getBoundingClientRect().height || 0
+        this.renderedContentHeight = Math.ceil(headerHeight + bodyHeight + paginationHeight) + 2
+      }
+      this.tableContentObserver = new ResizeObserver(measure)
+      for (const element of [header, body, pagination]) {
+        if (element) this.tableContentObserver.observe(element)
+      }
+      measure()
+    },
     invalidateListRequest() {
       this.debouncedGetListFromRemote?.cancel()
       this.listAbortController?.abort()

@@ -116,6 +116,7 @@
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { webSessionLockState, refreshWebSessionLock } from '@/composables/useWebSessionLock'
 
 export default {
   name: 'SiteMessages',
@@ -138,15 +139,31 @@ export default {
       unreadMsgCount: 0,
       markingMessageIds: [],
       pendingPopupMessages: [],
-      popupMessageIds: new Set()
+      popupMessageIds: new Set(),
+      siteMsgSocket: null,
+      siteMsgReconnectTimer: null,
+      siteMsgRetryDelay: 1000,
+      siteMsgRetryCount: 0,
+      siteMsgDisposed: false
     }
   },
   computed: {
+    webSessionUsable() {
+      return (
+        webSessionLockState.ready &&
+        Boolean(webSessionLockState.session) &&
+        !webSessionLockState.logoutAt
+      )
+    },
     width() {
       return this.$store.state.app.device === 'mobile' ? '100%' : '450px'
     }
   },
   watch: {
+    webSessionUsable(usable) {
+      if (usable) this.enablePullMsgCount()
+      else this.disconnectSiteMessages()
+    },
     msgDetailVisible(visible) {
       if (!visible) this.$nextTick(() => this.showNextPopupMessage())
     },
@@ -156,6 +173,10 @@ export default {
   },
   mounted() {
     this.enablePullMsgCount()
+  },
+  beforeUnmount() {
+    this.siteMsgDisposed = true
+    this.disconnectSiteMessages()
   },
   methods: {
     handleClose() {
@@ -345,17 +366,37 @@ export default {
     cancelRead() {
       this.msgDetailVisible = false
     },
+    disconnectSiteMessages() {
+      clearTimeout(this.siteMsgReconnectTimer)
+      this.siteMsgReconnectTimer = null
+      this.siteMsgRetryDelay = 1000
+      this.siteMsgRetryCount = 0
+      const ws = this.siteMsgSocket
+      this.siteMsgSocket = null
+      if (ws) {
+        ws.onclose = null
+        ws.onerror = null
+        ws.onopen = null
+        ws.onmessage = null
+        ws.close()
+      }
+    },
     enablePullMsgCount() {
+      if (this.siteMsgDisposed || !this.webSessionUsable || this.siteMsgSocket) return
       const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
       const port = document.location.port ? ':' + document.location.port : ''
       const url = '/ws/notifications/site-msg/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
 
       const ws = new WebSocket(wsURL)
+      this.siteMsgSocket = ws
       ws.onopen = (event) => {
+        this.siteMsgRetryDelay = 1000
+        this.siteMsgRetryCount = 0
         this.$log.debug('Websocket connected: ', event)
       }
       ws.onmessage = (event) => {
+        if (this.siteMsgSocket !== ws || !this.webSessionUsable) return
         try {
           const data = JSON.parse(event.data)
           this.$log.debug('Data: ', data)
@@ -369,8 +410,19 @@ export default {
         }
       }
       ws.onerror = (error) => {
-        this.$message.error(this.$tc('ConnectWebSocketError'))
         this.$log.debug('site message ws error: ', error)
+      }
+      ws.onclose = (event) => {
+        if (this.siteMsgSocket !== ws) return
+        this.siteMsgSocket = null
+        if (this.siteMsgDisposed || !this.webSessionUsable) return
+        if (event.code === 1008) void refreshWebSessionLock().catch(() => {})
+        if (++this.siteMsgRetryCount === 3) this.$message.error(this.$tc('ConnectWebSocketError'))
+        this.siteMsgReconnectTimer = setTimeout(() => {
+          this.siteMsgReconnectTimer = null
+          this.enablePullMsgCount()
+        }, this.siteMsgRetryDelay)
+        this.siteMsgRetryDelay = Math.min(this.siteMsgRetryDelay * 2, 30000)
       }
     }
   }

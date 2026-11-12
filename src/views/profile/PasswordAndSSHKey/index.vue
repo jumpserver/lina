@@ -1,7 +1,12 @@
 <template>
   <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" @update:active-menu="handleUpdate" />
+      <component
+        :is="config.activeMenu"
+        :key="config.activeMenu"
+        :object="user"
+        @update:active-menu="handleUpdate"
+      />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -10,21 +15,19 @@
 import { GenericDetailPage } from '@/layout/components'
 import Password from './Password/Password.vue'
 import SSHKeyList from './SSHKey/SSHKeyList.vue'
-import UKey from './UKey/UKey.vue'
 
 export default {
   components: {
     GenericDetailPage,
     Password,
-    SSHKeyList,
-    UKey: UKey
+    SSHKeyList
   },
   data() {
     return {
       user: this.$store.state.users.profile,
       config: {
         title: this.$t('PasswordAndSSHKey'),
-        activeMenu: 'Password',
+        activeMenu: this.$route.query.tab === 'SSHKeyList' ? 'SSHKeyList' : 'Password',
         submenu: this.getSubmenu(),
         hasRightSide: false,
         hasActivity: false,
@@ -45,7 +48,11 @@ export default {
       handler(disabled) {
         this.config.submenu = this.getSubmenu()
         if (disabled && this.config.activeMenu === 'Password') {
-          this.config.activeMenu = 'SSHKeyList'
+          this.config.activeMenu =
+            this.$store.state.users.profile.can_public_key_auth &&
+            this.$hasPerm('authentication.view_sshkey')
+              ? 'SSHKeyList'
+              : 'Password'
         }
       }
     }
@@ -61,12 +68,9 @@ export default {
         {
           title: this.$t('LoginSSHKeySetting'),
           name: 'SSHKeyList',
-          disabled: !this.$store.state.users.profile.can_public_key_auth
-        },
-        {
-          title: this.$t('LoginUKeySetting'),
-          name: 'UKey',
-          hidden: !this.$store.state.users.profile.can_ukey_auth
+          disabled:
+            !this.$store.state.users.profile.can_public_key_auth ||
+            !this.$hasPerm('authentication.view_sshkey')
         }
       ]
     },

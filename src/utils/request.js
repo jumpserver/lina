@@ -12,6 +12,7 @@ import { message } from '@/utils/vue/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
 import { getRouter } from '@/router/registry'
+import { getRequestOrgId } from './requestOrg'
 import { BASE_API, LOGIN_PATH, LOGOUT_PATH } from '@/utils/env'
 
 // create an axios instance
@@ -21,6 +22,14 @@ const service = axios.create({
   timeout: 2 * 60 * 1000 // request timeout
 })
 
+let lockSignOutUntil = 0
+
+export function deferAuthFailureUntil(at) {
+  if (Number.isFinite(at)) {
+    lockSignOutUntil = Math.max(lockSignOutUntil, Math.min(at, Date.now() + 5000))
+  }
+}
+
 function beforeRequestAddToken(config) {
   const csrfToken = getTokenFromCookie()
   if (csrfToken) {
@@ -28,9 +37,9 @@ function beforeRequestAddToken(config) {
   }
   const router = getRouter()
   const currentRoute = router?.currentRoute?.value || router?.currentRoute
-  const queryOrgId = currentRoute?.query?.oid
   const storeOrgId = store.getters.currentOrg?.id
-  const orgId = config.headers['X-JMS-ORG'] || queryOrgId || storeOrgId
+  const orgId =
+    config.headers['X-JMS-ORG'] || getRequestOrgId(currentRoute, storeOrgId, window.location.hash)
   if (orgId) {
     config.headers['X-JMS-ORG'] = orgId
   }
@@ -68,6 +77,14 @@ function goToLogin() {
 }
 
 function ifUnauthorized({ response }) {
+  if (response.status === 401 && response.data?.code === 'authentication_required') {
+    response.config.disableFlashErrorMsg = true
+    return
+  }
+  if (response.status === 401 && lockSignOutUntil > Date.now()) {
+    response.config.disableFlashErrorMsg = true
+    return
+  }
   if (response.status === 401) {
     response.config.disableFlashErrorMsg = true
     if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
@@ -132,7 +149,7 @@ export function flashErrorMsg({ response, error }) {
 }
 
 function ifConfirmRequired({ response }) {
-  if (response.status !== 412) {
+  if (response.status !== 412 || response.config?.skipUserConfirmation) {
     return null
   }
   return new Promise((resolve, reject) => {
@@ -171,6 +188,10 @@ service.interceptors.response.use(
       return Promise.reject(error)
     }
     const response = error.response
+    if (response.status === 423 && response.data?.code === 'web_session_locked') {
+      window.dispatchEvent(new Event('jms:web-session-locked'))
+      return Promise.reject(error)
+    }
 
     if (isTemplateFollowingConflict(error)) {
       return retryWithoutTemplateFollowing(

@@ -13,20 +13,18 @@
     @confirm="visible = false"
   >
     <div v-if="confirmTypeRequired === 'relogin'">
-      <el-row class="user-confirm-dialog__row" :gutter="24">
-        <el-col :md="24" :sm="24">
-          <el-alert :title="$tc('ReLoginTitle')" center style="margin-bottom: 20px" type="error" />
-        </el-col>
-      </el-row>
-      <el-row class="user-confirm-dialog__row" :gutter="24">
-        <el-col :md="24" :sm="24">
-          <el-button class="confirm-btn" type="primary" @click="logout">
-            {{ $t('ReLogin') }}
-          </el-button>
-        </el-col>
-      </el-row>
+      <el-alert :title="$t('IdentityConfirm.ReloginHint')" :closable="false" type="warning" />
+      <div class="user-confirm-dialog__relogin-actions">
+        <el-button @click="visible = false">{{ $t('Cancel') }}</el-button>
+        <el-button type="primary" @click="logout">
+          {{ $t('IdentityConfirm.GoToLogin') }}
+        </el-button>
+      </div>
     </div>
     <div v-else class="jms-form-controls">
+      <p class="user-confirm-dialog__hint">
+        {{ $t(showPassword ? 'IdentityConfirm.PasswordHint' : 'IdentityConfirm.MFAHint') }}
+      </p>
       <el-row class="user-confirm-dialog__row user-confirm-dialog__row--field" :gutter="24">
         <el-col :md="24" :sm="24" :span="24" class="add">
           <el-select
@@ -154,6 +152,7 @@ export default {
       callback: null,
       cancel: null,
       processing: false,
+      confirmGeneration: 0,
       isFaceCaptureVisible: false,
       faceToken: null,
       faceCaptureUrl: null,
@@ -163,6 +162,10 @@ export default {
       noCodeMFA: ['face', 'passkey'],
       sendCodeMFA: ['email', 'sms', 'otp'],
       passkeyVisible: false,
+      passkeyStatusTimer: null,
+      passkeyTimeout: null,
+      passkeyRequestPending: false,
+      passkeyGeneration: 0,
       passkeyUrl: '/api/v1/authentication/passkeys/login/?mfa=1',
       closeReason: ''
     }
@@ -179,10 +182,16 @@ export default {
   beforeUnmount() {
     this.$eventBus.$off('showConfirmDialog', this.performConfirm)
     window.removeEventListener('message', this.handleFaceCaptureMessage)
+    this.confirmGeneration += 1
+    this.stopPasskeyVerification()
     this.stopFaceCapture()
   },
   methods: {
     handleSubTypeChange(val) {
+      this.confirmGeneration += 1
+      if (val !== 'passkey') {
+        this.stopPasskeyVerification()
+      }
       if (val !== 'face') {
         this.stopFaceCapture()
       }
@@ -197,8 +206,11 @@ export default {
         return
       }
       this.processing = true
+      this.closeReason = ''
+      this.title = this.$t('CurrentUserVerify')
       this.callback = callback
       this.cancel = cancel
+      const generation = ++this.confirmGeneration
       this.$log.debug('perform confirm action')
       const confirmType = response.data?.code
       const confirmUrl = '/api/v1/authentication/confirm/'
@@ -208,21 +220,31 @@ export default {
           disableFlashErrorMsg: true
         })
         .then((data) => {
+          if (generation !== this.confirmGeneration) return
           this.confirmTypeRequired = data.confirm_type
 
           if (this.confirmTypeRequired === 'relogin') {
-            this.$axios
-              .post(confirmUrl, { confirm_type: 'relogin', secret_key: 'x' })
+            this.title = this.$t('NeedReLogin')
+            if (data.relogin_required !== false) {
+              this.visible = true
+              return
+            }
+            // A recent login is already proof of identity; no extra user action is needed.
+            return this.$axios
+              .post(
+                confirmUrl,
+                { confirm_type: 'relogin', secret_key: 'x' },
+                { disableFlashErrorMsg: true }
+              )
               .then(() => {
-                this.closeReason = 'success'
-                this.callback()
-                this.visible = false
+                if (generation === this.confirmGeneration) this.onSuccess()
               })
-              .catch(() => {
-                this.title = this.$t('NeedReLogin')
+              .catch((err) => {
+                if (generation !== this.confirmGeneration) return
+                if (err.response?.data?.code !== 'relogin_required') throw err
+                // The recent-login window may have expired since discovery. Ask before leaving.
                 this.visible = true
               })
-            return
           }
           this.subTypeChoices = data.content
           const defaultSubType = this.subTypeChoices.filter((item) => !item.disabled)[0]
@@ -231,17 +253,24 @@ export default {
           this.visible = true
         })
         .catch((err) => {
+          if (generation !== this.confirmGeneration) return
           const data = err.response?.data
           const msg = data?.error || data?.detail || data?.msg || this.$t('GetConfirmTypeFailed')
           this.$message.error(msg)
-          this.cancel(err)
+          this.callback = null
+          this.cancel = null
+          cancel(err)
         })
         .finally(() => {
-          this.processing = false
+          if (generation === this.confirmGeneration) this.processing = false
         })
     }, 500),
     logout() {
-      window.location.href = `${LOGOUT_PATH}?next=${this.$route.fullPath}`
+      const { origin, pathname, search, hash } = window.location
+      const logoutUrl = new URL(LOGOUT_PATH, origin)
+      logoutUrl.searchParams.set('next', `${pathname}${search}${hash}`)
+      this.handleDialogClose()
+      window.location.href = logoutUrl.toString()
     },
     sendCode() {
       this.$axios
@@ -267,24 +296,43 @@ export default {
         })
     },
     handlePasskeyVerify() {
-      this.passkeyVisible = true
       this.checkPasskeyStatus()
     },
     checkPasskeyStatus() {
+      this.stopPasskeyVerification()
+      this.passkeyVisible = true
+      const generation = this.passkeyGeneration
       const url = '/api/v1/authentication/confirm/check/?confirm_type=mfa'
-      const t = setInterval(() => {
-        this.$axios.get(url).then(() => {
-          this.passkeyVisible = false
-          this.onSuccess()
-        })
+      this.passkeyStatusTimer = setInterval(() => {
+        if (generation !== this.passkeyGeneration || this.passkeyRequestPending) return
+        this.passkeyRequestPending = true
+        this.$axios
+          .get(url, { disableFlashErrorMsg: true, skipUserConfirmation: true })
+          .then(() => {
+            if (generation !== this.passkeyGeneration) return
+            this.onSuccess()
+          })
+          .catch(() => {
+            // No confirmation yet; keep checking until completion or timeout.
+          })
+          .finally(() => {
+            if (generation === this.passkeyGeneration) this.passkeyRequestPending = false
+          })
       }, 2000)
-      setTimeout(() => {
-        clearInterval(t)
-        if (this.passkeyVisible) {
-          this.passkeyVisible = false
-          this.$message.error(this.$tc('PasskeyTimeout'))
-        }
+      this.passkeyTimeout = setTimeout(() => {
+        if (generation !== this.passkeyGeneration) return
+        this.stopPasskeyVerification()
+        this.$message.error(this.$tc('PasskeyTimeout'))
       }, 20000)
+    },
+    stopPasskeyVerification() {
+      this.passkeyGeneration += 1
+      if (this.passkeyStatusTimer) clearInterval(this.passkeyStatusTimer)
+      if (this.passkeyTimeout) clearTimeout(this.passkeyTimeout)
+      this.passkeyStatusTimer = null
+      this.passkeyTimeout = null
+      this.passkeyRequestPending = false
+      this.passkeyVisible = false
     },
     startFaceCapture() {
       const url = '/api/v1/authentication/face/context/'
@@ -365,11 +413,12 @@ export default {
       this.secretValue = ''
       this.smsBtnText = this.$t('SendVerificationCode')
       this.smsBtnDisabled = false
-      this.passkeyVisible = false
+      this.stopPasskeyVerification()
       this.stopFaceCapture()
       this.processing = false
     },
     handleDialogClose() {
+      this.confirmGeneration += 1
       const shouldCancel = this.closeReason !== 'success'
       this.resetDialogState()
       this.visible = false
@@ -381,8 +430,12 @@ export default {
       this.cancel = null
     },
     onSuccess() {
+      this.confirmGeneration += 1
       this.closeReason = 'success'
       this.secretValue = ''
+      this.processing = false
+      this.stopPasskeyVerification()
+      this.stopFaceCapture()
       // 先捕获 callback 引用：this.visible = false 会触发 Dialog @close →
       // handleDialogClose，那里会把 this.callback 置 null,若在 nextTick 里再取
       // this.callback 就会是 null，导致 "this.callback is not a function"。
@@ -410,13 +463,15 @@ export default {
             ? encryptPassword(this.secretValue)
             : this.secretValue
       }
+      const generation = this.confirmGeneration
 
       this.$axios
         .post(`/api/v1/authentication/confirm/`, data)
         .then(() => {
-          this.onSuccess()
+          if (generation === this.confirmGeneration) this.onSuccess()
         })
         .catch((err) => {
+          if (generation !== this.confirmGeneration) return
           this.$message.error(err.message || this.$tc('ConfirmFailed'))
           this.stopFaceCapture()
         })
@@ -434,6 +489,24 @@ export default {
 
 .user-confirm-dialog__row {
   margin: 0 !important;
+}
+
+.user-confirm-dialog__hint {
+  margin: 0 12px 20px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.user-confirm-dialog__relogin-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+
+  .el-button + .el-button {
+    margin-left: 0;
+  }
 }
 
 .user-confirm-dialog__row--field + .user-confirm-dialog__row--field {

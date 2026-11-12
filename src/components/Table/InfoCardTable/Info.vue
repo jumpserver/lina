@@ -3,7 +3,13 @@
     <el-row>
       <el-col v-for="(item, i) of infos" :key="i" :span="12" class="panel-item">
         <small class="item-label">{{ item.title }}</small>
-        <h4 class="item-value">{{ item.content }}</h4>
+        <el-tooltip v-if="item.tooltip" :trigger="['hover', 'focus']" placement="top" effect="dark">
+          <template #content>
+            <div class="info-value-tooltip">{{ item.tooltip }}</div>
+          </template>
+          <h4 class="item-value" tabindex="0">{{ item.content }}</h4>
+        </el-tooltip>
+        <h4 v-else class="item-value">{{ item.content }}</h4>
       </el-col>
     </el-row>
   </div>
@@ -26,6 +32,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.info-value-tooltip {
+  max-width: min(480px, calc(100vw - 48px));
+  max-height: 50vh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 @mixin textOverflow {
   white-space: nowrap;
   text-overflow: ellipsis;

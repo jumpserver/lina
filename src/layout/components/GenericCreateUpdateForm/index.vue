@@ -259,7 +259,7 @@ export default {
     onPerformError: {
       type: Function,
       default(error, method, vm) {
-        if (error.templateFollowCancelled) return
+        if (error.templateFollowCancelled || !error.response) return
         const response = error.response
         const data = response.data
         if (response.status === 400 && data && typeof data === 'object') {
@@ -494,7 +494,8 @@ export default {
     },
     async getObjectDetail(url, id) {
       this.$log.debug('Get object detail: ', url)
-      let data = await this.$axios.get(url, { params: { id } })
+      const params = id == null || id === '' ? {} : { id }
+      let data = await this.$axios.get(url, { params })
       if (Array.isArray(data)) {
         data = {}
       }

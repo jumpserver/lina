@@ -17,16 +17,30 @@ export default {
     return {
       logo_file: null,
       url: '/api/v1/accounts/integration-applications/',
+      initial: {
+        accounts: { type: 'ids', ids: [] },
+        credential_notifications_enabled: false
+      },
       fields: [
         [this.$t('Basic'), ['name', 'logo']],
-        [this.$t('AccountPolicy'), ['accounts', 'ip_group']],
+        [this.$t('AuthorizationPolicy'), ['accounts', 'ip_group']],
+        [this.$t('AccountCredentialNotifications'), ['credential_notifications_enabled']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        credential_notifications_enabled: {
+          label: this.$t('AccountCredentialNotifications'),
+          type: 'switch',
+          helpText: this.$t('AccountCredentialNotificationsHelp')
+        },
+        ip_group: {
+          helpText: this.$t('IpGroupHelpText')
+        },
         accounts: {
           component: JSONManyToManySelect,
           el: {
-            value: [],
+            value: { type: 'ids', ids: [] },
+            allowedTypes: ['all', 'ids', 'attrs'],
             resource: vm.$t('Accounts'),
             select2: {
               url: '/api/v1/accounts/accounts/',
@@ -68,9 +82,13 @@ export default {
         }
       },
       hasSaveContinue: false,
-      createSuccessNextRoute: {
-        name: 'ApplicationDetail'
+      objectDetailRoute: {
+        name: 'IntegrationApplicationDetail'
       },
+      getNextRoute: (res) => ({
+        name: 'IntegrationApplicationDetail',
+        params: { id: res.id }
+      }),
       performSubmit(values) {
         const formData = new FormData()
         delete values['logo']

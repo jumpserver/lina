@@ -31,7 +31,7 @@
         placement="bottom-start"
         :popper-options="fieldMenuPopperOptions"
         :props="cascaderConfig"
-        popper-class="tag-search-field-popper"
+        :popper-class="`tag-search-field-popper ${fieldMenuClass}`"
         @change="handleMenuItemChange"
         @visible-change="handleCascaderVisibleChange"
       >
@@ -203,6 +203,10 @@ export default {
     searchConfig: {
       type: Object,
       default: () => ({})
+    },
+    fieldMenuClass: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -465,7 +469,7 @@ export default {
         this.searchInputElement &&
         this.placeholder &&
         !hasInputContent &&
-        (!this.cascaderVisible || !this.hasSelectedField) &&
+        !this.cascaderVisible &&
         !this.operatorMenuVisible
       )
     }

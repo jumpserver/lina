@@ -38,6 +38,7 @@ export default {
       fieldsMeta: {
         recipients: { dependsOn: 'notice_enabled' },
         reviewers: { dependsOn: 'review_enabled' },
+        workflow_name: { dependsOn: 'review_enabled' },
         review_duration: { dependsOn: 'review_enabled' }
       },
       formatters: {
@@ -120,7 +121,9 @@ export default {
             'mfa_enabled',
             'face_verify_enabled',
             'review_enabled',
-            ...(this.object.review_enabled ? ['reviewers', 'review_duration'] : []),
+            ...(this.object.review_enabled
+              ? [this.object.workflow ? 'workflow_name' : 'reviewers', 'review_duration']
+              : []),
             'push_account_enabled'
           ]
         },

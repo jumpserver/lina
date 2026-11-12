@@ -357,6 +357,11 @@
   > .el-date-editor .el-input__wrapper {
     border-color: var(--el-color-danger) !important;
   }
+
+  > .password-input > .el-input > .el-input__wrapper {
+    border-color: var(--el-color-danger) !important;
+    box-shadow: none !important;
+  }
 }
 
 // 普通 el-form（非 DataForm）的间距与标签对齐
@@ -442,7 +447,7 @@
 }
 
 .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label {
-  span {
+  > span {
     &::before {
       content: '*';
       margin-right: 4px;

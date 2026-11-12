@@ -1,5 +1,9 @@
 <template>
-  <ListTable v-bind="$attrs" ref="ListTable" class="list-table" />
+  <ListTable v-bind="$attrs" ref="ListTable" class="list-table">
+    <template v-if="$slots['search-after']" #search-after>
+      <slot name="search-after" />
+    </template>
+  </ListTable>
 </template>
 
 <script>

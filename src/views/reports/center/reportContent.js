@@ -62,3 +62,19 @@ export function reportTrend(table) {
 export function isReportCountColumn(key) {
   return key === 'count' || key.endsWith('_count')
 }
+
+export function reportTrendChart(trend) {
+  const width = 658
+  const height = 120
+  const points = trend.rows.map((row, index) => ({
+    x: trend.rows.length === 1 ? width / 2 : (index / (trend.rows.length - 1)) * width,
+    y: (1 - row.count / trend.maximum) * height
+  }))
+  const linePoints = points.map((point) => `${point.x},${point.y}`).join(' ')
+  return {
+    viewBox: `0 0 ${width} ${height}`,
+    points,
+    linePoints,
+    areaPoints: `${points[0].x},${height} ${linePoints} ${points.at(-1).x},${height}`
+  }
+}

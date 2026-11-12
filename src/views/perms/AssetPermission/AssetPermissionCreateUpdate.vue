@@ -15,6 +15,7 @@ import NodeSelect from '@/components/Form/FormFields/NodeSelect'
 import AccountFormatter from './components/AccountFormatter'
 import ExpireNoticePolicy from './components/ExpireNoticePolicy.vue'
 import ExpireSoonNoticeMinutes from './components/ExpireSoonNoticeMinutes.vue'
+import PermissionActions from './components/PermissionActions.vue'
 import { AllAccount } from '../const'
 import ProtocolsSelect from '@/components/Form/FormFields/AllOrSpec.vue'
 import {
@@ -175,6 +176,7 @@ export default {
           }
         },
         actions: {
+          component: PermissionActions,
           label: this.$t('Action'),
           helpText: this.$t('ActionsTips'),
           el: {

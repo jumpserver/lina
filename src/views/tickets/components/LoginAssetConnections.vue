@@ -1,36 +1,31 @@
 <template>
-  <el-table
-    :data="connections"
-    :aria-label="$t('ConnectionDetails')"
-    border
-    class="connection-details"
-    :max-height="480"
-  >
-    <el-table-column :label="$t('Asset')" min-width="180">
-      <template #default="{ row }">
-        <div class="connection-asset">{{ row.asset.name || row.asset.id || '-' }}</div>
-        <div v-if="row.asset.address" class="connection-address">{{ row.asset.address }}</div>
-      </template>
-    </el-table-column>
-    <el-table-column :label="$t('Account')" prop="account" min-width="120" />
-    <el-table-column :label="$t('ConnectionReason')" min-width="240">
-      <template #default="{ row, $index }">
-        <div class="connection-reason">
-          {{ expanded[$index] ? row.reason : previewReason(row.reason)
-          }}<span v-if="!expanded[$index] && isLongReason(row.reason)">…</span>
-        </div>
-        <el-button
-          v-if="isLongReason(row.reason)"
-          link
-          type="primary"
-          :aria-expanded="Boolean(expanded[$index])"
-          @click="expanded[$index] = !expanded[$index]"
-        >
-          {{ $t(expanded[$index] ? 'CollapseReason' : 'ExpandReason') }}
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <ul class="connection-details" :aria-label="$t('ConnectionDetails')">
+    <li v-for="(row, index) in connections" :key="index">
+      <el-row>
+        <el-col :sm="12">
+          {{ $t('ApplyLoginAsset') }}: {{ row.asset.name || row.asset.id || '-' }}
+          <span v-if="row.asset.address">({{ row.asset.address }})</span>
+        </el-col>
+        <el-col :sm="12">{{ $t('ApplyLoginAccount') }}: {{ row.account || '-' }}</el-col>
+        <el-col v-if="row.reason">
+          {{ $t('ConnectionReason') }}:
+          <span class="connection-reason"
+            >{{ expanded[index] ? row.reason : previewReason(row.reason)
+            }}<span v-if="!expanded[index] && isLongReason(row.reason)">…</span></span
+          >
+          <el-button
+            v-if="isLongReason(row.reason)"
+            link
+            type="primary"
+            :aria-expanded="Boolean(expanded[index])"
+            @click="expanded[index] = !expanded[index]"
+          >
+            {{ $t(expanded[index] ? 'CollapseReason' : 'ExpandReason') }}
+          </el-button>
+        </el-col>
+      </el-row>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -62,21 +57,18 @@ export default {
 
 <style scoped>
 .connection-details {
-  width: 100%;
-}
-
-.connection-details :deep(.cell) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 480px;
+  overflow-y: auto;
   overflow-wrap: anywhere;
-  word-break: normal;
+  font-size: 13px;
+  line-height: 1.8;
 }
 
-.connection-details :deep(td) {
-  vertical-align: top;
-}
-
-.connection-address {
-  color: var(--el-text-color-secondary);
-  font-size: 12px;
+.connection-details li + li {
+  margin-top: 8px;
 }
 
 .connection-reason {

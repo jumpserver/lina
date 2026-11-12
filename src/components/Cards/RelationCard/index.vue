@@ -43,8 +43,9 @@
             <td>
               <el-button
                 :disabled="iDisabled"
+                :title="$t('Remove')"
+                class="relation-remove-button"
                 size="small"
-                style="float: right"
                 type="danger"
                 @click="removeObject(obj)"
               >
@@ -420,6 +421,15 @@ tr.item td {
   padding: 8px 12px;
   font-size: 12px;
   line-height: 1;
+}
+
+.the-box :deep(.el-button.relation-remove-button) {
+  float: right;
+  width: 30px;
+  min-width: 30px;
+  height: 24px;
+  min-height: 24px;
+  padding: 0;
 }
 
 .the-box :deep(.el-button--primary),

@@ -13,10 +13,11 @@ import Password from './Password.vue'
 import AuthLimit from './AuthLimit.vue'
 import Session from './Session.vue'
 import Client from './Client.vue'
+import Web from './Web.vue'
 
 export default {
   name: 'Index',
-  components: { TabPage, Auth, Password, AuthLimit, Session, Client },
+  components: { TabPage, Auth, Password, AuthLimit, Session, Client, Web },
   data() {
     return {
       activeMenu: 'Auth',
@@ -36,6 +37,10 @@ export default {
         {
           title: this.$t('SessionSecurity'),
           name: 'Session'
+        },
+        {
+          title: this.$t('PersonalSecurity.Web'),
+          name: 'Web'
         },
         {
           title: this.$t('ClientSecurity'),
