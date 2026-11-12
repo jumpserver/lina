@@ -3363,6 +3363,7 @@
   "WFEvent": "事件",
   "WFErrorHelp": "流程因配置或申請資源異常結束，未授予新權限。請查看時間線，修正後重新申請。",
   "WFDecisionComment": "審批意見（可選）",
+  "WFWithdrawReason": "撤回原因（選填）",
   "WFTransfer": "轉交",
   "WFAddApprover": "加簽",
   "WFWithdraw": "撤回申請",
