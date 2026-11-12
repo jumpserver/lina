@@ -88,7 +88,7 @@ const timelineComponent = new Function(
   'buildEventLanes',
   'getCredentialRotationEvents',
   timeline
-    .match(/<script>([\s\S]*?)<\/script>/)[1]
+    .match(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/i)[1]
     .replace(/^import .*\n/gm, '')
     .replace('export default', 'return')
 )({}, buildEventLanes, (...args) => fetchEvents(...args))
@@ -218,7 +218,7 @@ const browserComponent = new Function(
   'ResizeObserver',
   'getCredentialEventHistory',
   browserSource
-    .match(/<script>([\s\S]*?)<\/script>/)[1]
+    .match(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/i)[1]
     .replace(/^import[\s\S]*?from ['"][^'"]+['"]\n/gm, '')
     .replace('export default', 'return')
 )(

@@ -747,7 +747,7 @@ async function createFormConfig(path, props = {}) {
   assert.match(source, /<GenericCreateUpdatePage\b[^>]*:title="null"/)
   assert.doesNotMatch(source, /<el-form\b|<style\b/)
   const script = source
-    .match(/<script>([\s\S]*?)<\/script>/)[1]
+    .match(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/i)[1]
     .replace(/^import[\s\S]*?from ['"][^'"]+['"]\n/gm, '')
     .replace('export default', 'return')
   const component = new Function(
