@@ -39,7 +39,7 @@ const bindings = {
 const component = new Function(
   ...Object.keys(bindings),
   parse(source)
-    .descriptor.script.content.replace(/^import .*$/gm, '')
+    .descriptor.script.content.replace(/^import[\s\S]*? from ['"][^'"]+['"]$/gm, '')
     .replace('export default', 'return')
 )(...Object.values(bindings))
 const messages = Object.fromEntries(
@@ -613,4 +613,48 @@ test('reopening Create starts clean after discarding unpublished and published d
     assert.equal(await component.beforeRouteLeave.call(vm), true)
     assert.equal(prompts, 1)
   }
+})
+
+test('choosing login confirmation replaces only organization-admin defaults', () => {
+  const vm = mount()
+  const approval = vm.definition.nodes.find(node => node.type === 'approval')
+  approval.config.strategy = 'all'
+  approval.config.timeout = 600
+  const explicit = structuredClone(approval)
+  explicit.id = 'explicit'
+  explicit.config.approvers = { type: 'user', value: ['reviewer'] }
+  vm.definition.nodes.push(explicit)
+  vm.workflow.type = 'login_confirm'
+  vm.changeTicketType('login_confirm')
+  assert.deepEqual(approval.config.approvers, { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] })
+  assert.equal(approval.config.strategy, 'all')
+  assert.equal(approval.config.timeout, 600)
+  assert.equal(approval.config.exclude_applicant, true)
+  assert.deepEqual(explicit.config.approvers, { type: 'user', value: ['reviewer'] })
+  vm.insert(vm.definition.edges[0], 'condition')
+  assert.ok(vm.definition.nodes.filter(node => node.type === 'approval').every(node => node.config.approvers.type !== 'org_admin'))
+})
+
+test('an existing login workflow keeps its approvers and blocks republishing an organization-admin node', async () => {
+  const vm = mount({ id: 'workflow', type: 'login_confirm', active_version: 'version-1' })
+  const definition = graph.newDefinition()
+  const approval = definition.nodes.find(node => node.type === 'approval')
+  approval.name = 'Login review'
+  vm.versions = [{ id: 'version-1', definition }]
+  await vm.selectVersion('version-1')
+  assert.equal(vm.definition.nodes.find(node => node.id === approval.id).config.approvers.type, 'org_admin')
+  let focused = false
+  vm.$refs.approverSourceField = { $el: { scrollIntoView() {}, querySelector: () => ({ focus: () => { focused = true } }) } }
+  const calls = []
+  vm.$axios = { post: async (...args) => calls.push(args), patch: async (...args) => calls.push(args) }
+  await vm.publish()
+  assert.deepEqual(calls, [])
+  assert.equal(vm.selectedId, approval.id)
+  assert.equal(focused, true)
+  assert.match(vm.approverError, /Login review.*不能使用组织管理员/)
+  vm.workflow.type = 'apply_asset'
+  assert.equal(vm.approverError, '')
+  vm.workflow.type = 'login_confirm'
+  vm.selected.config.approvers = { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] }
+  assert.equal(vm.approverError, '')
 })

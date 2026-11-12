@@ -3705,6 +3705,7 @@
   "WFApproversRequired_user_group": "Could not publish: select approver groups for the \"{node}\" node.",
   "WFApproversRequired_role": "Could not publish: select approver roles for the \"{node}\" node.",
   "WFQuorumApproversRequired": "Could not publish: select at least {required} approvers for the \"{node}\" node; currently {count} selected.",
+  "WFLoginOrgAdminUnsupported": "Could not publish: login confirmation cannot use organization administrators in the \"{node}\" node. Select specific users or a system role.",
   "WFStrategy": "Approval strategy",
   "WFStrategy_any": "Any one approves",
   "WFStrategy_all": "All approve",

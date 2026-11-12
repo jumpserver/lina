@@ -55,7 +55,11 @@
               />
             </el-form-item>
             <el-form-item :label="$t('WFBusinessType')">
-              <el-select v-model="workflow.type" :disabled="!!workflow.active_version">
+              <el-select
+                v-model="workflow.type"
+                :disabled="!!workflow.active_version"
+                @change="changeTicketType"
+              >
                 <el-option
                   v-for="type in ticketTypes"
                   :key="type.type"
@@ -191,13 +195,23 @@
                   />
                 </el-form-item>
                 <template v-if="selected.type === 'approval'">
-                  <el-form-item :label="$t('WFApprovers')">
+                  <el-form-item
+                    ref="approverSourceField"
+                    :label="$t('WFApprovers')"
+                    :error="
+                      !resourceResolver && approverValidationNode?.id === selected.id
+                        ? approverError
+                        : ''
+                    "
+                    :show-message="false"
+                  >
                     <el-select v-model="selected.config.approvers.type" @change="changeResolver">
                       <el-option
                         v-for="kind in resolvers"
                         :key="kind"
                         :value="kind"
                         :label="$t(`WFResolver_${kind}`)"
+                        :disabled="workflow.type === 'login_confirm' && kind === 'org_admin'"
                       />
                     </el-select>
                     <p v-if="selected.config.approvers.type === 'asset_owner'" class="help-block">
@@ -364,7 +378,14 @@ import { Page } from '@/layout/components'
 import IBox from '@/components/Common/IBox'
 import Select2 from '@/components/Form/FormFields/Select2'
 import ConditionEditor from './ConditionEditor'
-import { newDefinition, layoutGraph, insertNode, removeNode, nodeLabels } from './graph'
+import {
+  newApproval,
+  newDefinition,
+  layoutGraph,
+  insertNode,
+  removeNode,
+  nodeLabels
+} from './graph'
 import { getTicketTypeLabel } from '../const'
 import { getErrorResponseMsg } from '@/utils/common'
 export default {
@@ -501,6 +522,7 @@ export default {
     try {
       this.workflow = await this.$axios.get(`/api/v1/tickets/workflows/${this.$route.params.id}/`)
       await this.loadVersions()
+      if (!this.workflow.active_version) this.changeTicketType(this.workflow.type)
       if (this.versions.length) await this.selectVersion(this.workflow.active_version)
       else if (this.workflow.migration_notes?.unpublished_cc_user_ids?.length) {
         const node = this.definition.nodes.find((n) => n.type === 'cc')
@@ -539,6 +561,14 @@ export default {
     }
   },
   methods: {
+    changeTicketType(type) {
+      if (type !== 'login_confirm') return
+      for (const node of this.definition.nodes) {
+        if (node.type === 'approval' && node.config.approvers.type === 'org_admin') {
+          node.config.approvers = newApproval(type).approvers
+        }
+      }
+    },
     renameWorkflow(name) {
       this.workflow.name = name
       this.workflow.display_name = ''
@@ -612,7 +642,13 @@ export default {
       else delete this.selected.config.required
     },
     insert(edge, type) {
-      this.selectedId = insertNode(this.definition, edge, type, this.$t(nodeLabels[type])).id
+      this.selectedId = insertNode(
+        this.definition,
+        edge,
+        type,
+        this.$t(nodeLabels[type]),
+        this.workflow.type
+      ).id
     },
     remove() {
       if (!removeNode(this.definition, this.selectedId)) {
@@ -660,6 +696,13 @@ export default {
       const approvers = node.config?.approvers
       if (
         node.type === 'approval' &&
+        this.workflow.type === 'login_confirm' &&
+        approvers?.type === 'org_admin'
+      ) {
+        return this.$t('WFLoginOrgAdminUnsupported', { node: name })
+      }
+      if (
+        node.type === 'approval' &&
         approvers?.type === 'user' &&
         node.config.strategy === 'quorum'
       ) {
@@ -687,7 +730,7 @@ export default {
         this.approverValidationId = invalid.id
         this.selectedId = invalid.id
         await this.$nextTick()
-        const field = this.$refs.approverField?.$el
+        const field = (this.$refs.approverField || this.$refs.approverSourceField)?.$el
         field?.scrollIntoView({ block: 'nearest' })
         field?.querySelector('[role="combobox"]')?.focus({ preventScroll: true })
         return
