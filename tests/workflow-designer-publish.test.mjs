@@ -59,6 +59,7 @@ function mount(workflow = {}) {
     ...component.data(),
     $t: i18n.global.t,
     $hasPerm: () => true,
+    $store: { getters: { currentOrgIsRoot: true } },
     $nextTick: async () => {},
     $refs: {}
   }
@@ -696,4 +697,32 @@ test('an existing login asset-owner node stays visible and cannot be republished
   assert.match(vm.approverError, /Login review.*不能使用资产负责人/)
   vm.workflow.type = 'login_asset_confirm'
   assert.equal(vm.approverError, '')
+})
+
+
+test('ordinary organizations cannot create or copy login workflows while asset login stays editable', async () => {
+  const root = '00000000-0000-0000-0000-000000000000'
+  const vm = mount()
+  vm.ticketTypes = [{ type: 'apply_asset' }, { type: 'login_confirm' }, { type: 'login_asset_confirm' }]
+  vm.$store.getters.currentOrgIsRoot = false
+  assert.deepEqual(vm.availableTicketTypes.map(item => item.type), ['apply_asset', 'login_asset_confirm'])
+  vm.$store.getters.currentOrgIsRoot = true
+  assert.deepEqual(vm.availableTicketTypes, vm.ticketTypes)
+  vm.workflow = { ...vm.workflow, id: 'global-login', type: 'login_confirm', org_id: root, active_version: 'v1' }
+  assert.equal(vm.canEdit, true)
+  vm.$store.getters.currentOrgIsRoot = false
+  assert.equal(vm.loginWorkflowReadOnly, true)
+  assert.equal(vm.canEdit, false)
+  assert.ok(vm.availableTicketTypes.some(item => item.type === 'login_confirm'))
+  const before = structuredClone(vm.workflow)
+  vm.$axios = { patch: () => assert.fail('Read-only flow must not be changed'), post: () => assert.fail('Read-only flow must not be published') }
+  await vm.publish()
+  await vm.toggleEnabled()
+  assert.deepEqual(vm.workflow, before)
+  vm.workflow.org_id = 'historical-org'
+  vm.$store.getters.currentOrgIsRoot = true
+  assert.equal(vm.canEdit, false)
+  vm.$store.getters.currentOrgIsRoot = false
+  vm.workflow.type = 'login_asset_confirm'
+  assert.equal(vm.canEdit, true)
 })

@@ -29,6 +29,13 @@
     </template>
     <div v-loading="loading" class="workflow-designer">
       <el-alert
+        v-if="loginWorkflowReadOnly"
+        :title="$t('WFLoginGlobalOnly')"
+        type="info"
+        show-icon
+        :closable="false"
+      />
+      <el-alert
         v-if="approverError || error"
         :title="approverError || error"
         type="error"
@@ -61,7 +68,7 @@
                 @change="changeTicketType"
               >
                 <el-option
-                  v-for="type in ticketTypes"
+                  v-for="type in availableTicketTypes"
                   :key="type.type"
                   :value="type.type"
                   :label="typeLabel(type)"
@@ -413,6 +420,21 @@ export default {
     }
   },
   computed: {
+    availableTicketTypes() {
+      return this.ticketTypes.filter(
+        (type) =>
+          this.$store.getters.currentOrgIsRoot ||
+          type.type !== 'login_confirm' ||
+          (this.workflow.id && type.type === this.workflow.type)
+      )
+    },
+    loginWorkflowReadOnly() {
+      return (
+        this.workflow.type === 'login_confirm' &&
+        (!this.$store.getters.currentOrgIsRoot ||
+          (this.workflow.org_id && this.workflow.org_id !== '00000000-0000-0000-0000-000000000000'))
+      )
+    },
     resolvers() {
       return ['user', 'user_group', 'role', 'asset_owner', 'org_admin'].filter(
         (kind) => this.workflow.type !== 'login_confirm' || kind !== 'asset_owner'
@@ -462,7 +484,10 @@ export default {
       )
     },
     canEdit() {
-      return this.$hasPerm(this.workflow.id ? 'tickets.change_workflow' : 'tickets.add_workflow')
+      return (
+        !this.loginWorkflowReadOnly &&
+        this.$hasPerm(this.workflow.id ? 'tickets.change_workflow' : 'tickets.add_workflow')
+      )
     },
     selected() {
       return this.definition.nodes.find((n) => n.id === this.selectedId)
@@ -733,7 +758,7 @@ export default {
       return ''
     },
     async publish() {
-      if (this.saving) return
+      if (this.saving || !this.canEdit) return
       this.approverValidationId = null
       this.error = ''
       if (!this.workflow.name.trim()) {
@@ -801,6 +826,7 @@ export default {
       }
     },
     async toggleEnabled() {
+      if (!this.canEdit) return
       const data = await this.$axios.patch(`/api/v1/tickets/workflows/${this.workflow.id}/`, {
         enabled: !this.workflow.enabled,
         expected_version: this.workflow.active_version_number || 0

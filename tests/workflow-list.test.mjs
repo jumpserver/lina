@@ -36,3 +36,16 @@ test('workflow edit opens the selected designer instead of the default update dr
   assert.equal(title({ row: { name: 'Apply for asset', display_name: '申请资产' } }), '申请资产')
   assert.equal(title({ row: { name: 'Custom approval' } }), 'Custom approval')
 })
+
+
+test('login workflow edit actions are available only for global definitions in the global organization', () => {
+  const vm = { $t: key => key, $hasPerm: () => true, $store: { getters: { currentOrgIsRoot: false } } }
+  const actions = component.data.call(vm).tableConfig.columnsMeta.actions.formatterArgs
+  const row = { type: 'login_confirm', org_id: '00000000-0000-0000-0000-000000000000' }
+  assert.equal(actions.hasUpdate({ row }), false)
+  vm.$store.getters.currentOrgIsRoot = true
+  assert.equal(actions.hasUpdate({ row }), true)
+  assert.equal(actions.hasUpdate({ row: { ...row, org_id: 'historical-org' } }), false)
+  vm.$store.getters.currentOrgIsRoot = false
+  assert.equal(actions.hasUpdate({ row: { type: 'login_asset_confirm', org_id: 'org' } }), true)
+})

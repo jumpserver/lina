@@ -3707,6 +3707,7 @@
   "WFQuorumApproversRequired": "Could not publish: select at least {required} approvers for the \"{node}\" node; currently {count} selected.",
   "WFLoginOrgAdminUnsupported": "Could not publish: login confirmation cannot use organization administrators in the \"{node}\" node. Select specific users or a system role.",
   "WFLoginAssetOwnerUnsupported": "Could not publish: login confirmation has no assets and cannot use asset owners in the \"{node}\" node. Select another approver source.",
+  "WFLoginGlobalOnly": "Login confirmation workflows can only be configured in the global organization.",
   "WFStrategy": "Approval strategy",
   "WFStrategy_any": "Any one approves",
   "WFStrategy_all": "All approve",
