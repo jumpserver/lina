@@ -12,8 +12,9 @@ const { descriptor } = parse(source)
 const component = new Function(
   'IBox',
   'MarkdownRenderer',
+  'SegmentedControl',
   descriptor.script.content.replace(/^import .*\n/gm, '').replace('export default', 'return')
-)(null, null)
+)(null, null, null)
 
 function documentationView(query = {}) {
   const requests = []

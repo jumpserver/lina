@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
-import { createRenderer, h, computed, unref, markRaw, toRaw, nextTick } from 'vue'
+import { createRenderer, h, computed, unref, markRaw, toRaw, nextTick, KeepAlive } from 'vue'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import { createStore, mapGetters } from 'vuex'
 import lodash from 'lodash'
@@ -118,6 +118,81 @@ function renderer() {
     }
   })
 }
+test('SDK document switches reuse the cached page and follow route navigation', async () => {
+  const routes = await load('router/pam/integrations.js', {
+    empty: {},
+    i18n: { t: (value) => value }
+  })
+  const integration = routes[0].children.find((route) => route.name === 'IntegrationApplicationList')
+  const path = '/pam/integrations/services'
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [
+      { path, name: integration.name, meta: integration.meta, component: {} },
+      { path: '/other', component: {} }
+    ]
+  })
+  const SDKList = await load('views/accounts/Integration/SDKList.vue', {
+    IBox: {},
+    MarkdownRenderer: {},
+    SegmentedControl: {}
+  })
+  const instances = []
+  SDKList.created = function () {
+    instances.push(this)
+  }
+  SDKList.render = () => null
+  const app = renderer().createApp({
+    render() {
+      const route = router.currentRoute.value
+      return h(KeepAlive, () =>
+        route.name === integration.name && route.query.tab === 'docs'
+          ? h(SDKList, { key: getRouteCacheKey(route, 'org-1') })
+          : null
+      )
+    }
+  })
+  const requests = []
+  app.config.globalProperties.$axios = {
+    get: async (_url, { params }) => {
+      requests.push(params.language)
+      return { readme: 'documentation', runtime: params.language }
+    }
+  }
+  app.use(router)
+  await router.push({ path, query: { tab: 'docs' } })
+  app.mount({ children: [] })
+  await flush()
+
+  const view = instances[0]
+  const initialKey = getRouteCacheKey(router.currentRoute.value, 'org-1')
+  for (const tab of ['agent', 'socket', 'sdk', 'protocol', 'sdk']) {
+    view.selectDocumentation(tab)
+    await flush()
+    assert.equal(router.currentRoute.value.query.documentation, tab)
+    assert.equal(getRouteCacheKey(router.currentRoute.value, 'org-1'), initialKey)
+    assert.equal(instances.length, 1)
+  }
+  assert.deepEqual(requests, ['python'])
+
+  view.selectSDKLanguage('go')
+  await flush()
+  assert.equal(router.currentRoute.value.query.sdk_language, 'go')
+  assert.deepEqual(requests, ['python', 'go'])
+  await router.replace({ path, query: { tab: 'docs', documentation: 'sdk', sdk_language: 'java' } })
+  await flush()
+  assert.equal(view.sdkLanguage, 'java')
+  await router.push('/other?sdk_language=node')
+  await flush()
+  assert.equal(view.sdkLanguage, 'java')
+  await router.push({ path, query: { tab: 'docs' } })
+  await flush()
+  assert.equal(view.documentationTab, 'overview')
+  assert.equal(instances.length, 1)
+  assert.notEqual(getRouteCacheKey(router.currentRoute.value, 'org-2'), initialKey)
+  app.unmount()
+})
+
 async function flush() {
   for (let i = 0; i < 8; i++) {
     await nextTick()

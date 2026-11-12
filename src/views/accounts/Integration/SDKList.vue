@@ -18,17 +18,12 @@
               :value="language.value"
             />
           </el-select>
-          <el-radio-group
+          <SegmentedControl
             :model-value="documentationTab"
+            :options="documentationOptions"
             :aria-label="$t('SDKCenter')"
             @update:model-value="selectDocumentation"
-          >
-            <el-radio-button value="overview">{{ $t('IntegrationDocsOverview') }}</el-radio-button>
-            <el-radio-button value="agent">{{ $t('AgentAccess') }}</el-radio-button>
-            <el-radio-button value="socket">{{ $t('SocketAPIAccess') }}</el-radio-button>
-            <el-radio-button value="sdk">{{ $t('SDKAccess') }}</el-radio-button>
-            <el-radio-button value="protocol">{{ $t('IntegrationDocsProtocol') }}</el-radio-button>
-          </el-radio-group>
+          />
           <el-button
             :disabled="documentationLoading || documentationError || !activeDocument"
             :loading="exportLoading"
@@ -142,15 +137,25 @@
 <script>
 import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer/index.vue'
 import IBox from '@/components/Common/IBox/index.vue'
+import SegmentedControl from '@/components/Common/SegmentedControl/index.vue'
 import { printDocumentation } from './documentationPrint'
 
 const sdkLanguageValues = ['python', 'go', 'java', 'node']
+const documentationTitles = {
+  overview: 'IntegrationDocsOverview',
+  agent: 'AgentAccess',
+  socket: 'SocketAPIAccess',
+  sdk: 'SDKAccess',
+  protocol: 'IntegrationDocsProtocol'
+}
+const documentationTabs = Object.keys(documentationTitles)
 
 export default {
   name: 'SDKList',
   components: {
     IBox,
-    MarkdownRenderer
+    MarkdownRenderer,
+    SegmentedControl
   },
   data() {
     return {
@@ -159,9 +164,7 @@ export default {
       documentationLoading: false,
       documentationRequestId: 0,
       exportLoading: false,
-      documentationTab: ['overview', 'agent', 'socket', 'sdk', 'protocol'].includes(
-        this.$route.query.documentation
-      )
+      documentationTab: documentationTabs.includes(this.$route.query.documentation)
         ? this.$route.query.documentation
         : sdkLanguageValues.includes(this.$route.query.sdk_language)
           ? 'sdk'
@@ -186,14 +189,14 @@ export default {
     activeLanguage() {
       return this.documentationTab === 'sdk' ? this.sdkLanguage : 'python'
     },
+    documentationOptions() {
+      return documentationTabs.map((value) => ({
+        value,
+        label: this.$t(documentationTitles[value])
+      }))
+    },
     documentationTitle() {
-      return {
-        overview: 'IntegrationDocsOverview',
-        agent: 'AgentAccess',
-        socket: 'SocketAPIAccess',
-        sdk: 'SDKAccess',
-        protocol: 'IntegrationDocsProtocol'
-      }[this.documentationTab]
+      return documentationTitles[this.documentationTab]
     },
     documentationDescription() {
       if (this.documentationTab === 'agent') return 'AgentDescription'
@@ -278,7 +281,7 @@ export default {
     syncDocumentationFromRoute() {
       const language = this.$route.query.sdk_language
       const requestedTab = this.$route.query.documentation
-      const tab = ['overview', 'agent', 'socket', 'sdk', 'protocol'].includes(requestedTab)
+      const tab = documentationTabs.includes(requestedTab)
         ? requestedTab
         : sdkLanguageValues.includes(language)
           ? 'sdk'
@@ -327,10 +330,7 @@ export default {
       this.$nextTick(this.observeHeadings)
     },
     selectDocumentation(tab) {
-      if (
-        !['overview', 'agent', 'socket', 'sdk', 'protocol'].includes(tab) ||
-        this.documentationTab === tab
-      ) {
+      if (!documentationTabs.includes(tab) || this.documentationTab === tab) {
         return
       }
       const previousLanguage = this.activeLanguage

@@ -11,6 +11,7 @@ export function getRouteCacheKey(route, orgId = '') {
       DRAWER_QUERY_KEYS.includes(key) ||
       key === 'oid' ||
       key === 'tab' ||
+      route.meta?.cacheIgnoreQueryKeys?.includes(key) ||
       key.includes('updated') ||
       key.includes('order') ||
       key.startsWith('_')
