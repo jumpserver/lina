@@ -369,6 +369,7 @@ import DataTable from '@/components/Table/DataTable'
 import { generateApplicationAccessMaterials } from '@/api/applicationCredential'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { copy } from '@/utils/common/index'
+import { subscribedAccountLabel } from '../components/subscriptionAccount.js'
 
 export default {
   name: 'ApplicationAccessWizard',
@@ -518,7 +519,7 @@ export default {
     },
     accountOption(account) {
       return {
-        label: `${account.username || account.name} (${account.asset?.name || account.asset?.address || account.id})`,
+        label: subscribedAccountLabel(account),
         value: account.id
       }
     },
