@@ -704,3 +704,31 @@ test('deadline timers follow refreshed nodes and stop while the panel is inactiv
   t.mock.timers.tick(10000)
   assert.equal(vm.now, 4500)
 })
+
+test('withdrawal asks for a reason while pending approvers keep the decision comment', async () => {
+  const source = await readFile(
+    new URL('../src/views/tickets/components/WorkflowPanel.vue', import.meta.url),
+    'utf8'
+  )
+  const input = source.match(/<el-input\s+v-model="comment"[\s\S]*?\/>/)[0]
+  const render = new Function(
+    'Vue',
+    compile(input, { mode: 'function', prefixIdentifiers: true }).code
+  )(Vue)
+  for (const [myTask, canWithdraw, expected] of [
+    [null, true, 'WFWithdrawReason'],
+    [{ id: 'task' }, false, 'WFDecisionComment'],
+    [{ id: 'task' }, true, 'WFDecisionComment']
+  ]) {
+    const app = Vue.createSSRApp({
+      render,
+      setup: () => ({ myTask, canWithdraw, comment: '', deadlinePassed: false })
+    })
+    app.config.globalProperties.$t = (key) => key
+    app.component('ElInput', ElInput)
+    app.provide(ID_INJECTION_KEY, { prefix: 100, current: 0 })
+    const html = await renderToString(app)
+    assert.ok(html.includes(`placeholder="${expected}"`), html)
+    assert.doesNotMatch(html, /<textarea[^>]*\brequired\b/)
+  }
+})

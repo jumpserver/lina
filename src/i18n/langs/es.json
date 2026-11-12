@@ -3018,6 +3018,7 @@
   "WFEvent": "Event",
   "WFErrorHelp": "The workflow ended because its configuration or requested resources were invalid. No new access was granted. Review the timeline and submit a corrected request.",
   "WFDecisionComment": "Decision comment (optional)",
+  "WFWithdrawReason": "Motivo de retirada (opcional)",
   "WFTransfer": "Transfer",
   "WFAddApprover": "Add approver",
   "WFWithdraw": "Withdraw",

@@ -3790,6 +3790,7 @@
   "WFEvent": "事件",
   "WFErrorHelp": "流程因配置或申请资源异常结束，未授予新权限。请查看时间线，修正后重新申请。",
   "WFDecisionComment": "审批意见（可选）",
+  "WFWithdrawReason": "撤回原因（可选）",
   "WFTransfer": "转交",
   "WFAddApprover": "加签",
   "WFWithdraw": "撤回申请",
