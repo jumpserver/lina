@@ -206,6 +206,9 @@
                     :show-message="false"
                   >
                     <el-select v-model="selected.config.approvers.type" @change="changeResolver">
+                      <template #label>
+                        {{ $t(`WFResolver_${selected.config.approvers.type}`) }}
+                      </template>
                       <el-option
                         v-for="kind in resolvers"
                         :key="kind"
@@ -406,11 +409,15 @@ export default {
       moreVersions: false,
       selectedId: 'approval_1',
       ticketTypes: [],
-      nodeLabels,
-      resolvers: ['user', 'user_group', 'role', 'asset_owner', 'org_admin']
+      nodeLabels
     }
   },
   computed: {
+    resolvers() {
+      return ['user', 'user_group', 'role', 'asset_owner', 'org_admin'].filter(
+        (kind) => this.workflow.type !== 'login_confirm' || kind !== 'asset_owner'
+      )
+    },
     pluginConditionFields() {
       const labels = {
         'Validity (seconds)': 'WFFieldValidity',
@@ -564,7 +571,10 @@ export default {
     changeTicketType(type) {
       if (type !== 'login_confirm') return
       for (const node of this.definition.nodes) {
-        if (node.type === 'approval' && node.config.approvers.type === 'org_admin') {
+        if (
+          node.type === 'approval' &&
+          ['org_admin', 'asset_owner'].includes(node.config.approvers.type)
+        ) {
           node.config.approvers = newApproval(type).approvers
         }
       }
@@ -697,9 +707,14 @@ export default {
       if (
         node.type === 'approval' &&
         this.workflow.type === 'login_confirm' &&
-        approvers?.type === 'org_admin'
+        ['org_admin', 'asset_owner'].includes(approvers?.type)
       ) {
-        return this.$t('WFLoginOrgAdminUnsupported', { node: name })
+        return this.$t(
+          approvers.type === 'asset_owner'
+            ? 'WFLoginAssetOwnerUnsupported'
+            : 'WFLoginOrgAdminUnsupported',
+          { node: name }
+        )
       }
       if (
         node.type === 'approval' &&
