@@ -658,3 +658,42 @@ test('an existing login workflow keeps its approvers and blocks republishing an 
   vm.selected.config.approvers = { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] }
   assert.equal(vm.approverError, '')
 })
+
+
+test('login confirmation hides asset owners and replaces that source when switching business type', () => {
+  const vm = mount()
+  for (const type of ['apply_asset', 'login_asset_confirm']) {
+    vm.workflow.type = type
+    assert.ok(vm.resolvers.includes('asset_owner'))
+  }
+  const approval = vm.selected
+  approval.config.approvers = { type: 'asset_owner' }
+  approval.config.strategy = 'all'
+  approval.config.timeout = 600
+  vm.workflow.type = 'login_confirm'
+  vm.changeTicketType('login_confirm')
+  assert.deepEqual(vm.resolvers, ['user', 'user_group', 'role', 'org_admin'])
+  assert.deepEqual(approval.config.approvers, { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] })
+  assert.equal(approval.config.strategy, 'all')
+  assert.equal(approval.config.timeout, 600)
+  assert.equal(approval.config.exclude_applicant, true)
+})
+
+test('an existing login asset-owner node stays visible and cannot be republished', async () => {
+  const vm = mount({ id: 'workflow', type: 'login_confirm', active_version: 'version-1' })
+  const definition = graph.newDefinition()
+  const approval = definition.nodes.find(node => node.type === 'approval')
+  approval.name = 'Login review'
+  approval.config.approvers = { type: 'asset_owner' }
+  vm.versions = [{ id: 'version-1', definition }]
+  await vm.selectVersion('version-1')
+  assert.equal(vm.definition.nodes.find(node => node.id === approval.id).config.approvers.type, 'asset_owner')
+  assert.ok(!vm.resolvers.includes('asset_owner'))
+  const calls = []
+  vm.$axios = { post: async (...args) => calls.push(args), patch: async (...args) => calls.push(args) }
+  await vm.publish()
+  assert.deepEqual(calls, [])
+  assert.match(vm.approverError, /Login review.*不能使用资产负责人/)
+  vm.workflow.type = 'login_asset_confirm'
+  assert.equal(vm.approverError, '')
+})

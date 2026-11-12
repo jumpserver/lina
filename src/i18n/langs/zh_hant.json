@@ -3270,6 +3270,7 @@
   "WFApproversRequired_role": "未能發佈：請為「{node}」節點選擇審批角色。",
   "WFQuorumApproversRequired": "未能發佈：「{node}」節點至少選擇 {required} 名審批人，目前已選擇 {count} 名。",
   "WFLoginOrgAdminUnsupported": "未能發佈：登入複核的「{node}」節點不能使用組織管理員，請選擇指定使用者或系統角色。",
+  "WFLoginAssetOwnerUnsupported": "未能發佈：登入複核不涉及資產，「{node}」節點不能使用資產負責人，請選擇其他審批人來源。",
   "WFStrategy": "審批策略",
   "WFStrategy_any": "或簽（一人通過）",
   "WFStrategy_all": "會簽（全部通過）",
