@@ -3659,7 +3659,7 @@
   "WFTransferTo": "Transfer to",
   "WFAddedApprover": "Additional approver",
   "WFSelectMember": "Search by name or username",
-  "TicketSelectAssetFirst": "Select an asset first.",
+  "TicketSelectAssetFirst": "Select an asset first",
   "TicketNoAssetAccounts": "No accounts available on this asset.",
   "TicketAccountsLoadFailed": "Could not load accounts. Open the dropdown again to retry.",
   "TicketViewSecret": "View account password",

@@ -3653,7 +3653,7 @@
   "WFTransferTo": "转交给",
   "WFAddedApprover": "加签审批人",
   "WFSelectMember": "搜索姓名或用户名",
-  "TicketSelectAssetFirst": "请先选择资产。",
+  "TicketSelectAssetFirst": "请先选择资产",
   "TicketNoAssetAccounts": "该资产暂无可申请的账号。",
   "TicketAccountsLoadFailed": "账号加载失败，请重新打开下拉框重试。",
   "TicketViewSecret": "查看账号密码",

@@ -3226,7 +3226,7 @@
   "WFTransferTo": "轉交給",
   "WFAddedApprover": "加簽審批人",
   "WFSelectMember": "搜尋姓名或使用者名稱",
-  "TicketSelectAssetFirst": "請先選擇資產。",
+  "TicketSelectAssetFirst": "請先選擇資產",
   "TicketNoAssetAccounts": "該資產暫無可申請的帳號。",
   "TicketAccountsLoadFailed": "帳號載入失敗，請重新開啟下拉選單重試。",
   "TicketViewSecret": "檢視帳號密碼",
