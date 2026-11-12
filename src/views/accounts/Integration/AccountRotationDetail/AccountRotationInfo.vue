@@ -1,6 +1,13 @@
 <template>
   <section class="credential-info" :aria-label="$t('BasicInfo')">
     <el-alert
+      v-if="crossAssetRotation"
+      :title="$t('RotationCrossAssetWarning')"
+      type="warning"
+      :closable="false"
+      show-icon
+    />
+    <el-alert
       v-if="object.precheck && object.precheck.status !== 'passed'"
       :title="precheckMessage"
       :description="object.precheck.code === 'changed' ? object.precheck.detail : ''"
@@ -27,7 +34,7 @@ import DetailCard from '@/components/Cards/DetailCard/index.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { credentialStatusLabel } from '../components/credentialStatus.js'
-import { subscribedAccountLabel } from '../components/subscriptionAccount.js'
+import { credentialAssetLabels, subscribedAccountLabel } from '../components/subscriptionAccount.js'
 import { openTaskPage } from '@/utils/jms'
 import {
   advanceApplicationCredentialRotation,
@@ -38,8 +45,6 @@ import {
   getCredentialRotationStatus,
   retryCredentialChange
 } from '@/api/applicationCredential'
-
-const accountName = (account) => account?.username || account?.name || '-'
 
 export default {
   name: 'ApplicationCredentialInfo',
@@ -89,6 +94,11 @@ export default {
     clearTimeout(this.rotationStatusTimer)
   },
   computed: {
+    crossAssetRotation() {
+      const first = this.object.account?.asset?.id
+      const second = this.object.alternate_account?.asset?.id
+      return this.object.mode === 'alternating_rotation' && first && second && first !== second
+    },
     precheckMessage() {
       const precheck = this.object.precheck
       if (precheck?.status === 'checking') return this.$t('PamPrecheckRunning')
@@ -143,11 +153,16 @@ export default {
         items.push(
           {
             key: this.$t('Asset'),
-            value: asset.name ? `${asset.name} (${asset.address})` : '-'
+            value: credentialAssetLabels(this.object).join(', ') || '-'
           },
-          { key: this.$t('AssetType'), value: asset.platform?.name || '-' },
-          { key: this.$t('CurrentAccount'), value: accountName(this.object.active_account) },
-          { key: this.$t('NextAccount'), value: accountName(nextAccount) },
+          ...(!this.crossAssetRotation
+            ? [{ key: this.$t('AssetType'), value: asset.platform?.name || '-' }]
+            : []),
+          {
+            key: this.$t('CurrentAccount'),
+            value: subscribedAccountLabel(this.object.active_account)
+          },
+          { key: this.$t('NextAccount'), value: subscribedAccountLabel(nextAccount) },
           {
             key: this.$t('VerifyBeforeSwitch'),
             value: this.object.verify_before_switch === false ? this.$t('No') : this.$t('Yes')

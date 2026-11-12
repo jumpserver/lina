@@ -10,6 +10,10 @@ import { credentialUrl, saveApplicationCredential } from '@/api/applicationCrede
 import { subscribedAccountLabel } from './components/subscriptionAccount.js'
 
 const isRotation = (form) => form.mode === 'alternating_rotation'
+const rotationAccountUrl = (applicationIds) =>
+  applicationIds.length
+    ? `/api/v1/accounts/accounts/?fields=id,name,username,asset&integrationapplications=${applicationIds.join(',')}`
+    : ''
 
 export default {
   name: 'ApplicationCredentialCreateUpdate',
@@ -21,15 +25,29 @@ export default {
   emits: ['cancel', 'saved'],
   data() {
     const item = this.credential
-    const assetId = item?.asset?.id || ''
-    const accountUrl = assetId
-      ? `/api/v1/accounts/accounts/?asset_id=${assetId}&fields_size=small`
-      : ''
+    const applicationIds = (item?.applications || []).map((application) => application.id)
+    const accountUrl = rotationAccountUrl(applicationIds)
+    const accounts = new Map(
+      [item?.account, item?.alternate_account]
+        .filter(Boolean)
+        .map((account) => [account.id, account])
+    )
+    const selectedIds = [item?.account?.id || '', item?.alternate_account?.id || '']
+    const crossAssetHelp = () => {
+      const [first, second] = selectedIds.map((id) => accounts.get(id)?.asset?.id)
+      return first && second && first !== second ? `!${this.$t('RotationCrossAssetWarning')}` : ''
+    }
+    const accountAjax = {
+      transformOption: (account) => {
+        accounts.set(account.id, account)
+        return { label: subscribedAccountLabel(account), value: account.id }
+      }
+    }
     const fieldsMeta = {
       name: {
         label: this.$t('Name'),
         rules: [rules.Required],
-        el: { type: 'text', placeholder: this.$t('CredentialNamePlaceholder') }
+        el: { type: 'text' }
       },
       mode: {
         hidden: true,
@@ -48,43 +66,24 @@ export default {
         },
         el: { disabled: !!item?.id }
       },
-      asset_id: {
-        label: this.$t('Asset'),
-        component: Select2,
-        rules: [rules.RequiredChange],
-        hidden: (form) => !isRotation(form),
-        el: {
-          multiple: false,
-          url: '/api/v1/assets/assets/?fields_size=small',
-          placeholder: this.$t('SelectAsset')
-        },
-        on: {
-          change: ([value], updateForm) => {
-            const url = value
-              ? `/api/v1/accounts/accounts/?asset_id=${value}&fields_size=small`
-              : ''
-            for (const name of ['account_id', 'alternate_account_id']) {
-              Object.assign(this.formConfig.fieldsMeta[name].el, { url, disabled: !value })
-            }
-            this.formConfig.fieldsMeta.alternate_account_id.el.disabledValues = []
-            updateForm({ account_id: '', alternate_account_id: '' })
-          }
-        }
-      },
       account_id: {
         label: this.$t('Account'),
         component: Select2,
         rules: [rules.RequiredChange],
         hidden: (form) => !isRotation(form),
+        helpText: this.$t('RotationAccountsHelp'),
         el: {
           multiple: false,
-          disabled: !assetId,
+          disabled: !applicationIds.length,
           url: accountUrl,
+          ajax: accountAjax,
           placeholder: this.$t('SelectAccount')
         },
         on: {
           change: ([value]) => {
+            selectedIds[0] = value
             this.formConfig.fieldsMeta.alternate_account_id.el.disabledValues = value ? [value] : []
+            this.formConfig.fieldsMeta.alternate_account_id.helpText = crossAssetHelp()
           }
         }
       },
@@ -105,12 +104,20 @@ export default {
           }
         ],
         hidden: (form) => !isRotation(form),
+        helpText: crossAssetHelp(),
         el: {
           multiple: false,
-          disabled: !assetId,
+          disabled: !applicationIds.length,
           url: accountUrl,
+          ajax: accountAjax,
           disabledValues: item?.account?.id ? [item.account.id] : [],
           placeholder: this.$t('SelectAlternateAccount')
+        },
+        on: {
+          change: ([value]) => {
+            selectedIds[1] = value
+            this.formConfig.fieldsMeta.alternate_account_id.helpText = crossAssetHelp()
+          }
         }
       },
       verify_before_switch: {
@@ -178,6 +185,19 @@ export default {
           multiple: true,
           url: '/api/v1/accounts/integration-applications/?fields_size=small&is_active=true',
           placeholder: this.$t('SelectApplications')
+        },
+        on: {
+          change: ([value], updateForm) => {
+            if (this.currentMode !== 'alternating_rotation') return
+            const url = rotationAccountUrl(value)
+            for (const name of ['account_id', 'alternate_account_id']) {
+              Object.assign(this.formConfig.fieldsMeta[name].el, { url, disabled: !value.length })
+            }
+            selectedIds.fill('')
+            this.formConfig.fieldsMeta.alternate_account_id.el.disabledValues = []
+            this.formConfig.fieldsMeta.alternate_account_id.helpText = ''
+            updateForm({ account_id: '', alternate_account_id: '' })
+          }
         }
       },
       is_active: { label: this.$t('IsActive'), type: 'checkbox' },
@@ -197,7 +217,6 @@ export default {
         initial: {
           name: item?.name || '',
           mode: item?.mode || this.mode,
-          asset_id: assetId,
           account_id: item?.account?.id || '',
           alternate_account_id: item?.alternate_account?.id || '',
           verify_before_switch: item?.verify_before_switch ?? true,
@@ -206,16 +225,16 @@ export default {
             (account) => account.id
           ),
           subscription_all_authorized: item?.subscription_all_authorized ?? false,
-          application_ids: (item?.applications || []).map((application) => application.id),
+          application_ids: applicationIds,
           is_active: item?.is_active ?? true,
           comment: item?.comment || ''
         },
         fields: [
           [this.$t('Basic'), ['name', 'mode']],
+          [this.$t('ApplicationBinding'), ['application_ids']],
           [
             this.$t('AccountConfiguration'),
             [
-              'asset_id',
               'account_id',
               'alternate_account_id',
               'verify_before_switch',
@@ -224,7 +243,6 @@ export default {
               'subscription_account_ids'
             ]
           ],
-          [this.$t('ApplicationBinding'), ['application_ids']],
           [this.$t('Other'), ['is_active', 'comment']]
         ],
         fieldsMeta,

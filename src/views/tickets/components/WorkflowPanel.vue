@@ -1,15 +1,15 @@
 <template>
   <IBox
     v-if="object.workflow_instance"
-    v-loading="loading"
+    v-loading="loading && !instance"
     title="WFProgress"
     class="workflow-panel"
   >
     <template #header>
       <div class="workflow-heading">
         <strong>{{ $t('WFProgress') }}</strong>
-        <el-button link :disabled="loading" @click="load">
-          <el-icon><Refresh /></el-icon>{{ $t('Refresh') }}
+        <el-button link :loading="refreshing" :disabled="loading" @click="load(true)">
+          <el-icon v-if="!refreshing"><Refresh /></el-icon>{{ $t('Refresh') }}
         </el-button>
       </div>
     </template>
@@ -18,7 +18,11 @@
         <el-tag :type="deadlinePassed ? 'warning' : stateTone(instance.state)" effect="light">
           {{ $t(deadlinePassed ? 'WFTimeoutPending' : stateLabels[instance.state]) }}
         </el-tag>
-        <span class="hint">{{ $t('WFVersion') }} {{ instance.version_number }}</span>
+        <span class="workflow-identity hint">
+          <span v-if="instance.workflow_name || object.workflow?.name"
+            >{{ instance.workflow_name || object.workflow.name }} · </span
+          >{{ $t('WFVersion') }} {{ instance.version_number }}
+        </span>
       </div>
       <el-alert
         v-if="instance.state === 'error'"
@@ -93,6 +97,7 @@
                 <VideoPlay v-if="node.type === 'start'" />
                 <Promotion v-else-if="node.type === 'cc'" />
                 <Share v-else-if="node.type === 'condition'" />
+                <Finished v-else-if="node.type === 'end'" />
                 <User v-else />
               </el-icon>
             </span>
@@ -135,6 +140,7 @@
             </div>
             <template v-if="node.type === 'approval'">
               <div class="step-description hint">
+                <span v-if="node.config.approvers">{{ approverSource(node) }} · </span>
                 {{
                   node.config.strategy === 'quorum'
                     ? $t('WFRequiredCount', { count: node.required })
@@ -318,6 +324,7 @@ export default {
   data: () => ({
     instance: null,
     loading: false,
+    refreshing: false,
     requestId: 0,
     busy: false,
     comment: '',
@@ -342,8 +349,11 @@ export default {
       return this.reassignVisible && this.reassignTaskId !== this.myTask?.id
     },
     timelineNodes() {
-      return (this.instance?.nodes || [])
-        .filter((node) => node.state !== 'skipped' && node.type !== 'end')
+      return [...(this.instance?.nodes || []), ...(this.instance?.upcoming_nodes || [])]
+        .filter(
+          (node) =>
+            node.state !== 'skipped' && (node.type !== 'end' || !this.instance.date_finished)
+        )
         .map((node) => ({
           ...node,
           pendingTasks: (node.tasks || []).filter((task) => task.state === 'pending'),
@@ -353,7 +363,9 @@ export default {
         }))
     },
     skippedNodes() {
-      return (this.instance?.nodes || []).filter((node) => node.state === 'skipped')
+      return [...(this.instance?.nodes || []), ...(this.instance?.upcoming_nodes || [])].filter(
+        (node) => node.state === 'skipped'
+      )
     },
     currentNode() {
       return this.instance?.nodes.find((n) => n.state === 'running' && n.type === 'approval')
@@ -397,6 +409,7 @@ export default {
         clearTimeout(this.deadlineTimer)
         this.instance = null
         this.loading = false
+        this.refreshing = false
         this.comment = ''
         this.reassignComment = ''
         this.reassignVisible = false
@@ -415,6 +428,7 @@ export default {
     this.disposed = true
     this.requestId++
     this.loading = false
+    this.refreshing = false
     this.reassignVisible = false
     clearTimeout(this.timer)
     clearTimeout(this.deadlineTimer)
@@ -426,6 +440,19 @@ export default {
     clearTimeout(this.deadlineTimer)
   },
   methods: {
+    approverSource(node) {
+      const approvers = node.config.approvers
+      if (
+        approvers.type === 'role' &&
+        this.instance?.approver_role_names &&
+        approvers.value?.length
+      ) {
+        return approvers.value
+          .map((id) => this.instance.approver_role_names[id] || this.$t('Unknown'))
+          .join(', ')
+      }
+      return this.$t(`WFResolver_${approvers.type}`)
+    },
     scheduleDeadline() {
       clearTimeout(this.deadlineTimer)
       this.deadlineTimer = null
@@ -457,6 +484,7 @@ export default {
       const requestConfig = this.requestConfig
       let retry = true
       this.loading = true
+      this.refreshing = force
       try {
         const instance = await this.$axios.get(
           `/api/v1/tickets/workflow-instances/${ticket.workflow_instance}/`,
@@ -487,6 +515,7 @@ export default {
       } finally {
         if (requestId === this.requestId && workflowKey === this.workflowKey) {
           this.loading = false
+          this.refreshing = false
           if (!this.disposed && retry) {
             this.timer = setTimeout(() => this.load(), 15000)
           }
@@ -574,6 +603,11 @@ export default {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 20px;
+}
+.workflow-identity {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 .workflow-panel :deep(.el-alert) {
   margin-bottom: 16px;

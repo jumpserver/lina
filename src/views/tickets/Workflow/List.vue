@@ -43,6 +43,11 @@ export default {
           enabled: { label: this.$t('Enabled') },
           actions: {
             formatterArgs: {
+              hasDelete: false,
+              hasUpdate: ({ row }) =>
+                row.type !== 'login_confirm' ||
+                (this.$store.getters.currentOrgIsRoot &&
+                  row.org_id === '00000000-0000-0000-0000-000000000000'),
               onUpdate: ({ row }) =>
                 this.$router.push({ name: 'WorkflowDetail', params: { id: row.id } })
             }

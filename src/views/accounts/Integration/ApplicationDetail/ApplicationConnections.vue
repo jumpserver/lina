@@ -50,6 +50,7 @@ import {
   setClientInstanceActive
 } from '@/api/applicationCredential'
 import ApplicationAccessWizard from './ApplicationAccessWizard.vue'
+import { subscribedAccountLabel } from '../components/subscriptionAccount.js'
 
 export default {
   name: 'ApplicationConnections',
@@ -201,8 +202,7 @@ export default {
       const used = (report?.account_ids || []).map((id) => {
         const account = accounts.get(id)
         if (!account) return id
-        const name = account.username || account.name
-        return account.asset?.name ? `${name} @ ${account.asset.name}` : name
+        return subscribedAccountLabel(account)
       })
       const progress = row.credential_statuses
         ?.map(

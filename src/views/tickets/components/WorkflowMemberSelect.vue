@@ -5,8 +5,7 @@
       <div v-if="selectedMember" class="selected-member">
         <el-icon class="selected-icon"><User /></el-icon>
         <div class="member-identity">
-          <span class="member-name">{{ selectedMember.name || selectedMember.username }}</span>
-          <span class="member-username">{{ selectedMember.username }}</span>
+          <span class="member-name">{{ formatUser(selectedMember) }}</span>
         </div>
         <el-button ref="chooseButton" link type="primary" :disabled="disabled" @click="choose">
           {{ $t('WFReselectMember') }}
@@ -40,8 +39,7 @@
           <li v-for="user in members" :key="user.id">
             <button type="button" class="member-row" :disabled="disabled" @click="select(user.id)">
               <span class="member-identity">
-                <span class="member-name">{{ user.name || user.username }}</span>
-                <span class="member-username">{{ user.username }}</span>
+                <span class="member-name">{{ formatUser(user) }}</span>
               </span>
               <el-icon><Plus /></el-icon>
             </button>
@@ -73,6 +71,8 @@
 </template>
 
 <script>
+import { formatTicketUser } from '../const'
+
 export default {
   props: {
     modelValue: { type: String, default: null },
@@ -110,6 +110,9 @@ export default {
     this.request++
   },
   methods: {
+    formatUser(user) {
+      return formatTicketUser(user)
+    },
     choose() {
       if (this.disabled) return
       this.$emit('update:modelValue', null)
@@ -174,7 +177,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 64px;
+  min-height: 48px;
   padding: 12px;
   border: 1px solid var(--el-border-color);
   border-radius: var(--el-border-radius-base);
@@ -206,7 +209,7 @@ export default {
   align-items: center;
   gap: 16px;
   width: 100%;
-  min-height: 64px;
+  min-height: 48px;
   padding: 12px 8px;
   border: 0;
   border-bottom: 1px solid var(--el-border-color-lighter);
@@ -228,17 +231,8 @@ export default {
   outline: 2px solid var(--el-color-primary);
   outline-offset: -2px;
 }
-.member-name,
-.member-username {
-  display: block;
-}
 .member-name {
   font-size: 14px;
-}
-.member-username {
-  margin-top: 2px;
-  color: var(--el-text-color-regular);
-  font-size: 12px;
 }
 .member-status {
   display: flex;

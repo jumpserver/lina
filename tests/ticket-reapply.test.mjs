@@ -251,6 +251,38 @@ test('asset requests require an asset or node even when all accounts are selecte
   assert.equal(vm.fieldsMeta.resource_description.rules[0].required, true)
 })
 
+test('asset request required markers follow nodes and description fallback without changing validators', () => {
+  const { vm } = vmFor(prefill())
+  const assets = vm.fieldsMeta.apply_assets
+  const accounts = vm.fieldsMeta.apply_accounts
+  const rules = [assets.rules, accounts.rules]
+  for (const descriptionAllowed of [false, true, false]) {
+    vm.resourceAvailability = { description_allowed: descriptionAllowed }
+    for (const nodes of [[], ['node-a'], []]) {
+      const form = { apply_nodes: nodes }
+      vm.availabilityParams = { selection: { apply_nodes: nodes.join(',') } }
+      assert.equal(assets.required(form), !descriptionAllowed && !nodes.length)
+      assert.equal(accounts.required(form), !descriptionAllowed)
+      for (const [field, required] of [
+        [assets, !descriptionAllowed && !nodes.length],
+        [accounts, !descriptionAllowed]
+      ]) {
+        let error
+        field.rules[0].validator({}, [], (result) => {
+          error = result
+        })
+        assert.equal(Boolean(error), required)
+        field.rules[0].validator({}, ['selected'], (result) => {
+          error = result
+        })
+        assert.equal(error, undefined)
+      }
+    }
+  }
+  assert.equal(assets.rules, rules[0])
+  assert.equal(accounts.rules, rules[1])
+})
+
 test('changing a node refreshes availability before revalidating the asset error', async () => {
   const { vm } = vmFor(prefill())
   const checks = []

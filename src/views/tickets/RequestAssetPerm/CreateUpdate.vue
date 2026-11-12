@@ -197,6 +197,8 @@ export default {
           }
         },
         apply_assets: {
+          required: (formValue) =>
+            !formValue.apply_nodes?.length && !this.resourceAvailability?.description_allowed,
           type: 'assetSelect',
           label: this.$t('Asset'),
           component: Select2,
@@ -226,6 +228,7 @@ export default {
           }
         },
         apply_accounts: {
+          required: () => !this.resourceAvailability?.description_allowed,
           component: AccountFormatter,
           rules: [
             {
@@ -324,6 +327,10 @@ export default {
           required: true,
           rules: [{ required: true, message: this.$t('FieldRequiredError'), trigger: 'blur' }],
           label: this.$t('TicketFlow'),
+          helpTextFormatter: () =>
+            this.flowBeneficiary && this.flowBeneficiary !== store.getters.currentUser.id
+              ? this.$t('TicketDelegatedWorkflowHelp')
+              : '',
           on: {
             retry: async (_, updateForm) => {
               const flow = await this.loadFlowOptions(this.selectedOrgId, this.flowBeneficiary)

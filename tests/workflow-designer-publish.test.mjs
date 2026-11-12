@@ -39,7 +39,7 @@ const bindings = {
 const component = new Function(
   ...Object.keys(bindings),
   parse(source)
-    .descriptor.script.content.replace(/^import .*$/gm, '')
+    .descriptor.script.content.replace(/^import[\s\S]*? from ['"][^'"]+['"]$/gm, '')
     .replace('export default', 'return')
 )(...Object.values(bindings))
 const messages = Object.fromEntries(
@@ -59,6 +59,7 @@ function mount(workflow = {}) {
     ...component.data(),
     $t: i18n.global.t,
     $hasPerm: () => true,
+    $store: { getters: { currentOrgIsRoot: true } },
     $nextTick: async () => {},
     $refs: {}
   }
@@ -217,6 +218,47 @@ test('missing explicit approvers blocks all writes and focuses the node without 
   }
 })
 
+test('impossible quorum blocks all writes, selects the node and counts unique users', async () => {
+  const user = '27338af8-fcef-46ec-893a-d84171fb13e0'
+  for (const value of [[user], [user, user], user]) {
+    const vm = mount({ id: 'workflow', active_version: 'version-1' })
+    const approval = vm.definition.nodes.find((node) => node.type === 'approval')
+    approval.name = 'Security review'
+    approval.config = { ...approval.config, approvers: { type: 'user', value }, strategy: 'quorum', required: 2 }
+    vm.selectedId = 'start'
+    const original = JSON.stringify(vm.definition)
+    const calls = []
+    vm.$axios = { post: async (...args) => calls.push(args), patch: async (...args) => calls.push(args) }
+    await vm.publish()
+    assert.deepEqual(calls, [])
+    assert.equal(vm.selectedId, approval.id)
+    assert.equal(vm.approverValidationNode, approval)
+    assert.equal(vm.approverError, '未能发布：「Security review」节点至少选择 2 名审批人，当前已选择 1 名。')
+    assert.equal(JSON.stringify(vm.definition), original)
+    assert.equal(vm.workflow.active_version, 'version-1')
+    approval.config.approvers.value = [user, '63a39ac1-165f-4ef1-b0fa-0b32e96386aa']
+    assert.equal(vm.approverError, '')
+    approval.config.approvers.value = [user]
+    assert.notEqual(vm.approverError, '')
+    approval.config.required = 1
+    assert.equal(vm.approverError, '')
+    approval.config.required = 2
+    vm.changeStrategy('all')
+    assert.equal(vm.approverError, '')
+  }
+})
+
+test('quorum validation keeps dynamic approver sources available', () => {
+  const vm = mount()
+  const approval = vm.definition.nodes.find((node) => node.type === 'approval')
+  approval.config.strategy = 'quorum'
+  approval.config.required = 2
+  for (const type of ['user_group', 'role', 'org_admin', 'asset_owner']) {
+    approval.config.approvers = ['user_group', 'role'].includes(type) ? { type, value: ['resource'] } : { type }
+    assert.equal(vm.getApproverError(approval), '')
+  }
+})
+
 test('validation advances to the next empty approval and clears after changing resolver', async () => {
   const vm = mount()
   const first = vm.definition.nodes.find((node) => node.type === 'approval')
@@ -243,12 +285,14 @@ test('validation advances to the next empty approval and clears after changing r
   assert.equal(vm.missingApprovers(second), false)
 })
 
-test('a corrected approval can be published through the normal flow', async () => {
+test('a corrected quorum can be published through the normal flow', async () => {
   const vm = mount({ id: 'workflow', enabled: false })
   const approval = vm.definition.nodes.find((node) => node.type === 'approval')
-  approval.config.approvers = { type: 'user', value: [] }
+  approval.config.strategy = 'quorum'
+  approval.config.required = 2
+  approval.config.approvers = { type: 'user', value: ['27338af8-fcef-46ec-893a-d84171fb13e0'] }
   await vm.publish()
-  approval.config.approvers.value = ['27338af8-fcef-46ec-893a-d84171fb13e0']
+  approval.config.approvers.value = ['27338af8-fcef-46ec-893a-d84171fb13e0', '63a39ac1-165f-4ef1-b0fa-0b32e96386aa']
   const calls = []
   vm.$route = { name: 'WorkflowDetail' }
   vm.$message = { success: () => {} }
@@ -270,7 +314,7 @@ test('a corrected approval can be published through the normal flow', async () =
   assert.equal(vm.workflow.active_version, 'version-1')
   assert.deepEqual(
     calls[1].data.definition.nodes.find((node) => node.type === 'approval').config.approvers.value,
-    ['27338af8-fcef-46ec-893a-d84171fb13e0']
+    ['27338af8-fcef-46ec-893a-d84171fb13e0', '63a39ac1-165f-4ef1-b0fa-0b32e96386aa']
   )
 })
 
@@ -486,4 +530,199 @@ test('timeout input uses whole minutes while workflow definitions keep seconds',
   }
   vm.timeoutMinutes = null
   assert.equal(vm.selected.config.timeout, 0)
+})
+
+test('leaving a dirty workflow keeps the confirmation open across hash changes', async () => {
+  for (const action of ['confirm', 'cancel', 'close']) {
+    const vm = mount()
+    vm.renameWorkflow('Unsaved workflow')
+    let options
+    let finish
+    vm.$confirm = (message, title, suppliedOptions) => {
+      options = suppliedOptions
+      return new Promise((resolve, reject) => {
+        finish = () => (action === 'confirm' ? resolve(action) : reject(action))
+      })
+    }
+    let settled = false
+    const navigation = component.beforeRouteLeave.call(vm).then((result) => {
+      settled = true
+      return result
+    })
+    await Promise.resolve()
+    assert.equal(settled, false)
+    assert.equal(options?.closeOnHashChange, false)
+    finish()
+    assert.equal(await navigation, action === 'confirm')
+    assert.equal(vm.workflow.name, 'Unsaved workflow')
+    assert.equal(vm.dirty, true)
+  }
+})
+
+test('unchanged workflows and publication navigation do not prompt before leaving', async () => {
+  const vm = mount()
+  let prompts = 0
+  vm.$confirm = async () => {
+    prompts += 1
+  }
+  assert.equal(await component.beforeRouteLeave.call(vm), true)
+  vm.renameWorkflow('Publishing workflow')
+  vm.saving = true
+  assert.equal(await component.beforeRouteLeave.call(vm), true)
+  assert.equal(prompts, 0)
+})
+
+test('reopening Create starts clean after discarding unpublished and published drafts', async () => {
+  for (const workflow of [
+    {},
+    { id: 'unpublished-draft' },
+    { id: 'published-workflow', active_version: 'version-1' }
+  ]) {
+    const vm = mount(workflow)
+    vm.$route = { name: 'WorkflowCreate', params: {} }
+    let prompts = 0
+    vm.$confirm = async () => {
+      prompts += 1
+    }
+    vm.renameWorkflow('Discard this draft')
+    vm.workflow.type = 'change_secret'
+    vm.workflow.comment = 'Discard this comment'
+    vm.selected.config.approvers = { type: 'user', value: ['reviewer'] }
+    vm.selected.config.strategy = 'quorum'
+    vm.selected.config.required = 2
+    vm.insert(vm.outgoing[0], 'approval')
+    vm.advancedOpen = ['advanced']
+    vm.error = 'Previous error'
+    vm.approverValidationId = vm.selectedId
+    vm.ticketTypes = [{ type: 'apply_asset' }]
+    const defaults = component.data()
+
+    assert.equal(vm.dirty, true)
+    assert.equal(await component.beforeRouteLeave.call(vm), true)
+    component.activated.call(vm)
+
+    assert.deepEqual(vm.workflow, defaults.workflow)
+    assert.deepEqual(vm.definition, defaults.definition)
+    assert.equal(vm.selectedId, defaults.selectedId)
+    assert.deepEqual(vm.advancedOpen, [])
+    assert.equal(vm.error, '')
+    assert.equal(vm.approverValidationId, null)
+    assert.equal(vm.dirty, false)
+    assert.equal(vm.selectedVersion, null)
+    assert.deepEqual(vm.versions, [])
+    assert.deepEqual(vm.ticketTypes, [{ type: 'apply_asset' }])
+    assert.equal(await component.beforeRouteLeave.call(vm), true)
+    assert.equal(prompts, 1)
+  }
+})
+
+test('choosing login confirmation replaces only organization-admin defaults', () => {
+  const vm = mount()
+  const approval = vm.definition.nodes.find(node => node.type === 'approval')
+  approval.config.strategy = 'all'
+  approval.config.timeout = 600
+  const explicit = structuredClone(approval)
+  explicit.id = 'explicit'
+  explicit.config.approvers = { type: 'user', value: ['reviewer'] }
+  vm.definition.nodes.push(explicit)
+  vm.workflow.type = 'login_confirm'
+  vm.changeTicketType('login_confirm')
+  assert.deepEqual(approval.config.approvers, { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] })
+  assert.equal(approval.config.strategy, 'all')
+  assert.equal(approval.config.timeout, 600)
+  assert.equal(approval.config.exclude_applicant, true)
+  assert.deepEqual(explicit.config.approvers, { type: 'user', value: ['reviewer'] })
+  vm.insert(vm.definition.edges[0], 'condition')
+  assert.ok(vm.definition.nodes.filter(node => node.type === 'approval').every(node => node.config.approvers.type !== 'org_admin'))
+})
+
+test('an existing login workflow keeps its approvers and blocks republishing an organization-admin node', async () => {
+  const vm = mount({ id: 'workflow', type: 'login_confirm', active_version: 'version-1' })
+  const definition = graph.newDefinition()
+  const approval = definition.nodes.find(node => node.type === 'approval')
+  approval.name = 'Login review'
+  vm.versions = [{ id: 'version-1', definition }]
+  await vm.selectVersion('version-1')
+  assert.equal(vm.definition.nodes.find(node => node.id === approval.id).config.approvers.type, 'org_admin')
+  let focused = false
+  vm.$refs.approverSourceField = { $el: { scrollIntoView() {}, querySelector: () => ({ focus: () => { focused = true } }) } }
+  const calls = []
+  vm.$axios = { post: async (...args) => calls.push(args), patch: async (...args) => calls.push(args) }
+  await vm.publish()
+  assert.deepEqual(calls, [])
+  assert.equal(vm.selectedId, approval.id)
+  assert.equal(focused, true)
+  assert.match(vm.approverError, /Login review.*不能使用组织管理员/)
+  vm.workflow.type = 'apply_asset'
+  assert.equal(vm.approverError, '')
+  vm.workflow.type = 'login_confirm'
+  vm.selected.config.approvers = { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] }
+  assert.equal(vm.approverError, '')
+})
+
+
+test('login confirmation hides asset owners and replaces that source when switching business type', () => {
+  const vm = mount()
+  for (const type of ['apply_asset', 'login_asset_confirm']) {
+    vm.workflow.type = type
+    assert.ok(vm.resolvers.includes('asset_owner'))
+  }
+  const approval = vm.selected
+  approval.config.approvers = { type: 'asset_owner' }
+  approval.config.strategy = 'all'
+  approval.config.timeout = 600
+  vm.workflow.type = 'login_confirm'
+  vm.changeTicketType('login_confirm')
+  assert.deepEqual(vm.resolvers, ['user', 'user_group', 'role', 'org_admin'])
+  assert.deepEqual(approval.config.approvers, { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] })
+  assert.equal(approval.config.strategy, 'all')
+  assert.equal(approval.config.timeout, 600)
+  assert.equal(approval.config.exclude_applicant, true)
+})
+
+test('an existing login asset-owner node stays visible and cannot be republished', async () => {
+  const vm = mount({ id: 'workflow', type: 'login_confirm', active_version: 'version-1' })
+  const definition = graph.newDefinition()
+  const approval = definition.nodes.find(node => node.type === 'approval')
+  approval.name = 'Login review'
+  approval.config.approvers = { type: 'asset_owner' }
+  vm.versions = [{ id: 'version-1', definition }]
+  await vm.selectVersion('version-1')
+  assert.equal(vm.definition.nodes.find(node => node.id === approval.id).config.approvers.type, 'asset_owner')
+  assert.ok(!vm.resolvers.includes('asset_owner'))
+  const calls = []
+  vm.$axios = { post: async (...args) => calls.push(args), patch: async (...args) => calls.push(args) }
+  await vm.publish()
+  assert.deepEqual(calls, [])
+  assert.match(vm.approverError, /Login review.*不能使用资产负责人/)
+  vm.workflow.type = 'login_asset_confirm'
+  assert.equal(vm.approverError, '')
+})
+
+
+test('ordinary organizations cannot create or copy login workflows while asset login stays editable', async () => {
+  const root = '00000000-0000-0000-0000-000000000000'
+  const vm = mount()
+  vm.ticketTypes = [{ type: 'apply_asset' }, { type: 'login_confirm' }, { type: 'login_asset_confirm' }]
+  vm.$store.getters.currentOrgIsRoot = false
+  assert.deepEqual(vm.availableTicketTypes.map(item => item.type), ['apply_asset', 'login_asset_confirm'])
+  vm.$store.getters.currentOrgIsRoot = true
+  assert.deepEqual(vm.availableTicketTypes, vm.ticketTypes)
+  vm.workflow = { ...vm.workflow, id: 'global-login', type: 'login_confirm', org_id: root, active_version: 'v1' }
+  assert.equal(vm.canEdit, true)
+  vm.$store.getters.currentOrgIsRoot = false
+  assert.equal(vm.loginWorkflowReadOnly, true)
+  assert.equal(vm.canEdit, false)
+  assert.ok(vm.availableTicketTypes.some(item => item.type === 'login_confirm'))
+  const before = structuredClone(vm.workflow)
+  vm.$axios = { patch: () => assert.fail('Read-only flow must not be changed'), post: () => assert.fail('Read-only flow must not be published') }
+  await vm.publish()
+  await vm.toggleEnabled()
+  assert.deepEqual(vm.workflow, before)
+  vm.workflow.org_id = 'historical-org'
+  vm.$store.getters.currentOrgIsRoot = true
+  assert.equal(vm.canEdit, false)
+  vm.$store.getters.currentOrgIsRoot = false
+  vm.workflow.type = 'login_asset_confirm'
+  assert.equal(vm.canEdit, true)
 })

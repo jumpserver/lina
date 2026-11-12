@@ -299,6 +299,7 @@ export default {
             meta.el = { type: 'textarea', rows: 3, maxlength: 4096 }
             meta.rules = [Required]
           } else if (['asset', 'account'].includes(field.resource)) {
+            meta.required = () => !this.resourceAvailability?.description_allowed
             meta.rules = [
               {
                 trigger: 'change',

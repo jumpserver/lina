@@ -29,6 +29,13 @@
     </template>
     <div v-loading="loading" class="workflow-designer">
       <el-alert
+        v-if="loginWorkflowReadOnly"
+        :title="$t('WFLoginGlobalOnly')"
+        type="info"
+        show-icon
+        :closable="false"
+      />
+      <el-alert
         v-if="approverError || error"
         :title="approverError || error"
         type="error"
@@ -55,9 +62,13 @@
               />
             </el-form-item>
             <el-form-item :label="$t('WFBusinessType')">
-              <el-select v-model="workflow.type" :disabled="!!workflow.active_version">
+              <el-select
+                v-model="workflow.type"
+                :disabled="!!workflow.active_version"
+                @change="changeTicketType"
+              >
                 <el-option
-                  v-for="type in ticketTypes"
+                  v-for="type in availableTicketTypes"
                   :key="type.type"
                   :value="type.type"
                   :label="typeLabel(type)"
@@ -191,13 +202,26 @@
                   />
                 </el-form-item>
                 <template v-if="selected.type === 'approval'">
-                  <el-form-item :label="$t('WFApprovers')">
+                  <el-form-item
+                    ref="approverSourceField"
+                    :label="$t('WFApprovers')"
+                    :error="
+                      !resourceResolver && approverValidationNode?.id === selected.id
+                        ? approverError
+                        : ''
+                    "
+                    :show-message="false"
+                  >
                     <el-select v-model="selected.config.approvers.type" @change="changeResolver">
+                      <template #label>
+                        {{ $t(`WFResolver_${selected.config.approvers.type}`) }}
+                      </template>
                       <el-option
                         v-for="kind in resolvers"
                         :key="kind"
                         :value="kind"
                         :label="$t(`WFResolver_${kind}`)"
+                        :disabled="workflow.type === 'login_confirm' && kind === 'org_admin'"
                       />
                     </el-select>
                     <p v-if="selected.config.approvers.type === 'asset_owner'" class="help-block">
@@ -348,7 +372,7 @@
                   @click="selected.type === 'condition' ? removeBranch() : remove()"
                   ><el-icon><Delete /></el-icon
                   >{{
-                    $t(selected.type === 'condition' ? 'WFRemoveCondition' : 'WFRemoveNode')
+                    $t(selected.type === 'condition' ? 'WFRemoveCondition' : 'DeleteNode')
                   }}</el-button
                 >
               </div>
@@ -364,7 +388,14 @@ import { Page } from '@/layout/components'
 import IBox from '@/components/Common/IBox'
 import Select2 from '@/components/Form/FormFields/Select2'
 import ConditionEditor from './ConditionEditor'
-import { newDefinition, layoutGraph, insertNode, removeNode, nodeLabels } from './graph'
+import {
+  newApproval,
+  newDefinition,
+  layoutGraph,
+  insertNode,
+  removeNode,
+  nodeLabels
+} from './graph'
 import { getTicketTypeLabel } from '../const'
 import { getErrorResponseMsg } from '@/utils/common'
 export default {
@@ -385,11 +416,30 @@ export default {
       moreVersions: false,
       selectedId: 'approval_1',
       ticketTypes: [],
-      nodeLabels,
-      resolvers: ['user', 'user_group', 'role', 'asset_owner', 'org_admin']
+      nodeLabels
     }
   },
   computed: {
+    availableTicketTypes() {
+      return this.ticketTypes.filter(
+        (type) =>
+          this.$store.getters.currentOrgIsRoot ||
+          type.type !== 'login_confirm' ||
+          (this.workflow.id && type.type === this.workflow.type)
+      )
+    },
+    loginWorkflowReadOnly() {
+      return (
+        this.workflow.type === 'login_confirm' &&
+        (!this.$store.getters.currentOrgIsRoot ||
+          (this.workflow.org_id && this.workflow.org_id !== '00000000-0000-0000-0000-000000000000'))
+      )
+    },
+    resolvers() {
+      return ['user', 'user_group', 'role', 'asset_owner', 'org_admin'].filter(
+        (kind) => this.workflow.type !== 'login_confirm' || kind !== 'asset_owner'
+      )
+    },
     pluginConditionFields() {
       const labels = {
         'Validity (seconds)': 'WFFieldValidity',
@@ -434,7 +484,10 @@ export default {
       )
     },
     canEdit() {
-      return this.$hasPerm(this.workflow.id ? 'tickets.change_workflow' : 'tickets.add_workflow')
+      return (
+        !this.loginWorkflowReadOnly &&
+        this.$hasPerm(this.workflow.id ? 'tickets.change_workflow' : 'tickets.add_workflow')
+      )
     },
     selected() {
       return this.definition.nodes.find((n) => n.id === this.selectedId)
@@ -471,16 +524,12 @@ export default {
     },
     approverValidationNode() {
       return this.definition.nodes.find(
-        (node) => node.id === this.approverValidationId && this.missingApprovers(node)
+        (node) => node.id === this.approverValidationId && this.getApproverError(node)
       )
     },
     approverError() {
       const node = this.approverValidationNode
-      return node
-        ? this.$t(`WFApproversRequired_${node.config.approvers.type}`, {
-            node: node.name || this.$t('WFApproval')
-          })
-        : ''
+      return node ? this.getApproverError(node) : ''
     },
     resourceResolver() {
       return ['user', 'user_group', 'role'].includes(this.selected?.config?.approvers?.type)
@@ -505,6 +554,7 @@ export default {
     try {
       this.workflow = await this.$axios.get(`/api/v1/tickets/workflows/${this.$route.params.id}/`)
       await this.loadVersions()
+      if (!this.workflow.active_version) this.changeTicketType(this.workflow.type)
       if (this.versions.length) await this.selectVersion(this.workflow.active_version)
       else if (this.workflow.migration_notes?.unpublished_cc_user_ids?.length) {
         const node = this.definition.nodes.find((n) => n.type === 'cc')
@@ -518,13 +568,14 @@ export default {
   },
   activated() {
     // The app caches route pages. Opening Create again must start a new draft.
-    if (this.$route.name === 'WorkflowCreate' && this.workflow.active_version) {
+    if (this.$route.name === 'WorkflowCreate') {
       this.workflow = { name: '', type: 'apply_asset', comment: '', enabled: false }
       this.definition = newDefinition()
       this.versions = []
       this.selectedVersion = null
       this.moreVersions = false
       this.selectedId = 'approval_1'
+      this.advancedOpen = []
       this.error = ''
       this.approverValidationId = null
       this.captureBaseline()
@@ -533,13 +584,26 @@ export default {
   async beforeRouteLeave() {
     if (!this.dirty || this.saving) return true
     try {
-      await this.$confirm(this.$t('WFUnsaved'), this.$t('Confirm'))
+      await this.$confirm(this.$t('WFUnsaved'), this.$t('Confirm'), {
+        closeOnHashChange: false
+      })
       return true
     } catch {
       return false
     }
   },
   methods: {
+    changeTicketType(type) {
+      if (type !== 'login_confirm') return
+      for (const node of this.definition.nodes) {
+        if (
+          node.type === 'approval' &&
+          ['org_admin', 'asset_owner'].includes(node.config.approvers.type)
+        ) {
+          node.config.approvers = newApproval(type).approvers
+        }
+      }
+    },
     renameWorkflow(name) {
       this.workflow.name = name
       this.workflow.display_name = ''
@@ -613,7 +677,13 @@ export default {
       else delete this.selected.config.required
     },
     insert(edge, type) {
-      this.selectedId = insertNode(this.definition, edge, type, this.$t(nodeLabels[type])).id
+      this.selectedId = insertNode(
+        this.definition,
+        edge,
+        type,
+        this.$t(nodeLabels[type]),
+        this.workflow.type
+      ).id
     },
     remove() {
       if (!removeNode(this.definition, this.selectedId)) {
@@ -653,20 +723,54 @@ export default {
         !approvers.value?.length
       )
     },
+    getApproverError(node) {
+      const name = node.name || this.$t('WFApproval')
+      if (this.missingApprovers(node)) {
+        return this.$t(`WFApproversRequired_${node.config.approvers.type}`, { node: name })
+      }
+      const approvers = node.config?.approvers
+      if (
+        node.type === 'approval' &&
+        this.workflow.type === 'login_confirm' &&
+        ['org_admin', 'asset_owner'].includes(approvers?.type)
+      ) {
+        return this.$t(
+          approvers.type === 'asset_owner'
+            ? 'WFLoginAssetOwnerUnsupported'
+            : 'WFLoginOrgAdminUnsupported',
+          { node: name }
+        )
+      }
+      if (
+        node.type === 'approval' &&
+        approvers?.type === 'user' &&
+        node.config.strategy === 'quorum'
+      ) {
+        const count = new Set([approvers.value || []].flat()).size
+        if (count < node.config.required) {
+          return this.$t('WFQuorumApproversRequired', {
+            node: name,
+            required: node.config.required,
+            count
+          })
+        }
+      }
+      return ''
+    },
     async publish() {
-      if (this.saving) return
+      if (this.saving || !this.canEdit) return
       this.approverValidationId = null
       this.error = ''
       if (!this.workflow.name.trim()) {
         this.error = this.$t('WFNameRequired')
         return
       }
-      const missing = this.definition.nodes.find(this.missingApprovers)
-      if (missing) {
-        this.approverValidationId = missing.id
-        this.selectedId = missing.id
+      const invalid = this.definition.nodes.find((node) => this.getApproverError(node))
+      if (invalid) {
+        this.approverValidationId = invalid.id
+        this.selectedId = invalid.id
         await this.$nextTick()
-        const field = this.$refs.approverField?.$el
+        const field = (this.$refs.approverField || this.$refs.approverSourceField)?.$el
         field?.scrollIntoView({ block: 'nearest' })
         field?.querySelector('[role="combobox"]')?.focus({ preventScroll: true })
         return
@@ -722,6 +826,7 @@ export default {
       }
     },
     async toggleEnabled() {
+      if (!this.canEdit) return
       const data = await this.$axios.patch(`/api/v1/tickets/workflows/${this.workflow.id}/`, {
         enabled: !this.workflow.enabled,
         expected_version: this.workflow.active_version_number || 0
