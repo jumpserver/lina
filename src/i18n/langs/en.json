@@ -2178,7 +2178,6 @@
   "Terminal": "Components",
   "TerminalDetail": "Terminal details",
   "TerminalCPULoad": "CPU load",
-  "TerminalCPULoadHelpTip": "CPU load is not CPU utilization.",
   "TerminalDiskUsage": "Disk usage",
   "TerminalMemoryUsage": "Memory usage",
   "TerminalUpdate": "Update the terminal",

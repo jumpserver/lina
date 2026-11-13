@@ -2152,7 +2152,6 @@
   "Terminal": "Composants",
   "TerminalDetail": "Détails du composant",
   "TerminalCPULoad": "Charge CPU",
-  "TerminalCPULoadHelpTip": "La charge CPU est différente du taux d’utilisation du CPU.",
   "TerminalDiskUsage": "Utilisation disque",
   "TerminalMemoryUsage": "Utilisation mémoire",
   "TerminalUpdate": "Mettre à jour le composant",

@@ -2040,7 +2040,6 @@
   "Terminal": "組件設置",
   "TerminalDetail": "組件詳情",
   "TerminalCPULoad": "CPU 負載",
-  "TerminalCPULoadHelpTip": "CPU 負載不等於 CPU 使用率。",
   "TerminalDiskUsage": "磁碟使用率",
   "TerminalMemoryUsage": "記憶體使用率",
   "TerminalUpdate": "更新終端機",

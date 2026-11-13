@@ -2049,7 +2049,6 @@
   "Terminal": "コンポーネント設定",
   "TerminalDetail": "コンポーネントの詳細",
   "TerminalCPULoad": "CPU 負荷",
-  "TerminalCPULoadHelpTip": "CPU 負荷は CPU 使用率とは異なります。",
   "TerminalDiskUsage": "ディスク使用率",
   "TerminalMemoryUsage": "メモリ使用率",
   "TerminalUpdate": "端末の更新",

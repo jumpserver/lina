@@ -114,8 +114,7 @@ export default {
             label: this.$t('TerminalCPULoad'),
             width: '160px',
             align: 'center',
-            formatter: (row) => row.stat?.cpu_load ?? '—',
-            helpTip: this.$t('TerminalCPULoadHelpTip')
+            formatter: (row) => row.stat?.cpu_load ?? '—'
           },
           memory_used: {
             label: this.$t('TerminalMemoryUsage'),

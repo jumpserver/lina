@@ -2084,7 +2084,6 @@
   "Terminal": "Configuración de componentes",
   "TerminalDetail": "detalles del componente",
   "TerminalCPULoad": "Carga de CPU",
-  "TerminalCPULoadHelpTip": "La carga de CPU no es el porcentaje de uso de CPU.",
   "TerminalDiskUsage": "Uso de disco",
   "TerminalMemoryUsage": "Uso de memoria",
   "TerminalUpdate": "Actualizar terminal",
