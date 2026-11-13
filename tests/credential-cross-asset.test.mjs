@@ -16,13 +16,14 @@ const script = parse(source)
   .replace('export default', 'return')
 const component = new Function(
   'GenericCreateUpdatePage',
+  'DurationInput',
   'Select2',
   'rules',
   'credentialUrl',
   'saveApplicationCredential',
   'subscribedAccountLabel',
   script
-)(null, null, {}, '/policies/', () => {}, subscribedAccountLabel)
+)(null, null, null, {}, '/policies/', () => {}, subscribedAccountLabel)
 
 const first = {
   id: 'a',

@@ -1,46 +1,52 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm
-      v-if="!loading"
+  <div v-loading="loading || saving" class="preference-form">
+    <AutoDataForm
+      v-if="remoteFieldsMeta"
       ref="form"
-      :clean-form-value="cleanFormValue"
+      :can-submit="fields.length > 0 && !saving && !restoring"
+      :disabled="saving || restoring"
       :fields="fields"
       :fields-meta="iFieldsMeta"
-      :has-buttons="!autoSave"
-      :initial="object"
-      :submit-method="submitMethod"
-      :url="url"
-      class="password-update"
-      @get-object-done="handleGetObjectDone"
+      :form="initialValues"
+      :has-reset="false"
+      :has-save-continue="false"
+      :more-buttons="resetButtons"
+      :remote-fields-meta="remoteFieldsMeta"
+      :url="preferenceUrl(categories[0])"
+      method="patch"
+      @submit="submitPreferences"
     />
-  </IBox>
+  </div>
 </template>
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
-import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import set from 'lodash/set'
-import { h } from 'vue'
-import { ElLink } from 'element-plus'
 import { getActionMeta } from '@/api/common'
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { IBox } from '@/components'
+import AutoDataForm from '@/components/Form/AutoDataForm'
+import { getLangCode } from '@/i18n/utils'
+import { vueCookie } from '@/utils/storage'
+
+function pickFields(values = {}, names) {
+  return Object.fromEntries(
+    names.filter((name) => Object.hasOwn(values, name)).map((name) => [name, values[name]])
+  )
+}
 
 export default {
   name: 'Base',
   components: {
-    GenericCreateUpdateForm,
-    IBox
+    AutoDataForm
   },
   props: {
-    object: {
-      type: Object,
-      default: null
+    categories: {
+      type: Array,
+      required: true
     },
-    category: {
-      type: String,
-      default: 'lina'
+    fieldsInclude: {
+      type: Array,
+      required: true
     },
     fieldsExclude: {
       type: Array,
@@ -49,204 +55,176 @@ export default {
     fieldsMeta: {
       type: Object,
       default: () => ({})
-    },
-    autoSave: {
-      type: Boolean,
-      default: false
-    },
-    canRestoreDefault: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
     return {
       fields: [],
       iFieldsMeta: {},
-      loading: true,
-      url: `/api/v1/users/preference/?category=${this.category}`,
+      remoteFieldsMeta: null,
+      fieldCategories: {},
+      initialValues: {},
       savedPreferenceValues: {},
-      autoSaveQueues: {},
-      autoSaveVersions: {}
+      loading: true,
+      saving: false,
+      restoring: false
+    }
+  },
+  computed: {
+    resetButtons() {
+      return [
+        {
+          title: this.$t('RestoreDefault'),
+          loading: this.restoring,
+          disabled: !this.fields.length || this.saving || this.restoring,
+          callback: this.restoreSectionDefaults
+        }
+      ]
     }
   },
   async mounted() {
     try {
-      this.loading = true
-      await this.getUrlMeta()
-      await this.setFormConfig()
+      const categories = await Promise.all(
+        this.categories.map(async (category) => {
+          const url = this.preferenceUrl(category)
+          const [metadata, values] = await Promise.all([
+            this.$store.dispatch('common/getUrlMeta', { url }),
+            this.$axios.get(url)
+          ])
+          return { category, metadata: getActionMeta(metadata, 'PATCH'), values }
+        })
+      )
+      this.setFormConfig(categories)
+    } catch {
+      // The shared request interceptor displays loading errors.
     } finally {
       this.loading = false
     }
   },
   methods: {
-    async getUrlMeta() {
-      const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
-      this.remoteMeta = getActionMeta(data, 'PATCH')
+    preferenceUrl(category) {
+      return `/api/v1/users/preference/?category=${category}`
     },
-    async setFormConfig() {
-      const fields = []
-      let fieldsMeta = {}
-      for (const k in this.remoteMeta) {
-        if (this.fieldsExclude.includes(k)) continue
-        const groupMeta = this.remoteMeta[k]
-        const groupLabel = groupMeta.label
-        const groupFields = Object.keys(groupMeta.children).filter(
-          (name) => this.fieldsExclude.indexOf(`${k}.${name}`) === -1
-        )
-        fields.push([groupLabel, [k]])
-        fieldsMeta[k] = {
-          fields: groupFields
-        }
-      }
+    setFormConfig(categories) {
+      const remoteFieldsMeta = {}
+      const fieldsMeta = {}
+      const values = {}
+      const fieldCategories = {}
 
-      fieldsMeta = this.mergeObjects({}, fieldsMeta, this.fieldsMeta)
-
-      if (this.autoSave) {
-        this.decorateAutoSaveFields(fieldsMeta)
-      }
-
-      this.fields = fields
-      this.iFieldsMeta = fieldsMeta
-    },
-    decorateAutoSaveFields(fieldsMeta) {
-      for (const [groupName, groupMeta] of Object.entries(fieldsMeta)) {
-        groupMeta.fieldsMeta = groupMeta.fieldsMeta || {}
-        for (const fieldName of groupMeta.fields) {
-          const fieldMeta = groupMeta.fieldsMeta[fieldName] || {}
-          const originalChange = fieldMeta.on?.change
-          fieldMeta.on = {
-            ...fieldMeta.on,
-            change: (args, updateForm) => {
-              this.queuePreferenceSave(groupName, fieldName, args[0], updateForm)
-              if (originalChange) {
-                originalChange(args, updateForm)
-              }
-            }
-          }
-          if (this.canRestoreDefault) {
-            fieldMeta.helpTextFormatter = () =>
-              h(
-                ElLink,
-                {
-                  type: 'primary',
-                  underline: 'hover',
-                  onClick: (event) => {
-                    event.preventDefault()
-                    this.restoreGlobalDefault(groupName, fieldName)
-                  }
-                },
-                () => this.$t('UseGlobalDefault')
-              )
-          }
-          groupMeta.fieldsMeta[fieldName] = fieldMeta
-        }
-      }
-    },
-    handleGetObjectDone(values) {
-      this.savedPreferenceValues = cloneDeep(values)
-    },
-    nextAutoSaveVersion(fieldKey) {
-      const version = (this.autoSaveVersions[fieldKey] || 0) + 1
-      this.autoSaveVersions[fieldKey] = version
-      return version
-    },
-    enqueueAutoSave(fieldKey, task) {
-      const previous = this.autoSaveQueues[fieldKey] || Promise.resolve()
-      const current = previous.catch(() => {}).then(task)
-      this.autoSaveQueues[fieldKey] = current
-      current.finally(() => {
-        if (this.autoSaveQueues[fieldKey] === current) {
-          delete this.autoSaveQueues[fieldKey]
-        }
-      })
-      return current
-    },
-    queuePreferenceSave(groupName, fieldName, value, updateForm) {
-      const fieldKey = `${groupName}.${fieldName}`
-      const fieldPath = [groupName, fieldName]
-      const nextValue = cloneDeep(value)
-      const version = this.nextAutoSaveVersion(fieldKey)
-
-      return this.enqueueAutoSave(fieldKey, async () => {
-        const previousValue = cloneDeep(get(this.savedPreferenceValues, fieldPath))
-        if (isEqual(previousValue, nextValue)) {
-          return
-        }
-        try {
-          await this.$axios.patch(this.url, {
-            [groupName]: {
-              [fieldName]: nextValue
-            }
-          })
-          set(this.savedPreferenceValues, fieldPath, cloneDeep(nextValue))
-          if (this.autoSaveVersions[fieldKey] === version) {
-            this.$message.success(this.$t('SaveSuccess'))
-          }
-        } catch (error) {
-          if (this.autoSaveVersions[fieldKey] === version) {
-            updateForm?.({ [fieldName]: previousValue })
-          }
-        }
-      })
-    },
-    restoreGlobalDefault(groupName, fieldName) {
-      const fieldKey = `${groupName}.${fieldName}`
-      const version = this.nextAutoSaveVersion(fieldKey)
-
-      return this.enqueueAutoSave(fieldKey, async () => {
-        try {
-          const values = await this.$axios.delete(this.url, {
-            data: { names: [fieldName] }
-          })
-          const fieldPath = [groupName, fieldName]
-          const restoredValue = cloneDeep(get(values, fieldPath))
-          set(this.savedPreferenceValues, fieldPath, restoredValue)
-          if (this.autoSaveVersions[fieldKey] === version) {
-            const formRenderer = this.$refs.form?.$refs.form?.dataForm?.elForm
-            const currentGroupValue = cloneDeep(
-              get(formRenderer?.getFormValue?.(), [groupName], {})
+      for (const { category, metadata, values: categoryValues } of categories) {
+        for (const [group, groupMeta] of Object.entries(metadata)) {
+          const children = Object.entries(groupMeta.children || {}).filter(([name]) => {
+            const path = `${group}.${name}`
+            return (
+              (this.fieldsInclude.includes(group) || this.fieldsInclude.includes(path)) &&
+              !this.fieldsExclude.includes(path)
             )
-            set(currentGroupValue, [fieldName], restoredValue)
-            formRenderer?.updateForm({
-              [groupName]: currentGroupValue
-            })
-            this.$message.success(this.$t('SaveSuccess'))
-          }
-        } catch (error) {
-          // Request errors are displayed by the shared request interceptor.
-        }
-      })
-    },
-    cleanFormValue(value) {
-      this.fieldsExclude.forEach((name) => {
-        const nameArray = name.split('.')
-        if (nameArray.length === 2) {
-          delete value[nameArray[0]][nameArray[1]]
-        } else {
-          delete value[nameArray[0]]
-        }
-      })
+          })
+          if (!children.length) continue
 
-      return value
+          const names = children.map(([name]) => name)
+          const overrides = this.fieldsMeta[group]
+          remoteFieldsMeta[group] = { ...groupMeta, children: Object.fromEntries(children) }
+          fieldsMeta[group] = { ...overrides, fields: names }
+          values[group] = pickFields(categoryValues[group], names)
+          fieldCategories[group] = category
+        }
+      }
+
+      this.fields = Object.keys(fieldsMeta)
+      this.iFieldsMeta = fieldsMeta
+      this.fieldCategories = fieldCategories
+      this.savedPreferenceValues = cloneDeep(values)
+      this.initialValues = values
+      this.remoteFieldsMeta = remoteFieldsMeta
     },
-    submitMethod() {
-      return 'patch'
-    },
-    mergeObjects(target, ...sources) {
-      for (const source of sources) {
-        for (const key in source) {
-          if (typeof source[key] === 'object' && typeof target[key] === 'object') {
-            this.mergeObjects(target[key], source[key])
-          } else {
-            target[key] = source[key]
+    getChanges(values) {
+      const changes = {}
+      for (const group of this.fields) {
+        for (const name of this.iFieldsMeta[group].fields) {
+          const value = values[group]?.[name]
+          if (value !== undefined && !isEqual(value, this.savedPreferenceValues[group]?.[name])) {
+            set(changes, [this.fieldCategories[group], group, name], value)
           }
         }
       }
-      return target
+      return changes
+    },
+    async submitPreferences(values) {
+      if (this.saving || this.restoring) return
+      const changes = this.getChanges(values)
+      if (!Object.keys(changes).length) return
+
+      this.saving = true
+      const errors = {}
+      let failed = false
+      try {
+        // Save the language last so an error in another category cannot trigger a reload.
+        for (const [category, payload] of Object.entries(changes).reverse()) {
+          try {
+            await this.$axios.patch(this.preferenceUrl(category), payload)
+            for (const [group, fields] of Object.entries(payload)) {
+              Object.assign(this.savedPreferenceValues[group], cloneDeep(fields))
+            }
+          } catch (error) {
+            failed = true
+            if (error.response?.status === 400) {
+              Object.assign(errors, error.response.data)
+            }
+            break
+          }
+        }
+        this.$refs.form?.setErrors(errors)
+        if (!failed) {
+          this.$message.success(this.$t('SaveSuccess'))
+          this.applyLanguage(changes.lina?.basic?.lang)
+        }
+      } finally {
+        this.saving = false
+      }
+    },
+    async restoreSectionDefaults(_values, form) {
+      if (this.saving || this.restoring || !this.fields.length) return
+
+      this.restoring = true
+      const defaults = {}
+      let failed = false
+      try {
+        for (const category of [...this.categories].reverse()) {
+          const groups = this.fields.filter((group) => this.fieldCategories[group] === category)
+          const names = groups.flatMap((group) => this.iFieldsMeta[group].fields)
+          if (!names.length) continue
+
+          try {
+            const values = await this.$axios.delete(this.preferenceUrl(category), {
+              data: { names }
+            })
+            for (const group of groups) {
+              defaults[group] = pickFields(values[group], this.iFieldsMeta[group].fields)
+            }
+          } catch {
+            failed = true
+            break
+          }
+        }
+
+        form.updateForm(defaults)
+        Object.assign(this.savedPreferenceValues, cloneDeep(defaults))
+        if (!failed) {
+          this.$refs.form?.setErrors({})
+          this.$message.success(this.$t('ResetSuccessfully'))
+          this.applyLanguage(defaults.basic?.lang)
+        }
+      } finally {
+        this.restoring = false
+      }
+    },
+    applyLanguage(language) {
+      if (language && language !== getLangCode(true)) {
+        vueCookie.setCookie('django_language', language, { expires: 365, path: '/' })
+        window.location.reload()
+      }
     }
   }
 }
 </script>
-
-<style lang="scss" scoped></style>

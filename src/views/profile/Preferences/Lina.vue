@@ -1,18 +1,25 @@
 <template>
-  <Base v-bind="$data" />
+  <IBox>
+    <Base
+      :categories="['lina', 'luna']"
+      :fields-include="['basic.lang', 'graphics.file_name_conflict_resolution']"
+      :fields-meta="fieldsMeta"
+    />
+  </IBox>
 </template>
 
 <script>
 import Base from './Base.vue'
+import IBox from '@/components/Common/IBox'
 
 export default {
   name: 'Lina',
   components: {
-    Base
+    Base,
+    IBox
   },
   data() {
     return {
-      category: 'lina',
       fieldsMeta: {
         basic: {
           fieldsMeta: {
@@ -20,13 +27,6 @@ export default {
               el: {
                 autocomplete: 'language',
                 name: 'preference-language'
-              },
-              on: {
-                change: ([value], updateForm) => {
-                  this.$axios.get(`/core/i18n/${value}/`).then(() => {
-                    window.location.reload()
-                  })
-                }
               }
             }
           }
@@ -36,5 +36,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped></style>

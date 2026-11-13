@@ -131,6 +131,15 @@ export default {
           load: {
             filterable: 'custom',
             sortable: false,
+            // Match ComputeLoadUtil in the JumpServer backend.
+            helpTip: this.$t('TerminalLoadStatusHelpTip', {
+              cpuNormal: 5,
+              cpuHigh: 20,
+              memoryNormal: 85,
+              memoryHigh: 95,
+              diskNormal: 80,
+              diskHigh: 99
+            }),
             formatterArgs: {
               classChoices: {
                 offline: 'fa fa-chain-broken text-danger',

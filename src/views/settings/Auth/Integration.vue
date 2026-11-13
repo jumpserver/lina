@@ -100,7 +100,9 @@ export default {
       }, {})
       this.groupedAuthItems = {}
       for (const type in this.typeMap) {
-        this.groupedAuthItems[type] = groupedAuthItems[type] || []
+        if (groupedAuthItems[type]?.length) {
+          this.groupedAuthItems[type] = groupedAuthItems[type]
+        }
       }
     }
   }

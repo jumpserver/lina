@@ -75,6 +75,10 @@ export default {
     fieldsMeta: {
       type: Object,
       default: () => ({})
+    },
+    remoteFieldsMeta: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -175,10 +179,10 @@ export default {
     },
     async optionUrlMetaAndGenerateColumns() {
       let data = { actions: {} }
-      if (this.url) {
+      if (this.url && !this.remoteFieldsMeta) {
         data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       }
-      this.remoteMeta = getActionMeta(data, this.method)
+      this.remoteMeta = this.remoteFieldsMeta || getActionMeta(data, this.method)
       this.$emit('afterRemoteMeta', this.remoteMeta)
       this.generateColumns()
       this.$emit('afterGenerateColumns', this.totalFields)

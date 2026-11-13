@@ -18,17 +18,16 @@
           </el-dropdown-item>
 
           <el-dropdown-item command="PasswordAndSSHKey">
-            <svg-icon class="icon" icon-class="personal" />
+            <svg-icon class="icon" icon-class="key" />
             {{ $t('PasswordAndSSHKey') }}
           </el-dropdown-item>
 
           <el-dropdown-item command="ProfileSecurity">
-            <svg-icon class="icon" icon-class="lock" />
+            <svg-icon class="icon" icon-class="security" />
             {{ $t('PersonalSecurity.Title') }}
           </el-dropdown-item>
 
-          <!--  Preference -->
-          <el-dropdown-item command="Preferences" divided>
+          <el-dropdown-item command="Preferences">
             <svg-icon class="icon" icon-class="preference" />
             {{ $t('Preferences') }}
           </el-dropdown-item>
@@ -38,8 +37,7 @@
             {{ $t('ScreenLock.LockNow') }}
           </el-dropdown-item>
 
-          <!-- logout -->
-          <el-dropdown-item command="logout" divided>
+          <el-dropdown-item command="logout">
             <svg-icon class="icon" icon-class="logout" />
             {{ $t('Logout') }}
           </el-dropdown-item>
@@ -102,12 +100,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:global(.nav-header-dropdown.nav-account-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
-  height: 32px;
-  line-height: 32px;
-  font-size: 12px;
-}
-
 .header-profile {
   display: flex;
   align-items: center;
@@ -147,7 +139,15 @@ export default {
 }
 
 .icon {
+  flex: 0 0 auto;
   font-size: 14px;
-  margin-right: 10px;
+}
+</style>
+
+<style lang="scss">
+.nav-header-dropdown.nav-account-dropdown.el-dropdown__popper {
+  .el-dropdown-menu__item {
+    gap: 8px;
+  }
 }
 </style>

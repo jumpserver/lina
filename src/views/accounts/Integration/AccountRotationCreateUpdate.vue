@@ -4,6 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import DurationInput from '@/components/Form/FormFields/DurationInput.vue'
 import Select2 from '@/components/Form/FormFields/Select2.vue'
 import rules from '@/components/Form/DataForm/rules'
 import { credentialUrl, saveApplicationCredential } from '@/api/applicationCredential'
@@ -126,23 +127,26 @@ export default {
         hidden: (form) => !isRotation(form),
         helpText: this.$t('VerifyBeforeSwitchHelp')
       },
-      source_no_traffic_days: {
-        label: this.$t('SourceNoTrafficDays'),
+      source_no_traffic_minutes: {
+        label: this.$t('SourceNoTrafficDuration'),
+        component: DurationInput,
         hidden: (form) => !isRotation(form),
         rules: [
           rules.Required,
           {
-            validator: (_rule, value, callback) =>
+            validator: (_rule, value, callback) => {
+              const minutes = Number(value)
               callback(
-                Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= 3650
+                Number.isInteger(minutes) && minutes >= 1 && minutes <= 5256000
                   ? undefined
-                  : new Error(this.$t('StandbyNoTrafficDaysValidation'))
-              ),
+                  : new Error(this.$t('SourceNoTrafficMinutesValidation'))
+              )
+            },
             trigger: 'blur'
           }
         ],
-        el: { type: 'number', min: 1, max: 3650, step: 1 },
-        helpText: this.$t('SourceNoTrafficDaysHelp')
+        el: { label: this.$t('SourceNoTrafficDuration') },
+        helpText: this.$t('SourceNoTrafficDurationHelp')
       },
       subscription_account_ids: {
         label: this.$t('SubscribedAccounts'),
@@ -220,7 +224,7 @@ export default {
           account_id: item?.account?.id || '',
           alternate_account_id: item?.alternate_account?.id || '',
           verify_before_switch: item?.verify_before_switch ?? true,
-          source_no_traffic_days: item?.source_no_traffic_days ?? 7,
+          source_no_traffic_minutes: item?.source_no_traffic_minutes ?? 10080,
           subscription_account_ids: (item?.subscription_accounts || []).map(
             (account) => account.id
           ),
@@ -238,7 +242,7 @@ export default {
               'account_id',
               'alternate_account_id',
               'verify_before_switch',
-              'source_no_traffic_days',
+              'source_no_traffic_minutes',
               'subscription_all_authorized',
               'subscription_account_ids'
             ]
