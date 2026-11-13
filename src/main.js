@@ -33,13 +33,12 @@ import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 import { toPlainTextMessage } from '@/utils/common/message'
 import xss from '@/utils/secure'
-import moment from 'moment'
-import 'moment/locale/fr'
+import moment, { getMomentLocale } from '@/i18n/moment'
 import DOMPurify from 'dompurify'
 import _ from 'lodash'
 import { ElMessageBox } from 'element-plus'
 
-moment.locale(getLangCode().toLowerCase().split('-')[0] === 'fr' ? 'fr' : 'zh-cn')
+moment.locale(getMomentLocale(i18n.global.locale.value))
 
 // 构建时间：生产环境为 Docker 构建时刻，开发环境为 dev server 启动时刻（见 vite.config.js）
 // 用双色徽章样式打印，与其它 console 信息区分开。
