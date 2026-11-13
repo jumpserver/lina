@@ -25,6 +25,7 @@ import Select2 from '@/components/Form/FormFields/Select2'
 import { DrawerListTable as ListTable } from '@/components'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
+import { ObjectLocalStorage } from '@/utils/common/objectLocalStorage'
 
 export default {
   components: {
@@ -79,9 +80,19 @@ export default {
           app: 'terminal',
           resource: 'terminal'
         },
+        columnsExclude: ['stat'],
+        columnsExtra: ['cpu_load', 'memory_used', 'disk_used'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'session_online', 'stat', 'load', 'actions']
+          default: [
+            'name',
+            'session_online',
+            'cpu_load',
+            'memory_used',
+            'disk_used',
+            'load',
+            'actions'
+          ]
         },
         columnsMeta: {
           name: {
@@ -99,15 +110,24 @@ export default {
               }
             }
           },
-          stat: {
-            formatter: (row) => {
-              if (!row?.stat) {
-                return ''
-              }
-              const stat = row.stat
-              return `${stat['cpu_load']} / ${stat['memory_used']}% / ${stat['disk_used']}%`
-            },
-            helpTip: 'CPU / Memory / Disk'
+          cpu_load: {
+            label: this.$t('TerminalCPULoad'),
+            width: '160px',
+            align: 'center',
+            formatter: (row) => row.stat?.cpu_load ?? '—',
+            helpTip: this.$t('TerminalCPULoadHelpTip')
+          },
+          memory_used: {
+            label: this.$t('TerminalMemoryUsage'),
+            width: '160px',
+            align: 'center',
+            formatter: (row) => (row.stat?.memory_used == null ? '—' : `${row.stat.memory_used}%`)
+          },
+          disk_used: {
+            label: this.$t('TerminalDiskUsage'),
+            width: '160px',
+            align: 'center',
+            formatter: (row) => (row.stat?.disk_used == null ? '—' : `${row.stat.disk_used}%`)
           },
           load: {
             filterable: 'custom',
@@ -119,8 +139,7 @@ export default {
                 high: 'fa fa-exclamation-triangle text-info',
                 normal: 'fa fa-check text-primary'
               }
-            },
-            helpTip: 'CPU / Memory / Disk'
+            }
           },
           remote_addr: {
             sortable: 'custom'
@@ -154,6 +173,20 @@ export default {
           this.dialogSettings.visible = true
         }
       }
+    }
+  },
+  created() {
+    const storage = new ObjectLocalStorage(
+      'tableColumns',
+      `${this.$route.name}_${this.tableConfig.url}`
+    )
+    const columns = storage.get()
+    if (Array.isArray(columns) && columns.includes('stat')) {
+      storage.set(
+        columns.flatMap((column) =>
+          column === 'stat' ? ['cpu_load', 'memory_used', 'disk_used'] : column
+        )
+      )
     }
   },
   methods: {

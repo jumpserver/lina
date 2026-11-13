@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { h } from 'vue'
+import { ElTooltip } from 'element-plus'
 import { toSentenceCase } from '@/utils/common/index'
 
 import {
@@ -526,11 +527,11 @@ export class TableColumnsGenerator {
       return h('span', [
         column.label,
         h(
-          'el-tooltip',
+          ElTooltip,
           {
             placement: 'bottom',
             effect: 'dark',
-            openDelay: 500,
+            showAfter: 500,
             popperClass: 'help-tips'
           },
           {
