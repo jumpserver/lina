@@ -2,6 +2,7 @@
   <DataForm
     v-bind="dataFormAttrs"
     v-if="!loading"
+    ref="form"
     :disabled="disabled"
     :fields="iFields"
     :form="iValue"

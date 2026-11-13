@@ -116,6 +116,7 @@
 import Dialog from '@/components/Dialog'
 import MarkDown from '@/components/Widgets/MarkDown'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
+import { getMomentLocale } from '@/i18n/moment'
 import { webSessionLockState, refreshWebSessionLock } from '@/composables/useWebSessionLock'
 
 export default {
@@ -260,7 +261,7 @@ export default {
       if (now.getTime() - d.getTime() > 3600 * 24 * 7 * 1000) {
         return toSafeLocalDateStr(s)
       } else {
-        return this.$moment(d).fromNow()
+        return this.$moment(d).locale(getMomentLocale(this.$i18n.locale)).fromNow()
       }
     },
     oneClickRead(msgs) {

@@ -50,7 +50,7 @@ export async function saveApplicationCredential(form) {
     alternate_account: form.mode === 'alternating_rotation' ? form.alternate_account_id : null,
     ...(form.mode === 'alternating_rotation'
       ? {
-          source_no_traffic_days: Number(form.source_no_traffic_days ?? 7),
+          source_no_traffic_minutes: Number(form.source_no_traffic_minutes ?? 10080),
           verify_before_switch: form.verify_before_switch ?? true
         }
       : {}),

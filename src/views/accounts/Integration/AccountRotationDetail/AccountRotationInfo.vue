@@ -168,9 +168,9 @@ export default {
             value: this.object.verify_before_switch === false ? this.$t('No') : this.$t('Yes')
           },
           {
-            key: this.$t('SourceNoTrafficDays'),
-            value: this.$t('StandbyNoTrafficDaysValue', {
-              days: this.object.source_no_traffic_days ?? 7
+            key: this.$t('SourceNoTrafficMinutes'),
+            value: this.$t('SourceNoTrafficMinutesValue', {
+              minutes: this.object.source_no_traffic_minutes ?? 10080
             })
           }
         )

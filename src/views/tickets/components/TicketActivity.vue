@@ -9,9 +9,13 @@
       </div>
     </template>
     <el-alert v-if="failed" :title="$t('LoadFailed')" type="error" :closable="false" />
-    <el-timeline v-if="events.length" class="activity-timeline" :aria-label="$t('OperateLog')">
+    <el-timeline
+      v-if="visibleEvents.length"
+      class="activity-timeline"
+      :aria-label="$t('OperateLog')"
+    >
       <el-timeline-item
-        v-for="event in events"
+        v-for="event in visibleEvents"
         :key="event.id"
         :timestamp="toSafeLocalDateStr(event.date_created)"
       >
@@ -31,9 +35,6 @@
             "
           >
             {{ formatUser(event.actor_snapshot) }}
-          </span>
-          <span v-if="event.type === 'approval.created' && event.data.assignee">
-            → {{ formatUser(event.data.assignee) }}
           </span>
           <span v-if="event.node_instance" class="hint">
             · {{ nodeName(event.node_instance) }}</span
@@ -83,7 +84,11 @@
         />
       </el-timeline-item>
     </el-timeline>
-    <el-empty v-else-if="!loading && !failed" :description="$t('NoData')" :image-size="80" />
+    <el-empty
+      v-else-if="!loading && !failed && !moreEvents"
+      :description="$t('NoData')"
+      :image-size="80"
+    />
     <el-button v-if="moreEvents" class="load-more" :disabled="loading" @click="load(true)">
       {{ $t('WFMoreEvents') }}
     </el-button>
@@ -120,6 +125,17 @@ export default {
     eventLabels
   }),
   computed: {
+    visibleEvents() {
+      return this.events.filter((event) => {
+        if (event.type === 'cc.added') return event.data.recipients?.length > 0
+        return ![
+          'approval.created',
+          'approval.cancelled',
+          'node.entered',
+          'node.completed'
+        ].includes(event.type)
+      })
+    },
     workflowKey() {
       return `${this.object.org_id || ''}:${this.object.workflow_instance || ''}`
     }

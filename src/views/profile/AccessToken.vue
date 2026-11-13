@@ -21,10 +21,15 @@ export default {
       tableConfig: {
         hasSelection: false,
         url: ajaxUrl,
+        extraQuery: { valid_only: true },
         columns: ['token_preview', 'scope', 'is_valid', 'expires', 'updated', 'created', 'actions'],
         columnsMeta: {
+          is_valid: {
+            // Reserve space for the pin button and longer translated headers.
+            width: `${Math.max(80, this.$t('Valid').length * 8 + 44)}px`
+          },
           actions: {
-            prop: '',
+            width: '76px',
             formatterArgs: {
               hasUpdate: false,
               hasClone: false,
@@ -33,8 +38,9 @@ export default {
                 {
                   name: 'Revoke',
                   title: this.$t('Revoke'),
+                  icon: 'fa-trash-can',
                   can: ({ row }) => this.$hasPerm('oauth2_provider.delete_accesstoken'),
-                  type: 'info',
+                  type: 'danger',
                   callback: function ({ row }) {
                     this.$axios
                       .delete(`${ajaxUrl}${row.id}/revoke/`)

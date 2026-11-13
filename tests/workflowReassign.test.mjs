@@ -733,3 +733,146 @@ test('withdrawal asks for a reason while pending approvers keep the decision com
     assert.doesNotMatch(html, /<textarea[^>]*\brequired\b/)
   }
 })
+
+test('password-change polling and manual refresh update only the result and keep the 15-second interval', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  const panel = await workflowPanel()
+  const object = {
+    id: 'ticket',
+    org_id: 'org',
+    workflow_instance: 'workflow',
+    type: { value: 'change_secret' },
+    state: { value: 'approved' },
+    title: 'Original title',
+    request_items: [{ name: 'accounts', value: 'account' }],
+    cc_users: [{ id: 'cc-user' }],
+    result: { state: 'queued', processing: true }
+  }
+  const original = { ...object }
+  const instance = { state: 'approved', nodes: [] }
+  const reads = []
+  let nextResult = {
+    state: 'running',
+    processing: true,
+    counts: { total: 2, success: 1, pending: 1 }
+  }
+  const vm = bindMethods(panel, {
+    ...panel.data(),
+    object,
+    instance,
+    comment: 'Keep this draft',
+    $axios: {
+      async get(url, config) {
+        reads.push(url)
+        assert.deepEqual(config, { params: { oid: 'org' } })
+        return {
+          ...object,
+          title: 'Changed title',
+          request_items: [],
+          cc_users: [],
+          result: nextResult
+        }
+      }
+    }
+  })
+  for (const key of ['workflowKey', 'requestConfig']) {
+    Object.defineProperty(vm, key, { get: () => panel.computed[key].call(vm) })
+  }
+  try {
+    await vm.load()
+    assert.strictEqual(object.result, nextResult)
+    t.mock.timers.tick(14999)
+    await new Promise(setImmediate)
+    assert.equal(reads.length, 1)
+    t.mock.timers.tick(1)
+    await new Promise(setImmediate)
+    assert.equal(reads.length, 2)
+    nextResult = { state: 'success', processing: false }
+    await vm.load(true, true)
+    assert.strictEqual(object.result, nextResult)
+    assert.deepEqual(reads, Array(3).fill('/api/v1/tickets/tickets/ticket/'))
+    for (const key of Object.keys(original).filter((key) => key !== 'result')) {
+      assert.strictEqual(object[key], original[key], key)
+    }
+    assert.strictEqual(vm.instance, instance)
+    assert.equal(vm.comment, 'Keep this draft')
+    assert.equal(vm.refreshing, false)
+    t.mock.timers.tick(30000)
+    await new Promise(setImmediate)
+    assert.equal(reads.length, 3)
+  } finally {
+    panel.beforeUnmount.call(vm)
+  }
+})
+
+test('result refresh preserves the previous progress on failure and retries without reloading the workflow', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] })
+  const panel = await workflowPanel()
+  const result = { state: 'running', processing: true }
+  let attempts = 0
+  const vm = bindMethods(panel, {
+    ...panel.data(),
+    object: { id: 'ticket', type: 'change_secret', workflow_instance: 'workflow', result },
+    instance: { state: 'approved' },
+    $axios: {
+      async get(url) {
+        assert.equal(url, '/api/v1/tickets/tickets/ticket/')
+        if (++attempts === 1) throw new Error('Temporary network error')
+        return { result: { state: 'failed', processing: false } }
+      }
+    }
+  })
+  try {
+    await vm.load()
+    assert.strictEqual(vm.object.result, result)
+    t.mock.timers.tick(15000)
+    await new Promise(setImmediate)
+    assert.equal(attempts, 2)
+    assert.equal(vm.object.result.state, 'failed')
+    t.mock.timers.tick(30000)
+    await new Promise(setImmediate)
+    assert.equal(attempts, 2)
+  } finally {
+    panel.beforeUnmount.call(vm)
+  }
+})
+
+test('result refresh avoids overlapping requests and ignores responses after leaving or switching tickets', async () => {
+  const panel = await workflowPanel()
+  for (const change of ['ticket', 'organization', 'deactivate', 'unmount']) {
+    let resolve,
+      requests = 0
+    const object = {
+      id: 'ticket',
+      org_id: 'org',
+      type: 'change_secret',
+      workflow_instance: 'workflow',
+      result: {}
+    }
+    const vm = bindMethods(panel, {
+      ...panel.data(),
+      object,
+      instance: { state: 'approved' },
+      $axios: {
+        get() {
+          requests++
+          return new Promise((done) => {
+            resolve = done
+          })
+        }
+      }
+    })
+    Object.defineProperty(vm, 'workflowKey', { get: () => panel.computed.workflowKey.call(vm) })
+    const pending = vm.load(true, true)
+    await vm.load(true, true)
+    assert.equal(requests, 1)
+    if (change === 'ticket') vm.object = { ...object, id: 'another-ticket' }
+    else if (change === 'organization') vm.object = { ...object, org_id: 'another-org' }
+    else if (change === 'deactivate') panel.deactivated.call(vm)
+    else panel.beforeUnmount.call(vm)
+    resolve({ result: { state: 'success' } })
+    await pending
+    assert.deepEqual(object.result, {})
+    panel.beforeUnmount.call(vm)
+  }
+})

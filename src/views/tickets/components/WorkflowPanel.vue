@@ -475,25 +475,40 @@ export default {
     formatUser(user) {
       return formatTicketUser(user)
     },
-    async load(force = false) {
-      if ((this.loading && !force) || !this.object.workflow_instance || this.disposed) return
+    async load(force = false, resultOnly = false) {
+      if (
+        (this.loading && (!force || resultOnly)) ||
+        !this.object.workflow_instance ||
+        this.disposed
+      ) {
+        return
+      }
       clearTimeout(this.timer)
       const requestId = ++this.requestId
       const workflowKey = this.workflowKey
       const ticket = this.object
       const requestConfig = this.requestConfig
+      const refreshResultOnly =
+        resultOnly ||
+        (!force &&
+          this.instance?.state === 'approved' &&
+          (ticket.type?.value || ticket.type) === 'change_secret')
       let retry = true
       this.loading = true
-      this.refreshing = force
+      this.refreshing = force && !refreshResultOnly
       try {
-        const instance = await this.$axios.get(
-          `/api/v1/tickets/workflow-instances/${ticket.workflow_instance}/`,
-          requestConfig
-        )
-        if (requestId !== this.requestId || workflowKey !== this.workflowKey || this.disposed) {
-          return
+        let instance = this.instance
+        if (!refreshResultOnly) {
+          instance = await this.$axios.get(
+            `/api/v1/tickets/workflow-instances/${ticket.workflow_instance}/`,
+            requestConfig
+          )
+          if (requestId !== this.requestId || workflowKey !== this.workflowKey || this.disposed) {
+            return
+          }
         }
         if (
+          refreshResultOnly ||
           force ||
           ticket.result?.processing ||
           instance.state !== this.instance?.state ||
@@ -506,10 +521,14 @@ export default {
           if (requestId !== this.requestId || workflowKey !== this.workflowKey || this.disposed) {
             return
           }
-          Object.assign(ticket, updatedTicket)
+          if (refreshResultOnly) {
+            ticket.result = updatedTicket.result
+          } else {
+            Object.assign(ticket, updatedTicket)
+          }
         }
-        this.instance = instance
-        retry = instance.state === 'running' || Boolean(ticket.result?.processing)
+        if (!refreshResultOnly) this.instance = instance
+        retry = !instance || instance.state === 'running' || Boolean(ticket.result?.processing)
       } catch {
         // Axios reports errors; retry until ticket details and access actions are refreshed.
       } finally {
