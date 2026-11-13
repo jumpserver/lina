@@ -126,9 +126,15 @@ export default {
   }),
   computed: {
     visibleEvents() {
-      return this.events.filter(
-        (event) => event.type !== 'approval.created' && event.type !== 'approval.cancelled'
-      )
+      return this.events.filter((event) => {
+        if (event.type === 'cc.added') return event.data.recipients?.length > 0
+        return ![
+          'approval.created',
+          'approval.cancelled',
+          'node.entered',
+          'node.completed'
+        ].includes(event.type)
+      })
     },
     workflowKey() {
       return `${this.object.org_id || ''}:${this.object.workflow_instance || ''}`

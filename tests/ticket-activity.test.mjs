@@ -19,7 +19,7 @@ const activity = new Function(
   script
 )({}, {}, {}, {}, () => ({}))
 
-test('hides task lifecycle events while retaining actual operations and the original events', () => {
+test('hides task and node lifecycle events while retaining actual operations and the original events', () => {
   const types = [
     'workflow.started',
     'node.entered',
@@ -36,19 +36,48 @@ test('hides task lifecycle events while retaining actual operations and the orig
     'workflow.completed',
     'approval.timed_out',
     'workflow.expired',
-    'resources.adjusted'
+    'resources.adjusted',
+    'workflow.error',
+    'action.executed',
+    'secret.viewed',
+    'replay.downloaded'
   ]
   const events = types.map((type, id) => ({ id, type, data: { comment: `comment-${id}` } }))
   const original = structuredClone(events)
   assert.deepEqual(
     activity.computed.visibleEvents.call({ events }),
-    [0, 1, 3, 5, 7, 8, 10, 11, 12, 13, 14, 15].map((i) => events[i])
+    [0, 3, 5, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19].map((i) => events[i])
   )
   assert.deepEqual(events, original)
 })
 
+test('hides empty CC records and retains configured recipients even when already copied', () => {
+  const recipient = { id: 'reviewer-id', username: 'reviewer' }
+  const events = [
+    { type: 'cc.added', data: { recipients: [] } },
+    { type: 'cc.added', data: {} },
+    { type: 'cc.added', data: { recipients: null } },
+    { type: 'cc.added', data: { recipients: [recipient], added_recipients: [recipient] } },
+    { type: 'cc.added', data: { recipients: [recipient], added_recipients: [] } }
+  ]
+  const original = structuredClone(events)
+  assert.deepEqual(activity.computed.visibleEvents.call({ events }), events.slice(3))
+  assert.deepEqual(events, original)
+})
+
 test('pagination uses all received events even when an entire page is hidden', async () => {
-  const hidden = Array.from({ length: 50 }, (_, id) => ({ id, type: 'approval.created' }))
+  const hiddenTypes = [
+    'approval.created',
+    'approval.cancelled',
+    'node.entered',
+    'node.completed',
+    'cc.added'
+  ]
+  const hidden = Array.from({ length: 50 }, (_, id) => ({
+    id,
+    type: hiddenTypes[id % hiddenTypes.length],
+    data: { recipients: [] }
+  }))
   const approved = { id: 50, type: 'approval.approved', data: { comment: 'Approved' } }
   const offsets = []
   const vm = {
