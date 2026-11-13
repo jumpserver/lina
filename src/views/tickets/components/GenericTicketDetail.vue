@@ -44,7 +44,7 @@
         :is="plugin.resultComponent"
         v-if="plugin.resultComponent"
         :object="object"
-        @refresh="$refs.workflow.load(true)"
+        @refresh="$refs.workflow.load(true, object.type?.value === 'change_secret')"
       />
       <slot id="MoreDetails" />
       <WorkflowPanel
