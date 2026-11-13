@@ -213,13 +213,13 @@
               <el-icon><Timer /></el-icon>
               {{ $t('RotationSourceWaitingEvent') }}
               <el-tooltip
-                :content="$t('SourceNoTrafficDaysHelp')"
+                :content="$t('SourceNoTrafficDurationHelp')"
                 :popper-style="{ maxWidth: '360px' }"
               >
                 <button
                   type="button"
                   class="section-help"
-                  :aria-label="$t('SourceNoTrafficDaysHelp')"
+                  :aria-label="$t('SourceNoTrafficDurationHelp')"
                 >
                   <el-icon><QuestionFilled /></el-icon>
                 </button>
@@ -237,11 +237,11 @@
             <div class="observation-content">
               <dl>
                 <div>
-                  <dt>{{ $t('SourceNoTrafficDays') }}</dt>
+                  <dt>{{ $t('SourceNoTrafficMinutes') }}</dt>
                   <dd>
                     {{
-                      $t('StandbyNoTrafficDaysValue', {
-                        days: detail.source_traffic.no_traffic_days
+                      $t('SourceNoTrafficMinutesValue', {
+                        minutes: detail.source_traffic.no_traffic_minutes
                       })
                     }}
                   </dd>
@@ -372,11 +372,11 @@
                           <dd>{{ accountLabel(recipientEvent.rotation_accounts.change) }}</dd>
                         </div>
                         <div v-if="recipientEvent.source_traffic">
-                          <dt>{{ $t('SourceNoTrafficDays') }}</dt>
+                          <dt>{{ $t('SourceNoTrafficMinutes') }}</dt>
                           <dd>
                             {{
-                              $t('StandbyNoTrafficDaysValue', {
-                                days: recipientEvent.source_traffic.no_traffic_days
+                              $t('SourceNoTrafficMinutesValue', {
+                                minutes: recipientEvent.source_traffic.no_traffic_minutes
                               })
                             }}
                           </dd>

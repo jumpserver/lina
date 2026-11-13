@@ -58,13 +58,14 @@ const script = parse(source)
   .replace('export default', 'return')
 const component = new Function(
   'GenericCreateUpdatePage',
+  'DurationInput',
   'Select2',
   'rules',
   'credentialUrl',
   'saveApplicationCredential',
   'subscribedAccountLabel',
   script
-)(null, null, {}, '/policies/', saveApplicationCredential, (value) => value)
+)(null, null, null, {}, '/policies/', saveApplicationCredential, (value) => value)
 
 test('policy checkbox defaults on and preserves existing false values', () => {
   for (const value of [undefined, false, true]) {

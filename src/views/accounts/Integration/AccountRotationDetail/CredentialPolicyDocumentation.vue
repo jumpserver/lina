@@ -23,7 +23,11 @@
           {{ subscribedAccountLabel(object.active_account) }}
         </el-descriptions-item>
         <el-descriptions-item :label="$t('PolicyDocsObservationWindow')">
-          {{ $t('PolicyDocsObservationDays', { days: object.source_no_traffic_days ?? 7 }) }}
+          {{
+            $t('PolicyDocsObservationMinutes', {
+              minutes: object.source_no_traffic_minutes ?? 10080
+            })
+          }}
         </el-descriptions-item>
       </el-descriptions>
       <nav class="policy-documentation-links" :aria-label="$t('IntegrationDocsLinks')">
@@ -121,7 +125,7 @@ export default {
                 ? 'PolicyDocsVerificationSkipped'
                 : 'PolicyDocsVerificationRequired'
             ),
-            days: this.object.source_no_traffic_days ?? 7
+            minutes: this.object.source_no_traffic_minutes ?? 10080
           })
         },
         {

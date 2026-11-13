@@ -8,6 +8,7 @@ import UploadKey from './UploadKey.vue'
 import JsonEditor from './JsonEditor.vue'
 import PhoneInput from './PhoneInput.vue'
 import UploadField from './UploadField.vue'
+import AvatarUploadField from './AvatarUploadField.vue'
 import UpdateToken from './UpdateToken.vue'
 import UserPassword from './UserPassword.vue'
 import UploadSecret from './UploadSecret.vue'
@@ -35,6 +36,7 @@ export default {
   UpdateToken,
   PhoneInput,
   UploadField,
+  AvatarUploadField,
   UserPassword,
   DynamicInput,
   PasswordInput,
@@ -62,6 +64,7 @@ export {
   UpdateToken,
   PhoneInput,
   UploadField,
+  AvatarUploadField,
   UserPassword,
   DynamicInput,
   PasswordInput,

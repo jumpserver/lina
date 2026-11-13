@@ -92,6 +92,26 @@
                     :data-column-prop="col.prop"
                   >
                     <span v-if="!col.hideHeaderLabel" :title="col.label">{{ col.label }}</span>
+                    <el-tooltip
+                      v-if="col.helpTip"
+                      :show-after="500"
+                      :trigger="['hover', 'focus']"
+                      effect="dark"
+                      placement="bottom"
+                      popper-class="help-tips"
+                    >
+                      <template #content>
+                        <div v-sanitize="col.helpTip" />
+                      </template>
+                      <i
+                        :aria-label="col.label"
+                        class="fa fa-question-circle-o column-help-tip-icon"
+                        role="img"
+                        tabindex="0"
+                        @click.stop
+                        @mousedown.stop
+                      />
+                    </el-tooltip>
                     <button
                       v-if="col.pinState?.visible"
                       :aria-label="$t(col.pinState.pinned ? 'UnpinColumn' : 'PinColumn')"
@@ -1117,7 +1137,7 @@ export default {
       // 函数类型的 formatter 已经通过 :formatter 显式传递了
       // 但是我们需要保留 formatter 在 v-bind 中，以便 template slot 可以访问到
       // 所以这里不排除 formatter，而是在 el-data-table-column 中处理
-      const { hideHeaderLabel, pinOriginalFixed, pinState, ...columnProps } = col
+      const { helpTip, hideHeaderLabel, pinOriginalFixed, pinState, ...columnProps } = col
       const props = { align: this.columnsAlign, ...columnProps }
       // Put the drag marker on the header itself; older browsers cannot match :has().
       if (isColumnDraggable(col)) {
@@ -1621,6 +1641,11 @@ export default {
   .column-header-content {
     display: inline-flex;
     align-items: center;
+  }
+
+  .column-help-tip-icon {
+    margin-inline-start: 4px;
+    cursor: help;
   }
 
   .column-pin-button {

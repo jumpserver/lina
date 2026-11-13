@@ -102,7 +102,7 @@ export default {
     resetButtons() {
       return [
         {
-          title: this.$t('IdleLock.ResetDefault'),
+          title: this.$t('RestoreDefault'),
           loading: this.resetting,
           disabled: this.resetting,
           callback: () => this.resetToDefault()
