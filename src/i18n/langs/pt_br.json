@@ -870,12 +870,6 @@
   "CurrentConnections": "Número atual de conexões",
   "CurrentStatus": "Estado atual",
   "CurrentUserVerify": "Confirme sua identidade",
-  "IdentityConfirm": {
-    "PasswordHint": "Digite sua senha de login para continuar",
-    "MFAHint": "Conclua a verificação MFA para continuar",
-    "ReloginHint": "Entre novamente para confirmar sua identidade. Ao continuar, esta sessão será encerrada, incluindo outras páginas que a utilizam. Alterações não salvas serão perdidas. Após entrar novamente, volte a esta página e repita a operação.",
-    "GoToLogin": "Ir para o login"
-  },
   "Custom": "Personalizar",
   "CustomCol": "Campos de lista personalizados",
   "CustomCreate": "Criar ativo - personalizado",
@@ -1203,7 +1197,6 @@
   "InstanceName": "Nome da instância",
   "InstanceNamePartIp": "Nome da instância e parte do IP",
   "InstancePlatformName": "Nome da plataforma de instância",
-  "IntegerMinimumRequired": "Insira um número inteiro maior ou igual a {min}",
   "IntegerRequired": "Insira um número inteiro.",
   "Integration": "Integração de aplicativos",
   "Interface": "Interface de rede",
@@ -2957,7 +2950,6 @@
   "WFResolver_user_group": "User groups",
   "WFResolver_role": "Roles",
   "WFResolver_asset_owner": "Asset owners",
-  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
   "WFResolver_org_admin": "Organization administrators",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
@@ -3027,8 +3019,6 @@
   "WFAddApprover": "Add approver",
   "WFWithdraw": "Withdraw",
   "WFDeadline": "Deadline",
-  "WFDeadlinePassed": "Deadline passed",
-  "WFTimeoutPending": "Deadline passed; awaiting system processing",
   "WFConditionResult": "Condition result",
   "WFTimeline": "Approval timeline",
   "WFMoreEvents": "Load more events",
@@ -3155,9 +3145,20 @@
     "LifetimeHelp": "Contado desde o login. Ao expirar, entre novamente; a atividade não prolonga o prazo.",
     "AdminClientHelp": "O administrador define padrões e limites. O usuário pode adotar opções mais restritas; caso contrário, segue o administrador."
   },
-  "AccountConnectivity": "Teste de conectividade de contas",
-  "AssetConnectivity": "Teste de conectividade de ativos",
-  "ConnectivityAllAccounts": "Todas as contas ativas",
+  "MCPClientID": "ID do cliente",
+  "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "Ativar MCP",
+  "MCPEnabledHelp": "O Koko sincroniza estas configurações a cada 60 segundos. Desativar o MCP interrompe novas solicitações, enquanto as tarefas aceitas são finalizadas e os registros de auditoria são enviados.",
+  "MCPAllowRegistration": "Permitir registro automático de clientes",
+  "MCPRegistrationHelp": "Aplica-se quando o MCP está ativado. Os usuários configuram apenas a URL MCP e depois entram no JumpServer para autorizar o acesso. Desativar esta opção impede novos registros sem revogar autorizações existentes.",
+  "MCPPublicURL": "URL de acesso MCP",
+  "MCPPublicURLHelp": "Obrigatório quando o MCP está ativado. Informe a URL MCP externa completa em HTTP ou HTTPS, sem barra final, parâmetros de consulta ou fragmento. O endereço de autorização usa a URL do site nas configurações básicas.",
+  "IdentityConfirm": {
+    "PasswordHint": "Digite sua senha de login para continuar",
+    "MFAHint": "Conclua a verificação MFA para continuar",
+    "ReloginHint": "Entre novamente para confirmar sua identidade. Ao continuar, esta sessão será encerrada, incluindo outras páginas que a utilizam. Alterações não salvas serão perdidas. Após entrar novamente, volte a esta página e repita a operação.",
+    "GoToLogin": "Ir para o login"
+  },
   "OnlineSessionPolicy": {
     "Title": "Informações de validade",
     "Expires": "Expira em",
@@ -3168,5 +3169,13 @@
     "Grace": "Fim da tolerância por alteração",
     "Unlimited": "Sem limite",
     "BrowserExit": "Entrar novamente ao fechar o navegador"
-  }
+  },
+  "IntegerMinimumRequired": "Insira um número inteiro maior ou igual a {min}",
+  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
+  "WFDeadlinePassed": "Deadline passed",
+  "WFTimeoutPending": "Deadline passed; awaiting system processing",
+  "AccountConnectivity": "Teste de conectividade de contas",
+  "AssetConnectivity": "Teste de conectividade de ativos",
+  "ConnectivityAllAccounts": "Todas as contas ativas",
+  "AgentFileTransfers": "Transferências do Agent"
 }

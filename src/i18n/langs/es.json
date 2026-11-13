@@ -870,12 +870,6 @@
   "CurrentConnections": "Número actual de conexiones",
   "CurrentStatus": "estado actual",
   "CurrentUserVerify": "Confirme su identidad",
-  "IdentityConfirm": {
-    "PasswordHint": "Introduzca su contraseña de inicio de sesión para continuar",
-    "MFAHint": "Complete la verificación MFA para continuar",
-    "ReloginHint": "Vuelva a iniciar sesión para confirmar su identidad. Al continuar, se cerrará esta sesión, incluidas las demás páginas que la usan. Se perderán los cambios sin guardar. Tras iniciar sesión, vuelva a esta página y repita la operación.",
-    "GoToLogin": "Ir al inicio de sesión"
-  },
   "Custom": "Personalizado",
   "CustomCol": "Campos de lista personalizados",
   "CustomCreate": "Crear activo - Personalizado",
@@ -1203,7 +1197,6 @@
   "InstanceName": "Nombre de la instancia",
   "InstanceNamePartIp": "Nombre de la instancia y parte de la IP",
   "InstancePlatformName": "Nombre de la plataforma de instancia",
-  "IntegerMinimumRequired": "Introduzca un número entero mayor o igual a {min}",
   "IntegerRequired": "Introduzca un número entero.",
   "Integration": "Integración de aplicaciones",
   "Interface": "Interfaz de red",
@@ -2957,7 +2950,6 @@
   "WFResolver_user_group": "User groups",
   "WFResolver_role": "Roles",
   "WFResolver_asset_owner": "Asset owners",
-  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
   "WFResolver_org_admin": "Organization administrators",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
@@ -3027,8 +3019,6 @@
   "WFAddApprover": "Add approver",
   "WFWithdraw": "Withdraw",
   "WFDeadline": "Deadline",
-  "WFDeadlinePassed": "Deadline passed",
-  "WFTimeoutPending": "Deadline passed; awaiting system processing",
   "WFConditionResult": "Condition result",
   "WFTimeline": "Approval timeline",
   "WFMoreEvents": "Load more events",
@@ -3155,9 +3145,20 @@
     "LifetimeHelp": "Se cuenta desde el inicio de sesión. Al vencer, vuelva a iniciar sesión; la actividad no lo prolonga.",
     "AdminClientHelp": "El administrador define valores predeterminados y límites. El usuario puede elegir opciones más estrictas; en otro caso, sigue al administrador."
   },
-  "AccountConnectivity": "Prueba de conectividad de cuentas",
-  "AssetConnectivity": "Prueba de conectividad de activos",
-  "ConnectivityAllAccounts": "Todas las cuentas activas",
+  "MCPClientID": "ID de cliente",
+  "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "Activar MCP",
+  "MCPEnabledHelp": "Koko sincroniza esta configuración cada 60 segundos. Al desactivar MCP se detienen las nuevas solicitudes, mientras continúa la finalización de las tareas aceptadas y el envío de registros de auditoría.",
+  "MCPAllowRegistration": "Permitir el registro automático de clientes",
+  "MCPRegistrationHelp": "Se aplica cuando MCP está activado. Los usuarios solo configuran la URL MCP y luego inician sesión en JumpServer para autorizar el acceso. Al desactivar esta opción se detienen los nuevos registros, sin revocar las autorizaciones existentes.",
+  "MCPPublicURL": "URL de acceso MCP",
+  "MCPPublicURLHelp": "Obligatorio cuando MCP está activado. Introduzca la URL MCP externa completa en HTTP o HTTPS, sin barra final, parámetros de consulta ni fragmentos. La dirección de autorización utiliza la URL del sitio de la configuración básica.",
+  "IdentityConfirm": {
+    "PasswordHint": "Introduzca su contraseña de inicio de sesión para continuar",
+    "MFAHint": "Complete la verificación MFA para continuar",
+    "ReloginHint": "Vuelva a iniciar sesión para confirmar su identidad. Al continuar, se cerrará esta sesión, incluidas las demás páginas que la usan. Se perderán los cambios sin guardar. Tras iniciar sesión, vuelva a esta página y repita la operación.",
+    "GoToLogin": "Ir al inicio de sesión"
+  },
   "OnlineSessionPolicy": {
     "Title": "Información de validez",
     "Expires": "Vencimiento",
@@ -3168,5 +3169,13 @@
     "Grace": "Fin de la prórroga por cambio",
     "Unlimited": "Sin límite",
     "BrowserExit": "Volver a iniciar sesión al cerrar el navegador"
-  }
+  },
+  "IntegerMinimumRequired": "Introduzca un número entero mayor o igual a {min}",
+  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
+  "WFDeadlinePassed": "Deadline passed",
+  "WFTimeoutPending": "Deadline passed; awaiting system processing",
+  "AccountConnectivity": "Prueba de conectividad de cuentas",
+  "AssetConnectivity": "Prueba de conectividad de activos",
+  "ConnectivityAllAccounts": "Todas las cuentas activas",
+  "AgentFileTransfers": "Transferencias de Agent"
 }

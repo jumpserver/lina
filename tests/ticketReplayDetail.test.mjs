@@ -50,20 +50,27 @@ test('ticket request details translate session fields and format dates while pre
     }
   }
   const items = component.computed.requestItems.call(vm)
-  assert.deepEqual(items, [
-    { key: '有效期（秒）', value: 3600 },
-    { key: '资产', value: 'Database server' },
-    { key: '账号', value: 'root' },
-    { key: '用户', value: 'Alice' },
-    { key: '开始日期', value: '2026-10-05 16:30:00' },
-    { key: '开始日期', value: '-' },
-    { key: 'Accounts', value: accounts },
-    { key: 'Custom label', value: 'Original text' },
-    { key: 'Zero', value: 0 },
-    { key: 'Disabled', value: false },
-    { key: 'Missing', value: '-' },
-    { key: 'Undefined', value: '-' }
-  ])
+  assert.deepEqual(
+    items.map(({ name, ...item }) => item),
+    [
+      { key: '有效期（秒）', value: 3600 },
+      { key: '资产', value: 'Database server' },
+      { key: '账号', value: 'root' },
+      { key: '用户', value: 'Alice' },
+      { key: '开始日期', value: '2026-10-05 16:30:00' },
+      { key: '开始日期', value: '-' },
+      { key: 'Accounts', value: accounts },
+      { key: 'Custom label', value: 'Original text' },
+      { key: 'Zero', value: 0 },
+      { key: 'Disabled', value: false },
+      { key: 'Missing', value: '-' },
+      { key: 'Undefined', value: '-' }
+    ]
+  )
+  assert.deepEqual(
+    items.map((item) => item.name),
+    vm.object.request_items.map((item) => item.name)
+  )
   assert.deepEqual(
     formattedDates,
     [date, null],

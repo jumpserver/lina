@@ -439,7 +439,8 @@ test('detail page forwards custom header actions only after a successful load, p
         loading,
         loadError,
         hasRightSide,
-        pageActions: []
+        hasPageActions: true,
+        pageActions: [{ has: true }]
       })
     }
     const app = Vue.createSSRApp({

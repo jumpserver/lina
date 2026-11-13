@@ -870,12 +870,6 @@
   "CurrentConnections": "현재 연결 수",
   "CurrentStatus": "현재 상태",
   "CurrentUserVerify": "본인 확인",
-  "IdentityConfirm": {
-    "PasswordHint": "계속하려면 로그인 비밀번호를 입력하세요",
-    "MFAHint": "계속하려면 MFA 인증을 완료하세요",
-    "ReloginHint": "본인 확인을 위해 다시 로그인해야 합니다. 계속하면 같은 로그인을 사용하는 다른 페이지도 로그아웃되며 저장하지 않은 내용은 사라집니다. 로그인 후 이 페이지로 돌아와 작업을 다시 진행해 주세요.",
-    "GoToLogin": "로그인으로 이동"
-  },
   "Custom": "사용자 정의",
   "CustomCol": "사용자 정의 목록 필드",
   "CustomCreate": "자산 생성 - 사용자 정의",
@@ -1203,7 +1197,6 @@
   "InstanceName": "인스턴스 이름",
   "InstanceNamePartIp": "인스턴스 이름 및 일부 IP",
   "InstancePlatformName": "인스턴스 플랫폼 이름",
-  "IntegerMinimumRequired": "{min} 이상의 정수를 입력하세요",
   "IntegerRequired": "정수를 입력하세요.",
   "Integration": "애플리케이션 통합",
   "Interface": "네트워크 인터페이스",
@@ -2959,7 +2952,6 @@
   "WFResolver_user_group": "User groups",
   "WFResolver_role": "Roles",
   "WFResolver_asset_owner": "Asset owners",
-  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
   "WFResolver_org_admin": "Organization administrators",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
@@ -3029,8 +3021,6 @@
   "WFAddApprover": "Add approver",
   "WFWithdraw": "Withdraw",
   "WFDeadline": "Deadline",
-  "WFDeadlinePassed": "Deadline passed",
-  "WFTimeoutPending": "Deadline passed; awaiting system processing",
   "WFConditionResult": "Condition result",
   "WFTimeline": "Approval timeline",
   "WFMoreEvents": "Load more events",
@@ -3157,9 +3147,20 @@
     "LifetimeHelp": "로그인 시점부터 계산합니다. 만료 시 재로그인이 필요하며 활동해도 연장되지 않습니다.",
     "AdminClientHelp": "관리자 설정이 기본값과 상한입니다. 사용자는 더 엄격하게 설정할 수 있으며, 직접 설정하지 않으면 관리자를 따릅니다."
   },
-  "AccountConnectivity": "계정 연결 테스트",
-  "AssetConnectivity": "자산 연결 테스트",
-  "ConnectivityAllAccounts": "모든 활성 계정",
+  "MCPClientID": "클라이언트 ID",
+  "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "MCP 활성화",
+  "MCPEnabledHelp": "Koko는 60초마다 설정을 동기화합니다. 비활성화하면 새 요청 접수가 중지되며, 이미 접수한 작업의 마무리와 감사 기록 전송은 계속됩니다.",
+  "MCPAllowRegistration": "클라이언트 자동 등록 허용",
+  "MCPRegistrationHelp": "MCP가 활성화된 경우 적용됩니다. 사용자는 MCP URL만 설정한 후 JumpServer에 로그인하여 접근을 승인할 수 있습니다. 비활성화하면 신규 클라이언트 등록만 중지되며 기존 승인은 취소되지 않습니다.",
+  "MCPPublicURL": "MCP 접근 URL",
+  "MCPPublicURLHelp": "MCP 활성화 시 필수입니다. 외부에서 접근 가능한 전체 HTTP 또는 HTTPS MCP URL을 끝 슬래시, 쿼리 또는 프래그먼트 없이 입력하세요. 인증 주소는 기본 설정의 사이트 URL을 사용합니다.",
+  "IdentityConfirm": {
+    "PasswordHint": "계속하려면 로그인 비밀번호를 입력하세요",
+    "MFAHint": "계속하려면 MFA 인증을 완료하세요",
+    "ReloginHint": "본인 확인을 위해 다시 로그인해야 합니다. 계속하면 같은 로그인을 사용하는 다른 페이지도 로그아웃되며 저장하지 않은 내용은 사라집니다. 로그인 후 이 페이지로 돌아와 작업을 다시 진행해 주세요.",
+    "GoToLogin": "로그인으로 이동"
+  },
   "OnlineSessionPolicy": {
     "Title": "유효 기간 정보",
     "Expires": "만료 시간",
@@ -3170,5 +3171,13 @@
     "Grace": "설정 변경 유예 종료",
     "Unlimited": "무제한",
     "BrowserExit": "브라우저를 닫으면 다시 로그인"
-  }
+  },
+  "IntegerMinimumRequired": "{min} 이상의 정수를 입력하세요",
+  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
+  "WFDeadlinePassed": "Deadline passed",
+  "WFTimeoutPending": "Deadline passed; awaiting system processing",
+  "AccountConnectivity": "계정 연결 테스트",
+  "AssetConnectivity": "자산 연결 테스트",
+  "ConnectivityAllAccounts": "모든 활성 계정",
+  "AgentFileTransfers": "Agent 파일 전송"
 }

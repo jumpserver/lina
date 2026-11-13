@@ -1,18 +1,34 @@
 <template>
-  <GenericListPage :header-actions="headerActions" :table-config="tableConfig" />
+  <component
+    :is="embedded ? 'GenericListTable' : 'GenericListPage'"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
+import GenericListTable from '@/layout/components/GenericListTable'
+import { ChoicesFormatter } from '@/components/Table/TableFormatters'
 import OverflowTooltipFormatter from '@/components/Table/TableFormatters/OverflowTooltipFormatter.vue'
 import { download } from '@/utils/common/index'
 import store from '@/store'
 
 export default {
   components: {
-    GenericListPage
+    GenericListPage,
+    GenericListTable
+  },
+  props: {
+    embedded: { type: Boolean, default: false },
+    category: { type: String, default: '' },
+    orgId: { type: String, default: '' }
   },
   data() {
+    const query = new URLSearchParams()
+    if (this.category) query.set('category', this.category)
+    if (this.orgId) query.set('oid', this.orgId)
+    const orgQuery = this.orgId ? `?oid=${encodeURIComponent(this.orgId)}` : ''
     return {
       tableConfig: {
         columnsShow: {
@@ -21,6 +37,7 @@ export default {
             'asset',
             'account',
             'operate',
+            'login_from',
             'filename',
             'date_start',
             'is_success',
@@ -28,8 +45,9 @@ export default {
           ],
           min: ['user', 'asset', 'filename']
         },
-        url: '/api/v1/audits/ftp-logs/',
+        url: `/api/v1/audits/ftp-logs/${query.size ? `?${query}` : ''}`,
         columnsMeta: {
+          login_from: { label: this.$t('Source'), width: '150px', formatter: ChoicesFormatter },
           filename: {
             width: '200px',
             formatter: OverflowTooltipFormatter
@@ -70,7 +88,7 @@ export default {
                   },
                   callback: function ({ row }) {
                     // 跳转下载页面
-                    download(`/api/v1/audits/ftp-logs/${row.id}/file/download/`)
+                    download(`/api/v1/audits/ftp-logs/${row.id}/file/download/${orgQuery}`)
                   }
                 }
               ]

@@ -870,12 +870,6 @@
   "CurrentConnections": "Số lượng kết nối hiện tại",
   "CurrentStatus": "Tình trạng hiện tại",
   "CurrentUserVerify": "Xác nhận danh tính của bạn",
-  "IdentityConfirm": {
-    "PasswordHint": "Nhập mật khẩu đăng nhập để tiếp tục",
-    "MFAHint": "Hoàn tất xác minh MFA để tiếp tục",
-    "ReloginHint": "Hãy đăng nhập lại để xác nhận danh tính. Tiếp tục sẽ kết thúc phiên này, bao gồm các trang khác dùng cùng phiên. Nội dung chưa lưu sẽ bị mất. Sau khi đăng nhập lại, hãy quay về trang này và thực hiện lại thao tác.",
-    "GoToLogin": "Đến trang đăng nhập"
-  },
   "Custom": "Tùy chỉnh",
   "CustomCol": "Trống",
   "CustomCreate": "Tạo tài sản - Tùy chỉnh",
@@ -1203,7 +1197,6 @@
   "InstanceName": "Tên phiên bản",
   "InstanceNamePartIp": "Tên phiên bản và một số IP",
   "InstancePlatformName": "Tên nền tảng phiên bản",
-  "IntegerMinimumRequired": "Vui lòng nhập số nguyên lớn hơn hoặc bằng {min}",
   "IntegerRequired": "Vui lòng nhập số nguyên.",
   "Integration": "WebSocket đã ngắt kết nối",
   "Interface": "giao diện mạng",
@@ -2959,7 +2952,6 @@
   "WFResolver_user_group": "User groups",
   "WFResolver_role": "Roles",
   "WFResolver_asset_owner": "Asset owners",
-  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
   "WFResolver_org_admin": "Organization administrators",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
@@ -3029,8 +3021,6 @@
   "WFAddApprover": "Add approver",
   "WFWithdraw": "Withdraw",
   "WFDeadline": "Deadline",
-  "WFDeadlinePassed": "Deadline passed",
-  "WFTimeoutPending": "Deadline passed; awaiting system processing",
   "WFConditionResult": "Condition result",
   "WFTimeline": "Approval timeline",
   "WFMoreEvents": "Load more events",
@@ -3157,9 +3147,20 @@
     "LifetimeHelp": "Tính từ lúc đăng nhập. Hết hạn phải đăng nhập lại; hoạt động không kéo dài thời hạn.",
     "AdminClientHelp": "Quản trị viên đặt mặc định và giới hạn. Người dùng có thể đặt nghiêm ngặt hơn; nếu không tự đặt thì theo quản trị viên."
   },
-  "AccountConnectivity": "Kiểm tra kết nối tài khoản",
-  "AssetConnectivity": "Kiểm tra kết nối tài sản",
-  "ConnectivityAllAccounts": "Tất cả tài khoản đang hoạt động",
+  "MCPClientID": "ID ứng dụng khách",
+  "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "Bật MCP",
+  "MCPEnabledHelp": "Koko đồng bộ cấu hình mỗi 60 giây. Tắt MCP sẽ dừng nhận yêu cầu mới, trong khi các tác vụ đã nhận tiếp tục hoàn tất và gửi bản ghi kiểm toán.",
+  "MCPAllowRegistration": "Cho phép tự động đăng ký ứng dụng khách",
+  "MCPRegistrationHelp": "Có hiệu lực khi MCP được bật. Người dùng chỉ cần cấu hình URL MCP, sau đó đăng nhập JumpServer và cấp quyền truy cập. Tắt tùy chọn này chỉ dừng đăng ký ứng dụng khách mới, không thu hồi quyền đã cấp.",
+  "MCPPublicURL": "URL truy cập MCP",
+  "MCPPublicURLHelp": "Bắt buộc khi bật MCP. Nhập URL MCP HTTP hoặc HTTPS bên ngoài đầy đủ, không có dấu gạch chéo cuối, tham số truy vấn hoặc phần fragment. Địa chỉ ủy quyền sử dụng URL trang web trong cài đặt cơ bản.",
+  "IdentityConfirm": {
+    "PasswordHint": "Nhập mật khẩu đăng nhập để tiếp tục",
+    "MFAHint": "Hoàn tất xác minh MFA để tiếp tục",
+    "ReloginHint": "Hãy đăng nhập lại để xác nhận danh tính. Tiếp tục sẽ kết thúc phiên này, bao gồm các trang khác dùng cùng phiên. Nội dung chưa lưu sẽ bị mất. Sau khi đăng nhập lại, hãy quay về trang này và thực hiện lại thao tác.",
+    "GoToLogin": "Đến trang đăng nhập"
+  },
   "OnlineSessionPolicy": {
     "Title": "Thông tin hiệu lực",
     "Expires": "Hết hạn lúc",
@@ -3170,5 +3171,13 @@
     "Grace": "Hạn gia hạn do thay đổi cấu hình",
     "Unlimited": "Không giới hạn",
     "BrowserExit": "Đăng nhập lại khi đóng trình duyệt"
-  }
+  },
+  "IntegerMinimumRequired": "Vui lòng nhập số nguyên lớn hơn hoặc bằng {min}",
+  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
+  "WFDeadlinePassed": "Deadline passed",
+  "WFTimeoutPending": "Deadline passed; awaiting system processing",
+  "AccountConnectivity": "Kiểm tra kết nối tài khoản",
+  "AssetConnectivity": "Kiểm tra kết nối tài sản",
+  "ConnectivityAllAccounts": "Tất cả tài khoản đang hoạt động",
+  "AgentFileTransfers": "Truyền tệp Agent"
 }

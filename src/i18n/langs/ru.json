@@ -870,12 +870,6 @@
   "CurrentConnections": "Текущие подключения",
   "CurrentStatus": "Текущий статус",
   "CurrentUserVerify": "Проверка текущего пользователя",
-  "IdentityConfirm": {
-    "PasswordHint": "Введите пароль входа, чтобы продолжить",
-    "MFAHint": "Пройдите проверку MFA, чтобы продолжить",
-    "ReloginHint": "Для подтверждения личности войдите снова. Продолжение завершит текущий сеанс, в том числе на других страницах, использующих его. Несохранённые изменения будут потеряны. После входа вернитесь на эту страницу и повторите операцию.",
-    "GoToLogin": "Перейти ко входу"
-  },
   "Custom": "Настраиваемый",
   "CustomCol": "Настроить отображение столбцов",
   "CustomCreate": "Создать актив - настраиваемый",
@@ -1203,7 +1197,6 @@
   "InstanceName": "Название экземпляра",
   "InstanceNamePartIp": "Название экземпляра и часть IP",
   "InstancePlatformName": "Название платформы экземпляра",
-  "IntegerMinimumRequired": "Введите целое число не меньше {min}",
   "IntegerRequired": "Введите целое число.",
   "Integration": "Интеграция",
   "Interface": "Сетевой интерфейс",
@@ -2959,7 +2952,6 @@
   "WFResolver_user_group": "User groups",
   "WFResolver_role": "Roles",
   "WFResolver_asset_owner": "Asset owners",
-  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
   "WFResolver_org_admin": "Organization administrators",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
@@ -3029,8 +3021,6 @@
   "WFAddApprover": "Add approver",
   "WFWithdraw": "Withdraw",
   "WFDeadline": "Deadline",
-  "WFDeadlinePassed": "Deadline passed",
-  "WFTimeoutPending": "Deadline passed; awaiting system processing",
   "WFConditionResult": "Condition result",
   "WFTimeline": "Approval timeline",
   "WFMoreEvents": "Load more events",
@@ -3157,9 +3147,20 @@
     "LifetimeHelp": "Отсчёт от входа. По истечении войдите снова; активность не продлевает срок.",
     "AdminClientHelp": "Администратор задаёт значения по умолчанию и ограничения. Пользователь может выбрать более строгие настройки, иначе следовать администратору."
   },
-  "AccountConnectivity": "Проверка подключения для учётных записей",
-  "AssetConnectivity": "Проверка подключения к активам",
-  "ConnectivityAllAccounts": "Все активные учётные записи",
+  "MCPClientID": "ID клиента",
+  "AgentMCP": "Agent / MCP",
+  "MCPEnabled": "Включить MCP",
+  "MCPEnabledHelp": "Koko синхронизирует настройки каждые 60 секунд. Отключение прекращает приём новых запросов, но завершение принятых задач и передача записей аудита продолжаются.",
+  "MCPAllowRegistration": "Разрешить автоматическую регистрацию клиентов",
+  "MCPRegistrationHelp": "Действует, когда MCP включён. Пользователю достаточно указать URL MCP, затем войти в JumpServer и разрешить доступ. Отключение прекращает регистрацию новых клиентов, но не отзывает существующие разрешения.",
+  "MCPPublicURL": "URL доступа MCP",
+  "MCPPublicURLHelp": "Обязательно при включении MCP. Укажите полный внешний URL MCP с HTTP или HTTPS без завершающей косой черты, параметров запроса и фрагмента. Адрес авторизации использует URL сайта из основных настроек.",
+  "IdentityConfirm": {
+    "PasswordHint": "Введите пароль входа, чтобы продолжить",
+    "MFAHint": "Пройдите проверку MFA, чтобы продолжить",
+    "ReloginHint": "Для подтверждения личности войдите снова. Продолжение завершит текущий сеанс, в том числе на других страницах, использующих его. Несохранённые изменения будут потеряны. После входа вернитесь на эту страницу и повторите операцию.",
+    "GoToLogin": "Перейти ко входу"
+  },
   "OnlineSessionPolicy": {
     "Title": "Срок действия",
     "Expires": "Истекает",
@@ -3170,5 +3171,13 @@
     "Grace": "Конец отсрочки после изменения",
     "Unlimited": "Без ограничений",
     "BrowserExit": "Входить заново при закрытии браузера"
-  }
+  },
+  "IntegerMinimumRequired": "Введите целое число не меньше {min}",
+  "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
+  "WFDeadlinePassed": "Deadline passed",
+  "WFTimeoutPending": "Deadline passed; awaiting system processing",
+  "AccountConnectivity": "Проверка подключения для учётных записей",
+  "AssetConnectivity": "Проверка подключения к активам",
+  "ConnectivityAllAccounts": "Все активные учётные записи",
+  "AgentFileTransfers": "Передачи файлов Agent"
 }
