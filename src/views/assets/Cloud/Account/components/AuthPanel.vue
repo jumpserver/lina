@@ -61,6 +61,7 @@ export default {
     }
 
     return {
+      attrsForm: null,
       submitType: 'auto',
       settings: {
         url: `/api/v1/xpack/cloud/accounts/`,
@@ -77,12 +78,18 @@ export default {
           attrs: {
             labelWidth: '140px',
             encryptedFields: ['access_key_secret'],
+            el: {
+              ref: (form) => {
+                this.attrsForm = form
+              }
+            },
             fields: ACCOUNT_PROVIDER_ATTRS_MAP[this.provider].attrs,
             fieldsMeta: {
               // 必须放在最上面，下面特殊制定的字段才会覆盖默认
               ...setFieldAttrs(this.provider),
               service_account_key: {
                 label: this.$t('ServerAccountKey'),
+                rules: this.object?.id ? [] : [RequiredChange],
                 component: UploadKey,
                 el: {
                   toFormat: 'object'
@@ -103,21 +110,22 @@ export default {
                 }
               },
               password: {
-                rules: this.$route.params.id ? [] : [RequiredChange]
+                rules: this.object?.id ? [] : [RequiredChange]
               },
               public_key: {
                 label: this.$t('PublicKey'),
-                rules: this.$route.params.id ? [] : [RequiredChange]
+                rules: this.object?.id ? [] : [RequiredChange]
               },
               private_key: {
                 label: this.$t('PrivateKey'),
-                rules: this.$route.params.id ? [] : [RequiredChange]
+                rules: this.object?.id ? [] : [RequiredChange]
               },
               project: {
                 label: this.$t('Project')
               },
               hostname_prefix: {
-                required: false
+                required: false,
+                rules: []
               }
             }
           },
@@ -172,32 +180,37 @@ export default {
           }
           return `${vm.settings.url}?provider=${this.provider}`
         },
-        async performSubmit(values) {
-          try {
-            return await this.$axios[this.method](this.iUrl, values, { disableFlashErrorMsg: true })
-          } catch (error) {
-            if (error.templateFollowCancelled) throw error
-            const { response } = error
-            const data = response?.data
-            if (response?.status === 400 && data && typeof data === 'object') {
-              const unhandled = Object.fromEntries(
-                Object.entries(data).filter(
-                  ([name]) => !Object.keys(vm.settings.fieldsMeta).includes(name)
-                )
-              )
-              if (Object.keys(data).length && !Object.keys(unhandled).length) throw error
-              vm.$message.error(getErrorResponseMsg(unhandled) || error.message)
-            } else if (!response) {
-              vm.$message.error(getErrorResponseMsg(error) || error.message)
-            } else if (
-              response.status !== 401 &&
-              !(response.status === 423 && response.data?.code === 'web_session_locked')
-            ) {
-              response.config.disableFlashErrorMsg = false
-              flashErrorMsg({ response, error })
+        performSubmit(values) {
+          return this.$axios[this.method](this.iUrl, values, { disableFlashErrorMsg: true })
+        },
+        onPerformError(error, method, formVm) {
+          if (error.templateFollowCancelled) return
+          const { response } = error
+          const data = response?.data
+          if (response?.status === 400 && data && typeof data === 'object') {
+            const fieldErrors = {}
+            const unhandled = {}
+            for (const [name, value] of Object.entries(data)) {
+              const isField = Object.hasOwn(vm.settings.fieldsMeta, name)
+              const isGroupError =
+                name === 'attrs' && (typeof value !== 'object' || Array.isArray(value))
+              const target = isField && !isGroupError ? fieldErrors : unhandled
+              target[name] = value
             }
-            throw error
+            formVm.$refs.form.setErrors(fieldErrors)
+            if (!Object.keys(data).length || Object.keys(unhandled).length) {
+              vm.$message.error(getErrorResponseMsg(unhandled) || error.message)
+            }
+          } else if (!response) {
+            vm.$message.error(getErrorResponseMsg(error) || error.message)
+          } else if (
+            response.status !== 401 &&
+            !(response.status === 423 && data?.code === 'web_session_locked')
+          ) {
+            response.config.disableFlashErrorMsg = false
+            flashErrorMsg({ response, error })
           }
+          if (response) vm.$emit('performError', data)
         },
         afterGetRemoteMeta: () => {
           const attrs = this.settings.fieldsMeta.attrs
@@ -221,14 +234,15 @@ export default {
     }
   },
   methods: {
-    submitForm(form, btn, submitType) {
-      form.validate((valid) => {
-        if (valid) {
-          btn.loading = true
-          this.$refs.form.$refs.form.dataForm.submitForm('form', false)
-          this.submitType = submitType
-        }
-      })
+    async submitForm(form, btn, submitType) {
+      try {
+        await Promise.all([form.validate(), this.attrsForm.$refs.form.elForm.validate()])
+      } catch {
+        return
+      }
+      btn.loading = true
+      this.$refs.form.$refs.form.dataForm.submitForm('form', false)
+      this.submitType = submitType
     },
     handleSubmitSuccess(res) {
       if (this.submitType === 'manual') {
