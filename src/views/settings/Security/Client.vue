@@ -2,7 +2,7 @@
   <div class="security-settings-form">
     <el-alert
       v-if="scope === 'Client'"
-      :title="$t('PersonalSecurity.AdminClientHelp')"
+      :title="$t('ClientLoginPolicyChangeHelp')"
       type="info"
       :closable="false"
     />
@@ -31,7 +31,7 @@ export default {
     const clientFields = [
       'SECURITY_CLIENT_REAUTH_ON_EXIT',
       'SECURITY_CLIENT_MAX_SESSION_TIME',
-      'SECURITY_CLIENT_IDLE_LOCK_TIME'
+      'SECURITY_CLIENT_MAX_IDLE_TIME'
     ]
     const isWeb = this.scope === 'Web'
     const settingFields = isWeb ? webFields : clientFields
@@ -47,7 +47,7 @@ export default {
           SECURITY_WEB_IDLE_LOCK_TIME: 15,
           SECURITY_CLIENT_REAUTH_ON_EXIT: false,
           SECURITY_CLIENT_MAX_SESSION_TIME: 0,
-          SECURITY_CLIENT_IDLE_LOCK_TIME: 15
+          SECURITY_CLIENT_MAX_IDLE_TIME: 0
         },
         fieldsMeta: {
           SESSION_COOKIE_AGE: {
@@ -63,6 +63,10 @@ export default {
                 trigger: ['blur', 'change']
               }
             ]
+          },
+          SECURITY_CLIENT_MAX_IDLE_TIME: {
+            helpTextAsTip: false,
+            helpTextAsPlaceholder: false
           }
         },
         cleanFormValue: (values) =>

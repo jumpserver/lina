@@ -3100,7 +3100,7 @@
   "TaskMonitorStopUnsupportedPool": "Ce processus utilise un pool de threads et ne peut pas arrêter une tâche en cours.",
   "TaskMonitorStopUnavailable": "Le processus n’a pas confirmé le résultat. Actualisez et vérifiez l’état de la tâche.",
   "ClientSecurity": "Connexion et verrouillage",
-  "ClientLoginPolicyChangeHelp": "Synchronisation environ toutes les 60 secondes. La durée maximale est recalculée depuis chaque connexion. Les connexions hors délai ont au plus 10 minutes supplémentaires. Une prolongation pendant ce délai annule la déconnexion si la nouvelle limite est respectée. Chaque démarrage les vérifie avant de restaurer une connexion.",
+  "ClientLoginPolicyChangeHelp": "Toute modification de ces trois paramètres, y compris la désactivation d’une limite, oblige le client à se reconnecter pour demander de nouveaux identifiants de connexion. Les jetons déjà émis restent soumis à leur propre expiration et à leurs permissions ; l’expiration de la session ne ferme pas automatiquement les connexions établies.",
   "TicketReapplyInvalidResources": "Certaines ressources ne sont plus disponibles. Sélectionnez-les à nouveau.",
   "AssetOwner": "Responsable de l’actif",
   "WFWorkflows": "Approval workflows",

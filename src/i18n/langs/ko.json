@@ -2931,7 +2931,7 @@
   "TaskMonitorStopUnsupportedPool": "이 워커는 스레드 풀을 사용하므로 실행 중인 작업을 중지할 수 없습니다.",
   "TaskMonitorStopUnavailable": "워커가 결과를 확인하지 못했습니다. 새로고침하여 작업 상태를 확인하세요.",
   "ClientSecurity": "로그인 및 화면 잠금",
-  "ClientLoginPolicyChangeHelp": "설정은 약 60초마다 동기화합니다. 최대 유효기간은 각 로그인 시간부터 다시 계산하며 이미 초과한 경우 최대 10분을 더 제공합니다. 유예 중 기간을 늘려 유효해지면 로그아웃을 취소합니다. 시작할 때마다 최신 설정을 확인하여 로그인 복원 여부를 결정합니다.",
+  "ClientLoginPolicyChangeHelp": "제한 비활성화를 포함하여 이 세 설정 중 하나라도 변경하면, 클라이언트에서 새 연결 자격 증명을 요청하려면 다시 로그인해야 합니다. 발급된 연결 토큰에는 자체 유효 기간과 권한이 계속 적용되며, 로그인 만료로 기존 연결이 자동으로 끊어지지는 않습니다.",
   "TicketReapplyInvalidResources": "일부 리소스를 사용할 수 없습니다. 다시 선택하세요.",
   "AssetOwner": "자산 담당자",
   "WFWorkflows": "Approval workflows",

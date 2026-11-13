@@ -2931,7 +2931,7 @@
   "TaskMonitorStopUnsupportedPool": "Tiến trình này sử dụng nhóm luồng và không thể dừng tác vụ đang chạy.",
   "TaskMonitorStopUnavailable": "Tiến trình chưa xác nhận kết quả. Hãy làm mới và kiểm tra trạng thái tác vụ.",
   "ClientSecurity": "Đăng nhập và khóa màn hình",
-  "ClientLoginPolicyChangeHelp": "Cấu hình đồng bộ khoảng mỗi 60 giây. Thời hạn tối đa được tính lại từ mỗi lần đăng nhập. Phiên đã quá hạn được dùng thêm tối đa 10 phút. Nếu tăng thời hạn trong lúc gia hạn và phiên chưa hết hạn mới, hủy đăng xuất. Mỗi lần khởi động đều kiểm tra cấu hình mới trước khi khôi phục đăng nhập.",
+  "ClientLoginPolicyChangeHelp": "Khi thay đổi bất kỳ cài đặt nào trong ba cài đặt này, kể cả tắt giới hạn, ứng dụng khách phải đăng nhập lại để yêu cầu thông tin xác thực kết nối mới. Các mã kết nối đã cấp vẫn tuân theo thời hạn và quyền riêng; việc hết hạn đăng nhập không tự động ngắt các kết nối đã thiết lập.",
   "TicketReapplyInvalidResources": "Một số tài nguyên không còn khả dụng. Vui lòng chọn lại.",
   "AssetOwner": "Người phụ trách tài sản",
   "WFWorkflows": "Approval workflows",

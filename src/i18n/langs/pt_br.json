@@ -2929,7 +2929,7 @@
   "TaskMonitorStopUnsupportedPool": "Este processo usa um pool de threads e não pode interromper uma tarefa em execução.",
   "TaskMonitorStopUnavailable": "O processo não confirmou o resultado. Atualize e verifique o estado da tarefa.",
   "ClientSecurity": "Login e bloqueio de tela",
-  "ClientLoginPolicyChangeHelp": "As configurações sincronizam aproximadamente a cada 60 segundos. A duração máxima é recalculada desde cada login. Logins fora do prazo têm até 10 minutos extras. Uma extensão durante a tolerância cancela a saída se o login estiver no novo limite. Cada inicialização as verifica antes de restaurar o login.",
+  "ClientLoginPolicyChangeHelp": "Ao alterar qualquer uma destas três configurações, inclusive desativar um limite, o cliente deve entrar novamente para solicitar novas credenciais de conexão. Os tokens já emitidos continuam sujeitos à própria validade e às permissões; a expiração do login não desconecta automaticamente as conexões estabelecidas.",
   "TicketReapplyInvalidResources": "Alguns recursos não estão mais disponíveis. Selecione-os novamente.",
   "AssetOwner": "Responsável pelo ativo",
   "WFWorkflows": "Approval workflows",
