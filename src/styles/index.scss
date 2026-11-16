@@ -551,6 +551,11 @@ a.el-link.el-link--info.is-hover-underline:hover:after {
     height: 14px;
   }
 
+  .pre-icon:has(.dropdown-item__icon) {
+    flex-basis: 20px;
+    width: 20px;
+  }
+
   .pre-icon :is(.fa, .el-icon, .svg-icon) {
     margin: 0;
     font-size: 14px;
