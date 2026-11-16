@@ -16,7 +16,8 @@
       v-if="iValue.type === 'ids'"
       v-model="ids"
       :resource-name="resource"
-      summary-count-only
+      :summary-count-only="summaryCountOnly"
+      :class="{ 'ids-select': !summaryCountOnly }"
       @change="onChangeEmit"
     />
     <div v-if="iValue.type === 'ids' && idsHelp" class="ids-scope-help">{{ idsHelp }}</div>
@@ -152,6 +153,10 @@ export default {
     select2: {
       type: Object,
       required: true
+    },
+    summaryCountOnly: {
+      type: Boolean,
+      default: true
     },
     attrs: {
       type: Array,
@@ -379,6 +384,10 @@ export default {
 .unsupported-scope-help {
   margin-top: 8px;
   color: var(--el-color-warning);
+}
+
+.ids-select {
+  margin-top: 5px;
 }
 
 .ids-scope-help {

@@ -15,7 +15,7 @@
         <ActionsGroup
           v-if="hasRightSide"
           :actions="pageActions"
-          size="default"
+          size="small"
           class="header-buttons"
         />
       </slot>
@@ -152,6 +152,7 @@ export default {
           name: 'update',
           title: this.$t('Edit'),
           type: 'primary',
+          plain: true,
           icon: 'el-icon-edit',
           can: this.validActions.canUpdate,
           has: this.validActions.hasUpdate,
@@ -367,35 +368,24 @@ export default {
   --data-actions-gap: 8px;
 
   :deep(.el-button.action-item) {
-    min-width: 76px;
-    height: 30px;
-    padding: 0 14px;
+    min-width: 64px;
+    height: 24px;
+    padding: 0 8px;
     border-radius: 4px;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 400;
   }
 
   :deep(.action-content) {
-    gap: 6px;
+    gap: 5px;
   }
 
   :deep(.action-content .pre-icon) {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   :deep(.action-content .pre-icon + span) {
     margin-left: 0;
-  }
-
-  :deep(.el-button.delete) {
-    --el-button-bg-color: var(--el-bg-color);
-    --el-button-border-color: var(--el-border-color);
-    --el-button-hover-text-color: var(--el-color-danger);
-    --el-button-hover-bg-color: var(--el-color-danger-light-9);
-    --el-button-hover-border-color: var(--el-color-danger-light-5);
-    --el-button-active-text-color: var(--el-color-danger);
-    --el-button-active-bg-color: var(--el-color-danger-light-8);
-    --el-button-active-border-color: var(--el-color-danger);
   }
 }
 </style>
