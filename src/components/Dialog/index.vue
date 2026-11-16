@@ -202,7 +202,7 @@ export default {
   }
 
   .el-dialog__body {
-    padding: 30px;
+    padding: 20px 30px;
     font-size: 13px;
   }
 

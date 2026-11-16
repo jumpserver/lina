@@ -45,6 +45,17 @@ function beforeRequestAddToken(config) {
   }
 }
 
+function beforeRequestSetLicenseErrorPolicy(config) {
+  const routeName = getRouter()?.currentRoute?.value?.name
+  if (
+    !store.getters.hasValidLicense &&
+    (routeName === 'AccountChangeSecretList' || routeName === 'AccountCheckList') &&
+    (config.method === 'get' || config.method === 'options')
+  ) {
+    config.disableLicenseErrorMsg = true
+  }
+}
+
 function beforeRequestAddTimezone(config) {
   try {
     config.headers['X-TZ'] = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -60,6 +71,7 @@ service.interceptors.request.use(
     // NProgress.start()
     beforeRequestAddToken(config)
     beforeRequestAddTimezone(config)
+    beforeRequestSetLicenseErrorPolicy(config)
     return config
   },
   (error) => {
@@ -127,7 +139,11 @@ export function logout() {
 }
 
 export function flashErrorMsg({ response, error }) {
-  if (!response.config.disableFlashErrorMsg) {
+  const hideLicenseError =
+    response.config.disableLicenseErrorMsg &&
+    response.status === 403 &&
+    response.data?.code === 'license_required'
+  if (!response.config.disableFlashErrorMsg && !hideLicenseError) {
     const responseErrorMsg = getErrorResponseMsg(error)
     let msg = responseErrorMsg || error.message
 
