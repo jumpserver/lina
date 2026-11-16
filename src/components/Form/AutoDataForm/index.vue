@@ -322,7 +322,13 @@ export default {
       const mapped = {}
       Object.entries(errors || {}).forEach(([k, v]) => {
         const field = this.totalFields.find((item) => item.prop === k)
-        mapped[k] = this.normalizeError(v, field?.passServerErrors)
+        // DRF keys errors for individual list items by their index.
+        const isListItemError =
+          this.remoteMeta[k]?.type === 'list' && _.isPlainObject(v) && !field?.passServerErrors
+        mapped[k] = this.normalizeError(
+          isListItemError ? Object.values(v).flat() : v,
+          field?.passServerErrors
+        )
       })
       this.serverErrors = mapped
       const elForm = this._getElFormInstance()

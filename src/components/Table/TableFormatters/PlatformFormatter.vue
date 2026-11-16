@@ -58,10 +58,10 @@ export default {
     flex-shrink: 0;
 
     .asset-icon {
+      display: block;
       height: 100%;
       width: 100%;
-      vertical-align: -0.2em;
-      fill: currentColor;
+      object-fit: contain;
     }
   }
 

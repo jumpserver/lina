@@ -1,5 +1,5 @@
 <template>
-  <AccountListTable v-bind="tableConfig" ref="table" :show-actions="false" />
+  <AccountListTable v-bind="tableConfig" ref="table" />
 </template>
 
 <script>
@@ -26,6 +26,7 @@ export default {
         hasImport: false,
         hasExport: false,
         showQuickFilters: false,
+        columnsDefault: ['name', 'username', 'secret', 'asset', 'platform', 'actions'],
         columnsMeta: {
           asset: {
             formatter: DetailFormatter,
