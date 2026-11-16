@@ -1,6 +1,9 @@
 <template>
-  <Page :title="t('TaskMonitor')">
-    <div class="task-monitor">
+  <TabPage v-model:active-menu="monitorTab" :submenu="monitorTabs" :title="t('TaskMonitor')">
+    <keep-alive>
+      <TaskMonitorTasks v-if="monitorTab === 'Tasks' && canMonitor && canViewLogs" />
+    </keep-alive>
+    <div v-if="monitorTab === 'Workers'" class="task-monitor">
       <el-alert
         v-if="!canMonitor"
         :title="t('TaskMonitorNoPermission')"
@@ -36,11 +39,20 @@
           </IBox>
         </div>
         <IBox :title="t('TaskMonitorWorkers')">
+          <div class="monitor-worker-toolbar">
+            <el-input v-model="workerSearch" :placeholder="t('Search')" clearable>
+              <template #prefix
+                ><el-icon><Search /></el-icon
+              ></template>
+            </el-input>
+          </div>
           <el-table
-            :data="workers"
+            :data="visibleWorkers"
             border
             row-key="name"
             highlight-current-row
+            show-summary
+            :summary-method="workerSummary"
             :empty-text="t('TaskMonitorNoWorkerData')"
           >
             <el-table-column
@@ -50,9 +62,13 @@
               show-overflow-tooltip
             >
               <template #default="{ row }">
-                <el-link type="info" underline="never" @click="selectedWorkerName = row.name">{{
-                  row.name
-                }}</el-link>
+                <el-link
+                  class="monitor-worker-name"
+                  type="info"
+                  underline="never"
+                  @click="selectedWorkerName = row.name"
+                  >{{ row.name }}</el-link
+                >
               </template>
             </el-table-column>
             <el-table-column :label="t('Status')" width="125">
@@ -62,26 +78,37 @@
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column :label="t('TaskMonitorConcurrency')" width="100" align="right">
-              <template #default="{ row }">{{ formatCount(row.concurrency) }}</template>
-            </el-table-column>
-            <el-table-column :label="t('TaskMonitorProcessed')" width="130" align="right">
-              <template #default="{ row }">{{ formatCount(row.processed) }}</template>
-            </el-table-column>
             <el-table-column
-              v-for="state in taskStates"
-              :key="state.key"
-              :label="t(state.label)"
+              v-for="metric in workerMetrics"
+              :key="metric.key"
+              :prop="metric.key"
+              :label="t(metric.label)"
               width="115"
               align="right"
             >
-              <template #default="{ row }">{{ formatCount(row[`${state.key}_count`]) }}</template>
+              <template #default="{ row }">{{ formatCount(row[metric.key]) }}</template>
+            </el-table-column>
+            <el-table-column :label="t('TaskMonitorLoadAverage')" min-width="160" align="right">
+              <template #default="{ row }">{{ formatLoadAverage(row.load_average) }}</template>
+            </el-table-column>
+            <el-table-column :label="t('TaskMonitorConcurrency')" width="100" align="right">
+              <template #default="{ row }">{{ formatCount(row.concurrency) }}</template>
             </el-table-column>
             <el-table-column :label="t('TaskMonitorQueues')" min-width="180" show-overflow-tooltip>
               <template #default="{ row }">{{ queueNames(row.queues) }}</template>
             </el-table-column>
           </el-table>
+          <el-pagination
+            v-model:current-page="workerPage"
+            v-model:page-size="workerPageSize"
+            class="monitor-pagination"
+            :page-sizes="[15, 30, 50, 100]"
+            :total="filteredWorkers.length"
+            layout="total, sizes, prev, pager, next"
+            background
+          />
           <p class="monitor-hint">{{ t('TaskMonitorWorkerHelp') }}</p>
+          <p class="monitor-hint">{{ t('TaskMonitorStatisticsHelp') }}</p>
         </IBox>
         <IBox :title="t('TaskMonitorQueueDepth')">
           <el-table :data="queues" border :empty-text="t('NoData')">
@@ -182,7 +209,7 @@
         </IBox>
       </template>
     </div>
-  </Page>
+  </TabPage>
 </template>
 
 <script setup>
@@ -190,13 +217,18 @@ import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, 
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import Page from '@/layout/components/Page/index.vue'
+import TabPage from '@/layout/components/TabPage/index.vue'
+import TaskMonitorTasks from './TaskMonitorTasks.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 import request from '@/utils/request'
 import { hasPermission, openTaskPage } from '@/utils/jms'
 
 const { t, locale } = useI18n()
 const router = useRouter()
+const monitorTab = ref('Workers')
+const workerSearch = ref('')
+const workerPage = ref(1)
+const workerPageSize = ref(15)
 const snapshot = ref(null)
 const loading = ref(false)
 const loadError = ref('')
@@ -211,6 +243,15 @@ const taskStates = [
   { key: 'reserved', label: 'TaskMonitorReserved' },
   { key: 'scheduled', label: 'TaskMonitorScheduled' }
 ]
+const workerMetrics = [
+  { key: 'active_count', label: 'TaskMonitorActive' },
+  { key: 'processed', label: 'TaskMonitorProcessed' },
+  { key: 'failed', label: 'Failed' },
+  { key: 'succeeded', label: 'Success' },
+  { key: 'retried', label: 'Retry' },
+  { key: 'reserved_count', label: 'TaskMonitorReserved' },
+  { key: 'scheduled_count', label: 'TaskMonitorScheduled' }
+]
 const metrics = [
   { key: 'online_workers', label: 'TaskMonitorOnlineWorkers' },
   ...taskStates,
@@ -222,7 +263,21 @@ const stoppingTasks = ref(new Set())
 const canViewTasks = computed(() => hasPermission('ops.view_celerytask'))
 const canViewLogs = computed(() => hasPermission('ops.view_celerytaskexecution'))
 const canViewHistory = computed(() => canViewTasks.value && canViewLogs.value)
+const monitorTabs = computed(() => [
+  { name: 'Workers', title: t('TaskMonitorWorkers') },
+  { name: 'Tasks', title: t('TaskList'), hidden: !canMonitor.value || !canViewLogs.value }
+])
 const workers = computed(() => snapshot.value?.workers || [])
+const filteredWorkers = computed(() => {
+  const keyword = workerSearch.value.trim().toLowerCase()
+  return workers.value.filter((worker) => worker.name.toLowerCase().includes(keyword))
+})
+const visibleWorkers = computed(() =>
+  filteredWorkers.value.slice(
+    (workerPage.value - 1) * workerPageSize.value,
+    workerPage.value * workerPageSize.value
+  )
+)
 const queues = computed(() => snapshot.value?.queues || [])
 const selectedWorker = computed(() =>
   workers.value.find((worker) => worker.name === selectedWorkerName.value)
@@ -259,6 +314,22 @@ let disposed = false
 
 function formatCount(value) {
   return typeof value === 'number' && Number.isFinite(value) ? value.toLocaleString() : '—'
+}
+
+function formatLoadAverage(value) {
+  return Array.isArray(value) && value.length === 3
+    ? value.map((number) => number.toFixed(2)).join(', ')
+    : '—'
+}
+
+function workerSummary({ columns }) {
+  return columns.map((column, index) => {
+    if (index === 0) return t('Total')
+    if (!workerMetrics.some((metric) => metric.key === column.property)) return ''
+    const values = filteredWorkers.value.map((worker) => worker[column.property])
+    if (!values.length || values.some((value) => !Number.isFinite(value))) return '—'
+    return formatCount(values.reduce((total, value) => total + value, 0))
+  })
 }
 
 function formatTime(value) {
@@ -364,7 +435,13 @@ async function stopTask(task) {
 }
 
 function canPoll() {
-  return !disposed && routeActive && canMonitor.value && !document.hidden
+  return (
+    !disposed &&
+    routeActive &&
+    monitorTab.value === 'Workers' &&
+    canMonitor.value &&
+    !document.hidden
+  )
 }
 
 function clearPollTimer() {
@@ -434,6 +511,22 @@ function onVisibilityChange() {
   else loadSnapshot()
 }
 
+watch(monitorTab, (tab) => {
+  if (tab === 'Workers') loadSnapshot()
+  else pausePolling()
+})
+watch([workerSearch, workerPageSize], () => {
+  workerPage.value = 1
+})
+watch(
+  () => filteredWorkers.value.length,
+  (length) => {
+    workerPage.value = Math.min(
+      workerPage.value,
+      Math.max(1, Math.ceil(length / workerPageSize.value))
+    )
+  }
+)
 watch([selectedWorkerName, taskState], () => {
   taskPage.value = 1
 })
@@ -476,6 +569,18 @@ onBeforeUnmount(() => {
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
+}
+.monitor-worker-name {
+  --color-link: var(--el-text-color-regular);
+}
+.monitor-worker-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+  .el-input {
+    width: 280px;
+    max-width: 100%;
+  }
 }
 .monitor-sampling {
   font-size: 12px;

@@ -4094,5 +4094,10 @@
     "Grace": "Configuration-change grace until",
     "Unlimited": "Unlimited",
     "BrowserExit": "Log in again when the browser closes"
-  }
+  },
+  "TaskMonitorLoadAverage": "Load average",
+  "TaskMonitorStatisticsHelp": "Processed, succeeded, failed and retried counts accumulate since worker startup and reset on restart. — means unavailable. Totals cover all pages of the search results; load averages cover 1, 5 and 15 minutes.",
+  "TaskMonitorTasksHelp": "All retained executions visible to your account, newest published first. Click the eye button in the Actions column to view logs.",
+  "TaskMonitorArgs": "Arguments",
+  "TaskMonitorKwargs": "Keyword arguments"
 }

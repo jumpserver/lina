@@ -3168,5 +3168,10 @@
     "Grace": "Fim da tolerância por alteração",
     "Unlimited": "Sem limite",
     "BrowserExit": "Entrar novamente ao fechar o navegador"
-  }
+  },
+  "TaskMonitorLoadAverage": "Carga média",
+  "TaskMonitorStatisticsHelp": "As contagens de tarefas processadas, bem-sucedidas, com falha e repetidas acumulam desde o início do processo e são zeradas ao reiniciar. — indica dados indisponíveis. Os totais incluem todas as páginas filtradas; a carga corresponde a 1, 5 e 15 minutos.",
+  "TaskMonitorTasksHelp": "Todas as execuções retidas visíveis para sua conta, da mais recente à mais antiga. Clique no botão de olho na coluna Ações para ver os registros.",
+  "TaskMonitorArgs": "Argumentos",
+  "TaskMonitorKwargs": "Argumentos nomeados"
 }

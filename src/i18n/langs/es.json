@@ -3168,5 +3168,10 @@
     "Grace": "Fin de la prórroga por cambio",
     "Unlimited": "Sin límite",
     "BrowserExit": "Volver a iniciar sesión al cerrar el navegador"
-  }
+  },
+  "TaskMonitorLoadAverage": "Carga media",
+  "TaskMonitorStatisticsHelp": "Los recuentos de tareas procesadas, correctas, fallidas y reintentadas se acumulan desde el inicio del proceso y se reinician al reiniciarlo. — indica datos no disponibles. Los totales incluyen todas las páginas filtradas; la carga corresponde a 1, 5 y 15 minutos.",
+  "TaskMonitorTasksHelp": "Todas las ejecuciones conservadas visibles para su cuenta, de más recientes a más antiguas. Pulse el botón del ojo en la columna Acciones para ver los registros.",
+  "TaskMonitorArgs": "Argumentos",
+  "TaskMonitorKwargs": "Argumentos con nombre"
 }
