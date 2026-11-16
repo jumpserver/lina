@@ -2,7 +2,7 @@
   <el-popover :title="title" placement="left" trigger="click" width="300" @show="getAsyncItems">
     <div v-if="!loading" class="detail-content">
       <div v-if="accountData.length === 0" class="empty-item">
-        <span>{{ $t('No accounts') }}</span>
+        <span>{{ $t('NoAccountFound') }}</span>
       </div>
       <div v-for="account of accountData" :key="account.id" class="detail-item">
         <span>{{ getDisplay(account) }}</span>
