@@ -208,10 +208,6 @@ export default {
   margin: 0 0 12px;
 }
 
-.application-events :deep(.el-pagination) {
-  justify-content: flex-end;
-}
-
 .application-events :deep(.event-text) {
   overflow: hidden;
   text-overflow: ellipsis;
