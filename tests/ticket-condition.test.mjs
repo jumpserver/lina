@@ -148,7 +148,7 @@ test('lists, zero, empty text, boolean and unknown fields retain their meaning a
     condition: rule('request.unknown', 'eq', '<script>alert(1)</script>')
   })
   assert.match(html, /request.unknown/)
-  assert.doesNotMatch(html, /<script>/)
+  assert.doesNotMatch(html, /<\s*script\b/i)
 })
 
 test('missing or unrecognized conditions preserve the original record without a misleading translation', async () => {

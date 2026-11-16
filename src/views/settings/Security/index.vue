@@ -43,7 +43,7 @@ export default {
           name: 'Web'
         },
         {
-          title: this.$t('PersonalSecurity.Client'),
+          title: this.$t('ClientSecurity'),
           name: 'Client'
         }
       ]
