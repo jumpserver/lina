@@ -304,7 +304,7 @@ export default {
     },
     tableUrl() {
       const url = new URL(this.url, location.origin)
-      url.searchParams.set('fields_size', 'small')
+      url.searchParams.delete('fields_size')
       return `${url.pathname}${url.search}${url.hash}`
     },
     defaultColumns() {
@@ -632,8 +632,7 @@ export default {
         params: {
           ...this.getQueryParams(),
           ...request.params,
-          ...selectionParams,
-          fields_size: 'small'
+          ...selectionParams
         }
       })
       const data = this.normalizeResponse(response)
