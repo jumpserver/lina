@@ -1,5 +1,10 @@
 <template>
-  <TabPage v-model:active-menu="activeMenu" :submenu="tab.submenu" :help-message="helpMessage" />
+  <TabPage
+    v-model:active-menu="activeMenu"
+    class="application-integration"
+    :submenu="tab.submenu"
+    :help-message="helpMessage"
+  />
 </template>
 
 <script>
@@ -70,3 +75,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.application-integration :deep(.el-pagination) {
+  justify-content: flex-end;
+}
+
+.application-integration :deep(.el-pagination .el-pagination__total) {
+  margin-right: 0;
+}
+</style>
