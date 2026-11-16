@@ -1,6 +1,6 @@
 <template>
   <div class="resource-adjustment">
-    <p>{{ $t('TicketAdjustResourcesHelp') }}</p>
+    <p v-if="!snapshot.legacy">{{ $t('TicketAdjustResourcesHelp') }}</p>
     <DataForm
       ref="form"
       v-model:form="initial"
