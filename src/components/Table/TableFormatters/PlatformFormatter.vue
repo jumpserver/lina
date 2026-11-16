@@ -53,7 +53,7 @@ export default {
   gap: 0.5rem;
 
   .icon-zone {
-    width: 1.5em;
+    width: 20px;
     height: 1.5em;
     flex-shrink: 0;
 

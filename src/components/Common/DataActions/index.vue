@@ -39,7 +39,7 @@
                 {{ option.group }}
               </div>
               <el-dropdown-item
-                v-bind="{ ...option, icon: '' }"
+                v-bind="{ ...option, icon: '', iconSrc: undefined }"
                 :command="[option, action]"
                 :title="option.tip"
                 class="dropdown-item"
@@ -55,7 +55,13 @@
                       v-if="actionsHasIcon(action.dropdown) && option.iconPlaceholder !== false"
                       class="pre-icon"
                     >
-                      <Icon v-if="option.icon" :icon="option.icon" />
+                      <img
+                        v-if="option.iconSrc"
+                        :src="option.iconSrc"
+                        alt=""
+                        class="dropdown-item__icon"
+                      />
+                      <Icon v-else-if="option.icon" :icon="option.icon" />
                     </span>
                     <span class="dropdown-item__label">{{ option.title }}</span>
                     <el-tooltip
@@ -131,7 +137,7 @@ export default {
   },
   methods: {
     actionsHasIcon(actions) {
-      return actions.some((action) => action.icon)
+      return actions.some((action) => action.icon || action.iconSrc)
     },
     hasIcon(action, type = '') {
       const icon = action.icon
@@ -236,6 +242,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dropdown-item__icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 // 通用
 .layout {
   display: inline-flex;
