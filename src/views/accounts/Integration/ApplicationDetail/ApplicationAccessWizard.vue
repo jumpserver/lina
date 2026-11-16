@@ -43,7 +43,11 @@
               <el-select v-model="form.agent_setup">
                 <el-option :label="$t('AgentSetupDelivery')" value="delivery" />
                 <el-option :label="$t('AgentSetupConfigUpdate')" value="config_update" />
-                <el-option :label="$t('AlternatingAccountRotation')" value="rotation" />
+                <el-option
+                  v-if="hasValidLicense"
+                  :label="$t('AlternatingAccountRotation')"
+                  value="rotation"
+                />
               </el-select>
             </el-form-item>
             <el-form-item
@@ -101,7 +105,7 @@
               >
                 <el-input v-model="form.service_name" placeholder="sample-app" maxlength="128" />
               </el-form-item>
-              <el-form-item :label="$t('AgentFollowAccountSwitch')">
+              <el-form-item v-if="hasValidLicense" :label="$t('AgentFollowAccountSwitch')">
                 <el-switch
                   v-model="form.allow_account_switch"
                   :disabled="form.agent_setup === 'rotation'"
@@ -370,6 +374,7 @@ import { generateApplicationAccessMaterials } from '@/api/applicationCredential'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { copy } from '@/utils/common/index'
 import { subscribedAccountLabel } from '../components/subscriptionAccount.js'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ApplicationAccessWizard',
@@ -449,6 +454,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['hasValidLicense']),
     instanceTableConfig() {
       return {
         totalData: this.instances,

@@ -143,11 +143,3 @@ export default {
   font-size: 14px;
 }
 </style>
-
-<style lang="scss">
-.nav-header-dropdown.nav-account-dropdown.el-dropdown__popper {
-  .el-dropdown-menu__item {
-    gap: 8px;
-  }
-}
-</style>

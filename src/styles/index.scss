@@ -500,6 +500,63 @@ a.el-link.el-link--info.is-hover-underline:hover:after {
   color: #909399 !important;
 }
 
+.el-dropdown__popper:is(.nav-header-dropdown, .action-dropdown) {
+  .el-dropdown-menu {
+    padding: 8px 0;
+    border-radius: 4px;
+  }
+
+  .el-dropdown-menu__item {
+    height: 32px;
+    line-height: 32px;
+    padding: 0 20px;
+    font-size: 12px;
+  }
+}
+
+.nav-account-dropdown.el-dropdown__popper .el-dropdown-menu__item,
+.action-dropdown.el-dropdown__popper .dropdown-item__content {
+  gap: 8px;
+}
+
+.action-dropdown.el-dropdown__popper {
+  .dropdown-item__content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dropdown-item__label {
+    min-width: 0;
+  }
+
+  .pre-icon,
+  .pre-icon > span,
+  .pre-icon :is(.fa, .el-icon, .svg-icon) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .pre-icon {
+    flex: 0 0 14px;
+  }
+
+  .pre-icon,
+  .pre-icon :is(.fa, .el-icon, .svg-icon),
+  .pre-icon .el-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .pre-icon :is(.fa, .el-icon, .svg-icon) {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
 .el-button.el-button--small,
 .el-button--small.is-round {
   font-weight: 400;

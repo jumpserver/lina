@@ -26,8 +26,7 @@ export default [
           title: i18n.t('UserLoginACLs'),
           app: 'acls',
           resource: 'loginacl',
-          disableOrgsChange: true,
-          licenseRequired: true
+          disableOrgsChange: true
         },
         children: createViewSetRoutes({
           name: 'UserLoginACL',
