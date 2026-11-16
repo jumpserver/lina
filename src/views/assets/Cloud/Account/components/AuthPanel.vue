@@ -183,6 +183,10 @@ export default {
         performSubmit(values) {
           return this.$axios[this.method](this.iUrl, values, { disableFlashErrorMsg: true })
         },
+        onPerformSuccess(res, method, formVm, addContinue) {
+          formVm.$emit('submitSuccess', res)
+          formVm.emitPerformSuccessMsg(method, res, addContinue)
+        },
         onPerformError(error, method, formVm) {
           if (error.templateFollowCancelled) return
           const { response } = error
