@@ -3652,5 +3652,10 @@
     "Grace": "設定變更寬限至",
     "Unlimited": "不限制",
     "BrowserExit": "瀏覽器關閉時重新登入"
-  }
+  },
+  "TaskMonitorLoadAverage": "系統負載",
+  "TaskMonitorStatisticsHelp": "已處理、成功、失敗及重試從本次任務程序啟動起累計，重新啟動後歸零。— 表示未取得資料。合計包含搜尋結果的所有分頁；負載為 1、5、15 分鐘平均值。",
+  "TaskMonitorTasksHelp": "顯示目前帳號有權查看的全部保留執行記錄，按發布時間倒序分頁。點選操作欄的眼睛按鈕查看日誌。",
+  "TaskMonitorArgs": "參數",
+  "TaskMonitorKwargs": "關鍵字參數"
 }
