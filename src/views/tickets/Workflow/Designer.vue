@@ -108,7 +108,10 @@
             $t('WFNodeCount', { count: definition.nodes.length })
           }}</span>
         </div>
-        <div class="workspace">
+        <div
+          class="workspace"
+          :class="{ 'attribute-workspace': selected?.config?.approvers?.type === 'user_selector' }"
+        >
           <div class="canvas-panel">
             <div class="canvas-scroll">
               <div
@@ -177,7 +180,7 @@
                     /></el-icon>
                   </span>
                   <small v-if="node.type === 'approval'"
-                    >{{ $t(`WFResolver_${node.config.approvers.type}`) }} ·
+                    >{{ approverLabel(node.config.approvers.type) }} ·
                     {{ $t(`WFStrategy_${node.config.strategy}`) }}</small
                   >
                 </button>
@@ -214,13 +217,13 @@
                   >
                     <el-select v-model="selected.config.approvers.type" @change="changeResolver">
                       <template #label>
-                        {{ $t(`WFResolver_${selected.config.approvers.type}`) }}
+                        {{ approverLabel(selected.config.approvers.type) }}
                       </template>
                       <el-option
                         v-for="kind in resolvers"
                         :key="kind"
                         :value="kind"
-                        :label="$t(`WFResolver_${kind}`)"
+                        :label="approverLabel(kind)"
                         :disabled="workflow.type === 'login_confirm' && kind === 'org_admin'"
                       />
                     </el-select>
@@ -242,6 +245,20 @@
                       :ajax="approverAjax"
                       :placeholder="$t(`WFApproversPlaceholder_${selected.config.approvers.type}`)"
                       multiple
+                    />
+                  </el-form-item>
+                  <el-form-item
+                    v-if="selected.config.approvers.type === 'user_selector'"
+                    ref="approverField"
+                    :error="approverValidationNode?.id === selected.id ? approverError : ''"
+                    :show-message="false"
+                  >
+                    <JSONManyToManySelect
+                      :key="selected.id"
+                      v-bind="userSelectorMeta"
+                      :value="selected.config.approvers.value"
+                      :allowed-types="['all', 'attrs']"
+                      @input="selected.config.approvers.value = $event"
                     />
                   </el-form-item>
                   <el-form-item :label="$t('WFStrategy')">
@@ -388,6 +405,8 @@ import { Page } from '@/layout/components'
 import IBox from '@/components/Common/IBox'
 import Select2 from '@/components/Form/FormFields/Select2'
 import ConditionEditor from './ConditionEditor'
+import JSONManyToManySelect from '@/components/Form/FormFields/JSONManyToManySelect'
+import { userJSONSelectMeta } from '@/views/users/const'
 import {
   newApproval,
   newDefinition,
@@ -397,9 +416,9 @@ import {
   nodeLabels
 } from './graph'
 import { getTicketTypeLabel } from '../const'
-import { getErrorResponseMsg } from '@/utils/common'
+import { getErrorResponseMsg, setUrlParam } from '@/utils/common'
 export default {
-  components: { Page, IBox, Select2, ConditionEditor },
+  components: { Page, IBox, Select2, ConditionEditor, JSONManyToManySelect },
   data() {
     return {
       loading: false,
@@ -436,7 +455,7 @@ export default {
       )
     },
     resolvers() {
-      return ['user', 'user_group', 'role', 'asset_owner', 'org_admin'].filter(
+      return ['user', 'user_group', 'role', 'user_selector', 'asset_owner', 'org_admin'].filter(
         (kind) => this.workflow.type !== 'login_confirm' || kind !== 'asset_owner'
       )
     },
@@ -533,6 +552,15 @@ export default {
     },
     resourceResolver() {
       return ['user', 'user_group', 'role'].includes(this.selected?.config?.approvers?.type)
+    },
+    userSelectorMeta() {
+      const meta = userJSONSelectMeta(this, this.workflow.type === 'login_confirm').el
+      const org = this.workflow.org_id || this.$store.getters.currentOrg.id
+      meta.select2.url = setUrlParam(setUrlParam(meta.select2.url, 'is_valid', true), 'oid', org)
+      for (const attr of meta.attrs) {
+        if (attr.el?.url) attr.el.url = setUrlParam(attr.el.url, 'oid', org)
+      }
+      return meta
     },
     approverAjax() {
       const urls = {
@@ -667,7 +695,14 @@ export default {
       this.selectedId = this.definition.nodes.find((n) => n.type === 'start')?.id
       this.savedDefinition = JSON.stringify(this.definition)
     },
+    approverLabel(kind) {
+      return this.$t(kind === 'user_selector' ? 'SelectByAttr' : `WFResolver_${kind}`)
+    },
     changeResolver(kind) {
+      if (kind === 'user_selector') {
+        this.selected.config.approvers = { type: kind, value: { type: 'attrs', attrs: [] } }
+        return
+      }
       this.selected.config.approvers = ['user', 'user_group', 'role'].includes(kind)
         ? { type: kind, value: [] }
         : { type: kind }
@@ -717,6 +752,9 @@ export default {
     },
     missingApprovers(node) {
       const approvers = node.config?.approvers
+      if (node.type === 'approval' && approvers?.type === 'user_selector') {
+        return approvers.value?.type !== 'all' && !approvers.value?.attrs?.length
+      }
       return (
         node.type === 'approval' &&
         ['user', 'user_group', 'role'].includes(approvers?.type) &&
@@ -726,7 +764,9 @@ export default {
     getApproverError(node) {
       const name = node.name || this.$t('WFApproval')
       if (this.missingApprovers(node)) {
-        return this.$t(`WFApproversRequired_${node.config.approvers.type}`, { node: name })
+        const kind =
+          node.config.approvers.type === 'user_selector' ? 'user' : node.config.approvers.type
+        return this.$t(`WFApproversRequired_${kind}`, { node: name })
       }
       const approvers = node.config?.approvers
       if (
@@ -1176,6 +1216,9 @@ h3 {
     grid-template-columns: minmax(0, 1fr) 360px;
   }
 }
+.workspace.attribute-workspace {
+  grid-template-columns: minmax(0, 1fr) 480px;
+}
 @media (max-width: 1100px) {
   .metadata {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1185,7 +1228,8 @@ h3 {
   }
 }
 @media (max-width: 800px) {
-  .workspace {
+  .workspace,
+  .workspace.attribute-workspace {
     grid-template-columns: 1fr;
   }
   .inspector {
