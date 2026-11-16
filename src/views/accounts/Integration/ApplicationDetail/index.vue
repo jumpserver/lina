@@ -1,7 +1,6 @@
 <template>
   <GenericDetailPage
     v-bind="config"
-    class="application-detail"
     :has-activity="false"
     v-model:active-menu="config.activeMenu"
     v-model:object="object"
@@ -90,13 +89,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.application-detail :deep(.el-pagination) {
-  justify-content: flex-end;
-}
-
-.application-detail :deep(.el-pagination .el-pagination__total) {
-  margin-right: 0;
-}
-</style>
