@@ -110,7 +110,7 @@ export default {
         hasSelection: false,
         hasPagination: true,
         // Merge both event streams before deciding whether another page exists.
-        paginationLayout: 'sizes, prev, next',
+        paginationLayout: 'sizes, prev, pager, next',
         hasOperation: false,
         hasEdit: false,
         hasDelete: false,
@@ -206,6 +206,10 @@ export default {
 
 .context-help {
   margin: 0 0 12px;
+}
+
+.application-events :deep(.el-pagination) {
+  justify-content: flex-end;
 }
 
 .application-events :deep(.event-text) {
