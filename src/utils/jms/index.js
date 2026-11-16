@@ -162,9 +162,6 @@ export function IsSupportPauseSessionType(terminalType) {
 
 export function loadPlatformIcon(name, type) {
   const platformMap = {
-    H3C: 'h3c',
-    Huawei: 'huawei',
-    Cisco: 'cisco',
     Gateway: 'gateway',
     macOS: 'macos',
     BSD: 'bsd',
@@ -173,7 +170,9 @@ export function loadPlatformIcon(name, type) {
     'OceanBase-Oracle': 'oceanbase'
   }
 
-  const value = platformMap[name] || type
+  const value = ['cisco', 'h3c', 'huawei', 'general'].includes(type)
+    ? type
+    : platformMap[name] || type
   const extension = ['cisco', 'oceanbase'].includes(value) ? 'svg' : 'png'
 
   return getAssetUrlOr(`img/icons/${value}.${extension}`, 'img/icons/other.png')
