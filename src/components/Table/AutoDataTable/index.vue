@@ -84,7 +84,6 @@ export default {
         defaultCols: []
       },
       isDeactivated: false,
-      tableColumnsStorage: this.getTableColumnsStorage(),
       sortable: null,
       columnResizeObserver: null,
       columnResizeFrame: null,
@@ -100,6 +99,13 @@ export default {
     }
   },
   computed: {
+    tableColumnsStorage() {
+      // Some lists assign their URL after mounting; wait for their real identity.
+      if (!this.config.name && !this.config.url) return null
+      let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
+      tableName = replaceAllUUID(tableName)
+      return new ObjectLocalStorage('tableColumns', tableName)
+    },
     sourceConfig() {
       // Snapshot editable settings without cloning Vue component definitions
       // or potentially large static data. In-place settings edits remain visible.
@@ -484,7 +490,7 @@ export default {
         return
       }
       const columnNames = columns.map((column) => column.prop)
-      this.tableColumnsStorage.set(columnNames)
+      this.tableColumnsStorage?.set(columnNames)
       this.cleanedColumnsShow.show = columnNames
       this.popoverColumns.currentCols = columnNames
       this.iConfig = { ...this.iConfig, columns }
@@ -564,11 +570,6 @@ export default {
       }
       return meta
     },
-    getTableColumnsStorage() {
-      let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
-      tableName = replaceAllUUID(tableName)
-      return new ObjectLocalStorage('tableColumns', tableName)
-    },
     // 生成给子组件使用的TotalColList
     cleanColumnsShow() {
       const totalColumnsNames = this.totalColumns.map((obj) => obj.prop)
@@ -584,7 +585,7 @@ export default {
         (name) => !isDefaultHiddenColumn(name) && totalColumnsNames.includes(name)
       )
 
-      const configShowColumnsNames = this.tableColumnsStorage.get()
+      const configShowColumnsNames = this.tableColumnsStorage?.get()
       let showColumnsNames = this.normalizeColumnNames(configShowColumnsNames, defaultColumnsNames)
       if (showColumnsNames.length === 0) {
         showColumnsNames = [...totalColumnsNames]
@@ -732,7 +733,7 @@ export default {
       }
       columns = this.normalizeColumnNames(columns, this.cleanedColumnsShow.default)
       this.popoverColumns.currentCols = columns
-      this.tableColumnsStorage.set(columns)
+      this.tableColumnsStorage?.set(columns)
       this.filterShowColumns()
     },
     filterChange(filters) {
