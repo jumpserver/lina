@@ -110,7 +110,7 @@ export default {
         hasSelection: false,
         hasPagination: true,
         // Merge both event streams before deciding whether another page exists.
-        paginationLayout: 'sizes, prev, next',
+        paginationLayout: 'sizes, prev, pager, next',
         hasOperation: false,
         hasEdit: false,
         hasDelete: false,
