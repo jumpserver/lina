@@ -786,7 +786,7 @@
   "ConnectionCount": "接続数",
   "ConnectionDropped": "接続が切断された",
   "ConnectionToken": "接続トークン",
-  "ConnectionTokenList": "コネクショントークンは、認証情報とアセット接続を組み合わせて用いるもので、ユーザーが一键でアセットにログインすることを支援します。現在対応しているコンポーネントにはKoKo、Lion、Magnus、Razorなどがあります。",
+  "ConnectionTokenList": "コネクショントークンは、認証情報とアセット接続を組み合わせて用いるもので、ユーザーが一键でアセットにログインすることを支援します。現在対応しているコンポーネントにはKoKo、Magnus、Razorなどがあります。",
   "Console": "コンソール",
   "ConsoleDashboard": "コントロールパネルのダッシュボード",
   "Constructor": "コンストラクター",

@@ -824,7 +824,7 @@
   "ConnectionCount": "Conexiones",
   "ConnectionDropped": "Conexión desconectada",
   "ConnectionToken": "Token de conexión",
-  "ConnectionTokenList": "El token de conexión es un tipo de información de autenticación que combina la verificación de identidad y el acceso a los activos, permitiendo a los usuarios iniciar sesión en los activos con un solo clic. Los componentes actualmente compatibles incluyen: KoKo, Lion, Magnus, Razor, entre otros.",
+  "ConnectionTokenList": "El token de conexión es un tipo de información de autenticación que combina la verificación de identidad y el acceso a los activos, permitiendo a los usuarios iniciar sesión en los activos con un solo clic. Los componentes actualmente compatibles incluyen: KoKo, Magnus, Razor, entre otros.",
   "Console": "Consola",
   "ConsoleDashboard": "Panel de control de la consola",
   "Constructor": "Constructor",

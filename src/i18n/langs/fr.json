@@ -824,7 +824,7 @@
   "ConnectionCount": "Nombre de connexions",
   "ConnectionDropped": "Connexion interrompue",
   "ConnectionToken": "Jetons de connexion",
-  "ConnectionTokenList": "Le jeton de connexion est un type d'information d'authentification combinant la vérification d'identité et la connexion aux actifs. Il permet une connexion en un clic des utilisateurs aux actifs. Les composants actuellement pris en charge incluent : koko, lion, magnus, razor, etc.",
+  "ConnectionTokenList": "Le jeton de connexion est un type d'information d'authentification combinant la vérification d'identité et la connexion aux actifs. Il permet une connexion en un clic des utilisateurs aux actifs. Les composants actuellement pris en charge incluent : koko, magnus, razor, etc.",
   "Console": "Console",
   "ConsoleDashboard": "Tableau de bord de la console",
   "Constructor": "Constructeur",

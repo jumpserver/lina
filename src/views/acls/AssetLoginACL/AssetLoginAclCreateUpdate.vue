@@ -64,6 +64,7 @@ export default {
       ],
       fieldsMeta: {
         workflow: {
+          dependsOn: 'review_enabled',
           component: Select2,
           label: this.$t('WFWorkflows'),
           helpText: this.$t('WFACLHint'),

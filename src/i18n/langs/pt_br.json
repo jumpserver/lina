@@ -824,7 +824,7 @@
   "ConnectionCount": "Conexões",
   "ConnectionDropped": "Conexão interrompida",
   "ConnectionToken": "Token de conexão",
-  "ConnectionTokenList": "O token de conexão é uma informação de autenticação usada para combinar a autenticação com os ativos da conexão, permitindo o login com um único clique nos ativos. Atualmente, suporta componentes como: KoKo, Lion, Magnus, Razor, etc.",
+  "ConnectionTokenList": "O token de conexão é uma informação de autenticação usada para combinar a autenticação com os ativos da conexão, permitindo o login com um único clique nos ativos. Atualmente, suporta componentes como: KoKo, Magnus, Razor, etc.",
   "Console": " Console",
   "ConsoleDashboard": "Painel de Controle do Console",
   "Constructor": "Construtor",
