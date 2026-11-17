@@ -71,7 +71,6 @@ export default {
         approval_mode: {
           label: this.$t('ApprovalMode'),
           type: 'radio-group',
-          dependsOn: 'review_enabled',
           hidden: (form) => form.action !== 'accept' || !form.review_enabled,
           options: [
             { label: this.$t('SimpleApproval'), value: 'simple' },
@@ -81,7 +80,6 @@ export default {
         workflow: {
           component: Select2,
           label: this.$t('WFWorkflows'),
-          dependsOn: 'review_enabled',
           rules: [rules.RequiredChange],
           hidden: (form) =>
             form.action !== 'accept' || !form.review_enabled || form.approval_mode !== 'workflow',
@@ -119,12 +117,18 @@ export default {
           ])
         ),
         review_duration: {
-          dependsOn: 'review_enabled',
           component: InputWithUnit,
           helpTextAsTip: true,
           helpTextAsPlaceholder: false,
           hidden: (formValue) => formValue.action !== 'accept' || !formValue.review_enabled,
-          el: { unit: 'hour', type: 'number', min: 0, max: 2147483647, step: 1 },
+          el: {
+            unit: 'hour',
+            type: 'number',
+            min: 0,
+            max: 2147483647,
+            step: 1,
+            style: { width: '240px', maxWidth: '100%' }
+          },
           rules: [
             {
               validator: (rule, value, callback) => {
@@ -155,21 +159,7 @@ export default {
         assets: assetJSONSelectMeta(this),
         rules: {
           fields: ['ip_group', 'time_period'],
-          afterGetFormValue: (value) => ({
-            ...value,
-            approval_mode: value.workflow ? 'workflow' : 'simple'
-          }),
           fieldsMeta: {
-            approval_mode: {
-              label: this.$t('ApprovalMode'),
-              type: 'radio-group',
-              dependsOn: 'review_enabled',
-              hidden: (form) => form.action !== 'accept' || !form.review_enabled,
-              options: [
-                { label: this.$t('SimpleApproval'), value: 'simple' },
-                { label: this.$t('WorkflowApproval'), value: 'workflow' }
-              ]
-            },
             ip_group: {
               component: TagInput,
               el: {
@@ -202,7 +192,6 @@ export default {
         },
         reviewers: {
           label: this.$t('Reviewer'),
-          dependsOn: 'review_enabled',
           type: 'resourceSelect',
           component: ResourceSelect,
           required: true,

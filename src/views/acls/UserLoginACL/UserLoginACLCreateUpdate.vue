@@ -77,8 +77,6 @@ export default {
         },
         rules: {
           fields: ['ip_group', 'time_period'],
-          afterGetFormValue: approvalFormValue,
-          afterGetRemoteMeta: (meta) => approvalActionMeta(meta, this.$t),
           fieldsMeta: {
             ip_group: {
               component: TagInput,
