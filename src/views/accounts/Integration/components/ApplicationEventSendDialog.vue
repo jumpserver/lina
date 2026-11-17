@@ -138,6 +138,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import { getErrorResponseMsg } from '@/utils/common/index'
+import { mapGetters } from 'vuex'
 import ApplicationCommandResults from './ApplicationCommandResults.vue'
 
 export default {
@@ -159,6 +160,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['hasValidLicense']),
     shown: {
       get() {
         return this.visible
@@ -178,7 +180,7 @@ export default {
       return this.event === 'credential.switch.requested'
     },
     canSwitch() {
-      return this.$hasPerm('accounts.change_applicationcredential')
+      return this.hasValidLicense && this.$hasPerm('accounts.change_applicationcredential')
     },
     pendingEntries() {
       return this.entries.filter((entry) => !entry.result)

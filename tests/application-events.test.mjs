@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { setImmediate } from 'node:timers/promises'
 import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
+import { mapGetters } from 'vuex'
 
 const source = await readFile(
   new URL(
@@ -16,8 +17,9 @@ const component = new Function(
   'Dialog',
   'ApplicationCommandResults',
   'getErrorResponseMsg',
+  'mapGetters',
   descriptor.script.content.replace(/^import .*\n/gm, '').replace('export default', 'return')
-)(null, null, (error) => error.response?.data?.detail || error.message)
+)(null, null, (error) => error.response?.data?.detail || error.message, mapGetters)
 
 function options(id) {
   return {
@@ -48,6 +50,7 @@ function dialog({
     ...component.data(),
     application,
     applications,
+    $store: { getters: { hasValidLicense: true } },
     $hasPerm(permission) {
       return switchPermission || permission !== 'accounts.change_applicationcredential'
     },

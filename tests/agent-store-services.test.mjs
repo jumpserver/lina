@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
+import { mapGetters } from 'vuex'
 
 const source = await readFile(
   new URL(
@@ -22,6 +23,7 @@ function wizard(request = async () => ({ config: '{}' })) {
     'generateApplicationAccessMaterials',
     'toSafeLocalDateStr',
     'copy',
+    'mapGetters',
     descriptor.script.content.replace(/^import .*\n/gm, '').replace('export default', 'return')
   )(
     null,
@@ -33,11 +35,13 @@ function wizard(request = async () => ({ config: '{}' })) {
       return request()
     },
     () => '',
-    () => {}
+    () => {},
+    mapGetters
   )
   const view = {
     ...component.data.call({ $t: (key) => key }),
     object: { id: 'application' },
+    $store: { getters: { hasValidLicense: true } },
     $refs: { form: { validate: async () => true } },
     $emit() {}
   }

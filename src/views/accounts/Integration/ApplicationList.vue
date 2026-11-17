@@ -56,7 +56,7 @@ export default {
             formatter: CopyableFormatter
           },
           logo: {
-            width: '80px',
+            width: '60px',
             formatter: (row) => {
               return (
                 <img

@@ -1,8 +1,14 @@
 <template>
   <div class="application-credential-list">
-    <ListTable ref="credentialTable" :header-actions="headerActions" :table-config="tableConfig" />
+    <ListTable
+      ref="credentialTable"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+      :table-metadata-provider="preview ? getPreviewMetadata : null"
+    />
 
     <Drawer
+      v-if="!preview"
       v-model:visible="drawerVisible"
       :has-footer="false"
       :title="drawerTitle"
@@ -49,7 +55,8 @@ export default {
     ListTable
   },
   props: {
-    mode: { type: String, required: true }
+    mode: { type: String, required: true },
+    preview: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -61,6 +68,7 @@ export default {
       tableConfig: {
         name: this.mode === 'alternating_rotation' ? 'PAMAccountRotationList' : undefined,
         url: credentialUrl,
+        ...(this.preview && { totalData: [] }),
         request: (url, config) =>
           requestCredentialTable(url, {
             ...config,
@@ -201,11 +209,14 @@ export default {
       immediate: true,
       handler(id) {
         const tab = this.mode === 'subscription' ? 'notifications' : 'rotations'
-        if (id && this.$route.query.tab === tab) this.openDetail({ id })
+        if (!this.preview && id && this.$route.query.tab === tab) this.openDetail({ id })
       }
     }
   },
   methods: {
+    getPreviewMetadata() {
+      return Promise.resolve({})
+    },
     renderSubscriptionAccounts(row) {
       const accounts = row.subscription_accounts_preview || []
       const remaining = Math.max(0, (row.subscription_accounts_amount ?? 0) - accounts.length)

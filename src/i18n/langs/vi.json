@@ -3179,5 +3179,10 @@
   "AccountConnectivity": "Kiểm tra kết nối tài khoản",
   "AssetConnectivity": "Kiểm tra kết nối tài sản",
   "ConnectivityAllAccounts": "Tất cả tài khoản đang hoạt động",
-  "AgentFileTransfers": "Truyền tệp Agent"
+  "AgentFileTransfers": "Truyền tệp Agent",
+  "TaskMonitorLoadAverage": "Tải trung bình",
+  "TaskMonitorStatisticsHelp": "Số tác vụ đã xử lý, thành công, thất bại và thử lại được tích lũy từ khi tiến trình khởi động và đặt lại khi khởi động lại. — nghĩa là chưa có dữ liệu. Tổng bao gồm mọi trang kết quả tìm kiếm; tải được tính trung bình trong 1, 5 và 15 phút.",
+  "TaskMonitorTasksHelp": "Tất cả bản ghi thực thi còn lưu mà tài khoản của bạn được phép xem, theo thời gian xuất bản từ mới đến cũ. Nhấn nút hình con mắt trong cột thao tác để xem nhật ký.",
+  "TaskMonitorArgs": "Đối số",
+  "TaskMonitorKwargs": "Đối số từ khóa"
 }

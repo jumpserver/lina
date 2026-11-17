@@ -1477,7 +1477,7 @@
   "NewSyncCount": "新同步",
   "Next": "下一步",
   "No": "否",
-  "NoAccountFound": "未找到帐户",
+  "NoAccountFound": "暂无可用账号",
   "NoAdminAccount": "无管理员账号",
   "NoAvailableActions": "暂无可用操作",
   "NoCertificateInfo": "暂无证书信息",
@@ -4134,5 +4134,10 @@
     "Unlimited": "不限制",
     "BrowserExit": "浏览器关闭时重新登录"
   },
-  "AgentFileTransfers": "Agent 文件传输"
+  "AgentFileTransfers": "Agent 文件传输",
+  "TaskMonitorLoadAverage": "系统负载",
+  "TaskMonitorStatisticsHelp": "已处理、成功、失败和重试从本次任务进程启动起累计，重启后清零。— 表示未获取到数据。合计覆盖搜索结果的所有分页；负载为 1、5、15 分钟平均值。",
+  "TaskMonitorTasksHelp": "显示当前账号有权查看的全部保留执行记录，按发布时间倒序分页。点击操作列的眼睛按钮查看日志。",
+  "TaskMonitorArgs": "参数",
+  "TaskMonitorKwargs": "关键字参数"
 }

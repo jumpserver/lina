@@ -1,6 +1,8 @@
 <template>
   <TwoCol>
-    <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+    <div class="group-info-card">
+      <AutoDetailCard :excludes="excludes" :object="object" :url="url" />
+    </div>
   </TwoCol>
 </template>
 
@@ -37,4 +39,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.group-info-card {
+  max-width: 800px;
+}
+</style>

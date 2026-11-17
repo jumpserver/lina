@@ -126,16 +126,7 @@ export default {
 @use '@/styles/variables' as *;
 
 :global(.nav-header-dropdown.el-dropdown__popper .el-dropdown-menu) {
-  padding: 8px 0;
   margin: 4px 0;
-  border-radius: 4px;
-}
-
-:global(.nav-header-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
-  height: 32px;
-  line-height: 32px;
-  padding: 0 20px;
-  font-size: 12px;
 }
 
 .navbar {

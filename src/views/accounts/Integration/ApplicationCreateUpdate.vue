@@ -41,6 +41,7 @@ export default {
             value: { type: 'ids', ids: [] },
             allowedTypes: ['all', 'ids', 'attrs'],
             resource: vm.$t('Accounts'),
+            summaryCountOnly: false,
             select2: {
               url: '/api/v1/accounts/accounts/',
               ajax: {

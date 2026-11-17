@@ -3383,5 +3383,10 @@
   "AccountConnectivity": "アカウントの接続テスト",
   "AssetConnectivity": "アセットの接続テスト",
   "ConnectivityAllAccounts": "すべての有効なアカウント",
-  "AgentFileTransfers": "Agent ファイル転送"
+  "AgentFileTransfers": "Agent ファイル転送",
+  "TaskMonitorLoadAverage": "平均負荷",
+  "TaskMonitorStatisticsHelp": "処理済み、成功、失敗、再試行の件数はワーカー起動から累計し、再起動でリセットされます。— は取得不可を示します。合計は検索結果の全ページが対象です。負荷は 1、5、15 分間の平均です。",
+  "TaskMonitorTasksHelp": "このアカウントで閲覧できる保存済みの全実行履歴を、発行日時の新しい順に表示します。操作列の目のボタンをクリックするとログを表示します。",
+  "TaskMonitorArgs": "引数",
+  "TaskMonitorKwargs": "キーワード引数"
 }

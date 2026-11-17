@@ -219,6 +219,10 @@ export default {
                 value: 'mysql'
               },
               {
+                label: 'MariaDB',
+                value: 'mariadb'
+              },
+              {
                 label: 'PostgreSQL',
                 value: 'postgresql'
               },
@@ -227,12 +231,41 @@ export default {
                 value: 'sqlserver'
               },
               {
+                label: 'Oracle',
+                value: 'oracle'
+              },
+              {
+                label: 'Dameng',
+                value: 'dameng'
+              },
+              {
+                label: 'OceanBase',
+                value: 'oceanbase'
+              },
+              {
+                label: 'DB2',
+                value: 'db2'
+              },
+              {
+                label: 'ClickHouse',
+                value: 'clickhouse'
+              },
+              {
                 label: 'CloudEngine',
                 value: 'huawei'
               }
             ],
             callback: (option) => {
-              this.cmOptions.mode = option === 'win_shell' ? 'powershell' : option
+              const modes = {
+                win_shell: 'powershell',
+                mariadb: 'mysql',
+                oracle: 'sql',
+                dameng: 'sql',
+                oceanbase: 'sql',
+                db2: 'sql',
+                clickhouse: 'sql'
+              }
+              this.cmOptions.mode = modes[option] || option
               this.module = option
             }
           }

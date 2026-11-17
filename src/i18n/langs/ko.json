@@ -3179,5 +3179,10 @@
   "AccountConnectivity": "계정 연결 테스트",
   "AssetConnectivity": "자산 연결 테스트",
   "ConnectivityAllAccounts": "모든 활성 계정",
-  "AgentFileTransfers": "Agent 파일 전송"
+  "AgentFileTransfers": "Agent 파일 전송",
+  "TaskMonitorLoadAverage": "평균 부하",
+  "TaskMonitorStatisticsHelp": "처리, 성공, 실패 및 재시도 횟수는 워커 시작부터 누적되며 재시작하면 초기화됩니다. —는 데이터 없음입니다. 합계는 검색 결과의 모든 페이지를 포함하며 부하는 1, 5, 15분 평균입니다.",
+  "TaskMonitorTasksHelp": "이 계정에서 볼 수 있는 보관된 모든 실행 기록을 게시 시간 역순으로 표시합니다. 작업 열의 눈 모양 버튼을 클릭하면 로그를 볼 수 있습니다.",
+  "TaskMonitorArgs": "인수",
+  "TaskMonitorKwargs": "키워드 인수"
 }

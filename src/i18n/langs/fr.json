@@ -3348,5 +3348,10 @@
   "AccountConnectivity": "Test de connectivité des comptes",
   "AssetConnectivity": "Test de connectivité des actifs",
   "ConnectivityAllAccounts": "Tous les comptes actifs",
-  "AgentFileTransfers": "Transferts Agent"
+  "AgentFileTransfers": "Transferts Agent",
+  "TaskMonitorLoadAverage": "Charge moyenne",
+  "TaskMonitorStatisticsHelp": "Les compteurs de tâches traitées, réussies, échouées et réessayées sont cumulés depuis le démarrage du processus et remis à zéro au redémarrage. — signifie indisponible. Les totaux couvrent toutes les pages filtrées ; la charge est calculée sur 1, 5 et 15 minutes.",
+  "TaskMonitorTasksHelp": "Toutes les exécutions conservées accessibles à votre compte, de la plus récente à la plus ancienne. Cliquez sur le bouton en forme d’œil dans la colonne Actions pour consulter les journaux.",
+  "TaskMonitorArgs": "Arguments",
+  "TaskMonitorKwargs": "Arguments nommés"
 }

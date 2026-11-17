@@ -37,21 +37,7 @@
       </template>
     </PageHeading>
     <PageContent :class="{ disabled: disabled }" class="page-content">
-      <div v-if="disabled" class="content-disabled-mask">
-        <IBox shadow="always">
-          <div class="disabled-content">
-            <div class="lock-icon">
-              <el-icon><Unlock /></el-icon>
-            </div>
-            <div class="disabled-text">
-              {{ $t('UpgradeEnterpriseEditionHelpText') }}
-            </div>
-            <el-button class="upgrade-btn" type="primary" @click="handleUpgrade">
-              {{ $t('UpgradeEnterpriseEdition') }}
-            </el-button>
-          </div>
-        </IBox>
-      </div>
+      <EnterpriseUpgradeMask v-if="disabled" />
       <el-alert
         v-if="iHelpMessage && helpAlertVisible"
         class="page-alert"
@@ -70,9 +56,9 @@
 <script>
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
+import EnterpriseUpgradeMask from './EnterpriseUpgradeMask.vue'
 import UserConfirmDialog from '@/components/Apps/UserConfirmDialog/index.vue'
 import { toSentenceCase } from '@/utils/common/index'
-import IBox from '@/components/Common/IBox/index.vue'
 import i18n from '@/i18n/i18n'
 
 export default {
@@ -81,7 +67,7 @@ export default {
     UserConfirmDialog,
     PageHeading,
     PageContent,
-    IBox
+    EnterpriseUpgradeMask
   },
   props: {
     disabled: {
@@ -169,10 +155,6 @@ export default {
     },
     endLongPress() {
       clearTimeout(this.longPressTimer)
-    },
-    handleUpgrade() {
-      const url = 'https://www.lxware.hk/pages/about'
-      window.open(url, '_blank')
     }
   }
 }
@@ -270,57 +252,6 @@ export default {
   .announcement-main {
     word-wrap: break-word;
     white-space: pre-wrap;
-  }
-}
-
-.ibox {
-  width: 500px;
-  position: absolute;
-  top: 30%;
-}
-
-.content-disabled-mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(2px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-
-  .disabled-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-
-    .lock-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 10px auto;
-
-      i {
-        font-size: 40px;
-        color: #909399;
-      }
-    }
-
-    .disabled-text {
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      padding: 10px;
-    }
-
-    .upgrade-btn {
-      min-width: 120px;
-      margin: 10px auto;
-    }
   }
 }
 
