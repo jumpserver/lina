@@ -35,7 +35,7 @@
           >
             <el-tab-pane
               v-for="(editor, key) in openedEditor"
-              :key="key"
+              :key="editor.id"
               :label="tabLabel(editor)"
               :name="key"
             >
@@ -150,12 +150,15 @@ export default {
             if (isCancel) {
               return
             }
-            renameFile(this.object.id, {
-              key: treeNode.id,
-              new_name: treeNode.name,
-              is_directory: treeNode.isParent
+            const { id, name, isParent } = treeNode
+            return renameFile(this.object.id, {
+              key: id,
+              new_name: name,
+              is_directory: isParent
             })
-              .then()
+              .then(() => {
+                this.renameEditors(id, name, isParent)
+              })
               .finally(() => {
                 this.refreshTree()
               })
@@ -197,8 +200,22 @@ export default {
     this.onOpenEditor({ id: 'main.yml', name: 'main.yml' })
   },
   methods: {
-    refreshEditor(id, name) {
-      this.openedEditor[id].name = name
+    renameEditors(oldPath, newName, isDirectory) {
+      const newPath = oldPath.slice(0, oldPath.lastIndexOf('/') + 1) + newName
+      this.openedEditor = Object.fromEntries(
+        Object.entries(this.openedEditor).map(([key, editor]) => {
+          if (key === oldPath || (isDirectory && key.startsWith(oldPath + '/'))) {
+            const newKey = newPath + key.slice(oldPath.length)
+            editor.key = newKey
+            editor.name = newKey.slice(newKey.lastIndexOf('/') + 1)
+            if (this.activeEditorId === key) {
+              this.activeEditorId = newKey
+            }
+            return [newKey, editor]
+          }
+          return [key, editor]
+        })
+      )
     },
     onReset() {
       const editor = this.activeEditor
@@ -273,8 +290,17 @@ export default {
       this.zTree.editName(node)
     },
     onOpenEditor(node) {
-      this.openedEditor[node.id] = { key: node.id, name: node.name, originValue: '', value: '' }
       this.activeEditorId = node.id
+      if (Object.prototype.hasOwnProperty.call(this.openedEditor, node.id)) {
+        return
+      }
+      this.openedEditor[node.id] = {
+        id: Symbol(node.id),
+        key: node.id,
+        name: node.name,
+        originValue: '',
+        value: ''
+      }
       this.getFileContent(node.id)
     },
     onCloseEditor(key) {
@@ -307,9 +333,15 @@ export default {
       }
     },
     getFileContent(key) {
+      const editor = this.openedEditor[key]
       this.$axios.get(`/api/v1/ops/playbook/${this.object.id}/file/?key=${key}`).then((res) => {
-        this.openedEditor[key].value = res.content
-        this.openedEditor[key].originValue = res.content
+        if (this.openedEditor[editor.key] !== editor) {
+          return
+        }
+        if (!this.hasChange(editor)) {
+          editor.value = res.content
+        }
+        editor.originValue = res.content
       })
     },
     tabLabel(editor) {
