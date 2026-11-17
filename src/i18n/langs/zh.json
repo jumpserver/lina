@@ -3720,6 +3720,7 @@
   "WFResolver_asset_owner": "资产负责人",
   "WFAssetOwnerHelp": "按申请资产的负责人审批，请先在资产编辑页面配置负责人。",
   "WFResolver_org_admin": "组织管理员",
+  "WFResolver_acl_reviewers": "ACL 指定审批人",
   "WFRequired": "通过人数",
   "WFRequiredCount": "需 {count} 人通过",
   "WFTimeout": "超时分钟数（0 表示不超时）",

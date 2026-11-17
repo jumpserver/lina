@@ -19,6 +19,7 @@ export default {
   },
   data() {
     return {
+      workflowRequiresReviewers: false,
       initial: {
         action: 'accept',
         review_duration: 0,
@@ -63,10 +64,10 @@ export default {
         [this.$t('AclAfterSession'), ['change_secret_enabled']],
         [this.$t('AclOtherSettings'), ['is_active', 'comment']]
       ],
-      afterGetFormValue: (value) => ({
-        ...value,
-        approval_mode: value.workflow ? 'workflow' : 'simple'
-      }),
+      afterGetFormValue: (value) => {
+        this.workflowRequiresReviewers = !!value.workflow_requires_reviewers
+        return { ...value, approval_mode: value.workflow ? 'workflow' : 'simple' }
+      },
       fieldsMeta: {
         approval_mode: {
           label: this.$t('ApprovalMode'),
@@ -81,6 +82,11 @@ export default {
           component: Select2,
           label: this.$t('WFWorkflows'),
           rules: [rules.RequiredChange],
+          on: {
+            changeOptions: ([options]) => {
+              this.workflowRequiresReviewers = !!options[0]?.requires_acl_reviewers
+            }
+          },
           hidden: (form) =>
             form.action !== 'accept' || !form.review_enabled || form.approval_mode !== 'workflow',
           el: {
@@ -88,7 +94,7 @@ export default {
             clearable: true,
             ajax: {
               url: `/api/v1/tickets/workflows/options/?type=login_asset_confirm&org_id=${this.$store.getters.currentOrg.id}`,
-              transformOption: (w) => ({ label: w.name, value: w.id })
+              transformOption: (w) => ({ ...w, label: w.name, value: w.id })
             }
           }
         },
@@ -197,7 +203,9 @@ export default {
           required: true,
           rules: [{ ...rules.RequiredChange, type: 'array', min: 1 }],
           hidden: (form) =>
-            form.action !== 'accept' || !form.review_enabled || form.approval_mode !== 'simple',
+            form.action !== 'accept' ||
+            !form.review_enabled ||
+            (form.approval_mode !== 'simple' && !this.workflowRequiresReviewers),
           helpTextAsTip: true,
           helpTextAsPlaceholder: false,
           el: {

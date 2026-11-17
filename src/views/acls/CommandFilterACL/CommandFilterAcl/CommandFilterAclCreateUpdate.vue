@@ -30,6 +30,7 @@ export default {
   },
   data() {
     return {
+      workflowRequiresReviewers: false,
       cleanFormValue(value) {
         cleanApprovalFormValue(value)
         return value
@@ -48,7 +49,10 @@ export default {
       ],
       url: '/api/v1/acls/command-filter-acls/',
       createSuccessNextRoute: { name: 'CommandFilterACLList' },
-      afterGetFormValue: approvalFormValue,
+      afterGetFormValue: (value) => {
+        this.workflowRequiresReviewers = !!value.workflow_requires_reviewers
+        return approvalFormValue(value)
+      },
       afterGetRemoteMeta: (meta) => approvalActionMeta(meta, this.$t),
       fieldsMeta: {
         workflow: {
@@ -56,12 +60,17 @@ export default {
           label: this.$t('WFWorkflows'),
           rules: [rules.RequiredChange],
           hidden: (value) => value.action !== 'workflow_review',
+          on: {
+            changeOptions: ([options]) => {
+              this.workflowRequiresReviewers = !!options[0]?.requires_acl_reviewers
+            }
+          },
           el: {
             multiple: false,
             clearable: true,
             ajax: {
               url: `/api/v1/tickets/workflows/options/?type=command_confirm&org_id=${this.$store.getters.currentOrg.id}`,
-              transformOption: (w) => ({ label: w.name, value: w.id })
+              transformOption: (w) => ({ ...w, label: w.name, value: w.id })
             }
           }
         },
@@ -91,8 +100,13 @@ export default {
           type: 'resourceSelect',
           component: ResourceSelect,
           hidden: (item, field) => {
-            field.label = this.$t(item.action === 'review' ? 'Reviewer' : 'Recipients')
-            return !['review', 'warning', 'notify_and_warn'].includes(item.action)
+            field.label = this.$t(
+              ['review', 'workflow_review'].includes(item.action) ? 'Reviewer' : 'Recipients'
+            )
+            return !(
+              ['review', 'warning', 'notify_and_warn'].includes(item.action) ||
+              (item.action === 'workflow_review' && this.workflowRequiresReviewers)
+            )
           },
           rules: [rules.RequiredChange],
           el: {

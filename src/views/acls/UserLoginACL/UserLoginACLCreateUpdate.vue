@@ -21,6 +21,7 @@ export default {
   },
   data() {
     return {
+      workflowRequiresReviewers: false,
       initial: {
         action: 'reject',
         user: this.$route.query.user,
@@ -40,7 +41,10 @@ export default {
         [this.$t('Action'), ['action', 'workflow', 'reviewers']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
-      afterGetFormValue: approvalFormValue,
+      afterGetFormValue: (value) => {
+        this.workflowRequiresReviewers = !!value.workflow_requires_reviewers
+        return approvalFormValue(value)
+      },
       afterGetRemoteMeta: (meta) => approvalActionMeta(meta, this.$t),
       fieldsMeta: {
         action: {
@@ -51,12 +55,17 @@ export default {
           label: this.$t('WFWorkflows'),
           rules: [RequiredChange],
           hidden: (value) => value.action !== 'workflow_review',
+          on: {
+            changeOptions: ([options]) => {
+              this.workflowRequiresReviewers = !!options[0]?.requires_acl_reviewers
+            }
+          },
           el: {
             multiple: false,
             clearable: true,
             ajax: {
               url: `/api/v1/tickets/workflows/options/?type=login_confirm&org_id=00000000-0000-0000-0000-000000000000`,
-              transformOption: (w) => ({ label: w.name, value: w.id })
+              transformOption: (w) => ({ ...w, label: w.name, value: w.id })
             }
           }
         },
@@ -74,8 +83,13 @@ export default {
           },
           rules: [Required],
           hidden: (formValue, field) => {
-            field.label = this.$t(formValue.action === 'review' ? 'Reviewer' : 'Recipients')
-            return !['review', 'notice'].includes(formValue.action)
+            field.label = this.$t(
+              ['review', 'workflow_review'].includes(formValue.action) ? 'Reviewer' : 'Recipients'
+            )
+            return !(
+              ['review', 'notice'].includes(formValue.action) ||
+              (formValue.action === 'workflow_review' && this.workflowRequiresReviewers)
+            )
           }
         },
         rules: {

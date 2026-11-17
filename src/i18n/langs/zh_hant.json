@@ -3292,6 +3292,7 @@
   "WFResolver_asset_owner": "資產負責人",
   "WFAssetOwnerHelp": "依申請資產的負責人審批，請先在資產編輯頁面設定負責人。",
   "WFResolver_org_admin": "組織管理員",
+  "WFResolver_acl_reviewers": "ACL 指定審批人",
   "WFRequired": "通過人數",
   "WFRequiredCount": "需 {count} 人通過",
   "WFTimeout": "超時分鐘數（0 表示不超時）",

@@ -3726,6 +3726,7 @@
   "WFResolver_asset_owner": "Asset owners",
   "WFAssetOwnerHelp": "Approval uses the owners of the requested assets. Set each owner on the asset edit page.",
   "WFResolver_org_admin": "Organization administrators",
+  "WFResolver_acl_reviewers": "ACL-specified approvers",
   "WFRequired": "Required approvals",
   "WFRequiredCount": "{count} approvals required",
   "WFTimeout": "Timeout in minutes (0 for no deadline)",

@@ -40,6 +40,14 @@ export default {
             ? this.object.workflow_name || '-'
             : this.object?.reviewers.map((item) => item?.name).join(', ')
         },
+        ...(this.object.workflow_requires_reviewers
+          ? [
+              {
+                key: this.$t('Reviewer'),
+                value: (this.object.reviewers || []).map((item) => item.name).join(', ')
+              }
+            ]
+          : []),
         'priority',
         'is_active',
         'comment'

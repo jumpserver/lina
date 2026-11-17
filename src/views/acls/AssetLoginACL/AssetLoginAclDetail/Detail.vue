@@ -127,7 +127,10 @@ export default {
                     key: this.$t('ApprovalMode'),
                     value: this.$t(this.object.workflow ? 'WorkflowApproval' : 'SimpleApproval')
                   },
-                  this.object.workflow ? 'workflow_name' : 'reviewers',
+                  ...(this.object.workflow ? ['workflow_name'] : []),
+                  ...(!this.object.workflow || this.object.workflow_requires_reviewers
+                    ? ['reviewers']
+                    : []),
                   'review_duration'
                 ]
               : []),

@@ -69,6 +69,14 @@ export default {
             ? vm.object.workflow_name || '-'
             : vm.object.reviewers.map((item) => item.name).join(', ')
         },
+        ...(vm.object.workflow_requires_reviewers
+          ? [
+              {
+                key: vm.$t('Reviewer'),
+                value: (vm.object.reviewers || []).map((item) => item.name).join(', ')
+              }
+            ]
+          : []),
         'comment'
       ]
     }
