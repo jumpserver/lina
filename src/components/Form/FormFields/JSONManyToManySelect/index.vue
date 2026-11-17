@@ -109,6 +109,7 @@ const AttrActionFormatter = {
       h(ElButton, {
         icon: 'Edit',
         size: 'small',
+        plain: true,
         style: { flexShrink: 0 },
         type: 'primary',
         onClick: () => this.trigger('onEdit')
@@ -116,6 +117,7 @@ const AttrActionFormatter = {
       h(ElButton, {
         icon: 'Minus',
         size: 'small',
+        plain: true,
         style: { flexShrink: 0 },
         type: 'danger',
         onClick: () => this.trigger('onDelete')

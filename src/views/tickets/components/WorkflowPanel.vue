@@ -451,7 +451,9 @@ export default {
           .map((id) => this.instance.approver_role_names[id] || this.$t('Unknown'))
           .join(', ')
       }
-      return this.$t(`WFResolver_${approvers.type}`)
+      return this.$t(
+        approvers.type === 'user_selector' ? 'SelectByAttr' : `WFResolver_${approvers.type}`
+      )
     },
     scheduleDeadline() {
       clearTimeout(this.deadlineTimer)

@@ -32,6 +32,7 @@ const bindings = {
   Page: {},
   IBox: {},
   Select2: {},
+  JSONManyToManySelect: {},
   ConditionEditor: {},
   getErrorResponseMsg,
   ...graph
@@ -673,7 +674,7 @@ test('login confirmation hides asset owners and replaces that source when switch
   approval.config.timeout = 600
   vm.workflow.type = 'login_confirm'
   vm.changeTicketType('login_confirm')
-  assert.deepEqual(vm.resolvers, ['user', 'user_group', 'role', 'org_admin'])
+  assert.deepEqual(vm.resolvers, ['user', 'user_group', 'role', 'user_selector', 'org_admin'])
   assert.deepEqual(approval.config.approvers, { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] })
   assert.equal(approval.config.strategy, 'all')
   assert.equal(approval.config.timeout, 600)
@@ -725,4 +726,18 @@ test('ordinary organizations cannot create or copy login workflows while asset l
   vm.$store.getters.currentOrgIsRoot = false
   vm.workflow.type = 'login_asset_confirm'
   assert.equal(vm.canEdit, true)
+})
+
+
+test('attribute selectors retain rule values and reject an empty new filter before publishing', () => {
+  const vm = mount()
+  vm.changeResolver('user_selector')
+  assert.equal(vm.missingApprovers(vm.selected), true)
+  assert.equal(vm.approverLabel('user_selector'), '属性筛选')
+  const selector = { type: 'attrs', attrs: [{ name: 'username', match: 'startswith', value: 'ops-' }] }
+  vm.selected.config.approvers.value = selector
+  assert.equal(vm.missingApprovers(vm.selected), false)
+  assert.deepEqual(vm.selected.config.approvers.value, selector)
+  vm.selected.config.approvers.value = { type: 'all' }
+  assert.equal(vm.missingApprovers(vm.selected), false)
 })
