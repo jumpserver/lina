@@ -43,6 +43,9 @@ export default {
       afterGetFormValue: approvalFormValue,
       afterGetRemoteMeta: (meta) => approvalActionMeta(meta, this.$t),
       fieldsMeta: {
+        action: {
+          type: 'radio-group'
+        },
         workflow: {
           component: Select2,
           label: this.$t('WFWorkflows'),

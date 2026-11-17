@@ -74,7 +74,9 @@ export default {
             enableVirtualAccount: false
           }
         },
-        action: {},
+        action: {
+          type: 'radio-group'
+        },
         command_groups: {
           type: 'resourceSelect',
           label: this.$tc('CommandGroup', 2),
