@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { LOGOUT_PATH } from '@/utils/env'
+import { logout } from '@/utils/request'
 import { lockWebSession } from '@/composables/useWebSessionLock'
 import { mapGetters } from 'vuex'
 import { getAssetUrl } from '@/utils/assets'
@@ -93,7 +93,7 @@ export default {
       if (currentOrg && (currentOrg.autoEnter || currentOrg.is_system)) {
         await this.$store.dispatch('users/setCurrentOrg', this.$store.getters.preOrg)
       }
-      window.location.href = `${LOGOUT_PATH}?next=${this.$route.fullPath}`
+      logout(this.$route.fullPath)
     }
   }
 }

@@ -153,6 +153,7 @@ export default {
       return (
         webSessionLockState.ready &&
         Boolean(webSessionLockState.session) &&
+        !webSessionLockState.loggingOut &&
         !webSessionLockState.logoutAt
       )
     },
