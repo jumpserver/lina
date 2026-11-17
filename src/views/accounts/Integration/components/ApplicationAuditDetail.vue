@@ -7,24 +7,11 @@
       </div>
       <p class="event-date">{{ formatDate(object.datetime) }}</p>
       <p v-if="object.event_meaning" class="event-meaning">
-        {{ $t('AppAuditEventMeaning') }}：{{ object.event_meaning }}
+        {{ object.event_meaning }}
       </p>
-      <details v-if="object.event_meaning" class="event-reference">
-        <summary>{{ $t('AppAuditEventReference') }}</summary>
-        <div v-if="object.related_protocol_events?.length" class="related-protocol-events">
-          <span>{{ $t('AppAuditRelatedProtocolEvents') }}</span>
-          <code v-for="event in object.related_protocol_events" :key="event">{{ event }}</code>
-        </div>
-        <router-link
-          @click="$emit('open-documentation')"
-          :to="{
-            name: 'IntegrationApplicationList',
-            query: { tab: 'docs', documentation: 'protocol' }
-          }"
-          >{{ $t('Documentation') }}</router-link
-        >
-      </details>
-      <p class="event-summary">{{ object.summary }}</p>
+      <p v-if="object.summary && object.summary !== object.event_display" class="event-summary">
+        {{ object.summary }}
+      </p>
       <el-descriptions :column="2" :label-width="120" size="small">
         <el-descriptions-item
           v-for="item in basicItems"
@@ -35,16 +22,35 @@
           <ItemValue :value="item.value" />
         </el-descriptions-item>
       </el-descriptions>
-      <el-descriptions class="trace-fields" :column="2" :label-width="120" size="small">
-        <el-descriptions-item
-          v-for="item in traceItems"
-          :key="item.key"
-          :label="item.key"
-          width="50%"
+      <details class="event-reference">
+        <summary>{{ $t('AppAuditTechnicalDetails') }}</summary>
+        <el-descriptions class="trace-fields" :column="2" :label-width="120" size="small">
+          <el-descriptions-item
+            v-for="item in traceItems"
+            :key="item.key"
+            :label="item.key"
+            width="50%"
+          >
+            <ItemValue :value="item.value" />
+          </el-descriptions-item>
+        </el-descriptions>
+        <p v-if="object.raw_summary && object.raw_summary !== object.summary">
+          {{ $t('AppAuditOriginalDetail') }}：{{ object.raw_summary }}
+        </p>
+        <div v-if="object.related_protocol_events?.length" class="related-protocol-events">
+          <span>{{ $t('AppAuditRelatedProtocolEvents') }}</span>
+          <code v-for="event in object.related_protocol_events" :key="event">{{ event }}</code>
+        </div>
+        <router-link
+          v-if="object.event_meaning"
+          @click="$emit('open-documentation')"
+          :to="{
+            name: 'IntegrationApplicationList',
+            query: { tab: 'docs', documentation: 'protocol' }
+          }"
+          >{{ $t('Documentation') }}</router-link
         >
-          <ItemValue :value="item.value" />
-        </el-descriptions-item>
-      </el-descriptions>
+      </details>
     </IBox>
     <IBox v-if="object.changes.length" :title="$t('ChangeField')">
       <DataTable :config="changeTable" />
@@ -93,6 +99,7 @@ export default {
       const recorded = (value) => ![null, undefined, '', '-'].includes(value)
       return [
         { key: this.$t('RelevantApp'), value: row.service },
+        { key: this.$t('Account'), value: row.account },
         ...(!disabled ? [{ key: this.$t('ApplicationCredential'), value: row.credential }] : []),
 
         {
@@ -106,20 +113,23 @@ export default {
           key: this.$t(row.source === 'Administrator' ? 'Operator' : 'AppAuditCaller'),
           value: row.operator
         },
-        { key: this.$t('IP'), value: row.remote_addr },
-        ...(!disabled
+        { key: this.$t('IP'), value: row.remote_addr }
+      ].filter((item) => recorded(item.value))
+    },
+    traceItems() {
+      const row = this.object
+      return [
+        { key: this.$t('AppAuditEventCode'), value: row.event },
+        { key: this.$t('AppAuditRecordID'), value: row.id },
+        { key: this.$t('AppAuditRotationID'), value: row.rotation_id },
+        ...(row.event !== 'client_disabled'
           ? [
               { key: this.$t('CredentialKey'), value: row.credential_key },
               { key: this.$t('AppAuditRevision'), value: row.revision }
             ]
-          : [])
-      ].filter((item) => recorded(item.value))
-    },
-    traceItems() {
-      return [
-        { key: this.$t('AppAuditEventCode'), value: this.object.event },
-        { key: this.$t('AppAuditRecordID'), value: this.object.id },
-        { key: this.$t('AppAuditRotationID'), value: this.object.rotation_id }
+          : []),
+        { key: this.$t('AppNotificationEventCode'), value: row.notification?.event },
+        { key: this.$t('AppNotificationEventID'), value: row.notification?.event_id }
       ].filter((item) => ![null, undefined, '', '-'].includes(item.value))
     },
     notificationItems() {
@@ -129,9 +139,7 @@ export default {
           key: this.$t('WebhookURL'),
           value: notification.url_display || '••••••',
           span: 2
-        },
-        { key: this.$t('AppNotificationEventCode'), value: notification.event },
-        { key: this.$t('AppNotificationEventID'), value: notification.event_id }
+        }
       ]
     },
     changeTable() {
@@ -200,12 +208,13 @@ export default {
 }
 
 .event-reference {
-  margin: 12px 0;
+  margin: 16px 0 0;
+  overflow-wrap: anywhere;
   font-size: 12px;
 
   summary {
     cursor: pointer;
-    color: var(--el-text-color-secondary);
+    color: var(--el-text-color-regular);
   }
 }
 

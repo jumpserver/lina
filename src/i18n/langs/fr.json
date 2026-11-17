@@ -3347,5 +3347,9 @@
   "TaskMonitorStatisticsHelp": "Les compteurs de tâches traitées, réussies, échouées et réessayées sont cumulés depuis le démarrage du processus et remis à zéro au redémarrage. — signifie indisponible. Les totaux couvrent toutes les pages filtrées ; la charge est calculée sur 1, 5 et 15 minutes.",
   "TaskMonitorTasksHelp": "Toutes les exécutions conservées accessibles à votre compte, de la plus récente à la plus ancienne. Cliquez sur le bouton en forme d’œil dans la colonne Actions pour consulter les journaux.",
   "TaskMonitorArgs": "Arguments",
-  "TaskMonitorKwargs": "Arguments nommés"
+  "TaskMonitorKwargs": "Arguments nommés",
+  "AppAuditAccessMaterialsGenerated": "Générer la configuration de connexion de l’application",
+  "AppAuditMeaningAccessMaterialsGenerated": "La configuration et les commandes de connexion du SDK ou de l’Agent à JumpServer ont été générées. Les paramètres de l’application et les identifiants des comptes restent inchangés.",
+  "AppAuditTechnicalDetails": "Détails techniques",
+  "AppAuditOriginalDetail": "Description d’origine"
 }

@@ -3660,5 +3660,9 @@
   "TaskMonitorStatisticsHelp": "已處理、成功、失敗及重試從本次任務程序啟動起累計，重新啟動後歸零。— 表示未取得資料。合計包含搜尋結果的所有分頁；負載為 1、5、15 分鐘平均值。",
   "TaskMonitorTasksHelp": "顯示目前帳號有權查看的全部保留執行記錄，按發布時間倒序分頁。點選操作欄的眼睛按鈕查看日誌。",
   "TaskMonitorArgs": "參數",
-  "TaskMonitorKwargs": "關鍵字參數"
+  "TaskMonitorKwargs": "關鍵字參數",
+  "AppAuditAccessMaterialsGenerated": "產生應用程式接入設定",
+  "AppAuditMeaningAccessMaterialsGenerated": "已產生 SDK 或 Agent 接入 JumpServer 所需的設定與命令，未修改應用程式設定或帳號憑據。",
+  "AppAuditTechnicalDetails": "技術詳情",
+  "AppAuditOriginalDetail": "原始說明"
 }
