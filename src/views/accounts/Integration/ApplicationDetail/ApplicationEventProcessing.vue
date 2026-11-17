@@ -79,7 +79,7 @@ export default {
         },
         { prop: 'credential', label: this.$t('ApplicationCredential'), minWidth: 150 },
         { prop: 'account', label: this.$t('Account'), minWidth: 130 },
-        { prop: 'revision', label: this.$t('Revision'), minWidth: 70 },
+        { prop: 'revision', label: this.$t('AppAuditRevision'), minWidth: 100 },
         {
           prop: 'status',
           label: this.$t('Status'),
