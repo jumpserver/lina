@@ -89,6 +89,7 @@ test('event requests exclude fetches without losing the application scope', asyn
     assert.ok(eventTypes.includes(value), `Missing current audit event: ${value}`)
   assert.equal(metadata.filters.id.type, 'uuid')
   assert.equal(metadata.filters.service.label, 'Application')
+  assert.equal(metadata.filters.remote_addr.label, 'AppAuditSourceIP')
   assert.equal(metadata.actions.GET.id.type, 'uuid')
   assert.equal(metadata.search.fields[0].name, 'service')
   assert.deepEqual(metadata.ordering.default, ['-date_created'])
@@ -154,4 +155,63 @@ test('main integration tabs separate retrieval, protocol events and activities w
     assert.equal(tab.title, label)
     assert.equal(tab.hidden, true)
   }
+})
+
+test('access material generation is readable without changing stored event identities', async () => {
+  const zh = JSON.parse(await readFile(new URL('../src/i18n/langs/zh.json', import.meta.url), 'utf8'))
+  const t = (key) => zh[key] || key
+  const source = Object.freeze({
+    id: 'original-audit-id',
+    event: 'configuration_updated',
+    summary: 'Generated application access materials.',
+    result: 'success'
+  })
+  const row = normalizeAudit(source, t)
+  assert.equal(row.event_display, '生成应用接入配置')
+  assert.equal(row.summary, row.event_display)
+  assert.match(row.event_meaning, /未修改应用设置或账号凭据/)
+  assert.deepEqual(row.related_protocol_events, [])
+  assert.equal(row.event, source.event)
+  assert.equal(row.id, source.id)
+  assert.equal(row.result, source.result)
+  assert.equal(row.raw_summary, source.summary)
+  const changed = normalizeAudit({ event: source.event, changes: [{ field: 'name', before: 'A', after: 'B' }] }, t)
+  assert.equal(changed.event_display, '修改应用或轮换配置')
+  assert.deepEqual(changed.related_protocol_events, ['app.scope.updated'])
+  assert.equal(changed.changes[0].after, 'B')
+  const unknown = normalizeAudit({ event: 'future_event', summary: 'Original diagnostic', result: 'failed' }, t)
+  assert.equal(unknown.event_display, 'future_event')
+  assert.equal(unknown.summary, 'Original diagnostic')
+  assert.equal(unknown.result, 'failed')
+  for (const locale of ['en', 'zh', 'zh_hant', 'ja', 'ko', 'es', 'fr', 'pt_br', 'ru', 'vi']) {
+    const messages = JSON.parse(await readFile(new URL(`../src/i18n/langs/${locale}.json`, import.meta.url), 'utf8'))
+    for (const key of ['AppAuditAccessMaterialsGenerated', 'AppAuditMeaningAccessMaterialsGenerated', 'AppAuditViewRawRecord', 'AppAuditSourceIP', 'AppAuditRecordID', 'AppAuditEventCode', 'AppAuditOriginalDetail']) {
+      assert.ok(messages[key], `${locale}: ${key}`)
+    }
+  }
+})
+
+test('audit details show the affected account and preserve technical and notification fields', async () => {
+  const detail = await component('../src/views/accounts/Integration/components/ApplicationAuditDetail.vue', {
+    IBox: null, Page: null, ItemValue: null, DataTable: null,
+    toSafeLocalDateStr: (value) => value, resultTagTypes: {}
+  })
+  const context = { $t: (key) => key, object: {
+    event: 'credential_secret_updated', id: 'audit', service: 'Application', account: 'db-user',
+    source: 'Administrator', operator: 'Operator', remote_addr: '192.0.2.30', credential_key: 'account:123', revision: 0,
+    notification: { event: 'credential.secret.updated', event_id: 'event-id', attempts: [{ id: 1, result: 'failed' }] }
+  } }
+  const basic = detail.computed.basicItems.call(context)
+  assert.equal(basic.find(item => item.key === 'Account').value, 'db-user')
+  assert.equal(basic.some(item => item.key === 'CredentialKey'), false)
+  assert.equal(basic.find(item => item.key === 'AppAuditSourceIP').value, '192.0.2.30')
+  const trace = detail.computed.traceItems.call(context)
+  assert.equal(trace.find(item => item.key === 'AppAuditEventCode').value, context.object.event)
+  assert.equal(trace.find(item => item.key === 'AppAuditRecordID').value, 'audit')
+  assert.equal(trace.find(item => item.key === 'AppAuditRevision').value, 0)
+  assert.equal(trace.find(item => item.key === 'AppNotificationEventID').value, 'event-id')
+  assert.equal(detail.computed.attemptTable.call(context).totalData[0].result, 'failed')
+  context.object = { event: 'client_disabled', service: 'Application' }
+  assert.equal(detail.computed.basicItems.call(context).find(item => item.key === 'AppAuditDisabledInstance').value, 'AppAuditNotRecorded')
+  assert.equal(detail.computed.traceItems.call(context).some(item => item.key === 'CredentialKey'), false)
 })
