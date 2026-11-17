@@ -160,20 +160,26 @@ export function IsSupportPauseSessionType(terminalType) {
   return supportedType.includes(terminalType)
 }
 
+const devicePlatformIcons = new Map([
+  ['cisco', 'cisco.svg'],
+  ['h3c', 'h3c.png'],
+  ['huawei', 'huawei.png'],
+  ['general', 'general.png']
+])
+
+const platformNameIcons = new Map([
+  ['Gateway', 'gateway.png'],
+  ['macOS', 'macos.png'],
+  ['BSD', 'bsd.png'],
+  ['Vmware-vSphere', 'vmware.png'],
+  ['OceanBase-MySQL', 'oceanbase.svg'],
+  ['OceanBase-Oracle', 'oceanbase.svg']
+])
+
 export function loadPlatformIcon(name, type) {
-  const platformMap = {
-    Gateway: 'gateway',
-    macOS: 'macos',
-    BSD: 'bsd',
-    'Vmware-vSphere': 'vmware',
-    'OceanBase-MySQL': 'oceanbase',
-    'OceanBase-Oracle': 'oceanbase'
-  }
-
-  const value = ['cisco', 'h3c', 'huawei', 'general'].includes(type)
-    ? type
-    : platformMap[name] || type
-  const extension = ['cisco', 'oceanbase'].includes(value) ? 'svg' : 'png'
-
-  return getAssetUrlOr(`img/icons/${value}.${extension}`, 'img/icons/other.png')
+  const filename =
+    devicePlatformIcons.get(type) ||
+    platformNameIcons.get(name) ||
+    (type === 'oceanbase' ? 'oceanbase.svg' : `${type}.png`)
+  return getAssetUrlOr(`img/icons/${filename}`, 'img/icons/other.png')
 }
