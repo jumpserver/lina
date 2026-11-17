@@ -2905,7 +2905,7 @@
   "AppAuditResult": "执行结果",
   "AppAuditRevision": "凭据版本",
   "AppAuditRotationID": "轮换 ID",
-  "AppAuditRecordID": "审计 ID",
+  "AppAuditRecordID": "日志编号",
   "AppAuditExampleData": "示例数据",
   "AppAuditPreviewMode": "前端预览",
   "AppAuditSavePreview": "保存预览",
@@ -3323,7 +3323,7 @@
   "AppAuditTypeApplicationSecretReset": "重置应用接入密钥",
   "AppAuditMeaningApplicationSecretReset": "重置应用连接 JumpServer 使用的身份密钥；不是业务账号密码轮换。",
   "AppAuditEventMeaning": "含义",
-  "AppAuditEventCode": "活动代码",
+  "AppAuditEventCode": "原始事件类型",
   "AppAuditRelatedProtocolEvents": "协议事件类型",
   "AppAuditEventReference": "活动日志与协议事件对应",
   "NotExecuted": "未执行",
@@ -4099,6 +4099,7 @@
   "TaskMonitorKwargs": "关键字参数",
   "AppAuditAccessMaterialsGenerated": "生成应用接入配置",
   "AppAuditMeaningAccessMaterialsGenerated": "已生成 SDK 或 Agent 接入 JumpServer 所需的配置和命令，未修改应用设置或账号凭据。",
-  "AppAuditTechnicalDetails": "技术详情",
-  "AppAuditOriginalDetail": "原始说明"
+  "AppAuditOriginalDetail": "原始说明",
+  "AppAuditViewRawRecord": "查看原始记录",
+  "AppAuditSourceIP": "来源 IP"
 }

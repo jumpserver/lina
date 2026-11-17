@@ -2918,7 +2918,7 @@
   "AppAuditResult": "Execution result",
   "AppAuditRevision": "Credential revision",
   "AppAuditRotationID": "Rotation ID",
-  "AppAuditRecordID": "Audit ID",
+  "AppAuditRecordID": "Log record ID",
   "AppAuditExampleData": "Example data",
   "AppAuditPreviewMode": "Frontend preview",
   "AppAuditSavePreview": "Save preview",
@@ -3329,7 +3329,7 @@
   "AppAuditTypeApplicationSecretReset": "Reset application access secret",
   "AppAuditMeaningApplicationSecretReset": "Resets the application's authentication secret for JumpServer; this is separate from business account password rotation.",
   "AppAuditEventMeaning": "Meaning",
-  "AppAuditEventCode": "Activity code",
+  "AppAuditEventCode": "Original event type",
   "AppAuditRelatedProtocolEvents": "Protocol event types",
   "AppAuditEventReference": "Activity log and protocol event reference",
   "NotExecuted": "Not executed",
@@ -4105,6 +4105,7 @@
   "TaskMonitorKwargs": "Keyword arguments",
   "AppAuditAccessMaterialsGenerated": "Generate application access configuration",
   "AppAuditMeaningAccessMaterialsGenerated": "Generated configuration and setup commands for connecting an SDK or Agent to JumpServer. This does not change application settings or account credentials.",
-  "AppAuditTechnicalDetails": "Technical details",
-  "AppAuditOriginalDetail": "Original detail"
+  "AppAuditOriginalDetail": "Original detail",
+  "AppAuditViewRawRecord": "View original record",
+  "AppAuditSourceIP": "Source IP"
 }

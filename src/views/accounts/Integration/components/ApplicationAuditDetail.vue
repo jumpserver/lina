@@ -23,7 +23,7 @@
         </el-descriptions-item>
       </el-descriptions>
       <details class="event-reference">
-        <summary>{{ $t('AppAuditTechnicalDetails') }}</summary>
+        <summary>{{ $t('AppAuditViewRawRecord') }}</summary>
         <el-descriptions class="trace-fields" :column="2" :label-width="120" size="small">
           <el-descriptions-item
             v-for="item in traceItems"
@@ -37,19 +37,6 @@
         <p v-if="object.raw_summary && object.raw_summary !== object.summary">
           {{ $t('AppAuditOriginalDetail') }}：{{ object.raw_summary }}
         </p>
-        <div v-if="object.related_protocol_events?.length" class="related-protocol-events">
-          <span>{{ $t('AppAuditRelatedProtocolEvents') }}</span>
-          <code v-for="event in object.related_protocol_events" :key="event">{{ event }}</code>
-        </div>
-        <router-link
-          v-if="object.event_meaning"
-          @click="$emit('open-documentation')"
-          :to="{
-            name: 'IntegrationApplicationList',
-            query: { tab: 'docs', documentation: 'protocol' }
-          }"
-          >{{ $t('Documentation') }}</router-link
-        >
       </details>
     </IBox>
     <IBox v-if="object.changes.length" :title="$t('ChangeField')">
@@ -83,7 +70,6 @@ import { resultTagTypes } from './applicationAudit'
 
 export default {
   name: 'ApplicationAuditDetail',
-  emits: ['open-documentation'],
   components: { Page, ItemValue, IBox, DataTable },
   props: { object: { type: Object, required: true } },
   data() {
@@ -113,7 +99,7 @@ export default {
           key: this.$t(row.source === 'Administrator' ? 'Operator' : 'AppAuditCaller'),
           value: row.operator
         },
-        { key: this.$t('IP'), value: row.remote_addr }
+        { key: this.$t('AppAuditSourceIP'), value: row.remote_addr }
       ].filter((item) => recorded(item.value))
     },
     traceItems() {
@@ -216,13 +202,6 @@ export default {
     cursor: pointer;
     color: var(--el-text-color-regular);
   }
-}
-
-.related-protocol-events {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 12px;
-  margin: 8px 0;
 }
 
 .trace-fields {

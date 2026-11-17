@@ -2873,7 +2873,7 @@
   "AppAuditTypeApplicationSecretReset": "アプリケーション接続シークレットのリセット",
   "AppAuditMeaningApplicationSecretReset": "JumpServer 接続用の認証シークレットを変更します。業務アカウントのパスワード変更とは別です。",
   "AppAuditEventMeaning": "Meaning",
-  "AppAuditEventCode": "アクティビティコード",
+  "AppAuditEventCode": "元のイベント種別",
   "AppAuditRelatedProtocolEvents": "関連通知・メッセージ",
   "AppAuditEventReference": "アクティビティとプロトコルイベントの対応",
   "ScriptJob": "スクリプトジョブ",
@@ -3385,6 +3385,8 @@
   "TaskMonitorKwargs": "キーワード引数",
   "AppAuditAccessMaterialsGenerated": "アプリケーション接続設定を生成",
   "AppAuditMeaningAccessMaterialsGenerated": "SDK または Agent を JumpServer に接続するための設定とコマンドを生成しました。アプリケーション設定やアカウント認証情報は変更していません。",
-  "AppAuditTechnicalDetails": "技術詳細",
-  "AppAuditOriginalDetail": "元の説明"
+  "AppAuditOriginalDetail": "元の説明",
+  "AppAuditViewRawRecord": "元の記録を表示",
+  "AppAuditSourceIP": "送信元 IP",
+  "AppAuditRecordID": "ログ記録 ID"
 }

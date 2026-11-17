@@ -89,6 +89,7 @@ test('event requests exclude fetches without losing the application scope', asyn
     assert.ok(eventTypes.includes(value), `Missing current audit event: ${value}`)
   assert.equal(metadata.filters.id.type, 'uuid')
   assert.equal(metadata.filters.service.label, 'Application')
+  assert.equal(metadata.filters.remote_addr.label, 'AppAuditSourceIP')
   assert.equal(metadata.actions.GET.id.type, 'uuid')
   assert.equal(metadata.search.fields[0].name, 'service')
   assert.deepEqual(metadata.ordering.default, ['-date_created'])
@@ -184,7 +185,7 @@ test('access material generation is readable without changing stored event ident
   assert.equal(unknown.result, 'failed')
   for (const locale of ['en', 'zh', 'zh_hant', 'ja', 'ko', 'es', 'fr', 'pt_br', 'ru', 'vi']) {
     const messages = JSON.parse(await readFile(new URL(`../src/i18n/langs/${locale}.json`, import.meta.url), 'utf8'))
-    for (const key of ['AppAuditAccessMaterialsGenerated', 'AppAuditMeaningAccessMaterialsGenerated', 'AppAuditTechnicalDetails', 'AppAuditOriginalDetail']) {
+    for (const key of ['AppAuditAccessMaterialsGenerated', 'AppAuditMeaningAccessMaterialsGenerated', 'AppAuditViewRawRecord', 'AppAuditSourceIP', 'AppAuditRecordID', 'AppAuditEventCode', 'AppAuditOriginalDetail']) {
       assert.ok(messages[key], `${locale}: ${key}`)
     }
   }
@@ -197,14 +198,16 @@ test('audit details show the affected account and preserve technical and notific
   })
   const context = { $t: (key) => key, object: {
     event: 'credential_secret_updated', id: 'audit', service: 'Application', account: 'db-user',
-    source: 'Administrator', operator: 'Operator', credential_key: 'account:123', revision: 0,
+    source: 'Administrator', operator: 'Operator', remote_addr: '192.0.2.30', credential_key: 'account:123', revision: 0,
     notification: { event: 'credential.secret.updated', event_id: 'event-id', attempts: [{ id: 1, result: 'failed' }] }
   } }
   const basic = detail.computed.basicItems.call(context)
   assert.equal(basic.find(item => item.key === 'Account').value, 'db-user')
   assert.equal(basic.some(item => item.key === 'CredentialKey'), false)
+  assert.equal(basic.find(item => item.key === 'AppAuditSourceIP').value, '192.0.2.30')
   const trace = detail.computed.traceItems.call(context)
   assert.equal(trace.find(item => item.key === 'AppAuditEventCode').value, context.object.event)
+  assert.equal(trace.find(item => item.key === 'AppAuditRecordID').value, 'audit')
   assert.equal(trace.find(item => item.key === 'AppAuditRevision').value, 0)
   assert.equal(trace.find(item => item.key === 'AppNotificationEventID').value, 'event-id')
   assert.equal(detail.computed.attemptTable.call(context).totalData[0].result, 'failed')

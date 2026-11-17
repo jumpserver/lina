@@ -2763,7 +2763,7 @@
   "AppAuditTypeApplicationSecretReset": "애플리케이션 접근 시크릿 재설정",
   "AppAuditMeaningApplicationSecretReset": "JumpServer 연결용 인증 시크릿을 변경합니다. 업무 계정의 암호 교체와는 별개입니다.",
   "AppAuditEventMeaning": "Meaning",
-  "AppAuditEventCode": "활동 코드",
+  "AppAuditEventCode": "원본 이벤트 유형",
   "AppAuditRelatedProtocolEvents": "관련 알림 / 메시지",
   "AppAuditEventReference": "활동 로그와 프로토콜 이벤트 대응",
   "ScriptJob": "스크립트 작업",
@@ -3181,6 +3181,8 @@
   "TaskMonitorKwargs": "키워드 인수",
   "AppAuditAccessMaterialsGenerated": "애플리케이션 연결 설정 생성",
   "AppAuditMeaningAccessMaterialsGenerated": "SDK 또는 Agent를 JumpServer에 연결하는 설정과 명령을 생성했습니다. 애플리케이션 설정이나 계정 자격 증명은 변경하지 않았습니다.",
-  "AppAuditTechnicalDetails": "기술 세부 정보",
-  "AppAuditOriginalDetail": "원본 설명"
+  "AppAuditOriginalDetail": "원본 설명",
+  "AppAuditViewRawRecord": "원본 기록 보기",
+  "AppAuditSourceIP": "출발지 IP",
+  "AppAuditRecordID": "로그 기록 ID"
 }

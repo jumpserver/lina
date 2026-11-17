@@ -2761,7 +2761,7 @@
   "AppAuditTypeApplicationSecretReset": "Redefinir segredo de acesso da aplicação",
   "AppAuditMeaningApplicationSecretReset": "Redefine o segredo de autenticação no JumpServer, separado da senha da conta de negócio.",
   "AppAuditEventMeaning": "Meaning",
-  "AppAuditEventCode": "Código da atividade",
+  "AppAuditEventCode": "Tipo de evento original",
   "AppAuditRelatedProtocolEvents": "Notificações / mensagens relacionadas",
   "AppAuditEventReference": "Correspondência entre atividades e eventos do protocolo",
   "ScriptJob": "Tarefas de scripts",
@@ -3179,6 +3179,8 @@
   "TaskMonitorKwargs": "Argumentos nomeados",
   "AppAuditAccessMaterialsGenerated": "Gerar configuração de conexão da aplicação",
   "AppAuditMeaningAccessMaterialsGenerated": "Foram gerados a configuração e os comandos para conectar o SDK ou Agent ao JumpServer. As configurações da aplicação e as credenciais das contas não foram alteradas.",
-  "AppAuditTechnicalDetails": "Detalhes técnicos",
-  "AppAuditOriginalDetail": "Descrição original"
+  "AppAuditOriginalDetail": "Descrição original",
+  "AppAuditViewRawRecord": "Ver registro original",
+  "AppAuditSourceIP": "IP de origem",
+  "AppAuditRecordID": "ID do registro"
 }

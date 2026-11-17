@@ -7,11 +7,7 @@
       :table-metadata-provider="getMetadata"
     />
     <Drawer v-model:visible="detailVisible" :title="$t('ApplicationActivityDetail')">
-      <ApplicationAuditDetail
-        v-if="detailVisible"
-        :object="selected"
-        @open-documentation="detailVisible = false"
-      />
+      <ApplicationAuditDetail v-if="detailVisible" :object="selected" />
     </Drawer>
   </div>
 </template>
@@ -104,7 +100,7 @@ export default {
             width: 180,
             formatter: (row) => toSafeLocalDateStr(row.datetime)
           },
-          { prop: 'remote_addr', label: this.$t('IP'), width: 140 },
+          { prop: 'remote_addr', label: this.$t('AppAuditSourceIP'), width: 140 },
           { prop: 'summary', label: this.$t('Detail'), minWidth: 260 }
         ]
       }
@@ -124,6 +120,7 @@ export default {
         ...metadata,
         filters: {
           ...metadata.filters,
+          remote_addr: { ...metadata.filters?.remote_addr, label: this.$t('AppAuditSourceIP') },
           event: choice(
             this.$t('ApplicationActivityType'),
             Object.fromEntries(

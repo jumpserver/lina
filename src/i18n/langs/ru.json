@@ -2763,7 +2763,7 @@
   "AppAuditTypeApplicationSecretReset": "Сбросить секрет доступа приложения",
   "AppAuditMeaningApplicationSecretReset": "Меняет секрет аутентификации приложения в JumpServer, отдельно от пароля рабочего аккаунта.",
   "AppAuditEventMeaning": "Meaning",
-  "AppAuditEventCode": "Код действия",
+  "AppAuditEventCode": "Исходный тип события",
   "AppAuditRelatedProtocolEvents": "Связанные уведомления / сообщения",
   "AppAuditEventReference": "Соответствие действий и событий протокола",
   "ScriptJob": "Задания скриптов",
@@ -3181,6 +3181,8 @@
   "TaskMonitorKwargs": "Именованные аргументы",
   "AppAuditAccessMaterialsGenerated": "Создание конфигурации подключения приложения",
   "AppAuditMeaningAccessMaterialsGenerated": "Созданы конфигурация и команды для подключения SDK или Agent к JumpServer. Настройки приложения и учётные данные аккаунтов не изменены.",
-  "AppAuditTechnicalDetails": "Технические сведения",
-  "AppAuditOriginalDetail": "Исходное описание"
+  "AppAuditOriginalDetail": "Исходное описание",
+  "AppAuditViewRawRecord": "Исходная запись",
+  "AppAuditSourceIP": "IP источника",
+  "AppAuditRecordID": "ID записи журнала"
 }

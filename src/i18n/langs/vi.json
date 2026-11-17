@@ -2763,7 +2763,7 @@
   "AppAuditTypeApplicationSecretReset": "Đặt lại khóa truy cập ứng dụng",
   "AppAuditMeaningApplicationSecretReset": "Đổi khóa xác thực ứng dụng với JumpServer; tách biệt với mật khẩu tài khoản nghiệp vụ.",
   "AppAuditEventMeaning": "Meaning",
-  "AppAuditEventCode": "Mã hoạt động",
+  "AppAuditEventCode": "Loại sự kiện gốc",
   "AppAuditRelatedProtocolEvents": "Thông báo / thông điệp liên quan",
   "AppAuditEventReference": "Đối chiếu hoạt động và sự kiện giao thức",
   "ScriptJob": "Tác vụ kịch bản",
@@ -3181,6 +3181,8 @@
   "TaskMonitorKwargs": "Đối số từ khóa",
   "AppAuditAccessMaterialsGenerated": "Tạo cấu hình kết nối ứng dụng",
   "AppAuditMeaningAccessMaterialsGenerated": "Đã tạo cấu hình và lệnh để kết nối SDK hoặc Agent với JumpServer. Không thay đổi cài đặt ứng dụng hoặc thông tin xác thực tài khoản.",
-  "AppAuditTechnicalDetails": "Chi tiết kỹ thuật",
-  "AppAuditOriginalDetail": "Mô tả gốc"
+  "AppAuditOriginalDetail": "Mô tả gốc",
+  "AppAuditViewRawRecord": "Xem bản ghi gốc",
+  "AppAuditSourceIP": "IP nguồn",
+  "AppAuditRecordID": "ID bản ghi nhật ký"
 }
