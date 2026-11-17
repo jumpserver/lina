@@ -25,15 +25,10 @@ export default {
       return {
         url: clientsURL,
         hasSelection: false,
-        columns: ['name', 'client_id', 'organizations', 'status', 'actions'],
+        columns: ['name', 'client_id', 'status', 'actions'],
         columnsMeta: {
           name: { label: this.$t('Name'), sortable: false, formatter: (row) => row.name },
           client_id: { label: this.$t('MCPClientID'), sortable: false },
-          organizations: {
-            label: this.$t('Organization'),
-            sortable: false,
-            formatter: (row) => row.organizations.map((org) => org.name).join(', ') || '—'
-          },
           status: {
             label: this.$t('Status'),
             sortable: false,
@@ -41,7 +36,6 @@ export default {
               this.$t(
                 {
                   active: 'MCPAuthorizationActive',
-                  disabled: 'Disabled',
                   expired: 'MCPAuthorizationExpired'
                 }[row.status] || row.status
               )
