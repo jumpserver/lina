@@ -29,7 +29,15 @@ export default {
   },
   methods: {
     getRouteCacheKey(route) {
-      return getRouteCacheKey(route, this.$store.getters.currentOrg?.id)
+      const currentOrg = this.$store.getters.currentOrg
+      // Some pages temporarily switch to the global org themselves. Keep the
+      // same page instance during that switch, while still separating caches
+      // when the user selects a different organization.
+      const org =
+        route.meta?.cacheByPreviousOrgOnAutoEnter && currentOrg?.autoEnter
+          ? this.$store.state.users.preOrg || currentOrg
+          : currentOrg
+      return getRouteCacheKey(route, org?.id)
     },
     isRouteShellComponent
   }
