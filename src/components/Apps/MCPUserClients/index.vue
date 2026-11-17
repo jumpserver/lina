@@ -4,6 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
+import { StatusFormatter } from '@/components/Table/TableFormatters'
 
 const clientsURL = '/api/v1/authentication/user-agent-clients/'
 
@@ -31,14 +32,26 @@ export default {
           client_id: { label: this.$t('MCPClientID'), sortable: false },
           status: {
             label: this.$t('Status'),
+            width: 100,
+            align: 'center',
             sortable: false,
-            formatter: (row) =>
-              this.$t(
-                {
-                  active: 'MCPAuthorizationActive',
-                  expired: 'MCPAuthorizationExpired'
-                }[row.status] || row.status
-              )
+            formatter: StatusFormatter,
+            formatterArgs: {
+              faChoices: {
+                active: 'fa-check-circle text-primary',
+                expired: 'fa-clock text-warning',
+                unknown: 'fa-question-circle text-muted'
+              },
+              getChoicesKey: (value) => (['active', 'expired'].includes(value) ? value : 'unknown'),
+              hasTips: true,
+              getTip: (value) =>
+                this.$t(
+                  {
+                    active: 'MCPAuthorizationActive',
+                    expired: 'MCPAuthorizationExpired'
+                  }[value] || 'Unknown'
+                )
+            }
           },
           actions: {
             formatterArgs: {
