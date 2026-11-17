@@ -291,7 +291,7 @@ export default {
     },
     onOpenEditor(node) {
       this.activeEditorId = node.id
-      if (Object.prototype.hasOwnProperty.call(this.openedEditor, node.id)) {
+      if (Object.hasOwn(this.openedEditor, node.id)) {
         return
       }
       this.openedEditor[node.id] = {
