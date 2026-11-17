@@ -18,7 +18,7 @@
         <el-tag :type="deadlinePassed ? 'warning' : stateTone(instance.state)" effect="light">
           {{ $t(deadlinePassed ? 'WFTimeoutPending' : stateLabels[instance.state]) }}
         </el-tag>
-        <span class="workflow-identity hint">
+        <span v-if="!instance.workflow_is_system" class="workflow-identity hint">
           <span v-if="instance.workflow_name || object.workflow?.name"
             >{{ instance.workflow_name || object.workflow.name }} · </span
           >{{ $t('WFVersion') }} {{ instance.version_number }}

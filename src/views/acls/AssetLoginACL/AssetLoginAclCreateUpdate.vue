@@ -52,6 +52,7 @@ export default {
             'mfa_enabled',
             'face_verify_enabled',
             'review_enabled',
+            'approval_mode',
             'workflow',
             'reviewers',
             'review_duration',
@@ -62,12 +63,28 @@ export default {
         [this.$t('AclAfterSession'), ['change_secret_enabled']],
         [this.$t('AclOtherSettings'), ['is_active', 'comment']]
       ],
+      afterGetFormValue: (value) => ({
+        ...value,
+        approval_mode: value.workflow ? 'workflow' : 'simple'
+      }),
       fieldsMeta: {
+        approval_mode: {
+          label: this.$t('ApprovalMode'),
+          type: 'radio-group',
+          dependsOn: 'review_enabled',
+          hidden: (form) => form.action !== 'accept' || !form.review_enabled,
+          options: [
+            { label: this.$t('SimpleApproval'), value: 'simple' },
+            { label: this.$t('WorkflowApproval'), value: 'workflow' }
+          ]
+        },
         workflow: {
           component: Select2,
           label: this.$t('WFWorkflows'),
-          helpText: this.$t('WFACLHint'),
-          hidden: (form) => form.action !== 'accept' || !form.review_enabled,
+          dependsOn: 'review_enabled',
+          rules: [rules.RequiredChange],
+          hidden: (form) =>
+            form.action !== 'accept' || !form.review_enabled || form.approval_mode !== 'workflow',
           el: {
             multiple: false,
             clearable: true,
@@ -138,7 +155,21 @@ export default {
         assets: assetJSONSelectMeta(this),
         rules: {
           fields: ['ip_group', 'time_period'],
+          afterGetFormValue: (value) => ({
+            ...value,
+            approval_mode: value.workflow ? 'workflow' : 'simple'
+          }),
           fieldsMeta: {
+            approval_mode: {
+              label: this.$t('ApprovalMode'),
+              type: 'radio-group',
+              dependsOn: 'review_enabled',
+              hidden: (form) => form.action !== 'accept' || !form.review_enabled,
+              options: [
+                { label: this.$t('SimpleApproval'), value: 'simple' },
+                { label: this.$t('WorkflowApproval'), value: 'workflow' }
+              ]
+            },
             ip_group: {
               component: TagInput,
               el: {
@@ -170,12 +201,14 @@ export default {
           }
         },
         reviewers: {
+          label: this.$t('Reviewer'),
           dependsOn: 'review_enabled',
           type: 'resourceSelect',
           component: ResourceSelect,
           required: true,
           rules: [{ ...rules.RequiredChange, type: 'array', min: 1 }],
-          hidden: (form) => form.action !== 'accept' || !form.review_enabled || !!form.workflow,
+          hidden: (form) =>
+            form.action !== 'accept' || !form.review_enabled || form.approval_mode !== 'simple',
           helpTextAsTip: true,
           helpTextAsPlaceholder: false,
           el: {
@@ -203,7 +236,8 @@ export default {
       },
       url: '/api/v1/acls/login-asset-acls/',
       cleanFormValue(value) {
-        value.workflow = value.workflow || null
+        value.workflow = value.approval_mode === 'workflow' ? value.workflow || null : null
+        delete value.approval_mode
         value.review_duration = Number(value.review_duration || 0)
         if (!Array.isArray(value.rules.ip_group)) {
           value.rules.ip_group = value.rules.ip_group ? value.rules.ip_group.split(',') : []

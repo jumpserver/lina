@@ -4,7 +4,12 @@
 
 <script>
 import Select2 from '@/components/Form/FormFields/Select2'
-import { Required } from '@/components/Form/DataForm/rules'
+import {
+  approvalActionMeta,
+  approvalFormValue,
+  cleanApprovalFormValue
+} from '@/views/acls/approval'
+import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import { ResourceSelect, TagInput, WeekCronSelect } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { userJSONSelectMeta } from '@/views/users/const'
@@ -35,12 +40,14 @@ export default {
         [this.$t('Action'), ['action', 'workflow', 'reviewers']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
+      afterGetFormValue: approvalFormValue,
+      afterGetRemoteMeta: (meta) => approvalActionMeta(meta, this.$t),
       fieldsMeta: {
         workflow: {
           component: Select2,
           label: this.$t('WFWorkflows'),
-          helpText: this.$t('WFACLHint'),
-          hidden: (value) => value.action !== 'review',
+          rules: [RequiredChange],
+          hidden: (value) => value.action !== 'workflow_review',
           el: {
             multiple: false,
             clearable: true,
@@ -63,15 +70,15 @@ export default {
             resourceName: this.$t('Users')
           },
           rules: [Required],
-          hidden: (formValue) => {
-            return (
-              !['review', 'notice'].includes(formValue.action) ||
-              (formValue.action === 'review' && !!formValue.workflow)
-            )
+          hidden: (formValue, field) => {
+            field.label = this.$t(formValue.action === 'review' ? 'Reviewer' : 'Recipients')
+            return !['review', 'notice'].includes(formValue.action)
           }
         },
         rules: {
           fields: ['ip_group', 'time_period'],
+          afterGetFormValue: approvalFormValue,
+          afterGetRemoteMeta: (meta) => approvalActionMeta(meta, this.$t),
           fieldsMeta: {
             ip_group: {
               component: TagInput,
@@ -100,7 +107,7 @@ export default {
         return url
       },
       cleanFormValue(value) {
-        value.workflow = value.action === 'review' ? value.workflow || null : null
+        cleanApprovalFormValue(value)
         if (
           Array.isArray(value.rules.time_period) &&
           value.rules.time_period.every((item) => item.value === '')

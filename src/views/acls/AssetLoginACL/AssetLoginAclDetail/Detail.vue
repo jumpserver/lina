@@ -37,7 +37,7 @@ export default {
       url: `/api/v1/acls/login-asset-acls/${this.object.id}/`,
       fieldsMeta: {
         recipients: { dependsOn: 'notice_enabled' },
-        reviewers: { dependsOn: 'review_enabled' },
+        reviewers: { label: this.$t('Reviewer'), dependsOn: 'review_enabled' },
         workflow_name: { dependsOn: 'review_enabled' },
         review_duration: { dependsOn: 'review_enabled' }
       },
@@ -122,7 +122,14 @@ export default {
             'face_verify_enabled',
             'review_enabled',
             ...(this.object.review_enabled
-              ? [this.object.workflow ? 'workflow_name' : 'reviewers', 'review_duration']
+              ? [
+                  {
+                    key: this.$t('ApprovalMode'),
+                    value: this.$t(this.object.workflow ? 'WorkflowApproval' : 'SimpleApproval')
+                  },
+                  this.object.workflow ? 'workflow_name' : 'reviewers',
+                  'review_duration'
+                ]
               : []),
             'push_account_enabled'
           ]

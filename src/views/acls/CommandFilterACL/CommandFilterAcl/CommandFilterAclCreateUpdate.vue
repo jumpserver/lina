@@ -10,6 +10,11 @@
 
 <script>
 import Select2 from '@/components/Form/FormFields/Select2'
+import {
+  approvalActionMeta,
+  approvalFormValue,
+  cleanApprovalFormValue
+} from '@/views/acls/approval'
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter.vue'
 import rules from '@/components/Form/DataForm/rules'
@@ -26,7 +31,7 @@ export default {
   data() {
     return {
       cleanFormValue(value) {
-        value.workflow = value.action === 'review' ? value.workflow || null : null
+        cleanApprovalFormValue(value)
         return value
       },
       initial: {
@@ -43,12 +48,14 @@ export default {
       ],
       url: '/api/v1/acls/command-filter-acls/',
       createSuccessNextRoute: { name: 'CommandFilterACLList' },
+      afterGetFormValue: approvalFormValue,
+      afterGetRemoteMeta: (meta) => approvalActionMeta(meta, this.$t),
       fieldsMeta: {
         workflow: {
           component: Select2,
           label: this.$t('WFWorkflows'),
-          helpText: this.$t('WFACLHint'),
-          hidden: (value) => value.action !== 'review',
+          rules: [rules.RequiredChange],
+          hidden: (value) => value.action !== 'workflow_review',
           el: {
             multiple: false,
             clearable: true,
@@ -81,9 +88,10 @@ export default {
         reviewers: {
           type: 'resourceSelect',
           component: ResourceSelect,
-          hidden: (item) =>
-            !['review', 'warning', 'notify_and_warn'].includes(item.action) ||
-            (item.action === 'review' && !!item.workflow),
+          hidden: (item, field) => {
+            field.label = this.$t(item.action === 'review' ? 'Reviewer' : 'Recipients')
+            return !['review', 'warning', 'notify_and_warn'].includes(item.action)
+          },
           rules: [rules.RequiredChange],
           el: {
             value: [],
