@@ -117,7 +117,7 @@
   </Dialog>
 </template>
 <script>
-import { LOGOUT_PATH } from '@/utils/env'
+import { logout } from '@/utils/request'
 import Dialog from '@/components/Dialog/index.vue'
 import { encryptPassword } from '@/utils/secure'
 import _ from 'lodash'
@@ -266,11 +266,9 @@ export default {
         })
     }, 500),
     logout() {
-      const { origin, pathname, search, hash } = window.location
-      const logoutUrl = new URL(LOGOUT_PATH, origin)
-      logoutUrl.searchParams.set('next', `${pathname}${search}${hash}`)
+      const { pathname, search, hash } = window.location
       this.handleDialogClose()
-      window.location.href = logoutUrl.toString()
+      logout(`${pathname}${search}${hash}`)
     },
     sendCode() {
       this.$axios
