@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { approvalActionLabel } from '@/views/acls/approval'
 import { DrawerListTable as ListTable } from '@/components'
 
 export default {
@@ -34,6 +35,7 @@ export default {
           default: ['name', 'priority', 'is_active', 'action', 'actions']
         },
         columnsMeta: {
+          action: { formatter: (row) => approvalActionLabel(row, this.$t) },
           name: {
             formatterArgs: {
               route: 'UserLoginACLDetail'

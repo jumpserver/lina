@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { approvalActionLabel } from '@/views/acls/approval'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -52,16 +53,30 @@ export default {
           value: vm.object.rules.ip_group.join(', ')
         },
         'dataVal',
-        'action_display',
+        { key: vm.$t('Action'), value: approvalActionLabel(vm.object, vm.$t) },
         'priority',
         'date_created',
         'created_by',
         {
-          key: vm.$t(vm.object.workflow ? 'WFWorkflows' : 'LoginConfirmUser'),
+          key: vm.$t(
+            vm.object.workflow
+              ? 'WFWorkflows'
+              : vm.object.action?.value === 'review'
+                ? 'Reviewer'
+                : 'Recipients'
+          ),
           value: vm.object.workflow
             ? vm.object.workflow_name || '-'
             : vm.object.reviewers.map((item) => item.name).join(', ')
         },
+        ...(vm.object.workflow_requires_reviewers
+          ? [
+              {
+                key: vm.$t('Reviewer'),
+                value: (vm.object.reviewers || []).map((item) => item.name).join(', ')
+              }
+            ]
+          : []),
         'comment'
       ]
     }

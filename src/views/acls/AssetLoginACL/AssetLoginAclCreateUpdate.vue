@@ -19,6 +19,7 @@ export default {
   },
   data() {
     return {
+      workflowRequiresReviewers: false,
       initial: {
         action: 'accept',
         review_duration: 0,
@@ -52,6 +53,7 @@ export default {
             'mfa_enabled',
             'face_verify_enabled',
             'review_enabled',
+            'approval_mode',
             'workflow',
             'reviewers',
             'review_duration',
@@ -62,19 +64,38 @@ export default {
         [this.$t('AclAfterSession'), ['change_secret_enabled']],
         [this.$t('AclOtherSettings'), ['is_active', 'comment']]
       ],
+      afterGetFormValue: (value) => {
+        this.workflowRequiresReviewers = !!value.workflow_requires_reviewers
+        return { ...value, approval_mode: value.workflow ? 'workflow' : 'simple' }
+      },
       fieldsMeta: {
+        approval_mode: {
+          label: this.$t('ApprovalMode'),
+          type: 'radio-group',
+          hidden: (form) => form.action !== 'accept' || !form.review_enabled,
+          options: [
+            { label: this.$t('SimpleApproval'), value: 'simple' },
+            { label: this.$t('WorkflowApproval'), value: 'workflow' }
+          ]
+        },
         workflow: {
           dependsOn: 'review_enabled',
           component: Select2,
           label: this.$t('WFWorkflows'),
-          helpText: this.$t('WFACLHint'),
-          hidden: (form) => form.action !== 'accept' || !form.review_enabled,
+          rules: [rules.RequiredChange],
+          on: {
+            changeOptions: ([options]) => {
+              this.workflowRequiresReviewers = !!options[0]?.requires_acl_reviewers
+            }
+          },
+          hidden: (form) =>
+            form.action !== 'accept' || !form.review_enabled || form.approval_mode !== 'workflow',
           el: {
             multiple: false,
             clearable: true,
             ajax: {
               url: `/api/v1/tickets/workflows/options/?type=login_asset_confirm&org_id=${this.$store.getters.currentOrg.id}`,
-              transformOption: (w) => ({ label: w.name, value: w.id })
+              transformOption: (w) => ({ ...w, label: w.name, value: w.id })
             }
           }
         },
@@ -103,12 +124,18 @@ export default {
           ])
         ),
         review_duration: {
-          dependsOn: 'review_enabled',
           component: InputWithUnit,
           helpTextAsTip: true,
           helpTextAsPlaceholder: false,
           hidden: (formValue) => formValue.action !== 'accept' || !formValue.review_enabled,
-          el: { unit: 'hour', type: 'number', min: 0, max: 2147483647, step: 1 },
+          el: {
+            unit: 'hour',
+            type: 'number',
+            min: 0,
+            max: 2147483647,
+            step: 1,
+            style: { width: '240px', maxWidth: '100%' }
+          },
           rules: [
             {
               validator: (rule, value, callback) => {
@@ -171,12 +198,15 @@ export default {
           }
         },
         reviewers: {
-          dependsOn: 'review_enabled',
+          label: this.$t('Reviewer'),
           type: 'resourceSelect',
           component: ResourceSelect,
           required: true,
           rules: [{ ...rules.RequiredChange, type: 'array', min: 1 }],
-          hidden: (form) => form.action !== 'accept' || !form.review_enabled || !!form.workflow,
+          hidden: (form) =>
+            form.action !== 'accept' ||
+            !form.review_enabled ||
+            (form.approval_mode !== 'simple' && !this.workflowRequiresReviewers),
           helpTextAsTip: true,
           helpTextAsPlaceholder: false,
           el: {
@@ -204,7 +234,8 @@ export default {
       },
       url: '/api/v1/acls/login-asset-acls/',
       cleanFormValue(value) {
-        value.workflow = value.workflow || null
+        value.workflow = value.approval_mode === 'workflow' ? value.workflow || null : null
+        delete value.approval_mode
         value.review_duration = Number(value.review_duration || 0)
         if (!Array.isArray(value.rules.ip_group)) {
           value.rules.ip_group = value.rules.ip_group ? value.rules.ip_group.split(',') : []

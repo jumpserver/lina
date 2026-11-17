@@ -455,8 +455,21 @@ export default {
       )
     },
     resolvers() {
-      return ['user', 'user_group', 'role', 'user_selector', 'asset_owner', 'org_admin'].filter(
-        (kind) => this.workflow.type !== 'login_confirm' || kind !== 'asset_owner'
+      return [
+        'user',
+        'user_group',
+        'role',
+        'user_selector',
+        'asset_owner',
+        'org_admin',
+        'acl_reviewers'
+      ].filter(
+        (kind) =>
+          (this.workflow.type !== 'login_confirm' || kind !== 'asset_owner') &&
+          (kind !== 'acl_reviewers' ||
+            ['login_confirm', 'login_asset_confirm', 'command_confirm'].includes(
+              this.workflow.type
+            ))
       )
     },
     pluginConditionFields() {
@@ -622,11 +635,13 @@ export default {
   },
   methods: {
     changeTicketType(type) {
-      if (type !== 'login_confirm') return
       for (const node of this.definition.nodes) {
         if (
           node.type === 'approval' &&
-          ['org_admin', 'asset_owner'].includes(node.config.approvers.type)
+          ((type === 'login_confirm' &&
+            ['org_admin', 'asset_owner'].includes(node.config.approvers.type)) ||
+            (node.config.approvers.type === 'acl_reviewers' &&
+              !['login_confirm', 'login_asset_confirm', 'command_confirm'].includes(type)))
         ) {
           node.config.approvers = newApproval(type).approvers
         }
