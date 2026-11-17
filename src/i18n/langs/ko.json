@@ -824,7 +824,7 @@
   "ConnectionCount": "연결 수",
   "ConnectionDropped": "연결이 끊겼습니다.",
   "ConnectionToken": "연결 토큰",
-  "ConnectionTokenList": "연결 토큰은 인증 및 연결 자산을 결합하여 사용하는 인증 정보로, 사용자가 자산에 원클릭 로그인을 지원합니다. 현재 지원되는 구성 요소는 KoKo, Lion, Magnus, Razor 등이 포함됩니다",
+  "ConnectionTokenList": "연결 토큰은 인증 및 연결 자산을 결합하여 사용하는 인증 정보로, 사용자가 자산에 원클릭 로그인을 지원합니다. 현재 지원되는 구성 요소는 KoKo, Magnus, Razor 등이 포함됩니다",
   "Console": "콘솔",
   "ConsoleDashboard": "콘솔 대시보드",
   "Constructor": "생성자",

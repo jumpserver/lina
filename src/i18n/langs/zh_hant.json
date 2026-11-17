@@ -778,7 +778,7 @@
   "ConnectionCount": "連接數",
   "ConnectionDropped": "連接已斷開",
   "ConnectionToken": "連接令牌",
-  "ConnectionTokenList": "連接令牌是將身份驗證和連接資產結合起來使用的一種認證資訊，支持用戶一鍵登入到資產，目前支持的組件包括：KoKo、Lion、Magnus、Razor 等",
+  "ConnectionTokenList": "連接令牌是將身份驗證和連接資產結合起來使用的一種認證資訊，支持用戶一鍵登入到資產，目前支持的組件包括：KoKo、Magnus、Razor 等",
   "Console": "控制台",
   "ConsoleDashboard": "控制台儀表盤",
   "Constructor": "建構函數",

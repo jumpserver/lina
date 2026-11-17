@@ -913,7 +913,7 @@
   "ConnectionCount": "Connection count",
   "ConnectionDropped": "Connection disconnected",
   "ConnectionToken": "Connection tokens",
-  "ConnectionTokenList": "The connection token is a type of authentication information that combines identity verification with connecting assets. it supports one-click user login to assets. currently supported components include: koko, lion, magnus, razor, etc.",
+  "ConnectionTokenList": "The connection token is a type of authentication information that combines identity verification with connecting assets. it supports one-click user login to assets. currently supported components include: koko, magnus, razor, etc.",
   "Console": "Console",
   "ConsoleDashboard": "Console dashboard",
   "Constructor": "Constructor",
