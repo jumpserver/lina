@@ -194,6 +194,16 @@
                 :expand-label="$t('CcUsersViewAll', { count: node.pendingTasks.length })"
               />
             </div>
+            <div v-else-if="node.approvers?.length" class="pending-reviewers">
+              <span class="hint">{{ $t('Reviewer') }}</span>
+              <TicketValueList
+                inline
+                :items="node.approvers.map(formatUser)"
+                :label="$t('Reviewer')"
+                :count-label="$t('TicketUserCount', { count: node.approvers.length })"
+                :expand-label="$t('CcUsersViewAll', { count: node.approvers.length })"
+              />
+            </div>
             <div v-if="node.result?.condition" class="step-description">
               <span class="hint">{{ $t('WFConditionResult') }}</span>
               {{ node.result.result ? $t('WFTrueBranch') : $t('WFFalseBranch') }}
