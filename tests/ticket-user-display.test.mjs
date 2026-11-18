@@ -43,3 +43,23 @@ test('approval nodes, activity and member selection use the same snapshot format
     )
   }
 })
+
+test('member selection shows both name and username even when they match', async () => {
+  const source = await readFile(
+    new URL('../src/views/tickets/components/WorkflowMemberSelect.vue', import.meta.url),
+    'utf8'
+  )
+  const script = parse(source).descriptor.script.content
+  const method = script.match(/formatUser\(user\) \{([\s\S]*?)\n    \}/)[1]
+  const format = new Function('formatTicketUser', 'user', method)
+  for (const [user, expected] of [
+    [{ name: 'helloworld', username: 'helloworld' }, 'helloworld (helloworld)'],
+    [{ name: '张三', username: 'zhangsan' }, '张三 (zhangsan)'],
+    [{ username: 'ops' }, 'ops'],
+    [{ name: '张三' }, '张三'],
+    [{}, '-'],
+    [null, '-']
+  ]) {
+    assert.equal(format(formatTicketUser, user), expected)
+  }
+})
