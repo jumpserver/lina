@@ -900,7 +900,7 @@
   "DataMaskingRuleHelpHelpMsg": "Ao conectar ao banco de dados de ativos, é possível aplicar esta regra para desensibilizar os resultados da consulta.",
   "DataMaskingRuleHelpHelpText": "Ao conectar-se ao ativo do banco de dados, é possível aplicar esta regra para mascarar os resultados da consulta.",
   "Database": "Banco de dados",
-  "DatabaseConnectivityTestHelpMessage": "O teste de conectividade não é compatível com ativos de banco de dados dos tipos Redis, DB2, Dameng e ClickHouse. Ativos de banco de dados dos tipos Oracle e MongoDB não oferecem suporte à conexão por meio de um cliente.",
+  "DatabaseConnectivityTestHelpMessage": "Os testes de conectividade e as tarefas de automação disponíveis dependem da configuração da plataforma do ativo. Consulte o guia de conexão na área de trabalho para ver as opções de conexão por cliente.",
   "DatabaseCreate": "Criar ativo - Banco de dados",
   "DatabasePort": "Porta do protocolo do banco de dados",
   "DatabaseUpdate": "Atualizar Assets-Database",

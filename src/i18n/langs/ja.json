@@ -863,7 +863,7 @@
   "DataMaskingRuleHelpHelpMsg": "データベース資産に接続する際、これに基づいてクエリ結果をマスキングすることができます。",
   "DataMaskingRuleHelpHelpText": "データベース資産に接続する際は、このルールに従ってクエリ結果をマスキングできます。",
   "Database": "データベース",
-  "DatabaseConnectivityTestHelpMessage": "Redis、DB2、Dameng、ClickHouse タイプのデータベース資産では接続性テストはサポートされていません。Oracle、MongoDB タイプのデータベース資産はクライアントを介した接続をサポートしていません。",
+  "DatabaseConnectivityTestHelpMessage": "利用できる接続テストと自動化タスクは、資産プラットフォームの設定によって異なります。クライアントでの接続方法は、ワークベンチの接続ガイドを参照してください。",
   "DatabaseCreate": "資産-データベースの作成",
   "DatabasePort": "データベースプロトコルポート",
   "DatabaseUpdate": "資産-データベースの更新",

@@ -900,7 +900,7 @@
   "DataMaskingRuleHelpHelpMsg": "Khi kết nối với cơ sở dữ liệu tài sản, có thể áp dụng quy tắc này để làm mờ kết quả truy vấn.",
   "DataMaskingRuleHelpHelpText": "Khi kết nối tài sản cơ sở dữ liệu, có thể tiến hành làm mờ kết quả truy vấn theo quy tắc này.",
   "Database": "Cơ sở dữ liệu",
-  "DatabaseConnectivityTestHelpMessage": "Kiểm tra kết nối không được hỗ trợ cho các tài sản cơ sở dữ liệu loại Redis, DB2, Dameng và ClickHouse. Các tài sản cơ sở dữ liệu loại Oracle và MongoDB không hỗ trợ kết nối qua máy khách.",
+  "DatabaseConnectivityTestHelpMessage": "Các bài kiểm tra kết nối và tác vụ tự động hóa khả dụng phụ thuộc vào cấu hình nền tảng của tài sản. Xem hướng dẫn kết nối trong không gian làm việc để biết các cách kết nối bằng ứng dụng khách.",
   "DatabaseCreate": "Tạo tài sản-Cơ sở dữ liệu",
   "DatabasePort": "cổng giao thức cơ sở dữ liệu",
   "DatabaseUpdate": "Cập nhật tài sản - Cơ sở dữ liệu",

@@ -900,7 +900,7 @@
   "DataMaskingRuleHelpHelpMsg": "Al conectar con la base de datos de activos, se puede aplicar esta regla para desensibilizar los resultados de la consulta.",
   "DataMaskingRuleHelpHelpText": "Al conectar activos de la base de datos, se puede llevar a cabo la desensibilización de los resultados de la consulta según esta regla.",
   "Database": "Base de datos",
-  "DatabaseConnectivityTestHelpMessage": "La prueba de conectividad no es compatible con los activos de base de datos de tipo Redis, DB2, Dameng y ClickHouse. Los activos de base de datos de tipo Oracle y MongoDB no admiten la conexión a través de un cliente.",
+  "DatabaseConnectivityTestHelpMessage": "Las pruebas de conectividad y las tareas de automatización disponibles dependen de la configuración de la plataforma del activo. Consulte la guía de conexión del espacio de trabajo para ver las opciones de conexión mediante clientes.",
   "DatabaseCreate": "crear activo - base de datos",
   "DatabasePort": "Puerto del protocolo de la base de datos",
   "DatabaseUpdate": "Actualizar activos - base de datos",

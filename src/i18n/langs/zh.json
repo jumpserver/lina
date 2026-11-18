@@ -972,7 +972,7 @@
   "DataMaskingRuleHelpHelpMsg": "连接数据库资产时，可以根据此规则对查询结果进行脱敏",
   "DataMaskingRuleHelpHelpText": "连接数据库资产时，可以根据此规则对查询结果进行脱敏",
   "Database": "数据库",
-  "DatabaseConnectivityTestHelpMessage": "Redis、DB2、Dameng、ClickHouse 类型的数据库资产暂不支持可连接性测试；Oracle、MongoDB 类型的数据库资产暂不支持通过客户端进行连接。",
+  "DatabaseConnectivityTestHelpMessage": "可用的连接测试和自动化任务以资产平台配置为准。客户端连接方式请查看工作台的连接向导。",
   "DatabaseCreate": "创建资产-数据库",
   "DatabasePort": "数据库协议端口",
   "DatabaseUpdate": "更新资产-数据库",

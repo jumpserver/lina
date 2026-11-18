@@ -900,7 +900,7 @@
   "DataMaskingRuleHelpHelpMsg": "Lors de la connexion aux actifs de base de données, vous pouvez anonymiser les résultats de requête selon cette règle.",
   "DataMaskingRuleHelpHelpText": "Lors de la connexion aux actifs de base de données, vous pouvez anonymiser les résultats de requête selon cette règle.",
   "Database": "Base de données",
-  "DatabaseConnectivityTestHelpMessage": "Le test de connectivité n'est pas pris en charge pour les actifs de base de données Redis, DB2, Dameng et ClickHouse. Les actifs de base de données Oracle et MongoDB ne prennent pas en charge la connexion via un client.",
+  "DatabaseConnectivityTestHelpMessage": "Les tests de connectivité et les tâches d’automatisation disponibles dépendent de la configuration de la plateforme de l’actif. Consultez le guide de connexion dans l’espace de travail pour connaître les options de connexion via un client.",
   "DatabaseCreate": "Créer un actif - base de données",
   "DatabasePort": "Port du protocole de base de données",
   "DatabaseUpdate": "Mettre à jour l'actif - base de données",
