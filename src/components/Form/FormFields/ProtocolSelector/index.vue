@@ -15,6 +15,7 @@
             :disabled="disableSelect(item)"
             :model-value="item.name"
             class="prepend"
+            :class="{ 'prepend-wide': item.display_name?.length > 14 }"
             @change="handleProtocolChange($event, item)"
           >
             <el-option
@@ -388,10 +389,15 @@ export default {
 }
 
 .prepend {
-  width: 120px;
+  --protocol-select-width: 120px;
+  width: var(--protocol-select-width);
+
+  &.prepend-wide {
+    --protocol-select-width: 152px;
+  }
 
   :deep(.el-select__wrapper) {
-    width: 120px;
+    width: var(--protocol-select-width);
     background-color: #f5f7fa;
     box-shadow: none !important;
 

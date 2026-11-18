@@ -7,6 +7,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import { encryptPassword } from '@/utils/session-encrypt'
 import { getUpdateObjURL, setUrlParam, getSelectedAssetNodeId } from '@/utils/common/index'
 import { assetFieldsMeta, getWebAssetSettingDefaults } from '@/views/assets/const'
+import { CLICKHOUSE_HTTP_PROTOCOL, getAssetProtocolChoices } from '@/views/assets/assetProtocols'
 
 const getRelatedId = (value) => value?.pk ?? value?.id ?? value?.value ?? value
 
@@ -253,18 +254,14 @@ export default {
     },
     async setPlatformConstrains() {
       const { platform } = this
-      let protocols = platform?.protocols || []
-      protocols = protocols.map((i) => {
-        if (i.name === 'http') {
-          i.display_name = 'http(s)'
-        }
-        // 这个不删除会导致时，把 platform id 提交成 asset 的
-        delete i['id']
-        return i
-      })
-      const protocolChoices = this.iConfig.fieldsMeta.protocols.el.choices
+      const protocols = getAssetProtocolChoices(platform)
+      const protocolMeta = this.iConfig.fieldsMeta.protocols
+      const protocolChoices = protocolMeta.el.choices
       protocolChoices.splice(0, protocolChoices.length, ...protocols)
-      this.iConfig.fieldsMeta.protocols.el.key = `asset-protocols-${platform.id}`
+      protocolMeta.el.key = `asset-protocols-${platform.id}`
+      protocolMeta.helpText = protocols.some((item) => item.name === CLICKHOUSE_HTTP_PROTOCOL)
+        ? this.$t('ClickHouseAssetPortsHelp')
+        : this.$t('AssetProtocolHelpText')
       this.iConfig.fieldsMeta.accounts.el.platform = platform
     }
   }

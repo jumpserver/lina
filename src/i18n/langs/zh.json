@@ -571,6 +571,7 @@
   "AssetPermissionUpdate": "更新资产授权规则",
   "AssetPermsAmount": "资产授权数量",
   "AssetProtocolHelpText": "资产支持的协议受平台限制，点击设置按钮可以查看协议的设置。 如果需要更新，请更新平台",
+  "ClickHouseAssetPortsHelp": "分别填写数据库实际监听的 Native 和 HTTP 端口。Magnus 对外的代理端口不变。",
   "AssetReport": "资产报表",
   "AssetSelectSelectedCount": "已选择 {count} 个资产",
   "AssetStatisticsReport": "资产统计报告",
