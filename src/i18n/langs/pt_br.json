@@ -1567,6 +1567,7 @@
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "Sua fonte de autenticação é {source}, a adição de Passkey não é suportada",
   "PasskeyAlreadyRegistered": "Este dispositivo ou autenticador já tem uma chave de acesso para esta conta. Use a chave existente ou tente outro dispositivo ou autenticador.",
+  "PasskeyCertificateError": "O navegador bloqueou a criação da chave de acesso porque o certificado HTTPS deste site é inválido ou não confiável. Peça ao administrador para configurar um certificado confiável e tente novamente.",
   "PasskeySummary": "Autenticação biométrica sem senha",
   "Passphrase": "Senha da chave",
   "Password": " Senha ",

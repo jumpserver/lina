@@ -1567,6 +1567,7 @@
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "Nguồn xác thực của bạn là {source}, không hỗ trợ thêm Passkey",
   "PasskeyAlreadyRegistered": "Thiết bị hoặc trình xác thực này đã có khóa truy cập cho tài khoản này. Hãy dùng khóa hiện có hoặc thử lại bằng thiết bị hay trình xác thực khác.",
+  "PasskeyCertificateError": "Trình duyệt đã chặn việc tạo khóa truy cập vì chứng chỉ HTTPS của trang web này không hợp lệ hoặc không đáng tin cậy. Hãy liên hệ quản trị viên để cấu hình chứng chỉ đáng tin cậy rồi thử lại.",
   "PasskeySummary": "Xác thực sinh trắc học không cần mật khẩu",
   "Passphrase": "Mật khẩu khóa",
   "Password": "Mật khẩu",

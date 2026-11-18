@@ -1499,6 +1499,7 @@
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "認証ソースは {source} で、Passkeyの追加はサポートされていません",
   "PasskeyAlreadyRegistered": "このデバイスまたは認証器には、このアカウントのパスキーがすでに登録されています。既存のパスキーを使用するか、別のデバイスまたは認証器で再試行してください。",
+  "PasskeyCertificateError": "このサイトの HTTPS 証明書が無効または信頼されていないため、ブラウザーがパスキーの作成をブロックしました。管理者に信頼できる証明書の設定を依頼してから、再試行してください。",
   "PasskeySummary": "パスワード不要の生体認証",
   "Passphrase": "キーコード",
   "Password": "パスワード",
