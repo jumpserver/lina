@@ -1492,6 +1492,7 @@
   "Passkey": "Passkey",
   "PasskeyAddDisableInfo": "你的認證來源是 {source}, 不支持添加 Passkey",
   "PasskeyAlreadyRegistered": "目前裝置或驗證器已新增此帳號的 Passkey，請使用現有 Passkey，或更換裝置／驗證器後重試。",
+  "PasskeyCertificateError": "目前網站的 HTTPS 憑證無效或不受信任，瀏覽器已封鎖建立 Passkey。請聯絡管理員設定受信任的憑證後重試。",
   "PasskeySummary": "無密碼生物識別認證",
   "Passphrase": "金鑰密碼",
   "Password": "密碼",

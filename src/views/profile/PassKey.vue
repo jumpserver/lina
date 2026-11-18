@@ -155,6 +155,13 @@ export default {
           this.$message.success(this.$tc('CreateSuccessMsg'))
         })
         .catch((error) => {
+          if (
+            error.name === 'NotAllowedError' &&
+            error.message.includes('TLS certificate errors')
+          ) {
+            this.$message.error(this.$t('PasskeyCertificateError'))
+            return
+          }
           if (error.response?.status === 412 || error.name === 'NotAllowedError') {
             return
           }
