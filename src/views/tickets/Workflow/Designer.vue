@@ -35,13 +35,7 @@
         show-icon
         :closable="false"
       />
-      <el-alert
-        v-if="approverError || error"
-        :title="approverError || error"
-        type="error"
-        show-icon
-        :closable="false"
-      />
+      <el-alert v-if="error" :title="error" type="error" show-icon :closable="false" />
       <IBox class="metadata-box">
         <div class="section-heading">
           <h3>{{ $t('BasicInfo') }}</h3>
