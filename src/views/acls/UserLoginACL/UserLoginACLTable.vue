@@ -3,6 +3,7 @@
     ref="listTable"
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
+    :drawer-props="{ userId }"
     :header-actions="headerActions"
     :resource="$t('UserLoginACL')"
     :table-config="tableConfig"
@@ -18,6 +19,10 @@ export default {
     ListTable
   },
   props: {
+    userId: {
+      type: String,
+      default: ''
+    },
     url: {
       type: String,
       default: '/api/v1/acls/login-acls/'
