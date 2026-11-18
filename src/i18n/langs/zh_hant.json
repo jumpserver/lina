@@ -856,7 +856,7 @@
   "DataMaskingRuleHelpHelpMsg": "連接資料庫資產時，可以根據此規則對查詢結果進行脫敏",
   "DataMaskingRuleHelpHelpText": "連接資料庫資產時，可以根據此規則對查詢結果進行脫敏。",
   "Database": "資料庫",
-  "DatabaseConnectivityTestHelpMessage": "Redis、DB2、Dameng、ClickHouse 類型的資料庫資產暫不支援可連接性測試；Oracle、MongoDB 類型的資料庫資產暫不支援透過用戶端進行連接。",
+  "DatabaseConnectivityTestHelpMessage": "可用的連線測試和自動化任務以資產平台設定為準。用戶端連線方式請查看工作台的連線精靈。",
   "DatabaseCreate": "創建資產-資料庫",
   "DatabasePort": "資料庫協議埠",
   "DatabaseUpdate": "更新資產-資料庫",

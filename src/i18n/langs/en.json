@@ -990,7 +990,7 @@
   "DataMaskingRuleHelpHelpMsg": "When connecting to database assets, you can anonymize query results based on this rule.",
   "DataMaskingRuleHelpHelpText": "When connecting to database assets, you can anonymize query results based on this rule.",
   "Database": "Database",
-  "DatabaseConnectivityTestHelpMessage": "Connectivity testing is not supported for Redis, DB2, Dameng, and ClickHouse database assets. Oracle and MongoDB database assets do not support connecting through a client.",
+  "DatabaseConnectivityTestHelpMessage": "Available connectivity tests and automation tasks depend on the asset platform configuration. See the connection guide in the Workbench for client connection options.",
   "DatabaseCreate": "Create asset - database",
   "DatabasePort": "Database protocol port",
   "DatabaseUpdate": "Update the asset-database",
