@@ -11,6 +11,11 @@ const source = await readFile(
   new URL('../src/views/tickets/components/WorkflowPanel.vue', import.meta.url),
   'utf8'
 )
+const constSource = await readFile(new URL('../src/views/tickets/const.js', import.meta.url), 'utf8')
+const formatTicketUser = new Function(
+  'i18n',
+  `${constSource.replace(/^import .*$/gm, '').replaceAll('export ', '')}; return formatTicketUser`
+)({ t: (key) => key })
 const panel = new Function(
   'IBox',
   'Dialog',
@@ -18,10 +23,11 @@ const panel = new Function(
   'CcUsers',
   'TicketValueList',
   'useDateTime',
+  'formatTicketUser',
   parse(source)
     .descriptor.script.content.replace(/^import .*$/gm, '')
     .replace('export default', 'return')
-)({}, {}, {}, {}, {}, () => ({}))
+)({}, {}, {}, {}, {}, () => ({}), formatTicketUser)
 const messages = JSON.parse(
   await readFile(new URL('../src/i18n/langs/zh.json', import.meta.url), 'utf8')
 )
@@ -112,16 +118,19 @@ const wrapper = {
 }
 const icon = { render: () => null }
 
-test('future nodes render their source and distinct state without approval tasks or deadlines', async () => {
+test('future nodes show approver previews without pending tasks or deadlines', async () => {
   const instance = {
     state: 'running',
     nodes: [],
     upcoming_nodes: [
-      node('后续组织审批', 'not_started'),
+      node('后续组织审批', 'not_started', {
+        approvers: [{ id: 'user-1', name: '二级审批人', username: 'reviewer2' }]
+      }),
       node('条件节点', 'not_started', { type: 'condition', config: {} }),
       node('分支角色审批', 'branch_pending', {
         config: { approvers: { type: 'role', value: ['role'] }, strategy: 'quorum' },
-        required: 2
+        required: 2,
+        approvers: [{ id: 'user-2', name: '三级审批人', username: 'reviewer3' }]
       }),
       node('结束', 'not_started', { type: 'end', config: {} })
     ],
@@ -139,7 +148,11 @@ test('future nodes render their source and distinct state without approval tasks
       Share: icon,
       User: icon,
       Finished: icon,
-      Clock: icon
+      Clock: icon,
+      TicketValueList: {
+        props: ['items'],
+        render() { return Vue.h('div', this.items.join(', ')) }
+      }
     },
     setup: () => ({
       instance,
@@ -149,14 +162,18 @@ test('future nodes render their source and distinct state without approval tasks
       nodeLabels,
       deadlinePassed: false
     }),
-    methods: { approverSource: panel.methods.approverSource, stateTone: panel.methods.stateTone }
+    methods: {
+      approverSource: panel.methods.approverSource,
+      stateTone: panel.methods.stateTone,
+      formatUser: panel.methods.formatUser
+    }
   })
   app.config.globalProperties.$t = (key, params) => messages[key]?.replace('{count}', params?.count)
   const html = await renderToString(app)
   const text = html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ')
-  assert.match(text, /后续组织审批.*未开始.*组织管理员.*或签/)
+  assert.match(text, /后续组织审批.*未开始.*组织管理员.*或签.*审批人.*二级审批人 \(reviewer2\)/)
   assert.match(text, /条件节点.*未开始/)
-  assert.match(text, /分支角色审批.*分支待确定.*系统管理员.*需 2 人通过/)
+  assert.match(text, /分支角色审批.*分支待确定.*系统管理员.*需 2 人通过.*三级审批人 \(reviewer3\)/)
   assert.match(text, /结束.*未开始/)
-  assert.doesNotMatch(html, /step-deadline|pending-reviewers|<time/)
+  assert.doesNotMatch(html, /step-deadline|待处理人|<time/)
 })
