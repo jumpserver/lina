@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <title>Site message Markdown regression check</title>
+  <!-- Run yarn dev, then open /ui/tests/site-message-markdown.html. No backend is needed. -->
+  <pre id="results">Running…</pre>
+  <div id="fixture"></div>
+  <script type="module">
+    import { createApp, h, nextTick, ref } from 'vue'
+    import SiteMessages from '../src/layout/components/NavHeader/SiteMessages.vue'
+    import xss from '../src/utils/secure'
+
+    window.$xss = xss
+    const fixture = document.querySelector('#fixture')
+    const results = document.querySelector('#results')
+    const source = ref('')
+    const app = createApp({
+      render: () => h(SiteMessages.components.MarkdownRenderer, { source: source.value, html: true })
+    })
+    app.mount(fixture)
+    const passed = []
+    function check(condition, message) {
+      if (!condition) throw new Error(message)
+      passed.push(message)
+      results.textContent = passed.map((line) => `PASS: ${line}`).join('\n')
+    }
+
+    try {
+      source.value = String.raw`* **Accounts:** Node, no\_access, sshkey\_account, ops\*admin, DOMAIN\\ops\_user, C:\\Temp\\file\_name, $user`
+      await nextTick()
+      check(
+        fixture.textContent.trim() === String.raw`Accounts: Node, no_access, sshkey_account, ops*admin, DOMAIN\ops_user, C:\Temp\file_name, $user`,
+        'Markdown escapes are parsed once and literal backslashes are preserved'
+      )
+      check(fixture.querySelector('li > strong')?.textContent === 'Accounts:', 'Field labels keep their formatting')
+
+      source.value = '<a href="javascript:alert(1)" onclick="alert(1)">unsafe</a><iframe src="about:blank"></iframe>'
+      await nextTick()
+      check(!fixture.querySelector('script, iframe, [onclick], [href^="javascript:"]'), 'Unsafe HTML is removed after rendering')
+
+      source.value = '[View ticket](/ui/#/tickets/tickets/123)'
+      await nextTick()
+      check(fixture.querySelector('a')?.getAttribute('href') === '/ui/#/tickets/tickets/123', 'Ticket links remain intact when the message changes')
+    } catch (error) {
+      results.textContent += `\nFAIL: ${error.message}`
+      throw error
+    } finally {
+      app.unmount()
+    }
+  </script>
+</html>
