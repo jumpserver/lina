@@ -19,15 +19,19 @@ export default {
   components: {
     GenericCreateUpdatePage
   },
+  props: {
+    userId: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       workflowRequiresReviewers: false,
       initial: {
         action: 'reject',
         user: this.$route.query.user,
-        users: {
-          username_group: ''
-        },
+        users: this.userId ? { type: 'ids', ids: [this.userId] } : { username_group: '' },
         rules: {
           ip_group: ['*']
         }

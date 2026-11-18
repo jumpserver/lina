@@ -1,6 +1,6 @@
 <template>
   <TwoCol>
-    <UserLoginACLTable :url="url" />
+    <UserLoginACLTable :url="url" :user-id="object.id" />
   </TwoCol>
 </template>
 
