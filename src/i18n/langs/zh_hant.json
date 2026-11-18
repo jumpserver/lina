@@ -244,6 +244,7 @@
   "AssetPermissionUpdate": "更新資產授權規則",
   "AssetPermsAmount": "資產授權數量",
   "AssetProtocolHelpText": "資產支持的協議受平台限制，點擊設置按鈕可以查看協議的設置。 如果需要更新，請更新平台",
+  "ClickHouseAssetPortsHelp": "分別填寫資料庫實際監聽的 Native 和 HTTP 連接埠。Magnus 對外的代理連接埠不變。",
   "AssetReport": "資產報表",
   "AssetSelectSelectedCount": "已選擇 {count} 個資產",
   "AssetStatisticsReport": "資產統計報告",
