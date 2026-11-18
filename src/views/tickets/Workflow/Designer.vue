@@ -213,7 +213,6 @@
                         ? approverError
                         : ''
                     "
-                    :show-message="false"
                   >
                     <el-select v-model="selected.config.approvers.type" @change="changeResolver">
                       <template #label>
@@ -236,7 +235,6 @@
                     ref="approverField"
                     :label="$t('WFSelectApprovers')"
                     :error="approverValidationNode?.id === selected.id ? approverError : ''"
-                    :show-message="false"
                     required
                   >
                     <Select2
@@ -251,7 +249,6 @@
                     v-if="selected.config.approvers.type === 'user_selector'"
                     ref="approverField"
                     :error="approverValidationNode?.id === selected.id ? approverError : ''"
-                    :show-message="false"
                   >
                     <JSONManyToManySelect
                       :key="selected.id"

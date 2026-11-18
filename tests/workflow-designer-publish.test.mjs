@@ -362,7 +362,6 @@ test('the approver field is red when first mounted after jumping from another no
     const html = await renderToString(app)
     assert.equal(html.includes('is-error'), !corrected)
     assert.ok(html.includes('is-required'))
-    assert.ok(!html.includes('el-form-item__error'))
   }
 })
 
