@@ -100,6 +100,7 @@ export function createApplicationEventHistory(request, pageSize = 30, groupEvent
   let sources = ['manual', 'policy'].map((source) => ({
     source,
     offset: 0,
+    count: 0,
     rows: [],
     exhausted: false
   }))
@@ -111,6 +112,7 @@ export function createApplicationEventHistory(request, pageSize = 30, groupEvent
         throw new Error('Event history returned an incomplete page')
       }
       source.offset += data.results.length
+      source.count = data.count
       source.rows = source.rows.concat(
         (groupEvents ? applicationEventGroups : applicationEventRows)(data.results, source.source)
       )
@@ -130,7 +132,11 @@ export function createApplicationEventHistory(request, pageSize = 30, groupEvent
         .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
       options.signal?.throwIfAborted()
       sources = nextSources
-      return { rows: rows.slice(end - size, end), hasNext: rows.length > end }
+      return {
+        rows: rows.slice(end - size, end),
+        hasNext: rows.length > end,
+        eventCount: sources.reduce((count, source) => count + source.count, 0)
+      }
     }
   }
 }

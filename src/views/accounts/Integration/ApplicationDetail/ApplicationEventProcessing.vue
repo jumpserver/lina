@@ -109,8 +109,6 @@ export default {
         columnsMeta: { actions: { has: false } },
         hasSelection: false,
         hasPagination: true,
-        // Merge both event streams before deciding whether another page exists.
-        paginationLayout: 'sizes, prev, pager, next',
         hasOperation: false,
         hasEdit: false,
         hasDelete: false,
@@ -187,7 +185,7 @@ export default {
         return {
           data: {
             results: data.rows,
-            count: offset + data.rows.length + (data.hasNext ? 1 : 0)
+            count: data.eventCount
           }
         }
       } catch (error) {
@@ -206,10 +204,6 @@ export default {
 
 .context-help {
   margin: 0 0 12px;
-}
-
-.application-events :deep(.el-pagination) {
-  justify-content: flex-end;
 }
 
 .application-events :deep(.event-text) {

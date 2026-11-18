@@ -20,7 +20,7 @@ function event(number, source, recipients = 1) {
   }
 }
 
-function history(records, pageSize = 30) {
+function history(records, pageSize = 30, groupEvents = false) {
   const requests = []
   const request = async (source, params) => {
     requests.push({ source, ...params })
@@ -29,8 +29,36 @@ function history(records, pageSize = 30) {
       results: records[source].slice(params.offset, params.offset + params.limit)
     }
   }
-  return { pager: createApplicationEventHistory(request, pageSize), requests }
+  return { pager: createApplicationEventHistory(request, pageSize, groupEvents), requests }
 }
+
+test('grouped history exposes the full event count while loading pages on demand', async () => {
+  const { pager, requests } = history({
+    manual: Array.from({ length: 71 }, (_, index) => event(142 - index * 2, 'manual')),
+    policy: Array.from({ length: 60 }, (_, index) => event(141 - index * 2, 'policy'))
+  }, 30, true)
+  const first = await pager.getPage(1, 15)
+  assert.equal(first.eventCount, 131)
+  assert.equal(first.rows.length, 15)
+  assert.equal(first.hasNext, true)
+  assert.deepEqual(requests.map(({ offset, limit }) => [offset, limit]), [[0, 30], [0, 30]])
+
+  const last = await pager.getPage(9, 15)
+  assert.equal(last.eventCount, 131)
+  assert.equal(last.rows.length, 11)
+  assert.equal(last.hasNext, false)
+  const requestCount = requests.length
+  assert.equal((await pager.getPage(1, 15)).eventCount, 131)
+  const resized = await pager.getPage(3, 50)
+  assert.equal(resized.eventCount, 131)
+  assert.equal(resized.rows.length, 31)
+  assert.equal(requests.length, requestCount)
+})
+
+test('empty grouped history reports zero events', async () => {
+  const { pager } = history({ manual: [], policy: [] }, 30, true)
+  assert.deepEqual(await pager.getPage(1, 15), { rows: [], hasNext: false, eventCount: 0 })
+})
 
 test('mixed history pages retain chronological order and every instance without duplicates', async () => {
   const records = { manual: [], policy: [] }
@@ -185,6 +213,7 @@ test('grouped history keeps one event per row and all recipient execution result
     true
   )
   const page = await pager.getPage(1)
+  assert.equal(page.eventCount, 1)
   assert.equal(page.rows.length, 1)
   assert.equal(page.hasNext, false)
   assert.equal(page.rows[0].recipientRows.length, 61)
