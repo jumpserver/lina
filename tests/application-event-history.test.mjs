@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import {
-  applicationEventRows,
   applicationEventGroups,
   createApplicationEventHistory
 } from '../src/views/accounts/Integration/ApplicationDetail/applicationEventHistory.js'
@@ -20,7 +19,7 @@ function event(number, source, recipients = 1) {
   }
 }
 
-function history(records, pageSize = 30, groupEvents = false) {
+function history(records, pageSize = 30) {
   const requests = []
   const request = async (source, params) => {
     requests.push({ source, ...params })
@@ -29,24 +28,24 @@ function history(records, pageSize = 30, groupEvents = false) {
       results: records[source].slice(params.offset, params.offset + params.limit)
     }
   }
-  return { pager: createApplicationEventHistory(request, pageSize, groupEvents), requests }
+  return { pager: createApplicationEventHistory(request, pageSize), requests }
 }
 
-test('grouped history exposes the full event count while loading pages on demand', async () => {
+test('history exposes the full event count while loading pages on demand', async () => {
   const { pager, requests } = history({
     manual: Array.from({ length: 71 }, (_, index) => event(142 - index * 2, 'manual')),
     policy: Array.from({ length: 60 }, (_, index) => event(141 - index * 2, 'policy'))
-  }, 30, true)
+  })
   const first = await pager.getPage(1, 15)
   assert.equal(first.eventCount, 131)
   assert.equal(first.rows.length, 15)
-  assert.equal(first.hasNext, true)
   assert.deepEqual(requests.map(({ offset, limit }) => [offset, limit]), [[0, 30], [0, 30]])
+  assert.equal((await pager.getPage(2, 15)).rows.length, 15)
+  assert.equal(requests.length, 2)
 
   const last = await pager.getPage(9, 15)
   assert.equal(last.eventCount, 131)
   assert.equal(last.rows.length, 11)
-  assert.equal(last.hasNext, false)
   const requestCount = requests.length
   assert.equal((await pager.getPage(1, 15)).eventCount, 131)
   const resized = await pager.getPage(3, 50)
@@ -55,21 +54,19 @@ test('grouped history exposes the full event count while loading pages on demand
   assert.equal(requests.length, requestCount)
 })
 
-test('empty grouped history reports zero events', async () => {
-  const { pager } = history({ manual: [], policy: [] }, 30, true)
-  assert.deepEqual(await pager.getPage(1, 15), { rows: [], hasNext: false, eventCount: 0 })
+test('empty history reports zero events', async () => {
+  const { pager } = history({ manual: [], policy: [] })
+  assert.deepEqual(await pager.getPage(1, 15), { rows: [], eventCount: 0 })
 })
 
-test('mixed history pages retain chronological order and every instance without duplicates', async () => {
+test('mixed history pages retain chronological order and every event without duplicates', async () => {
   const records = { manual: [], policy: [] }
   const expected = []
   for (let number = 78; number >= 0; number--) {
     const source = number % 2 ? 'manual' : 'policy'
     const recipients = number % 5 ? 1 : 3
     records[source].push(event(number, source, recipients))
-    for (let index = 0; index < recipients; index++) {
-      expected.push(`${source}:event-${number}:${index}`)
-    }
+    expected.push(`${source}:event-${number}`)
   }
   const { pager } = history(records)
   const actual = []
@@ -79,7 +76,7 @@ test('mixed history pages retain chronological order and every instance without 
     result = await pager.getPage(page++)
     assert.ok(result.rows.length <= 30)
     actual.push(...result.rows.map((row) => row.key))
-  } while (result.hasNext)
+  } while (actual.length < result.eventCount)
   assert.deepEqual(actual, expected)
 })
 
@@ -91,7 +88,6 @@ test('a long single source passes the API limit and going back uses cached rows'
   const { pager, requests } = history(records)
   const last = await pager.getPage(5)
   assert.equal(last.rows.length, 11)
-  assert.equal(last.hasNext, false)
   assert.deepEqual(
     requests.filter((item) => item.source === 'manual').map((item) => item.offset),
     [0, 30, 60, 90, 120]
@@ -102,14 +98,14 @@ test('a long single source passes the API limit and going back uses cached rows'
   assert.equal(requests.length, requestCount)
 })
 
-test('one event with many recipients paginates by instance rows and preserves each receipt', async () => {
+test('one event with many recipients stays on one page and preserves each receipt', async () => {
   const { pager, requests } = history({ manual: [event(1, 'manual', 61)], policy: [] })
   const first = await pager.getPage(1)
   const second = await pager.getPage(2)
-  const third = await pager.getPage(3)
-  assert.deepEqual([first.rows.length, second.rows.length, third.rows.length], [30, 30, 1])
-  assert.equal(third.rows[0].instance_id, 'instance-60')
-  assert.equal(third.hasNext, false)
+  assert.deepEqual([first.rows.length, second.rows.length], [1, 0])
+  assert.equal(first.eventCount, 1)
+  assert.equal(first.rows[0].recipientRows.length, 61)
+  assert.equal(first.rows[0].recipientRows[60].instance_id, 'instance-60')
   assert.equal(requests.length, 2)
 })
 
@@ -131,22 +127,20 @@ test('failed loading can be retried without consuming or losing rows', async () 
   const page = await pager.getPage(2)
   assert.deepEqual(
     page.rows.map((row) => row.key),
-    ['manual:event-3:0', 'policy:event-2:0']
+    ['manual:event-3', 'policy:event-2']
   )
 })
 
 test('a receipt keeps the received state separate from successful command execution', () => {
-  const received = applicationEventRows([event(1, 'manual')], 'manual')[0]
+  const received = applicationEventGroups([event(1, 'manual')], 'manual')[0].recipientRows[0]
   assert.equal(received.statusLabel, 'RotationEventReceived')
   assert.equal(received.statusType, 'success')
-  const policyReceived = applicationEventRows([event(1, 'policy')], 'policy')[0]
+  const policyReceived = applicationEventGroups([event(1, 'policy')], 'policy')[0].recipientRows[0]
   assert.equal(policyReceived.statusLabel, 'RotationEventReceived')
   assert.equal(policyReceived.statusType, 'success')
   const succeeded = event(2, 'manual')
   succeeded.recipients[0].status = 'success'
-  assert.equal(applicationEventRows([succeeded], 'manual')[0].statusLabel, 'Success')
-  const untargeted = applicationEventRows([event(3, 'policy', 0)], 'policy')[0]
-  assert.equal(untargeted.statusLabel, 'RotationEventNotTargeted')
+  assert.equal(applicationEventGroups([succeeded], 'manual')[0].recipientRows[0].statusLabel, 'Success')
 })
 
 test('an unexpectedly empty API page reports failure instead of silently hiding history', async () => {
@@ -154,22 +148,21 @@ test('an unexpectedly empty API page reports failure instead of silently hiding 
   await assert.rejects(pager.getPage(1), /incomplete page/)
 })
 
-test('changing the page size preserves the merged order and cached instance rows', async () => {
+test('changing the page size preserves the merged order and cached events', async () => {
   const records = {
     manual: [event(6, 'manual', 20), event(3, 'manual', 20)],
     policy: [event(5, 'policy', 20), event(2, 'policy', 20)]
   }
   const expected = [
-    ...applicationEventRows(records.manual, 'manual'),
-    ...applicationEventRows(records.policy, 'policy')
+    ...applicationEventGroups(records.manual, 'manual'),
+    ...applicationEventGroups(records.policy, 'policy')
   ].sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
   const { pager, requests } = history(records)
-  assert.deepEqual((await pager.getPage(2, 15)).rows, expected.slice(15, 30))
+  assert.deepEqual((await pager.getPage(2, 1)).rows, expected.slice(1, 2))
   const requestCount = requests.length
-  assert.deepEqual((await pager.getPage(1, 50)).rows, expected.slice(0, 50))
-  const last = await pager.getPage(2, 50)
-  assert.deepEqual(last.rows, expected.slice(50))
-  assert.equal(last.hasNext, false)
+  assert.deepEqual((await pager.getPage(1, 3)).rows, expected.slice(0, 3))
+  const last = await pager.getPage(2, 3)
+  assert.deepEqual(last.rows, expected.slice(3))
   assert.equal(requests.length, requestCount)
 })
 
@@ -200,7 +193,7 @@ test('an aborted request cannot overwrite the cache used by a later page request
   assert.deepEqual((await pager.getPage(1, 15)).rows, current.rows)
 })
 
-test('grouped history keeps one event per row and all recipient execution results', async () => {
+test('history keeps one event per row and all recipient execution results', async () => {
   const record = event(1, 'policy', 61)
   record.recipients[0].status = 'success'
   record.recipients[0].finished_at = '2026-10-28T01:00:00Z'
@@ -208,14 +201,11 @@ test('grouped history keeps one event per row and all recipient execution result
     async (source) => ({
       count: source === 'policy' ? 1 : 0,
       results: source === 'policy' ? [record] : []
-    }),
-    30,
-    true
+    })
   )
   const page = await pager.getPage(1)
   assert.equal(page.eventCount, 1)
   assert.equal(page.rows.length, 1)
-  assert.equal(page.hasNext, false)
   assert.equal(page.rows[0].recipientRows.length, 61)
   assert.equal(page.rows[0].successCount, 1)
   assert.equal(page.rows[0].recipientRows[0].statusLabel, 'Success')
@@ -245,7 +235,7 @@ test('skip results have a visible label in both policy and manual event history'
     ]
   }
   for (const source of ['policy', 'manual']) {
-    const row = applicationEventRows([event], source)[0]
+    const row = applicationEventGroups([event], source)[0].recipientRows[0]
     assert.equal(row.statusLabel, 'Skipped')
   }
 })

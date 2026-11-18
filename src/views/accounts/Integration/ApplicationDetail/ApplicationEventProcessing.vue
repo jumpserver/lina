@@ -168,17 +168,13 @@ export default {
       const { signal } = config
       this.loadFailed = false
       if (!this.history) {
-        this.history = createApplicationEventHistory(
-          (source, query, options) => {
-            const endpoint = source === 'manual' ? 'manual-events' : 'credential-events'
-            return this.$axios.get(`/api/v1/accounts/integration-applications/${id}/${endpoint}/`, {
-              ...options,
-              params: query
-            })
-          },
-          30,
-          true
-        )
+        this.history = createApplicationEventHistory((source, query, options) => {
+          const endpoint = source === 'manual' ? 'manual-events' : 'credential-events'
+          return this.$axios.get(`/api/v1/accounts/integration-applications/${id}/${endpoint}/`, {
+            ...options,
+            params: query
+          })
+        })
       }
       try {
         const data = await this.history.getPage(offset / size + 1, size, { signal })

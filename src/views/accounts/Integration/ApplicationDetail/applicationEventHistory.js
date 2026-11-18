@@ -20,15 +20,14 @@ const statusTypes = {
   timeout: 'danger'
 }
 
-export function applicationEventRows(events, source) {
-  return events.flatMap((event) => {
-    const recipients = event.recipients.length ? event.recipients : [{}]
-    return recipients.map((recipient, index) => {
+export function applicationEventGroups(events, source) {
+  return events.map((event) => {
+    const recipients = event.recipients.map((recipient, index) => {
       const row = { ...event, ...recipient }
       const status =
         source === 'manual' || ['success', 'failed', 'skip'].includes(row.status)
           ? row.status
-          : receiptStatus(event.recipients.length ? recipient : null)
+          : receiptStatus(recipient)
       return {
         ...row,
         key: `${source}:${event.id || event.command_id}:${index}`,
@@ -40,12 +39,6 @@ export function applicationEventRows(events, source) {
         statusType: statusTypes[status] || 'info'
       }
     })
-  })
-}
-
-export function applicationEventGroups(events, source) {
-  return events.map((event) => {
-    const recipients = applicationEventRows([event], source).filter(() => event.recipients.length)
     const failed = recipients.filter(
       (row) => row.status === 'failed' || row.publish_result === 'failed'
     ).length
@@ -96,7 +89,7 @@ export function applicationEventGroups(events, source) {
   })
 }
 
-export function createApplicationEventHistory(request, pageSize = 30, groupEvents = false) {
+export function createApplicationEventHistory(request, pageSize = 30) {
   let sources = ['manual', 'policy'].map((source) => ({
     source,
     offset: 0,
@@ -113,9 +106,7 @@ export function createApplicationEventHistory(request, pageSize = 30, groupEvent
       }
       source.offset += data.results.length
       source.count = data.count
-      source.rows = source.rows.concat(
-        (groupEvents ? applicationEventGroups : applicationEventRows)(data.results, source.source)
-      )
+      source.rows = source.rows.concat(applicationEventGroups(data.results, source.source))
       source.exhausted = source.offset >= data.count
     }
   }
@@ -123,10 +114,9 @@ export function createApplicationEventHistory(request, pageSize = 30, groupEvent
   return {
     async getPage(page, size = pageSize, options = {}) {
       const end = page * size
-      // Each source must provide its first end + 1 instance rows, or be exhausted,
-      // before the merged page and the presence of a next page can be determined.
+      // Load enough events from each source before merging by publication time.
       const nextSources = sources.map((source) => ({ ...source }))
-      await Promise.all(nextSources.map((source) => fill(source, end + 1, options)))
+      await Promise.all(nextSources.map((source) => fill(source, end, options)))
       const rows = nextSources
         .flatMap((source) => source.rows)
         .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
@@ -134,7 +124,6 @@ export function createApplicationEventHistory(request, pageSize = 30, groupEvent
       sources = nextSources
       return {
         rows: rows.slice(end - size, end),
-        hasNext: rows.length > end,
         eventCount: sources.reduce((count, source) => count + source.count, 0)
       }
     }
