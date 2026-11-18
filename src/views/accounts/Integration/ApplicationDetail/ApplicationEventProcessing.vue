@@ -79,7 +79,7 @@ export default {
         },
         { prop: 'credential', label: this.$t('ApplicationCredential'), minWidth: 150 },
         { prop: 'account', label: this.$t('Account'), minWidth: 130 },
-        { prop: 'revision', label: this.$t('Revision'), minWidth: 70 },
+        { prop: 'revision', label: this.$t('AppAuditRevision'), minWidth: 100 },
         {
           prop: 'status',
           label: this.$t('Status'),
@@ -109,8 +109,6 @@ export default {
         columnsMeta: { actions: { has: false } },
         hasSelection: false,
         hasPagination: true,
-        // Merge both event streams before deciding whether another page exists.
-        paginationLayout: 'sizes, prev, pager, next',
         hasOperation: false,
         hasEdit: false,
         hasDelete: false,
@@ -170,24 +168,20 @@ export default {
       const { signal } = config
       this.loadFailed = false
       if (!this.history) {
-        this.history = createApplicationEventHistory(
-          (source, query, options) => {
-            const endpoint = source === 'manual' ? 'manual-events' : 'credential-events'
-            return this.$axios.get(`/api/v1/accounts/integration-applications/${id}/${endpoint}/`, {
-              ...options,
-              params: query
-            })
-          },
-          30,
-          true
-        )
+        this.history = createApplicationEventHistory((source, query, options) => {
+          const endpoint = source === 'manual' ? 'manual-events' : 'credential-events'
+          return this.$axios.get(`/api/v1/accounts/integration-applications/${id}/${endpoint}/`, {
+            ...options,
+            params: query
+          })
+        })
       }
       try {
         const data = await this.history.getPage(offset / size + 1, size, { signal })
         return {
           data: {
             results: data.rows,
-            count: offset + data.rows.length + (data.hasNext ? 1 : 0)
+            count: data.eventCount
           }
         }
       } catch (error) {
@@ -206,10 +200,6 @@ export default {
 
 .context-help {
   margin: 0 0 12px;
-}
-
-.application-events :deep(.el-pagination) {
-  justify-content: flex-end;
 }
 
 .application-events :deep(.event-text) {

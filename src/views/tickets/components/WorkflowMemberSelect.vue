@@ -111,6 +111,9 @@ export default {
   },
   methods: {
     formatUser(user) {
+      if (user?.name && user.name === user.username) {
+        return `${user.name} (${user.username})`
+      }
       return formatTicketUser(user)
     },
     choose() {

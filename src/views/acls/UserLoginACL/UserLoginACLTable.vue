@@ -3,6 +3,7 @@
     ref="listTable"
     :create-drawer="createDrawer"
     :detail-drawer="detailDrawer"
+    :drawer-props="{ userId }"
     :header-actions="headerActions"
     :resource="$t('UserLoginACL')"
     :table-config="tableConfig"
@@ -10,6 +11,7 @@
 </template>
 
 <script>
+import { approvalActionLabel } from '@/views/acls/approval'
 import { DrawerListTable as ListTable } from '@/components'
 
 export default {
@@ -17,6 +19,10 @@ export default {
     ListTable
   },
   props: {
+    userId: {
+      type: String,
+      default: ''
+    },
     url: {
       type: String,
       default: '/api/v1/acls/login-acls/'
@@ -34,6 +40,7 @@ export default {
           default: ['name', 'priority', 'is_active', 'action', 'actions']
         },
         columnsMeta: {
+          action: { formatter: (row) => approvalActionLabel(row, this.$t) },
           name: {
             formatterArgs: {
               route: 'UserLoginACLDetail'

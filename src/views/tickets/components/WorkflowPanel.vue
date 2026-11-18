@@ -18,7 +18,7 @@
         <el-tag :type="deadlinePassed ? 'warning' : stateTone(instance.state)" effect="light">
           {{ $t(deadlinePassed ? 'WFTimeoutPending' : stateLabels[instance.state]) }}
         </el-tag>
-        <span class="workflow-identity hint">
+        <span v-if="!instance.workflow_is_system" class="workflow-identity hint">
           <span v-if="instance.workflow_name || object.workflow?.name"
             >{{ instance.workflow_name || object.workflow.name }} · </span
           >{{ $t('WFVersion') }} {{ instance.version_number }}
@@ -192,6 +192,16 @@
                 :label="$t('Assignees')"
                 :count-label="$t('TicketUserCount', { count: node.pendingTasks.length })"
                 :expand-label="$t('CcUsersViewAll', { count: node.pendingTasks.length })"
+              />
+            </div>
+            <div v-else-if="node.approvers?.length" class="pending-reviewers">
+              <span class="hint">{{ $t('Reviewer') }}</span>
+              <TicketValueList
+                inline
+                :items="node.approvers.map(formatUser)"
+                :label="$t('Reviewer')"
+                :count-label="$t('TicketUserCount', { count: node.approvers.length })"
+                :expand-label="$t('CcUsersViewAll', { count: node.approvers.length })"
               />
             </div>
             <div v-if="node.result?.condition" class="step-description">

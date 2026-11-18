@@ -1,6 +1,6 @@
 import { reactive, watch } from 'vue'
 import { createWebSessionLock, describeWebSessionError } from '@/utils/webSessionLock'
-import request, { logout, deferAuthFailureUntil } from '@/utils/request'
+import request, { logout, deferAuthFailureUntil, setWebSessionAuthState } from '@/utils/request'
 import { LOGIN_PATH } from '@/utils/env'
 import { notifyWebSessionClose } from '@/utils/jms/auth'
 
@@ -8,6 +8,7 @@ export const webSessionLockState = reactive({
   ready: false,
   locked: true,
   pending: false,
+  loggingOut: false,
   logoutAt: 0,
   attemptsRemaining: null,
   idleRemaining: null,
@@ -41,9 +42,11 @@ export async function startWebSessionLock() {
             data: body,
             headers,
             disableFlashErrorMsg: true,
+            skipAuthFailure: path === '/api/v1/authentication/web-session/status/',
             timeout: 10000
           }),
         onChange: (state) => {
+          setWebSessionAuthState(state)
           if (state.logoutAt) deferAuthFailureUntil(state.logoutAt)
           if (state.error) {
             console.error(

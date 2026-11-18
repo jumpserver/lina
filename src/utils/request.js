@@ -14,6 +14,7 @@ import axiosRetry from 'axios-retry'
 import { getRouter } from '@/router/registry'
 import { getRequestOrgId } from './requestOrg'
 import { BASE_API, LOGIN_PATH, LOGOUT_PATH } from '@/utils/env'
+import { isWebSessionLoggingOut } from '@/utils/webSessionLock'
 
 // create an axios instance
 const service = axios.create({
@@ -23,6 +24,13 @@ const service = axios.create({
 })
 
 let lockSignOutUntil = 0
+let webSessionScope
+let loggingOut = false
+
+export function setWebSessionAuthState(state) {
+  webSessionScope = state.session?.scope
+  loggingOut = Boolean(state.loggingOut)
+}
 
 export function deferAuthFailureUntil(at) {
   if (Number.isFinite(at)) {
@@ -89,6 +97,13 @@ function goToLogin() {
 }
 
 function ifUnauthorized({ response }) {
+  if (
+    response.status === 401 &&
+    (response.config.skipAuthFailure || loggingOut || isWebSessionLoggingOut(webSessionScope))
+  ) {
+    response.config.disableFlashErrorMsg = true
+    return
+  }
   if (response.status === 401 && response.data?.code === 'authentication_required') {
     response.config.disableFlashErrorMsg = true
     return
@@ -134,8 +149,12 @@ function ifBadRequest({ response, error }) {
   }
 }
 
-export function logout() {
-  window.location.href = `${LOGOUT_PATH}?next=${location.pathname}`
+export function logout(next = window.location.pathname) {
+  window.dispatchEvent(new Event('jms:web-session-logout'))
+  loggingOut = true
+  const url = new URL(LOGOUT_PATH, window.location.origin)
+  url.searchParams.set('next', next)
+  window.location.assign(url.href)
 }
 
 export function flashErrorMsg({ response, error }) {

@@ -2,13 +2,14 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
+import { approvalActionLabel } from '../src/views/acls/approval.js'
 
 async function load(path) {
   const source = await readFile(new URL(`../src/views/acls/${path}`, import.meta.url), 'utf8')
   const script = parse(source).descriptor.script.content
     .replace(/^import .*$/gm, '').replace('export default', 'return')
-  return new Function('AutoDetailCard', 'TwoCol', 'ChoicesFormatter', 'AccountLabelMapper', 'h', script)(
-    {}, {}, {}, {}, () => {}
+  return new Function('AutoDetailCard', 'TwoCol', 'ChoicesFormatter', 'AccountLabelMapper', 'h', 'approvalActionLabel', script)(
+    {}, {}, {}, {}, () => {}, approvalActionLabel
   )
 }
 
@@ -46,7 +47,7 @@ test('asset rules retain fixed reviewers and hide approval details when approval
 })
 
 for (const [name, component, reviewerLabel] of [
-  ['command', command, 'Reviewer'], ['login', login, 'LoginConfirmUser']
+  ['command', command, 'Reviewer'], ['login', login, 'Reviewer']
 ]) {
   test(`${name} rules show the workflow name and preserve fixed-reviewer fallback`, () => {
     const configured = component.data.call(context()).detailFields.filter(Boolean)

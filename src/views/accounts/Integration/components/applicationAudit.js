@@ -43,7 +43,9 @@ const fieldLabels = {
   systemd_unit: 'SystemdUnit',
   systemd_action: 'SystemdAction'
 }
+const accessMaterialsSummary = 'Generated application access materials.'
 const summaries = {
+  [accessMaterialsSummary]: 'AppAuditAccessMaterialsGenerated',
   'credential.switch.requested': 'ApplicationAccountSwitchRequest',
   'app.restart.requested': 'ApplicationRestartRequest',
   execution_failed: 'ApplicationCommandExecutionFailed',
@@ -69,7 +71,14 @@ function formatChangeValue(field, value, t) {
 }
 
 export function normalizeAudit(row, t) {
-  const definition = auditEventDefinitions[row.event]
+  const definition =
+    row.event === 'configuration_updated' && row.summary === accessMaterialsSummary
+      ? {
+          label: 'AppAuditAccessMaterialsGenerated',
+          meaning: 'AppAuditMeaningAccessMaterialsGenerated',
+          protocolEvents: []
+        }
+      : auditEventDefinitions[row.event]
   const eventLabel = definition?.label || historicalAuditEvents[row.event]
   return {
     ...row,
@@ -77,6 +86,7 @@ export function normalizeAudit(row, t) {
     event_meaning: definition ? t(definition.meaning) : '',
     related_protocol_events: definition?.protocolEvents || [],
     result_display: auditResults[row.result] ? t(auditResults[row.result]) : row.result,
+    raw_summary: row.summary,
     summary: summaries[row.summary] ? t(summaries[row.summary]) : row.summary,
     changes: (row.changes || []).map((change) => ({
       ...change,

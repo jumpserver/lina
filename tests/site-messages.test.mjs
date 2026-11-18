@@ -33,7 +33,7 @@ class FakeWebSocket {
 
 const component = new Function(
   'Dialog',
-  'MarkDown',
+  'MarkdownRenderer',
   'toSafeLocalDateStr',
   'WebSocket',
   'document',

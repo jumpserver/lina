@@ -72,6 +72,14 @@ test('user cancellation stays silent and does not submit a credential', async ()
   assert.equal(result.vm.dialogVisible, true)
 })
 
+test('TLS certificate rejection shows a localized recovery message instead of being treated as cancellation', async () => {
+  const result = await register({ error: new DOMException('WebAuthn is not supported on sites with TLS certificate errors.', 'NotAllowedError') })
+  assert.deepEqual(result.errors, [zh.PasskeyCertificateError])
+  assert.match(result.errors[0], /证书/)
+  assert.deepEqual(result.posts, [])
+  assert.equal(result.vm.dialogVisible, true)
+})
+
 test('identity confirmation stays with the HTTP 412 handler', async () => {
   const result = await register({ requestError: { response: { status: 412 } } })
   assert.deepEqual(result.errors, [])

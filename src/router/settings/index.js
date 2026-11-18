@@ -126,6 +126,7 @@ export default {
           meta: {
             title: i18n.t('RoleList'),
             app: 'rbac',
+            cacheByPreviousOrgOnAutoEnter: true,
             permissions: ['rbac.view_orgrole | rbac.view_systemrole']
           }
         },

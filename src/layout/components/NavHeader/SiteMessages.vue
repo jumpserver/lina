@@ -105,7 +105,11 @@
       <div class="msg-detail">
         <div class="msg-detail-txt" @click.capture="handleMessageContentClick">
           <span class="msg-detail-time">{{ formatDate(currentMsg.date_created) }}</span>
-          <MarkDown :html="true" :value="currentMsg.content.message" />
+          <MarkdownRenderer
+            class="markdown-body"
+            :html="true"
+            :source="currentMsg.content.message"
+          />
         </div>
       </div>
     </Dialog>
@@ -114,7 +118,8 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import MarkDown from '@/components/Widgets/MarkDown'
+import MarkdownRenderer from '@/components/Widgets/MarkdownRenderer/index.vue'
+import 'github-markdown-css/github-markdown-light.css'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import { getMomentLocale } from '@/i18n/moment'
 import { webSessionLockState, refreshWebSessionLock } from '@/composables/useWebSessionLock'
@@ -123,7 +128,7 @@ export default {
   name: 'SiteMessages',
   components: {
     Dialog,
-    MarkDown
+    MarkdownRenderer
   },
   data() {
     return {
@@ -153,6 +158,7 @@ export default {
       return (
         webSessionLockState.ready &&
         Boolean(webSessionLockState.session) &&
+        !webSessionLockState.loggingOut &&
         !webSessionLockState.logoutAt
       )
     },
@@ -554,7 +560,8 @@ export default {
 
     // 正文为 Markdown 渲染结果（标题 / 字段列表 / 链接），下面按渲染出的标签排版。
     :deep(.markdown-body) {
-      padding: 0;
+      padding: 6px;
+      font-size: inherit;
     }
 
     // 段落分节标题（# / ##）
