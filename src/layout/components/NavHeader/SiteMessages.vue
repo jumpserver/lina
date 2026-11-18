@@ -99,7 +99,6 @@
       :confirm-title="$tc('MarkAsRead')"
       :title="currentMsg.content.subject"
       @cancel="cancelRead"
-      @close="markAsRead([currentMsg])"
       @confirm="markAsRead([currentMsg])"
     >
       <div class="msg-detail">
@@ -278,7 +277,7 @@ export default {
         /* 取消*/
       })
     },
-    async handleMessageContentClick(event) {
+    handleMessageContentClick(event) {
       const anchor = event.composedPath().find((element) => element?.nodeName === 'A')
       if (!anchor || !this.currentMsg) return
 
@@ -292,38 +291,8 @@ export default {
         return
       }
 
-      const openInNewTab = anchor.target === '_blank' || event.ctrlKey || event.metaKey
-      const currentMsg = this.currentMsg
-
       event.preventDefault()
-      this.msgDetailVisible = false
-      this.markAsRead([currentMsg])
-
-      if (openInNewTab) {
-        window.open(url.href, '_blank', 'noopener,noreferrer')
-        return
-      }
-
-      // 先让 Dialog 完成卸载，再执行导航，避免 Hash 路由切换与弹窗关闭竞争。
-      await this.$nextTick()
-
-      const routerBase = this.$router.options.history.base.replace(/\/$/, '')
-      const targetBase = url.pathname.replace(/\/$/, '')
-      const isLinaRoute =
-        url.origin === window.location.origin &&
-        targetBase === routerBase &&
-        url.hash.startsWith('#/')
-
-      if (isLinaRoute) {
-        try {
-          await this.$router.push(url.hash.slice(1))
-        } catch {
-          window.location.assign(url.href)
-        }
-        return
-      }
-
-      window.location.assign(url.href)
+      window.open(url.href, '_blank', 'noopener,noreferrer')
     },
     markAsReadAll(msgs) {
       const url = `/api/v1/notifications/site-messages/mark-as-read-all/`
