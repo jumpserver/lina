@@ -7,15 +7,24 @@
     class="generic-detail-page"
     @tab-click="handleTabClick"
   >
-    <template #headingRightSide>
-      <span v-if="hasRightSide && !loading && !loadError">
-        <ActionsGroup :actions="pageActions" class="header-buttons" />
-      </span>
+    <template
+      v-if="!loading && !loadError && ($slots.headingRightSide || (hasRightSide && hasPageActions))"
+      #headingRightSide
+    >
+      <slot name="headingRightSide">
+        <ActionsGroup
+          v-if="hasRightSide"
+          :actions="pageActions"
+          size="small"
+          class="header-buttons"
+        />
+      </slot>
     </template>
-    <div v-if="!loading">
+    <!-- Keep slot roots directly under TabPage so its section spacing reaches tab content. -->
+    <template v-if="!loading">
       <el-result v-if="loadError" icon="warning" :title="loadError" />
       <slot v-else />
-    </div>
+    </template>
   </TabPage>
 </template>
 
@@ -142,8 +151,9 @@ export default {
         {
           name: 'update',
           title: this.$t('Edit'),
-          icon: 'el-icon-edit-outline',
-          size: 'small',
+          type: 'primary',
+          plain: true,
+          icon: 'el-icon-edit',
           can: this.validActions.canUpdate,
           has: this.validActions.hasUpdate,
           callback: this.validActions.updateCallback.bind(this)
@@ -154,12 +164,16 @@ export default {
           type: 'danger',
           plain: true,
           icon: 'el-icon-delete',
-          size: 'small',
           can: this.validActions.canDelete,
           has: this.validActions.hasDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }
       ]
+    },
+    hasPageActions() {
+      return this.pageActions.some((action) =>
+        typeof action.has === 'function' ? action.has(action) : (action.has ?? true)
+      )
     },
     detailTitle() {
       return this.title || this.getTitle(this.object)
@@ -351,7 +365,27 @@ export default {
 
 <style lang="scss" scoped>
 .header-buttons {
-  z-index: 999;
-  margin-right: 20px;
+  --data-actions-gap: 8px;
+
+  :deep(.el-button.action-item) {
+    min-width: 64px;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  :deep(.action-content) {
+    gap: 5px;
+  }
+
+  :deep(.action-content .pre-icon) {
+    font-size: 12px;
+  }
+
+  :deep(.action-content .pre-icon + span) {
+    margin-left: 0;
+  }
 }
 </style>

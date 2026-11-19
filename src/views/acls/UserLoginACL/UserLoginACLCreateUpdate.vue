@@ -3,7 +3,13 @@
 </template>
 
 <script>
-import { Required } from '@/components/Form/DataForm/rules'
+import Select2 from '@/components/Form/FormFields/Select2'
+import {
+  approvalActionMeta,
+  approvalFormValue,
+  cleanApprovalFormValue
+} from '@/views/acls/approval'
+import { Required, RequiredChange } from '@/components/Form/DataForm/rules'
 import { ResourceSelect, TagInput, WeekCronSelect } from '@/components/Form/FormFields'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { userJSONSelectMeta } from '@/views/users/const'
@@ -13,14 +19,19 @@ export default {
   components: {
     GenericCreateUpdatePage
   },
+  props: {
+    userId: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
+      workflowRequiresReviewers: false,
       initial: {
         action: 'reject',
         user: this.$route.query.user,
-        users: {
-          username_group: ''
-        },
+        users: this.userId ? { type: 'ids', ids: [this.userId] } : { username_group: '' },
         rules: {
           ip_group: ['*']
         }
@@ -31,10 +42,37 @@ export default {
         [this.$t('Basic'), ['name', 'priority']],
         [this.$t('Users'), ['users']],
         [this.$t('Rules'), ['rules']],
-        [this.$t('Action'), ['action', 'reviewers']],
+        [this.$t('Action'), ['action', 'workflow', 'reviewers']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
+      afterGetFormValue: (value) => {
+        this.workflowRequiresReviewers = !!value.workflow_requires_reviewers
+        return approvalFormValue(value)
+      },
+      afterGetRemoteMeta: (meta) => approvalActionMeta(meta, this.$t),
       fieldsMeta: {
+        action: {
+          type: 'radio-group'
+        },
+        workflow: {
+          component: Select2,
+          label: this.$t('WFWorkflows'),
+          rules: [RequiredChange],
+          hidden: (value) => value.action !== 'workflow_review',
+          on: {
+            changeOptions: ([options]) => {
+              this.workflowRequiresReviewers = !!options[0]?.requires_acl_reviewers
+            }
+          },
+          el: {
+            multiple: false,
+            clearable: true,
+            ajax: {
+              url: `/api/v1/tickets/workflows/options/?type=login_confirm&org_id=00000000-0000-0000-0000-000000000000`,
+              transformOption: (w) => ({ ...w, label: w.name, value: w.id })
+            }
+          }
+        },
         is_active: {
           type: 'checkbox'
         },
@@ -48,8 +86,14 @@ export default {
             resourceName: this.$t('Users')
           },
           rules: [Required],
-          hidden: (formValue) => {
-            return !['review', 'notice'].includes(formValue.action)
+          hidden: (formValue, field) => {
+            field.label = this.$t(
+              ['review', 'workflow_review'].includes(formValue.action) ? 'Reviewer' : 'Recipients'
+            )
+            return !(
+              ['review', 'notice'].includes(formValue.action) ||
+              (formValue.action === 'workflow_review' && this.workflowRequiresReviewers)
+            )
           }
         },
         rules: {
@@ -82,6 +126,7 @@ export default {
         return url
       },
       cleanFormValue(value) {
+        cleanApprovalFormValue(value)
         if (
           Array.isArray(value.rules.time_period) &&
           value.rules.time_period.every((item) => item.value === '')

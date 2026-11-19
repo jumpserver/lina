@@ -44,7 +44,12 @@
           :placeholder="$t('SelectVirtualAccount')"
           @change="handleVirtualSelectionChanged"
         >
-          <el-option v-for="i in virtualAccounts" :key="i.label" :label="i.label" :value="i.value">
+          <el-option
+            v-for="i in availableVirtualAccounts"
+            :key="i.label"
+            :label="i.label"
+            :value="i.value"
+          >
             {{ i.label }}
             <el-tooltip :content="i.tip" :show-after="500" placement="top">
               <i class="fa fa-question-circle-o" />
@@ -140,6 +145,10 @@ export default {
       type: Boolean,
       default: true
     },
+    virtualAccountValues: {
+      type: Array,
+      default: () => []
+    },
     enableNoneAccount: {
       type: Boolean,
       default: false
@@ -207,6 +216,12 @@ export default {
     }
   },
   computed: {
+    availableVirtualAccounts() {
+      return this.virtualAccounts.filter(
+        (item) =>
+          !this.virtualAccountValues.length || this.virtualAccountValues.includes(item.value)
+      )
+    },
     currentValue() {
       return this.modelValue !== undefined ? this.modelValue : this.value
     },
@@ -249,7 +264,7 @@ export default {
   },
   methods: {
     getVirtualChoices(val) {
-      return this.virtualAccounts
+      return this.availableVirtualAccounts
         .filter((i) => {
           return val.includes(i.value)
         })
@@ -426,6 +441,7 @@ export default {
 .account-content {
   width: 100%;
   min-width: 0;
+  margin-bottom: 0;
   overflow-x: hidden;
 
   :deep(.el-form-item) {

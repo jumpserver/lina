@@ -176,9 +176,9 @@ export default {
 :deep(.el-pagination.is-background .el-pager li) {
   margin: 0 1px;
   padding: 0 2px;
-  min-width: 28px;
-  height: 28px;
-  line-height: 26px;
+  min-width: 24px;
+  height: 24px;
+  line-height: 22px;
   box-sizing: border-box;
   border: 1px solid #dcdfe6;
   border-radius: 2px;
@@ -198,9 +198,9 @@ export default {
 :deep(.el-pagination.is-background .btn-next) {
   margin: 0 5px;
   padding: 0 2px;
-  min-width: 28px;
-  height: 28px;
-  line-height: 26px;
+  min-width: 24px;
+  height: 24px;
+  line-height: 22px;
   box-sizing: border-box;
   border: 1px solid #dcdfe6;
   border-radius: 2px;

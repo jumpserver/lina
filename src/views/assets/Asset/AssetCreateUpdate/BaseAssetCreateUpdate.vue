@@ -7,6 +7,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import { encryptPassword } from '@/utils/session-encrypt'
 import { getUpdateObjURL, setUrlParam, getSelectedAssetNodeId } from '@/utils/common/index'
 import { assetFieldsMeta, getWebAssetSettingDefaults } from '@/views/assets/const'
+import { getAssetProtocolChoices, getAssetProtocolHelpKey } from '@/views/assets/assetProtocols'
 
 const getRelatedId = (value) => value?.pk ?? value?.id ?? value?.value ?? value
 
@@ -96,7 +97,7 @@ export default {
         updateSuccessNextRoute: this.updateSuccessNextRoute,
         hasDetailInMsg: false,
         fields: [
-          [this.$t('Basic'), ['name', 'address', 'platform', 'nodes']],
+          [this.$t('Basic'), ['name', 'address', 'platform', 'nodes', 'owner']],
           [this.$t('Protocol'), ['protocols']],
           [this.$t('Account'), ['accounts']],
           [this.$t('Other'), ['directory_services', 'zone', 'labels', 'is_active', 'comment']]
@@ -106,6 +107,9 @@ export default {
           let url = this.url
           const id = getUpdateId(this)
           const values = _.cloneDeep(validValues)
+          if ('owner' in values) {
+            values.owner = getRelatedId(values.owner) || null
+          }
           const submitMethod = id ? 'put' : 'post'
 
           // 后端 validate_nodes：nodes 为空会落到组织根节点。
@@ -250,18 +254,12 @@ export default {
     },
     async setPlatformConstrains() {
       const { platform } = this
-      let protocols = platform?.protocols || []
-      protocols = protocols.map((i) => {
-        if (i.name === 'http') {
-          i.display_name = 'http(s)'
-        }
-        // 这个不删除会导致时，把 platform id 提交成 asset 的
-        delete i['id']
-        return i
-      })
-      const protocolChoices = this.iConfig.fieldsMeta.protocols.el.choices
+      const protocols = getAssetProtocolChoices(platform)
+      const protocolMeta = this.iConfig.fieldsMeta.protocols
+      const protocolChoices = protocolMeta.el.choices
       protocolChoices.splice(0, protocolChoices.length, ...protocols)
-      this.iConfig.fieldsMeta.protocols.el.key = `asset-protocols-${platform.id}`
+      protocolMeta.el.key = `asset-protocols-${platform.id}`
+      protocolMeta.helpText = this.$t(getAssetProtocolHelpKey(protocols))
       this.iConfig.fieldsMeta.accounts.el.platform = platform
     }
   }

@@ -339,7 +339,10 @@ export default {
 
 .resource-select-summary__placeholder {
   padding: 0 11px;
-  color: var(--el-text-color-secondary);
+  color: var(--el-input-placeholder-color, var(--el-text-color-placeholder));
+  font:
+    400 13px 'Open Sans',
+    sans-serif;
 }
 
 .resource-select-summary__name {

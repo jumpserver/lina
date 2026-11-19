@@ -3,7 +3,7 @@
     <div>
       <el-button size="small" type="primary" @click="onOpenDialog">
         {{ $tc('View') }}
-        <span>({{ $t('LockedIP', { count: ipCounts }) }})</span>
+        <span>({{ $t('LockedIP', { count: lockedIPs.length }) }})</span>
       </el-button>
     </div>
     <Dialog
@@ -16,7 +16,7 @@
       width="40%"
       @update:visible="$emit('update:visible', $event)"
     >
-      <BlockedIPList />
+      <BlockedIPList :ips="lockedIPs" @refresh="getLockedIp" @unlock="unlockIPs" />
     </Dialog>
   </div>
 </template>
@@ -52,7 +52,8 @@ export default {
       remoteMeta: {},
       visible: false,
       form: this.value,
-      ipCounts: 0,
+      lockedIPs: [],
+      listRequestId: 0,
       config: {
         url: this.url,
         hasSaveContinue: false,
@@ -71,13 +72,21 @@ export default {
     this.getLockedIp()
   },
   methods: {
-    getLockedIp() {
-      this.$axios.get('/api/v1/settings/security/block-ip/').then((res) => {
-        this.ipCounts = res.count
-      })
+    async getLockedIp() {
+      const requestId = ++this.listRequestId
+      const { results } = await this.$axios.get('/api/v1/settings/security/block-ip/')
+      if (requestId === this.listRequestId) {
+        this.lockedIPs = results
+      }
+    },
+    async unlockIPs(ips) {
+      await this.$axios.post('/api/v1/settings/security/unlock-ip/', { ips })
+      this.$message.success(this.$tc('UnlockSuccessMsg'))
+      await this.getLockedIp()
     },
     onOpenDialog() {
       this.visible = true
+      this.getLockedIp()
     }
   }
 }

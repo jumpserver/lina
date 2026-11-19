@@ -38,7 +38,7 @@ export default {
           component: () => import('@/views/profile/PasswordAndSSHKey/index'),
           name: 'SSHKeyList',
           icon: 'key',
-          meta: { title: i18n.t('PasswordAndSSHKey'), permissions: ['authentication.view_sshkey'] }
+          meta: { title: i18n.t('PasswordAndSSHKey'), permissions: [] }
         },
         {
           path: 'create',
@@ -63,6 +63,12 @@ export default {
           }
         }
       ]
+    },
+    {
+      path: '/profile/security',
+      name: 'ProfileSecurity',
+      component: () => import('@/views/profile/Security/index.vue'),
+      meta: { title: i18n.t('PersonalSecurity.Title'), icon: 'lock', permissions: [] }
     },
     {
       path: '/profile/passkeys',

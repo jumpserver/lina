@@ -1,7 +1,9 @@
 import empty from '@/layout/empty.vue'
 import i18n from '@/i18n/i18n'
+import connectivity from './connectivity'
 
 export default [
+  connectivity,
   {
     path: 'account-discovery',
     component: empty,

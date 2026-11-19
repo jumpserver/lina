@@ -11,6 +11,7 @@ export function getRouteCacheKey(route, orgId = '') {
       DRAWER_QUERY_KEYS.includes(key) ||
       key === 'oid' ||
       key === 'tab' ||
+      route.meta?.cacheIgnoreQueryKeys?.includes(key) ||
       key.includes('updated') ||
       key.includes('order') ||
       key.startsWith('_')
@@ -20,14 +21,15 @@ export function getRouteCacheKey(route, orgId = '') {
     query[key] = value
   }
 
-  if (route.query?.['_']) {
+  const effectiveOrg = route.query?.oid || orgId
+  // Report drafts and evidence must never share a cache instance across orgs.
+  if (route.query?.['_'] && !route.path?.startsWith('/audit/reports/')) {
     return route.query['_']
   }
-  if (route.path?.startsWith('/audit/reports/')) {
-    return trimTrailingSlash(route.path)
+  if (route.path?.startsWith('/audit/reports/legacy/')) {
+    const suffix = effectiveOrg ? `?oid=${encodeURIComponent(effectiveOrg)}` : ''
+    return `${trimTrailingSlash(route.path)}${suffix}`
   }
-
-  const effectiveOrg = route.query?.oid || orgId
   if (effectiveOrg) query.oid = effectiveOrg
   const routeName = route.name?.toLowerCase?.() || ''
   const queryString = new URLSearchParams(query).toString()

@@ -1,0 +1,62 @@
+.ticket-list-filters {
+  --ticket-tab-height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--ticket-tab-height);
+  margin: calc(-1 * var(--page-content-top-padding, 12px))
+    calc(-1 * var(--page-inline-padding, 20px)) 8px;
+  padding: 0 var(--page-inline-padding, 20px);
+  background-color: var(--page-background-color, #fff);
+}
+
+.ticket-list-tabs {
+  --el-tabs-header-height: var(--ticket-tab-height);
+
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ticket-list-tabs :deep(.el-tabs__header) {
+  height: var(--ticket-tab-height);
+  margin: 0;
+  border: 0;
+}
+
+.ticket-list-tabs :deep(.el-tabs__nav-wrap::after) {
+  display: none;
+}
+
+.ticket-list-tabs :deep(.el-tabs__item) {
+  height: var(--ticket-tab-height);
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--el-text-color-primary, #303133);
+}
+
+.ticket-list-tabs :deep(.el-tabs__nav > .el-tabs__active-bar + .el-tabs__item) {
+  padding-left: var(--page-heading-icon-inset, 6px);
+}
+
+.ticket-list-tabs :deep(.el-tabs__active-bar) {
+  height: 2px;
+  background-color: transparent;
+}
+
+.ticket-list-tabs :deep(.el-tabs__active-bar::before) {
+  position: absolute;
+  top: 0;
+  right: -6px;
+  bottom: 0;
+  left: -6px;
+  content: '';
+  background-color: var(--el-color-primary);
+  border-radius: 3px;
+}
+
+.ticket-list-filters :deep(.el-radio-group) {
+  flex: none;
+}

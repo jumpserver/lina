@@ -13,23 +13,31 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item command="ProfileIndex">
-            <svg-icon class="icon" icon-class="attestation" />
-            {{ $t('YourProfile') }}
+            <svg-icon class="icon" icon-class="nav-setting" />
+            {{ $t('PersonalSettings') }}
           </el-dropdown-item>
 
           <el-dropdown-item command="PasswordAndSSHKey">
-            <svg-icon class="icon" icon-class="personal" />
+            <svg-icon class="icon" icon-class="key" />
             {{ $t('PasswordAndSSHKey') }}
           </el-dropdown-item>
 
-          <!--  Preference -->
-          <el-dropdown-item command="Preferences" divided>
+          <el-dropdown-item command="ProfileSecurity">
+            <svg-icon class="icon" icon-class="security" />
+            {{ $t('PersonalSecurity.Title') }}
+          </el-dropdown-item>
+
+          <el-dropdown-item command="Preferences">
             <svg-icon class="icon" icon-class="preference" />
             {{ $t('Preferences') }}
           </el-dropdown-item>
 
-          <!-- logout -->
-          <el-dropdown-item command="logout" divided>
+          <el-dropdown-item command="lock" divided>
+            <svg-icon class="icon" icon-class="lock" />
+            {{ $t('ScreenLock.LockNow') }}
+          </el-dropdown-item>
+
+          <el-dropdown-item command="logout">
             <svg-icon class="icon" icon-class="logout" />
             {{ $t('Logout') }}
           </el-dropdown-item>
@@ -40,7 +48,8 @@
 </template>
 
 <script>
-import { LOGOUT_PATH } from '@/utils/env'
+import { logout } from '@/utils/request'
+import { lockWebSession } from '@/composables/useWebSessionLock'
 import { mapGetters } from 'vuex'
 import { getAssetUrl } from '@/utils/assets'
 
@@ -65,8 +74,14 @@ export default {
         case 'PasswordAndSSHKey':
           this.$router.push({ name: 'SSHKeyList' })
           break
+        case 'ProfileSecurity':
+          this.$router.push({ name: 'ProfileSecurity' })
+          break
         case 'Preferences':
           this.$router.push({ name: 'Preferences' })
+          break
+        case 'lock':
+          lockWebSession().catch(() => this.$message.error(this.$t('ScreenLock.LoadFailed')))
           break
         case 'logout':
           this.logout()
@@ -78,19 +93,13 @@ export default {
       if (currentOrg && (currentOrg.autoEnter || currentOrg.is_system)) {
         await this.$store.dispatch('users/setCurrentOrg', this.$store.getters.preOrg)
       }
-      window.location.href = `${LOGOUT_PATH}?next=${this.$route.fullPath}`
+      logout(this.$route.fullPath)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-:global(.nav-header-dropdown.nav-account-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
-  height: 32px;
-  line-height: 32px;
-  font-size: 12px;
-}
-
 .header-profile {
   display: flex;
   align-items: center;
@@ -130,7 +139,7 @@ export default {
 }
 
 .icon {
+  flex: 0 0 auto;
   font-size: 14px;
-  margin-right: 10px;
 }
 </style>

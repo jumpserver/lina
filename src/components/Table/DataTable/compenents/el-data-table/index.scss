@@ -216,10 +216,10 @@
   //padding: 4px 0;
 }
 
-// Header and body cells already draw their own separators. Remove Element
-// Plus's extra top and bottom lines.
-.el-data-table :deep(.el-table__inner-wrapper::before),
-.el-data-table :deep(.el-table__inner-wrapper::after) {
+// Full-height lists draw their outer border on the surface. Embedded tables
+// still need Element Plus's top and bottom lines to complete their border.
+.el-data-table--fill-height :deep(.el-table__inner-wrapper::before),
+.el-data-table--fill-height :deep(.el-table__inner-wrapper::after) {
   display: none;
 }
 
@@ -233,7 +233,8 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 8px 20px;
+  // The table body already reserves 16px above pagination for the scrollbar.
+  padding: 0 20px 16px;
 
   .el-pagination__total {
     margin-right: auto;
@@ -266,9 +267,9 @@
   &.is-background .el-pager li {
     margin: 0 1px;
     padding: 0 2px;
-    min-width: 28px;
-    height: 28px;
-    line-height: 26px;
+    min-width: 24px;
+    height: 24px;
+    line-height: 22px;
     box-sizing: border-box;
     border: 1px solid #dcdfe6;
     border-radius: 2px;
@@ -289,9 +290,9 @@
   &.is-background .btn-next {
     margin: 0 5px;
     padding: 0 2px;
-    min-width: 28px;
-    height: 28px;
-    line-height: 26px;
+    min-width: 24px;
+    height: 24px;
+    line-height: 22px;
     box-sizing: border-box;
     border: 1px solid #dcdfe6;
     border-radius: 2px;

@@ -60,7 +60,6 @@ export default {
             name: 'UserLoginACLList',
             comment: this.$t('UserLoginACLHelpText'),
             icon: 'login',
-            edition: 'enterprise',
             tags: ['login']
           }
         ],

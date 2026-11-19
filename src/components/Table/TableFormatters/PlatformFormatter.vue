@@ -53,15 +53,15 @@ export default {
   gap: 0.5rem;
 
   .icon-zone {
-    width: 1.5em;
+    width: 20px;
     height: 1.5em;
     flex-shrink: 0;
 
     .asset-icon {
+      display: block;
       height: 100%;
       width: 100%;
-      vertical-align: -0.2em;
-      fill: currentColor;
+      object-fit: contain;
     }
   }
 

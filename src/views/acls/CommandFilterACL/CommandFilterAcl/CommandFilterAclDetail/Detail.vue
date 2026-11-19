@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { approvalActionLabel } from '@/views/acls/approval'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
@@ -31,12 +32,22 @@ export default {
         },
         {
           key: this.$t('Action'),
-          value: this.object.action?.label
+          value: approvalActionLabel(this.object, this.$t)
         },
         this.object.action?.value === 'review' && {
-          key: this.$t('Reviewer'),
-          value: this.object?.reviewers.map((item) => item?.name).join(', ')
+          key: this.$t(this.object.workflow ? 'WFWorkflows' : 'Reviewer'),
+          value: this.object.workflow
+            ? this.object.workflow_name || '-'
+            : this.object?.reviewers.map((item) => item?.name).join(', ')
         },
+        ...(this.object.workflow_requires_reviewers
+          ? [
+              {
+                key: this.$t('Reviewer'),
+                value: (this.object.reviewers || []).map((item) => item.name).join(', ')
+              }
+            ]
+          : []),
         'priority',
         'is_active',
         'comment'

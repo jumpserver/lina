@@ -1,4 +1,4 @@
-import router from '@/router'
+import { getRouter } from '@/router/registry'
 import store from '@/store'
 import { withBaseApi } from '@/utils/env'
 import { getTokenFromCookie } from '@/utils/jms/auth'
@@ -414,7 +414,7 @@ export async function cancelConversation(id) {
 
 export function getAuditedConversation(id, options = {}) {
   return quietRequest({
-    url: KAEL_BASE + '/admin/audit/conversations/' + id,
+    url: '/api/v1/chat-ai/audit/conversations/' + id + '/',
     method: 'get',
     signal: options.signal
   })
@@ -456,7 +456,7 @@ export function cancelApproval(id) {
 }
 
 function currentRoute() {
-  return router.currentRoute.value
+  return getRouter()?.currentRoute.value
 }
 
 function nativeHeaders(accept = 'application/json') {

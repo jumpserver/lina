@@ -6,7 +6,12 @@
         <QuickActions :actions="quickActions" type="primary" />
       </template>
     </TwoCol>
-    <SecretDialog ref="secretDialog" />
+    <SecretDialog
+      ref="secretDialog"
+      :title="$t('ApplicationSecret')"
+      :warning-text="$t('ApplicationSecretWarning')"
+      mask-secret
+    />
   </div>
 </template>
 
@@ -33,15 +38,12 @@ export default {
   },
   data() {
     return {
-      visible: false,
-      warningText: this.$t('ApiKeyWarning'),
-      key: { id: '', secret: '' },
       quickActions: [
         {
-          title: this.$t('Secret'),
+          title: this.$t('ApplicationSecret'),
           attrs: {
             type: 'primary',
-            label: this.$t('Generate'),
+            label: this.$t('View'),
             disabled:
               !this.$hasPerm('accounts.change_integrationapplication') || !this.object.is_active
           },
@@ -57,9 +59,20 @@ export default {
         }
       ],
       url: `/api/v1/accounts/integration-applications/${this.object.id}`,
-      detailFields: ['id', 'name', 'date_created', 'date_updated', 'comment', 'is_active']
+      detailFields: [
+        'id',
+        'name',
+        {
+          key: this.$t('AccountCredentialNotifications'),
+          value: this.$t(this.object.credential_notifications_enabled ? 'Enabled' : 'Disabled')
+        },
+        { key: this.$t('SubscriptionScope'), value: this.$t('AllApplicationAccounts') },
+        'date_created',
+        'date_updated',
+        'comment',
+        'is_active'
+      ]
     }
-  },
-  computed: {}
+  }
 }
 </script>

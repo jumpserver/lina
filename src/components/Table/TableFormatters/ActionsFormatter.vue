@@ -330,6 +330,7 @@ export default {
     },
     moreButtonProps() {
       return {
+        'aria-label': this.$t('More'),
         size: 'small',
         type: '',
         plain: false
@@ -374,6 +375,7 @@ export default {
     getButtonProps(action) {
       const { type, disabled, plain, loading, hoverType } = action
       return {
+        'aria-label': action.title,
         size: 'small',
         type,
         disabled,
@@ -526,26 +528,6 @@ export default {
   :deep(.table-action-dropdown) {
     display: inline-flex;
   }
-}
-
-:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu--small) {
-  padding: 6px 0;
-}
-
-:global(.action-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
-  line-height: 1.4;
-}
-
-:global(.action-dropdown.el-dropdown__popper .dropdown-item__content) {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-:global(.action-dropdown.el-dropdown__popper .dropdown-item__content .pre-icon) {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 :global(.action-dropdown.el-dropdown__popper .dropdown-item__help) {

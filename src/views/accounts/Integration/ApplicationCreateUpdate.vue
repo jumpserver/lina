@@ -3,8 +3,7 @@
 </template>
 
 <script>
-import { UploadField } from '@/components'
-import { JSONManyToManySelect } from '@/components/Form/FormFields'
+import { AvatarUploadField, JSONManyToManySelect } from '@/components/Form/FormFields'
 import { GenericCreateUpdatePage } from '@/layout/components'
 
 export default {
@@ -15,19 +14,34 @@ export default {
   data() {
     const vm = this
     return {
-      logo_file: null,
       url: '/api/v1/accounts/integration-applications/',
+      initial: {
+        logo: '',
+        accounts: { type: 'ids', ids: [] },
+        credential_notifications_enabled: false
+      },
       fields: [
         [this.$t('Basic'), ['name', 'logo']],
-        [this.$t('AccountPolicy'), ['accounts', 'ip_group']],
+        [this.$t('AuthorizationPolicy'), ['accounts', 'ip_group']],
+        [this.$t('ChangeNotifications'), ['credential_notifications_enabled']],
         [this.$t('Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        credential_notifications_enabled: {
+          label: this.$t('AccountCredentialNotifications'),
+          type: 'switch',
+          helpText: this.$t('AccountCredentialNotificationsHelp')
+        },
+        ip_group: {
+          helpText: this.$t('IpGroupHelpText')
+        },
         accounts: {
           component: JSONManyToManySelect,
           el: {
-            value: [],
+            value: { type: 'ids', ids: [] },
+            allowedTypes: ['all', 'ids', 'attrs'],
             resource: vm.$t('Accounts'),
+            summaryCountOnly: false,
             select2: {
               url: '/api/v1/accounts/accounts/',
               ajax: {
@@ -54,26 +68,19 @@ export default {
           }
         },
         logo: {
-          component: UploadField,
-          el: {
-            width: '20%',
-            height: '10%',
-            accept: 'image/jpg, image/png, image/jpeg, image/svg+xml'
-          },
-          on: {
-            fileChange: ([value], updateForm) => {
-              this.logo_file = value
-            }
-          }
+          component: AvatarUploadField
         }
       },
       hasSaveContinue: false,
-      createSuccessNextRoute: {
-        name: 'ApplicationDetail'
+      objectDetailRoute: {
+        name: 'IntegrationApplicationDetail'
       },
-      performSubmit(values) {
+      getNextRoute: (res) => ({
+        name: 'IntegrationApplicationDetail',
+        params: { id: res.id }
+      }),
+      performSubmit({ logo, ...values }) {
         const formData = new FormData()
-        delete values['logo']
 
         if (!Array.isArray(values.ip_group)) {
           values.ip_group = values.ip_group ? values.ip_group.split(',') : []
@@ -89,8 +96,8 @@ export default {
           const value = key === 'accounts' ? JSON.stringify(values[key]) : values[key]
           formData.append(key, value)
         }
-        if (vm.logo_file) {
-          formData.append('logo', vm.logo_file)
+        if (logo instanceof File) {
+          formData.append('logo', logo)
         }
         return this.$axios[this.method](this.iUrl, formData)
       }

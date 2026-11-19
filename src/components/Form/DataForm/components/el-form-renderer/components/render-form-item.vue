@@ -2,9 +2,12 @@
   <el-form-item
     v-bind="data.attrs"
     v-if="_show"
+    v-show="!collapsed"
     :class="[
       classes,
       {
+        'form-item--dependent': data.dependentLayout,
+        'is-required': typeof data.required === 'function' ? data.required(value) : data.required,
         'checkbox-inline-help':
           rawComponent === 'el-checkbox' && (helpText || data.helpTextFormatter)
       }
@@ -16,7 +19,6 @@
   >
     <template v-if="data.label" #label>
       <span :title="data.helpTip ? undefined : data.label">
-        <span v-if="data.required" class="form-item-required-mark">*</span>
         {{ data.label }}
         <el-tooltip
           v-if="data.helpTip"
@@ -116,6 +118,11 @@ import { FORM_RENDERER_KEY } from '../context'
 import getEnableWhenStatus from '../util/enable-when'
 import { noop } from '../util/utils'
 
+function isDomEvent(value) {
+  // Business values can also have a target field; only unwrap native events.
+  return typeof Event !== 'undefined' && value instanceof Event
+}
+
 function validator(data) {
   if (!data) {
     throw new Error('data must be an Object.')
@@ -141,6 +148,7 @@ export default {
     }
   },
   props: {
+    collapsed: Boolean,
     // eslint-disable-next-line vue/require-default-prop
     data: Object,
     serverErrors: {
@@ -293,7 +301,7 @@ export default {
         ),
         // 手动更新表单数据
         input: (value, ...rest) => {
-          if (this.data.type === 'checkbox-group' && value?.target) {
+          if (this.data.type === 'checkbox-group' && isDomEvent(value)) {
             return
           }
           this.handleValueUpdate({
@@ -395,7 +403,7 @@ export default {
   },
   methods: {
     normalizeEmittedValue(value) {
-      if (value && typeof value === 'object' && 'target' in value) {
+      if (isDomEvent(value) && value.target) {
         if (this.data.type === 'checkbox' && 'checked' in value.target) {
           return value.target.checked
         }
@@ -440,12 +448,11 @@ export default {
   width: 300px;
 }
 
-.form-item-required-mark {
-  margin-right: 4px;
-  color: var(--el-color-danger, #ed5565);
-}
-
 .help-block {
+  > span {
+    white-space: pre-line;
+  }
+
   :deep(.el-alert__icon) {
     font-size: 16px;
   }

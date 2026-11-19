@@ -16,6 +16,7 @@
       :detail-drawer="detailDrawer"
       :draw-props="createProps"
       :header-actions="iHeaderActions"
+      :quick-filters="quickFilters"
       :resource="$tc('Asset')"
       :table-config="iTableConfig"
       @selection-change="updateAssistantSelection"
@@ -56,6 +57,7 @@ import AccountDiscoverDialog from './AccountDiscoverDialog.vue'
 import AccountCreateUpdate from '@/components/Apps/AccountListTable/AccountCreateUpdate.vue'
 import { getDefaultConfig } from './const'
 import { getSelectedAssetNodeId } from '@/utils/common/index'
+import { loadPlatformIcon } from '@/utils/jms/index'
 import { mapState } from 'vuex'
 import {
   publishAssetPageContext,
@@ -87,6 +89,10 @@ export default {
     headerActions: {
       type: Object,
       default: () => ({})
+    },
+    quickFilters: {
+      type: Array,
+      default: () => []
     },
     addExtraMoreActions: {
       type: Array,
@@ -122,11 +128,13 @@ export default {
       {
         name: 'linux',
         title: 'Linux',
+        iconSrc: loadPlatformIcon('Linux', 'linux'),
         callback: () => {}
       },
       {
         name: 'windows',
         title: 'Windows',
+        iconSrc: loadPlatformIcon('Windows', 'windows'),
         callback: () => {}
       }
     ]
@@ -313,6 +321,7 @@ export default {
         return {
           name: item.name,
           title: item.name,
+          iconSrc: loadPlatformIcon(item.name, item.type.value),
           callback: () => {
             vm.createAsset(item)
           }

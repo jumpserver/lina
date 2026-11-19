@@ -11,6 +11,7 @@ import {
 } from '@/components/Form/FormFields'
 import { message } from '@/utils/vue/message'
 import { reactive } from 'vue'
+import { CLICKHOUSE_HTTP_PROTOCOL } from './assetProtocols'
 
 export const filterSelectValues = (values) => {
   if (!values) return
@@ -84,7 +85,7 @@ async function updatePlatformProtocols(
 
   await vm.setPlatformConstrains()
   if (!isLatest()) return
-  const platformProtocols = vm.platform.protocols || []
+  const platformProtocols = vm.iConfig.fieldsMeta.protocols.el.choices
 
   const formUpdates = {}
   if (platformChanged) {
@@ -150,6 +151,7 @@ export const assetFieldsMeta = (vm, category, type) => {
       component: ProtocolSelector,
       el: {
         settingReadonly: true,
+        showSetting: ({ name }) => !['clickhouse', CLICKHOUSE_HTTP_PROTOCOL].includes(name),
         choices: platformProtocols,
         instance: asset
       },
@@ -198,6 +200,18 @@ export const assetFieldsMeta = (vm, category, type) => {
         clearable: true,
         ajax: {
           url: '/api/v1/assets/zones/'
+        }
+      }
+    },
+    owner: {
+      label: vm.$t('AssetOwner'),
+      component: Select2,
+      el: {
+        multiple: false,
+        clearable: true,
+        ajax: {
+          url: '/api/v1/users/users/?fields_size=mini&is_valid=true',
+          transformOption: (item) => ({ label: `${item.name} (${item.username})`, value: item.id })
         }
       }
     },

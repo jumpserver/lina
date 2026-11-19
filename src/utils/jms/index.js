@@ -86,7 +86,7 @@ export function getPermedViews() {
     ['audit', store.getters.auditOrgs.length > 0],
     ['pam', store.getters.pamOrgs.length > 0],
     ['workbench', true],
-    ['tickets', hasPermission('tickets.view_ticket')],
+    ['tickets', hasPermission('tickets.view_ticket | tickets.view_workflow')],
     ['settings', hasPermission('settings.view_setting')]
   ]
   return viewShowMapper.filter((i) => i[1]).map((i) => i[0])
@@ -160,17 +160,26 @@ export function IsSupportPauseSessionType(terminalType) {
   return supportedType.includes(terminalType)
 }
 
+const devicePlatformIcons = new Map([
+  ['cisco', 'cisco.svg'],
+  ['h3c', 'h3c.png'],
+  ['huawei', 'huawei.png'],
+  ['general', 'general.png']
+])
+
+const platformNameIcons = new Map([
+  ['Gateway', 'gateway.png'],
+  ['macOS', 'macos.png'],
+  ['BSD', 'bsd.png'],
+  ['Vmware-vSphere', 'vmware.png'],
+  ['OceanBase-MySQL', 'oceanbase.svg'],
+  ['OceanBase-Oracle', 'oceanbase.svg']
+])
+
 export function loadPlatformIcon(name, type) {
-  const platformMap = {
-    Huawei: 'huawei',
-    Cisco: 'cisco',
-    Gateway: 'gateway',
-    macOS: 'macos',
-    BSD: 'bsd',
-    'Vmware-vSphere': 'vmware'
-  }
-
-  const value = platformMap[name] || type
-
-  return getAssetUrlOr(`img/icons/${value}.png`, 'img/icons/other.png')
+  const filename =
+    devicePlatformIcons.get(type) ||
+    platformNameIcons.get(name) ||
+    (type === 'oceanbase' ? 'oceanbase.svg' : `${type}.png`)
+  return getAssetUrlOr(`img/icons/${filename}`, 'img/icons/other.png')
 }

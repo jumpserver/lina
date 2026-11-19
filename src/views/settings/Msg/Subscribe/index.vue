@@ -31,22 +31,13 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$tc('Receivers')">
+        <el-table-column
+          :label="$tc('Receivers')"
+          :show-overflow-tooltip="{ hideAfter: 200, popperClass: 'subscription-receivers-popper' }"
+          :tooltip-formatter="formatReceiversTooltip"
+        >
           <template #default="scope">
-            <el-popover
-              v-if="!scope.row.children && scope.row.receivers && scope.row.receivers.length"
-              placement="top"
-              popper-class="black-theme-popover"
-              trigger="hover"
-            >
-              <p v-for="item in scope.row.receivers" :key="item.name">{{ item.name }}</p>
-              <template #reference>
-                <span class="name-wrapper">
-                  {{ scope.row.receivers.map((item) => item.name).join(', ') }}
-                </span>
-              </template>
-            </el-popover>
-            <span v-else-if="!scope.row.children && scope.row.receivers">
+            <span v-if="!scope.row.children && scope.row.receivers">
               {{ scope.row.receivers.map((item) => item.name).join(', ') }}
             </span>
           </template>
@@ -73,6 +64,7 @@
 </template>
 
 <script>
+import { h } from 'vue'
 import SelectDialog from './SelectDialog.vue'
 import IBox from '@/components/Common/IBox/index.vue'
 
@@ -97,6 +89,13 @@ export default {
     await this.initSubscriptions()
   },
   methods: {
+    formatReceiversTooltip({ row }) {
+      return h(
+        'div',
+        { class: 'subscription-receivers-tooltip' },
+        (row.receivers || []).map((item) => h('div', { key: item.id || item.name }, item.name))
+      )
+    },
     onCheckReceiveBackend(sub) {
       const backends = []
       for (const [name, checked] of Object.entries(sub.receiveBackends)) {
@@ -209,25 +208,42 @@ export default {
   margin-bottom: 0;
   width: 50%;
 }
+</style>
 
-:deep(.el-table .cell) {
-  display: flex;
-
-  .name-wrapper {
-    display: inline-block;
-    max-height: 55px;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    cursor: pointer;
-  }
+<style>
+.subscription-receivers-popper.el-popper {
+  padding-right: 4px;
 }
 
-:deep(.black-theme-popover .el-popover__inner) {
-  background-color: #000 !important;
-  color: #fff !important;
-  border-color: #000 !important;
+.subscription-receivers-tooltip {
+  --receivers-scrollbar-thumb: rgb(255 255 255 / 36%);
+
+  max-width: min(400px, calc(100vw - 48px));
+  max-height: min(320px, 60vh);
+  padding-right: 7px;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  color-scheme: dark;
+  scrollbar-width: thin;
+  scrollbar-color: var(--receivers-scrollbar-thumb) transparent;
+}
+
+.subscription-receivers-tooltip:hover {
+  --receivers-scrollbar-thumb: rgb(255 255 255 / 52%);
+}
+
+.subscription-receivers-tooltip::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+
+.subscription-receivers-tooltip::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.subscription-receivers-tooltip::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: var(--receivers-scrollbar-thumb);
 }
 </style>

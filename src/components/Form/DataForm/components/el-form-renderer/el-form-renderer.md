@@ -82,6 +82,18 @@ interface Content {
   hidden?: (formValue: Object, item: Content) => boolean
 
   /**
+   * DataForm 中指定所属 checkbox / switch 的 id，仅控制从属布局，不改变 hidden 或校验。
+   * 仅同组内紧跟开关的连续依赖字段，标签和控件均与普通字段 value 区域左边缘对齐。
+   * label 在上、控件在下并左对齐，不限制标签列宽，不显示竖线；文字样式沿用普通字段。
+   * 中间出现其他字段或 groupStart 时中断；AutoDataForm 自动标记分组边界。
+   * In DataForm, consecutive dependents of the same checkbox / switch use top labels
+   * aligned with the normal value column, without a fixed label width or vertical guide.
+   * Other fields or groupStart end the layout relationship.
+   */
+  dependsOn?: string
+  groupStart?: boolean
+
+  /**
    * 具有选择功能的原子表单可用此定义可选项
    * use with type: select, radio-group, radio-button, checkbox-group, checkbox-button
    */
@@ -205,6 +217,15 @@ interface obj {
 ```
 
 ## Methods
+
+AutoDataForm 的 `subgroup: true` 分组使用阶段卡片：二级标题背景复用列表区域外的页面底色变量
+`--page-content-background-color`，随主题变化，
+字段区域为白底和细边框，支持独立折叠。`sectionTitle` 对应的一级标题位于卡片外，
+可整体折叠其下的阶段卡片。折叠保留已挂载字段、输入值及校验规则。
+
+DataForm / ElFormRenderer 使用 `fieldGroups: [{ id, fields: string[], hidden, collapsed }]`
+描述这些连续字段的视觉分组；`id` 为该组首字段 id，`section:<id>` 插槽位于卡片外，
+`id:<id>` 插槽作为卡片标题。该配置不改变字段类型或 API 数据结构，未配置时仍按原布局显示。
 
 support all [el-form's methods](https://element.eleme.io/#/zh-CN/component/form#form-methods)
 

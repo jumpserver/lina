@@ -366,7 +366,11 @@ import axiosRetry from 'axios-retry'
 import Icon from '@/components/Widgets/Icon'
 import TreeFolderIcon from '@/components/Tree/TreeFolderIcon.vue'
 import { ArrowRight } from '@element-plus/icons-vue'
-import { getShowCurrentAssetValue, setShowCurrentAssetValue } from '@/utils/common/index'
+import {
+  getErrorResponseMsg,
+  getShowCurrentAssetValue,
+  setShowCurrentAssetValue
+} from '@/utils/common/index'
 import { createXTreeSetting, X_TREE_LOAD_MODES, X_TREE_SEARCH_PLACEMENTS } from './config'
 
 const DEFAULT_NODE_INDENT = 14
@@ -3445,7 +3449,7 @@ export default {
         if (!this.useVirtualTree) {
           this.restoreDraggedNode(draggingNode.data)
         }
-        this.$message.error(`${this.$tc('UpdateErrorMsg')} ${error}`)
+        this.$message.error(`${this.$tc('UpdateErrorMsg')} ${getErrorResponseMsg(error)}`)
       } finally {
         this.dragSourceAncestorNodes = []
         this.dragSourcePlacement = null

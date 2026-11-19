@@ -1,55 +1,49 @@
 <template>
-  <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
+  <TabPage v-model:active-menu="activeMenu" :submenu="submenu" :title="$t('Preferences')">
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" @update:active-menu="handleUpdate" />
+      <Lina v-if="activeMenu === 'Lina'" key="Lina" />
+      <IBox v-else :key="activeMenu">
+        <Luna :section="activeMenu === 'Luna' ? 'graphics' : 'commandLine'" />
+      </IBox>
     </keep-alive>
-  </GenericDetailPage>
+  </TabPage>
 </template>
 
 <script>
-import { GenericDetailPage } from '@/layout/components'
+import { TabPage } from '@/layout/components'
+import IBox from '@/components/Common/IBox'
 import Lina from './Lina'
 import Luna from './Luna'
 
 export default {
   components: {
-    GenericDetailPage,
+    IBox,
+    TabPage,
     Luna,
     Lina
   },
   data() {
     return {
-      user: this.$store.state.users.profile,
-      config: {
-        title: this.$t('Preferences'),
-        activeMenu: 'Lina',
-        submenu: this.getSubmenu(),
-        hasRightSide: false,
-        hasActivity: false,
-        actions: {
-          detailApiUrl: '/api/v1/users/preference/?category=luna'
-        }
-      }
+      activeMenu: 'Lina'
     }
   },
-  methods: {
-    getSubmenu() {
+  computed: {
+    submenu() {
       return [
         {
           title: this.$t('General'),
           name: 'Lina'
         },
         {
-          title: this.$t('WebTerminal'),
+          title: this.$t('CommandLine'),
+          name: 'CommandLine'
+        },
+        {
+          title: this.$t('Graphics'),
           name: 'Luna'
         }
       ]
-    },
-    handleUpdate(value) {
-      this.config.activeMenu = value
     }
   }
 }
 </script>
-
-<style scoped></style>

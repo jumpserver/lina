@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$emit('submit', this.item, JSON.stringify(this.form))
+      this.$emit('submit', this.item, this.form)
       this.$emit('update:visible', false)
     }
   }

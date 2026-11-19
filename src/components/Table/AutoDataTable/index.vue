@@ -84,7 +84,6 @@ export default {
         defaultCols: []
       },
       isDeactivated: false,
-      tableColumnsStorage: this.getTableColumnsStorage(),
       sortable: null,
       columnResizeObserver: null,
       columnResizeFrame: null,
@@ -100,6 +99,13 @@ export default {
     }
   },
   computed: {
+    tableColumnsStorage() {
+      // Some lists assign their URL after mounting; wait for their real identity.
+      if (!this.config.name && !this.config.url) return null
+      let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
+      tableName = replaceAllUUID(tableName)
+      return new ObjectLocalStorage('tableColumns', tableName)
+    },
     sourceConfig() {
       // Snapshot editable settings without cloning Vue component definitions
       // or potentially large static data. In-place settings edits remain visible.
@@ -405,6 +411,17 @@ export default {
       // Default columns are ordered by the generator. Saved user order must
       // also apply to ID/name instead of moving those columns back to the front.
       const columns = source.filter((item) => item !== undefined && item !== null)
+      if (this.config.columnOrder === 'configured') {
+        const order = new Map(
+          this.config.columns.map((column, index) => [
+            typeof column === 'object' ? column.prop : column,
+            index
+          ])
+        )
+        const position = (column) =>
+          order.get(typeof column === 'object' ? column.prop : column) ?? Infinity
+        columns.sort((left, right) => position(left) - position(right))
+      }
       return orderActionColumn(columns, this.config.actionsColumnPosition)
     },
     destroyColumnDraggable() {
@@ -413,6 +430,10 @@ export default {
     },
     setColumnDraggable() {
       if (this.isDeactivated || !this.$el?.isConnected) {
+        return
+      }
+      if (this.config.columnOrder === 'configured') {
+        this.destroyColumnDraggable()
         return
       }
       const el = this.$el.querySelector(
@@ -469,7 +490,7 @@ export default {
         return
       }
       const columnNames = columns.map((column) => column.prop)
-      this.tableColumnsStorage.set(columnNames)
+      this.tableColumnsStorage?.set(columnNames)
       this.cleanedColumnsShow.show = columnNames
       this.popoverColumns.currentCols = columnNames
       this.iConfig = { ...this.iConfig, columns }
@@ -477,6 +498,9 @@ export default {
     generateTotalColumns() {
       const generator = new TableColumnsGenerator(this.config, this.meta, this)
       this.totalColumns = generator.generateColumns()
+      if (this.config.columnOrder === 'configured') {
+        this.totalColumns = this.totalColumns.map((column) => ({ ...column, draggable: false }))
+      }
       this.iConfig = {
         ...this.config,
         columns: [...this.totalColumns],
@@ -546,11 +570,6 @@ export default {
       }
       return meta
     },
-    getTableColumnsStorage() {
-      let tableName = this.config.name || this.$route.name + '_' + newURL(this.config.url).pathname
-      tableName = replaceAllUUID(tableName)
-      return new ObjectLocalStorage('tableColumns', tableName)
-    },
     // 生成给子组件使用的TotalColList
     cleanColumnsShow() {
       const totalColumnsNames = this.totalColumns.map((obj) => obj.prop)
@@ -566,7 +585,7 @@ export default {
         (name) => !isDefaultHiddenColumn(name) && totalColumnsNames.includes(name)
       )
 
-      const configShowColumnsNames = this.tableColumnsStorage.get()
+      const configShowColumnsNames = this.tableColumnsStorage?.get()
       let showColumnsNames = this.normalizeColumnNames(configShowColumnsNames, defaultColumnsNames)
       if (showColumnsNames.length === 0) {
         showColumnsNames = [...totalColumnsNames]
@@ -714,7 +733,7 @@ export default {
       }
       columns = this.normalizeColumnNames(columns, this.cleanedColumnsShow.default)
       this.popoverColumns.currentCols = columns
-      this.tableColumnsStorage.set(columns)
+      this.tableColumnsStorage?.set(columns)
       this.filterShowColumns()
     },
     filterChange(filters) {
@@ -786,7 +805,12 @@ export default {
     word-break: normal !important;
   }
 
-  :deep(.el-table__body td.el-table__cell .cell > :not(.label-container):not(.copyable)) {
+  :deep(
+    .el-table__body
+      td.el-table__cell
+      .cell
+      > :not(.label-container):not(.copyable):not(.truncate-content)
+  ) {
     min-width: max-content;
     max-width: none !important;
   }

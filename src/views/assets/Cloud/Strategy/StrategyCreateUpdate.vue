@@ -30,9 +30,11 @@ export default {
           helpTip: this.$t('RuleRelationHelpTip')
         },
         strategy_rules: {
+          label: this.$t('Rule'),
           component: RuleInput
         },
         strategy_actions: {
+          label: this.$t('Action'),
           component: ActionInput
         }
       },

@@ -7,23 +7,30 @@
     >
       <div v-show="isExpand" class="quick-filter-wrap">
         <div v-if="filters" class="quick-filter-zone">
-          <div v-for="category in iFilters" :key="category.label" class="item-zone">
+          <div
+            v-for="category in iFilters"
+            :key="category.label"
+            class="item-zone"
+            role="group"
+            :aria-label="category.label"
+          >
             <div>
               <h5>{{ category.label }}</h5>
               <div class="filter-options">
-                <span
+                <button
                   v-for="option in category.options"
                   :key="option.label"
                   :class="option.active ? 'active' : ''"
                   class="item"
+                  type="button"
+                  :aria-pressed="option.active"
                   @click="handleFilterClick(option)"
                 >
                   {{ option.label }}
                   <span v-if="option.hasCount">
                     <span>({{ option.count }})</span>
                   </span>
-                  <!--                  <i class="el-icon-circle-check" />-->
-                </span>
+                </button>
               </div>
             </div>
           </div>
@@ -55,6 +62,7 @@
 </template>
 
 <script>
+import isEqual from 'lodash/isEqual'
 import SummaryCard from '@/components/Cards/SummaryCard/index.vue'
 import { setUrlParam } from '@/utils/common/index'
 
@@ -99,6 +107,35 @@ export default {
     }
   },
   watch: {
+    filters: {
+      deep: true,
+      handler() {
+        const previous = this.iFilters
+        this.iFilters = this.cleanFilters()
+        for (const category of this.iFilters) {
+          const oldCategory = previous.find((item) => item.label === category.label)
+          if (!oldCategory) continue
+          for (const option of category.options) {
+            option.active = oldCategory.options.some(
+              (old) => old.active && isEqual(old.filter, option.filter)
+            )
+          }
+        }
+        this.activeFilters = [
+          ...this.activeFilters.filter((item) => item.category === 'summary'),
+          ...this.iFilters.flatMap((category) => category.options).filter((option) => option.active)
+        ]
+        const filtered = this.activeFilters.reduce(
+          (query, option) => ({ ...query, ...option.filter }),
+          {}
+        )
+        if (!isEqual(filtered, this.filtered)) {
+          this.filtered = filtered
+          this.$emit('filter', filtered)
+        }
+        this.generateCount()
+      }
+    },
     tableUrl() {
       this.generateCount()
     }
@@ -106,6 +143,9 @@ export default {
   mounted() {
     this.iFilters = this.cleanFilters()
     this.iSummary = this.cleanSummary()
+    this.activeFilters = this.iFilters
+      .flatMap((category) => category.options)
+      .filter((option) => option.active)
     this.generateCount()
   },
   methods: {
@@ -165,7 +205,7 @@ export default {
             return {
               category: category.label,
               ...option,
-              active: false,
+              active: Boolean(option.active),
               filter: option.filter || {}
             }
           })
@@ -189,7 +229,7 @@ export default {
         this.activeFilters.push(option)
       } else {
         this.activeFilters = this.activeFilters.filter((item) => {
-          return item.label !== option.label && item.category !== option.category
+          return item !== option
         })
       }
       option.active = !option.active
@@ -273,6 +313,16 @@ export default {
         color: #303133;
         font-size: 12px;
         cursor: pointer;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        font-family: inherit;
+        line-height: inherit;
+
+        &:focus-visible {
+          outline: 2px solid var(--el-color-primary);
+          outline-offset: 2px;
+        }
 
         &::after {
           content: '';

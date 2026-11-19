@@ -7,7 +7,7 @@
       :items="selectedSummaryItems"
       :selected-count="selectedValue.length"
       :count-only="summaryCountOnly"
-      :text="summaryText"
+      :text="placeholder || summaryText"
       @clear="clearSummaryResources"
       @click="openDialog(selectedValue.length > 0 ? 'selected' : 'available')"
       @load-more="loadNextSummaryBatch"
@@ -64,6 +64,10 @@ export default {
       default: () => ({})
     },
     resourceName: {
+      type: String,
+      default: ''
+    },
+    placeholder: {
       type: String,
       default: ''
     },

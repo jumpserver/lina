@@ -146,6 +146,8 @@ export default {
 .upload-field__actions {
   display: flex;
   align-items: center;
+  // 与表单标签的 30px 首行对齐，small 按钮仍保持自身尺寸。
+  min-height: 30px;
   gap: 8px;
   flex-wrap: wrap;
 }
@@ -159,7 +161,7 @@ export default {
 .upload-field__preview {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   align-self: flex-start;
   min-height: 32px;
   border-radius: 2px;
@@ -170,6 +172,7 @@ export default {
     display: block;
     max-width: 100%;
     object-fit: contain;
+    object-position: left center;
   }
 }
 

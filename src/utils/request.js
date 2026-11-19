@@ -12,7 +12,9 @@ import { message } from '@/utils/vue/message'
 import store from '@/store'
 import axiosRetry from 'axios-retry'
 import { getRouter } from '@/router/registry'
+import { getRequestOrgId } from './requestOrg'
 import { BASE_API, LOGIN_PATH, LOGOUT_PATH } from '@/utils/env'
+import { isWebSessionLoggingOut } from '@/utils/webSessionLock'
 
 // create an axios instance
 const service = axios.create({
@@ -21,6 +23,21 @@ const service = axios.create({
   timeout: 2 * 60 * 1000 // request timeout
 })
 
+let lockSignOutUntil = 0
+let webSessionScope
+let loggingOut = false
+
+export function setWebSessionAuthState(state) {
+  webSessionScope = state.session?.scope
+  loggingOut = Boolean(state.loggingOut)
+}
+
+export function deferAuthFailureUntil(at) {
+  if (Number.isFinite(at)) {
+    lockSignOutUntil = Math.max(lockSignOutUntil, Math.min(at, Date.now() + 5000))
+  }
+}
+
 function beforeRequestAddToken(config) {
   const csrfToken = getTokenFromCookie()
   if (csrfToken) {
@@ -28,11 +45,22 @@ function beforeRequestAddToken(config) {
   }
   const router = getRouter()
   const currentRoute = router?.currentRoute?.value || router?.currentRoute
-  const queryOrgId = currentRoute?.query?.oid
   const storeOrgId = store.getters.currentOrg?.id
-  const orgId = config.headers['X-JMS-ORG'] || queryOrgId || storeOrgId
+  const orgId =
+    config.headers['X-JMS-ORG'] || getRequestOrgId(currentRoute, storeOrgId, window.location.hash)
   if (orgId) {
     config.headers['X-JMS-ORG'] = orgId
+  }
+}
+
+function beforeRequestSetLicenseErrorPolicy(config) {
+  const routeName = getRouter()?.currentRoute?.value?.name
+  if (
+    !store.getters.hasValidLicense &&
+    (routeName === 'AccountChangeSecretList' || routeName === 'AccountCheckList') &&
+    (config.method === 'get' || config.method === 'options')
+  ) {
+    config.disableLicenseErrorMsg = true
   }
 }
 
@@ -51,6 +79,7 @@ service.interceptors.request.use(
     // NProgress.start()
     beforeRequestAddToken(config)
     beforeRequestAddTimezone(config)
+    beforeRequestSetLicenseErrorPolicy(config)
     return config
   },
   (error) => {
@@ -68,6 +97,21 @@ function goToLogin() {
 }
 
 function ifUnauthorized({ response }) {
+  if (
+    response.status === 401 &&
+    (response.config.skipAuthFailure || loggingOut || isWebSessionLoggingOut(webSessionScope))
+  ) {
+    response.config.disableFlashErrorMsg = true
+    return
+  }
+  if (response.status === 401 && response.data?.code === 'authentication_required') {
+    response.config.disableFlashErrorMsg = true
+    return
+  }
+  if (response.status === 401 && lockSignOutUntil > Date.now()) {
+    response.config.disableFlashErrorMsg = true
+    return
+  }
   if (response.status === 401) {
     response.config.disableFlashErrorMsg = true
     if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
@@ -105,12 +149,20 @@ function ifBadRequest({ response, error }) {
   }
 }
 
-export function logout() {
-  window.location.href = `${LOGOUT_PATH}?next=${location.pathname}`
+export function logout(next = window.location.pathname) {
+  window.dispatchEvent(new Event('jms:web-session-logout'))
+  loggingOut = true
+  const url = new URL(LOGOUT_PATH, window.location.origin)
+  url.searchParams.set('next', next)
+  window.location.assign(url.href)
 }
 
 export function flashErrorMsg({ response, error }) {
-  if (!response.config.disableFlashErrorMsg) {
+  const hideLicenseError =
+    response.config.disableLicenseErrorMsg &&
+    response.status === 403 &&
+    response.data?.code === 'license_required'
+  if (!response.config.disableFlashErrorMsg && !hideLicenseError) {
     const responseErrorMsg = getErrorResponseMsg(error)
     let msg = responseErrorMsg || error.message
 
@@ -132,7 +184,7 @@ export function flashErrorMsg({ response, error }) {
 }
 
 function ifConfirmRequired({ response }) {
-  if (response.status !== 412) {
+  if (response.status !== 412 || response.config?.skipUserConfirmation) {
     return null
   }
   return new Promise((resolve, reject) => {
@@ -171,6 +223,10 @@ service.interceptors.response.use(
       return Promise.reject(error)
     }
     const response = error.response
+    if (response.status === 423 && response.data?.code === 'web_session_locked') {
+      window.dispatchEvent(new Event('jms:web-session-locked'))
+      return Promise.reject(error)
+    }
 
     if (isTemplateFollowingConflict(error)) {
       return retryWithoutTemplateFollowing(

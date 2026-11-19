@@ -1,11 +1,29 @@
 <template>
-  <div ref="formGroup" class="form-group-header">
+  <div
+    ref="formGroup"
+    class="form-group-header"
+    :class="{ 'form-group-header--subgroup': group.subgroup }"
+  >
     <div v-if="line" class="hr-line-dashed" />
-    <div v-if="group['title']" class="form-group-header__row">
-      <h3 class="form-group-header__title" @click="toggle">
+    <div
+      v-if="group['title']"
+      class="form-group-header__row"
+      :class="{ 'form-group-header__row--subgroup': group.subgroup }"
+    >
+      <component
+        :is="group.subgroup ? 'h4' : 'h3'"
+        class="form-group-header__title"
+        @click="$emit('toggle')"
+      >
         {{ group['title'] }}
-      </h3>
-      <button class="form-group-header__toggle" type="button" @click="toggle">
+      </component>
+      <button
+        class="form-group-header__toggle"
+        type="button"
+        :aria-label="group.title"
+        :aria-expanded="!collapsed"
+        @click="$emit('toggle')"
+      >
         <el-icon><component :is="iconClass" /></el-icon>
       </button>
     </div>
@@ -14,7 +32,12 @@
 
 <script>
 export default {
+  emits: ['toggle'],
   props: {
+    collapsed: {
+      type: Boolean,
+      default: false
+    },
     line: {
       type: Boolean,
       default: true
@@ -28,34 +51,9 @@ export default {
       default: () => ({})
     }
   },
-  data() {
-    return {
-      isVisible: true
-    }
-  },
   computed: {
     iconClass() {
-      return this.isVisible ? 'ArrowDown' : 'ArrowRight'
-    }
-  },
-  methods: {
-    toggle() {
-      this.isVisible = !this.isVisible
-      this.toggleSiblingVisibility()
-    },
-    toggleSiblingVisibility() {
-      // 当前 form-group-header 的 DOM 元素
-      const formGroupHeader = this.$refs.formGroup
-      if (!formGroupHeader) return
-
-      // 找到当前 form-group-header 的下一个兄弟节点
-      let sibling = formGroupHeader.nextElementSibling
-
-      // 循环隐藏或显示直到找到下一个 form-group-header
-      while (sibling && sibling.classList.contains('el-form-item')) {
-        sibling.style.display = this.isVisible ? '' : 'none'
-        sibling = sibling.nextElementSibling
-      }
+      return this.collapsed ? 'ArrowRight' : 'ArrowDown'
     }
   }
 }
@@ -66,7 +64,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-left: 20px;
+  margin-left: var(--form-group-indent, 20px);
 }
 
 .hr-line-dashed {
@@ -92,6 +90,22 @@ export default {
   line-height: 1.4;
   cursor: pointer;
   color: var(--color-text-primary);
+}
+
+.form-group-header__row--subgroup {
+  .form-group-header__title {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .form-group-header__toggle {
+    height: 22px;
+    color: var(--color-text-secondary, #7c7c7c);
+  }
+}
+
+.form-group-header--subgroup {
+  margin-left: 0;
 }
 
 .form-group-header__toggle {

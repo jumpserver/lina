@@ -7,17 +7,32 @@ import Base from './Base'
 import { Select2 } from '@/components'
 import { terminalThemeOptions } from '@/utils/terminal-theme'
 
+const sections = {
+  graphics: {
+    fieldsInclude: ['graphics'],
+    fieldsExclude: ['graphics.file_name_conflict_resolution']
+  },
+  commandLine: {
+    fieldsInclude: ['command_line']
+  }
+}
+
 export default {
   name: 'Luna',
   components: {
     Base
   },
+  props: {
+    section: {
+      type: String,
+      required: true,
+      validator: (value) => Object.hasOwn(sections, value)
+    }
+  },
   data() {
     return {
-      category: 'luna',
-      autoSave: true,
-      canRestoreDefault: true,
-      fieldsExclude: ['basic.connect_default_open_method', 'basic.themes'],
+      categories: ['luna'],
+      ...sections[this.section],
       fieldsMeta: {
         command_line: {
           fieldsMeta: {

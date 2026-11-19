@@ -1,22 +1,37 @@
 <template>
   <div id="app">
     <!-- 使用 key 而不是 v-if 来强制重新渲染 router-view，避免根节点被完全卸载导致的 DOM insertBefore 错误 -->
-    <router-view :key="isRouterAlive" />
+    <div
+      v-if="sessionContentReady"
+      :inert="sessionBlocked || undefined"
+      class="app-session-content"
+    >
+      <router-view :key="isRouterAlive" />
+    </div>
+    <WebScreenLock />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Watermark } from 'watermark-js-plus'
+import WebScreenLock from '@/components/ScreenLock/index.vue'
+import { webSessionLockState } from '@/composables/useWebSessionLock'
 
 export default {
   name: 'App',
+  components: { WebScreenLock },
   data() {
     return {
-      watermark: null
+      watermark: null,
+      sessionContentReady: false
     }
   },
   computed: {
+    screenLockState: () => webSessionLockState,
+    sessionBlocked() {
+      return !this.screenLockState.ready || this.screenLockState.locked
+    },
     ...mapState({
       isRouterAlive: (state) => state.common.isRouterAlive
     }),
@@ -25,7 +40,25 @@ export default {
       publicSettings: 'publicSettings'
     })
   },
+  mounted() {
+    this.$router.isReady().then(this.finishInitialLoading, this.finishInitialLoading)
+  },
   watch: {
+    'screenLockState.ready': {
+      immediate: true,
+      handler(ready) {
+        if (ready && this.screenLockState.locked) this.finishInitialLoading()
+      }
+    },
+    sessionBlocked: {
+      immediate: true,
+      handler(blocked) {
+        if (!blocked && !this.sessionContentReady) {
+          this.sessionContentReady = true
+          this.$store.dispatch('assets/getAssetCategories').catch(() => {})
+        }
+      }
+    },
     currentUser: {
       handler(newVal) {
         this.createWatermark()
@@ -45,6 +78,10 @@ export default {
     }
   },
   methods: {
+    async finishInitialLoading() {
+      await this.$nextTick()
+      document.getElementById('loading')?.remove()
+    },
     getWaterMarkFields() {
       const user = this.currentUser
       const userId = user?.id || ''
@@ -81,3 +118,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.app-session-content {
+  height: 100%;
+}
+</style>

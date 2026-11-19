@@ -26,6 +26,7 @@ export default {
         redis: ['client_cert', 'client_key'],
         postgresql: ['client_cert', 'client_key', 'pg_ssl_mode'],
         mysql: ['client_cert', 'client_key', 'allow_invalid_cert'],
+        mariadb: ['client_cert', 'client_key', 'allow_invalid_cert'],
         mongodb: ['client_key', 'allow_invalid_cert']
       }
 
@@ -46,17 +47,21 @@ export default {
         },
         use_ssl: {
           label: this.$t('UseSSL'),
+          helpText: ['mysql', 'mariadb', 'postgresql'].includes(platform)
+            ? this.$t('DatabaseSSLBackendHelp')
+            : undefined,
           component: 'el-switch',
           on: {
             change: ([event], updateForm) => {
-              updateForm({
-                pg_ssl_mode: event ? 'require' : 'prefer'
-              })
+              if (platform === 'postgresql') {
+                updateForm({ pg_ssl_mode: event ? 'verify-full' : 'prefer' })
+              }
             }
           }
         },
         allow_invalid_cert: {
           label: this.$t('AllowInvalidCert'),
+          helpText: this.$t('DatabaseSSLInsecureHelp'),
           hidden: (form) => {
             return !form.use_ssl
           },
@@ -64,6 +69,7 @@ export default {
         },
         ca_cert: {
           label: this.$t('CACertificate'),
+          helpText: this.$t('DatabaseSSLCAHelp'),
           hidden: (form) => {
             return !form.use_ssl
           },
@@ -71,6 +77,7 @@ export default {
         },
         client_cert: {
           label: this.$t('ClientCertificate'),
+          helpText: this.$t('DatabaseSSLClientHelp'),
           hidden: (form) => {
             return !form.use_ssl
           },
@@ -78,10 +85,16 @@ export default {
         },
         client_key: {
           label: this.$t('CertificateKey'),
+          helpText: this.$t('DatabaseSSLClientHelp'),
           hidden: (form) => {
             return !form.use_ssl
           },
           component: UploadKey
+        },
+        pg_ssl_mode: {
+          label: this.$t('DatabaseSSLMode'),
+          helpText: this.$t('DatabaseSSLModeHelp'),
+          hidden: (form) => !form.use_ssl
         }
       }
 

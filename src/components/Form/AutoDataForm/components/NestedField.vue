@@ -2,6 +2,7 @@
   <DataForm
     v-bind="dataFormAttrs"
     v-if="!loading"
+    ref="form"
     :disabled="disabled"
     :fields="iFields"
     :form="iValue"
@@ -123,6 +124,11 @@ export default {
 .sub-form :deep(.el-form) {
   margin-right: 0;
   margin-bottom: 0;
+}
+
+.sub-form :deep(.form-fields.el-form) {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /*

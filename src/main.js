@@ -18,7 +18,6 @@ import store from './store'
 import router from './router'
 import { eventBus } from './utils/vue/eventbus'
 import '@/styles/fonts/loadSans'
-import { watchSessions } from './utils/jms/auth'
 
 import { installSvgIcon } from '@/icons' // icon
 import { installElementPlusIcons } from '@/icons/element-plus-icons'
@@ -34,13 +33,12 @@ import request from '@/utils/request'
 import { message } from '@/utils/vue/message'
 import { toPlainTextMessage } from '@/utils/common/message'
 import xss from '@/utils/secure'
-import moment from 'moment'
-import 'moment/locale/fr'
+import moment, { getMomentLocale } from '@/i18n/moment'
 import DOMPurify from 'dompurify'
 import _ from 'lodash'
 import { ElMessageBox } from 'element-plus'
 
-moment.locale(getLangCode().toLowerCase().split('-')[0] === 'fr' ? 'fr' : 'zh-cn')
+moment.locale(getMomentLocale(i18n.global.locale.value))
 
 // 构建时间：生产环境为 Docker 构建时刻，开发环境为 dev server 启动时刻（见 vite.config.js）
 // 用双色徽章样式打印，与其它 console 信息区分开。
@@ -130,17 +128,7 @@ async function initApp() {
   // 初始化默认主题变量（确保在应用启动时就注入 CSS 变量）
   setRootColors()
 
-  watchSessions()
-  // Mount app and remove initial loading overlay
   app.mount('#app')
-  try {
-    const el = document.getElementById('loading')
-    if (el && el.parentNode) {
-      el.parentNode.removeChild(el)
-    }
-  } catch (e) {
-    // ignore
-  }
 }
 
 initApp().then()

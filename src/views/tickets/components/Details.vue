@@ -4,19 +4,28 @@
       <div class="clearfix ibox-title"><i /> {{ title }}</div>
     </template>
     <div class="content">
+      <slot name="actions" />
       <el-row :gutter="10">
         <el-col
           v-for="item in detailCardItems"
           :key="'card-' + item.key"
           :md="12"
           :sm="12"
+          :class="{
+            'item-list': Array.isArray(item.value) && item.value.length > 3 && !item.formatter
+          }"
           style="display: flex"
         >
           <div :style="{ 'text-align': 'align' }" class="item-label">
             <label>{{ item.key }}: </label>
           </div>
           <div class="item-text">
-            <ItemValue v-bind="item" />
+            <TicketValueList
+              v-if="Array.isArray(item.value) && !item.formatter"
+              :items="item.value"
+              :label="item.key"
+            />
+            <ItemValue v-else v-bind="item" />
           </div>
         </el-col>
       </el-row>
@@ -27,26 +36,36 @@
           :key="'card-' + item.key"
           :md="12"
           :sm="12"
+          :class="{
+            'item-list': Array.isArray(item.value) && item.value.length > 3 && !item.formatter
+          }"
           style="display: flex"
         >
           <div :style="{ 'text-align': 'align' }" class="item-label">
             <label>{{ item.key }}: </label>
           </div>
           <div class="item-text">
-            <ItemValue v-bind="item" />
+            <TicketValueList
+              v-if="Array.isArray(item.value) && !item.formatter"
+              :items="item.value"
+              :label="item.key"
+            />
+            <ItemValue v-else v-bind="item" />
           </div>
         </el-col>
       </el-row>
+      <slot />
     </div>
   </IBox>
 </template>
 <script>
 import ItemValue from '@/components/Cards/DetailCard/ItemValue'
 import IBox from '@/components/Common/IBox'
+import TicketValueList from './TicketValueList'
 
 export default {
   name: 'Details',
-  components: { ItemValue, IBox },
+  components: { ItemValue, IBox, TicketValueList },
   props: {
     specialCardItems: {
       type: Array,
@@ -75,6 +94,11 @@ export default {
 .content {
   font-size: 13px;
   line-height: 2.5;
+}
+
+.item-list {
+  flex: 0 0 100%;
+  max-width: 100%;
 }
 
 .item-label {

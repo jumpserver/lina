@@ -30,6 +30,7 @@ import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import AutoDataZTree from '@/components/Tree/AutoDataZTree'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 import _ from 'lodash'
+import { auditReportPermissions } from '@/views/reports/center/permissions'
 
 export default {
   name: 'RolePerms',
@@ -78,6 +79,12 @@ export default {
         }
       },
       nodesDeps: {
+        ...Object.fromEntries(
+          Object.values(auditReportPermissions).map((permission) => [
+            permission,
+            ['rbac.view_audit']
+          ])
+        ),
         view_console: [],
         view_audit: [],
         view_pam: [],

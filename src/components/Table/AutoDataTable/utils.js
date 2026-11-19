@@ -236,7 +236,6 @@ export class TableColumnsGenerator {
     col = this.generateColumnByName(name, col)
     col = this.setDefaultFormatterIfNeed(col)
     col = Object.assign(col, customMeta)
-    col = this.addHelpTipIfNeed(col)
     col = this.addFilterIfNeed(col)
     col = this.addOrderingIfNeed(col)
     col = this.updateLabelIfNeed(col)
@@ -513,39 +512,6 @@ export class TableColumnsGenerator {
         col.sortable = 'custom'
         col['column-key'] = col.prop
       }
-    }
-    return col
-  }
-
-  addHelpTipIfNeed(col) {
-    const helpTip = col.helpTip
-    if (!helpTip) {
-      return col
-    }
-    col.renderHeader = ({ column, $index }) => {
-      return h('span', [
-        column.label,
-        h(
-          'el-tooltip',
-          {
-            placement: 'bottom',
-            effect: 'dark',
-            openDelay: 500,
-            popperClass: 'help-tips'
-          },
-          {
-            content: () =>
-              h('div', {
-                innerHTML: window.$xss ? window.$xss.process(String(helpTip || '')) : helpTip
-              }),
-            default: () =>
-              h('i', {
-                class: 'fa fa-question-circle-o help-tip-icon',
-                style: 'padding-left: 2px'
-              })
-          }
-        )
-      ])
     }
     return col
   }

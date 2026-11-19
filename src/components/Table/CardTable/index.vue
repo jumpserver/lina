@@ -48,6 +48,7 @@
       :component-key="detailContext?.id"
       :component-props="{ drawerContext: detailContext }"
       :title="detailTitle"
+      @closed="handleDetailDrawerClosed"
     />
   </div>
 </template>
@@ -135,7 +136,8 @@ export default {
   },
   watch: {
     detailDrawerVisible(visible) {
-      if (!visible) this.clearDetailDrawer()
+      // Keep the detail key and context stable through the closing transition.
+      if (!visible) this.$store.dispatch('common/leaveDrawer', this.drawerToken)
     }
   },
   created() {
@@ -148,7 +150,6 @@ export default {
   deactivated() {
     this.tableActive = false
     this.detailDrawerVisible = false
-    this.clearDetailDrawer()
   },
   async mounted() {
     this.ownerPath = this.$route.path
@@ -169,6 +170,9 @@ export default {
     this.reloadTable()
   },
   methods: {
+    handleDetailDrawerClosed() {
+      if (!this.detailDrawerVisible) this.clearDetailDrawer()
+    },
     clearDetailDrawer() {
       this.detailContext = null
       this.$store.dispatch('common/leaveDrawer', this.drawerToken)

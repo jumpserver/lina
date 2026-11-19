@@ -25,13 +25,31 @@ export default {
     }
   },
   data() {
+    const intervalMeta = { ...periodicMeta.interval }
+    const isPeriodicMeta = {
+      ...periodicMeta.is_periodic,
+      label: this.$t('Timer')
+    }
+    delete intervalMeta.component
+    delete intervalMeta.el
     return {
       submitType: 'timing',
       settings: {
         url: `/api/v1/xpack/cloud/sync-instance-tasks/`,
-        fields: [[this.$t('Timer'), ['is_periodic', 'interval', 'crontab']]],
+        fields: [[this.$t('Timer'), ['is_periodic', 'interval', 'interval_unit', 'crontab']]],
         fieldsMeta: {
-          ...periodicMeta
+          ...periodicMeta,
+          is_periodic: isPeriodicMeta,
+          interval: intervalMeta,
+          interval_unit: {
+            type: 'select',
+            label: this.$t('Unit'),
+            hidden: (formValue) => formValue.is_periodic === false,
+            options: [
+              { label: this.$t('Minute'), value: 'minute' },
+              { label: this.$t('Hour'), value: 'hour' }
+            ]
+          }
         },
         defaultButton: false,
         submitMethod: 'put',
@@ -44,7 +62,7 @@ export default {
             type: 'primary',
             loading: false,
             callback: (value, form, btn) => {
-              this.submitForm(form, btn)
+              this.submitForm(value, form, btn)
             }
           },
           {
@@ -62,7 +80,13 @@ export default {
   },
   mounted() {},
   methods: {
-    submitForm(form, btn) {
+    submitForm(value, form, btn) {
+      const hasInterval = Number(value.interval) > 0
+      const hasCrontab = Boolean(value.crontab?.trim())
+      if (value.is_periodic && !hasInterval && !hasCrontab) {
+        this.$message.error(this.$t('CloudScheduleRequired'))
+        return
+      }
       form.validate((valid) => {
         if (valid) {
           btn.loading = true

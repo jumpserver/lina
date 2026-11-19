@@ -1,7 +1,11 @@
 <template>
   <div v-if="ready">
     <VariableHelpDialog v-model:visible="showHelpDialog" />
-    <GenericCreateUpdatePage v-bind="{ ...$data, ...$attrs }" ref="form" />
+    <GenericCreateUpdatePage
+      v-bind="{ ...$data, ...$attrs }"
+      ref="form"
+      @submit-success="openExecutionLog"
+    />
   </div>
 </template>
 
@@ -12,6 +16,7 @@ import CodeEditor from '@/components/Form/FormFields/CodeEditor'
 import { crontab, interval } from '@/components/const'
 import i18n from '@/i18n/i18n'
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { openTaskPage } from '@/utils/jms'
 import VariableHelpDialog from '@/views/ops/Adhoc/VariableHelpDialog.vue'
 import LoadTemplateLink from '@/views/ops/Job/components/LoadTemplateLink.vue'
 import Variable from '@/views/ops/Template/components/Variable'
@@ -126,9 +131,8 @@ export default {
           component: AssetSelect,
           label: this.$t('Asset'),
           el: {
+            userAssets: true,
             baseUrl: '/api/v1/perms/users/self/assets/',
-            baseNodeUrl: '/api/v1/perms/users/self/nodes/',
-            typeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/category/tree',
             value: []
           }
         },
@@ -273,6 +277,9 @@ export default {
     this.ready = true
   },
   methods: {
+    openExecutionLog({ task_id }) {
+      if (task_id) openTaskPage(task_id)
+    },
     submitForm(form, btn) {
       form.validate((valid) => {
         if (valid) {

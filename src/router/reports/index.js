@@ -1,70 +1,53 @@
-import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
-
 import users from './users'
 import assets from './assets'
 import accounts from './accounts'
 import dashboard from './dashboard'
 
+const redirectLegacy = (group, routes) =>
+  routes.map((route) => ({
+    path: `${group}/${route.path}`,
+    hidden: true,
+    redirect: (to) => ({
+      path: `/audit/reports/legacy/${group}/${route.path}`,
+      query: to.query
+    }),
+    meta: { permissions: [] }
+  }))
+
 export default {
   path: '/reports',
-  redirect: '/reports/users',
   component: empty,
-  meta: {
-    title: i18n.t('Reports'),
-    icon: 'fa-bar-chart-o',
-    view: 'reports',
-    showNavSwitcher: false,
-    permissions: []
-  },
+  hidden: true,
+  redirect: '/audit/reports/overview',
+  meta: { view: 'reports', showNavSwitcher: false, permissions: [] },
   children: [
-    {
-      path: '/reports/dashboard',
-      component: empty,
-      redirect: 'dashboard',
-      name: 'ReportsDashboard',
-      meta: {
-        title: i18n.t('ReportsDashboard'),
-        icon: 'reports',
-        permissions: []
+    ...redirectLegacy('users', users),
+    ...redirectLegacy('assets', assets),
+    ...redirectLegacy('accounts', accounts),
+    ...['users', 'assets', 'accounts'].map((group) => ({
+      path: group,
+      hidden: true,
+      redirect: (to) => ({ path: `/audit/reports/legacy/${group}`, query: to.query }),
+      meta: { permissions: [] }
+    })),
+    ...dashboard.map((route) => ({
+      path: `dashboard/${route.path}`,
+      name: route.name,
+      hidden: true,
+      redirect: {
+        path: '/audit/reports/editor',
+        query: {
+          theme: route.path === 'pam' || route.path === 'change-secret' ? 'account' : 'audit'
+        }
       },
-      children: dashboard
-    },
+      meta: { permissions: [] }
+    })),
     {
-      path: '/reports/users',
-      component: empty,
-      redirect: 'users',
-      name: 'ReportsUsers',
-      meta: {
-        title: i18n.t('ReportsUsers'),
-        icon: 'reports',
-        permissions: []
-      },
-      children: users
-    },
-    {
-      path: '/reports/assets',
-      component: empty,
-      redirect: 'assets',
-      name: 'ReportsAssets',
-      meta: {
-        title: i18n.t('ReportsAssets'),
-        icon: 'reports',
-        permissions: []
-      },
-      children: assets
-    },
-    {
-      path: '/reports/accounts',
-      component: empty,
-      redirect: 'accounts',
-      name: 'ReportsAccounts',
-      meta: {
-        title: i18n.t('ReportsAccounts'),
-        icon: 'reports',
-        permissions: []
-      },
-      children: accounts
+      path: ':pathMatch(.*)*',
+      redirect: '/audit/reports/overview',
+      hidden: true,
+      meta: { permissions: [] }
     }
   ]
 }

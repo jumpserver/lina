@@ -105,6 +105,7 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/accounts/account-risks/',
+        extraQuery: {},
         columns: ['asset', 'username', 'risk', 'status', 'date_created'],
         columnsMeta: {
           asset: {
@@ -167,6 +168,47 @@ export default {
             }
           }
         ]
+      }
+    }
+  },
+  computed: {
+    routeRiskFilters() {
+      const { path, query } = this.$route
+      if (path.replace(/\/+$/, '') !== '/pam/security/check') return {}
+      if (query.tab && query.tab !== 'AccountRisks') return {}
+      const filters = {}
+      if (
+        typeof query.id === 'string' &&
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(query.id)
+      ) {
+        filters.id = query.id
+      }
+      const riskTypes = [
+        'long_time_no_login',
+        'new_found',
+        'account_deleted',
+        'groups_changed',
+        'sudoers_changed',
+        'authorized_keys_changed',
+        'password_expired',
+        'long_time_password',
+        'weak_password',
+        'leaked_password',
+        'repeated_password'
+      ]
+      if (riskTypes.includes(query.risk)) filters.risk = query.risk
+      if (['0', '1', '2'].includes(query.status)) filters.status = query.status
+      return filters
+    }
+  },
+  watch: {
+    routeRiskFilters: {
+      immediate: true,
+      handler(filters) {
+        for (const key of ['id', 'risk', 'status']) {
+          if (filters[key]) this.tableConfig.extraQuery[key] = filters[key]
+          else delete this.tableConfig.extraQuery[key]
+        }
       }
     }
   },

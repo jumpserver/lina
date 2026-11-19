@@ -99,7 +99,7 @@ export default {
       return (
         this.publicSettings['TICKETS_ENABLED'] &&
         this.$hasLicense() &&
-        this.$hasPerm('tickets.view_ticket')
+        this.$hasPerm('tickets.view_ticket | tickets.view_workflow')
       )
     },
     showLogo() {
@@ -126,16 +126,7 @@ export default {
 @use '@/styles/variables' as *;
 
 :global(.nav-header-dropdown.el-dropdown__popper .el-dropdown-menu) {
-  padding: 10px 0;
-  margin: 5px 0;
-  border-radius: 4px;
-}
-
-:global(.nav-header-dropdown.el-dropdown__popper .el-dropdown-menu__item) {
-  height: 36px;
-  line-height: 36px;
-  padding: 0 20px;
-  font-size: 13px;
+  margin: 4px 0;
 }
 
 .navbar {
@@ -297,6 +288,7 @@ export default {
       }
 
       & :deep(.el-dropdown-link) {
+        cursor: pointer;
         outline: none;
         box-shadow: none;
 

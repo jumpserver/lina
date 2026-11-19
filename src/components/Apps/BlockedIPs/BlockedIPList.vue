@@ -1,5 +1,5 @@
 <template>
-  <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
+  <ListTable :header-actions="headerActions" :table-config="{ ...tableConfig, totalData: ips }" />
 </template>
 
 <script>
@@ -10,20 +10,18 @@ export default {
   components: {
     ListTable
   },
+  emits: ['refresh', 'unlock'],
   props: {
-    object: {
-      type: Object,
-      required: false,
-      default: () => ({})
+    ips: {
+      type: Array,
+      required: true
     }
   },
   data() {
-    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/settings/security/block-ip/',
         columns: ['ip', 'actions'],
-        totalData: [],
         columnsMeta: {
           ip: {
             label: this.$t('IP')
@@ -39,16 +37,7 @@ export default {
                   title: this.$t('Unblock'),
                   can: this.$hasPerm('settings.change_security'),
                   type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios
-                      .post('/api/v1/settings/security/unlock-ip/', {
-                        ips: [row.ip]
-                      })
-                      .then(() => {
-                        vm.$message.success(this.$tc('UnlockSuccessMsg'))
-                        vm.$refs.ListTable.reloadTable()
-                      })
-                  }
+                  callback: ({ row }) => this.$emit('unlock', [row.ip])
                 }
               ]
             }
@@ -61,6 +50,7 @@ export default {
         hasCreate: false,
         hasSearch: true,
         hasRefresh: true,
+        handleRefreshClick: () => this.$emit('refresh'),
         hasBulkDelete: false,
         hasBulkUpdate: false,
         hasLeftActions: true,
@@ -74,27 +64,16 @@ export default {
             can: ({ selectedRows }) => {
               return selectedRows.length > 0
             },
-            callback: function ({ selectedRows }) {
-              vm.$axios
-                .post('/api/v1/settings/security/unlock-ip/', {
-                  ips: selectedRows.map((v) => {
-                    return v.ip
-                  })
-                })
-                .then((res) => {
-                  vm.$message.success(vm.$tc('UnlockSuccessMsg'))
-                  vm.$refs.ListTable.reloadTable()
-                })
+            callback: ({ selectedRows }) => {
+              this.$emit(
+                'unlock',
+                selectedRows.map((row) => row.ip)
+              )
             }
           }
         ]
       }
     }
-  },
-  mounted() {
-    this.$axios.get('/api/v1/settings/security/block-ip/').then((res) => {
-      this.tableConfig.totalData = res.results
-    })
   }
 }
 </script>

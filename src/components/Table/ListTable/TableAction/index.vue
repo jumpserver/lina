@@ -32,6 +32,7 @@
           :class="[searchClass, { 'has-label-filter': hasLabelSearch }]"
           class="search"
         >
+          <slot name="search-before" />
           <NodeSearch
             v-bind="nodeSearchConfig"
             v-if="hasNodeSearch"
@@ -414,7 +415,7 @@ export default {
       return ''
     },
     searchClass() {
-      return this.iHasLeftActions ? 'right' : 'left'
+      return this.iHasLeftActions || this.$slots['search-before'] ? 'right' : 'left'
     },
     searchPresetStorageKey() {
       try {

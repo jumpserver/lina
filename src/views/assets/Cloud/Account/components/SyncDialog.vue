@@ -5,7 +5,7 @@
     :close-on-press-escape="false"
     :destroy-on-close="true"
     :show-buttons="false"
-    :title="$tc('SyncOnline')"
+    :title="$tc('DiscoverAndImport')"
   >
     <AssetPanel v-model:visible="iVisible" :object="object" />
   </Dialog>

@@ -6,7 +6,7 @@
     :visible="visible"
     class="help-dialog"
     top="8vh"
-    width="720px"
+    :width="width"
     @update:visible="$emit('update:visible', $event)"
   >
     <div class="variables-help-content">
@@ -69,6 +69,10 @@ export default {
       default() {
         return 'WatermarkVariableHelpText'
       }
+    },
+    width: {
+      type: String,
+      default: '720px'
     }
   },
   emits: ['update:visible'],

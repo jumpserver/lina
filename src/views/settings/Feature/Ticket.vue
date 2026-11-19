@@ -28,10 +28,19 @@ export default {
           [this.$t('Basic'), ['TICKETS_ENABLED', 'TICKETS_DIRECT_APPROVE']],
           [
             this.$t('AssetPermission'),
-            ['TICKET_AUTHORIZE_DEFAULT_TIME', 'TICKET_AUTHORIZE_DEFAULT_TIME_UNIT']
+            [
+              'TICKET_APPLY_ASSET_SCOPE',
+              'TICKET_AUTHORIZE_DEFAULT_TIME',
+              'TICKET_AUTHORIZE_DEFAULT_TIME_UNIT'
+            ]
           ]
         ],
-        fieldsMeta: {},
+        fieldsMeta: {
+          TICKET_APPLY_ASSET_SCOPE: {
+            helpTextAsTip: true,
+            helpTextAsPlaceholder: false
+          }
+        },
         successUrl: { name: 'Settings', params: { activeMenu: 'Basic' } },
         url: '/api/v1/settings/setting/?category=ticket',
         hasReset: false,

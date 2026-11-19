@@ -1,9 +1,5 @@
 <template>
-  <TabPage
-    v-model:active-menu="config.activeMenu"
-    :submenu="config.submenu"
-    @tab-click="handleTabClick"
-  >
+  <TabPage v-model:active-menu="config.activeMenu" :submenu="config.submenu">
     <template #title>
       <div>
         {{ Title }}
@@ -51,6 +47,11 @@ export default {
       return this.$t('RoleList')
     }
   },
+  watch: {
+    'config.activeMenu'(activeMenu) {
+      this.switchGlobalOrg(activeMenu === 'OrgRoleList')
+    }
+  },
   activated() {
     this.switchGlobalOrg(this.config.activeMenu === 'OrgRoleList')
   },
@@ -58,9 +59,6 @@ export default {
     this.switchGlobalOrg(this.config.activeMenu === 'OrgRoleList')
   },
   methods: {
-    handleTabClick(tab) {
-      this.switchGlobalOrg(tab.name === 'OrgRoleList')
-    },
     switchGlobalOrg(status) {
       if (status) {
         this.$route.meta.disableOrgsChange = false

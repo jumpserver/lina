@@ -71,12 +71,7 @@
         </section>
       </template>
 
-      <GenericListTable
-        v-else
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-        :table-metadata-provider="auditTableMetadata"
-      />
+      <GenericListTable v-else :header-actions="headerActions" :table-config="tableConfig" />
     </div>
   </Page>
 </template>
@@ -113,27 +108,18 @@ const detailId = computed(() => String(route.params.id || ''))
 const auditHelpMessage = computed(
   () => `${t('ChatAIAuditSecurityTitle')}: ${t('ChatAIConversationAuditNotice')}`
 )
-const headerActions = {
+const headerActions = computed(() => ({
   hasLeftActions: false,
   hasImport: false,
   hasExport: false,
   hasDatePicker: false,
-  hasSearch: false
-}
-const auditTableMetadata = () =>
-  Promise.resolve({
-    actions: {
-      GET: {
-        id: { type: 'string', label: 'ID' },
-        user: { type: 'object', label: t('ChatAIAuditOwner') },
-        title: { type: 'string', label: t('ChatAIConversationTitle') },
-        question_count: { type: 'integer', label: t('ChatAIAuditQuestions') },
-        date_updated: { type: 'datetime', label: t('ChatAIAuditUpdated') }
-      }
-    }
-  })
+  searchConfig: {
+    getUrlQuery: true,
+    fieldLabels: { user: t('ChatAIAuditOwner') }
+  }
+}))
 const tableConfig = computed(() => ({
-  url: '/kael/api/v1/admin/audit/conversations',
+  url: '/api/v1/chat-ai/audit/conversations/',
   columnsShow: {
     min: ['user', 'title'],
     default: ['user', 'title', 'question_count', 'date_updated', 'actions']

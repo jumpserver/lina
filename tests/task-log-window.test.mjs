@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
+import { runInNewContext } from 'node:vm'
 import { parse } from '@vue/compiler-sfc'
 
 const source = await readFile(
@@ -121,4 +122,30 @@ test('blocked popups do not throw and custom log URLs remain intact', () => {
   const { open, routes } = taskOpener(null)
   assert.doesNotThrow(() => open('', 'celery', '/core/ops/custom-log/?id=123'))
   assert.equal(routes[0].query.url, '/core/ops/custom-log/?id=123')
+})
+
+test('saving a job opens only the execution log returned by that save', async () => {
+  const source = await readFile(
+    new URL('../src/views/ops/Job/JobUpdateCreate.vue', import.meta.url),
+    'utf8'
+  )
+  const { descriptor } = parse(source)
+  const { open, routes } = taskOpener(null)
+  const script = descriptor.script.content
+    .replace(/^import .*$/gm, '')
+    .replace('export default', '')
+  const job = runInNewContext(`(${script.trim()})`, {
+    openTaskPage: open,
+    GenericCreateUpdatePage: {},
+    VariableHelpDialog: {}
+  })
+  assert.match(descriptor.template.content, /@submit-success="openExecutionLog"/)
+  const saved = { id: 'job-id' }
+  job.methods.openExecutionLog(saved)
+  job.methods.openExecutionLog({ ...saved, task_id: 'first-run' })
+  job.methods.openExecutionLog({ ...saved, task_id: 'second-run' })
+  assert.deepEqual(
+    routes.map((route) => route.query.url),
+    [taskUrl('first-run'), taskUrl('second-run')]
+  )
 })

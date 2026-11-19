@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { approvalActionLabel } from '@/views/acls/approval'
 import { DrawerListTable as ListTable } from '@/components'
 import { DetailFormatter } from '@/components/Table/TableFormatters'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
@@ -29,6 +30,7 @@ export default {
           default: ['name', 'command_groups_amount', 'priority', 'is_active', 'comment', 'actions']
         },
         columnsMeta: {
+          action: { formatter: (row) => approvalActionLabel(row, this.$t) },
           name: {
             formatter: DetailFormatter,
             formatterArgs: {

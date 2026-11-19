@@ -267,6 +267,7 @@ export default {
   height: 2em;
   vertical-align: -0.2em;
   width: 26px;
+  object-fit: contain;
   fill: currentColor;
 }
 

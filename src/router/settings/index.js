@@ -125,6 +125,7 @@ export default {
           meta: {
             title: i18n.t('RoleList'),
             app: 'rbac',
+            cacheByPreviousOrgOnAutoEnter: true,
             permissions: ['rbac.view_orgrole | rbac.view_systemrole']
           }
         },
@@ -617,6 +618,17 @@ export default {
           meta: {
             title: i18n.t('SystemTasks'),
             permissions: ['ops.view_celerytask']
+          }
+        },
+        {
+          path: 'monitor',
+          name: 'TaskMonitor',
+          component: () => import('@/views/settings/Task/TaskMonitor.vue'),
+          hidden: true,
+          meta: {
+            title: i18n.t('TaskMonitor'),
+            permissions: ['ops.view_taskmonitor'],
+            activeMenu: '/settings/tasks'
           }
         },
         {

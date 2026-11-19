@@ -10,7 +10,6 @@ import {
   DetailFormatter,
   SwitchFormatter
 } from '@/components/Table/TableFormatters'
-import { BASE_URL } from '@/utils/common/index'
 export default {
   name: 'TaskList',
   components: {
@@ -164,7 +163,7 @@ export default {
             can: this.$hasPerm('ops.view_taskmonitor'),
             has: () => this.vendor !== 'OSM',
             callback: () => {
-              window.open(`${BASE_URL}/core/flower/?_=${Date.now()}`)
+              this.$router.push({ name: 'TaskMonitor' })
             }
           }
         ]

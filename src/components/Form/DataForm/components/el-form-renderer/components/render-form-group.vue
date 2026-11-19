@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-show="!collapsed">
     <template v-for="(item, index) in data.items" :key="item.id || index">
       <slot :name="`id:${item.id}`" />
       <slot :name="`$id:${item.id}`" />
@@ -28,6 +28,7 @@ export default {
     RenderFormItem: markRaw(RenderFormItem)
   },
   props: {
+    collapsed: Boolean,
     data: Object,
     itemValue: {},
     value: Object,

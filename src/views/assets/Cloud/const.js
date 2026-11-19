@@ -53,7 +53,7 @@ export const publicHostProviders = [
   ctyun
 ]
 
-export const publicDBProviders = [aliyun]
+export const publicDBProviders = [aliyun, qcloud]
 
 export const privateCloudProviders = [
   vmware,

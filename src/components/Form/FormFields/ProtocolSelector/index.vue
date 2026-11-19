@@ -15,6 +15,7 @@
             :disabled="disableSelect(item)"
             :model-value="item.name"
             class="prepend"
+            :class="{ 'prepend-wide': item.display_name?.length > 14 }"
             @change="handleProtocolChange($event, item)"
           >
             <el-option
@@ -64,11 +65,15 @@
       type="primary"
       @click="handleAdd(0)"
     />
+    <div v-if="$slots.preview" class="protocol-item">
+      <slot name="preview" />
+    </div>
     <ProtocolSettingDialog
       v-if="showDialog"
       v-model:visible="showDialog"
       :disabled="settingReadonly || readonly"
       :protocol="currentProtocol"
+      :asset-type="assetType || instance.type?.value || instance.type"
       @confirm="handleSettingConfirm"
     />
   </div>
@@ -120,6 +125,10 @@ export default {
     instance: {
       type: Object,
       default: () => ({})
+    },
+    assetType: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -136,7 +145,7 @@ export default {
     },
     passAttrs() {
       // 只把非事件监听的属性透传给内部端口输入框，过滤掉 onXxx 事件，
-      // 协议字段的值只经由本组件的 $emit('input', items) 上报。
+      // 协议字段的值只经由本组件事件上报。
       const out = {}
       for (const key of Object.keys(this.$attrs)) {
         if (/^on[A-Z]/.test(key)) continue
@@ -193,6 +202,7 @@ export default {
             return { name: i.name, port: i.port }
           })
         }
+        this.$emit('update:modelValue', value)
         this.$emit('input', value)
       },
       deep: true
@@ -383,14 +393,20 @@ export default {
 <style lang="scss" scoped>
 .show-setting,
 .hide-setting {
+  --protocol-wide-label-width: 152px;
   width: 100%;
 }
 
 .prepend {
-  width: 120px;
+  --protocol-select-width: 120px;
+  width: var(--protocol-select-width);
+
+  &.prepend-wide {
+    --protocol-select-width: var(--protocol-wide-label-width);
+  }
 
   :deep(.el-select__wrapper) {
-    width: 120px;
+    width: var(--protocol-select-width);
     background-color: #f5f7fa;
     box-shadow: none !important;
 

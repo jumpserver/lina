@@ -7,16 +7,31 @@
       :fields="totalFields"
       :form="iForm"
       :server-errors="serverErrors"
+      :collapsed-fields="collapsedFields"
+      :field-groups="fieldGroups"
       @submit="handleSubmit"
       @invalid="handleInvalid"
+      @update:form="groupForm = $event"
     >
+      <template v-for="(group, i) in groups" #[`section:${group.name}`]>
+        <FormGroupHeader
+          v-if="group.subgroup && group.sectionTitle && !groupHidden(group, i)"
+          :group="{ title: group.sectionTitle }"
+          :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
+          :collapsed="isSectionCollapsed(group)"
+          @toggle="toggleSection(group)"
+        />
+      </template>
       <template v-for="(group, i) in groups" #[`id:${group.name}`]>
         <FormGroupHeader
           v-if="!groupHidden(group, i)"
+          v-show="!isSectionCollapsed(group)"
           :key="'group-' + group.name"
           :group="group"
           :index="i"
-          :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
+          :line="!group.subgroup && i !== 0 && !groupHidden(groups[i - 1], i - 1)"
+          :collapsed="!!collapsedGroups[group.name]"
+          @toggle="toggleGroup(group)"
         />
       </template>
     </DataForm>
@@ -60,6 +75,10 @@ export default {
     fieldsMeta: {
       type: Object,
       default: () => ({})
+    },
+    remoteFieldsMeta: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -67,12 +86,46 @@ export default {
       remoteMeta: {},
       totalFields: [],
       loading: true,
+      groupForm: null,
       groups: [],
+      collapsedGroups: {},
+      collapsedSections: {},
       errors: {},
       serverErrors: {}
     }
   },
   computed: {
+    fieldGroups() {
+      return this.groups
+        .filter((group) => group.subgroup)
+        .map((group) => ({
+          id: group.name,
+          fields: group.fields.map((field) => field.id || field.prop),
+          hidden: this.groupHidden(group) || this.isSectionCollapsed(group),
+          collapsed: !!this.collapsedGroups[group.name]
+        }))
+    },
+    groupSections() {
+      let section = null
+      return Object.fromEntries(
+        this.groups.map((group) => {
+          if (!group.subgroup) section = null
+          if (group.sectionTitle) section = group.name
+          return [group.name, section]
+        })
+      )
+    },
+    collapsedFields() {
+      return [
+        ...new Set(
+          this.groups.flatMap((group) =>
+            this.collapsedGroups[group.name] || this.isSectionCollapsed(group)
+              ? group.fields.map((field) => field.id || field.prop)
+              : []
+          )
+        )
+      ]
+    },
     forwardedAttrs() {
       const attrs = { ...this.$attrs }
       delete attrs.onSubmit
@@ -108,6 +161,16 @@ export default {
     this.optionUrlMetaAndGenerateColumns()
   },
   methods: {
+    isSectionCollapsed(group) {
+      return !!this.collapsedSections[this.groupSections[group.name]]
+    },
+    toggleGroup(group) {
+      this.collapsedGroups[group.name] = !this.collapsedGroups[group.name]
+    },
+    toggleSection(group) {
+      const section = this.groupSections[group.name]
+      if (section) this.collapsedSections[section] = !this.collapsedSections[section]
+    },
     handleSubmit(...args) {
       this.$emit('submit', ...args)
     },
@@ -116,10 +179,10 @@ export default {
     },
     async optionUrlMetaAndGenerateColumns() {
       let data = { actions: {} }
-      if (this.url) {
+      if (this.url && !this.remoteFieldsMeta) {
         data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       }
-      this.remoteMeta = getActionMeta(data, this.method)
+      this.remoteMeta = this.remoteFieldsMeta || getActionMeta(data, this.method)
       this.$emit('afterRemoteMeta', this.remoteMeta)
       this.generateColumns()
       this.$emit('afterGenerateColumns', this.totalFields)
@@ -128,7 +191,8 @@ export default {
       this.serverErrors = {}
       this.loading = false
       await this.$nextTick()
-      this.$emit('formReady', this.dataForm?.getFormValue() || this.iForm)
+      this.groupForm = this.dataForm?.getFormValue() || this.iForm
+      this.$emit('formReady', this.groupForm)
     },
     generateColumns() {
       const generator = new FormFieldGenerator()
@@ -258,7 +322,13 @@ export default {
       const mapped = {}
       Object.entries(errors || {}).forEach(([k, v]) => {
         const field = this.totalFields.find((item) => item.prop === k)
-        mapped[k] = this.normalizeError(v, field?.passServerErrors)
+        // DRF keys errors for individual list items by their index.
+        const isListItemError =
+          this.remoteMeta[k]?.type === 'list' && _.isPlainObject(v) && !field?.passServerErrors
+        mapped[k] = this.normalizeError(
+          isListItemError ? Object.values(v).flat() : v,
+          field?.passServerErrors
+        )
       })
       this.serverErrors = mapped
       const elForm = this._getElFormInstance()
@@ -312,7 +382,7 @@ export default {
       for (const field of group.fields) {
         let hidden = field.hidden
         if (typeof hidden === 'function') {
-          hidden = hidden(this.iForm)
+          hidden = hidden(this.groupForm || this.iForm)
         }
         if (!hidden) {
           return false
