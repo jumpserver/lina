@@ -8,6 +8,7 @@
           v-if="protocolChoices"
           v-model="object.protocols"
           :choices="protocolChoices"
+          :asset-type="object.type?.value || object.type"
           :readonly="!canEdit"
         />
         <el-button

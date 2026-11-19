@@ -48,6 +48,7 @@ export default {
   },
   emits: ['update:visible', 'confirm'],
   props: {
+    assetType: String,
     visible: {
       type: Boolean,
       default: false
@@ -72,7 +73,12 @@ export default {
       config: {
         hasSaveContinue: false,
         hasButtons: !this.disabled,
-        url: '/api/v1/assets/protocol-settings/?name=' + this.protocol.name,
+        url:
+          '/api/v1/assets/protocol-settings/?' +
+          new URLSearchParams({
+            name: this.protocol.name,
+            ...(this.assetType === 'oceanbase' ? { asset_type: 'oceanbase' } : {})
+          }),
         fields: [
           [vm.$t('Basic'), ['primary', 'required', 'default', 'public']],
           [vm.$t('Advanced'), ['setting']]
