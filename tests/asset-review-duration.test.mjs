@@ -44,7 +44,7 @@ test('review fields are visible only for accepting rules with approval enabled',
     ['reject', true, true],
     ['reject', false, true]
   ]) {
-    const form = { action, review_enabled }
+    const form = config.afterGetFormValue({ ...config.initial, action, review_enabled })
     assert.equal(config.fieldsMeta.reviewers.hidden(form), hidden)
     assert.equal(config.fieldsMeta.review_duration.hidden(form), hidden)
   }
@@ -110,7 +110,7 @@ test('submission normalizes an unset review duration to zero without changing th
 
  test('workflow selection replaces fixed reviewers and is preserved when controls are disabled', () => {
   const config = component.data.call({ $t: (key) => key, $store: { getters: { currentOrg: { id: 'org-id' } } } })
-  const form = { action: 'accept', review_enabled: true, workflow: 'workflow-id', rules: { ip_group: ['*'] } }
+  const form = { action: 'accept', review_enabled: true, approval_mode: 'workflow', workflow: 'workflow-id', rules: { ip_group: ['*'] } }
   assert.equal(config.fieldsMeta.workflow.hidden(form), false)
   assert.equal(config.fieldsMeta.reviewers.hidden(form), true)
   assert.equal(config.fieldsMeta.review_duration.hidden(form), false)

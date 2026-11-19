@@ -8,6 +8,7 @@
 
 <script>
 import TabPage from '@/layout/components/TabPage/index.vue'
+import { redirectLegacyMCPSettings } from '@/router/settings/legacy-mcp'
 import Announcement from './Announcement.vue'
 import Vault from './Vault/index.vue'
 import Ticket from './Ticket.vue'
@@ -18,6 +19,7 @@ import SSHCA from './SSHCA.vue'
 export default {
   name: 'Feature',
   components: { TabPage, Announcement, Vault, Ticket, Ops, VirtualApp, SSHCA },
+  beforeRouteUpdate: redirectLegacyMCPSettings,
   data() {
     return {
       activeMenu: 'Announcement',

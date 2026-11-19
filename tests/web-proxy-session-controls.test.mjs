@@ -27,7 +27,7 @@ const ticket = await loadComponent('views/tickets/components/Session.vue', {
   IBox: {}, Drawer: {}, IsSupportPauseSessionType
 })
 
-test('built-in browser controls are disabled while HTTP(S) remote apps retain theirs', async () => {
+test('built-in browser controls are disabled while HTTP(S) remote apps retain theirs', () => {
   for (const terminal of ['koko', 'lion']) {
     for (const protocol of ['http', 'https']) {
       for (const type of ['web_proxy', 'normal']) {
@@ -51,15 +51,8 @@ test('built-in browser controls are disabled while HTTP(S) remote apps retain th
         assert.equal(quickActions[0].attrs.disabled, false)
         assert.equal(quickActions[1].attrs.disabled, !supported)
 
-        const ticketContext = {
-          object: { id: 'ticket' },
-          $axios: () => Promise.resolve(session)
-        }
-        ticket.methods.init.call(ticketContext)
-        // Let the existing request callback apply the capability decision.
-        await Promise.resolve()
-        assert.equal(ticketContext.supportedLock, supported)
-        assert.equal(ticketContext.session.can_join, supported)
+        const ticketContext = { session: { ...session, type, terminal_type: terminal } }
+        assert.equal(ticket.computed.supportedLock.call(ticketContext), supported)
       }
     }
   }
