@@ -11,6 +11,38 @@ import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.
 import { connectivityMeta } from '@/components/Apps/AccountListTable/const'
 import { openTaskPage } from '@/utils/jms/index'
 
+export const assetQuickFilters = (vm) => [
+  {
+    label: vm.$t('QuickFilter'),
+    options: [
+      {
+        label: vm.$t('Enabled'),
+        filter: {
+          is_active: 'true'
+        }
+      },
+      {
+        label: vm.$t('Disabled'),
+        filter: {
+          is_active: 'false'
+        }
+      },
+      {
+        label: vm.$t('NotAccessedForThreeMonths'),
+        filter: {
+          not_accessed_in_three_months: 'true'
+        }
+      },
+      {
+        label: vm.$t('NoValidPermission'),
+        filter: {
+          no_valid_permission: 'true'
+        }
+      }
+    ]
+  }
+]
+
 export function getDefaultConfig(vm) {
   const onAction = async (row, action) => {
     await vm.updateOrCloneAsset(row, action.toLowerCase())
