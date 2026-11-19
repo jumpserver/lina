@@ -1,6 +1,6 @@
 <template>
   <span class="protocol-cell">
-    <el-tag v-for="(p, index) of cellValue" :key="p.name" :type="getTagType(index)" size="small">
+    <el-tag v-for="(p, index) of tags" :key="p.name" :type="getTagType(index)" size="small">
       {{ p.name }}/{{ p.port }}
     </el-tag>
   </span>
@@ -24,6 +24,11 @@ export default {
     return {
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {}),
       types: ['primary', 'success', 'info', 'warning']
+    }
+  },
+  computed: {
+    tags() {
+      return this.formatterArgs.getTags?.(this.cellValue || []) ?? this.cellValue
     }
   },
   methods: {

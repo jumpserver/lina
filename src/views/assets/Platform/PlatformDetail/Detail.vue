@@ -4,7 +4,7 @@
     <template #right>
       <QuickActions :actions="quickActions" type="primary" />
       <IBox :title="$tc('Protocols')">
-        <ProtocolSelector
+        <PlatformProtocolSelector
           v-if="protocolChoices"
           v-model="object.protocols"
           :choices="protocolChoices"
@@ -36,7 +36,7 @@ import { IBox } from '@/components'
 import AutoDetailCard from '@/components/Cards/DetailCard/auto'
 import QuickActions from '@/components/Common/QuickActions'
 import PlatformDetailUpdateDialog from './PlatformDetailUpdateDialog'
-import ProtocolSelector from '@/components/Form/FormFields/ProtocolSelector'
+import PlatformProtocolSelector from '../PlatformProtocolSelector.vue'
 import TwoCol from '@/layout/components/Page/TwoColPage.vue'
 
 export default {
@@ -46,7 +46,7 @@ export default {
     IBox,
     QuickActions,
     AutoDetailCard,
-    ProtocolSelector,
+    PlatformProtocolSelector,
     PlatformDetailUpdateDialog
   },
   props: {

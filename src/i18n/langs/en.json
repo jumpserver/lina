@@ -589,6 +589,7 @@
   "AssetPermsAmount": "Asset authorization number",
   "AssetProtocolHelpText": "! The protocols supported by the assets are restricted by the platform. Click the settings button to view the protocol settings. If updates are required, please update the platform",
   "ClickHouseAssetPortsHelp": "Enter the database's Native and HTTP ports separately. The public Magnus proxy port is unchanged.",
+  "ClickHousePlatformHTTPHelp": "This is the default HTTP port for new assets. Change the actual port on the asset.",
   "AssetReport": "Asset report",
   "AssetSelectSelectedCount": "{count} assets selected",
   "AssetStatisticsReport": "Asset statistics report",
