@@ -4,7 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import { StatusFormatter } from '@/components/Table/TableFormatters'
+import { DateFormatter, StatusFormatter } from '@/components/Table/TableFormatters'
 
 const clientsURL = '/api/v1/authentication/user-agent-clients/'
 
@@ -26,10 +26,11 @@ export default {
       return {
         url: clientsURL,
         hasSelection: false,
-        columns: ['name', 'client_id', 'status', 'actions'],
+        columns: ['name', 'client_id', 'status', 'expires_at', 'actions'],
         columnsMeta: {
           name: { label: this.$t('Name'), sortable: false, formatter: (row) => row.name },
           client_id: { label: this.$t('MCPClientID'), sortable: false },
+          expires_at: { label: this.$t('DateExpired'), sortable: false, formatter: DateFormatter },
           status: {
             label: this.$t('Status'),
             width: 100,

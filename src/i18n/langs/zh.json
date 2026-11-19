@@ -4112,7 +4112,7 @@
   "TerminalCommands": "终端命令",
   "MyMCPClients": "我的客户端",
   "MCPAccessDocumentation": "接入文档",
-  "MCPUserClientHelp": "每人最多授权 10 个不同的 MCP 客户端，客户端按本人当前权限访问资产，重复授权不重复计数。授权过期但未撤销的客户端仍占名额。撤销后释放名额并回收闲置客户端注册，历史审计记录保留。",
+  "MCPUserClientHelp": "每次授权有效期为 7 天，自动刷新令牌不延长有效期，到期后请在客户端重新发起授权。每人最多授权 10 个不同的 MCP 客户端，客户端按本人当前权限访问资产，重复授权不重复计数。授权过期但未撤销的客户端仍占名额。撤销后释放名额并回收闲置客户端注册，历史审计记录保留。",
   "MCPUserConnectionHelp": "使用以下 MCP 地址配置客户端，再登录 JumpServer 并确认授权。",
   "MCPUserUnavailable": "MCP 访问当前不可用，请联系管理员。仍可撤销已有客户端授权。",
   "MCPUserRegistrationRequired": "客户端自动注册已关闭。接入新客户端请联系管理员，已登记客户端可继续使用已有授权。",
