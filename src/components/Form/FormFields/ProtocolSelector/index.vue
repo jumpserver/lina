@@ -70,6 +70,7 @@
       v-model:visible="showDialog"
       :disabled="settingReadonly || readonly"
       :protocol="currentProtocol"
+      :asset-type="assetType || instance.type?.value || instance.type"
       @confirm="handleSettingConfirm"
     />
   </div>
@@ -121,6 +122,10 @@ export default {
     instance: {
       type: Object,
       default: () => ({})
+    },
+    assetType: {
+      type: String,
+      default: ''
     }
   },
   data() {
