@@ -65,6 +65,9 @@
       type="primary"
       @click="handleAdd(0)"
     />
+    <div v-if="$slots.preview" class="protocol-item">
+      <slot name="preview" />
+    </div>
     <ProtocolSettingDialog
       v-if="showDialog"
       v-model:visible="showDialog"
@@ -390,6 +393,7 @@ export default {
 <style lang="scss" scoped>
 .show-setting,
 .hide-setting {
+  --protocol-wide-label-width: 152px;
   width: 100%;
 }
 
@@ -398,7 +402,7 @@ export default {
   width: var(--protocol-select-width);
 
   &.prepend-wide {
-    --protocol-select-width: 152px;
+    --protocol-select-width: var(--protocol-wide-label-width);
   }
 
   :deep(.el-select__wrapper) {
