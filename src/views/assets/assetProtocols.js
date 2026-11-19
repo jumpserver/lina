@@ -1,5 +1,17 @@
 export const CLICKHOUSE_HTTP_PROTOCOL = 'clickhouse_http'
 
+export const getAssetProtocolHelpKey = (protocols) => {
+  if (protocols.some((p) => p.name === CLICKHOUSE_HTTP_PROTOCOL)) return 'ClickHouseAssetPortsHelp'
+  const redis = protocols.find((p) => p.name === 'redis')
+  if (!redis) return 'AssetProtocolHelpText'
+  // Read the effective protocol setting, not the name of the platform: admins
+  // can clone, rename or configure their own Redis platforms.
+  const mode = redis.setting?.enable_cluster_mode
+  return mode === true || mode === 'true'
+    ? 'RedisClusterAssetProtocolHelp'
+    : 'RedisStandaloneAssetProtocolHelp'
+}
+
 // HTTP is an asset endpoint, not a second platform login protocol.
 export const withClickHouseEndpoints = (protocols = []) => {
   if (!protocols.some((p) => p.name === 'clickhouse')) return protocols
