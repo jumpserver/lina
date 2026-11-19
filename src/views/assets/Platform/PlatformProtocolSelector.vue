@@ -1,12 +1,18 @@
 <template>
-  <div class="platform-protocol-selector">
-    <ProtocolSelector v-bind="$attrs" :choices="loginChoices" />
-    <template v-if="httpEndpoint">
-      <el-input :model-value="httpEndpoint.port" readonly :aria-label="httpEndpoint.display_name">
-        <template #prepend>{{ httpEndpoint.display_name }}</template>
-      </el-input>
-      <div class="help-block">{{ $t('ClickHousePlatformHTTPHelp') }}</div>
-    </template>
+  <div class="platform-protocol-selector" :class="{ 'with-http-preview': httpEndpoint }">
+    <ProtocolSelector v-bind="$attrs" :choices="loginChoices">
+      <template v-if="httpEndpoint" #preview>
+        <el-input
+          class="http-preview jms-input-spacing keep-inner-border"
+          :model-value="httpEndpoint.port"
+          readonly
+          :aria-label="httpEndpoint.display_name"
+        >
+          <template #prepend>{{ httpEndpoint.display_name }}</template>
+        </el-input>
+      </template>
+    </ProtocolSelector>
+    <div v-if="httpEndpoint" class="help-block">{{ $t('ClickHousePlatformHTTPHelp') }}</div>
   </div>
 </template>
 
@@ -30,5 +36,15 @@ const loginChoices = computed(() =>
 <style scoped>
 .platform-protocol-selector {
   width: 100%;
+}
+
+.with-http-preview :deep(.protocol-item > .el-input-group > .el-input-group__prepend) {
+  box-sizing: border-box;
+  flex: 0 0 var(--protocol-wide-label-width);
+}
+
+.http-preview :deep(.el-input-group__prepend) {
+  justify-content: flex-start;
+  padding-inline: 9px;
 }
 </style>
