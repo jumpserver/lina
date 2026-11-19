@@ -16,6 +16,7 @@
       :detail-drawer="detailDrawer"
       :draw-props="createProps"
       :header-actions="iHeaderActions"
+      :quick-filters="quickFilters"
       :resource="$tc('Asset')"
       :table-config="iTableConfig"
       @selection-change="updateAssistantSelection"
@@ -88,6 +89,10 @@ export default {
     headerActions: {
       type: Object,
       default: () => ({})
+    },
+    quickFilters: {
+      type: Array,
+      default: () => []
     },
     addExtraMoreActions: {
       type: Array,

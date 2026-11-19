@@ -16,6 +16,7 @@
           ref="baseList"
           :add-extra-more-actions="addExtraMoreActions"
           :header-actions="headerActions"
+          :quick-filters="quickFilters"
         />
       </template>
     </AssetTreeTable>
@@ -27,6 +28,7 @@ import { AssetTreeTable } from '@/components'
 import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
+import { assetQuickFilters } from './components/const'
 import { setRouterQuery, setUrlParam } from '@/utils/common/index'
 
 export default {
@@ -38,6 +40,7 @@ export default {
   data() {
     const tableUrl = '/api/v1/assets/assets/'
     return {
+      quickFilters: assetQuickFilters(this),
       treeRef: null,
       showPlatform: false,
       category: 'all',
