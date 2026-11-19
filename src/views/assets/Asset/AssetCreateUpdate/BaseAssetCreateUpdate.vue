@@ -7,7 +7,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import { encryptPassword } from '@/utils/session-encrypt'
 import { getUpdateObjURL, setUrlParam, getSelectedAssetNodeId } from '@/utils/common/index'
 import { assetFieldsMeta, getWebAssetSettingDefaults } from '@/views/assets/const'
-import { CLICKHOUSE_HTTP_PROTOCOL, getAssetProtocolChoices } from '@/views/assets/assetProtocols'
+import { getAssetProtocolChoices, getAssetProtocolHelpKey } from '@/views/assets/assetProtocols'
 
 const getRelatedId = (value) => value?.pk ?? value?.id ?? value?.value ?? value
 
@@ -259,9 +259,7 @@ export default {
       const protocolChoices = protocolMeta.el.choices
       protocolChoices.splice(0, protocolChoices.length, ...protocols)
       protocolMeta.el.key = `asset-protocols-${platform.id}`
-      protocolMeta.helpText = protocols.some((item) => item.name === CLICKHOUSE_HTTP_PROTOCOL)
-        ? this.$t('ClickHouseAssetPortsHelp')
-        : this.$t('AssetProtocolHelpText')
+      protocolMeta.helpText = this.$t(getAssetProtocolHelpKey(protocols))
       this.iConfig.fieldsMeta.accounts.el.platform = platform
     }
   }

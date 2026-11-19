@@ -245,6 +245,8 @@
   "AssetPermsAmount": "資產授權數量",
   "AssetProtocolHelpText": "資產支持的協議受平台限制，點擊設置按鈕可以查看協議的設置。 如果需要更新，請更新平台",
   "ClickHouseAssetPortsHelp": "分別填寫資料庫實際監聽的 Native 和 HTTP 連接埠。Magnus 對外的代理連接埠不變。",
+  "RedisClusterAssetProtocolHelp": "已啟用 Redis 叢集路由。請填寫一個叢集節點的位址及連接埠，資料庫使用 0。透過 Magnus 連線時，redis-cli 不需要 -c。",
+  "RedisStandaloneAssetProtocolHelp": "目前平台採用單機連線。若後端為 Redis Cluster，請選擇 Redis-Cluster（僅密碼）或 Redis-Cluster-ACL（使用者名稱和密碼），也可在自訂平台的 Redis 協定設定中啟用叢集模式。否則跨節點讀寫可能傳回 MOVED。",
   "ClickHousePlatformHTTPHelp": "這裡顯示新建資產的預設 HTTP 連接埠。實際連接埠可在資產上修改。",
   "AssetReport": "資產報表",
   "AssetSelectSelectedCount": "已選擇 {count} 個資產",
