@@ -32,6 +32,19 @@ function beforeConnection(vm) {
   return asset.computed.detailGroups.call(vm).find((group) => group.title === 'AclBeforeConnection').fields
 }
 
+async function visibleDetails(component, vm) {
+  const config = component.data.call(vm)
+  const card = {
+    ...autoDetail.data(), ...autoDetail.methods,
+    fields: config.detailFields, url: config.url, iObject: vm.object,
+    formatters: {}, fieldsMeta: {},
+    $store: { dispatch: async () => ({ name: { label: 'Name', type: 'string' } }) }
+  }
+  await autoDetail.mounted.call(card)
+  assert.equal(card.loading, false)
+  return autoDetail.computed.validItems.call(card)
+}
+
 test('asset approval shows the configured workflow instead of fixed reviewers', () => {
   const vm = context()
   assert.ok(beforeConnection(vm).includes('workflow_name'))
@@ -51,30 +64,30 @@ test('asset rules retain fixed reviewers and hide approval details when approval
 for (const [name, component, reviewerLabel] of [
   ['command', command, 'Reviewer'], ['login', login, 'Reviewer']
 ]) {
-  test(`${name} rules show the workflow name and preserve fixed-reviewer fallback`, () => {
-    const configured = component.data.call(context()).detailFields
+  test(`${name} rules show the workflow name and preserve fixed-reviewer fallback`, async () => {
+    const configured = await visibleDetails(component, context())
     assert.equal(configured.find((field) => field.key === 'WFWorkflows')?.value, 'Operations approval')
     assert.ok(!configured.some((field) => field.key === reviewerLabel))
-    const legacy = component.data.call(context({ workflow: null })).detailFields
+    const legacy = await visibleDetails(component, context({ workflow: null }))
     assert.equal(legacy.find((field) => field.key === reviewerLabel)?.value, 'Existing reviewer')
     assert.ok(!legacy.some((field) => field.key === 'WFWorkflows'))
-    const missing = component.data.call(context({ workflow_name: '' })).detailFields
+    const missing = await visibleDetails(component, context({ workflow_name: '' }))
     assert.equal(missing.find((field) => field.key === 'WFWorkflows')?.value, '-')
   })
 }
 
+test('command workflows show required reviewers alongside the workflow name', async () => {
+  const fields = await visibleDetails(command, context({ workflow_requires_reviewers: true }))
+  assert.equal(fields.find((field) => field.key === 'WFWorkflows')?.value, 'Operations approval')
+  assert.equal(fields.find((field) => field.key === 'Reviewer')?.value, 'Existing reviewer')
+})
+
 for (const action of ['accept', 'reject', 'warning', 'notify_and_warn']) {
   test(`${action} command details finish loading without approval fields`, async () => {
-    const vm = context({ action: { value: action, label: action }, workflow: null })
-    const config = command.data.call(vm)
-    const card = {
-      ...autoDetail.data(), ...autoDetail.methods,
-      fields: config.detailFields, url: config.url, iObject: vm.object, formatters: {},
-      $store: { dispatch: async () => ({ name: { label: 'Name', type: 'string' } }) }
-    }
-    await autoDetail.mounted.call(card)
-    assert.equal(card.loading, false)
-    assert.equal(card.items.find((item) => item.key === 'Action')?.value, action)
-    assert.ok(!card.items.some((item) => item.key === 'WFWorkflows' || item.key === 'Reviewer'))
+    const fields = await visibleDetails(command, context({
+      action: { value: action, label: action }, workflow: null, reviewers: undefined
+    }))
+    assert.equal(fields.find((item) => item.key === 'Action')?.value, action)
+    assert.ok(!fields.some((item) => item.key === 'WFWorkflows' || item.key === 'Reviewer'))
   })
 }
