@@ -71,9 +71,8 @@ export default {
         {
           title: this.$t('LoginSSHKeySetting'),
           name: 'SSHKeyList',
-          disabled:
-            !this.$store.state.users.profile.can_public_key_auth ||
-            !this.$hasPerm('authentication.view_sshkey')
+          hidden: !this.$hasPerm('authentication.view_sshkey'),
+          disabled: !this.$store.state.users.profile.can_public_key_auth
         },
         {
           title: this.$t('LoginUKeySetting'),

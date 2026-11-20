@@ -92,23 +92,22 @@ test('the password route does not require SSH permissions; SSH create/update rou
   }
 })
 
-test('local users without SSH permission can change passwords and cannot open the SSH tab', () => {
+test('local users without SSH permission can change passwords and do not see the SSH tab', () => {
   const view = createView()
   assert.equal(view.config.submenu.find((tab) => tab.name === 'Password').disabled, false)
-  assert.equal(view.config.submenu.find((tab) => tab.name === 'SSHKeyList').disabled, true)
+  assert.equal(view.config.submenu.find((tab) => tab.name === 'SSHKeyList').hidden, true)
   assert.equal(renderedTab(view), 'Password')
   view.handleUpdate('SSHKeyList')
   assert.equal(renderedTab(view), Vue.Comment)
 })
 
-test('SSH tab availability requires both the feature setting and view permission', () => {
+test('SSH permission controls visibility while the feature setting controls availability', () => {
   for (const ssh of [false, true]) {
     for (const publicKey of [false, true]) {
       const view = createView({ ssh, publicKey })
-      assert.equal(
-        view.config.submenu.find((tab) => tab.name === 'SSHKeyList').disabled,
-        !(ssh && publicKey)
-      )
+      const tab = view.config.submenu.find((tab) => tab.name === 'SSHKeyList')
+      assert.equal(tab.hidden, !ssh)
+      assert.equal(tab.disabled, !publicKey)
     }
   }
   const view = createView({ ssh: true })
