@@ -1,7 +1,12 @@
 <template>
   <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="user">
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" @update:active-menu="handleUpdate" />
+      <component
+        :is="config.activeMenu"
+        v-if="config.activeMenu !== 'SSHKeyList' || $hasPerm('authentication.view_sshkey')"
+        :object="user"
+        @update:active-menu="handleUpdate"
+      />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -45,7 +50,11 @@ export default {
       handler(disabled) {
         this.config.submenu = this.getSubmenu()
         if (disabled && this.config.activeMenu === 'Password') {
-          this.config.activeMenu = 'SSHKeyList'
+          this.config.activeMenu =
+            this.$store.state.users.profile.can_public_key_auth &&
+            this.$hasPerm('authentication.view_sshkey')
+              ? 'SSHKeyList'
+              : 'Password'
         }
       }
     }
@@ -61,7 +70,9 @@ export default {
         {
           title: this.$t('LoginSSHKeySetting'),
           name: 'SSHKeyList',
-          disabled: !this.$store.state.users.profile.can_public_key_auth
+          disabled:
+            !this.$store.state.users.profile.can_public_key_auth ||
+            !this.$hasPerm('authentication.view_sshkey')
         },
         {
           title: this.$t('LoginUKeySetting'),
