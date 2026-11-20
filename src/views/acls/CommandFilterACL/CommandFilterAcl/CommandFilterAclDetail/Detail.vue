@@ -34,20 +34,18 @@ export default {
           key: this.$t('Action'),
           value: approvalActionLabel(this.object, this.$t)
         },
-        this.object.action?.value === 'review' && {
+        {
           key: this.$t(this.object.workflow ? 'WFWorkflows' : 'Reviewer'),
+          has: this.object.action?.value === 'review',
           value: this.object.workflow
             ? this.object.workflow_name || '-'
-            : this.object?.reviewers.map((item) => item?.name).join(', ')
+            : (this.object.reviewers || []).map((item) => item?.name).join(', ')
         },
-        ...(this.object.workflow_requires_reviewers
-          ? [
-              {
-                key: this.$t('Reviewer'),
-                value: (this.object.reviewers || []).map((item) => item.name).join(', ')
-              }
-            ]
-          : []),
+        {
+          key: this.$t('Reviewer'),
+          has: !!this.object.workflow_requires_reviewers,
+          value: (this.object.reviewers || []).map((item) => item.name).join(', ')
+        },
         'priority',
         'is_active',
         'comment'
