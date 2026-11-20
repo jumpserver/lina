@@ -64,12 +64,11 @@ export default {
           enable: false
         },
         callback: {
-          onCheck: _.debounce((event, treeId, treeNode) => {
+          onCheck: (event, treeId, treeNode) => {
             // 选择后，更新按钮可用
             vm.setUpdateBtn()
-            vm.checkActionDeps(treeNode)
-            vm.checkSpecDeps()
-          }, 200),
+            vm.checkPermissionDeps(treeNode)
+          },
           beforeCheck: (treeId, treeNode) => {
             return true
           },
@@ -205,7 +204,7 @@ export default {
           'ops.view_playbook'
         ],
         'ops.add_jobexecution': ['ops.view_celerytaskexecution'],
-        'authentication.add_connectiontoken': ['rbac.view_webterminal'],
+        'rbac.view_webterminal': ['authentication.add_connectiontoken'],
         'labels.view_labeledresource': ['rbac.view_contenttype'],
         'xpack.add_syncinstancetask': [
           'assets.view_asset',
@@ -278,76 +277,39 @@ export default {
       }
       return { action, resource, app }
     },
-    checkActionDeps(node) {
-      if (node.isParent) {
-        this.$log.debug('Is parent')
-        return
-      }
-      const data = this.parsePerm(node.title)
-      if (!data) {
-        this.$log.error('Parse perm error: ', node.title)
-        return
-      }
-
-      const { app, action, resource } = data
-      const ztree = this.$refs.tree.zTree
-      const viewId = `${app}.view_${resource}`
-      const viewNode = ztree.getNodeByParam('title', viewId)
-      if (!viewNode) {
-        return
-      }
-
-      const viewIgnoreAction = ['match']
-      const checked = node.checked
-      if (action === 'view') {
-        // 选中 view node 不需要处理, 不选中的话去掉 兄弟节点选中
-        if (checked) {
-          return
-        }
-        const parent = viewNode.getParentNode()
-        const actionNodes = parent.children
-        for (const node of actionNodes) {
-          const d = this.parsePerm(node.title)
-          if (!d) {
-            continue
+    checkPermissionDeps(treeNode) {
+      const ztree = this.ztree
+      const nodes = ztree.transformToArray(ztree.getNodes()).filter((node) => !node.isParent)
+      const dependencies = new Map(
+        nodes.map((node) => {
+          // 分组依赖适用于其下的每个权限，半选分组也不例外。
+          const deps = node.getPath().flatMap((parent) => this.nodesDeps[parent.title] || [])
+          const perm = this.parsePerm(node.title)
+          if (perm && !['view', 'match'].includes(perm.action)) {
+            deps.push(`${perm.app}.view_${perm.resource}`)
           }
-          const { action: act, resource: res } = d
-          // 忽略的 action 不用处理, resource 不相同的不用处理
-          this.$log.debug('Action: ', act, d)
-          if (act === 'view' || viewIgnoreAction.indexOf(act) > -1 || res !== resource) {
-            continue
-          }
-          ztree.checkNode(node, false)
-        }
-      } else if (viewIgnoreAction.indexOf(action) > -1) {
-        this.$log.debug('Action is ignore: ', action)
-      } else {
-        if (!checked) {
-          return
-        }
-        this.$log.debug('Select view node: ', viewNode)
-        ztree.checkNode(viewNode, true)
-      }
-    },
-    checkSpecDeps() {
-      const ztree = this.$refs.tree.zTree
-      const depsId = ztree
-        .getCheckedNodes()
-        .filter((i) => {
-          return !!this.nodesDeps[i.title]
+          return [node, deps]
         })
-        .reduce((result, v) => {
-          return [...result, ...this.nodesDeps[v.title]]
-        }, [])
-      this.$log.debug('Select nodes should try: ', depsId)
-
-      for (const i of depsId) {
-        const depNode = this.ztree.getNodeByParam('title', i)
-        if (!depNode) {
-          this.$log.debug(`Not found depNode for title: ${i}`)
+      )
+      const checked = treeNode.checked
+      const pending = ztree.transformToArray([treeNode]).filter((node) => !node.isParent)
+      const visited = new Set()
+      while (pending.length) {
+        const node = pending.pop()
+        if (visited.has(node) || node.chkDisabled) {
           continue
         }
-        this.ztree.checkNode(depNode, true)
+        visited.add(node)
+        const related = checked
+          ? nodes.filter((item) => dependencies.get(node).includes(item.title))
+          : nodes.filter((item) => dependencies.get(item).includes(node.title))
+        for (const item of related) {
+          if (item.chkDisabled) {
+            continue
+          }
+          ztree.checkNode(item, checked, true)
+          pending.push(item)
+        }
       }
     },
     updatePermissions() {
