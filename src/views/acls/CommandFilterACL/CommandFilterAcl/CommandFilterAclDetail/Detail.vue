@@ -51,7 +51,7 @@ export default {
         'priority',
         'is_active',
         'comment'
-      ]
+      ].filter(Boolean)
     }
   },
   computed: {}
