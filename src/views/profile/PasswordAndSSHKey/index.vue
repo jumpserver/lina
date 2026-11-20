@@ -3,6 +3,7 @@
     <keep-alive>
       <component
         :is="config.activeMenu"
+        :key="config.activeMenu"
         v-if="config.activeMenu !== 'SSHKeyList' || $hasPerm('authentication.view_sshkey')"
         :object="user"
         @update:active-menu="handleUpdate"

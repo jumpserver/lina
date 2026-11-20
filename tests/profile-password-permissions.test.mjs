@@ -138,3 +138,13 @@ test('UKey remains registered, selectable without SSH permission, and controlled
     }
   }
 })
+
+test('cached password, SSH and UKey tabs have distinct component identities', () => {
+  const view = createView({ ssh: true })
+  const identities = ['Password', 'SSHKeyList', 'UKey'].map((tab) => {
+    view.handleUpdate(tab)
+    const vnode = render(view, []).children.default()[0].children[0]
+    return vnode.key ?? vnode.type
+  })
+  assert.equal(new Set(identities).size, 3)
+})
