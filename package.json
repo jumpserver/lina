@@ -17,7 +17,7 @@
     "fmt": "oxfmt --write src package.json vite.config.js .env.development .env.development.example .env.production .env.staging .oxlintrc.json .oxfmtrc.json",
     "fmt:check": "oxfmt --check src package.json vite.config.js .env.development .env.development.example .env.production .env.staging .oxlintrc.json .oxfmtrc.json",
     "fix": "yarn run lint:fix && yarn run fmt",
-    "svgo": "svgo -f src/icons/svg --config=src/icas/svgo.yml",
+    "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.config.mjs",
     "vue-i18n-extract": "vue-i18n-extract",
     "vue-i18n-report": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json'",
     "vue-i18n-report-json": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json' -o /tmp/abc.json",
