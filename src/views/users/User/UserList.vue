@@ -40,6 +40,17 @@ export default {
   },
   data() {
     const vm = this
+    const canEditUser = (row) => vm.currentUserIsSuperAdmin || row.is_superuser === false
+    const canBulkUpdate = ({ selectedRows }) =>
+      vm.$hasPerm('users.change_user') && selectedRows.some(canEditUser)
+    const editableSelection = (selectedRows) => {
+      const users = selectedRows.filter(canEditUser)
+      const skipped = selectedRows.length - users.length
+      if (skipped) {
+        vm.$message.info(`${vm.$t('Skipped')} · ${vm.$t('SuperAdmin')} × ${skipped}`)
+      }
+      return users
+    }
     const hasDelete = () => {
       return vm.$hasPerm('users.delete_user')
     }
@@ -291,12 +302,7 @@ export default {
             width: '90px',
             formatterArgs: {
               hasDelete: hasDelete,
-              canUpdate: ({ row }) => {
-                return (
-                  this.$hasPerm('users.change_user') &&
-                  !(!this.currentUserIsSuperAdmin && row['is_superuser'])
-                )
-              },
+              canUpdate: ({ row }) => this.$hasPerm('users.change_user') && canEditUser(row),
               extraActions: [
                 {
                   title: this.$t('Remove'),
@@ -340,12 +346,10 @@ export default {
           // }
         ],
         hasBulkUpdate: true,
-        canBulkUpdate: ({ selectedRows }) => {
-          return selectedRows.length > 0 && vm.$hasPerm('users.change_user')
-        },
+        canBulkUpdate,
         handleBulkUpdate: ({ selectedRows }) => {
+          vm.updateSelectedDialogSetting.selectedRows = editableSelection(selectedRows)
           vm.updateSelectedDialogSetting.visible = true
-          vm.updateSelectedDialogSetting.selectedRows = selectedRows
         },
         extraMoreActions: [
           {
@@ -360,17 +364,17 @@ export default {
             name: 'BatchDisable',
             title: this.$t('DisableSelected'),
             icon: 'action-disable',
-            can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
+            can: canBulkUpdate,
             callback: ({ selectedRows, reloadTable }) =>
-              vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
+              vm.bulkActionCallback(editableSelection(selectedRows), reloadTable, 'disable')
           },
           {
             name: 'BatchActivate',
             title: this.$t('ActivateSelected'),
             icon: 'action-activate',
-            can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
+            can: canBulkUpdate,
             callback: ({ selectedRows, reloadTable }) =>
-              vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
+              vm.bulkActionCallback(editableSelection(selectedRows), reloadTable, 'activate')
           }
         ]
       },
@@ -378,6 +382,7 @@ export default {
         selectedRows: [],
         visible: false,
         targetResourceSetting: {
+          canSelect: canEditUser,
           label: this.$t('User'),
           url: '/api/v1/users/users/?fields_size=mini',
           resourceName: this.$t('Users')
