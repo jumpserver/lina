@@ -156,7 +156,7 @@ export function toM2MInstanceJsonParams(instanceAppModel, instanceId) {
 }
 
 export function IsSupportPauseSessionType(terminalType) {
-  const supportedType = ['koko', 'lion', 'chen', 'kael']
+  const supportedType = ['koko', 'lion', 'chen', 'kael', 'magnus']
   return supportedType.includes(terminalType)
 }
 
