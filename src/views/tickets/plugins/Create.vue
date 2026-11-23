@@ -59,6 +59,8 @@ import { toSafeLocalDateStr } from '@/composables/useDateTime'
 import resourceAvailability from './resourceAvailability'
 import TicketTransferFiles from '../components/TicketTransferFiles.vue'
 import TicketWorkflowSelect from '../components/TicketWorkflowSelect.vue'
+import TicketAttachmentUpload from '../components/TicketAttachmentUpload.vue'
+import { ticketSubmitData } from '../attachments'
 
 export default {
   mixins: [resourceAvailability],
@@ -148,7 +150,7 @@ export default {
         }
       }
       this.selectedOrgId = orgId
-      this.initial = { title: '', org_id: orgId, workflow_id: '', comment: '' }
+      this.initial = { title: '', org_id: orgId, workflow_id: '', comment: '', attachments: [] }
       this.fieldsMeta = {
         title: { label: this.$t('Title'), required: true, type: 'input' },
         org_id: {
@@ -166,7 +168,7 @@ export default {
               this.transferUploading = false
               if (this.fieldsMeta.param_files) this.fieldsMeta.param_files.el.uploadedFiles = []
               for (const field of this.accountFields) this.loadAccountOptions(field, '', updateForm)
-              const cleared = { workflow_id: '' }
+              const cleared = { workflow_id: '', attachments: [] }
               for (const field of this.selectedPlugin.fields) {
                 cleared[`param_${field.name}`] = this.defaultValue(field)
               }
@@ -189,7 +191,8 @@ export default {
           },
           el: { options: [], disabled: true, loading: false, failed: false }
         },
-        comment: { label: this.$t('Comment'), type: 'input', el: { type: 'textarea', rows: 3 } }
+        comment: { label: this.$t('Comment'), type: 'input', el: { type: 'textarea', rows: 3 } },
+        attachments: { label: this.$t('Attachments'), component: TicketAttachmentUpload }
       }
       for (const field of this.selectedPlugin.fields) {
         const name = `param_${field.name}`
@@ -383,7 +386,7 @@ export default {
       this.fields = [
         [this.$t('Basic'), ['title', 'org_id', 'workflow_id']],
         [this.$t('ApplyInfo'), this.selectedPlugin.fields.map((field) => `param_${field.name}`)],
-        [this.$t('Other'), ['comment']]
+        [this.$t('Other'), ['comment', 'attachments']]
       ]
       const flow = await this.loadFlows(orgId)
       if (flow === undefined) return
@@ -546,23 +549,26 @@ export default {
       if (!this.resourceAvailability?.description_allowed) {
         delete payload.request_data.resource_description
       }
-      return payload
+      return { ...payload, attachments: value.attachments || [] }
     },
     performSubmit(value) {
-      return this.$axios.post('/api/v1/tickets/tickets/open/', value).catch((error) => {
-        const data = error.response?.data
-        if (
-          data?.request_data &&
-          typeof data.request_data === 'object' &&
-          !Array.isArray(data.request_data)
-        ) {
-          for (const [field, errors] of Object.entries(data.request_data)) {
-            data[`param_${field}`] = errors
+      const { attachments, ...payload } = value
+      return this.$axios
+        .post('/api/v1/tickets/tickets/open/', ticketSubmitData(payload, attachments))
+        .catch((error) => {
+          const data = error.response?.data
+          if (
+            data?.request_data &&
+            typeof data.request_data === 'object' &&
+            !Array.isArray(data.request_data)
+          ) {
+            for (const [field, errors] of Object.entries(data.request_data)) {
+              data[`param_${field}`] = errors
+            }
+            delete data.request_data
           }
-          delete data.request_data
-        }
-        throw error
-      })
+          throw error
+        })
     },
     hasUnsavedChanges() {
       return this.$refs.form?.hasUnsavedChanges?.() || false

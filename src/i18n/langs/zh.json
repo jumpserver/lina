@@ -4109,5 +4109,14 @@
   "AppAuditMeaningAccessMaterialsGenerated": "已生成 SDK 或 Agent 接入 JumpServer 所需的配置和命令，未修改应用设置或账号凭据。",
   "AppAuditOriginalDetail": "原始说明",
   "AppAuditViewRawRecord": "查看原始记录",
-  "AppAuditSourceIP": "来源 IP"
+  "AppAuditSourceIP": "来源 IP",
+  "Attachments": "附件",
+  "TicketAttachmentExpired": "已过期",
+  "TicketAttachmentDrop": "拖拽文件到此处，或粘贴图片",
+  "TicketAttachmentHelp": "支持 JPG、PNG、PDF、Word、Excel，最多 5 个文件，单个不超过 10 MB。",
+  "TicketAttachmentRetention": "提交后保留 {days} 天，与工单状态无关。",
+  "TicketAttachmentCountError": "最多可添加 5 个附件。",
+  "TicketAttachmentTypeError": "请选择 JPG、PNG、PDF、Word 或 Excel 文件。",
+  "TicketAttachmentSizeError": "文件不能为空，且单个不能超过 10 MB。",
+  "TicketAttachmentExpires": "到期时间：{date}"
 }

@@ -1,3 +1,4 @@
+import { ticketSubmitData } from '../src/views/tickets/attachments.js'
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
@@ -17,6 +18,8 @@ const script = descriptor.script.content
 const dependencies = {
   Select2: {},
   TicketWorkflowSelect: {},
+  TicketAttachmentUpload: {},
+  ticketSubmitData,
   GenericCreateUpdatePage: {},
   AccountFormatter: {},
   ExpireNoticePolicy: {},
