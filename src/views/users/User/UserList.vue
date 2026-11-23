@@ -42,15 +42,7 @@ export default {
     const vm = this
     const canEditUser = (row) => vm.currentUserIsSuperAdmin || row.is_superuser === false
     const canBulkUpdate = ({ selectedRows }) =>
-      vm.$hasPerm('users.change_user') && selectedRows.some(canEditUser)
-    const editableSelection = (selectedRows) => {
-      const users = selectedRows.filter(canEditUser)
-      const skipped = selectedRows.length - users.length
-      if (skipped) {
-        vm.$message.info(`${vm.$t('Skipped')} · ${vm.$t('SuperAdmin')} × ${skipped}`)
-      }
-      return users
-    }
+      selectedRows.length > 0 && vm.$hasPerm('users.change_user')
     const hasDelete = () => {
       return vm.$hasPerm('users.delete_user')
     }
@@ -151,6 +143,7 @@ export default {
         }
       ],
       tableConfig: {
+        canSelect: canEditUser,
         url: '/api/v1/users/users/',
         permissions: {
           resource: 'user'
@@ -348,7 +341,7 @@ export default {
         hasBulkUpdate: true,
         canBulkUpdate,
         handleBulkUpdate: ({ selectedRows }) => {
-          vm.updateSelectedDialogSetting.selectedRows = editableSelection(selectedRows)
+          vm.updateSelectedDialogSetting.selectedRows = selectedRows
           vm.updateSelectedDialogSetting.visible = true
         },
         extraMoreActions: [
@@ -366,7 +359,7 @@ export default {
             icon: 'action-disable',
             can: canBulkUpdate,
             callback: ({ selectedRows, reloadTable }) =>
-              vm.bulkActionCallback(editableSelection(selectedRows), reloadTable, 'disable')
+              vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
           },
           {
             name: 'BatchActivate',
@@ -374,7 +367,7 @@ export default {
             icon: 'action-activate',
             can: canBulkUpdate,
             callback: ({ selectedRows, reloadTable }) =>
-              vm.bulkActionCallback(editableSelection(selectedRows), reloadTable, 'activate')
+              vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
           }
         ]
       },
