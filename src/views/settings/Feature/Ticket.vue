@@ -25,7 +25,10 @@ export default {
       visible: false,
       config: {
         fields: [
-          [this.$t('Basic'), ['TICKETS_ENABLED', 'TICKETS_DIRECT_APPROVE']],
+          [
+            this.$t('Basic'),
+            ['TICKETS_ENABLED', 'TICKETS_DIRECT_APPROVE', 'TICKET_ATTACHMENT_RETENTION_DAYS']
+          ],
           [
             this.$t('AssetPermission'),
             [

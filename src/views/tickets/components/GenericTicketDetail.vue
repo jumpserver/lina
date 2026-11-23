@@ -35,6 +35,7 @@
         @saving="savingRequest = $event"
         @refresh="$refs.workflow.load(true)"
       />
+      <TicketAttachments :key="ticketKey" :object="object" />
       <Details
         v-if="object.state.value === 'approved' && assignedCardItems.length > 0"
         :detail-card-items="assignedCardItems"
@@ -68,10 +69,12 @@ import Details from './Details'
 import Session from './Session'
 import WorkflowPanel from './WorkflowPanel'
 import TicketRequestInfo from './TicketRequestInfo'
+import TicketAttachments from './TicketAttachments.vue'
 import { getTicketFlowLabel, getTicketStateLabel, getTicketTypeLabel } from '../const'
 export default {
   name: 'GenericTicketDetail',
   components: {
+    TicketAttachments,
     WorkflowPanel,
     TicketRequestInfo,
     CcUsers,

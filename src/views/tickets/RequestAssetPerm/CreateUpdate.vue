@@ -67,6 +67,8 @@ import {
 import { getTicketFlowLabel } from '@/views/tickets/const'
 import { mapGetters, mapState } from 'vuex'
 import resourceAvailability from '../plugins/resourceAvailability'
+import TicketAttachmentUpload from '../components/TicketAttachmentUpload.vue'
+import { ticketSubmitData } from '../attachments'
 
 export default {
   mixins: [resourceAvailability],
@@ -93,6 +95,7 @@ export default {
       flowBeneficiary: '',
       selectedOrgId: '',
       initial: {
+        attachments: [],
         ips_or_not: true,
         apply_date_expired: date_expired,
         apply_date_start: date_start,
@@ -129,9 +132,10 @@ export default {
             'apply_expire_soon_notice_minutes'
           ]
         ],
-        [this.$t('Other'), ['comment']]
+        [this.$t('Other'), ['comment', 'attachments']]
       ],
       fieldsMeta: {
+        attachments: { label: this.$t('Attachments'), component: TicketAttachmentUpload },
         resource_description: {
           label: this.$t('TicketResourceDescription'),
           helpText: this.$t('TicketResourceDescriptionHelp'),
@@ -311,6 +315,7 @@ export default {
               this.loadResourceAvailability('apply_asset', event)
               updateForm({
                 workflow_id: '',
+                attachments: [],
                 apply_nodes: [],
                 apply_assets: [],
                 apply_accounts: [],
@@ -536,15 +541,21 @@ export default {
         )
       )
       return this.$axios
-        .post('/api/v1/tickets/tickets/open/', {
-          type: 'apply_asset',
-          title,
-          org_id,
-          workflow_id,
-          comment,
-          request_data,
-          ...(this.sourceTicket ? { source_ticket_id: this.sourceTicket.id } : {})
-        })
+        .post(
+          '/api/v1/tickets/tickets/open/',
+          ticketSubmitData(
+            {
+              type: 'apply_asset',
+              title,
+              org_id,
+              workflow_id,
+              comment,
+              request_data,
+              ...(this.sourceTicket ? { source_ticket_id: this.sourceTicket.id } : {})
+            },
+            validValues.attachments
+          )
+        )
         .then((ticket) => {
           this.submitted = true
           return ticket

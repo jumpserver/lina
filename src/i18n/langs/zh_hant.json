@@ -3673,5 +3673,14 @@
   "AppAuditOriginalDetail": "原始說明",
   "AppAuditViewRawRecord": "查看原始記錄",
   "AppAuditSourceIP": "來源 IP",
-  "AppAuditRecordID": "日誌編號"
+  "AppAuditRecordID": "日誌編號",
+  "Attachments": "附件",
+  "TicketAttachmentExpired": "已過期",
+  "TicketAttachmentDrop": "拖曳檔案到此處，或貼上圖片",
+  "TicketAttachmentHelp": "支援 JPG、PNG、PDF、Word、Excel，最多 5 個檔案，單個不超過 10 MB。",
+  "TicketAttachmentRetention": "提交後保留 {days} 天，與工單狀態無關。",
+  "TicketAttachmentCountError": "最多可新增 5 個附件。",
+  "TicketAttachmentTypeError": "請選擇 JPG、PNG、PDF、Word 或 Excel 檔案。",
+  "TicketAttachmentSizeError": "檔案不能為空，且單個不能超過 10 MB。",
+  "TicketAttachmentExpires": "到期時間：{date}"
 }

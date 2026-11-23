@@ -4114,5 +4114,14 @@
   "AppAuditMeaningAccessMaterialsGenerated": "Generated configuration and setup commands for connecting an SDK or Agent to JumpServer. This does not change application settings or account credentials.",
   "AppAuditOriginalDetail": "Original detail",
   "AppAuditViewRawRecord": "View original record",
-  "AppAuditSourceIP": "Source IP"
+  "AppAuditSourceIP": "Source IP",
+  "Attachments": "Attachments",
+  "TicketAttachmentExpired": "Expired",
+  "TicketAttachmentDrop": "Drop files here, or paste an image",
+  "TicketAttachmentHelp": "Up to 5 files, 10 MB each. JPG, PNG, PDF, Word and Excel.",
+  "TicketAttachmentRetention": "Retained for {days} days from submission, regardless of ticket status.",
+  "TicketAttachmentCountError": "You can attach up to 5 files.",
+  "TicketAttachmentTypeError": "Choose a JPG, PNG, PDF, Word or Excel file.",
+  "TicketAttachmentSizeError": "Each file must be non-empty and no larger than 10 MB.",
+  "TicketAttachmentExpires": "Expires: {date}"
 }
