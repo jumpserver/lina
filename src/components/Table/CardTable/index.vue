@@ -241,7 +241,8 @@ export default {
     defaultPerformView(obj) {
       const defaultRoute = this.$route.name.replace('List', 'Detail')
       const route = this.headerActions.detailRoute || defaultRoute
-      let detailRoute = { replace: true }
+      // 不要用 replace 打开详情：那会把列表从历史记录里替换掉，返回键就到不了列表
+      let detailRoute = {}
       if (typeof route === 'string') {
         detailRoute.name = route
         detailRoute.params = { id: obj.id }
