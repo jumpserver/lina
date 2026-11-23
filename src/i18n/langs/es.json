@@ -2015,6 +2015,7 @@
   "Summary(success/total)": "Resumen (éxito / total)",
   "Sunday": "Domingo",
   "SuperAdmin": "Super administrador",
+  "SystemAdminsInSelection": "No tienes permiso para realizar la acción «{action}». Desmarca a los siguientes administradores del sistema y vuelve a intentarlo: {users}.",
   "SuperOrgAdmin": "Superadministrador + Administrador de organización",
   "Support": "Apoyo",
   "SupportedProtocol": "Protocolos soportados",

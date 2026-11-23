@@ -2093,6 +2093,7 @@
   "Summary(success/total)": "概况( 成功/总数 )",
   "Sunday": "周日",
   "SuperAdmin": "超级管理员",
+  "SystemAdminsInSelection": "{users} 是系统管理员，无法执行「{action}」。请取消勾选后重试。",
   "SuperOrgAdmin": "超级管理员+组织管理员",
   "Support": "支持",
   "SupportedProtocol": "支持的协议",

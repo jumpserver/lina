@@ -2083,6 +2083,7 @@
   "Summary(success/total)": " vue d'ensemble (réussi/total)",
   "Sunday": "Dim",
   "SuperAdmin": "Super administrateur",
+  "SystemAdminsInSelection": "Vous ne pouvez pas effectuer l’action « {action} ». Désélectionnez les administrateurs système suivants, puis réessayez : {users}.",
   "SuperOrgAdmin": "Super admin + administrateur d'organisation",
   "Support": "Support",
   "SupportedProtocol": "Protocoles",

@@ -2113,6 +2113,7 @@
   "Summary(success/total)": " overview( successful/total )",
   "Sunday": "Sun",
   "SuperAdmin": "Super administrator",
+  "SystemAdminsInSelection": "Permission denied for “{action}”. Deselect the following system administrators and try again: {users}.",
   "SuperOrgAdmin": "Super admin + organization admin",
   "Support": "Support",
   "SupportedProtocol": "Protocols",

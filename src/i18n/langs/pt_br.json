@@ -2015,6 +2015,7 @@
   "Summary(success/total)": "Visão geral ( Sucesso/Total )",
   "Sunday": "Domingo",
   "SuperAdmin": "Super Administrador",
+  "SystemAdminsInSelection": "Você não tem permissão para executar “{action}”. Desmarque os administradores do sistema a seguir e tente novamente: {users}.",
   "SuperOrgAdmin": "Super administrador+Administrador de organização",
   "Support": "Suporte",
   "SupportedProtocol": "Protocolos suportados",

@@ -1980,6 +1980,7 @@
   "Summary(success/total)": "概要（成功/総数）",
   "Sunday": "日曜日",
   "SuperAdmin": "スーパー管理者",
+  "SystemAdminsInSelection": "「{action}」を実行する権限がありません。次のシステム管理者の選択を解除してから、もう一度お試しください：{users}。",
   "SuperOrgAdmin": "スーパー管理者+組織管理",
   "Support": "サポート",
   "SupportedProtocol": "サポートされているプロトコル",
