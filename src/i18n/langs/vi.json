@@ -2015,6 +2015,7 @@
   "Summary(success/total)": "Tổng quan ( Thành công/Tổng số )",
   "Sunday": "Chủ nhật",
   "SuperAdmin": "Quản trị viên siêu cấp",
+  "SystemAdminsInSelection": "Bạn không có quyền thực hiện “{action}”. Hãy bỏ chọn các quản trị viên hệ thống sau rồi thử lại: {users}.",
   "SuperOrgAdmin": "Quản trị viên siêu cấp + Quản trị viên tổ chức",
   "Support": "Hỗ trợ",
   "SupportedProtocol": "Giao thức hỗ trợ",

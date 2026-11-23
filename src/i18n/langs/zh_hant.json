@@ -1975,6 +1975,7 @@
   "Summary(success/total)": "概況( 成功/總數 )",
   "Sunday": "週日",
   "SuperAdmin": "超級管理員",
+  "SystemAdminsInSelection": "{users} 是系統管理員，無法執行「{action}」。請取消勾選後再試一次。",
   "SuperOrgAdmin": "超級管理員+組織管理員",
   "Support": "支持",
   "SupportedProtocol": "支持的協議",

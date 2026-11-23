@@ -2015,6 +2015,7 @@
   "Summary(success/total)": "개요( 성공/총 수 )",
   "Sunday": "로그아웃",
   "SuperAdmin": "슈퍼 관리자",
+  "SystemAdminsInSelection": "“{action}” 작업을 수행할 권한이 없습니다. 다음 시스템 관리자의 선택을 해제한 후 다시 시도하세요: {users}.",
   "SuperOrgAdmin": "슈퍼 관리자 + 조직 관리자",
   "Support": "지원",
   "SupportedProtocol": "지원하는 프로토콜",
