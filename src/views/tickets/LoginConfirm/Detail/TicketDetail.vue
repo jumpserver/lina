@@ -1,4 +1,10 @@
-<template><GenericTicketDetail :object="object" :special-card-items="specialCardItems" /></template>
+<template>
+  <GenericTicketDetail
+    :object="object"
+    :special-card-items="specialCardItems"
+    :show-comment="!object.request_items?.some((item) => item.name === 'reason')"
+  />
+</template>
 <script>
 import GenericTicketDetail from '../../components/GenericTicketDetail'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
