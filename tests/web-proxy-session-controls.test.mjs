@@ -27,7 +27,22 @@ const ticket = await loadComponent('views/tickets/components/Session.vue', {
   IBox: {}, Drawer: {}, IsSupportPauseSessionType
 })
 
-test('built-in browser controls are disabled while HTTP(S) remote apps retain theirs', async () => {
+test('Magnus pause and resume require a normal session and the existing session-control permission', () => {
+  const row = { terminal: { type: 'magnus' }, type: { value: 'normal' }, is_locked: false }
+  const context = { $t: (key) => key, $hasPerm: (perm) => perm === 'terminal.terminate_session' }
+  const actions = online.data.call(context).extraActions
+  const pause = actions.find((action) => action.name === 'pause')
+  const resume = actions.find((action) => action.name === 'resume')
+  assert.ok(pause.can({ row }) && pause.has({ row }))
+  assert.ok(!resume.has({ row }))
+  row.is_locked = true
+  assert.ok(resume.can({ row }) && resume.has({ row }) && !pause.has({ row }))
+  context.$hasPerm = () => false
+  assert.ok(!pause.can({ row }) && !resume.can({ row }))
+  assert.ok(ticket.computed.supportedLock.call({ session: { type: 'normal', terminal_type: 'magnus', is_finished: false } }))
+})
+
+test('built-in browser controls are disabled while HTTP(S) remote apps retain theirs', () => {
   for (const terminal of ['koko', 'lion']) {
     for (const protocol of ['http', 'https']) {
       for (const type of ['web_proxy', 'normal']) {
@@ -51,15 +66,9 @@ test('built-in browser controls are disabled while HTTP(S) remote apps retain th
         assert.equal(quickActions[0].attrs.disabled, false)
         assert.equal(quickActions[1].attrs.disabled, !supported)
 
-        const ticketContext = {
-          object: { id: 'ticket' },
-          $axios: () => Promise.resolve(session)
-        }
-        ticket.methods.init.call(ticketContext)
-        // Let the existing request callback apply the capability decision.
-        await Promise.resolve()
-        assert.equal(ticketContext.supportedLock, supported)
-        assert.equal(ticketContext.session.can_join, supported)
+        assert.equal(ticket.computed.supportedLock.call({
+          session: { terminal_type: terminal, type, is_finished: false }
+        }), supported)
       }
     }
   }
