@@ -230,14 +230,12 @@ function createContextService({ router } = {}) {
   return {
     install(app) {
       app.mixin({
+        beforeCreate() {
+          // Bind the context to this component so nested drawers use their own ID.
+          this.$context = createFacade(this)
+        },
         unmounted() {
           deleteViewScope(this)
-        }
-      })
-
-      Object.defineProperty(app.config.globalProperties, '$context', {
-        get() {
-          return createFacade(this)
         }
       })
     }

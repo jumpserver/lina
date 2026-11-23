@@ -30,6 +30,7 @@
       </table>
     </IBox>
     <Drawer
+      v-if="drawerVisible"
       v-model:visible="drawerVisible"
       :component="detailDrawer"
       :component-props="detailDrawerProps"
