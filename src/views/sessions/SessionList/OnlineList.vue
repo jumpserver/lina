@@ -20,6 +20,10 @@ export default {
   },
   data() {
     const vm = this
+    const canToggleLock = ({ row }) =>
+      !row.is_finished &&
+      IsSupportPauseSessionType(row.terminal.type, row.type.value) &&
+      vm.$hasPerm('terminal.terminate_session')
     return {
       url: '/api/v1/terminal/sessions/?is_finished=0&category=user',
       isTerminating: false,
@@ -49,12 +53,7 @@ export default {
           title: this.$t('Pause'),
           icon: 'fa-solid fa-pause',
           type: 'warning',
-          can: ({ row }) => {
-            const terminalType = row['terminal']['type']
-            const isNormalSession = row['type']['value'] === 'normal'
-            const supportedType = IsSupportPauseSessionType(terminalType) && isNormalSession
-            return supportedType && vm.$hasPerm('terminal.terminate_session')
-          },
+          can: canToggleLock,
           has: ({ row }) => !row['is_locked'],
           callback: function ({ reload, row }) {
             const data = {
@@ -73,12 +72,7 @@ export default {
           title: this.$t('Resume'),
           icon: 'fa-solid fa-unlock',
           type: 'warning',
-          can: ({ row }) => {
-            const terminalType = row['terminal']['type']
-            const isNormalSession = row['type']['value'] === 'normal'
-            const supportedType = IsSupportPauseSessionType(terminalType) && isNormalSession
-            return supportedType && vm.$hasPerm('terminal.terminate_session')
-          },
+          can: canToggleLock,
           has: ({ row }) => row['is_locked'],
           callback: function ({ reload, row }) {
             const data = {

@@ -155,9 +155,10 @@ export function toM2MInstanceJsonParams(instanceAppModel, instanceId) {
   return ['attr_rules_instance', encodeURIComponent(btoa(String.fromCharCode(...data)))]
 }
 
-export function IsSupportPauseSessionType(terminalType) {
+export function IsSupportPauseSessionType(terminalType, sessionType) {
+  if (sessionType === 'db_workbench') return terminalType === 'koko'
   const supportedType = ['koko', 'lion', 'chen', 'kael', 'magnus', 'razor']
-  return supportedType.includes(terminalType)
+  return sessionType === 'normal' && supportedType.includes(terminalType)
 }
 
 const devicePlatformIcons = new Map([

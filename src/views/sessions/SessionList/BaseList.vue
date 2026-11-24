@@ -45,6 +45,7 @@ export default {
             'asset',
             'account',
             'protocol',
+            'type',
             'login_from',
             'date_start',
             'actions'

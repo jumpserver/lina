@@ -118,11 +118,7 @@ export default {
     },
     supportedLock() {
       const session = this.session
-      return (
-        !session.is_finished &&
-        session.type === 'normal' &&
-        IsSupportPauseSessionType(session.terminal_type)
-      )
+      return !session.is_finished && IsSupportPauseSessionType(session.terminal_type, session.type)
     },
     isAuditRoute() {
       return this.$route.name === 'AuditTicketList'
