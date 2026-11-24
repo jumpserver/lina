@@ -65,8 +65,13 @@
 </template>
 
 <script>
+import { unref } from 'vue'
 import Icon from '@/components/Widgets/Icon'
-import { TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from '@/components/Drawer/context'
+import {
+  DRAWER_RUNTIME_CONTEXT,
+  TAB_NAVIGATION_CONTEXT,
+  TAB_NAVIGATION_SCOPE
+} from '@/components/Drawer/context'
 import { toSentenceCase } from '@/utils/common/index'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
 import { scopedLocalStorage as localStorage } from '@/utils/storage'
@@ -82,6 +87,10 @@ export default {
     tabNavigationContext: {
       from: TAB_NAVIGATION_CONTEXT,
       default: () => ({ scope: TAB_NAVIGATION_SCOPE.ROUTE })
+    },
+    drawerRuntimeContext: {
+      from: DRAWER_RUNTIME_CONTEXT,
+      default: () => null
     }
   },
   props: {
@@ -125,11 +134,23 @@ export default {
       helpAlertVisible: true,
       toSentenceCase: toSentenceCase,
       activeTab: this.activeMenu,
+      // 抽屉内的页签由抽屉上下文决定，而 activeMenu 会被本组件自己的
+      // update:activeMenu 覆盖成上一次选中的页签；另存初始值，作为抽屉
+      // 没有指定目标页签时的默认页签。
+      defaultTab: this.activeMenu,
       navigationActive: true,
       ownerPath: this.$route.path
     }
   },
   computed: {
+    // 本地抽屉（列表点开详情）会把目标页签放在抽屉上下文的 query.tab 里，
+    // 抽屉内的 TabPage 需要据此选中页签，否则只能落回默认页签。
+    drawerContext() {
+      return unref(this.drawerRuntimeContext) || null
+    },
+    drawerActiveTab() {
+      return this.drawerContext?.query?.tab || ''
+    },
     iHelpMessage() {
       return this.helpMessage || this.helpTip
     },
@@ -182,6 +203,15 @@ export default {
       handler(newValue) {
         this.activeTab = newValue
       }
+    },
+    // 抽屉实例可能被复用（关闭后再打开不会重新 created），且每次打开都会换成一个
+    // 新的上下文对象：按上下文同步才能覆盖「再次打开时没有目标页签」与
+    // 「目标页签和上次相同」两种情况。
+    drawerContext(context) {
+      if (!context || this.shouldSyncTabState) {
+        return
+      }
+      this.syncActiveTab()
     },
     '$route.query.tab'() {
       if (!this.shouldSyncTabState) {
@@ -250,7 +280,7 @@ export default {
             this.rememberActiveTab ? localStorage.getItem(this.activeTabStorageKey) : undefined,
             this.activeMenu
           ]
-        : [this.activeMenu]
+        : [this.drawerActiveTab, this.defaultTab]
 
       for (const preTab of preActiveTabs) {
         const currentTab = typeof preTab === 'object' ? preTab?.name || '' : preTab
