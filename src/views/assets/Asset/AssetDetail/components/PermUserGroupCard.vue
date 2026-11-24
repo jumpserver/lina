@@ -107,6 +107,7 @@ export default {
     goDetail(obj) {
       this.detailDrawer = this.detailRoute
       this.detailDrawerProps = {
+        actions: { detailApiUrl: `/api/v1/users/groups/${obj.id}/` },
         drawerContext: {
           isDrawer: true,
           action: 'detail',

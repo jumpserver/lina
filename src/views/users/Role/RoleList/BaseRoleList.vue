@@ -120,14 +120,6 @@ export default {
       }
     }
   },
-  watch: {
-    '$store.getters.inDrawer'(open) {
-      const table = this.$refs.ListTable
-      if (!open && table?.drawerContext) {
-        table.afterCloseDrawer()
-      }
-    }
-  },
   methods: {
     hasPermNotBuiltin(row, perm) {
       return !row['builtin'] && this.$hasPerm(perm)
