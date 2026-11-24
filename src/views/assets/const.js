@@ -89,7 +89,10 @@ async function updatePlatformProtocols(
     formUpdates.protocols = reloadPlatformProtocols(platformProtocols, currentProtocols)
   }
 
-  const isCreate = !vm.$context.get('id') && !vm.$context.get('clone_from')
+  const isCreate =
+    !vm.$context.get('id') &&
+    !vm.$context.get('clone_from') &&
+    vm.$context.get('action') !== 'clone'
   if (platformCategory === 'web' && (isCreate || platformChanged)) {
     Object.assign(formUpdates, getWebAssetSettingDefaults(platformProtocols))
   }

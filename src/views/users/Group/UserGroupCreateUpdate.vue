@@ -17,6 +17,8 @@ export default {
           users: []
         },
         url: '/api/v1/users/groups/',
+        objectDetailRoute: { name: 'UserGroupDetail' },
+        getNextRoute: () => ({ name: 'UserGroupDetail' }),
         fields: [
           [this.$t('Basic'), ['name', 'users']],
           [this.$t('Other'), ['comment']]

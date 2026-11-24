@@ -64,13 +64,15 @@ export default {
   },
   computed: {
     initial() {
-      return this.$context.getScope('overlay')?.query || this.$route.query
+      const initial = { ...(this.$context.getScope('overlay')?.query || this.$route.query) }
+      const org = this.$store.getters.consoleOrgs?.[0]
+      if (org) {
+        initial.org_id = org.id
+      }
+      return initial
     }
   },
   mounted() {
-    if (this.$store.getters.consoleOrgs) {
-      this.initial.org_id = this.$store.getters.consoleOrgs[0].id
-    }
     this.loading = false
   }
 }

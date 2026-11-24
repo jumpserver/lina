@@ -3,7 +3,10 @@
     <TwoCol>
       <ListTable ref="ListTable" :header-actions="headerActions" :table-config="tableConfig" />
       <template #right>
-        <PermUserGroupCard v-bind="UserGroupCardConfig" />
+        <PermUserGroupCard
+          v-bind="UserGroupCardConfig"
+          @group-deleted="$refs.ListTable.reloadTable()"
+        />
       </template>
     </TwoCol>
     <GenericListTableDialog
