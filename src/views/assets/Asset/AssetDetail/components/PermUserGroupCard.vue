@@ -12,9 +12,14 @@
                 placement="left"
                 style="margin: 4px"
               >
-                <el-link class="detail" @click="goDetail(obj)">
+                <el-link
+                  v-if="$hasPerm('users.view_usergroup')"
+                  class="detail"
+                  @click="goDetail(obj)"
+                >
                   {{ obj.label }}
                 </el-link>
+                <span v-else>{{ obj.label }}</span>
               </el-tooltip>
             </td>
             <td class="action-cell">
@@ -80,6 +85,7 @@ export default {
       default: (obj) => {}
     }
   },
+  emits: ['group-deleted'],
   data() {
     return {
       detailDrawer: '',
@@ -105,9 +111,20 @@ export default {
       this.objects = data
     },
     goDetail(obj) {
+      const url = `/api/v1/users/groups/${obj.id}/`
       this.detailDrawer = this.detailRoute
       this.detailDrawerProps = {
-        actions: { detailApiUrl: `/api/v1/users/groups/${obj.id}/` },
+        actions: {
+          detailApiUrl: url,
+          canUpdate: () =>
+            !this.$store.getters.currentOrgIsRoot && this.$hasPerm('users.change_usergroup'),
+          canDelete: () => this.$hasPerm('users.delete_usergroup'),
+          updateCallback: () => {
+            this.drawerVisible = false
+            return this.$router.push({ name: 'UserGroupUpdate', params: { id: obj.id } })
+          },
+          deleteCallback: () => this.deleteGroup(obj, url)
+        },
         drawerContext: {
           isDrawer: true,
           action: 'detail',
@@ -120,6 +137,22 @@ export default {
         }
       }
       this.drawerVisible = true
+    },
+    async deleteGroup(group, url) {
+      try {
+        await this.$confirm(`${this.$t('DeleteWarningMsg')} ${group.name} ?`, this.$t('Info'), {
+          type: 'warning',
+          confirmButtonClass: 'el-button--danger'
+        })
+        await this.$axios.delete(url)
+      } catch (error) {
+        if (error instanceof Error && !error.response) this.$message.error(error.message)
+        return
+      }
+      if (this.detailDrawerProps.drawerContext.id === group.id) this.drawerVisible = false
+      this.$message.success(this.$t('DeleteSuccessMsg'))
+      this.$emit('group-deleted')
+      return this.loadObjects()
     }
   }
 }
