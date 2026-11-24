@@ -14,6 +14,7 @@ export default {
       object: {},
       config: {
         url: '/api/v1/accounts/virtual-accounts/',
+        submitMethod: 'patch',
         object: {},
         fields: [
           [this.$t('Basic'), ['name', 'username']],
