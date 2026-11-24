@@ -73,6 +73,27 @@ test('Magnus pause and resume require a normal session and the existing session-
   assert.ok(ticket.computed.supportedLock.call({ session: { type: 'normal', terminal_type: 'magnus', is_finished: false } }))
 })
 
+test('only live Koko database workbenches support pause and resume in both views', () => {
+  const context = { $t: (key) => key, $hasPerm: (perm) => perm === 'terminal.terminate_session' }
+  const controls = online.data.call(context).extraActions.filter(({ name }) =>
+    ['pause', 'resume'].includes(name)
+  )
+  assert.equal(controls.length, 2)
+  for (const [terminal, finished, expected] of [
+    ['koko', false, true],
+    ['koko', true, false],
+    ['lion', false, false]
+  ]) {
+    const row = { terminal: { type: terminal }, type: { value: 'db_workbench' }, is_finished: finished }
+    for (const control of controls) assert.equal(control.can({ row }), expected)
+    const session = { terminal_type: terminal, type: 'db_workbench', is_finished: finished }
+    assert.equal(ticket.computed.supportedLock.call({ session }), expected)
+  }
+  context.$hasPerm = () => false
+  const row = { terminal: { type: 'koko' }, type: { value: 'db_workbench' } }
+  for (const control of controls) assert.equal(control.can({ row }), false)
+})
+
 test('built-in browser controls are disabled while HTTP(S) remote apps retain theirs', () => {
   for (const terminal of ['koko', 'lion']) {
     for (const protocol of ['http', 'https']) {
