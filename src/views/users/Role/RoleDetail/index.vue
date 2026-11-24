@@ -1,6 +1,6 @@
 <template>
   <GenericDetailPage v-bind="config" v-model:active-menu="config.activeMenu" v-model:object="role">
-    <keep-alive>
+    <keep-alive v-if="role.id && role.scope?.value">
       <component :is="config.activeMenu" :object="role" />
     </keep-alive>
   </GenericDetailPage>
@@ -24,7 +24,7 @@ export default {
     return {
       scope: scope,
       scopeRole: scope + 'role',
-      role: { name: '', comment: '', users: [] },
+      role: {},
       config: {
         titlePrefix: scope === 'org' ? vm.$t('OrgRole') : vm.$t('SystemRole'),
         getObjectName: (obj) => {
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     hasPermNotBuiltin(row, perm) {
-      return !row['builtin'] && this.$hasPerm(perm)
+      return !!row.id && !row.builtin && this.$hasPerm(perm)
     }
   }
 }

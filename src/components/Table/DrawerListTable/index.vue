@@ -8,6 +8,7 @@
     />
     <Drawer
       v-if="drawerComponent"
+      :key="drawerKey"
       v-model:visible="drawerVisible"
       :action="action"
       :class="[action]"
@@ -17,6 +18,7 @@
       :title="drawerTitle"
       class="page-drawer"
       @close-drawer="handleDrawerShellClose"
+      @closed="afterCloseDrawer"
     />
   </div>
 </template>
@@ -84,7 +86,7 @@ export default {
       drawerVisible: false,
       drawerComponent: '',
       drawerContext: null,
-      isReopeningDrawer: false // 标志：是否正在重新打开抽屉
+      drawerKey: 0
     }
   },
   computed: {
@@ -150,35 +152,9 @@ export default {
       }
     },
     drawerVisible: {
-      handler(val, oldVal) {
-        this.$log.debug('>>> drawerVisible changed: ', oldVal, '->', val, {
-          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
-          isReopeningDrawer: this.isReopeningDrawer,
-          drawerTitle: this.drawerTitle
-        })
-        if (!val && oldVal) {
-          this.$log.debug(
-            '>>> drawerVisible: closing drawer, isReopeningDrawer =',
-            this.isReopeningDrawer
-          )
-          this.$nextTick(() => {
-            // 如果正在重新打开抽屉，不清空组件
-            if (!this.isReopeningDrawer) {
-              this.$log.debug('>>> drawerVisible: calling afterCloseDrawer')
-              this.afterCloseDrawer()
-            } else {
-              this.$log.debug(
-                '>>> drawerVisible: skipping afterCloseDrawer (isReopeningDrawer = true)'
-              )
-            }
-            this.isReopeningDrawer = false
-          })
-        } else if (val && !oldVal) {
-          this.$log.debug('>>> drawerVisible: opening drawer', {
-            drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
-            drawerTitle: this.drawerTitle
-          })
-        }
+      flush: 'sync',
+      handler(visible) {
+        if (!visible) this.restoreLegacyRouteState()
       }
     },
     drawerComponent: {
@@ -210,12 +186,11 @@ export default {
   },
   methods: {
     afterCloseDrawer() {
+      if (this.drawerVisible) return
       this.$log.debug('>>> afterCloseDrawer called', {
         drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
-        drawerVisible: this.drawerVisible,
-        isReopeningDrawer: this.isReopeningDrawer
+        drawerVisible: this.drawerVisible
       })
-      this.restoreLegacyRouteState()
       this.$log.debug('>>> afterCloseDrawer: clearing drawerComponent')
       this.drawerComponent = ''
       this.drawerContext = null
@@ -422,114 +397,29 @@ export default {
       action,
       { row = {}, col = {}, query = {}, cellValue = '', payload = {} } = {}
     ) {
-      this.$log.debug('>>> showDrawer START:', {
-        action,
-        currentDrawerVisible: this.drawerVisible,
-        currentDrawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
-        isReopeningDrawer: this.isReopeningDrawer
-      })
-
       try {
-        // 1. 设置 action
-        this.action = action
-        this.$log.debug('>>> showDrawer step 1: action set to', action)
-
-        this.syncLegacyRouteState({ query })
-
-        // 2. 先获取组件
         const component = this.getDrawerComponent(action, payload) || this.getDefaultDrawer(action)
-        this.$log.debug('>>> showDrawer step 2: got component', {
-          component: component
-            ? typeof component === 'function'
-              ? 'FUNCTION'
-              : String(component)
-            : 'EMPTY',
-          getDrawerComponent: this.getDrawerComponent(action, payload) ? 'EXISTS' : 'EMPTY',
-          getDefaultDrawer: this.getDefaultDrawer(action) ? 'EXISTS' : 'EMPTY'
-        })
-
-        // 3. 如果还是没有组件，报错
         if (!component) {
           throw new Error(`No drawer component found for action: ${action}`)
         }
 
-        // 4. 如果组件已存在且相同，且抽屉已打开，直接返回
-        if (this.drawerComponent === component && this.drawerVisible) {
-          this.$log.debug('>>> showDrawer: drawer already open with same component, returning')
-          return
-        }
-
-        // 5. 设置标志，防止关闭时清空组件
-        this.isReopeningDrawer = true
-        this.$log.debug('>>> showDrawer step 5: isReopeningDrawer set to true')
-
-        // 6. 先设置组件（在关闭之前设置）
-        this.drawerComponent = markRaw(toRaw(component))
-        this.$log.debug('>>> showDrawer step 6: drawerComponent set', {
-          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
-          drawerVisible: this.drawerVisible
-        })
-
-        // 7. 如果抽屉已打开，先关闭
-        if (this.drawerVisible) {
-          this.$log.debug('>>> showDrawer step 7: closing existing drawer')
-          this.drawerVisible = false
-          await this.$nextTick()
-          this.$log.debug(
-            '>>> showDrawer step 7: after close, drawerComponent =',
-            this.drawerComponent ? 'EXISTS' : 'EMPTY'
-          )
-          // 确保组件没有被清空
-          if (!this.drawerComponent) {
-            this.$log.debug('>>> showDrawer step 7: drawerComponent was cleared, restoring it')
-            this.drawerComponent = markRaw(toRaw(component))
-          }
-        }
-
-        // 8. 获取标题
+        this.action = action
+        this.syncLegacyRouteState({ query })
         if (this.getDrawerTitle) {
           const actionMeta = this.drawerContext || (await getRuntimeActionMeta(this))
           this.title = this.getDrawerTitle({ action, ...actionMeta })
         }
         this.drawerTitle = this.getActionDrawerTitle({ action, row, col, cellValue, payload })
-        this.$log.debug('>>> showDrawer step 8: title set to', this.drawerTitle)
-
-        // 9. 等待下一个 tick，确保组件已设置
-        await this.$nextTick()
-        this.$log.debug('>>> showDrawer step 9: after nextTick', {
-          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
-          drawerVisible: this.drawerVisible
-        })
-
-        // 10. 显示抽屉
+        this.drawerComponent = markRaw(toRaw(component))
+        // Each action provides its own context, even when two actions render the same form.
+        this.drawerKey++
         this.drawerVisible = true
-        this.$log.debug('>>> showDrawer step 10: drawerVisible set to true', {
-          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
-          drawerTitle: this.drawerTitle,
-          action: this.action
-        })
-
-        // 11. 再等待一个 tick，确保 DOM 已更新
         await this.$nextTick()
-        this.$log.debug('>>> showDrawer step 11: final state', {
-          drawerComponent: this.drawerComponent ? 'EXISTS' : 'EMPTY',
-          drawerVisible: this.drawerVisible,
-          drawerTitle: this.drawerTitle,
-          isReopeningDrawer: this.isReopeningDrawer
-        })
-
-        this.$log.debug('Drawer initialized:', {
-          title: this.title,
-          visible: this.drawerVisible,
-          component: this.drawerComponent,
-          action: this.action
-        })
       } catch (error) {
         console.error('Failed to show drawer:', error)
-        this.$log.debug('>>> showDrawer ERROR:', error)
         this.drawerVisible = false
-        this.drawerComponent = ''
-        this.isReopeningDrawer = false
+        this.restoreLegacyRouteState()
+        this.afterCloseDrawer()
       }
     },
     reloadTable() {
