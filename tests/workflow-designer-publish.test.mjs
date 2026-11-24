@@ -673,7 +673,7 @@ test('login confirmation hides asset owners and replaces that source when switch
   approval.config.timeout = 600
   vm.workflow.type = 'login_confirm'
   vm.changeTicketType('login_confirm')
-  assert.deepEqual(vm.resolvers, ['user', 'user_group', 'role', 'user_selector', 'org_admin'])
+  assert.deepEqual(vm.resolvers, ['user', 'user_group', 'role', 'user_selector', 'org_admin', 'acl_reviewers'])
   assert.deepEqual(approval.config.approvers, { type: 'role', value: ['00000000-0000-0000-0000-000000000001'] })
   assert.equal(approval.config.strategy, 'all')
   assert.equal(approval.config.timeout, 600)

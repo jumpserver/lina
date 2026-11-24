@@ -21,7 +21,7 @@ export default {
   data() {
     const vm = this
     return {
-      url: '/api/v1/terminal/sessions/?is_finished=0',
+      url: '/api/v1/terminal/sessions/?is_finished=0&category=user',
       isTerminating: false,
       reloadTimer: null,
       extraMoreActions: [

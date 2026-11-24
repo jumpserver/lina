@@ -1,10 +1,20 @@
 import i18n from '@/i18n/i18n'
+import { redirectLegacyMCPSettings } from './settings/legacy-mcp'
 
 /**
  * admin and user routes
  * the routes that need to be dynamically loaded based on admin or user roles
  */
 export default [
+  {
+    // The static Feature route takes precedence when permitted. Keep old MCP
+    // links working even when that route is removed by permission filtering.
+    path: '/settings/:legacyFeature(features)',
+    name: 'LegacyMCPSettings',
+    component: () => import('@/views/403'),
+    beforeEnter: (to) => redirectLegacyMCPSettings(to) || { name: 'Forbidden', replace: true },
+    hidden: true
+  },
   {
     path: '/ops/task/logs/',
     component: () => import('@/views/settings/Task/TaskLogWindow.vue'),
