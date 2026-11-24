@@ -100,12 +100,6 @@ export default {
           can: ({ row, cellValue }) => {
             return row['can_join'] && this.$hasPerm('terminal.monitor_session')
           },
-          tip: ({ row }) => {
-            if (row.login_from === 'RT') {
-              return this.$t('RazorNotSupport')
-            }
-            return ''
-          },
           callback: function ({ row, tableData }) {
             const monitorUrl = '/luna/monitor/' + row.id
             window.open(
