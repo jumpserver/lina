@@ -4,27 +4,58 @@ import { test } from 'node:test'
 import { parse } from '@vue/compiler-sfc'
 
 const utilsSource = await readFile(new URL('../src/utils/jms/index.js', import.meta.url), 'utf8')
-const IsSupportPauseSessionType = new Function(`${utilsSource
-  .replace(/^import .*$/gm, '')
-  .replace(/^export \{.*$/gm, '')
-  .replaceAll('export function ', 'function ')}\nreturn IsSupportPauseSessionType`)()
+const IsSupportPauseSessionType = new Function(
+  `${utilsSource
+    .replace(/^import .*$/gm, '')
+    .replace(/^export \{.*$/gm, '')
+    .replaceAll('export function ', 'function ')}\nreturn IsSupportPauseSessionType`
+)()
 
 async function loadComponent(path, dependencies) {
   const source = await readFile(new URL(`../src/${path}`, import.meta.url), 'utf8')
   const { descriptor } = parse(source)
-  return new Function(...Object.keys(dependencies), descriptor.script.content
-    .replace(/^import .*$/gm, '')
-    .replace('export default', 'return'))(...Object.values(dependencies))
+  return new Function(
+    ...Object.keys(dependencies),
+    descriptor.script.content.replace(/^import .*$/gm, '').replace('export default', 'return')
+  )(...Object.values(dependencies))
 }
 
 const online = await loadComponent('views/sessions/SessionList/OnlineList.vue', {
-  BaseList: {}, IsSupportPauseSessionType
+  BaseList: {},
+  IsSupportPauseSessionType
 })
 const detail = await loadComponent('views/sessions/SessionDetail/SessionDetailInfo.vue', {
-  TwoCol: {}, DetailCard: {}, QuickActions: {}
+  TwoCol: {},
+  DetailCard: {},
+  QuickActions: {}
 })
 const ticket = await loadComponent('views/tickets/components/Session.vue', {
-  IBox: {}, Drawer: {}, IsSupportPauseSessionType
+  IBox: {},
+  Drawer: {},
+  IsSupportPauseSessionType
+})
+
+test('Razor RDP sessions support pause and resume with the existing control permission', () => {
+  const row = {
+    terminal: { type: 'razor' },
+    type: { value: 'normal' },
+    is_locked: false,
+    can_join: true
+  }
+  const context = { $t: (key) => key, $hasPerm: () => true }
+  const actions = online.data.call(context).extraActions
+  const pause = actions.find((action) => action.name === 'pause')
+  const resume = actions.find((action) => action.name === 'resume')
+  assert.equal(pause.can({ row }), true)
+  assert.equal(resume.can({ row }), true)
+  assert.equal(pause.has({ row }), true)
+  assert.equal(resume.has({ row }), false)
+  row.is_locked = true
+  assert.equal(pause.has({ row }), false)
+  assert.equal(resume.has({ row }), true)
+  context.$hasPerm = () => false
+  assert.equal(pause.can({ row }), false)
+  assert.equal(resume.can({ row }), false)
 })
 
 test('Magnus pause and resume require a normal session and the existing session-control permission', () => {
@@ -48,8 +79,13 @@ test('built-in browser controls are disabled while HTTP(S) remote apps retain th
       for (const type of ['web_proxy', 'normal']) {
         const supported = type === 'normal'
         const session = {
-          id: 'session', protocol, terminal: { type: terminal }, type: { value: type },
-          can_join: supported, can_terminate: true, is_locked: false
+          id: 'session',
+          protocol,
+          terminal: { type: terminal },
+          type: { value: type },
+          can_join: supported,
+          can_terminate: true,
+          is_locked: false
         }
         const context = {
           $t: (key) => key,
@@ -59,9 +95,15 @@ test('built-in browser controls are disabled while HTTP(S) remote apps retain th
         }
         const actions = online.data.call(context).extraActions
         for (const name of ['pause', 'resume', 'join']) {
-          assert.equal(actions.find((action) => action.name === name).can({ row: session }), supported)
+          assert.equal(
+            actions.find((action) => action.name === name).can({ row: session }),
+            supported
+          )
         }
-        assert.equal(actions.find((action) => action.name === 'terminate').can({ row: session }), true)
+        assert.equal(
+          actions.find((action) => action.name === 'terminate').can({ row: session }),
+          true
+        )
         const quickActions = detail.computed.onlineSessionActions.call(context)
         assert.equal(quickActions[0].attrs.disabled, false)
         assert.equal(quickActions[1].attrs.disabled, !supported)
