@@ -89,7 +89,12 @@ export default {
   min-height: 140px;
   padding: 20px 30px;
 }
+.ticket-type-content :deep(.el-col) {
+  display: flex;
+}
 .ticket-type-item {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   margin: 5px 0;
   border: 1px solid var(--color-border);
@@ -107,9 +112,11 @@ export default {
 }
 .ticket-type-item :deep(.el-card__body) {
   display: flex;
+  flex: 1;
   align-items: center;
   gap: 10px;
   min-width: 0;
+  box-sizing: border-box;
   padding: 10px;
 }
 .ticket-type-icon {
@@ -118,8 +125,8 @@ export default {
   height: 26px;
 }
 .ticket-type-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-width: 0;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 </style>
