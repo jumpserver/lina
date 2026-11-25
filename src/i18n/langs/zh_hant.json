@@ -3161,7 +3161,7 @@
   "TaskMonitorStopUnsupportedPool": "此進程使用執行緒池，無法停止執行中的任務。",
   "TaskMonitorStopUnavailable": "任務進程未確認結果，請重新整理檢查任務狀態。",
   "ClientSecurity": "登入與鎖屏",
-  "ClientLoginPolicyChangeHelp": "設定約每 60 秒同步。最長登入有效期依每次登入時間重新計算；新設定下已逾時的，最多再保留 10 分鐘。寬限期間延長後未逾時的，取消登出。每次啟動時，依最新設定決定是否需要重新登入。",
+  "ClientLoginPolicyChangeHelp": "修改這三項設定中的任意一項（包括關閉限制）後，用戶端需重新登入才能申請新的連線憑證；已簽發的連線權杖仍依自身有效期限和權限使用，既有連線不會因登入失效而自動中斷。",
   "TicketBatchApprovalTitle": "批次審批（{count} 張工單）",
   "TicketBatchResultTitle": "批次審批結果（{count} 張工單）",
   "TicketBatchProgress": "已處理 {done}/{total} 張",
