@@ -21,6 +21,7 @@ import { TabPage } from '@/layout/components'
 import { ChoicesFormatter, ProtocolsFormatter } from '@/components/Table/TableFormatters'
 import GenericListTable from '@/components/Table/DrawerListTable/index.vue'
 import AmountFormatter from '@/components/Table/TableFormatters/AmountFormatter.vue'
+import { withClickHouseEndpoints } from '../assetProtocols'
 
 export default {
   components: {
@@ -93,7 +94,14 @@ export default {
           },
           protocols: {
             showFullContent: true,
-            formatter: ProtocolsFormatter
+            formatter: ProtocolsFormatter,
+            formatterArgs: {
+              getTags: (protocols) =>
+                withClickHouseEndpoints(protocols).map(({ display_name, name, port }) => ({
+                  name: display_name || name,
+                  port
+                }))
+            }
           },
           base: {
             width: '140px'

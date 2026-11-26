@@ -39,7 +39,17 @@ export default {
       default: () => {
         return {
           min: ['number', 'actions'],
-          default: ['number', 'user', 'asset', 'account', 'protocol', 'date_start', 'actions']
+          default: [
+            'number',
+            'user',
+            'asset',
+            'account',
+            'protocol',
+            'type',
+            'login_from',
+            'date_start',
+            'actions'
+          ]
         }
       }
     },

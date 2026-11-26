@@ -1,3 +1,4 @@
+import { ticketSubmitData } from '../src/views/tickets/attachments.js'
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
@@ -17,6 +18,8 @@ const script = descriptor.script.content
 const dependencies = {
   Select2: {},
   TicketWorkflowSelect: {},
+  TicketAttachmentUpload: {},
+  ticketSubmitData,
   GenericCreateUpdatePage: {},
   AccountFormatter: {},
   ExpireNoticePolicy: {},
@@ -439,7 +442,8 @@ test('detail page forwards custom header actions only after a successful load, p
         loading,
         loadError,
         hasRightSide,
-        pageActions: []
+        hasPageActions: true,
+        pageActions: [{ has: true }]
       })
     }
     const app = Vue.createSSRApp({

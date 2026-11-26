@@ -3,6 +3,7 @@ import rules from '@/components/Form/DataForm/rules'
 import { JsonEditor } from '@/components/Form/FormFields'
 import { assetFieldsMeta } from '@/views/assets/const'
 import AutomationMethodField from './AutomationMethodField'
+import PlatformProtocolSelector from './PlatformProtocolSelector.vue'
 
 const needSettingParamsFields = ['push_account', 'change_secret']
 
@@ -112,6 +113,7 @@ export const platformFieldsMeta = (vm) => {
     protocols: {
       label: i18n.t('SupportedProtocol'),
       ...assetMeta.protocols,
+      component: PlatformProtocolSelector,
       el: {
         choices: []
       },

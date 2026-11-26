@@ -151,6 +151,7 @@ export default {
         return i
       })
       this.fieldsMeta.protocols.el.choices = protocols
+      this.fieldsMeta.protocols.el.assetType = type
 
       const fieldsCheck = ['gateway_enabled', 'su_enabled']
       for (const field of fieldsCheck) {

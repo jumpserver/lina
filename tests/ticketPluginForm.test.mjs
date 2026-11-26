@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { getTicketPlugin, configurePluginField } from '../src/views/tickets/plugins/registry.js'
-import { reactive } from 'vue'
+import { reactive, toRaw } from 'vue'
 import resourceAvailability from '../src/views/tickets/plugins/resourceAvailability.js'
 import { buildRequestPayload } from '../src/views/tickets/plugins/form.js'
 
@@ -151,6 +151,7 @@ async function createAccountForm(get) {
     'BasicTree',
     'TicketTransferFiles',
     'TicketWorkflowSelect',
+    'TicketAttachmentUpload',
     script
   )(
     () => ({}),
@@ -166,6 +167,7 @@ async function createAccountForm(get) {
     buildRequestPayload,
     (value) => `local:${value}`,
     resourceAvailability,
+    {},
     {},
     {},
     {}
@@ -453,7 +455,7 @@ test('file transfer preserves each direction draft, submits only active fields a
   values.param_target_directory = '/tmp/reports'
   values.param_paths = '/var/log/app.log'
   vm.fieldsMeta.param_files.on['files-change']([[file]])
-  const uploadDraft = structuredClone(values)
+  const uploadDraft = structuredClone({ ...values, attachments: toRaw(values.attachments) })
   vm.fieldsMeta.param_files.on.busy([true])
   assert.equal(vm.fieldsMeta.param_direction.el.disabled, true)
   assert.equal(vm.fieldsMeta.param_direction.helpTextFormatter(), 'TicketTransferWaitDirection')
@@ -521,7 +523,7 @@ test('failed workflow loads keep generic forms usable and retry changes only the
     param_asset: 'asset-a',
     param_accounts: ['root']
   }
-  const original = structuredClone(draft)
+  const original = structuredClone({ ...draft, attachments: toRaw(draft.attachments) })
   let resolve
   vm.$axios.get = () =>
     new Promise((done) => {

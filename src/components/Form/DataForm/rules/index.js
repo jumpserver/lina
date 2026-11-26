@@ -48,7 +48,7 @@ export const IpCheck = {
 export const specialEmojiCheck = {
   validator: (rule, value, callback) => {
     value = value?.trim()
-    if (/[\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/.test(value)) {
+    if (/(?:\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F])/.test(value)) {
       callback(new Error(i18n.t('NotSpecialEmoji')))
     } else {
       callback()

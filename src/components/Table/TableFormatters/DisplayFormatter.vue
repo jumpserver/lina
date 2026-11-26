@@ -10,11 +10,7 @@ export default {
   props: {
     formatterArgsDefault: {
       type: Object,
-      default() {
-        return {
-          displayKey: this.col.prop + '_display'
-        }
-      }
+      default: () => ({})
     }
   },
   data() {
@@ -24,7 +20,7 @@ export default {
   },
   computed: {
     value() {
-      const displayKey = this.formatterArgs.displayKey
+      const displayKey = this.formatterArgs.displayKey || this.col.prop + '_display'
       let value = this.row[displayKey]
       if (value === undefined) {
         value = this.row[this.col.prop]
