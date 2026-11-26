@@ -14,6 +14,7 @@
                 <el-col :md="8" :xs="24">
                   <User />
                   <Log />
+                  <SecurityOverview />
                 </el-col>
               </el-row>
             </div>
@@ -31,6 +32,7 @@ import User from './components/User'
 import Ticket from './components/Ticket'
 import Log from './components/LoginLog'
 import Session from './components/Session'
+import SecurityOverview from './components/SecurityOverview.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -41,7 +43,8 @@ export default {
     User,
     Ticket,
     Log,
-    Session
+    Session,
+    SecurityOverview
   },
   computed: {
     url() {
