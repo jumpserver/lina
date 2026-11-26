@@ -55,7 +55,7 @@ export default {
       formSetting: {
         url: '/api/v1/assets/assets/',
         hasSaveContinue: false,
-        fields: ['platform', 'nodes', 'zone', 'labels', 'is_active', 'comment'],
+        fields: ['platform', 'nodes', 'owner', 'zone', 'labels', 'is_active', 'comment'],
         fieldsMeta: {
           platform: {
             el: {
@@ -74,6 +74,11 @@ export default {
           nodes: {
             ...meta.nodes,
             label: this.$t('Node')
+          },
+          owner: {
+            ...meta.owner,
+            // Bulk fields start checked. Only send an owner when a user is selected.
+            outputFormat: (value) => value || undefined
           },
           zone: {
             ...meta.zone,
