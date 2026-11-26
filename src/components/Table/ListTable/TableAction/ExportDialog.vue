@@ -4,6 +4,7 @@
       v-if="exportDialogShow"
       v-model:visible="exportDialogShow"
       :destroy-on-close="true"
+      :show-confirm="canConfirm"
       :title="$tc('Export')"
       width="700px"
       @close="handleExportCancel"
@@ -112,6 +113,7 @@ export default {
     return {
       meta: {},
       exportDialogShow: false,
+      exportRows: [],
       exportOption: 'all',
       exportTypeOption: 'csv',
       mfaDialogShow: false,
@@ -120,7 +122,10 @@ export default {
   },
   computed: {
     hasSelected() {
-      return this.selectedRows.length > 0
+      return this.exportRows.length > 0
+    },
+    canConfirm() {
+      return this.exportOptions.some((option) => option.value === this.exportOption && option.can)
     },
     tableQuery() {
       const listTableRef = this.listTableContext
@@ -185,28 +190,20 @@ export default {
     this.$eventBus.$on('showExportDialog', this.showExportDialogHandler)
   },
   methods: {
-    showExportDialogHandler({ selectedRows, url, name }) {
+    showExportDialogHandler({ selectedRows, url }) {
       if (url && (url === this.url || url.indexOf(this.url) > -1)) {
-        this.showExportDialog()
+        this.showExportDialog(selectedRows)
       }
     },
-    showExportDialog() {
-      if (!this.mfaVerifyRequired) {
-        this.exportDialogShow = true
-
-        if (this.hasSelected) {
-          this.exportOption = 'selected'
-        }
-
-        if (this.tableHasQuery) {
-          this.exportOption = 'filtered'
-        }
-
-        return
+    async showExportDialog(selectedRows = this.selectedRows) {
+      // A background table reload can clear its selection while this dialog is open.
+      this.exportRows = [...selectedRows]
+      this.exportOption = this.hasSelected ? 'selected' : 'all'
+      if (this.tableHasQuery) this.exportOption = 'filtered'
+      if (this.mfaVerifyRequired) {
+        await this.$axios.get('/api/v1/authentication/confirm/check/?confirm_type=mfa')
       }
-      this.$axios.get('/api/v1/authentication/confirm/check/?confirm_type=mfa').then(() => {
-        this.exportDialogShow = true
-      })
+      this.exportDialogShow = true
     },
     downloadCsv(url) {
       download(url)
@@ -215,12 +212,12 @@ export default {
       const url = withBaseApi(this.url)
       const query = Object.assign({}, q)
       if (exportOption === 'selected') {
-        const resources = []
-        const data = selectRows
-        for (let index = 0; index < data.length; index++) {
-          resources.push(data[index].id)
-        }
+        const resources = selectRows.map((row) => row.id)
         const spm = await createSourceIdCache(resources)
+        if (!spm?.spm) {
+          this.$message.error(this.$t('Failed'))
+          return
+        }
         query['spm'] = spm.spm
       }
       query['format'] = exportTypeOption
@@ -235,11 +232,13 @@ export default {
       const query = listTableRef.dataTable.getQuery()
       delete query['limit']
       delete query['offset']
+      const { exportRows, exportOption, exportTypeOption } = this
       await this.beforeExport()
       const performExport = this.performExport || this.defaultPerformExport
-      return performExport(this.selectedRows, this.exportOption, query, this.exportTypeOption)
+      return performExport(exportRows, exportOption, query, exportTypeOption)
     },
     async handleExportConfirm() {
+      if (!this.canConfirm) return
       await this.handleExport()
       this.exportDialogShow = false
       this.$emit('importDialogConfirm')

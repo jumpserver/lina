@@ -37,6 +37,16 @@ export default {
       }
     },
     {
+      path: '/audit/user-credentials',
+      component: () => import('@/views/audits/UserCredential/index.vue'),
+      name: 'UserCredentials',
+      meta: {
+        icon: 'key',
+        title: i18n.t('UserCredentials'),
+        permissions: ['rbac.view_usercredential']
+      }
+    },
+    {
       path: '/audit/sessions',
       component: empty,
       name: 'AuditSessions',

@@ -646,6 +646,7 @@ export default {
       ]
     },
     applyPinnedColumns(columns) {
+      const pinningDisabled = this.pinningDisabled || this.config.hasColumnPinning === false
       const getOriginalFixed = (item) => {
         return Object.prototype.hasOwnProperty.call(item, 'pinOriginalFixed')
           ? item.pinOriginalFixed
@@ -660,7 +661,7 @@ export default {
           .map((item) => item.prop)
       )
       this.pinnedColumnProps = this.pinnedColumnProps.filter((prop) => pinnableProps.has(prop))
-      if (this.pinningDisabled) {
+      if (pinningDisabled) {
         this.pinnedColumnProps = []
       }
       const pinnedSet = new Set(this.pinnedColumnProps)
@@ -675,8 +676,7 @@ export default {
         col.fixed = isPinned ? 'left' : originalFixed
         col.pinState = {
           pinned: isPinned,
-          visible:
-            !this.pinningDisabled && pinnableProps.has(col.prop) && (isPinned || !pinLimitReached)
+          visible: !pinningDisabled && pinnableProps.has(col.prop) && (isPinned || !pinLimitReached)
         }
         return col
       })
