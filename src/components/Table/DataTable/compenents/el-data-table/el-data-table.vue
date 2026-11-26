@@ -157,6 +157,12 @@
                 </template>
               </el-table-column>
             </template>
+            <template v-if="loadFailed && loadErrorMessage" #empty>
+              <span role="alert">{{ loadErrorMessage }}</span>
+              <el-button link type="primary" :disabled="tableLoading" @click="getList()">{{
+                $t('Retry')
+              }}</el-button>
+            </template>
             <slot />
           </el-table>
         </div>
@@ -243,6 +249,7 @@ export default {
       type: String,
       default: ''
     },
+    loadErrorMessage: String,
     request: {
       type: Function,
       default: null
@@ -814,6 +821,7 @@ export default {
       // https://github.com/ElemeFE/element/issues/1153
       total: null,
       tableLoading: false,
+      loadFailed: false,
       renderedContentHeight: null,
       listRequestId: 0,
       listAbortController: null,
@@ -1311,6 +1319,7 @@ export default {
             this.total = _get(resp, this.totalPath) || 0
           }
 
+          this.loadFailed = false
           this.data = data
 
           // 树形结构逻辑
@@ -1345,6 +1354,10 @@ export default {
           if (signal.aborted) {
             this.tableLoading = false
             return
+          }
+          if (this.loadErrorMessage) {
+            this.loadFailed = true
+            this.data = []
           }
           this.total = 0
           this.tableLoading = false

@@ -1,31 +1,52 @@
 <template>
-  <Page :help-message="`${$t('UserCredentialCountHint')} ${$t('UserCredentialScopeHint')}`">
-    <GenericListTable
+  <div>
+    <GenericListPage
+      v-if="orgId"
       :key="orgId"
       :table-config="tableConfig"
       :header-actions="headerActions"
       :table-metadata-provider="getMetadata"
-      @query-change="closeDetails"
+      @query-change="handleQueryChange"
     />
     <Drawer v-model:visible="drawerVisible" :title="drawerTitle" @close-drawer="closeDetails">
-      <CredentialDetails
+      <TabPage
         v-if="selection"
-        :key="`${orgId}:${selection.user.id}:${selection.type}`"
-        :user="selection.user"
-        :credential-type="selection.type"
-        :org-id="orgId"
-      />
+        v-model:active-menu="selection.type"
+        :hide-heading="true"
+        :submenu="credentialTabs"
+        navigation-scope="local"
+      >
+        <template #headingRightSide>
+          <el-button
+            link
+            :aria-label="$t('Refresh')"
+            :title="$t('Refresh')"
+            :disabled="!detail || detail.loading"
+            @click="detail.reload()"
+          >
+            <Icon icon="refresh" />
+          </el-button>
+        </template>
+        <CredentialDetails
+          :key="`${orgId}:${selection.user.id}:${selection.type}`"
+          ref="detail"
+          :user="selection.user"
+          :credential-type="selection.type"
+          :org-id="orgId"
+        />
+      </TabPage>
     </Drawer>
-  </Page>
+  </div>
 </template>
 
 <script>
-import { markRaw } from 'vue'
-import Page from '@/layout/components/Page'
-import GenericListTable from '@/layout/components/GenericListTable'
+import { markRaw, useTemplateRef } from 'vue'
+import TabPage from '@/layout/components/TabPage'
+import GenericListPage from '@/layout/components/GenericListPage'
 import CredentialCount from './CredentialCount.vue'
 import CredentialDetails from './CredentialDetails.vue'
 import Drawer from '@/components/Drawer/index.vue'
+import Icon from '@/components/Widgets/Icon'
 import ChoicesFormatter from '@/components/Table/TableFormatters/ChoicesFormatter.vue'
 
 const credentialLabels = {
@@ -35,41 +56,58 @@ const credentialLabels = {
   private_token: 'PrivateToken'
 }
 
+function userLabel(user) {
+  return user.name && user.name !== user.username
+    ? `${user.name} (${user.username})`
+    : user.username
+}
+
 export default {
   name: 'UserCredentialList',
-  components: { Page, GenericListTable, CredentialDetails, Drawer },
+  components: { GenericListPage, TabPage, CredentialDetails, Drawer, Icon },
+  setup() {
+    return { detail: useTemplateRef('detail') }
+  },
   data() {
     return {
+      hasSearchQuery: false,
       drawerVisible: false,
-      selection: null,
-      headerActions: {
-        hasLeftActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasMoreActions: false
-      }
+      selection: null
     }
   },
   computed: {
+    headerActions() {
+      return {
+        hasLeftActions: false,
+        hasExport: this.$hasPerm('rbac.view_usercredential'),
+        hasImport: false,
+        hasMoreActions: false
+      }
+    },
     orgId() {
       return this.$route.query.oid || this.$store.getters.currentOrg?.id || ''
     },
     drawerTitle() {
-      if (!this.selection) return this.$t('UserCredentials')
-      return `${this.selection.user.name || this.selection.user.username} · ${this.$t(credentialLabels[this.selection.type])}`
+      return this.selection ? userLabel(this.selection.user) : this.$t('UserCredentials')
+    },
+    credentialTabs() {
+      return Object.entries(credentialLabels).map(([name, label]) => ({
+        name,
+        title: this.$t(label)
+      }))
     },
     tableConfig() {
       const columnsMeta = {
         actions: { has: false },
         name: {
           label: this.$t('User'),
-          minWidth: '200px',
+          minWidth: '170px',
           sortable: false,
-          formatter: (row) => (row.name ? `${row.name}(${row.username})` : row.username)
+          formatter: userLabel
         },
         is_active: {
           label: this.$t('UserCredentialUserStatus'),
-          width: '100px',
+          width: '130px',
           formatter: markRaw(ChoicesFormatter),
           formatterArgs: {
             getText: ({ cellValue }) => this.$t(cellValue ? 'UserCredentialEnabled' : 'Disabled')
@@ -79,7 +117,7 @@ export default {
       for (const [type, label] of Object.entries(credentialLabels)) {
         columnsMeta[type] = {
           label: this.$t(label),
-          minWidth: '130px',
+          minWidth: type === 'passkeys' ? '110px' : '130px',
           formatter: markRaw(CredentialCount),
           formatterArgs: {
             existsOnly: type === 'private_token',
@@ -88,13 +126,19 @@ export default {
         }
       }
       return {
-        url: '/api/v1/audits/user-credentials/',
+        // Browser downloads use this URL directly, outside the Axios org header.
+        url: `/api/v1/audits/user-credentials/?oid=${encodeURIComponent(this.orgId)}`,
         permissions: { app: 'rbac', resource: 'usercredential' },
-        columns: ['name', ...Object.keys(credentialLabels), 'is_active'],
+        columns: ['name', 'is_active', ...Object.keys(credentialLabels)],
+        columnsShow: { min: ['name'] },
+        loadErrorMessage: this.$t('UserCredentialListLoadFailed'),
+        tableAttrs: {
+          emptyText: this.$t(
+            this.hasSearchQuery ? 'UserCredentialNoMatches' : 'UserCredentialNoUsers'
+          )
+        },
         columnsMeta,
-        hasSelection: false,
-        hasColumnPinning: false,
-        axiosConfig: { raw: 1, headers: { 'X-JMS-ORG': this.orgId } }
+        axiosConfig: { raw: 1, disableFlashErrorMsg: true, headers: { 'X-JMS-ORG': this.orgId } }
       }
     }
   },
@@ -107,6 +151,10 @@ export default {
     this.closeDetails()
   },
   methods: {
+    handleQueryChange(query) {
+      this.hasSearchQuery = Object.keys(query).length > 0
+      this.closeDetails()
+    },
     getMetadata() {
       return Promise.resolve({
         actions: { GET: {} },

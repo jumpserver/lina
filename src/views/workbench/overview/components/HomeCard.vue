@@ -2,19 +2,21 @@
   <div class="home-card">
     <el-card class="box-card no-border" shadow="never">
       <template #header>
-        <div v-show="title || btnText" class="clearfix">
+        <div v-show="title || btnText" class="card-heading">
           <span v-show="title" class="title">{{ title }}</span>
-          <el-button v-show="btnText" style="float: right; padding: 3px 0" link @click="btnChange">
-            {{ btnText }}
-          </el-button>
+          <slot name="header-action">
+            <el-button v-if="btnText" link @click="btnChange">{{ btnText }}</el-button>
+          </slot>
         </div>
       </template>
-      <ListTable
-        ref="ListTable"
-        :header-actions="headerActions"
-        :table-config="tableConfig"
-        class="ListTable"
-      />
+      <slot>
+        <ListTable
+          ref="ListTable"
+          :header-actions="headerActions"
+          :table-config="tableConfig"
+          class="ListTable"
+        />
+      </slot>
     </el-card>
   </div>
 </template>
@@ -79,6 +81,13 @@ export default {
 
 :deep(.el-card__body) {
   padding-top: 10px;
+}
+
+.card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .ListTable :deep(.el-data-table .el-pagination) {

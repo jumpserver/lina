@@ -1,41 +1,49 @@
 <template>
-  <DetailFormatter
-    v-if="existsOnly ? cellValue : cellValue.total"
-    :row="row"
-    :col="col"
-    :cell-value="cellValue"
+  <el-link
+    v-if="hasDetails"
+    type="info"
+    underline="hover"
     role="button"
     tabindex="0"
-    :aria-label="
-      existsOnly
-        ? $t('UserCredentialPresenceAction', { user: row.username, type: col.label })
-        : $t('UserCredentialCountAction', { user: row.username, type: col.label, ...cellValue })
-    "
-    @keydown.enter.prevent="col.formatterArgs.onClick({ row })"
-    @keydown.space.prevent="col.formatterArgs.onClick({ row })"
+    :aria-label="actionLabel"
+    @click="openDetails"
+    @keydown.enter.prevent="openDetails"
+    @keydown.space.prevent="openDetails"
   >
-    {{ displayValue }}
-  </DetailFormatter>
-  <span v-else>{{ displayValue }}</span>
+    {{ label }}
+  </el-link>
+  <span v-else>{{ label }}</span>
 </template>
 
 <script>
 import BaseFormatter from '@/components/Table/TableFormatters/base.vue'
-import DetailFormatter from '@/components/Table/TableFormatters/DetailFormatter.vue'
 
 export default {
   name: 'CredentialCount',
-  components: { DetailFormatter },
   extends: BaseFormatter,
   computed: {
     existsOnly() {
       return this.col.formatterArgs.existsOnly
     },
-    displayValue() {
+    hasDetails() {
+      return this.existsOnly ? this.cellValue : this.cellValue.total > 0
+    },
+    label() {
       if (this.existsOnly) {
         return this.$t(this.cellValue ? 'UserCredentialPresent' : 'UserCredentialAbsent')
       }
       return `${this.cellValue.enabled} / ${this.cellValue.total}`
+    },
+    actionLabel() {
+      const context = { user: this.row.username, type: this.col.label }
+      return this.existsOnly
+        ? this.$t('UserCredentialPresenceAction', context)
+        : this.$t('UserCredentialCountAction', { ...context, ...this.cellValue })
+    }
+  },
+  methods: {
+    openDetails() {
+      this.col.formatterArgs.onClick({ row: this.row })
     }
   }
 }
