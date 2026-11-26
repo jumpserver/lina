@@ -19,7 +19,10 @@ export default {
         encryptedFields: ['RADIUS_SECRET'],
         fields: [
           [this.$t('Basic'), ['AUTH_RADIUS', 'RADIUS_SERVER', 'RADIUS_PORT', 'RADIUS_SECRET']],
-          [this.$t('MFA'), ['OTP_IN_RADIUS', 'RADIUS_MFA_MODE', 'RADIUS_PUSH_TIMEOUT']],
+          [
+            this.$t('MFA'),
+            ['OTP_IN_RADIUS', 'RADIUS_PUSH_ENABLED', 'RADIUS_PUSH_TRIGGER', 'RADIUS_PUSH_TIMEOUT']
+          ],
           [this.$t('Other'), ['RADIUS_ORG_IDS']]
         ],
         fieldsMeta: {
