@@ -37,7 +37,7 @@
     "@pdf-lib/fontkit": "1.1.1",
     "@traptitech/markdown-it-katex": "^3.6.0",
     "@ztree/ztree_v3": "3.5.48",
-    "axios": "^1.16.1",
+    "axios": "^1.20.0",
     "axios-retry": "^4.5.0",
     "codemirror": "^6",
     "core-js": "^3.49.0",
@@ -59,16 +59,16 @@
     "markdown-it": "^14.3.3",
     "markdown-it-link-attributes": "^4.0.1",
     "mitt": "^3.0.1",
-    "moment": "^2.30.1",
+    "moment": "^2.31.0",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
     "path-browserify": "^1.0.1",
     "path-to-regexp": "8.4.2",
     "pdf-lib": "^1.17.1",
     "prismjs": "^1.30.0",
-    "sm-crypto": "^0.4.0",
+    "sm-crypto": "^0.5.0",
     "sortablejs": "^1.15.7",
-    "vue": "^3.5.35",
+    "vue": "^3.5.42",
     "vue-codemirror": "6.1.1",
     "vue-cookie-next": "^1.3.0",
     "vue-echarts": "^8.0.1",
@@ -86,8 +86,8 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
     "@vitejs/plugin-vue-jsx": "^5.1.6",
-    "@vue/compiler-core": "^3.5.35",
-    "@vue/compiler-sfc": "^3.5.35",
+    "@vue/compiler-core": "^3.5.42",
+    "@vue/compiler-sfc": "^3.5.42",
     "@x18n/cli": "^0.1.14",
     "autoprefixer": "^10.5.0",
     "balanced-match": "^4.0.4",
@@ -99,7 +99,7 @@
     "lint-staged": "^17.0.5",
     "oxfmt": "^0.55.0",
     "oxlint": "^1.70.0",
-    "postcss": "^8.5.6",
+    "postcss": "^8.5.23",
     "pretty-bytes": "^7.1.0",
     "sass": "^1.100.0",
     "semver": "^7.8.1",
@@ -107,6 +107,9 @@
     "svgo": "^4.1.0",
     "vite": "^8.1.6",
     "vue-i18n-extract": "^2.0.7"
+  },
+  "resolutions": {
+    "tinypool": "^2.1.2"
   },
   "lint-staged": {
     "src/**/*.{js,vue}": [
