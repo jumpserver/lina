@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import { getStoredDrawerWidth, useDrawerResize } from '@/composables/useDrawerResize'
 import { resolveAsyncComponentCompat } from '@/utils/vue'
 import { DRAWER_RUNTIME_CONTEXT, TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } from './context'
@@ -39,7 +40,9 @@ import { DRAWER_RUNTIME_CONTEXT, TAB_NAVIGATION_CONTEXT, TAB_NAVIGATION_SCOPE } 
 export default {
   provide() {
     return {
-      [DRAWER_RUNTIME_CONTEXT]: this.componentProps?.drawerContext || null,
+      // 抽屉可能在复用同一个实例时重新打开（更新 componentProps），
+      // 用 computed 暴露上下文，子组件才能感知到新的 drawerContext。
+      [DRAWER_RUNTIME_CONTEXT]: computed(() => this.componentProps?.drawerContext || null),
       [TAB_NAVIGATION_CONTEXT]: {
         scope: TAB_NAVIGATION_SCOPE.LOCAL
       }
