@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://x18n.dev/schema/reviews.json
+x18n: 1
+sources:
+  AccessToken:
+    zh: 18cb5bffdee64e
+  AddAssetInDomain:
+    zh: 117a8ca3132a0
+  AddGatewayInDomain:
+    zh: 19414e870b5328
+  AppletHostZoneHelpText:
+    zh: 13b727ab1c5bc4
+  Applicationes:
+    zh: 14ad39f803754b
+  AssetActivity:
+    zh: 1833da7a04c75b
+  BaseAssetAclList:
+    zh: 1f86bca7a837a8
+  BaseCommandFilterAclList:
+    zh: cb419be549b85
+  CTYun:
+    zh: 8aba8f38e091a
+  DeeplyThoughtAbout:
+    zh: 1e946461d19edc
+  IsAlwaysUpdateHelpTip:
+    zh: 2281c82cad762
+  LinkedDomains:
+    zh: 4de108edacf72
+  NoUnreadMsg:
+    zh: 16534a5a924baa
+  OverviewCurrentOrg:
+    zh: 552894a38f1d5
+  Please enter a reason:
+    zh: cb9a4c8087e1
+  ScreenLock.LockNow:
+    zh: 154879706776d2
+  UserActivity:
+    zh: 17e243319d1ab9
+  ZoneHelpMessage:
+    zh: 37ef6863a60a4
