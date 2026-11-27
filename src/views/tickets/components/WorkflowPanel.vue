@@ -35,22 +35,6 @@
           <el-icon><EditPen /></el-icon>
           <strong>{{ $t(myTask ? 'AwaitingMyApproval' : 'WFWithdraw') }}</strong>
         </div>
-        <el-alert
-          v-if="
-            myTask &&
-            object?.type?.value === 'login_confirm' &&
-            currentNode?.deadline &&
-            !deadlinePassed
-          "
-          :type="deadlineSoon ? 'warning' : 'info'"
-          :title="
-            deadlineSoon
-              ? $t('WFDeadlineSoon', { deadline: toSafeLocalDateStr(currentNode.deadline) })
-              : $t('WFDeadline') + ' ' + toSafeLocalDateStr(currentNode.deadline)
-          "
-          :closable="false"
-          show-icon
-        />
         <el-input
           v-model="comment"
           type="textarea"
@@ -163,9 +147,15 @@
                     : $t(`WFStrategy_${node.config.strategy}`)
                 }}
               </div>
-              <div v-if="node.state === 'running' && node.deadline" class="step-deadline hint">
+              <div
+                v-if="node.state === 'running' && node.deadline"
+                class="step-deadline hint"
+                :class="{ 'login-deadline': object.type?.value === 'login_confirm' }"
+              >
                 <el-icon><Clock /></el-icon>
-                {{ $t('WFDeadline') }} {{ toSafeLocalDateStr(node.deadline) }}
+                <time :datetime="node.deadline"
+                  >{{ $t('WFDeadline') }} {{ toSafeLocalDateStr(node.deadline) }}</time
+                >
               </div>
             </template>
             <div v-if="node.historyTasks.length" class="step-tasks">
@@ -396,10 +386,6 @@ export default {
     currentNode() {
       return this.instance?.nodes.find((n) => n.state === 'running' && n.type === 'approval')
     },
-    deadlineSoon() {
-      const remaining = Date.parse(this.currentNode?.deadline) - this.now
-      return remaining > 0 && remaining <= 60000
-    },
     deadlinePassed() {
       return Boolean(
         this.currentNode?.deadline && Date.parse(this.currentNode.deadline) <= this.now
@@ -493,7 +479,7 @@ export default {
       if (!this.disposed && remaining > 0) {
         this.deadlineTimer = setTimeout(
           () => this.scheduleDeadline(),
-          Math.min(remaining > 60000 ? remaining - 60000 : remaining, 2147483647)
+          Math.min(remaining, 2147483647)
         )
       }
     },
@@ -800,6 +786,19 @@ export default {
   gap: 5px;
   margin-top: 4px;
   font-size: 12px;
+}
+.step-deadline.login-deadline {
+  display: inline-flex;
+  flex-wrap: wrap;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--el-color-warning-light-9);
+  color: var(--el-text-color-primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+.login-deadline > .el-icon {
+  color: var(--el-color-warning);
 }
 .step-tasks {
   display: flex;

@@ -607,16 +607,12 @@ async function timedApproval(deadline) {
 
 test('deadline disables approval controls without waiting for the next poll', async (t) => {
   t.mock.timers.enable({ apis: ['Date', 'setTimeout'], now: 1000 })
-  const { vm } = await timedApproval(new Date(62000).toISOString())
-  assert.equal(vm.deadlineSoon, false)
-  t.mock.timers.tick(1000)
-  assert.equal(vm.deadlineSoon, true)
+  const { vm } = await timedApproval(new Date(61000).toISOString())
   assert.equal(vm.deadlinePassed, false)
   t.mock.timers.tick(59999)
   assert.equal(vm.deadlinePassed, false)
   t.mock.timers.tick(1)
   assert.equal(vm.deadlinePassed, true)
-  assert.equal(vm.deadlineSoon, false)
   assert.equal(vm.instance.state, 'running', 'the server still owns the final state')
   assert.equal(vm.deadlineTimer, null)
 
@@ -635,7 +631,6 @@ test('deadline disables approval controls without waiting for the next poll', as
   const app = Vue.createSSRApp({
     render,
     setup: () => ({
-      object: { type: { value: 'login_confirm' } },
       myTask: vm.myTask,
       currentNode: vm.currentNode,
       canWithdraw: vm.canWithdraw,
@@ -652,7 +647,6 @@ test('deadline disables approval controls without waiting for the next poll', as
   app.config.globalProperties.$t = vm.$t
   app.component('ElButton', ElButton)
   app.component('ElInput', ElInput)
-  app.component('ElAlert', { template: '<div />' })
   app.component('ElIcon', { template: '<span><slot /></span>' })
   app.component('EditPen', { template: '<span />' })
   app.provide(ID_INJECTION_KEY, { prefix: 100, current: 0 })
