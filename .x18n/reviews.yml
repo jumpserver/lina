@@ -1,39 +1,1942 @@
 # yaml-language-server: $schema=https://x18n.dev/schema/reviews.json
 x18n: 1
 sources:
+  AccessAccountsRequired:
+    fr: 7e600585ea132
+  AccessAccountsRequiredHelp:
+    fr: f08a67d646c32
+  AccessAuthorizationIncomplete:
+    fr: 84d461fc72436
+  AccessAuthorizationIncompleteHelp:
+    fr: 112fe56af79421
+  AccessClientsOffline:
+    fr: 7d8bc938f9021
+  AccessClientsOfflineHelp:
+    fr: 140d31e19880c2
+  AccessConfigurationNameHelp:
+    fr: 13993f84da8bd8
+  AccessConfigurationRequired:
+    fr: 8ad05e06f3955
+  AccessConfigurationRequiredHelp:
+    fr: 1ba673296f095a
+  AccessConfigurationsCount:
+    fr: cc2faedcea05b
+  AccessCredentialSelectionHelp:
+    fr: 15af0790f444f6
+  AccessDeploymentPending:
+    fr: 268dbf5f87ccd
+  AccessDeploymentPendingHelp:
+    fr: 134292a4fa757e
+  AccessFirstFetchPending:
+    fr: 1f40ca0fde2c68
+  AccessFirstFetchPendingHelp:
+    fr: eb2108f873c62
+  AccessGuideAgentDeployHelp:
+    fr: 264675f4a7f56
+  AccessGuideAgentVerifyHelp:
+    fr: 641eadec97218
+  AccessGuideAuthorize:
+    fr: 18abb52e32c91a
+  AccessGuideAuthorizeHelp:
+    fr: 839b79101f954
+  AccessGuideConfigure:
+    fr: f657e78c548d7
+  AccessGuideConfigureHelp:
+    fr: 13d59faa1d8bb1
+  AccessGuideDeploy:
+    fr: 2581cacd30f9e
+  AccessGuidePrepare:
+    fr: c0ab838002339
+  AccessGuideSDKDeployHelp:
+    fr: 32cf7ff57d209
+  AccessGuideSDKVerifyHelp:
+    fr: 5cc8e67c66698
+  AccessGuideVerify:
+    fr: 1c67edf02c3e1c
+  AccessReadiness:
+    fr: e65a5a39d28e4
+  AccessReady:
+    fr: 11b25353882b74
+  AccessReadyHelp:
+    fr: e5272a8d1abae
   AccessToken:
     zh: 18cb5bffdee64e
+  AccountConfiguration:
+    fr: 12e356fcfe87b0
+  AccountConnectivityCreate:
+    fr: 189fcee0fafad8
+  AccountConnectivityTasks:
+    fr: 1c5d3726dc8a3d
+  AccountConnectivityUpdate:
+    fr: 1e69fdfecac77f
+  AccountRotation:
+    fr: b7ebf601ea011
+  AccountRotationHelp:
+    fr: 1e1edd31f0957d
+  ActiveAccount:
+    fr: 10d81998ca98
+  AddAssetByCIDR:
+    fr: d65f9c5d99313
   AddAssetInDomain:
     zh: 117a8ca3132a0
   AddGatewayInDomain:
     zh: 19414e870b5328
+  AddSelectedToZone:
+    fr: 133d09fead501c
+  AffectedApplications:
+    fr: b39a518d2088c
+  AgentActions:
+    fr: 1e5f03f57b6015
+  AgentApproval:
+    fr: 1bf173ed5152b4
+  AgentAuditDetail:
+    fr: 1348badf871f16
+  AgentDeliveryEnvironment:
+    fr: 14ef05a9023f89
+  AgentDeliveryJSON:
+    fr: 9d24b909cf321
+  AgentDeliveryMode:
+    fr: b2906a96f4d39
+  AgentDeliveryModeHelp:
+    fr: efb0c8c76174f
+  AgentDeliverySocket:
+    fr: 13ba0cfbc1e52f
+  AgentDescription:
+    fr: 4ebb0e4ea14f
+  AgentEvents:
+    fr: 89d7caf504ff6
+  AgentInstallStep:
+    fr: 8f213ffd34547
+  AgentInstallStepHelp:
+    fr: "41569014348e8"
+  AgentMoreEvents:
+    fr: afa9cf05455cb
+  AgentOffline:
+    fr: 12e4119a835f5a
+  AgentOnline:
+    fr: 1577ead6e8f7d
+  AgentParametersRequired:
+    fr: 10376ce57c000b
+  AgentRegisterStep:
+    fr: 1e4596310cc8a3
+  AgentRegisterStepHelp:
+    fr: 33dae89139352
+  AgentRegistrationComplete:
+    fr: e0560c7be3717
+  AgentRequest:
+    fr: 18e8fb08e1f57f
+  AgentSessionActions:
+    fr: 110cf05c305f51
+  AgentSessions:
+    fr: 148f86f3bca088
+  AgentTerminalSession:
+    fr: 1593d3ee23ffb6
+  AgentVerifyStep:
+    fr: eb5a67536cd75
+  AgentVerifyStepHelp:
+    fr: 1d5e8e3bc7ba0c
+  AllClientsConfirmed:
+    fr: 1aba8d83257746
+  AlternateAccount:
+    fr: 14b89378e3e15f
+  AlternatingAccountRotation:
+    fr: b7ebf601ea011
+  AlternatingAccountsMustDiffer:
+    fr: 160ce0ba9c43ea
+  AppAuditActor:
+    fr: 1bd0d0f18401d7
+  AppAuditAdministrator:
+    fr: 9069fe340200b
+  AppAuditAfter:
+    fr: ec812f5908d93
+  AppAuditAppliedSummary:
+    fr: 12fc78540d1fb4
+  AppAuditAttempt:
+    fr: 124a7126e13aab
+  AppAuditAuthorizationRevoked:
+    fr: 1c0565c6cb946e
+  AppAuditAuthorizationSummary:
+    fr: 1e3f54e9419be
+  AppAuditAuthorizationUpdated:
+    fr: 17c4f369527ef0
+  AppAuditBackupSummary:
+    fr: 14d82e1ffc65c6
+  AppAuditBefore:
+    fr: 27d6134a18133
+  AppAuditCallbackFailed:
+    fr: 3ff2f2920d9e1
+  AppAuditCaller:
+    fr: 1bb523beb0830d
+  AppAuditChangeSummary:
+    fr: 18910982150eae
+  AppAuditClientDisabled:
+    fr: 9077bee57d64d
+  AppAuditClientRegistered:
+    fr: 1ef5fbe79f76b8
+  AppAuditCompleteSummary:
+    fr: 153e4b19d9cbe8
+  AppAuditConfigurationCreated:
+    fr: 2715cf227b5b0
+  AppAuditConfigurationDeleted:
+    fr: 2df753becc3b3
+  AppAuditConfigurationDisabled:
+    fr: 1ce2309c468bd2
+  AppAuditConfigurationSummary:
+    fr: a85f77eb13f4d
+  AppAuditConfigurationUpdated:
+    fr: 858b10684045
+  AppAuditCredentialApplied:
+    fr: 1d949e03604f6
+  AppAuditCredentialChanging:
+    fr: 18a4b4131fdce3
+  AppAuditCredentialFetched:
+    fr: 156c0ea3d680c9
+  AppAuditCredentialNotAuthorized:
+    fr: e13ce38c1b371
+  AppAuditCredentialNotFound:
+    fr: 1fc01d095d0e71
+  AppAuditCredentialNotReady:
+    fr: 4697f02c493e5
+  AppAuditCredentialNotSelected:
+    fr: 1db2645c097eb2
+  AppAuditCredentialStreamConnected:
+    fr: 1f1f8af665d26a
+  AppAuditCredentialStreamDisconnected:
+    fr: 1b20e8ee4aba1
+  AppAuditDeadline:
+    fr: 8ce5e75909b35
+  AppAuditDeliveryAttempts:
+    fr: cd203c3ee84a3
+  AppAuditDeliveryFailedSummary:
+    fr: 11a5abbc091386
+  AppAuditDeliverySummary:
+    fr: ff6cbbd696c38
+  AppAuditDeniedSummary:
+    fr: 1eace518471aa0
+  AppAuditDetail:
+    fr: 1e23652bd4d1bd
+  AppAuditDisabledInstance:
+    fr: 100ba31fe9bd42
+  AppAuditDisabledSummary:
+    fr: 7b2d60d662372
+  AppAuditEvent:
+    fr: 1b0ddd012d1254
+  AppAuditExampleApplication:
+    fr: a4d71ecb6b109
+  AppAuditExampleConfiguration:
+    fr: a4558d0dfc727
+  AppAuditExampleCredential:
+    fr: 1658bfff38dae1
+  AppAuditExampleData:
+    fr: 750dc4c2b5309
+  AppAuditFetchSummary:
+    fr: 1d864727f92cdd
+  AppAuditHTTPFailed:
+    fr: f94a99742f7f5
+  AppAuditHTTPStatus:
+    fr: 3f3cee6a849ff
+  AppAuditInvalidRequest:
+    fr: 13ac7e53a7b9ac
+  AppAuditLeaseExpired:
+    fr: 1d1068b6a68dba
+  AppAuditListenerStopped:
+    fr: 159e1689c0e6e6
+  AppAuditLogs:
+    fr: 1263206468c48d
+  AppAuditNotRecorded:
+    fr: 12f40e288cdcbb
+  AppAuditNotificationDelivered:
+    fr: e6b9050b8f23a
+  AppAuditNotificationDetail:
+    fr: 1efe17fdbe790c
+  AppAuditPendingDelivery:
+    fr: be8912024ba98
+  AppAuditPreviewMode:
+    fr: 19a0832d5884a5
+  AppAuditPreviewSaved:
+    fr: 117c5310de0482
+  AppAuditPrimarySummary:
+    fr: fab5333c76b3b
+  AppAuditReceivedOnly:
+    fr: 15ea3b8253c40c
+  AppAuditResult:
+    fr: 176a4d853b7b09
+  AppAuditRetrySummary:
+    fr: 1a57c2af2b4002
+  AppAuditRetrying:
+    fr: 1b4b3f46045c7e
+  AppAuditRevision:
+    fr: fc808ea9f706b
+  AppAuditRotationCompleted:
+    fr: ad171ca387a9f
+  AppAuditRotationID:
+    fr: 16ab8742c81ad5
+  AppAuditRotationStarted:
+    fr: 12511d7e6ea087
+  AppAuditRotationStep:
+    fr: 18af2174ee3fdc
+  AppAuditSavePreview:
+    fr: 2b81535bf2d75
+  AppAuditSecretChangeCompleted:
+    fr: 1c64250a08a505
+  AppAuditSecretChangeFailed:
+    fr: 870968ac6cb41
+  AppAuditSecretChangeFinished:
+    fr: 10772bc644d0ef
+  AppAuditSecretChangeStarted:
+    fr: 382a6f200a40
+  AppAuditServiceUnavailable:
+    fr: 1e21abfc975868
+  AppAuditSource:
+    fr: 32497d8bcef56
+  AppAuditStartSummary:
+    fr: 98761df7c3e8a
+  AppAuditSubscriptionSnapshot:
+    fr: 19183aa0e9d6d8
+  AppAuditVerifiedSummary:
+    fr: 14037f6758ac1c
+  AppEventNotification:
+    fr: 1939b3c8788de5
+  AppNotificationAuth:
+    fr: b67784a3175e4
+  AppNotificationEnabled:
+    fr: 11ec380819f48c
+  AppNotificationEventID:
+    fr: b6f3d70013693
+  AppNotificationInvalidURL:
+    fr: 1822b6a144fb02
+  AppNotificationNoAuth:
+    fr: 189c9b507e1231
+  AppNotificationOptionalHelp:
+    fr: 1cec0442f168ca
+  AppNotificationPreviewHelp:
+    fr: 1998b2417e99df
+  AppNotificationReceipt:
+    fr: 56819a117b3d9
+  AppNotificationSDKCallback:
+    fr: 1428cf1a2cbc0a
+  AppNotificationURL:
+    fr: 1923360762af33
+  AppletHostDeployConfirm:
+    fr: 1a7cf35de6fa0
+  AppletHostRDSLicenseServerHelpText:
+    fr: 4114d4a0f9054
   AppletHostZoneHelpText:
     zh: 13b727ab1c5bc4
+  Application:
+    fr: 40336583f5cee
+  ApplicationAuthorizedAccounts:
+    fr: 128f4a2e8a7772
+  ApplicationBinding:
+    fr: 1b78f8399308ee
+  ApplicationConnectionProgress:
+    fr: c8bcdf14af9ce
+  ApplicationConnections:
+    fr: 58d7bfc45c934
+  ApplicationConnectionsHelp:
+    fr: 3b657203d738e
+  ApplicationCreate:
+    fr: 19976b6ee07c85
+  ApplicationCredential:
+    fr: 14f70c261aeb45
+  ApplicationCredentials:
+    fr: 1501e52afd3d94
+  ApplicationEventNotification:
+    fr: 175b9eca09a05b
+  ApplicationEventProcessing:
+    fr: cf78af0907801
+  ApplicationID:
+    fr: db273bfec192f
+  ApplicationRunUser:
+    fr: 4940d69664aec
+  ApplicationSecret:
+    fr: 528bf5d7300af
+  ApplicationSecretReset:
+    fr: 18d7d9aff0c6af
+  ApplicationSecretWarning:
+    fr: 13e19affc7af4c
   Applicationes:
     zh: 14ad39f803754b
+  ApplicationsStillUsingAccount:
+    fr: 15b1932689ac9b
+  AppliedAccount:
+    fr: 55eb41ee73629
+  AppliedRevision:
+    fr: 1ef11ad7dd01be
   AssetActivity:
     zh: 1833da7a04c75b
+  AssetConnectivityCreate:
+    fr: 4b9d806a8a4b5
+  AssetConnectivityTasks:
+    fr: 170edaf5c8b0fc
+  AssetConnectivityUpdate:
+    fr: c7cb1aeddeb08
+  AssetType:
+    fr: dbd9e88a3ee97
+  Attachments:
+    fr: 1f77e204cb9d72
+  AuthorizationPolicy:
+    fr: ac008e4506e88
+  AuthorizedAccess:
+    fr: 95d2a915929c8
+  AuthorizedAccountsCount:
+    fr: 1d815cceb2ae72
+  AutoReleasePolicyDescription:
+    fr: 153716974c46e
+  BackToClientAccessList:
+    fr: 1cc015fb4b38b1
+  BackToList:
+    fr: 1b7aa1317c767e
   BaseAssetAclList:
     zh: 1f86bca7a837a8
   BaseCommandFilterAclList:
     zh: cb419be549b85
+  BlockingInstances:
+    fr: 77b525b8e9428
+  CIDRRanges:
+    fr: 1e53a2bb4b2c1a
   CTYun:
     zh: 8aba8f38e091a
+  CancelCredentialRotationConfirm:
+    fr: a290573bdf175
+  CancelRotation:
+    fr: 18cf788990fbeb
+  Cancelled:
+    fr: 17094d8ed5963f
+  CandidateCount:
+    fr: e171a9697d59c
+  ChangeAndVerifySecret:
+    fr: 1afb847560b25a
+  ChangeInactiveAccountSecretHelp:
+    fr: 66e80a289bc36
+  ChangeNotifications:
+    fr: 129c47adc30a4
+  ChangeSecretExecution:
+    fr: f6dabb6279674
+  ChangingSecret:
+    fr: 1a5a1ca427483a
+  ChatAIConfiguration:
+    fr: 4932881c5045a
+  CheckRotationReadiness:
+    fr: 16db65321c5f30
+  CheckSecretChangeResult:
+    fr: 6f9545bd1b060
+  CheckUsageStatus:
+    fr: 1f970704b2e29d
+  ClickGetApplicationSecret:
+    fr: 5f4e3865e0460
+  ClickHouseAssetPortsHelp:
+    fr: 81ba7762b3e5d
+  ClickHousePlatformHTTPHelp:
+    fr: 1c164cf766f2b1
+  ClientAccess:
+    fr: ddea1b4f1f0c
+  ClientAccessConfiguration:
+    fr: f249253b3734c
+  ClientAccessConfigurationID:
+    fr: 298303c7d5ba7
+  ClientAccessConfigurations:
+    fr: 18dac65fbdf8de
+  ClientAccessConfigurationsHelp:
+    fr: 47812f832634c
+  ClientAccessIP:
+    fr: acc44600fa7ca
+  ClientEventHistoryHelp:
+    fr: 15d36ade6f9149
+  ClientInstances:
+    fr: 1277ddd5f044a6
+  ClientStatus:
+    fr: 1e1d50cfd3db4
+  ClientType:
+    fr: 1ddd1892b0a6b8
+  ClientUpgradeRequired:
+    fr: be1514a362b63
+  ClientVersion:
+    fr: d20a8caa8dd85
+  CloudAssetUpdateDisabled:
+    fr: 1fd486b122052e
+  CloudBindingConflict:
+    fr: 56ac7120cd214
+  CloudConfirmedMissing:
+    fr: e0c99a72b2d08
+  CloudInvalidScanResult:
+    fr: 182fc8d50826e6
+  CloudPaginationIncomplete:
+    fr: 13dedc7a2d722a
+  CloudProviderScanFailed:
+    fr: 6bcfde611aa5
+  CloudRegionRemoved:
+    fr: 167c3517c8a6d6
+  CloudRegionScanTimeout:
+    fr: 17c58931ea1b1e
+  CloudResourceNotSelected:
+    fr: 8687c6459d5db
+  CloudResourcePreviewOnly:
+    fr: e296d258dae20
+  CloudReviewSelectionExportOnly:
+    fr: 14c977e0967773
+  CloudScheduleIncomplete:
+    fr: eccdff9d99034
+  CloudScheduleRequired:
+    fr: 183ee099f968b5
+  CloudStrategyNotMatched:
+    fr: 14c400b32be5c0
+  CloudSyncFailed:
+    fr: 1f982f2ca6d2f1
+  CloudSyncInvalidCredentials:
+    fr: 10f5a19e387df6
+  CloudSyncPartialFailure:
+    fr: 1fd1fdcb9db7cd
+  CloudSyncPermissionDenied:
+    fr: 1bceb857b2ab01
+  CloudSyncRateLimited:
+    fr: 4c15ba01b3692
+  CloudSyncTaskUnavailable:
+    fr: 1e07d4caf49e5c
+  CloudSyncTimeout:
+    fr: 3e3069841ec4c
+  CommandGroupCreatedAndSelected:
+    fr: 12f17feda47813
+  CommandGroupImmediateSaveHelp:
+    fr: 3671a231ec3ae
+  CommandMatchMode:
+    fr: 6bb853f9fe07c
+  CommandMatching:
+    fr: 159917b5cfef2e
+  CommandRecords:
+    fr: 1ed989132a3f5f
+  CommandRejectedByACL:
+    fr: 14f3f61e0f828a
+  CommandRuleAIAction:
+    fr: 29f5ab3fe3f5c
+  CommandRuleAIApplied:
+    fr: 19db14377842d8
+  CommandRuleAIApply:
+    fr: 136bd57f069f50
+  CommandRuleAIDialogTitle:
+    fr: 82cb48f7621c2
+  CommandRuleAIEntryHint:
+    fr: 198f8abf075fab
+  CommandRuleAIError:
+    fr: bf2946c9488ab
+  CommandRuleAIExcludeExamples:
+    fr: eadc111949256
+  CommandRuleAIExcludeExamplesPlaceholder:
+    fr: 41630b3d14684
+  CommandRuleAIGenerating:
+    fr: 1603beed46a24c
+  CommandRuleAIGeneratingHint:
+    fr: 718fc6db488e3
+  CommandRuleAIGoal:
+    fr: 865ccf4b95198
+  CommandRuleAIGoalPlaceholder:
+    fr: 18a3ba30d37857
+  CommandRuleAIMatchExamples:
+    fr: 1e598991216b7f
+  CommandRuleAIMatchExamplesPlaceholder:
+    fr: 41630b3d14684
+  CommandRuleAIPreview:
+    fr: 1f52c34a4ff7f
+  CommandRuleAIReviewHint:
+    fr: 227a117548f86
+  CommandRules:
+    fr: 9c63251b15a58
+  Configuration:
+    fr: 1d781ffffdc3f0
+  ConfigurationFile:
+    fr: 1bd10eec2cab3f
+  ConfigurationGenerated:
+    fr: 1130a0688b4581
+  ConfigurationPending:
+    fr: a5772596a4c37
+  ConfigurationSync:
+    fr: 815f3d6284f9c
+  ConfirmApplicationsBack:
+    fr: 2c9753ec96b81
+  ConfirmApplicationsSwitched:
+    fr: 33a04bc00c667
+  ConfirmSecretChanged:
+    fr: 14808aed9ef684
+  Conflict:
+    fr: 639011d78db8e
+  ConflictCount:
+    fr: 1c2230bb2e3973
+  ConnectionParameters:
+    fr: 1e0d2f02200fac
+  ConnectivityAccountsHelp:
+    fr: 182239eab93165
+  ConnectivityResults:
+    fr: 63df28aa0ba8f
+  ConnectivityTarget:
+    fr: 156286e64b0678
+  ConnectivityTargets:
+    fr: 1119126670f82c
+  ConnectivityTasks:
+    fr: d96ca034bbadc
+  ConnectivityTests:
+    fr: 9cb7d0f3fda56
+  ConnectivityUnsupported:
+    fr: 1299e409e5d53e
+  ContinueRotation:
+    fr: 6da8476799c6b
+  CopyAgentRegistrationCommand:
+    fr: 6c366e8d07ca3
+  CopyConnectionParametersHelp:
+    fr: 136c1479aeea5b
+  CopyInstallCommandHelp:
+    fr: 92feeb7c36e6
+  CreateRotationConfiguration:
+    fr: 18ea7b70fd5288
+  CredentialEventEmpty:
+    fr: 22b0307dac09b
+  CredentialEventNoInstances:
+    fr: 5fc35d96dd69a
+  CredentialEventReception:
+    fr: 1cf566a9cca5bc
+  CredentialKey:
+    fr: 5b3b612ff5f41
+  CredentialPolicies:
+    fr: 1501e52afd3d94
+  CredentialPolicyLatestRun:
+    fr: 1a9a8e8f756f
+  CredentialPolicyMode:
+    fr: 10c676607a86f3
+  CredentialPolicyRunHistory:
+    fr: 4e1b2bb7c3bf2
+  CredentialRotationLockedHelp:
+    fr: f304ffb89e3f5
+  CredentialSubscriptionApplicationsHelp:
+    fr: eebecddf29cc
+  CredentialUpdateSubscription:
+    fr: 21ff27cf7b280
+  CredentialUpdateSubscriptionHelp:
+    fr: 1c49ee0fa182bc
+  CredentialUsages:
+    fr: 39d8a3d0e751f
+  CurrentAccessMode:
+    fr: "11e34192010175"
+  CurrentAccount:
+    fr: 1fbfa04a661b30
+  CurrentAction:
+    fr: 1aefb0acbfa95a
+  CurrentRotationReceipts:
+    fr: 7a49c55be1a57
+  DatabaseSSLBackendHelp:
+    fr: 7213e21d6016
+  DatabaseSSLCAHelp:
+    fr: 1c47c3c53ecfad
+  DatabaseSSLClientHelp:
+    fr: eef26769fd292
+  DatabaseSSLInsecureHelp:
+    fr: 1aea63b59b9e4e
+  DatabaseSSLMode:
+    fr: 1ce52b8c01e6c3
+  DatabaseSSLModeHelp:
+    fr: b6684e8a6ce
   DeeplyThoughtAbout:
     zh: 1e946461d19edc
+  Degraded:
+    fr: 1e80186aa5da26
+  DeleteAllReleasedAssetsForAccount:
+    fr: 160accd4272293
+  DeleteAllReleasedAssetsForAccountConfirm:
+    fr: 11a49c43cacd2d
+  DeleteAllReleasedAssetsForAccountFailed:
+    fr: 3bedd0cac99e5
+  DeleteAllReleasedAssetsForAccountSuccess:
+    fr: 179a9cf952a44e
+  DeleteApplicationCredentialConfirm:
+    fr: 8d9d265183276
+  DeleteClientAccessConfirm:
+    fr: db2763e565d73
+  DeleteEventNotificationRuleConfirm:
+    fr: c5fe7280e27ea
+  DeleteSelectedCloudAssetsConfirm:
+    fr: 189ffc21cf4c4c
+  DisableCredentialClientConfirm:
+    fr: 78d707bdfd006
+  DiscoverAndImport:
+    fr: 3ab72a4a579cb
+  DiscoveredCount:
+    fr: 1d4d3c56b3f62
+  DiscoveringCloudAssets:
+    fr: 2bcadf574c400
+  DiscoveryAndImportCompleted:
+    fr: 19f87531729dbf
+  DiscoveryAndImportFinishedWithIssues:
+    fr: 475ec9c3d67f1
+  DiscoveryCompleted:
+    fr: 1bb00be6d94f2b
+  DiscoveryCompletedWithIssues:
+    fr: 1c4242c76590e3
+  DiscoveryFailed:
+    fr: 14cdd7dfaaf928
+  DiscoveryFinishedWithIssues:
+    fr: 140816dd0360a4
+  DiscoveryPhase:
+    fr: 1a6f038d75ccfc
+  EditApplicationCredential:
+    fr: 1e71c4a77ca34e
+  EditClientAccessConfiguration:
+    fr: 1c029aa46630bc
+  EditEventNotificationRule:
+    fr: 1f5d71c9529e65
+  EditRotationConfiguration:
+    fr: 19bb38531ad1e7
+  EffectiveScope:
+    fr: 165abbf9efa0a3
+  EnableStatus:
+    fr: 1d445c78de9c93
+  EndTime:
+    fr: c1c7abc0183a3
+  EnvironmentVariables:
+    fr: 172cec5eb9ff72
+  EventAllStates:
+    fr: c56c6ea26293d
+  EventAllTypes:
+    fr: c21937ebbbca4
+  EventClientCount:
+    fr: dc9673467fdcd
+  EventClientSearch:
+    fr: 2ad7dce4da6c7
+  EventClientType:
+    fr: 1ddd1892b0a6b8
+  EventClientsLoadFailed:
+    fr: 1de06e12317559
+  EventCompareRotation:
+    fr: b92a9b580a051
+  EventHistory:
+    fr: 12805c356606ae
+  EventHistoryCount:
+    fr: 1b5dda6548401f
+  EventHistoryLoadFailed:
+    fr: ac62444d26c4f
+  EventLatestPublished:
+    fr: 71de317e9246a
+  EventLatestReceipt:
+    fr: e1fe3b4b4dc8b
+  EventNoClientEvents:
+    fr: 16c0b2ed764059
+  EventNoMatchingClients:
+    fr: 1e396f6a4a83c9
+  EventNone:
+    fr: 114ece4d6c1679
+  EventNotificationRule:
+    fr: b66d8ff44e4a8
+  EventNotifications:
+    fr: 1939b3c8788de5
+  EventRetry:
+    fr: 15ff4b667839d7
+  EventRotationRound:
+    fr: 1d884c719590
+  EventSelectClient:
+    fr: a7d474b3c1247
+  EventsCount:
+    fr: c79311ae98dca
+  ExcludeRotatingClientReasonHelp:
+    fr: 9173ce2a73c61
+  ExclusionReasonRequired:
+    fr: 151f458021c667
+  ExecuteCredentialChangeConfirm:
+    fr: 26df0503fa689
+  ExecutionItems:
+    fr: 1f66831f9c2848
+  ExecutionStatusRecovering:
+    fr: 1607babaad9506
+  ExecutionStatusRecoveryFailed:
+    fr: 1f61545719f69b
+  ExternalID:
+    fr: 14d534c5b0e3b4
+  FailedCount:
+    fr: 1e8768656bcd8b
+  FieldDiff:
+    fr: 1cb860afb1e8f7
+  FirstMissingAt:
+    fr: 819a468b9480c
+  FullExample:
+    fr: 18ce4dd9df0b49
+  GeneralGuide:
+    fr: f06eb380c9298
+  GenerateAccessMaterialHelp:
+    fr: 12d4ac2e43c555
+  GenerateAgentCommandHelp:
+    fr: 98a2f8ba1bc25
+  GenerateAgentMaterialHelp:
+    fr: b3ddbb360ec7
+  GenerateConfiguration:
+    fr: 1d3000d7c0c5fc
+  GenerateRegistrationToken:
+    fr: 165b3e4df6965a
+  GenerateSensitiveMaterialConfirm:
+    fr: 1d0aa8df3b9342
+  GeneratedAccessMaterial:
+    fr: 1a244329d3dfd1
+  GoChangeSecret:
+    fr: c39d36637bcb6
+  Healthy:
+    fr: 8f9c5e1b60643
+  Hide:
+    fr: 1d044851aa3ede
+  IgnoreCase:
+    fr: 4f0efaefd1644
+  ImportPhase:
+    fr: 1650bf1c71dc35
+  InitialAccount:
+    fr: 16875dd99ed703
+  InstallCommand:
+    fr: 6b564852220aa
+  InstallPath:
+    fr: 154670b59f0c02
+  InstanceID:
+    fr: c5ef2ada02c6c
   IsAlwaysUpdateHelpTip:
     zh: 2281c82cad762
+  JumpServerAddress:
+    fr: 1972aa36a407c4
+  LastFetchedAt:
+    fr: e77a63501c570
+  LastReportedAt:
+    fr: 11a7806b6f5499
+  LastRotation:
+    fr: 57518f3214858
+  LastSeenAt:
+    fr: 1bf096b53b0a10
+  LastSyncedAt:
+    fr: df6529dcc0360
+  LatestChanges:
+    fr: 139faa80757d2f
+  LatestExecution:
+    fr: 1f9d918198e1b2
+  LatestRotationReceipts:
+    fr: 154b0b1fe49688
+  LatestSuccess:
+    fr: 1033abe31bccca
+  LegacyAllAuthorizedAccounts:
+    fr: 11c82342f5e3d
   LinkedDomains:
     zh: 4de108edacf72
+  LocalEndpoint:
+    fr: 3d19c54d9228c
+  MCPAccessDocumentation:
+    fr: 79eb2fbfd3651
+  MCPAgentSetupBoundary:
+    fr: bc100e7ab9470
+  MCPAgentSetupHelp:
+    fr: 1c2d9183e3618c
+  MCPAgentSetupInstructions:
+    fr: 1b85d5f1df9040
+  MCPAgentSetupPrompt:
+    fr: b50f33eae24e5
+  MCPAuthorizationActive:
+    fr: 3e90f8f5d1808
+  MCPAuthorizationExpired:
+    fr: 4b22b7be86219
+  MCPBrowserAuthorization:
+    fr: 12340e920c47e3
+  MCPCodexCheckConnection:
+    fr: 125eacd5adac1f
+  MCPConnectionAuthorizationHelp:
+    fr: 105d933817769d
+  MCPConnectionConfig:
+    fr: f9b93d826a764
+  MCPConnectionGuide:
+    fr: 105650cff4d752
+  MCPConnectionVerificationHelp:
+    fr: 1862fb7f909464
+  MCPCopyForAgent:
+    fr: 1bbcc9d3fcef58
+  MCPOneSentenceSetup:
+    fr: ffdc5c7212f9f
+  MCPRunCLICommands:
+    fr: 1b423b3904357d
+  MCPUserClientHelp:
+    fr: 158cb64a0bafa8
+  MCPUserConnectionHelp:
+    fr: 1ca6558251ea97
+  MCPUserRegistrationRequired:
+    fr: 1f98ef5c67c49
+  MCPUserRevokeConfirm:
+    fr: 10fc142e0946ee
+  MCPUserRevokeSuccess:
+    fr: c62593f77397c
+  MCPUserUnavailable:
+    fr: a4a4fbb248828
+  MCPVerifyConnection:
+    fr: efa06b2e19235
+  ManageAuthorizedAccounts:
+    fr: 103cc3cebbe24
+  ManualReviewPolicyDescription:
+    fr: 1ca15bf5cf81a9
+  ManualReviewRequired:
+    fr: 15d2b16e0a104
+  ManualRotationHelp:
+    fr: 21ba794526c35
+  MinimalCode:
+    fr: 1c2ccf5d0df176
+  MinimalCodeHelp:
+    fr: 1a6c84bded30d4
+  Minute:
+    fr: 12909aa33516f6
+  MissingCount:
+    fr: 5c2302da6be8b
+  MyMCPClients:
+    fr: 1953f23677c321
+  NeverRun:
+    fr: 10722bb0e4e56f
+  NewApplicationCredential:
+    fr: 15a7343be2c7aa
+  NewClientAccessConfiguration:
+    fr: 15b7b7d55b8293
+  NewEventNotificationRule:
+    fr: 1ff88b4d989d4b
+  NextAccount:
+    fr: d38cda28b9e8f
+  NextExecution:
+    fr: 1ec60e477a1351
+  NextStep:
+    fr: 13dc810d036f43
+  NoAdditionalDetails:
+    fr: 552c046197217
+  NoChange:
+    fr: c868d524c5fce
+  NoChangeCount:
+    fr: 2bd158b86d2fc
+  NoCloudImportCandidates:
+    fr: 18389b28d3c856
   NoUnreadMsg:
     zh: 16534a5a924baa
+  NotExecuted:
+    fr: 19ada0f3cc77f5
+  Online:
+    fr: 1f2cbdd0f69b71
+  OnlineClientInstancesCount:
+    fr: def9ef4575f7c
+  Or:
+    fr: 11b58ce98f31cc
+  OrganizationID:
+    fr: 1c2972eda5c66c
+  OverviewAccessibleOrgs:
+    fr: 1a8ab5efcf4080
+  OverviewAccountSecurity:
+    fr: 1b10339b146060
+  OverviewAccountSessions:
+    fr: 130fad0c7d1bad
+  OverviewActiveAccessKeys:
+    fr: 1083abece806e
+  OverviewActivePasskeys:
+    fr: 10780c050f4fa8
+  OverviewActiveSSHKeys:
+    fr: 10feacb45a3f32
+  OverviewConnectionTokenRule:
+    fr: 3f95f017b9735
   OverviewCurrentOrg:
+    fr: 552894a38f1d5
     zh: 552894a38f1d5
+  OverviewDataUnavailable:
+    fr: 139bf9c36e608a
+  OverviewLoadFailed:
+    fr: c0a7054be270b
+  OverviewLoginBreakdown:
+    fr: "7802885e81661"
+  OverviewMFA:
+    fr: eacde75c55d26
+  OverviewMFADisabled:
+    fr: 1ffc497678d635
+  OverviewMFAEnabled:
+    fr: 108e41aeb7d690
+  OverviewMFASetup:
+    fr: 44016f5a18c98
+  OverviewNextExpiry:
+    fr: 506856a369458
+  OverviewOAuth2Token:
+    fr: 1106d799ff6332
+  OverviewOnlineAssetSessions:
+    fr: 398890d606cf1
+  OverviewPlatformCredentials:
+    fr: 1b5efd80ef29ca
+  OverviewReusableConnectionToken:
+    fr: 170a74ee0b238b
+  OverviewReuseDisabled:
+    fr: 4a0080d5fde5a
+  OverviewReuseDisabledDetail:
+    fr: 17f53b159c23b7
+  OverviewSSHKey:
+    fr: 1ce0a3a36e02dc
+  OverviewTemporaryPassword:
+    fr: e9ee1cc7d2b87
+  OverviewUnusedKeyRule:
+    fr: 157d3ab148ca91
+  OverviewUnusedKeyWarning:
+    fr: 1b52c76459c11a
+  OverviewValidAccessTokens:
+    fr: 938f7306587db
+  OverviewValidTempPasswords:
+    fr: 166d0af3df5802
+  PamChangeFailed:
+    fr: e4e36c3a1318c
+  PamChangeReadyForRetry:
+    fr: 5d3f035bc8cab
+  PamChangeReason:
+    fr: 43edf001aafdf
+  PamChangeSecretResult:
+    fr: 9b6db34712168
+  PamChangeStillRunning:
+    fr: c1ebb7e8356b5
+  PamExecutionStatus:
+    fr: 2c71434b42173
+  PamPrecheck:
+    fr: 17fccba4c172df
+  PamPrecheckCancelled:
+    fr: 142c95f2f612c8
+  PamPrecheckChanged:
+    fr: 15d0281e98a561
+  PamPrecheckDispatchFailed:
+    fr: 1dcee166d8cb66
+  PamPrecheckFailed:
+    fr: 1d77a31efdc61d
+  PamPrecheckRunning:
+    fr: 1e0d86b45cee49
+  PamPrecheckTimeout:
+    fr: 9d317eb0496f6
+  PamRecoveryRequired:
+    fr: 18601d3f966911
+  PamRecoveryStillRequired:
+    fr: 97330b0ffd82d
+  PamRedispatch:
+    fr: 6d8e5378265c1
+  PamRotationExpired:
+    fr: 63fc563f79d35
+  Partial:
+    fr: 1db0d8233637da
+  PartialRegionResult:
+    fr: 8eba82ff37ac3
+  PasswordChangeNotifications:
+    fr: 128599cda2d3d5
+  PendingRelease:
+    fr: 979c917fe6a6d
+  PendingReleaseAssets:
+    fr: 92e0b55784202
+  PendingReleaseCount:
+    fr: 979c917fe6a6d
+  PendingReleaseReason:
+    fr: 8d7f4a5626fcb
+  Phase:
+    fr: 12051f713203f0
   Please enter a reason:
     zh: cb9a4c8087e1
+  PolicyCurrentCycle:
+    fr: 17bf426954fd20
+  PolicyCycleCleaningSettings:
+    fr: 3eabb76042833
+  PolicyCycleDetail:
+    fr: 13579fe1c7ce02
+  PolicyCycleLastUpdated:
+    fr: 1a55172822874
+  PolicyCycleLatestStage:
+    fr: 98bb05d2c625a
+  PolicyCycleRetentionDays:
+    fr: 7ce8d9355f011
+  PolicyCycleRetentionHelp:
+    fr: 1a2d37f85c41ad
+  PolicyCycleStartedAt:
+    fr: 18f4e1f33bfe7e
+  PolicyCycleType:
+    fr: 19c82388752b75
+  PolicyCyclesNoMatch:
+    fr: 45adefdf399cf
+  PolicyViewCurrentCycle:
+    fr: 1be6e6c4eeca08
+  PrivateToken:
+    fr: d9eba258894c7
+  PrototypeDataNotice:
+    fr: 1ef8d3cfd63854
+  PrototypeSecretPlaceholder:
+    fr: 1932e353d832f9
+  PythonSDK:
+    fr: 60ee655a2cbc
+  Readme:
+    fr: d13316f98eed5
+  ReadyForSecretChange:
+    fr: 199e83053cc92c
+  RedisClusterAssetProtocolHelp:
+    fr: 7099007802a9d
+  RedisStandaloneAssetProtocolHelp:
+    fr: 386401e94330c
+  RefreshSuccess:
+    fr: 1f22cb64a55d59
+  Regenerate:
+    fr: 4f955db59bc6b
+  RegenerateAgentRegistrationCommand:
+    fr: 1fe6462f1703dd
+  RegenerateToken:
+    fr: 119eacd6496820
+  RegistrationToken:
+    fr: 167696dd963c95
+  Release:
+    fr: 173f6ffcf6d30d
+  Reload:
+    fr: 35cc0cfb48c09
+  RemainingConfirmations:
+    fr: 4d77e37edc404
+  RemoveRotatingCredentialWarning:
+    fr: 1f3d6a992c2924
+  Required:
+    fr: 1077f7d40d99a7
+  RequiredRevision:
+    fr: f9b28bcdf7bed
+  ResetApplicationSecret:
+    fr: 120957ec487700
+  ResetApplicationSecretConfirm:
+    fr: 12a493ba75b28c
+  ResetApplicationSecretSuccess:
+    fr: 189a45b8533280
+  Restart:
+    fr: 9be580cfad2ed
+  ReviewExemptionDuration:
+    fr: 1c4b021c7d4865
+  ReviewExemptionDurationHelp:
+    fr: 16e72f80660914
+  RotationCompleted:
+    fr: ad171ca387a9f
+  RotationConfiguration:
+    fr: 78be12b47971
+  RotationEventEmpty:
+    fr: 1b8d2f4d481e4f
+  RotationEventFailed:
+    fr: 1f544f97d57b0f
+  RotationEventInactiveClient:
+    fr: 5f1a403bfe806
+  RotationEventLoadFailed:
+    fr: 1948ee3405f66e
+  RotationEventNoInstances:
+    fr: ff45c74e46ba
+  RotationEventNotTargeted:
+    fr: 17c4c61525e9c2
+  RotationEventNotTargetedHelp:
+    fr: 405f407ca66e6
+  RotationEventOverview:
+    fr: 7a63ce23cd8ab
+  RotationEventPublishFailed:
+    fr: 7562e1006be22
+  RotationEventPublishedAt:
+    fr: 18e9a72ca239f3
+  RotationEventPublishing:
+    fr: 1a080afe7c93ee
+  RotationEventReceiptCount:
+    fr: 46bc746d508c7
+  RotationEventReceived:
+    fr: 1b165c8188688e
+  RotationEventReceivedAt:
+    fr: 1b165c8188688e
+  RotationEventReception:
+    fr: 4e1b2bb7c3bf2
+  RotationEventTimeline:
+    fr: 5cf8dae3193f4
+  RotationEventTimelineHelp:
+    fr: 454bce4206abf
+  RotationEventUnacknowledged:
+    fr: 29ac0fa5832be
+  RotationEventUpgradeClient:
+    fr: a0d971274f50b
+  RotationEventWaitingForSwitch:
+    fr: 19ef1214dbb54
+  RotationNormal:
+    fr: 3591fa4fb7f6d
+  RotationProgress:
+    fr: 102354cace758e
+  RotationPurpose:
+    fr: 42aa53b81f92f
+  RotationReceiptAllClients:
+    fr: 18925c122fb8b9
+  RotationReceiptComplete:
+    fr: 1c9be37cb118cf
+  RotationReceiptFilter:
+    fr: 12a77e6ab14acd
+  RotationReceiptNotTargeted:
+    fr: 1fce07e754c202
+  RotationReceiptPending:
+    fr: 80a2f26a3fa5d
+  RotationReceiptPriority:
+    fr: 17cabf7c5cc982
+  RotationSourceReadyEvent:
+    fr: 1914958dafe6a8
+  RotationSourceWaitingEvent:
+    fr: 118081796a06bf
+  RotationStatus:
+    fr: 1996a8891e83d2
+  RotationVerificationCancelledEvent:
+    fr: 1196ccfcab8b68
+  RotationVerificationFailedEvent:
+    fr: dc3e17932447d
+  RotationVerificationStartedEvent:
+    fr: 1b3f9ebe1a9e33
+  SDKAccess:
+    fr: 18ec109dfb693c
+  SDKCenter:
+    fr: 558a498468a95
+  SDKDocumentationEmpty:
+    fr: c534c5568ba7d
+  SDKDocumentationLoadFailed:
+    fr: 1f379cf21054bb
+  SDKInstallationNotice:
+    fr: 1aa273002a7171
+  ScannedRegions:
+    fr: 12c4d5f5ca5fc2
+  Scope:
+    fr: 1609d6190181f6
   ScreenLock.LockNow:
     zh: 154879706776d2
+  SearchByNameOrKey:
+    fr: 15af63ac936f80
+  SecretChangeGuard:
+    fr: 13095a190e57bc
+  SelectAccount:
+    fr: 2f77d76a796d8
+  SelectAlternateAccount:
+    fr: e121f10eb0ec2
+  SelectApplication:
+    fr: 1ad731e36431a9
+  SelectApplicationCredentials:
+    fr: 188aab3dfc85a9
+  SelectApplicationHelp:
+    fr: 683e4536911fc
+  SelectApplications:
+    fr: 6f4c88512b5d
+  SelectAsset:
+    fr: 12c81407a0f743
+  SelectCredentialKeys:
+    fr: 1f89ac9b217d81
+  SelectSubscribedAccounts:
+    fr: dc003608aff6f
+  SensitiveConfigurationNotice:
+    fr: 1ac9ea5470c850
+  SessionRecords:
+    fr: 1de1ae44051701
+  SkipCount:
+    fr: d662470b87c08
+  SourceAccount:
+    fr: 1c0a4f4d3d1c4f
+  SourceChangeEligibleAt:
+    fr: 1a52c8c42762a0
+  SourceIdleSince:
+    fr: b0f7b18bb3957
+  SourceLastSecretAccess:
+    fr: cf1562e34fa75
+  SourceNoTrafficDuration:
+    fr: d540346c35543
+  SourceNoTrafficDurationHelp:
+    fr: 10720bd593c10
+  SourceNoTrafficMinutes:
+    fr: 123439a706ddb5
+  StartCredentialRotationConfirm:
+    fr: aa8a2aa8e1e02
+  StartRotation:
+    fr: bfdc90d3c369d
+  StartRotationCycleConfirm:
+    fr: 149192f037057b
+  StartTime:
+    fr: 18f4e1f33bfe7e
+  StepCompleted:
+    fr: 4887ff0fcbd0
+  SubscribedAccounts:
+    fr: 16dfa328d72c75
+  SubscribedAccountsHelp:
+    fr: 19233a0293ec13
+  SubscriptionScope:
+    fr: 1f4bd478712b5a
+  SuccessfulRegions:
+    fr: a4ddf1756503e
+  SwitchToAgent:
+    fr: 1654749978cdef
+  SwitchToAlternateAccount:
+    fr: 5989e54fa5834
+  SwitchToSDK:
+    fr: 6bda776b8e17c
+  SyncException:
+    fr: 5b20c3ca30bce
+  SyncFailed:
+    fr: 18bf8ad46359bd
+  SyncHealth:
+    fr: 1e3a37d196d92
+  SyncSuccess:
+    fr: 1ec3d024b261fc
+  SystemdAction:
+    fr: 1b9951aa0b2a2b
+  SystemdUnit:
+    fr: 91481eadf2223
+  SystemdUnitHelp:
+    fr: 528527349f9c9
+  TerminalCommands:
+    fr: d4c1fc4ccc6a9
+  TicketAccountsLoadFailed:
+    fr: ec6fe9ad9f3dd
+  TicketAdjustRequest:
+    fr: 1a7a4fffbbd928
+  TicketAdjustResourcesHelp:
+    fr: 76deb2cebb3c7
+  TicketAdjustmentAfter:
+    fr: 126105e0731fe5
+  TicketAdjustmentBefore:
+    fr: 187575198d3a3c
+  TicketAdjustmentChanged:
+    fr: 166bb6bfdff6c0
+  TicketAdjustmentDiff:
+    fr: 5e56503f6e19d
+  TicketAdjustmentField:
+    fr: 1bd11cb56b0a6f
+  TicketAdjustmentNoChanges:
+    fr: 1ccf753ebd3e1c
+  TicketAdjustmentReason:
+    fr: 14dbcc68f5c75c
+  TicketAdjustmentSaved:
+    fr: 80f1e3c478cc0
+  TicketAllRequests:
+    fr: 18fcccbe4119e2
+  TicketApplyRenewal:
+    fr: 1ed04798b0adcd
+  TicketApplyTitle:
+    fr: 186f5c97287439
+  TicketApprovalApproved:
+    fr: 10514da8555587
+  TicketApprovalDurationHelp:
+    fr: 18e60bbbea5687
+  TicketApprovalFinished:
+    fr: 1b11431729f6a7
+  TicketApprovalOnlyHint:
+    fr: ffa9c546306e8
+  TicketApprovalRestarted:
+    fr: be048f192a929
+  TicketApprovalStatus:
+    fr: 105e4c2f24da12
+  TicketAttachmentCountError:
+    fr: 1cf3af74a5a44a
+  TicketAttachmentDrop:
+    fr: bf3dfa03864ec
+  TicketAttachmentExpired:
+    fr: 1b0fe7b41d1b86
+  TicketAttachmentExpires:
+    fr: 1fc0850fd002d7
+  TicketAttachmentHelp:
+    fr: 1c5a866b73ce9d
+  TicketAttachmentRetention:
+    fr: e4f252afe6bdc
+  TicketAttachmentSizeError:
+    fr: c74da0e39081f
+  TicketAttachmentTypeError:
+    fr: 7b6b40ff71d65
+  TicketAuthorizedUser:
+    fr: 8c486e47a74a4
+  TicketAuthorizedUsers:
+    fr: f395c52f6e406
+  TicketBatchApprovalTitle:
+    fr: facf94d66f714
+  TicketBatchApproveSummary:
+    fr: 1bd8c86c2ad111
+  TicketBatchApproved:
+    fr: 61c6525dbc89e
+  TicketBatchForbidden:
+    fr: b28811b22305a
+  TicketBatchPartial:
+    fr: c0fa12e046bbb
+  TicketBatchProgress:
+    fr: 34098958ae8fe
+  TicketBatchRejectSummary:
+    fr: 69f691dac4574
+  TicketBatchRejected:
+    fr: a33cc479588e9
+  TicketBatchResultTitle:
+    fr: 172cd37e6bd91b
+  TicketBatchStateChanged:
+    fr: "19521e14597030"
+  TicketBatchUnavailable:
+    fr: 726fa2002a62
+  TicketBatchUnfinished:
+    fr: f782594e2b29e
+  TicketBatchUnknown:
+    fr: 100c4a30afc171
+  TicketBatchUnknownReason:
+    fr: a42e37784ca1
+  TicketBatchViewDetail:
+    fr: 14be0da791c050
+  TicketChangeSecret:
+    fr: c1f09b72fa87b
+  TicketChangeSecretApplyHelp:
+    fr: e7016a750b000
+  TicketChangeSecretExecution:
+    fr: 162d3e5c7fe747
+  TicketChangeSecretFailed:
+    fr: 1355918b14b531
+  TicketChangeSecretFailureHelp:
+    fr: 738ac8c8f7f2c
+  TicketChangeSecretLogHelp:
+    fr: 15b52c0b906f81
+  TicketChangeSecretNeedsVerification:
+    fr: 19e0303c322905
+  TicketChangeSecretPending:
+    fr: ebe0dfad4b6c3
+  TicketChangeSecretPendingHelp:
+    fr: 1f28c5a7e6d16a
+  TicketChangeSecretQueued:
+    fr: 1d7840926b72f7
+  TicketChangeSecretQueuedHelp:
+    fr: 6d032376ceca2
+  TicketChangeSecretRunning:
+    fr: 4dc54ddc40410
+  TicketChangeSecretRunningHelp:
+    fr: c75af8311788
+  TicketChangeSecretSuccess:
+    fr: e2e3807b99b48
+  TicketChangeSecretTotal:
+    fr: 13a43947fca66d
+  TicketChangeSecretUnapproved:
+    fr: 19ada0f3cc77f5
+  TicketChangeSecretUnavailable:
+    fr: 10f863dbd24e2f
+  TicketChangeSecretUnavailableHelp:
+    fr: e1c23d838e4c
+  TicketChangeSecretUnfinished:
+    fr: 178278bf432c54
+  TicketChangeSecretUnverified:
+    fr: 19ca2f3cfcdae9
+  TicketChangeSecretVerificationHelp:
+    fr: 6d258db26e7d5
+  TicketDelegatedWorkflowHelp:
+    fr: fefcc0e4cc875
+  TicketDownloadReplay:
+    fr: 1d3c2b1fe544df
+  TicketFileTransfer:
+    fr: 1bcea3a2c0a467
+  TicketFinished:
+    fr: 178fe4fa2686ec
+  TicketInProgress:
+    fr: 78c01202e55cf
+  TicketListCollapse:
+    fr: 16da8a7f900beb
+  TicketListCount:
+    fr: 1733d21534058
+  TicketListExpand:
+    fr: 125ba616108f35
+  TicketManualRequests:
+    fr: 15ea59912cba56
+  TicketNoAssetAccounts:
+    fr: b2190c091409d
+  TicketOneItemPerLine:
+    fr: f956089e26c1f
+  TicketPendingApproval:
+    fr: cb834139fb641
+  TicketReapply:
+    fr: 1b29cd9c7bf483
+  TicketReapplyBeneficiary:
+    fr: 116ff0bac92482
+  TicketReapplyHelp:
+    fr: b3908c7a6b6a9
+  TicketReapplyInvalidAccounts:
+    fr: d894760a866ed
+  TicketReapplyInvalidAssets:
+    fr: b6dd2823d0fc5
+  TicketReapplyLoadFailed:
+    fr: a2b813ed9af9e
+  TicketReapplyNoWorkflow:
+    fr: 9cfc859c2dc18
+  TicketReapplyNodes:
+    fr: 7685015a6fdc7
+  TicketReapplyTitle:
+    fr: 19250539743c0b
+  TicketReapplyWorkflow:
+    fr: "11e96289848492"
+  TicketRenewalTitle:
+    fr: 16ff5c8e84ec26
+  TicketReplayApplicantOnly:
+    fr: 11f018e8b3d43d
+  TicketReplayApplicantOnlyHelp:
+    fr: 1a97b04a8bdb84
+  TicketReplayAvailable:
+    fr: 13ad5839a40b4a
+  TicketReplayDurationHelp:
+    fr: 359ee47f29ec2
+  TicketReplayExpired:
+    fr: 1e1080d7d318e0
+  TicketReplayExpiredHelp:
+    fr: 17ccda8fe7578c
+  TicketReplayPending:
+    fr: f6d334b34683d
+  TicketReplayPendingHelp:
+    fr: 1902f6fca18c43
+  TicketReplayUnapproved:
+    fr: a6174851a410b
+  TicketReplayUnapprovedHelp:
+    fr: 1313e762f83c00
+  TicketReplayUnavailable:
+    fr: 1dffc91e1ba714
+  TicketReplayUnavailableHelp:
+    fr: 1918ee06684e2c
+  TicketRequestedForMe:
+    fr: 10ba8507a14b32
+  TicketRequiredResource:
+    fr: 14daaf1699b41c
+  TicketResourceDescription:
+    fr: 651f7dd9cede8
+  TicketResourceDescriptionHelp:
+    fr: 14090a4a2b6759
+  TicketResourceLoadFailed:
+    fr: fe8d5c3840682
+  TicketResourcesPending:
+    fr: 17cb8314abcc48
+  TicketSaveAdjustment:
+    fr: 19dc72ee991dd9
+  TicketSecretApplicantOnly:
+    fr: e34e759b6b52b
+  TicketSecretApplicantOnlyHelp:
+    fr: 1a97b04a8bdb84
+  TicketSecretDisabled:
+    fr: 78d38eb674d35
+  TicketSecretDisabledHelp:
+    fr: 8312c527c12b2
+  TicketSecretDuration:
+    fr: a8659c3ae1e94
+  TicketSecretDurationHelp:
+    fr: 93a433472ee3e
+  TicketSecretExpired:
+    fr: 1e91dfba89a44b
+  TicketSecretExpiredHelp:
+    fr: 14dd648c57c18d
+  TicketSecretPending:
+    fr: 43f2413d0ba2d
+  TicketSecretPendingHelp:
+    fr: e272dc511696
+  TicketSecretUnapproved:
+    fr: a6174851a410b
+  TicketSecretUnapprovedHelp:
+    fr: 1a334ebd85ffc9
+  TicketSecretUnavailable:
+    fr: 4616d46c37d4
+  TicketSecretUnavailableHelp:
+    fr: f78fa57c23549
+  TicketSelectAssetFirst:
+    fr: b06facfc1d457
+  TicketSelectSession:
+    fr: 188cab60b1d65f
+  TicketSelectSessionHelp:
+    fr: c558abee39cd9
+  TicketSelectType:
+    fr: e35191a7810ad
+  TicketSource:
+    fr: 1f0a974088dcdd
+  TicketSystemTriggered:
+    fr: ce15531d22901
+  TicketTransferApplyHelp:
+    fr: cf86864a2414b
+  TicketTransferAvailable:
+    fr: 3ea3b99db0783
+  TicketTransferCountSeparator:
+    fr: 36556e719be68
+  TicketTransferCount_failed:
+    fr: 1f2e0ced5ac9aa
+  TicketTransferCount_pending:
+    fr: 15122aea62d66c
+  TicketTransferCount_running:
+    fr: 158869f20641b
+  TicketTransferCount_success:
+    fr: 604b61f8ce332
+  TicketTransferCount_unverified:
+    fr: 1d483e6712d824
+  TicketTransferDirection:
+    fr: 7bda7bbd24b5b
+  TicketTransferDirectoryExample:
+    fr: 5d7e0fa811100
+  TicketTransferDownloaded:
+    fr: 19454fc4c5b112
+  TicketTransferDurationHelp:
+    fr: 1fe4def88b9242
+  TicketTransferError_access_changed:
+    fr: a44453f2878b5
+  TicketTransferError_commit_uncertain:
+    fr: 8deb6191d12aa
+  TicketTransferError_destination_exists:
+    fr: 17d6fe76b4077a
+  TicketTransferError_expired:
+    fr: 1522868d3a0c1d
+  TicketTransferError_file_missing:
+    fr: b992609b15fc7
+  TicketTransferError_gateway_unavailable:
+    fr: 60f31c309e29d
+  TicketTransferError_interrupted:
+    fr: 1faaa5b0bd0469
+  TicketTransferError_invalid_file_type:
+    fr: d49b04d5b5a45
+  TicketTransferError_invalid_path:
+    fr: dd5d9d65c841a
+  TicketTransferError_outside_root:
+    fr: d43bec20fa102
+  TicketTransferError_permission_denied:
+    fr: 18bbd6a9403e8f
+  TicketTransferError_size_limit:
+    fr: 153d827e4a2790
+  TicketTransferError_source_changed:
+    fr: 1af13c8bf8bcf1
+  TicketTransferError_storage_limit:
+    fr: 14a7ab4879ba5
+  TicketTransferError_symlink_not_allowed:
+    fr: 1017588ba5350
+  TicketTransferError_transfer_failed:
+    fr: 1004aa0c45b59f
+  TicketTransferExactPathsHelp:
+    fr: f7c0295000c09
+  TicketTransferExecuteUpload:
+    fr: 69dbc3a3be586
+  TicketTransferExecutionDurationHelp:
+    fr: 1eeb86808660e0
+  TicketTransferExecutionHelp:
+    fr: 17e100f4a25c68
+  TicketTransferExecutionNextStep:
+    fr: 37f4f7d30e7e6
+  TicketTransferExpired:
+    fr: 78f1cabdd1edc
+  TicketTransferExpiresAt:
+    fr: 6902b4d9ec48a
+  TicketTransferFailedHelp:
+    fr: 70f5256fc3a2b
+  TicketTransferFetchFiles:
+    fr: aa98eef69dc6b
+  TicketTransferFileName:
+    fr: 28172ca7ac107
+  TicketTransferFilePath:
+    fr: a1d5518195c5a
+  TicketTransferFileSelectionError:
+    fr: b5d89010708ad
+  TicketTransferFileState_failed:
+    fr: 1e8768656bcd8b
+  TicketTransferFileState_pending:
+    fr: a88520a2a601a
+  TicketTransferFileState_running:
+    fr: bab62540496aa
+  TicketTransferFileState_success:
+    fr: 3feee53ed914
+  TicketTransferFileState_unverified:
+    fr: e9e05b214eede
+  TicketTransferFiles:
+    fr: a8db4919be425
+  TicketTransferFinished:
+    fr: 1015cbae9feb31
+  TicketTransferLegacy:
+    fr: 1ee9a095f6f168
+  TicketTransferPartialSuccess:
+    fr: 1db0d8233637da
+  TicketTransferPathExample:
+    fr: 10a426d8706829
+  TicketTransferPaths:
+    fr: 1544b6bc62e70
+  TicketTransferPathsHelp:
+    fr: 150047f6da54f2
+  TicketTransferPending:
+    fr: 1446f09251af71
+  TicketTransferReconnectHelp:
+    fr: 106125ed033e6f
+  TicketTransferResultSummary:
+    fr: 1cf5e4797073f8
+  TicketTransferReviewFile:
+    fr: 1667a757401d7b
+  TicketTransferScopeHelp:
+    fr: 1787fe46dbbbf5
+  TicketTransferStartsAt:
+    fr: 1ef209a330f179
+  TicketTransferState_expired:
+    fr: fc8a5104d010a
+  TicketTransferState_failed:
+    fr: c6521a89ee00e
+  TicketTransferState_pending:
+    fr: cb834139fb641
+  TicketTransferState_queued:
+    fr: f224a3d8cb680
+  TicketTransferState_ready:
+    fr: 71fa37eba02fb
+  TicketTransferState_running:
+    fr: 1d81b7941b9a85
+  TicketTransferState_success:
+    fr: 27226e4cec20f
+  TicketTransferState_unavailable:
+    fr: 1ac5a64657d08e
+  TicketTransferState_unverified:
+    fr: 1c9b36407ab833
+  TicketTransferStatus:
+    fr: 19cb2dce56e73c
+  TicketTransferSuccessfulDownloadHelp:
+    fr: cb53e8bd28f3a
+  TicketTransferTargetDirectory:
+    fr: 6ee1441cc400f
+  TicketTransferTargetHelp:
+    fr: 8236d82889b81
+  TicketTransferUnavailable:
+    fr: 1e146962a0c3b9
+  TicketTransferUnavailableHelp:
+    fr: b03f016fac99e
+  TicketTransferUnverifiedHelp:
+    fr: e523d00802acb
+  TicketTransferUploadHelp:
+    fr: 111b9c087e23b4
+  TicketTransferWaitDirection:
+    fr: 3e260932a19b6
+  TicketTransferWaitUpload:
+    fr: 1ec589627218ff
+  TicketUnsupportedForm:
+    fr: 576c3163da3f
+  TicketViewPassword:
+    fr: 1f3c94d7af6366
+  TicketViewSecret:
+    fr: c360ffb0a4d9e
+  TicketWorkflowEmpty:
+    fr: c474cc0468df6
+  TicketWorkflowFailed:
+    fr: 12ce5158a987d5
+  TicketWorkflowLoading:
+    fr: 128a6d8fa5db6a
+  TicketWorkflowReload:
+    fr: 17388f20dd7cd8
+  TinkerVersion:
+    fr: dacf7ce567db
+  TinkerVersionNotReportedHelp:
+    fr: ee81f6557d626
+  TinkerVersionTooLowHelp:
+    fr: d73c17dfd6695
+  TinkerVersionUnknownHelp:
+    fr: 412cbdcaab067
+  TinkerVersionUnsupported:
+    fr: f7b3e01edc087
+  UnboundLocalAsset:
+    fr: af124a7313c84
+  Unhealthy:
+    fr: 14237271d8003b
+  Unit:
+    fr: 109ac7dda16838
+  Unknown:
+    fr: 11d382b5d7cd96
+  UpdatedCount:
+    fr: 1ce442d39d0db3
+  UsageName:
+    fr: 15f56725a43891
   UserActivity:
     zh: 17e243319d1ab9
+  UserCredentialAbsent:
+    fr: 685c68ad7f794
+  UserCredentialCountAction:
+    fr: 19f44f78b3eef0
+  UserCredentialEnabled:
+    fr: 108e41aeb7d690
+  UserCredentialEnabledStatus:
+    fr: 10e7a3b3b1a7a3
+  UserCredentialExists:
+    fr: 14a9042644b02c
+  UserCredentialLastUsed:
+    fr: 2a1b7452ee592
+  UserCredentialListLoadFailed:
+    fr: 117ee5666e8ace
+  UserCredentialLoadFailed:
+    fr: 74830186b01b6
+  UserCredentialNameOrIdentifier:
+    fr: 1b92aa21b59f2c
+  UserCredentialNoDetails:
+    fr: 1cfab49074abb5
+  UserCredentialNoMatches:
+    fr: 1077bffe6aec0b
+  UserCredentialNoUsageRecord:
+    fr: 1a463855f42ab6
+  UserCredentialNoUsers:
+    fr: 16aebcabaab5b
+  UserCredentialPresenceAction:
+    fr: ace13f147d549
+  UserCredentialPresent:
+    fr: 1deeec8814828a
+  UserCredentialUserStatus:
+    fr: 1e1c94c2ab2c8c
+  UserCredentials:
+    fr: f58ffbbb82166
+  ViewAgentRegistrationCommand:
+    fr: 8902c68810d4b
+  ViewApplications:
+    fr: 1f004783a87eef
+  ViewClientAccessConfiguration:
+    fr: 1b43c7fd52161c
+  ViewGlobalRotation:
+    fr: 12dd4d1fa34369
+  WFActionSubmitted:
+    fr: 1cb52252c118f5
+  WFAddComment:
+    fr: 11912cbd6640e9
+  WFAddedApprover:
+    fr: 2c6d5152dc796
+  WFApproversPlaceholder_role:
+    fr: 1eaf6b58af2bd3
+  WFApproversPlaceholder_user:
+    fr: 5e73d932d1fa8
+  WFApproversPlaceholder_user_group:
+    fr: 1e1f0ed6e7af58
+  WFApproversRequired_role:
+    fr: 9b8c43b19c697
+  WFApproversRequired_user:
+    fr: 13c85e454877ff
+  WFApproversRequired_user_group:
+    fr: 166f05feabfa2
+  WFAssetLoginRule:
+    fr: c8a192f3b41e
+  WFCC:
+    fr: 1e1ac030e4717a
+  WFCCAdded:
+    fr: 9dd7adb9e246
+  WFCCNodeHint:
+    fr: 7cdb249c841e6
+  WFChangeLinkedRule:
+    fr: e76651a30fe95
+  WFChooseMember:
+    fr: 1b25f750ea9375
+  WFCombinedReference:
+    fr: 1badd6c3053ee3
+  WFConfirmAddApprover:
+    fr: 1024860d5d1c36
+  WFConfirmTransfer:
+    fr: bd8803c4b7482
+  WFEnableFlow:
+    fr: 1ed01e3e286ac
+  WFFieldAccountUsername:
+    fr: 1995b35a031675
+  WFFieldApplicantUsername:
+    fr: ebf5db9436e72
+  WFFieldAssetEnvironment:
+    fr: 80eff105b1264
+  WFFieldAssetOwnerId:
+    fr: 83519020faf47
+  WFFieldAssetPlatformCategory:
+    fr: 16f987badf6269
+  WFFieldAssetPlatformType:
+    fr: 183b9495f42644
+  WFFieldDirection:
+    fr: 131414318badbc
+  WFFieldDuration:
+    fr: 157b3d94f778da
+  WFFieldPaths:
+    fr: 1b968e661cbaf6
+  WFFieldRequestIP:
+    fr: 844bf46f10310
+  WFFieldValidity:
+    fr: 72e8f28bae6b6
+  WFHowToHandle:
+    fr: 1e9d8e2403a9b
+  WFKeepApprovalHistory:
+    fr: 2b6b0c9b712f4
+  WFLoadMoreMembers:
+    fr: 1552f149453707
+  WFLoginAssetOwnerUnsupported:
+    fr: 1849b9dc25ba2d
+  WFLoginGlobalOnly:
+    fr: 15a2a209640a4f
+  WFLoginOrgAdminUnsupported:
+    fr: 5f268c5f2b43e
+  WFMembersLoadFailed:
+    fr: 11f708d0d3682c
+  WFNoMatchingMembers:
+    fr: 12fb3c69c494ab
+  WFNoVisibleReferences:
+    fr: 8715322c0bebf
+  WFOp_not_exists:
+    fr: 19a2cfc18a586e
+  WFPublished:
+    fr: 128335be1c3df1
+  WFPublishedDisabled:
+    fr: 21448ef800209
+  WFPublishedDisabledHelp:
+    fr: fabf53ea5708b
+  WFQuorumApproversRequired:
+    fr: 11326fdffebbb0
+  WFReassignCommentPlaceholder:
+    fr: 1500536630a36a
+  WFReassignTaskChanged:
+    fr: 14f0d3ac691a7c
+  WFReferences:
+    fr: 1bad499d5f8a87
+  WFReselectMember:
+    fr: 1732a25dc7aafb
+  WFSelectMember:
+    fr: ffa2032aeabda
+  WFTransferComment:
+    fr: 15b6b45e0bd1e7
+  WFTransferTo:
+    fr: "7918125349066"
+  WaitAgentOnlineHelp:
+    fr: 35b405105c783
+  WaitingForAccountRevert:
+    fr: 125493efbaed1a
+  WaitingForAccountSwitch:
+    fr: 10268d68bc4a03
+  WaitingForApplications:
+    fr: 1e6e2378e5854a
+  WaitingForClientReport:
+    fr: 12af576e1ce565
+  WebhookBodyTemplate:
+    fr: 2e401cefec412
+  WebhookBodyTemplateHelp:
+    fr: 155612875a10b6
+  WebhookEventsPlaceholder:
+    fr: a165f0f05e280
+  WebhookEventsRequired:
+    fr: 151202bd12f202
+  WebhookHeaders:
+    fr: 23de28f55b065
+  WebhookHeadersHelp:
+    fr: 5cbe18fdbd5c
+  WebhookInvalidJSONObject:
+    fr: aef9b00fd5fab
+  WebhookLoadFailed:
+    fr: 2be9c1f681295
+  WebhookMethod:
+    fr: 16102158aa2e8c
+  WebhookNotification:
+    fr: 1e6f9381e745bc
+  WebhookNotificationHelp:
+    fr: 196e1b5bfcfe64
+  WebhookSaved:
+    fr: 8e57ecfb45f4b
+  WebhookSelectTestEvent:
+    fr: ccfce6dbb3b76
+  WebhookSubscribedEvents:
+    fr: 111d0b4bcabe8e
+  WebhookSubscribedEventsHelp:
+    fr: fc07c56c74729
+  WebhookTemplateVariables:
+    fr: 1f595b7a6817e8
+  WebhookTemplateVariablesHelp:
+    fr: e80b79c6a4ea4
+  WebhookTestEvent:
+    fr: 1b3f84bbb4cf0a
+  WebhookTestEventHelp:
+    fr: 222cd311091ca
+  WebhookTestFailed:
+    fr: f8aa017b5f77
+  WebhookTestSend:
+    fr: 1fcbffcf4c8841
+  WebhookTestSuccess:
+    fr: 7ed7c51c8e082
+  WebhookURL:
+    fr: 51e8333c20308
+  WebhookURLHelp:
+    fr: 74ccf816985b8
+  WebhookURLPlaceholder:
+    fr: 778dd5843f446
+  WebhookURLRequired:
+    fr: 19daa1b6b1cdd7
+  WebhookUpdateHeaders:
+    fr: 8dca76b52b1e6
+  WebhookUpdateURL:
+    fr: 5ea5a4a878d1b
+  ZoneAssetMatching:
+    fr: 178a35332391c6
+  ZoneAutoAssign:
+    fr: 184bb4f3e8ea4a
+  ZoneAutoAssignHelp:
+    fr: 6ba167ba29aff
+  ZoneCIDRFilterPlaceholder:
+    fr: 12cd7d09371f6
+  ZoneCIDRHelp:
+    fr: bf17ba12cec4d
+  ZoneCIDRManualHelp:
+    fr: 18a0932d23c58b
   ZoneHelpMessage:
     zh: 37ef6863a60a4
