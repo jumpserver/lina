@@ -24,6 +24,9 @@
         {{ $t('Copy') }}
       </el-button>
     </div>
+    <p v-if="canConnect && /^https:/i.test(publicURL)" class="guide-description">
+      {{ $t('MCPSelfSignedCertificateHelp') }}
+    </p>
     <template v-if="publicURL">
       <h5 class="client-title">{{ $t('MCPOneSentenceSetup') }}</h5>
       <p class="guide-description">{{ $t('MCPAgentSetupHelp') }}</p>

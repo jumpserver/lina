@@ -3160,6 +3160,7 @@
   "MCPEnabledHelp": "Koko는 60초마다 설정을 동기화합니다. 비활성화하면 새 요청 접수가 중지되며, 이미 접수한 작업의 마무리와 감사 기록 전송은 계속됩니다.",
   "MCPAllowRegistration": "클라이언트 자동 등록 허용",
   "MCPRegistrationHelp": "MCP가 활성화된 경우 적용됩니다. 사용자는 MCP URL만 설정한 후 JumpServer에 로그인하여 접근을 승인할 수 있습니다. 비활성화하면 신규 클라이언트 등록만 중지되며 기존 승인은 취소되지 않습니다.",
+  "MCPSelfSignedCertificateHelp": "자체 서명 인증서를 사용하는 경우 관리자에게 인증서를 받아 MCP 클라이언트와 브라우저의 신뢰할 수 있는 인증서 목록에 추가하세요.",
   "MCPPublicURL": "MCP 접근 URL",
   "MCPPublicURLHelp": "MCP 활성화 시 필수입니다. 외부에서 접근 가능한 전체 HTTP 또는 HTTPS MCP URL을 끝 슬래시, 쿼리 또는 프래그먼트 없이 입력하세요. 인증 주소는 기본 설정의 사이트 URL을 사용합니다.",
   "IdentityConfirm": {

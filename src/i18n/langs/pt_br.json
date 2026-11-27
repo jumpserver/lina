@@ -3158,6 +3158,7 @@
   "MCPEnabledHelp": "O Koko sincroniza estas configurações a cada 60 segundos. Desativar o MCP interrompe novas solicitações, enquanto as tarefas aceitas são finalizadas e os registros de auditoria são enviados.",
   "MCPAllowRegistration": "Permitir registro automático de clientes",
   "MCPRegistrationHelp": "Aplica-se quando o MCP está ativado. Os usuários configuram apenas a URL MCP e depois entram no JumpServer para autorizar o acesso. Desativar esta opção impede novos registros sem revogar autorizações existentes.",
+  "MCPSelfSignedCertificateHelp": "Se o site usar um certificado autoassinado, peça uma cópia ao administrador e adicione o certificado à lista de certificados confiáveis do cliente MCP e do navegador.",
   "MCPPublicURL": "URL de acesso MCP",
   "MCPPublicURLHelp": "Obrigatório quando o MCP está ativado. Informe a URL MCP externa completa em HTTP ou HTTPS, sem barra final, parâmetros de consulta ou fragmento. O endereço de autorização usa a URL do site nas configurações básicas.",
   "IdentityConfirm": {

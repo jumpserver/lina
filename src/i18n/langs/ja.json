@@ -3357,6 +3357,7 @@
   "MCPEnabledHelp": "Koko は設定を 60 秒ごとに同期します。無効にすると新しいリクエストの受付を停止し、受付済みタスクの終了処理と監査記録の送信は継続します。",
   "MCPAllowRegistration": "クライアントの自動登録を許可",
   "MCPRegistrationHelp": "MCP が有効な場合に適用されます。ユーザーは MCP URL のみを設定し、JumpServer にログインしてアクセスを承認できます。無効にすると新規クライアント登録のみが停止し、既存の承認は取り消されません。",
+  "MCPSelfSignedCertificateHelp": "自己署名証明書を使用している場合は、管理者から証明書を入手し、MCP クライアントとブラウザーの信頼済み証明書に追加してください。",
   "MCPPublicURL": "MCP アクセス URL",
   "MCPPublicURLHelp": "MCP を有効にする場合は必須です。外部からアクセス可能な完全な HTTP または HTTPS の MCP URL を、末尾のスラッシュ、クエリ、フラグメントを含めずに入力してください。認可アドレスには基本設定のサイト URL を使用します。",
   "IdentityConfirm": {
