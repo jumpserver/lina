@@ -4089,6 +4089,7 @@
   "MCPEnabledHelp": "Koko 每 60 秒同步配置。关闭后停止接收新请求，已受理任务继续收尾并交付审计记录。",
   "MCPAllowRegistration": "允许客户端自动注册",
   "MCPRegistrationHelp": "启用 MCP 后生效。用户只需配置 MCP 地址，即可登录 JumpServer 并授权。关闭后仅停止新客户端登记，不撤销已有授权。",
+  "MCPSelfSignedCertificateHelp": "如使用自签名证书，请向管理员获取证书并导入 MCP 客户端和浏览器的信任库。",
   "MCPPublicURL": "MCP 访问地址",
   "MCPPublicURLHelp": "启用 MCP 时必填。填写用户可访问的完整 HTTP 或 HTTPS MCP 地址，不含末尾斜线、查询参数或片段。授权地址复用基本设置中的网站地址。",
   "MCPConnectionGuide": "MCP 接入方式",

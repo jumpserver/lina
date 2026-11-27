@@ -3160,6 +3160,7 @@
   "MCPEnabledHelp": "Koko đồng bộ cấu hình mỗi 60 giây. Tắt MCP sẽ dừng nhận yêu cầu mới, trong khi các tác vụ đã nhận tiếp tục hoàn tất và gửi bản ghi kiểm toán.",
   "MCPAllowRegistration": "Cho phép tự động đăng ký ứng dụng khách",
   "MCPRegistrationHelp": "Có hiệu lực khi MCP được bật. Người dùng chỉ cần cấu hình URL MCP, sau đó đăng nhập JumpServer và cấp quyền truy cập. Tắt tùy chọn này chỉ dừng đăng ký ứng dụng khách mới, không thu hồi quyền đã cấp.",
+  "MCPSelfSignedCertificateHelp": "Nếu trang web dùng chứng chỉ tự ký, hãy xin chứng chỉ từ quản trị viên rồi thêm vào danh sách chứng chỉ tin cậy của ứng dụng khách MCP và trình duyệt.",
   "MCPPublicURL": "URL truy cập MCP",
   "MCPPublicURLHelp": "Bắt buộc khi bật MCP. Nhập URL MCP HTTP hoặc HTTPS bên ngoài đầy đủ, không có dấu gạch chéo cuối, tham số truy vấn hoặc phần fragment. Địa chỉ ủy quyền sử dụng URL trang web trong cài đặt cơ bản.",
   "IdentityConfirm": {

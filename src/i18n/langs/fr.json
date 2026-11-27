@@ -3329,6 +3329,7 @@
   "MCPEnabledHelp": "Koko synchronise ces paramètres toutes les 60 secondes. La désactivation bloque les nouvelles requêtes, tout en poursuivant la finalisation des tâches acceptées et la transmission des journaux d’audit.",
   "MCPAllowRegistration": "Autoriser l’inscription automatique des clients",
   "MCPRegistrationHelp": "Prend effet lorsque MCP est activé. Les utilisateurs configurent uniquement l’URL MCP, puis se connectent à JumpServer pour autoriser l’accès. La désactivation bloque les nouvelles inscriptions sans révoquer les autorisations existantes.",
+  "MCPSelfSignedCertificateHelp": "Si le site utilise un certificat autosigné, demandez-le à votre administrateur et ajoutez-le aux certificats de confiance du client MCP et du navigateur.",
   "MCPPublicURL": "URL d’accès MCP",
   "MCPPublicURLHelp": "Obligatoire lorsque MCP est activé. Saisissez l’URL MCP externe complète en HTTP ou HTTPS, sans barre oblique finale, paramètres de requête ni fragment. L’adresse d’autorisation utilise l’URL du site des paramètres de base.",
   "IdentityConfirm": {

@@ -4095,6 +4095,7 @@
   "MCPEnabledHelp": "Koko syncs these settings every 60 seconds. Disabling MCP stops new requests while accepted tasks finish and audit records are delivered.",
   "MCPAllowRegistration": "Allow automatic client registration",
   "MCPRegistrationHelp": "Takes effect when MCP is enabled. Users can configure only the MCP URL, then sign in to JumpServer and authorize access. Disabling this stops new client registration; it does not revoke existing authorizations.",
+  "MCPSelfSignedCertificateHelp": "If the site uses a self-signed certificate, ask your administrator for a copy and add it to the trusted certificates in your MCP client and browser.",
   "MCPPublicURL": "MCP access URL",
   "MCPPublicURLHelp": "Required when MCP is enabled. Enter the complete external HTTP or HTTPS MCP URL without a trailing slash, query or fragment. The authorization address uses Site URL in Basic Settings.",
   "MCPConnectionGuide": "MCP connection guide",
