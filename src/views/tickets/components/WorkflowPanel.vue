@@ -147,9 +147,15 @@
                     : $t(`WFStrategy_${node.config.strategy}`)
                 }}
               </div>
-              <div v-if="node.state === 'running' && node.deadline" class="step-deadline hint">
+              <div
+                v-if="node.state === 'running' && node.deadline"
+                class="step-deadline hint"
+                :class="{ 'login-deadline': object.type?.value === 'login_confirm' }"
+              >
                 <el-icon><Clock /></el-icon>
-                {{ $t('WFDeadline') }} {{ toSafeLocalDateStr(node.deadline) }}
+                <time :datetime="node.deadline"
+                  >{{ $t('WFDeadline') }} {{ toSafeLocalDateStr(node.deadline) }}</time
+                >
               </div>
             </template>
             <div v-if="node.historyTasks.length" class="step-tasks">
@@ -780,6 +786,19 @@ export default {
   gap: 5px;
   margin-top: 4px;
   font-size: 12px;
+}
+.step-deadline.login-deadline {
+  display: inline-flex;
+  flex-wrap: wrap;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--el-color-warning-light-9);
+  color: var(--el-text-color-primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+.login-deadline > .el-icon {
+  color: var(--el-color-warning);
 }
 .step-tasks {
   display: flex;
