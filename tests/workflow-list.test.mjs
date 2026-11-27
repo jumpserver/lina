@@ -83,15 +83,24 @@ test('workflow delete handles cancellation, linked records, and successful remov
 
 
 test('workflow edit actions respect permissions and organization restrictions', () => {
-  const vm = { $t: key => key, $hasPerm: () => true, $store: { getters: { currentOrgIsRoot: false } } }
+  const globalId = '00000000-0000-0000-0000-000000000000'
+  const getters = { currentOrgIsRoot: true, currentOrg: { id: globalId } }
+  const vm = { $t: key => key, $hasPerm: perm => perm === 'tickets.change_workflow', $store: { getters } }
   const actions = component.data.call(vm).tableConfig.columnsMeta.actions.formatterArgs
-  const row = { type: 'login_confirm', org_id: '00000000-0000-0000-0000-000000000000' }
-  assert.equal(actions.canUpdate({ row }), false)
-  vm.$store.getters.currentOrgIsRoot = true
-  assert.equal(actions.canUpdate({ row }), false)
-  assert.equal(actions.canUpdate({ row: { type: 'login_asset_confirm' } }), false)
-  vm.$store.getters.currentOrgIsRoot = false
-  assert.equal(actions.canUpdate({ row: { type: 'login_asset_confirm', org_id: 'org' } }), true)
+  const globalLogin = { row: { type: 'login_confirm', org_id: globalId } }
+  const localLogin = { row: { type: 'login_confirm', org_id: 'org' } }
+  const assetLogin = { row: { type: 'login_asset_confirm', org_id: 'org' } }
+
+  assert.equal(actions.canUpdate(globalLogin), true)
+  assert.equal(actions.canUpdate(localLogin), false)
+  assert.equal(actions.canUpdate(assetLogin), false)
   vm.$hasPerm = () => false
-  assert.equal(actions.canUpdate({ row: { type: 'login_asset_confirm', org_id: 'org' } }), false)
+  assert.equal(actions.canUpdate(globalLogin), false)
+
+  getters.currentOrgIsRoot = false
+  getters.currentOrg = { id: 'org' }
+  vm.$hasPerm = () => true
+  assert.equal(actions.canUpdate(globalLogin), false)
+  assert.equal(actions.canUpdate(localLogin), false)
+  assert.equal(actions.canUpdate(assetLogin), true)
 })
