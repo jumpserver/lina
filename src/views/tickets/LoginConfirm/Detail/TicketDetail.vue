@@ -6,7 +6,9 @@
   />
 </template>
 <script>
+import { h } from 'vue'
 import GenericTicketDetail from '../../components/GenericTicketDetail'
+import LoginReviewReason from '../../components/LoginReviewReason.vue'
 import { toSafeLocalDateStr } from '@/composables/useDateTime'
 export default {
   components: { GenericTicketDetail },
@@ -15,7 +17,9 @@ export default {
     specialCardItems() {
       return (this.object.request_items || []).map((item) => ({
         key: item.label,
-        value: item.name === 'apply_login_datetime' ? toSafeLocalDateStr(item.value) : item.value
+        value: item.name === 'apply_login_datetime' ? toSafeLocalDateStr(item.value) : item.value,
+        formatter:
+          item.name === 'reason' ? (_, value) => h(LoginReviewReason, { value }) : undefined
       }))
     }
   }
