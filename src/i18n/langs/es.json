@@ -3432,6 +3432,7 @@
   "SelectApprovers": "Seleccionar aprobadores",
   "ConnectionDetails": "Detalles de la conexión",
   "ConnectionReason": "Motivo de la conexión",
+  "ViewFullText": "Ver texto completo",
   "ExpandReason": "Expandir",
   "CollapseReason": "Contraer",
   "ReviewExemptionDurationHours": "{hours} h",

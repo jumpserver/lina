@@ -129,6 +129,7 @@ import { h } from 'vue'
 import TicketValueList from './components/TicketValueList'
 import BaseTicketList from './BaseTicketList'
 import LoginAssetConnections from './components/LoginAssetConnections.vue'
+import LoginReviewReason from './components/LoginReviewReason.vue'
 import { getTicketTypeLabel } from './const'
 import { getTicketDetailRoute } from './plugins/registry'
 import { getErrorResponseMsg } from '@/utils/common'
@@ -283,7 +284,9 @@ export default {
               : (field.value ?? '-'),
             formatter: Array.isArray(field.value)
               ? (_item, value) => h(TicketValueList, { items: value, label: field.label })
-              : undefined
+              : (item.type?.value || item.type) === 'login_confirm' && field.name === 'reason'
+                ? (_, value) => h(LoginReviewReason, { value })
+                : undefined
           }))
       ]
     }

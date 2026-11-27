@@ -42,8 +42,20 @@ test('missing sessions render a dash; valid sessions retain their permission-gat
 })
 
 const toSafeLocalDateStr = (value) => (value ? `local:${value}` : '-')
+const LoginReviewReason = await component('components/LoginReviewReason.vue', {})
+test('login reason preview keeps at most 120 code points and three text lines', () => {
+  const preview = (value) => LoginReviewReason.computed.preview.call({ value })
+  const limit = '🙂'.repeat(120)
+  assert.equal(preview(limit), limit)
+  assert.equal(preview(limit + '末'), limit)
+  assert.equal(preview(limit + '…'), limit)
+  assert.equal(preview('一\n二\n三'), '一\n二\n三')
+  assert.equal(preview('一\n二\n三\n四'), '一\n二\n三')
+})
+
 const login = await component('LoginConfirm/Detail/TicketDetail.vue', {
   GenericTicketDetail: {},
+  LoginReviewReason,
   toSafeLocalDateStr
 })
 const assigned = await component('AssignedTicketList.vue', {
@@ -51,6 +63,7 @@ const assigned = await component('AssignedTicketList.vue', {
   Dialog: {},
   BaseTicketList: {},
   LoginAssetConnections: {},
+  LoginReviewReason,
   mapGetters: () => ({}),
   toSafeLocalDateStr
 })
@@ -73,13 +86,18 @@ test('login details and batch approval format login dates and preserve the other
 
 test('login detail and batch approval preserve optional reasons as plain multiline text', () => {
   for (const reason of ['-', '排查告警\n<script>alert(1)</script>', 'x'.repeat(4096)]) {
-    const ticket = { request_items: [{ name: 'reason', label: '申请原因', value: reason }] }
+    const ticket = {
+      type: { value: 'login_confirm' },
+      request_items: [{ name: 'reason', label: '申请原因', value: reason }]
+    }
     const detail = login.computed.specialCardItems.call({ object: ticket })
     const batch = assigned.methods.getDetailFields.call({ $t: (key) => key }, ticket).slice(1)
     for (const [field] of [detail, batch]) {
       assert.equal(field.key, '申请原因')
       assert.equal(field.value, reason)
-      assert.equal(field.formatter, undefined)
+      const preview = field.formatter({}, field.value)
+      assert.equal(preview.type, LoginReviewReason)
+      assert.equal(preview.props.value, reason)
     }
   }
 })

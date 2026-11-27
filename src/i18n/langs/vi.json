@@ -2875,6 +2875,7 @@
   "SelectApprovers": "Chọn người phê duyệt",
   "ConnectionDetails": "Chi tiết kết nối",
   "ConnectionReason": "Lý do kết nối",
+  "ViewFullText": "Xem toàn bộ nội dung",
   "ExpandReason": "Mở rộng",
   "CollapseReason": "Thu gọn",
   "ReviewExemptionDurationHours": "{hours} giờ",

@@ -2875,6 +2875,7 @@
   "SelectApprovers": "Выберите согласующих",
   "ConnectionDetails": "Сведения о подключении",
   "ConnectionReason": "Причина подключения",
+  "ViewFullText": "Показать полный текст",
   "ExpandReason": "Развернуть",
   "CollapseReason": "Свернуть",
   "ReviewExemptionDurationHours": "{hours} ч",

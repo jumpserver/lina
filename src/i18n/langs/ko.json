@@ -2875,6 +2875,7 @@
   "SelectApprovers": "승인자 선택",
   "ConnectionDetails": "연결 세부 정보",
   "ConnectionReason": "연결 사유",
+  "ViewFullText": "전체 내용 보기",
   "ExpandReason": "펼치기",
   "CollapseReason": "접기",
   "ReviewExemptionDurationHours": "{hours}시간",

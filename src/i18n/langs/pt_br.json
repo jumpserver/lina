@@ -2873,6 +2873,7 @@
   "SelectApprovers": "Selecionar aprovadores",
   "ConnectionDetails": "Detalhes da conexão",
   "ConnectionReason": "Motivo da conexão",
+  "ViewFullText": "Ver texto completo",
   "ExpandReason": "Expandir",
   "CollapseReason": "Recolher",
   "ReviewExemptionDurationHours": "{hours} h",
