@@ -263,7 +263,6 @@ export default {
         icon: ACTION_ICON_MAP.update,
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
-        tip: colActions.updateTip,
         callback: colActions.onUpdate,
         order: 10
       },

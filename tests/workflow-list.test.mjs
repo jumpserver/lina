@@ -93,11 +93,9 @@ test('workflow edit actions respect permissions and organization restrictions', 
 
   assert.equal(actions.canUpdate(globalLogin), true)
   assert.equal(actions.canUpdate(localLogin), false)
-  assert.equal(actions.updateTip(localLogin), 'WFLoginGlobalOnly')
   assert.equal(actions.canUpdate(assetLogin), false)
   vm.$hasPerm = () => false
   assert.equal(actions.canUpdate(globalLogin), false)
-  assert.equal(actions.updateTip(globalLogin), 'NoPermission')
 
   getters.currentOrgIsRoot = false
   getters.currentOrg = { id: 'org' }
