@@ -35,6 +35,22 @@
           <el-icon><EditPen /></el-icon>
           <strong>{{ $t(myTask ? 'AwaitingMyApproval' : 'WFWithdraw') }}</strong>
         </div>
+        <el-alert
+          v-if="
+            myTask &&
+            object?.type?.value === 'login_confirm' &&
+            currentNode?.deadline &&
+            !deadlinePassed
+          "
+          :type="deadlineSoon ? 'warning' : 'info'"
+          :title="
+            deadlineSoon
+              ? $t('WFDeadlineSoon', { deadline: toSafeLocalDateStr(currentNode.deadline) })
+              : $t('WFDeadline') + ' ' + toSafeLocalDateStr(currentNode.deadline)
+          "
+          :closable="false"
+          show-icon
+        />
         <el-input
           v-model="comment"
           type="textarea"
@@ -380,6 +396,10 @@ export default {
     currentNode() {
       return this.instance?.nodes.find((n) => n.state === 'running' && n.type === 'approval')
     },
+    deadlineSoon() {
+      const remaining = Date.parse(this.currentNode?.deadline) - this.now
+      return remaining > 0 && remaining <= 60000
+    },
     deadlinePassed() {
       return Boolean(
         this.currentNode?.deadline && Date.parse(this.currentNode.deadline) <= this.now
@@ -473,7 +493,7 @@ export default {
       if (!this.disposed && remaining > 0) {
         this.deadlineTimer = setTimeout(
           () => this.scheduleDeadline(),
-          Math.min(remaining, 2147483647)
+          Math.min(remaining > 60000 ? remaining - 60000 : remaining, 2147483647)
         )
       }
     },

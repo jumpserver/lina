@@ -3811,6 +3811,7 @@
   "WFAddApprover": "Add approver",
   "WFWithdraw": "Withdraw",
   "WFDeadline": "Deadline",
+  "WFDeadlineSoon": "Approval is due by {deadline}. Please review now.",
   "WFDeadlinePassed": "Deadline passed",
   "WFTimeoutPending": "Deadline passed; awaiting system processing",
   "WFConditionResult": "Condition result",

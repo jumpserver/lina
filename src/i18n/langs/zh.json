@@ -3805,6 +3805,7 @@
   "WFAddApprover": "加签",
   "WFWithdraw": "撤回申请",
   "WFDeadline": "截止时间",
+  "WFDeadlineSoon": "即将超时，请在 {deadline} 前审批。",
   "WFDeadlinePassed": "已到期",
   "WFTimeoutPending": "已到期，等待系统处理",
   "WFConditionResult": "判断结果",
