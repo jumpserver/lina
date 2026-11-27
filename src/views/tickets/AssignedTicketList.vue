@@ -89,6 +89,16 @@
             :connections="d.login_asset_connections"
           />
         </div>
+        <el-input
+          v-model="bulkComment"
+          class="batch-comment"
+          type="textarea"
+          :rows="2"
+          maxlength="4096"
+          :aria-label="$t('WFDecisionComment')"
+          :placeholder="$t('WFDecisionComment')"
+          :disabled="bulkLoading"
+        />
       </template>
       <template #footer>
         <el-button v-if="bulkResults.length" type="primary" @click="isVisible = false">
@@ -151,6 +161,7 @@ export default {
       isVisible: false,
       bulkLoading: false,
       bulkAction: '',
+      bulkComment: '',
       bulkCompleted: 0,
       bulkResults: [],
       extraTicketAction: {
@@ -169,6 +180,7 @@ export default {
               this.bulkResults = []
               this.bulkCompleted = 0
               this.bulkAction = ''
+              this.bulkComment = ''
               this.ticketData = [...selectedRows]
               this.isVisible = true
             }.bind(this)
@@ -233,7 +245,7 @@ export default {
               (ticket.my_tasks || []).map((task) =>
                 this.$axios.post(
                   `/api/v1/tickets/approval-tasks/${task}/${action}/`,
-                  {},
+                  { comment: this.bulkComment },
                   { params: { oid: ticket.org_id }, disableFlashErrorMsg: true }
                 )
               )
@@ -306,7 +318,8 @@ export default {
 .batch-progress {
   margin-right: 16px;
 }
-.approval-ticket + .approval-ticket {
+.approval-ticket + .approval-ticket,
+.batch-comment {
   margin-top: 20px;
 }
 </style>

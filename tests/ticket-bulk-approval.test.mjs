@@ -177,3 +177,23 @@ test('rejecting every ticket confirms the exact action; empty selections do noth
   assert.deepEqual(empty.messages, [])
   assert.equal(empty.reloads(), 0)
 })
+
+for (const action of ['approve', 'reject']) {
+  test(`bulk ${action} sends the batch comment to each task and clears it for the next batch`, async () => {
+    const tickets = [ticket('a', ['first', 'second']), ticket('b')]
+    const { vm, requests } = setup(tickets, () => Promise.resolve({}))
+    vm.bulkComment = '第一行\n第二行'
+    await vm.bulk(action)
+    assert.deepEqual(
+      requests.map(([url, body]) => [url, body.comment]),
+      ['first', 'second', 'task-b'].map((task) => [
+        `/api/v1/tickets/approval-tasks/${task}/${action}/`,
+        vm.bulkComment
+      ])
+    )
+    vm.extraTicketAction.extraMoreActions[0].callback({ selectedRows: [ticket('c')] })
+    assert.equal(vm.bulkComment, '')
+    await vm.bulk(action)
+    assert.equal(requests.at(-1)[1].comment, '')
+  })
+}
