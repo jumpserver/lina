@@ -22,13 +22,15 @@ yarn fmt:check        # formatting check only
 
 There is **no unit-test framework** in this repo — do not assume `yarn test`. Verify changes with `yarn lint` and `yarn build:prod`.
 
-i18n tooling (translations live in `src/i18n/langs/*.json`):
+i18n is managed by **x18n** (`x18n.config.ts`; translations in `src/i18n/langs/{locale}.json`):
 
 ```bash
-yarn vue-i18n-report      # list missing/unused keys
-yarn diff-i18n            # python diff en vs ja/zh_Hant
-yarn apply-i18n           # python apply across locales
+yarn i18n:check           # x18n check: missing keys, missing/stale translations, placeholder/param mismatch, unused keys
+yarn exec x18n status     # per-locale coverage
+yarn exec x18n <command>  # keys | get | usages | search | set | rename | delete | format | review | ui
 ```
+
+Adding or changing user-facing text? Author the key in the same commit — see **i18n** under Architecture.
 
 ## Dev environment / proxying
 
@@ -69,8 +71,16 @@ yarn apply-i18n           # python apply across locales
 
 **State** (`src/store/modules`): `users` (profile, current org, perms), `app` (device/sidebar, org switching), `permission` (generated routes/menu), `settings`, `table`, `tagsView`, `common`, `assets`, `chat`.
 
+**i18n** (`src/i18n/`, x18n): `en` is `sourceLocale` (`x18n.config.ts`) and the runtime `fallbackLocale`; `zh, zh_hant, ja, ko, es, fr, pt_br, ru, vi` are translations of it. Every user-visible string is a `$t`/`$tc` key — no literal copy in templates, `message.*`/toast/confirm text, table column labels, form labels/placeholders/help, route titles or empty states. **Translations ship with the change, not after it**:
+
+- Author the key in `en.json` **and** `zh.json` in the same commit (source + the locale kept in lockstep with it). The other locales are partial on purpose — top them up through x18n, never by hand-copying English into nine files.
+- New meaning → new key. Don't recycle a key whose text means something else; add with `x18n set`, rename with `x18n rename` (it rewrites every locale file), retire with `x18n delete` — no string-replace surgery on the JSON.
+- Keys are PascalCase, namespaced when a screen brings several (`ScreenLock.IdleWarningTitle`, `WebLogin.Title`), and interpolations are named (`{seconds}`, `{total}`) — a placeholder set that differs from the source is a `check` error.
+- `$tc` keeps the Vue 2 shape (`src/i18n/i18n.js`): a numeric choice selects the `one | many` pipe form, and `en` appends `s` when there is no pipe form — write both forms explicitly for counts instead of relying on that.
+- `yarn i18n:check` already fails on a pre-existing backlog (87 legacy `missing-key` errors from bare keys like `DA`/`DP`/`SA`, ~2.5k unused/identical/missing-translation warnings, no baseline in `.x18n/`). Don't widen scope to fix it — but nothing it reports may point at a key, locale entry or file you touched. `yarn i18n:check --only missing-key,placeholder-mismatch,param-mismatch` cuts the noise to real errors.
+
 ## Conventions
 
-- Reply and write UI text in the user's language; user-facing strings go through i18n (`$t`/`$tc`), with keys in `src/i18n/langs`.
+- Reply and write UI text in the user's language; user-facing strings go through i18n (`$t`/`$tc`), with keys landing in `en.json` + `zh.json` in the same change (see **i18n** above).
 - This is a Vue 3 migration branch (`v5_vue3`) off Element UI → Element Plus. Watch for Vue-3-specific gotchas the codebase has already hit: prop `default()` factories are **not** bound to the instance (`this` is undefined — import singletons like `@/store` directly); `el-link` `underline` takes `'always'|'hover'|'never'`, not boolean.
 - Run `yarn fix` (lint:fix + fmt) before committing. Commit messages in this repo use Conventional-Commit prefixes (`fix:`, `feat:`, `perf:`, `style:`).
