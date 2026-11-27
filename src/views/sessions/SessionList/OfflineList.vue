@@ -22,7 +22,7 @@ export default {
   props: {
     url: {
       type: String,
-      default: () => '/api/v1/terminal/sessions/?is_finished=1&category=user'
+      default: () => '/api/v1/terminal/sessions/?is_finished=1'
     }
   },
   data() {
