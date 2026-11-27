@@ -87,10 +87,13 @@ sources:
     fr: b39a518d2088c
   AgentActions:
     fr: 1e5f03f57b6015
+    ru: 1e5f03f57b6015
   AgentApproval:
     fr: 1bf173ed5152b4
+    ru: 1bf173ed5152b4
   AgentAuditDetail:
     fr: 1348badf871f16
+    ru: 1348badf871f16
   AgentDeliveryEnvironment:
     fr: 14ef05a9023f89
   AgentDeliveryJSON:
@@ -105,12 +108,14 @@ sources:
     fr: 4ebb0e4ea14f
   AgentEvents:
     fr: 89d7caf504ff6
+    ru: 89d7caf504ff6
   AgentInstallStep:
     fr: 8f213ffd34547
   AgentInstallStepHelp:
     fr: "41569014348e8"
   AgentMoreEvents:
     fr: afa9cf05455cb
+    ru: afa9cf05455cb
   AgentOffline:
     fr: 12e4119a835f5a
   AgentOnline:
@@ -125,12 +130,16 @@ sources:
     fr: e0560c7be3717
   AgentRequest:
     fr: 18e8fb08e1f57f
+    ru: 18e8fb08e1f57f
   AgentSessionActions:
     fr: 110cf05c305f51
+    ru: 110cf05c305f51
   AgentSessions:
     fr: 148f86f3bca088
+    ru: 148f86f3bca088
   AgentTerminalSession:
     fr: 1593d3ee23ffb6
+    ru: 1593d3ee23ffb6
   AgentVerifyStep:
     fr: eb5a67536cd75
   AgentVerifyStepHelp:
@@ -375,6 +384,7 @@ sources:
     fr: dbd9e88a3ee97
   Attachments:
     fr: 1f77e204cb9d72
+    ru: 1f77e204cb9d72
   AuthorizationPolicy:
     fr: ac008e4506e88
   AuthorizedAccess:
@@ -417,6 +427,7 @@ sources:
     fr: 1a5a1ca427483a
   ChatAIConfiguration:
     fr: 4932881c5045a
+    ru: 4932881c5045a
   CheckRotationReadiness:
     fr: 16db65321c5f30
   CheckSecretChangeResult:
@@ -505,6 +516,7 @@ sources:
     fr: 159917b5cfef2e
   CommandRecords:
     fr: 1ed989132a3f5f
+    ru: 1ed989132a3f5f
   CommandRejectedByACL:
     fr: 14f3f61e0f828a
   CommandRuleAIAction:
@@ -653,6 +665,10 @@ sources:
     fr: c5fe7280e27ea
   DeleteSelectedCloudAssetsConfirm:
     fr: 189ffc21cf4c4c
+  DingTalk:
+    ru: 1ca010097d76c6
+  DingTalkOAuth:
+    ru: c1ec64131004f
   DisableCredentialClientConfirm:
     fr: 78d707bdfd006
   DiscoverAndImport:
@@ -819,50 +835,73 @@ sources:
     fr: 3d19c54d9228c
   MCPAccessDocumentation:
     fr: 79eb2fbfd3651
+    ru: 79eb2fbfd3651
   MCPAgentSetupBoundary:
     fr: bc100e7ab9470
+    ru: bc100e7ab9470
   MCPAgentSetupHelp:
     fr: 1c2d9183e3618c
+    ru: 1c2d9183e3618c
   MCPAgentSetupInstructions:
     fr: 1b85d5f1df9040
+    ru: 1b85d5f1df9040
   MCPAgentSetupPrompt:
     fr: b50f33eae24e5
+    ru: b50f33eae24e5
   MCPAuthorizationActive:
     fr: 3e90f8f5d1808
+    ru: 3e90f8f5d1808
   MCPAuthorizationExpired:
     fr: 4b22b7be86219
+    ru: 4b22b7be86219
   MCPBrowserAuthorization:
     fr: 12340e920c47e3
+    ru: 12340e920c47e3
   MCPCodexCheckConnection:
     fr: 125eacd5adac1f
+    ru: 125eacd5adac1f
   MCPConnectionAuthorizationHelp:
     fr: 105d933817769d
+    ru: 105d933817769d
   MCPConnectionConfig:
     fr: f9b93d826a764
+    ru: f9b93d826a764
   MCPConnectionGuide:
     fr: 105650cff4d752
+    ru: 105650cff4d752
   MCPConnectionVerificationHelp:
     fr: 1862fb7f909464
+    ru: 1862fb7f909464
   MCPCopyForAgent:
     fr: 1bbcc9d3fcef58
+    ru: 1bbcc9d3fcef58
   MCPOneSentenceSetup:
     fr: ffdc5c7212f9f
+    ru: ffdc5c7212f9f
   MCPRunCLICommands:
     fr: 1b423b3904357d
+    ru: 1b423b3904357d
   MCPUserClientHelp:
     fr: 158cb64a0bafa8
+    ru: 158cb64a0bafa8
   MCPUserConnectionHelp:
     fr: 1ca6558251ea97
+    ru: 1ca6558251ea97
   MCPUserRegistrationRequired:
     fr: 1f98ef5c67c49
+    ru: 1f98ef5c67c49
   MCPUserRevokeConfirm:
     fr: 10fc142e0946ee
+    ru: 10fc142e0946ee
   MCPUserRevokeSuccess:
     fr: c62593f77397c
+    ru: c62593f77397c
   MCPUserUnavailable:
     fr: a4a4fbb248828
+    ru: a4a4fbb248828
   MCPVerifyConnection:
     fr: efa06b2e19235
+    ru: efa06b2e19235
   ManageAuthorizedAccounts:
     fr: 103cc3cebbe24
   ManualReviewPolicyDescription:
@@ -881,6 +920,7 @@ sources:
     fr: 5c2302da6be8b
   MyMCPClients:
     fr: 1953f23677c321
+    ru: 1953f23677c321
   NeverRun:
     fr: 10722bb0e4e56f
   NewApplicationCredential:
@@ -917,61 +957,89 @@ sources:
     fr: 1c2972eda5c66c
   OverviewAccessibleOrgs:
     fr: 1a8ab5efcf4080
+    ru: 1a8ab5efcf4080
   OverviewAccountSecurity:
     fr: 1b10339b146060
+    ru: 1b10339b146060
   OverviewAccountSessions:
     fr: 130fad0c7d1bad
+    ru: 130fad0c7d1bad
   OverviewActiveAccessKeys:
     fr: 1083abece806e
+    ru: 1083abece806e
   OverviewActivePasskeys:
     fr: 10780c050f4fa8
+    ru: 10780c050f4fa8
   OverviewActiveSSHKeys:
     fr: 10feacb45a3f32
+    ru: 10feacb45a3f32
   OverviewConnectionTokenRule:
     fr: 3f95f017b9735
+    ru: 3f95f017b9735
   OverviewCurrentOrg:
     fr: 552894a38f1d5
+    ru: 552894a38f1d5
     zh: 552894a38f1d5
   OverviewDataUnavailable:
     fr: 139bf9c36e608a
+    ru: 139bf9c36e608a
   OverviewLoadFailed:
     fr: c0a7054be270b
+    ru: c0a7054be270b
   OverviewLoginBreakdown:
     fr: "7802885e81661"
+    ru: "7802885e81661"
   OverviewMFA:
     fr: eacde75c55d26
+    ru: eacde75c55d26
   OverviewMFADisabled:
     fr: 1ffc497678d635
+    ru: 1ffc497678d635
   OverviewMFAEnabled:
     fr: 108e41aeb7d690
+    ru: 108e41aeb7d690
   OverviewMFASetup:
     fr: 44016f5a18c98
+    ru: 44016f5a18c98
   OverviewNextExpiry:
     fr: 506856a369458
+    ru: 506856a369458
   OverviewOAuth2Token:
     fr: 1106d799ff6332
+    ru: 1106d799ff6332
   OverviewOnlineAssetSessions:
     fr: 398890d606cf1
+    ru: 398890d606cf1
   OverviewPlatformCredentials:
     fr: 1b5efd80ef29ca
+    ru: 1b5efd80ef29ca
   OverviewReusableConnectionToken:
     fr: 170a74ee0b238b
+    ru: 170a74ee0b238b
   OverviewReuseDisabled:
     fr: 4a0080d5fde5a
+    ru: 4a0080d5fde5a
   OverviewReuseDisabledDetail:
     fr: 17f53b159c23b7
+    ru: 17f53b159c23b7
   OverviewSSHKey:
     fr: 1ce0a3a36e02dc
+    ru: 1ce0a3a36e02dc
   OverviewTemporaryPassword:
     fr: e9ee1cc7d2b87
+    ru: e9ee1cc7d2b87
   OverviewUnusedKeyRule:
     fr: 157d3ab148ca91
+    ru: 157d3ab148ca91
   OverviewUnusedKeyWarning:
     fr: 1b52c76459c11a
+    ru: 1b52c76459c11a
   OverviewValidAccessTokens:
     fr: 938f7306587db
+    ru: 938f7306587db
   OverviewValidTempPasswords:
     fr: 166d0af3df5802
+    ru: 166d0af3df5802
   PamChangeFailed:
     fr: e4e36c3a1318c
   PamChangeReadyForRetry:
@@ -1048,6 +1116,7 @@ sources:
     fr: 1be6e6c4eeca08
   PrivateToken:
     fr: d9eba258894c7
+    ru: d9eba258894c7
   PrototypeDataNotice:
     fr: 1ef8d3cfd63854
   PrototypeSecretPlaceholder:
@@ -1212,6 +1281,9 @@ sources:
     fr: 1ac9ea5470c850
   SessionRecords:
     fr: 1de1ae44051701
+    ru: 1de1ae44051701
+  SetDingTalk:
+    ru: 1c260e6fbbfc5e
   SkipCount:
     fr: d662470b87c08
   SourceAccount:
@@ -1268,6 +1340,9 @@ sources:
     fr: 528527349f9c9
   TerminalCommands:
     fr: d4c1fc4ccc6a9
+    ru: d4c1fc4ccc6a9
+  ThirdPartyMfaHelpText:
+    ru: c841c5ae074ea
   TicketAccountsLoadFailed:
     fr: ec6fe9ad9f3dd
   TicketAdjustRequest:
@@ -1310,20 +1385,28 @@ sources:
     fr: 105e4c2f24da12
   TicketAttachmentCountError:
     fr: 1cf3af74a5a44a
+    ru: 1cf3af74a5a44a
   TicketAttachmentDrop:
     fr: bf3dfa03864ec
+    ru: bf3dfa03864ec
   TicketAttachmentExpired:
     fr: 1b0fe7b41d1b86
+    ru: 1b0fe7b41d1b86
   TicketAttachmentExpires:
     fr: 1fc0850fd002d7
+    ru: 1fc0850fd002d7
   TicketAttachmentHelp:
     fr: 1c5a866b73ce9d
+    ru: 1c5a866b73ce9d
   TicketAttachmentRetention:
     fr: e4f252afe6bdc
+    ru: e4f252afe6bdc
   TicketAttachmentSizeError:
     fr: c74da0e39081f
+    ru: c74da0e39081f
   TicketAttachmentTypeError:
     fr: 7b6b40ff71d65
+    ru: 7b6b40ff71d65
   TicketAuthorizedUser:
     fr: 8c486e47a74a4
   TicketAuthorizedUsers:
@@ -1718,38 +1801,55 @@ sources:
     zh: 17e243319d1ab9
   UserCredentialAbsent:
     fr: 685c68ad7f794
+    ru: 685c68ad7f794
   UserCredentialCountAction:
     fr: 19f44f78b3eef0
+    ru: 19f44f78b3eef0
   UserCredentialEnabled:
     fr: 108e41aeb7d690
+    ru: 108e41aeb7d690
   UserCredentialEnabledStatus:
     fr: 10e7a3b3b1a7a3
+    ru: 10e7a3b3b1a7a3
   UserCredentialExists:
     fr: 14a9042644b02c
+    ru: 14a9042644b02c
   UserCredentialLastUsed:
     fr: 2a1b7452ee592
+    ru: 2a1b7452ee592
   UserCredentialListLoadFailed:
     fr: 117ee5666e8ace
+    ru: 117ee5666e8ace
   UserCredentialLoadFailed:
     fr: 74830186b01b6
+    ru: 74830186b01b6
   UserCredentialNameOrIdentifier:
     fr: 1b92aa21b59f2c
+    ru: 1b92aa21b59f2c
   UserCredentialNoDetails:
     fr: 1cfab49074abb5
+    ru: 1cfab49074abb5
   UserCredentialNoMatches:
     fr: 1077bffe6aec0b
+    ru: 1077bffe6aec0b
   UserCredentialNoUsageRecord:
     fr: 1a463855f42ab6
+    ru: 1a463855f42ab6
   UserCredentialNoUsers:
     fr: 16aebcabaab5b
+    ru: 16aebcabaab5b
   UserCredentialPresenceAction:
     fr: ace13f147d549
+    ru: ace13f147d549
   UserCredentialPresent:
     fr: 1deeec8814828a
+    ru: 1deeec8814828a
   UserCredentialUserStatus:
     fr: 1e1c94c2ab2c8c
+    ru: 1e1c94c2ab2c8c
   UserCredentials:
     fr: f58ffbbb82166
+    ru: f58ffbbb82166
   ViewAgentRegistrationCommand:
     fr: 8902c68810d4b
   ViewApplications:
@@ -1778,6 +1878,7 @@ sources:
     fr: 166f05feabfa2
   WFAssetLoginRule:
     fr: c8a192f3b41e
+    ru: c8a192f3b41e
   WFCC:
     fr: 1e1ac030e4717a
   WFCCAdded:
@@ -1786,10 +1887,12 @@ sources:
     fr: 7cdb249c841e6
   WFChangeLinkedRule:
     fr: e76651a30fe95
+    ru: e76651a30fe95
   WFChooseMember:
     fr: 1b25f750ea9375
   WFCombinedReference:
     fr: 1badd6c3053ee3
+    ru: 1badd6c3053ee3
   WFConfirmAddApprover:
     fr: 1024860d5d1c36
   WFConfirmTransfer:
@@ -1820,8 +1923,10 @@ sources:
     fr: 72e8f28bae6b6
   WFHowToHandle:
     fr: 1e9d8e2403a9b
+    ru: 1e9d8e2403a9b
   WFKeepApprovalHistory:
     fr: 2b6b0c9b712f4
+    ru: 2b6b0c9b712f4
   WFLoadMoreMembers:
     fr: 1552f149453707
   WFLoginAssetOwnerUnsupported:
@@ -1836,6 +1941,7 @@ sources:
     fr: 12fb3c69c494ab
   WFNoVisibleReferences:
     fr: 8715322c0bebf
+    ru: 8715322c0bebf
   WFOp_not_exists:
     fr: 19a2cfc18a586e
   WFPublished:
@@ -1852,6 +1958,7 @@ sources:
     fr: 14f0d3ac691a7c
   WFReferences:
     fr: 1bad499d5f8a87
+    ru: 1bad499d5f8a87
   WFReselectMember:
     fr: 1732a25dc7aafb
   WFSelectMember:
