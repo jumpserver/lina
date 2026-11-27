@@ -20,6 +20,16 @@ import { getTicketTypeLabel } from '../const'
 export default {
   components: { GenericListPage, WorkflowReferences },
   data() {
+    const editDisabledReason = ({ row }) => {
+      if (!this.$hasPerm('tickets.change_workflow')) return this.$t('NoPermission')
+      const { currentOrgIsRoot, currentOrg } = this.$store.getters
+      if (row.type === 'login_confirm') {
+        if (!currentOrgIsRoot || row.org_id !== currentOrg.id) return this.$t('WFLoginGlobalOnly')
+      } else if (currentOrgIsRoot) {
+        return this.$t('NoPermissionInGlobal')
+      }
+      return ''
+    }
     const defaultColumns = [
       'name',
       'type',
@@ -66,10 +76,8 @@ export default {
                   }
                 }
               ],
-              canUpdate: ({ row }) =>
-                this.$hasPerm('tickets.change_workflow') &&
-                !this.$store.getters.currentOrgIsRoot &&
-                row.type !== 'login_confirm',
+              canUpdate: (args) => !editDisabledReason(args),
+              updateTip: editDisabledReason,
               onUpdate: ({ row }) =>
                 this.$router.push({ name: 'WorkflowDetail', params: { id: row.id } })
             }

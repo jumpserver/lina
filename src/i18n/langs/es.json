@@ -3718,7 +3718,7 @@
   "WFQuorumApproversRequired": "No se pudo publicar: seleccione al menos {required} aprobadores para el nodo «{node}»; ahora hay {count} seleccionados.",
   "WFLoginOrgAdminUnsupported": "No se pudo publicar: la confirmación de inicio de sesión no puede usar administradores de la organización en el nodo «{node}». Seleccione usuarios concretos o un rol del sistema.",
   "WFLoginAssetOwnerUnsupported": "No se pudo publicar: la confirmación de inicio de sesión no tiene activos y no puede usar propietarios de activos en el nodo «{node}». Seleccione otro origen de aprobadores.",
-  "WFLoginGlobalOnly": "Los flujos de confirmación de inicio de sesión solo se pueden configurar en la organización global.",
+  "WFLoginGlobalOnly": "Solo se pueden editar los flujos de confirmación de inicio de sesión que pertenecen a la organización global, y únicamente desde esa organización.",
   "WFStrategy": "Estrategia de aprobación",
   "WFStrategy_any": "Basta con que apruebe uno",
   "WFStrategy_all": "Deben aprobar todos",

@@ -4127,7 +4127,7 @@
   "WFFieldValidity": "有効期間（秒）",
   "WFLoadMoreMembers": "さらにメンバーを読み込む",
   "WFLoginAssetOwnerUnsupported": "公開できません：ログイン確認にはアセットがなく、「{node}」ノードでアセット所有者を使用できません。別の承認者ソースを選択してください。",
-  "WFLoginGlobalOnly": "ログイン確認ワークフローはグローバル組織でのみ設定できます。",
+  "WFLoginGlobalOnly": "ログイン確認ワークフローは、グローバル組織に所属するもののみ、グローバル組織で編集できます。",
   "WFLoginOrgAdminUnsupported": "公開できません：ログイン確認では「{node}」ノードで組織管理者を使用できません。特定のユーザーまたはシステムロールを選択してください。",
   "WFMembersLoadFailed": "メンバーを読み込めませんでした",
   "WFNoMatchingMembers": "利用可能なメンバーが見つかりません",

@@ -4265,7 +4265,7 @@
   "WFKeepApprovalHistory": "Conservez l’historique des approbations. Désactivez le workflow d’origine pour arrêter les nouvelles demandes.",
   "WFLoadMoreMembers": "Charger plus de membres",
   "WFLoginAssetOwnerUnsupported": "Impossible de publier : la confirmation de connexion ne comporte aucun actif et ne peut pas utiliser les propriétaires d’actifs dans le nœud « {node} ». Sélectionnez une autre source d’approbateur.",
-  "WFLoginGlobalOnly": "Les workflows de confirmation de connexion ne peuvent être configurés que dans l’organisation globale.",
+  "WFLoginGlobalOnly": "Seuls les workflows de confirmation de connexion appartenant à l’organisation globale peuvent être modifiés depuis cette organisation.",
   "WFLoginOrgAdminUnsupported": "Impossible de publier : la confirmation de connexion ne peut pas utiliser les administrateurs d’organisation dans le nœud « {node} ». Sélectionnez des utilisateurs spécifiques ou un rôle système.",
   "WFMembersLoadFailed": "Impossible de charger les membres",
   "WFNoMatchingMembers": "Aucun membre disponible n’a été trouvé",
