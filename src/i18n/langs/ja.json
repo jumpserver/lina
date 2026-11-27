@@ -3072,6 +3072,7 @@
   "SelectApprovers": "承認者を選択",
   "ConnectionDetails": "接続の詳細",
   "ConnectionReason": "接続理由",
+  "ViewFullText": "全文を表示",
   "ExpandReason": "展開",
   "CollapseReason": "折りたたむ",
   "ReviewExemptionDurationHours": "{hours} 時間",

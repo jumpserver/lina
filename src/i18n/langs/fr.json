@@ -3044,6 +3044,7 @@
   "SelectApprovers": "Sélectionner les approbateurs",
   "ConnectionDetails": "Détails de la connexion",
   "ConnectionReason": "Motif de la connexion",
+  "ViewFullText": "Voir le texte intégral",
   "ExpandReason": "Développer",
   "CollapseReason": "Réduire",
   "ReviewExemptionDurationHours": "{hours} h",

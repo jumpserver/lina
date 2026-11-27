@@ -3104,6 +3104,7 @@
   "SelectApprovers": "選擇審批人",
   "ConnectionDetails": "連線明細",
   "ConnectionReason": "連線原因",
+  "ViewFullText": "查看全文",
   "ExpandReason": "展開",
   "CollapseReason": "收合",
   "ReviewExemptionDurationHours": "{hours} 小時",
