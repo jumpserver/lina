@@ -66,10 +66,13 @@ export default {
                   }
                 }
               ],
-              canUpdate: ({ row }) =>
-                this.$hasPerm('tickets.change_workflow') &&
-                !this.$store.getters.currentOrgIsRoot &&
-                row.type !== 'login_confirm',
+              canUpdate: ({ row }) => {
+                if (!this.$hasPerm('tickets.change_workflow')) return false
+                const { currentOrgIsRoot, currentOrg } = this.$store.getters
+                return row.type === 'login_confirm'
+                  ? currentOrgIsRoot && row.org_id === currentOrg.id
+                  : !currentOrgIsRoot
+              },
               onUpdate: ({ row }) =>
                 this.$router.push({ name: 'WorkflowDetail', params: { id: row.id } })
             }
